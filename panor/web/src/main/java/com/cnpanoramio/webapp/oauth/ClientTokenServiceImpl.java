@@ -15,7 +15,6 @@ public class ClientTokenServiceImpl implements ClientTokenService {
 	
 	String userName = "username";
 	
-	@Override
 	public OAuth2AccessToken getAccessToken(@Context HttpServletRequest request) {
 		
 		Collection<OAuth2AccessToken> tokens = tokenServices.findTokensByUserName(request.getAttribute(userName).toString());

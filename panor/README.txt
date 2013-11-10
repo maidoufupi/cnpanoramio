@@ -29,7 +29,20 @@ To get started, complete the following steps:
     http://appfuse.org/display/APF/AppFuse+QuickStart
 
 
-eclipse中运行项目在tomcat runtime上：
-panor上运行mvn tomcat:run
-1. 更改panor\pom.xml中变量cargo.container.home（本地tomcat home地址）
-2. 更改panor\pom.xml中变量jdbc.password（本地MYSQL数据库账户root的密码）
+# eclipse中运行项目在tomcat runtime上：
+# panor上运行mvn tomcat:run
+# 1. 更改panor\pom.xml中变量cargo.container.home（本地tomcat home地址）
+# 2. 更改panor\pom.xml中变量jdbc.password（本地MYSQL数据库账户root的密码）
+
+第一次运行创建数据库：
+panor-core上运行mvn hibernate3:hbm2ddl
+初始化数据库：
+mvn dbunit:operation -Pprod
+
+或者mvn install -SkipTests将执行build里的所有goal
+
+每次运行：
+panor上运行mvn tomcat6:run
+
+浏览器中打开：
+http://localhost:8080/panor-web

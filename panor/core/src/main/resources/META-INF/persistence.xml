@@ -3,8 +3,7 @@
 
     <persistence-unit name="pictureEntityManager" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>com.cnpanoramio.domain.Picture</class>
-        
+        <class>org.appfuse.model.User</class>
         <!-- 
         Adding more <class>f.q.c.Name</class> elements here is not required.  
         The annotated classes will still be detected, as can be observed in the 
