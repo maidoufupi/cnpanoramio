@@ -14,10 +14,10 @@
     </rule>
 
     <!-- Add rules here for anything that shouldn't be served up by Spring MVC. -->
-    <rule>
+<!--     <rule>
         <from>/</from>
         <to type="redirect" last="true">mainMenu</to>
-    </rule>
+    </rule> -->
     <rule>
         <from>/app/**</from>
         <to last="true" type="redirect">%{context-path}/$1</to>

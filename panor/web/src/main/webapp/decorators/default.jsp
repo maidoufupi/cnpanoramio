@@ -9,42 +9,47 @@
     <link rel="icon" href="<c:url value="/images/favicon.ico"/>"/>
     <title><decorator:title/> | <fmt:message key="webapp.name"/></title>
 
-    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/lib/bootstrap-2.2.1.min.css'/>" />
-    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/lib/bootstrap-responsive-2.2.1.min.css'/>" />
+    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/bootstrap3/css/bootstrap.min.css'/>" />
+    <%-- <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/bootstrap3/css/bootstrap-responsive-2.2.1.min.css'/>" /> --%>
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/style.css'/>" />
     <decorator:head/>
 
     <script type="text/javascript" src="<c:url value='/scripts/lib/jquery-1.8.2.min.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/lib/bootstrap-2.2.1.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bootstrap3/js/bootstrap.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/lib/plugins/jquery.cookie.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/imgLiquid/imgLiquid.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/Panor.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/Panor-init.js'/>"></script>
 </head>
 <body<decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>>
     <c:set var="currentMenu" scope="request"><decorator:getProperty property="meta.menu"/></c:set>
 
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
                 <%-- For smartphones and smaller screens --%>
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="<c:url value='/'/>"><fmt:message key="webapp.name"/></a>
-                <%@ include file="/common/menu.jsp" %>
+                <a class="navbar-brand" href="<c:url value='/'/>"><fmt:message key="webapp.name"/></a>
+                
                 <c:if test="${pageContext.request.locale.language ne 'en'}">
                     <div id="switchLocale"><a href="<c:url value='/?locale=en'/>">
                         <fmt:message key="webapp.name"/> in English</a>
                     </div>
                 </c:if>
             </div>
+            <%@ include file="/common/menu.jsp" %>
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container">
         <%@ include file="/common/messages.jsp" %>
-        <div class="row-fluid">
+        <div class="row">
             <decorator:body/>
 
             <c:if test="${currentMenu == 'AdminMenu'}">

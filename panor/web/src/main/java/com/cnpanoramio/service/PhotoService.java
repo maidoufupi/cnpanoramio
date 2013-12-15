@@ -4,13 +4,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.imaging.ImageReadException;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 
 import com.cnpanoramio.domain.Photo;
@@ -26,9 +30,18 @@ public interface PhotoService {
 	 * @throws IOException
 	 * @throws ImageReadException
 	 */
+//	@Produces("application/json")
+//	@POST
+//	public Photo store(MultipartBody body) throws ImageReadException;
+
 	@Produces("application/json")
 	@POST
-	public Photo store(MultipartBody body) throws ImageReadException;
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public Photo store(
+	 @Multipart(value = "lat", type = "text/plain") String lat,
+     @Multipart(value = "lng", type = "text/plain") String lng,
+     @Multipart(value = "address", type = "text/plain") String address,
+     @Multipart(value = "image", type = "image/jpeg") Attachment image) throws ImageReadException;;
 
 	/**
 	 * 根据ID获取图片
@@ -67,7 +80,7 @@ public interface PhotoService {
 	 * @return The photo that was read.
 	 */
 	@GET
-	@Path("/{id}")
-	public InputStream loadPhoto(@PathParam("id") Long id);
+	@Path("/{name}")
+	public InputStream loadPhoto(@PathParam("name") String name);
 
 }

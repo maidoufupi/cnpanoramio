@@ -5,12 +5,31 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class Point {
-
+    
+	private Double geoLat;
 	private Double geoLong;
 	
-	private Double geoLat;
 	// altitude
 	private Double geoAlti ;
+	
+	private String address;
+	
+	public Point() {
+		super();
+	}
+	
+	public Point( Double geoLat, Double geoLong) {
+		super();
+		this.geoLat = geoLat;
+		this.geoLong = geoLong;
+	}
+	
+	public Point( Double geoLat, Double geoLong, Double geoAlti) {
+		super();
+		this.geoLat = geoLat;
+		this.geoLong = geoLong;
+		this.geoAlti = geoAlti;
+	}
 	
 	@Column(name = "geo_long")
 	public Double getGeoLong() {
@@ -34,5 +53,15 @@ public class Point {
 	}
 	public void setGeoAlti(Double geoAlti) {
 		this.geoAlti = geoAlti;
-	}	
+	}
+
+	@Column(name = "geo_address")
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
 }

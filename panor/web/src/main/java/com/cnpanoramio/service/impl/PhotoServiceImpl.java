@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.activation.DataHandler;
 
@@ -15,10 +16,13 @@ import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.tiff.TiffField;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.constants.GpsTagConstants;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
+import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
@@ -37,12 +41,15 @@ import com.cnpanoramio.service.PhotoService;
 
 @Service("photoService")
 @Transactional
-public class PhotoServiceImpl implements PhotoService, PhotoManager{
+public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
 	private String contentId = "image";
-	
+	private static String CON_LAT = "lat";
+	private static String CON_LNG = "lng";
+	private static String CON_ADDRESS = "address";
+
 	private PhotoDao photoDao;
 	private FileService fileService;
 	private UserManager userManager = null;
@@ -69,19 +76,17 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager{
 	public void setFileService(FileService fileService) {
 		this.fileService = fileService;
 	}
-	
+
 	public void setContentId(String contentId) {
 		this.contentId = contentId;
 	}
 
 	@Override
-	public Photo store(MultipartBody body) throws ImageReadException {
+	public Photo store(String lat, String lng, String address, Attachment image) throws ImageReadException {
 
-		Attachment attachment = body.getAttachment(contentId);
-		String fileName = attachment.getContentDisposition().getParameter("filename");;
-
-		DataHandler dh = attachment.getDataHandler();
-				
+		ContentDisposition content = image.getContentDisposition();
+		String fileName = content.getParameter("filename");
+		DataHandler dh = image.getDataHandler();
 		InputStream ins = null;
 		try {
 			ins = dh.getInputStream();
@@ -89,10 +94,83 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		Photo photo = this.save(fileName, ins);
+		
+		Double latDouble = Double.valueOf(lat);
+		Double lngDouble = Double.valueOf(lng);
+		Point point;
+		if (latDouble != 0 || lngDouble != 0) {
+			point = new Point(latDouble, lngDouble);
+			address = address.trim();
+			if (address != null && address != "") {
+				point.setAddress(address);
+			}
+			photo.setGpsPoint(point);
+		}
+
 		return photo;
 	}
+	
+//	@Override
+//	public Photo store(MultipartBody body) throws ImageReadException {
+//
+//		Attachment attachment = body.getAttachment(contentId);
+//		ContentDisposition content = attachment.getContentDisposition();
+//		String fileName = content.getParameter("filename");
+//		
+//		String lat = null;
+//		String lng = null;
+//		String address = null;
+//		DataHandler dh = body.getAttachment(CON_LAT).getDataHandler();
+//		try {
+//			lat = dh.getContent().toString();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}		
+//
+//		dh = body.getAttachment(CON_LNG).getDataHandler();
+//		try {
+//			lng = dh.getContent().toString();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		dh = body.getAttachment(CON_ADDRESS).getDataHandler();
+//		try {
+//			address = dh.getContent().toString();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//
+//		dh = attachment.getDataHandler();
+//		InputStream ins = null;
+//		try {
+//			ins = dh.getInputStream();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		Photo photo = this.save(fileName, ins);
+//		
+//		Double latDouble = Double.valueOf(lat);
+//		Double lngDouble = Double.valueOf(lng);
+//		Point point;
+//		if (latDouble != 0 || lngDouble != 0) {
+//			point = new Point(latDouble, lngDouble);
+//			address = address.trim();
+//			if (address != null && address != "") {
+//				point.setAddress(address);
+//			}
+//			photo.setGpsPoint(point);
+//		}
+//
+//		return photo;
+//	}
 
 	@Override
 	public Photo fillPhotoDetail(InputStream is, Photo photo)
@@ -136,6 +214,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager{
 
 				}
 			}
+
 			// get 海拔高度
 			final TiffField altitudeField = jpegMetadata
 					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_ALTITUDE);
@@ -164,9 +243,9 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager{
 	}
 
 	@Override
-	public InputStream loadPhoto(Long id) {
-		Photo photo = photoDao.get(id);
-		return fileService.readFile(FileService.TYPE_IMAGE, getName(photo));
+	public InputStream loadPhoto(String name) {
+		String id = FilenameUtils.removeExtension(name);
+		return loadPhoto(Long.parseLong(id));
 	}
 
 	/**
@@ -176,11 +255,12 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager{
 	 * @return
 	 */
 	public String getName(Photo photo) {
-		return photo.getId() + "-" + photo.getName();
+		return photo.getId() + "." + photo.getFileType();
 	}
 
 	@Override
-	public Photo save(String fileName, InputStream ins) throws ImageReadException {
+	public Photo save(String fileName, InputStream ins)
+			throws ImageReadException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 		try {
@@ -197,6 +277,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager{
 
 		Photo photo = new Photo();
 		photo.setName(fileName);
+		photo.setFileType(FilenameUtils.getExtension(fileName));
 
 		Object principal = SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
@@ -223,6 +304,11 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager{
 
 		return photo;
 	}
-	
-	
+
+	@Override
+	public InputStream loadPhoto(Long id) {
+		Photo photo = photoDao.get(id);
+		return fileService.readFile(FileService.TYPE_IMAGE, getName(photo));
+	}
+
 }

@@ -1,0 +1,61 @@
+div.container {
+margin-left: 0px;
+padding-left: 0px;
+}
+
+html, body, div#map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px
+}
+
+.front-root {
+    position: absolute;
+    width: 100%;
+    height: 100%
+}
+
+.front-photo_stack {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    /*margin-left: 0;*/
+    /*margin-right: auto ;*/
+}
+
+.front-photo_sizer {
+    position: absolute;
+
+    width: 40%;
+    left: 5%;
+    margin-left: auto;
+    right: 55%;
+    margin-right: auto;
+
+    height: 60%;
+    top: 20%;
+    margin-top: auto;
+    bottom: 20%;
+    margin-bottom: auto;
+}
+
+.front-main_map {
+    z-index: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.front-photo_link {
+    outline: none
+}
+
+.imgLiquidFill {
+    border: 5px solid white
+}
