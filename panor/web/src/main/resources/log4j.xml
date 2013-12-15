@@ -70,6 +70,11 @@
     </logger>
     
     <logger name="org.springframework.security">
+      <level value="WARN"/>
+    </logger>
+ 
+ <!--  com.cnpanoramio.service.impl -->   
+    <logger name="com.cnpanoramio.service.impl">
       <level value="DEBUG"/>
     </logger>
 

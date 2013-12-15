@@ -10,6 +10,8 @@
     <title><decorator:title/> | <fmt:message key="webapp.name"/></title>
 
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/bootstrap3/css/bootstrap.min.css'/>" />
+    <!-- Bootstrap theme -->
+    <link href="<c:url value="/bootstrap3/css/bootstrap-theme.min.css"/>" rel="stylesheet">
     <%-- <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/bootstrap3/css/bootstrap-responsive-2.2.1.min.css'/>" /> --%>
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/style.css'/>" />
     <decorator:head/>

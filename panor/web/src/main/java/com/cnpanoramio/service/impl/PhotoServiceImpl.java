@@ -45,11 +45,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
-	private String contentId = "image";
-	private static String CON_LAT = "lat";
-	private static String CON_LNG = "lng";
-	private static String CON_ADDRESS = "address";
-
 	private PhotoDao photoDao;
 	private FileService fileService;
 	private UserManager userManager = null;
@@ -75,10 +70,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	@Autowired
 	public void setFileService(FileService fileService) {
 		this.fileService = fileService;
-	}
-
-	public void setContentId(String contentId) {
-		this.contentId = contentId;
 	}
 
 	@Override
@@ -210,7 +201,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 					final double latitude = gpsInfo.getLatitudeAsDegreesNorth();
 
 					point.setGeoLat(latitude);
-					point.setGeoLong(longitude);
+					point.setGeoLng(longitude);
 
 				}
 			}

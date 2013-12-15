@@ -16,6 +16,7 @@
     <jaxws:endpoint id="userService" implementor="#userManager" address="/UserService"/>
     <!-- Add new endpoints for additional services you'd like to expose -->
     <jaxws:endpoint id="photoServiceApi" implementor="#photoService" address="/PhotoService"/>
+    <jaxws:endpoint id="panorThumbServiceApi" implementor="#panorThumbService" address="/PanoramioThumbnailService"/>
     
     <jaxrs:server address="/api">
         <jaxrs:features>
@@ -24,6 +25,7 @@
         <jaxrs:serviceBeans>
             <ref bean="userManager"/>
             <ref bean="photoService"/>
+            <ref bean="panorThumbService"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider"/>

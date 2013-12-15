@@ -19,5 +19,8 @@
     <li>
         <a href="<c:url value='/photoUpload'/>"><fmt:message key="menu.selectFile"/></a>
     </li>
+    <li>
+        <a href="<c:url value='/exploreWorld'/>"><fmt:message key="menu.explore"/></a>
+    </li>
 </ul>
 </body>

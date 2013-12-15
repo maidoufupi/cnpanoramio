@@ -48,7 +48,7 @@ public class PhotoServiceTest {
 
 	@Test
 	public void testPhotoStore() throws IOException, ImageReadException {
-		photoService.store(getMultipartBody());
+//		photoService.store(getMultipartBody());
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class PhotoServiceTest {
 		Photo photo = new Photo();
 		photoService.fillPhotoDetail(ins, photo);
 		log.info(photo.getGpsPoint().getGeoLat());
-		log.info(photo.getGpsPoint().getGeoLong());
+		log.info(photo.getGpsPoint().getGeoLng());
 		log.info(photo.getGpsPoint().getGeoAlti());
 		Assert.notNull(photo.getGpsPoint());
 		Assert.notNull(photo.getGpsPoint().getGeoAlti());

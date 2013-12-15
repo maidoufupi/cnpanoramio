@@ -94,12 +94,14 @@
 	<http xmlns="http://www.springframework.org/schema/security">
 		<intercept-url pattern="/photo/**" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/photoUpload" access="ROLE_ADMIN,ROLE_USER" />
+		<intercept-url pattern="/exploreWorld" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
 		<intercept-url pattern="/passwordHint*"
 			access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/signup*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/app/**" access="ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/services/api/photo" access="ROLE_USER" />
+		<intercept-url pattern="/services/api/photos" access="ROLE_USER" />
+		<intercept-url pattern="/services/api/panoramiothumbnail" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/photo/trusted/**" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/photo/user/**" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/photo/**" access="ROLE_USER" />
