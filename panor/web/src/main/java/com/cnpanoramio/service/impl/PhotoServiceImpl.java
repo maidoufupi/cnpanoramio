@@ -2,12 +2,17 @@ package com.cnpanoramio.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
 import javax.activation.DataHandler;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
@@ -233,12 +238,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		return photoDao.getUserPhotos(user);
 	}
 
-	@Override
-	public InputStream loadPhoto(String name) {
-		String id = FilenameUtils.removeExtension(name);
-		return loadPhoto(Long.parseLong(id));
-	}
-
 	/**
 	 * 获取图片文件名称
 	 * 
@@ -297,9 +296,29 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	}
 
 	@Override
+	public Response read(Long id) {
+		Photo photo = photoDao.get(id);
+		File file = fileService.readFile(FileService.TYPE_IMAGE, getName(photo));
+		ResponseBuilder response = Response.ok((Object) file);
+		response.header("Content-Disposition",
+				"attachment; filename=" + getName(photo));
+		return response.build();
+
+	}
+
+	@Override
 	public InputStream loadPhoto(Long id) {
 		Photo photo = photoDao.get(id);
-		return fileService.readFile(FileService.TYPE_IMAGE, getName(photo));
+		File file = fileService.readFile(FileService.TYPE_IMAGE, getName(photo));
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(file);
+			return fis;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

@@ -33,7 +33,7 @@ public interface FileService {
      * @param fileName
      * @return
      */
-    public InputStream readFile(String fileType, String fileName);
+    public File readFile(String fileType, String fileName);
     
     /**
      * 删除文件

@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
@@ -79,8 +80,10 @@ public interface PhotoService {
 	 *            The id of the photo.
 	 * @return The photo that was read.
 	 */
+	@Path("/{id}")
+	@Produces("image/*")
 	@GET
-	@Path("/{name}")
-	public InputStream loadPhoto(@PathParam("name") String name);
+	@Consumes({ MediaType.APPLICATION_JSON})
+	public Response read(@PathParam("id") Long id);
 
 }

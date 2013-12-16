@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bootstrap form</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="../bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <script type="text/javascript" src="../js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+    <!-- Custom styles for this template -->
+    <link href="form.css" rel="stylesheet">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#location-search-input').attr("placeholder", "aaaa");
+            $('#location-search-input').focusout(function () {
+                $("#location-search-go").fadeTo("slow", 0.3, function () {
+                    $(this).css("display", "none");
+                });
+            });
+            $('#location-search-input').focusin(function () {
+                $("#location-search-go").css("display", "");
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+            <input type="text" class="form-control">
+        </div>
+        <!-- /input-group -->
+    </div>
+    <!-- /.col-lg-6 -->
+    <form role="form">
+        <div class="col-lg-6">
+            <div class="input-group input-group-sm">
+                <input id="location-search-input" type="text" class="form-control">
+      <span id="location-search-go" class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+            </div>
+            <!-- /input-group -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </form>
+</div>
+<!-- /.row -->
+</body>
+</html>

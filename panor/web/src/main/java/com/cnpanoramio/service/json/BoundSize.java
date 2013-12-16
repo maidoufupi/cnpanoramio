@@ -12,8 +12,8 @@ public class BoundSize {
 	private Double boundSWLat;
 	private Double boundSWLng;
 
-	private Integer sizeX;
-	private Integer sizeY;
+	private Integer width;
+	private Integer height;
 	
 	public Double getBoundNELat() {
 		return boundNELat;
@@ -39,16 +39,17 @@ public class BoundSize {
 	public void setBoundSWLng(Double boundSWLng) {
 		this.boundSWLng = boundSWLng;
 	}
-	public Integer getSizeX() {
-		return sizeX;
+	public Integer getWidth() {
+		return width;
 	}
-	public void setSizeX(Integer sizeX) {
-		this.sizeX = sizeX;
+	public void setWidth(Integer width) {
+		this.width = width;
 	}
-	public Integer getSizeY() {
-		return sizeY;
+	public Integer getHeight() {
+		return height;
 	}
-	public void setSizeY(Integer sizeY) {
-		this.sizeY = sizeY;
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
+
 }

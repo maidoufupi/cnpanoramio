@@ -70,11 +70,11 @@ public class FileServiceImpl implements FileService {
 	 */
 	public String getParentPath() {
 		return System.getProperty("cnpanoramio.root") + "/resources";
-//		return getClass().getResource("/resources").getPath();
+		// return getClass().getResource("/resources").getPath();
 	}
 
 	@Override
-	public InputStream readFile(String fileType, String fileName) {
+	public File readFile(String fileType, String fileName) {
 		if (null == fileName) {
 			return null;
 		} else {
@@ -85,16 +85,7 @@ public class FileServiceImpl implements FileService {
 		String parent = getParentPath();
 		if (null != parent) {
 			String uploadDir = parent + "/" + fileType + "/" + fileName;
-			FileInputStream fis = null;
-
-			try {
-				fis = new FileInputStream(new File(uploadDir));
-				return fis;
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			return new File(uploadDir);
 		}
 		return null;
 	}

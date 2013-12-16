@@ -23,7 +23,7 @@
            map.addControl(overviewMapControl);
            map.addControl(new BMap.MapTypeControl());
 
-           var latLng = new BMap.Point(102.8, 25);
+           var latLng = new BMap.Point(102.7, 25);
            map.centerAndZoom(latLng, 13);
        },
        setPanoramioLayer: function() {

@@ -1,22 +1,28 @@
-html body {
-    margin: 0px;
+html, body, .container .row, td {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.container {
+	margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%
+}
+
+.navbar.navbar-fixed-top {
+	position: static;
+	margin: 0;
 }
 
 #map-canvas {
     height: 100%;
-    width: 70%;
+    width: 100%;
     margin: 0px;
     padding: 0px
 }
 
 .front-root {
-    position: absolute;
-    width: 100%;
     height: 100%
-}
-
-.table {
-   position: relative;
-   top: 30px;
-   height: 90%;
 }

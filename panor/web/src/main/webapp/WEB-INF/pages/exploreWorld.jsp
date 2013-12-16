@@ -17,8 +17,9 @@
     <link href="<c:url value="/scripts/panor/css/explore.css"/>" rel="stylesheet">
 </head>
 <body>
-<script type="text/javascript" src="<c:url value="/scripts/fileupload/vendor/jquery.min.1.10.2.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.baidu.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/fileupload/vendor/jquery.min.1.10.2.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.Panoramio.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.baidu.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/cnmap.Explore.baidu.js"/>"></script>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
@@ -27,22 +28,6 @@
     $(document).ready(function () {
         $.cnmap.explore.initMap("map-canvas");
         $.cnmap.explore.setPanoramioLayer();
-        $("#get_panoramio").click(function() {
-        	var client = new $.RestClient('/panor-web/services/api/', {
-                stringifyData: true
-            });
-            client.add('panoramiothumbnail');
-            var rs = client.panoramiothumbnail.create({
-                    boundNELat: 180,
-                    boundNELng: 200,
-                    boundSWLat: 1,
-                    boundSWLng: 1,
-                    sizeX: 100,
-                    sizeY:100
-            }).done(function(data) {
-                console.log(data)
-            });
-        })
     })
     </script>
 <table class="front-root table table-striped">
