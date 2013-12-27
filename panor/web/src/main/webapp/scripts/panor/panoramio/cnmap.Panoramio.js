@@ -73,6 +73,16 @@
         this.getVisible = function (photoId) {
             return photos[photoId] ? photos[photoId].visible : false;
         }
+
+        this.getLabelContent = function(photoId) {
+            return "<img src='services/api/photos/" + photoId + "' style='width: 34px; height: 34px;'>";
+        }
+
+        this.getInfoWindowContent = function(photoId) {
+            return "<a href='photo/" + photoId +
+                "'><img src='services/api/photos/" + photoId +
+            "' style='width: 100px; height: 100px;'></a>";
+        }
     };
 
 //    $.cnmap.PanoramioOptions = {
@@ -100,5 +110,4 @@
 //        lng:number,
 //        noWrap?:boolean
 //    }
-
 }));

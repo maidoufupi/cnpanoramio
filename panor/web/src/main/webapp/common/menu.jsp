@@ -10,6 +10,7 @@
     </c:if>
     <menu:displayMenu name="MainMenu"/>
     <menu:displayMenu name="UserMenu"/>
+    <menu:displayMenu name="SettingsMenu"/>
     <menu:displayMenu name="AdminMenu"/>
     <menu:displayMenu name="Logout"/>
 </ul>

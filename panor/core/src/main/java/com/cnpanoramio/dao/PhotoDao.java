@@ -11,5 +11,4 @@ public interface PhotoDao extends GenericDao<Photo, Long>{
 
 	public List<Photo> getUserPhotos(User user);
 	
-	
 }

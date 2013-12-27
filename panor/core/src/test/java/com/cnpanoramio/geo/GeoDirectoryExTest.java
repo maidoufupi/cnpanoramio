@@ -51,7 +51,7 @@ public class GeoDirectoryExTest {
 
 			if (geoLocation != null && !geoLocation.isZero()) {
 				point.setGeoLat(geoLocation.getLatitude());
-				point.setGeoLong(geoLocation.getLongitude());
+//				point.setGeoLong(geoLocation.getLongitude());
 			}
 		}
 		

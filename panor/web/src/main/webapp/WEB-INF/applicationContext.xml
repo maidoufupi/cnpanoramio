@@ -58,4 +58,6 @@
 	</bean>
 	
 	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<bean class="com.cnpanoramio.webapp.listener.AuthenticationListener"/>
 </beans>

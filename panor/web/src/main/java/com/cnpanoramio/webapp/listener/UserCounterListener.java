@@ -1,20 +1,31 @@
 package com.cnpanoramio.webapp.listener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.service.UserSettingsManager;
+import com.cnpanoramio.service.UserSettingsService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -28,6 +39,9 @@ import java.util.Set;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 public class UserCounterListener implements ServletContextListener, HttpSessionAttributeListener, HttpSessionListener {
+	
+	private transient final Log log = LogFactory.getLog(getClass());
+		
     /**
      * Name of user counter variable
      */
@@ -171,6 +185,22 @@ public class UserCounterListener implements ServletContextListener, HttpSessionA
     }
     
     public void sessionCreated(HttpSessionEvent se) { 
+//    	if(userSettingsService == null) {
+//    		userSettingsService = WebApplicationContextUtils.getWebApplicationContext(se.getSession().getServletContext()).getBean(UserSettingsManager.class);
+//    	}    	
+//    	HttpSession session = se.getSession();
+//        SecurityContext context = (SecurityContext)session.getAttribute("SPRING_SECURITY_CONTEXT");
+//        Authentication authentication = context.getAuthentication();
+//        Object principal = authentication.getPrincipal();
+//        String username;
+//		if (principal instanceof UserDetails) {
+//			username = ((UserDetails) principal).getUsername();
+//		} else {
+//			username = principal.toString();
+//		}		
+//    	UserSettings us = userSettingsService.getSettingsByUserName(username);
+//    	log.info(us.getMapVendor());
+//    	se.getSession().setAttribute("mapVendor", us.getMapVendor());
     }
     
     public void sessionDestroyed(HttpSessionEvent se) {
@@ -179,4 +209,6 @@ public class UserCounterListener implements ServletContextListener, HttpSessionA
             se.getSession().removeAttribute(EVENT_KEY);
         }
     }
+    
+     
 }

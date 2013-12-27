@@ -15,8 +15,6 @@
 <!-- Bootstrap styles -->
 <!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
 <%-- <link rel="stylesheet" href="<c:url value="/styles/fileupload/bootstrap.min.css"/>"> --%>
-<!-- Generic page styles -->
-<link rel="stylesheet" href="<c:url value="/styles/fileupload/style.css"/>">
 <!-- blueimp Gallery styles -->
 <!-- <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css"> -->
 <link rel="stylesheet" href="<c:url value="/scripts/fileupload/css/blueimp-gallery.min.css"/>">
@@ -28,9 +26,6 @@
 <noscript><link rel="stylesheet" href="<c:url value="/styles/fileupload/jquery.fileupload-ui-noscript.css"/>"></noscript>
 <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
 <script type="text/javascript" src="<c:url value="/scripts/fileupload/vendor/jquery.min.1.10.2.js"/>"></script>
-
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/api?v=1.5&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
 
     <!-- Custom styles for this template -->
     <link href="<c:url value="/styles/fileupload/modal.css"/>" rel="stylesheet">
@@ -46,7 +41,28 @@
 </head>
 
 <body>
-<script type="text/javascript" src="<c:url value="/scripts/panor/cnmap.Modal.baidu.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
+<c:choose>
+  <c:when test='${sessionScope.mapVendor eq "baidu"}'>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
+    <script type="text/javascript"
+            src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.baidu.js"/>"></script>
+  </c:when>
+  <c:when test='${sessionScope.mapVendor eq "qq"}'>
+<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.qq.js"/>"></script>
+  </c:when>
+  <c:when test='${sessionScope.mapVendor eq "gaode"}'>
+  	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.gaode.js"/>"></script>
+  </c:when>
+  <c:otherwise>
+  	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.gaode.js"/>"></script>
+   </c:otherwise>
+</c:choose>
+  
 <div class="span3">
 	<h2>
 		<fmt:message key="upload.heading" />
@@ -57,8 +73,6 @@
 </div>
 
 <div class="container">
-    <h1>jQuery File Upload Demo</h1>
-    <br>
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="<c:url value="/services/api/photos"/>" method="POST" enctype="multipart/form-data">
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
@@ -99,7 +113,6 @@
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
     </form>
-
 </div>
 
 <!-- Modal -->

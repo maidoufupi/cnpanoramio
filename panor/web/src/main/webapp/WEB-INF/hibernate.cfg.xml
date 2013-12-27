@@ -39,6 +39,7 @@
 		<mapping class="com.cnpanoramio.domain.Picture" />
 		<mapping class="com.cnpanoramio.domain.Comment" />
 		<mapping class="com.cnpanoramio.domain.Tag" />
+		<mapping class="com.cnpanoramio.domain.UserSettings" />
 		
 	</session-factory>
 </hibernate-configuration>

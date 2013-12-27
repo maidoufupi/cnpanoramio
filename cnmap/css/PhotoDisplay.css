@@ -1,0 +1,188 @@
+body {
+    background-color: #ececec;
+}
+
+.container {
+    padding: 0;
+    width: auto;
+    margin: 0 auto;
+}
+
+.content_wrapper {
+
+}
+
+@media all and (max-width: 740px) {
+    .photo-col {
+        width: 100%;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+
+    .info-col {
+        width: 100%;
+    }
+}
+
+@media all and (max-width: 960px) and (min-width: 741px) {
+    .photo-col {
+        width: 700px;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+}
+
+@media all and (max-width: 1023px) and (min-width: 961px) {
+    .photo-col {
+        width: 880px;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+}
+
+@media all and (max-width: 1199px) and (min-width: 1024px) {
+    .photo-col {
+        width: 664px;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+}
+
+@media all and (min-width: 1200px) {
+    .container {
+        width: 1180px;
+    }
+    .photo-col {
+        width: 880px;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+}
+
+
+.info-col {
+    display: inline-block;
+    vertical-align: top;
+    margin: 20px 0;
+}
+
+#main-photo-wrapper {
+    height: 487px;
+    width: 100%;
+}
+
+.photo-page-card {
+    min-width: 250px;
+    max-width: 300px;
+    background-color: #fff;
+    padding: 10px;
+    margin: 0 0 13px;
+    box-shadow: 0 2px 3px #dfdfdf;
+    border-radius: 2px;
+}
+
+.interim-info-card>h2 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+#details li {
+    margin-bottom: 6px;
+    padding-top: 0;
+    font-size: 13px;
+    color: #999;
+    clear: both;
+}
+
+#details li#tech-details ul {
+    margin: 4px 0 0;
+    padding: 0;
+}
+
+#details li ul li {
+    margin: 0;
+}
+
+#tech-details li {
+    font-size: 13px;
+}
+
+/****.photo-col********************************************************/
+
+.photo_page-stats_container {
+    float: right;
+    padding-top: 3px;
+}
+
+h1 {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 5px 0;
+}
+
+#photo-page-prev-next-container {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.photo-page-earth-status {
+    font-size: 13px;
+    color: #333;
+}
+
+.photo_description {
+    margin: 15px 0 0;
+    width: 800px;
+}
+
+.photo_description .photo_description_formatted {
+    border: 1px solid transparent;
+    font-size: 12px;
+    padding: 2px;
+    overflow: hidden;
+    cursor: text;
+    width: 100%;
+    position: relative;
+    left: -3px;
+    line-height: 14px;
+}
+
+#users_comments {
+    font-size: 18px;
+    color: #333;
+}
+
+div.comment {
+    font-size: 10pt;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 5px;
+    color: #333;
+    background-color: #fff;
+    box-shadow: 0 2px 3px #dfdfdf;
+    border-radius: 2px;
+}
+
+.comment-inner {
+    display: inline-block;
+    vertical-align: top;
+    /*margin-left: 5px;*/
+    white-space: normal;
+}
+
+#tcomment {
+    width: 100%;
+    min-height: 100px;
+}

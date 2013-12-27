@@ -11,6 +11,8 @@
     var map;
     var geocoder;
     var marker;
+    var template_preview_thumb;
+
     $.cnmap = $.cnmap || {};
     $.cnmap.explore = {
        initMap: function(mapCanvas) {
@@ -27,8 +29,20 @@
            map.centerAndZoom(latLng, 13);
        },
        setPanoramioLayer: function() {
-           var panoramioLayer = new $.cnmap.baidu.PanoramioLayer({suppressInfoWindows: true});
+           var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});
            panoramioLayer.setMap(map);
+
+           if (tmpl) {
+               template_preview_thumb = tmpl("template-preview-thumb");
+           }
+           $(panoramioLayer).bind("data_changed", function(e, data) {
+               var result = template_preview_thumb({
+                   items: data
+               });
+               $("#preview").html("");
+               $("#preview").append(result);
+//               $(".imgLiquidFill").imgLiquid({fill: true});
+           })
        }
     }
 })(jQuery)

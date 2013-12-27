@@ -154,6 +154,7 @@
 	<listener>
 		<listener-class>net.sf.navigator.menu.MenuContextListener</listener-class>
 	</listener>
+
 	<!-- 负责将 Web 应用根目录以 webAppRootKey 上下文参数指定的属性名添加到系统参数中 -->  
  <listener>   
     <listener-class>   

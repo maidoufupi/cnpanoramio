@@ -39,7 +39,7 @@
                 </button>
                 <a class="navbar-brand" href="<c:url value='/'/>"><fmt:message key="webapp.name"/></a>
                 
-                <c:if test="${pageContext.request.locale.language ne 'en'}">
+                <c:if test='${pageContext.request.locale.language ne "en"}'>
                     <div id="switchLocale"><a href="<c:url value='/?locale=en'/>">
                         <fmt:message key="webapp.name"/> in English</a>
                     </div>

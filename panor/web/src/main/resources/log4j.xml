@@ -74,12 +74,12 @@
     </logger>
  
  <!--  com.cnpanoramio.service.impl -->   
-    <logger name="com.cnpanoramio.service.impl">
+    <logger name="com.cnpanoramio.service">
       <level value="DEBUG"/>
     </logger>
 
     <root>
-        <level value="WARN"/>
+        <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 

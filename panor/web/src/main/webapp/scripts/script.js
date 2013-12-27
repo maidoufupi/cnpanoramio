@@ -1,4 +1,10 @@
-
+$("document").ready(function() {
+	$(window).on('resize', windowresize);
+    $(window).on('load', windowresize);
+    function windowresize() {
+		$("body > .container").css("height", ($(window).height() - 84 ));
+	}
+})
 // This function is used by the login screen to validate user/pass
 // are entered.
 function validateRequired(form) {

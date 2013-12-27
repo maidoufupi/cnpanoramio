@@ -1,0 +1,116 @@
+.table>tbody>tr>td {
+    padding: 0;
+}
+
+.alert.alert-* {
+    position: fixed;
+    top: 10px;
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+}
+.panel.panel-primary {
+    margin-left: 30px;
+    margin-right: 20px;
+}
+
+#explore-expanded-input {
+    background-color: #5a5a5a;
+    color: #000000;
+    transition: all .5s;
+}
+
+#explore-expanded-input:focus {
+    background-color: #ddd;
+    -webkit-transition: all .5s;
+}
+
+/**/
+#settings {
+    margin: 0;
+    padding: 0
+}
+
+#settings fieldset {
+    margin: 5px 0 10px;
+    border: 0;
+    border-bottom: 1px solid #dfdfdf;
+    padding: 0 10px 10px;
+    clear: both;
+    float: left;
+    width: 760px
+}
+
+#settings #actual-pwd {
+    margin: 0 0 8px;
+    background-color: #f0f0f0;
+    padding: 10px 10px 8px 0
+}
+
+#settings #actual-pwd span.form-help {
+    font-weight: bold
+}
+
+#settings legend {
+    float: left;
+    margin: 0 0 20px 40px;
+    font-size: 110%;
+    font-weight: bold;
+    padding-left: 23px;
+    background-repeat: no-repeat;
+    background-position: left 0;
+    color: #000
+}
+
+#settings fieldset #conditions label {
+    font-size: 80%;
+    vertical-align: top
+}
+
+#settings fieldset div label {
+    float: left;
+    width: 180px;
+    text-align: right
+}
+
+#settings fieldset div.inline {
+    margin-left: 183px;
+    width: 580px;
+    display: inline
+}
+
+#settings fieldset div.inline .radio {
+    margin-left: 183px;
+    display: inline
+}
+
+#settings fieldset p.sublegend {
+    margin-left: 140px;
+    font-weight: bold
+}
+
+#settings fieldset p.sublegend span {
+    font-weight: normal;
+    color: #8a8a8a;
+    font-size: 90%
+}
+
+#settings fieldset p.explanation {
+    margin: 0 0 8px 23px;
+    color: #8a8a8a;
+    font-size: 80%
+}
+
+#botones {
+    padding: 10px 0 60px;
+    clear: both;
+    width: 760px;
+    color: Gray;
+    text-align: center
+}

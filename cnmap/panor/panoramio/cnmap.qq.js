@@ -17,13 +17,14 @@
 
 // 全局命名空间
     $.cnmap = $.cnmap || {};
-    $.cnmap.qq = $.cnmap.qq || {};
 
-    $.cnmap.qq.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
+    $.cnmap.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
+
+        var panoramio = new $.cnmap.Panoramio();
 
         var infoWindows = [];
-
         var infoWindow = new qq.maps.InfoWindow();
+        var labels = [];
 
         this.preZoom = 0;
         this.preBounds = null;
@@ -59,19 +60,76 @@
                 var listener = qq.maps.event.addListener(
                     map,
                     'idle',
-                    function () {
+                    getBoundsThumbnails
+//                    function () {
+//
+//                        if (this.zoom != this.preZoom) {
+//                            this.preZoom = this.zoom;
+//                            for (var i in infoWindows) {
+//                                infoWindows[i].setVisible(false);
+//                            }
+//                        }
+//                        var label = new qq.maps.Label();
+//                        label.setContent("<img src=\"1.jpg\" style=\"width: 34px; height: 34px;\"></img>");
+//                        label.setMap(map);
+////                        var latLng = qq.maps.LatLng(25, 102.8);
+//                        label.setPosition(map.getCenter());
+//                        qq.maps.event.addListener(
+//                            label,
+//                            'click',
+//                            function () {
+//                                if (opts.suppressInfoWindows) {
+//                                    if (infoWindow.opened) {
+//                                        infoWindow.close();
+//                                        infoWindow.opened = false;
+//                                    } else {
+//                                        infoWindow.setContent("<img src=\"1.jpg\" style=\"width: 100px; height: 100px;\"></img>");
+//                                        infoWindow.setPosition(label.getPosition());
+//                                        infoWindow.open();
+//                                        infoWindow.opened = true;
+//                                    }
+//                                }
+//                            });
+//                        infoWindows.push(label);
+//                    }
+                );
+            } else {
+                opts.map = null;
+            }
 
-                        if (this.zoom != this.preZoom) {
-                            this.preZoom = this.zoom;
-                            for (var i in infoWindows) {
-                                infoWindows[i].setVisible(false);
-                            }
+            var that = this;
+            function getBoundsThumbnails() {
+                var bounds = map.getBounds();
+                var mapContainer = map.getContainer();
+                var size = {
+                    width: parseInt(mapContainer.width),
+                    height: parseInt(mapContainer.height)
+                };
+                var thumbs = panoramio.getBoundsThumbnails({
+                    ne: {
+                        lat: bounds.getNorthEast().lat,
+                        lng: bounds.getNorthEast().lng
+                    },
+                    sw: {
+                        lat: bounds.getSouthWest().lat,
+                        lng: bounds.getSouthWest().lng
+                    }
+                }, size, function(thumbs) {
+                    for (var i in thumbs) {
+                        var photoId = thumbs[i].photoId;
+                        if(panoramio.getVisible(photoId)) {
+                            continue;
+                        }
+                        if(labels[photoId]) {
+                            labels[photoId].setMap(map);
+                            continue;
                         }
                         var label = new qq.maps.Label();
-                        label.setContent("<img src=\"1.jpg\" style=\"width: 34px; height: 34px;\"></img>");
+                        label.photoId = photoId;
+                        label.setContent("<img src='services/api/photos/" + photoId + "' style='width: 34px; height: 34px;'>");
                         label.setMap(map);
-//                        var latLng = qq.maps.LatLng(25, 102.8);
-                        label.setPosition(map.getCenter());
+                        label.setPosition(new qq.maps.LatLng(thumbs[i].lat, thumbs[i].lng));
+                        labels[photoId] = label;
                         qq.maps.event.addListener(
                             label,
                             'click',
@@ -81,18 +139,20 @@
                                         infoWindow.close();
                                         infoWindow.opened = false;
                                     } else {
-                                        infoWindow.setContent("<img src=\"1.jpg\" style=\"width: 100px; height: 100px;\"></img>");
+                                        infoWindow.setContent("<a href='photo/" + this.photoId +
+                                            "'><img src='services/api/photos/" + this.photoId +
+                                            "' style='width: 100px; height: 100px;'></a>");
                                         infoWindow.setPosition(label.getPosition());
                                         infoWindow.open();
                                         infoWindow.opened = true;
                                     }
                                 }
                             });
-                        infoWindows.push(label);
                     }
-                );
-            } else {
-                opts.map;
+
+                    // trigger data_changed event
+                    $(this).trigger("data_changed", [thumbs]);
+                })
             }
         };
 
@@ -106,18 +166,12 @@
         this.setUserId = function (userId/*:string*/) { //	None
         };
 
-//        function open() {
-//            for (var infoWindow in infoWindows) {
-//                infoWindows[infoWindow].open();
-//            }
-//        }
-
         this.center_changed = function () {
 //            infoWindows = [];
         };
     };
 
-    $.cnmap.qq.PanoramioLayer.prototype = new qq.maps.MVCObject();
+    $.cnmap.PanoramioLayer.prototype = new qq.maps.MVCObject();
 
 //    $.cnmap.qq.PanoramioLayer.prototype.zoom_changed = function () {
 //        infoWindows = [];

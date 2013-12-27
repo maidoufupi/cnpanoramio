@@ -20,9 +20,9 @@
 
 // 全局命名空间
     $.cnmap = $.cnmap || {};
-    $.cnmap.baidu = $.cnmap.baidu || {};
+//    $.cnmap.baidu = $.cnmap.baidu || {};
 
-    $.cnmap.baidu.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
+    $.cnmap.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
 
         var panoramio = new $.cnmap.Panoramio();
 
@@ -79,11 +79,12 @@
             } else {
                 opts.map = null;
                 map.clearOverlays();
+                panoramio.clearVisible();
                 map.removeEventListener('tilesloaded');
                 map.removeEventListener('zoomend');
                 map.removeEventListener('moveend');
             }
-
+            var that = this;
             function getBoundsThumbnails() {
                 var bounds = map.getBounds();
                 var size = map.getSize();
@@ -117,13 +118,10 @@
                                     if (infoWindow.isOpen()) {
                                         infoWindow.close();
                                     } else {
-
-//                                        var image = panoramio.getThumbnail(thumbs[i].photoId);
-                                        infoWindow.setContent("<a href='photo/" + this.photoId + "'><img src='services/api/photos/" + this.photoId + "' style='width: 100px; height: 100px;'></a>");
-//                                        infoWindow.setPosition(label.getPosition());
+                                        infoWindow.setContent("<a href='photo/" + this.photoId +
+                                            "'><img src='services/api/photos/" + this.photoId +
+                                            "' style='width: 100px; height: 100px;'></a>");
                                         map.openInfoWindow(infoWindow, this.getPosition());
-//                                        marker.openInfoWindow(infoWindow);
-//                                        infoWindow.restore();
                                     }
                                 }
                             });
@@ -140,8 +138,9 @@
                         map.addOverlay(label);
                         labels[photoId] = label;
                     }
+                    // trigger data_changed event
+                    $(that).trigger("data_changed", [thumbs]);
                 });
-
 
             }
         };

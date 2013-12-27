@@ -1,0 +1,65 @@
+html, body, .container, .container .row {
+    margin: 0px;
+    height: 100%;
+}
+
+body {
+    background-color: #ececec;
+}
+
+#map-canvas {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px
+}
+
+.front-root {
+    width: 100%;
+    height: 100%
+}
+
+/*.table {
+    position: relative;
+    top: 30px;
+    height: 90%;
+}*/
+
+.table>tbody>tr>td {
+    padding: 0;
+}
+
+/************************************************************/
+#thumbinnerarea {
+    padding: 22px 20px 0;
+}
+
+#preview div {
+    padding: 0;
+    margin: 0;
+    width: 112px;
+    display: inline;
+    float: left;
+    text-align: center;
+    overflow: hidden;
+}
+
+.preview_thumb_area img {
+    width: 112px;
+}
+
+#map_pages {
+    width: 425px;
+    position: absolute;
+    bottom: 10px;
+    margin: 15px 0 5px;
+    display: block;
+}
+
+.pager {
+    width: 425px;
+    position: absolute;
+    bottom: 10px;
+    margin: 15px 0 5px;
+    display: block;
+}

@@ -17,12 +17,13 @@
 
 // 全局命名空间
     $.cnmap = $.cnmap || {};
-    $.cnmap.gaode = $.cnmap.gaode || {};
+//    $.cnmap.gaode = $.cnmap.gaode || {};
 
-    $.cnmap.gaode.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
+    $.cnmap.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
 
-        var infoWindows = [];
+        var panoramio = new $.cnmap.Panoramio();
 
+        var labels = [];
         var infoWindow = new AMap.InfoWindow({isCustom: false});
 
         this.preZoom = 0;
@@ -51,8 +52,6 @@
         this.setMap = function (map/*:Map*/) { //	None	Renders the layer on the specified map. If map is set to null, the layer will be removed.
             if (map) {
                 opts.map = map;
-//                this.bindTo("zoom", map);
-//                this.bindTo("center", map);
 
                 AMap.event.addListener(
                     map,
@@ -60,26 +59,85 @@
                     function () {
                         if (map.getZoom() != this.preZoom) {
                             this.preZoom = map.getZoom();
-                            for (var i in infoWindows) {
-//                                infoWindows[i].setVisible(false);
-                            }
+                            map.clearMap();
+                            panoramio.clearVisible();
+                            getBoundsThumbnails();
                         }
                     });
+
                 AMap.event.addListener(
                     map,
                     'moveend',
-                    function () {
+                    getBoundsThumbnails
+//                    function () {
+//                        var label = new AMap.Marker({
+//                            map: map,
+//                            position: map.getCenter(), //基点位置
+//                            offset: new AMap.Pixel(0, 0), //相对于基点的偏移位置
+////                            draggable:true,  //是否可拖动
+//                            content: "<div style='background-color: rgb(255, 255, 255);padding: 2px;'><img src='1.jpg' style='width: 34px; height: 34px;'></img></div>"   //自定义点标记覆盖物内容
+//                        });
+////                        label.setContent("<img src=\"1.jpg\" style=\"width: 34px; height: 34px;\"></img>");
+////                        label.setMap(map);
+////                        var latLng = qq.maps.LatLng(25, 102.8);
+////                        label.setPosition(map.getCenter());
+//                        AMap.event.addListener(
+//                            label,
+//                            'click',
+//                            function () {
+//                                if (opts.suppressInfoWindows) {
+//                                    if (infoWindow.getIsOpen()) {
+//                                        infoWindow.close();
+//
+//                                    } else {
+//                                        infoWindow.setContent("<a href='http://www.baidu.com'><img src=\"1.jpg\" style=\"width: 100px; height: 100px;\"/></a>");
+////                                        infoWindow.setPosition(label.getPosition());
+//                                        infoWindow.open(map, label.getPosition());
+//
+//                                    }
+//                                }
+//                            });
+//                        label.setMap(map);  //在地图上添加点
+//                        infoWindows.push(label);
+//                    }
+                );
+            } else {
+                opts.map;
+                map.clearMap();
+                panoramio.clearVisible();
+            }
+
+            var that = this;
+            function getBoundsThumbnails() {
+                var bounds = map.getBounds();
+                var size = map.getSize();
+                var thumbs = panoramio.getBoundsThumbnails({
+                    ne: {
+                        lat: bounds.getNorthEast().lat,
+                        lng: bounds.getNorthEast().lng
+                    },
+                    sw: {
+                        lat: bounds.getSouthWest().lat,
+                        lng: bounds.getSouthWest().lng
+                    }
+                }, {width: size.getWidth(),
+                    height: size.getHeight()}, function(thumbs) {
+                    for (var i in thumbs) {
+                        var photoId = thumbs[i].photoId;
+                        if(panoramio.getVisible(photoId)) {
+                            continue;
+                        }
+                        if(labels[photoId]) {
+                            labels[photoId].setMap(map);
+                            continue;
+                        }
                         var label = new AMap.Marker({
                             map: map,
-                            position: map.getCenter(), //基点位置
+                            position: new AMap.LngLat(thumbs[i].lng, thumbs[i].lat), //基点位置
                             offset: new AMap.Pixel(0, 0), //相对于基点的偏移位置
-//                            draggable:true,  //是否可拖动
-                            content: "<div style='background-color: rgb(255, 255, 255);padding: 2px;'><img src='1.jpg' style='width: 34px; height: 34px;'></img></div>"   //自定义点标记覆盖物内容
+                            content: panoramio.getLabelContent(photoId)  //自定义点标记覆盖物内容
                         });
-//                        label.setContent("<img src=\"1.jpg\" style=\"width: 34px; height: 34px;\"></img>");
-//                        label.setMap(map);
-//                        var latLng = qq.maps.LatLng(25, 102.8);
-//                        label.setPosition(map.getCenter());
+                        label.photoId = photoId;
                         AMap.event.addListener(
                             label,
                             'click',
@@ -87,21 +145,20 @@
                                 if (opts.suppressInfoWindows) {
                                     if (infoWindow.getIsOpen()) {
                                         infoWindow.close();
-
                                     } else {
-                                        infoWindow.setContent("<a href='http://www.baidu.com'><img src=\"1.jpg\" style=\"width: 100px; height: 100px;\"/></a>");
-//                                        infoWindow.setPosition(label.getPosition());
+                                        infoWindow.setContent(panoramio.getInfoWindowContent(this.photoId));
                                         infoWindow.open(map, label.getPosition());
 
                                     }
                                 }
                             });
+                        labels[photoId] = label;
                         label.setMap(map);  //在地图上添加点
-                        infoWindows.push(label);
                     }
-                );
-            } else {
-                opts.map;
+
+                    // trigger data_changed event
+                    $(this).trigger("data_changed", [thumbs]);
+                })
             }
         };
 
