@@ -6,11 +6,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Point {
     
-	private Double geoLat;
-	private Double geoLng;
+	private Double lat;
+	private Double lng;
 	
 	// altitude
-	private Double geoAlti ;
+	private Double alt;
 	
 	private String address;
 	
@@ -20,42 +20,42 @@ public class Point {
 	
 	public Point( Double geoLat, Double geoLng) {
 		super();
-		this.geoLat = geoLat;
-		this.geoLng = geoLng;
+		this.lat = geoLat;
+		this.lng = geoLng;
 	}
 	
 	public Point( Double geoLat, Double geoLng, Double geoAlti) {
 		super();
-		this.geoLat = geoLat;
-		this.geoLng = geoLng;
-		this.geoAlti = geoAlti;
+		this.lat = geoLat;
+		this.lng = geoLng;
+		this.alt = geoAlti;
 	}
 	
-	@Column(name = "geo_long")
-	public Double getGeoLng() {
-		return geoLng;
+	@Column(name = "lng")
+	public Double getLng() {
+		return lng;
 	}
-	public void setGeoLng(Double geoLong) {
-		this.geoLng = geoLong;
-	}
-	
-	@Column(name = "geo_lat")
-	public Double getGeoLat() {
-		return geoLat;
-	}
-	public void setGeoLat(Double geoLat) {
-		this.geoLat = geoLat;
+	public void setLng(Double geoLong) {
+		this.lng = geoLong;
 	}
 	
-	@Column(name = "geo_alti")
-	public Double getGeoAlti() {
-		return geoAlti;
+	@Column(name = "lat")
+	public Double getLat() {
+		return lat;
 	}
-	public void setGeoAlti(Double geoAlti) {
-		this.geoAlti = geoAlti;
+	public void setLat(Double geoLat) {
+		this.lat = geoLat;
+	}
+	
+	@Column(name = "alt")
+	public Double getAlt() {
+		return alt;
+	}
+	public void setAlt(Double geoAlti) {
+		this.alt = geoAlti;
 	}
 
-	@Column(name = "geo_address")
+	@Column(name = "address")
 	public String getAddress() {
 		return address;
 	}

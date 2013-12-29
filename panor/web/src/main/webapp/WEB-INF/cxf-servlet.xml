@@ -18,6 +18,7 @@
     <jaxws:endpoint id="photoServiceApi" implementor="#photoService" address="/PhotoService"/>
     <jaxws:endpoint id="panorThumbServiceApi" implementor="#panorThumbService" address="/PanoramioThumbnailService"/>
     <jaxws:endpoint id="settingsServiceApi" implementor="#userSettingsService" address="/UserSettingsService"/>
+    <jaxws:endpoint id="commentServiceApi" implementor="#commentService" address="/CommentService"/>
     
     <jaxrs:server address="/api">
         <jaxrs:features>
@@ -28,6 +29,7 @@
             <ref bean="photoService"/>
             <ref bean="panorThumbService"/>
             <ref bean="userSettingsService"/>
+            <ref bean="commentService"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider"/>

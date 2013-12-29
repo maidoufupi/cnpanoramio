@@ -17,6 +17,7 @@
     $.cnmap.explore = {
        initMap: function(mapCanvas) {
            map = new qq.maps.Map(document.getElementById(mapCanvas));
+           return map;
        },
        setPanoramioLayer: function() {
            var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});

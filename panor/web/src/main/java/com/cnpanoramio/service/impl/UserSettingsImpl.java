@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,13 @@ public class UserSettingsImpl implements UserSettingsService, UserSettingsManage
 	
 	@Override
 	public UserSettings getCurrentUserSettings() {
+		
+		UserSettings userSettings = null;
+				
 		User user = getCurrentUser();
-		UserSettings userSettings = userSettingsDao.getByUserName(user.getUsername());
+		if(null != user) {
+			userSettings = userSettingsDao.getByUserName(user.getUsername());
+		}		
 		return userSettings;
 	}
 	
@@ -62,16 +68,21 @@ public class UserSettingsImpl implements UserSettingsService, UserSettingsManage
 	}
 	
 	protected User getCurrentUser() {
-		Object principal = SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		String username;
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-		} else {
-			username = principal.toString();
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if(null != auth) {
+			Object principal = auth.getPrincipal();
+			String username;
+			if (principal instanceof UserDetails) {
+				username = ((UserDetails) principal).getUsername();
+			} else {
+				username = principal.toString();
+			}
+			return userManager.getUserByUsername(username);
+		}else {
+			return null;
 		}
-
-		return userManager.getUserByUsername(username);
+		
 	}
 
 	public UserSettingsDao getUserSettingsDao() {

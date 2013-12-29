@@ -17,20 +17,74 @@
     <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 
     <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="js/imgLiquid.js"></script>
 
     <link rel="stylesheet" href="css/PhotoDisplay.css">
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".imgLiquidFill").imgLiquid({fill: true});
-        })
+            $("abbr.latitude").each(function (i, element) {
+                $(this).text($.cnmap.GPS.convert(Number($(this).attr("title"))) + " N");
+            })
 
+            $("abbr.longitude").each(function (i, element) {
+                $(this).text($.cnmap.GPS.convert(Number($(this).attr("title"))) + " E");
+            })
+
+            var template_comment;
+            if (tmpl) {
+                template_comment = tmpl("template-comment");
+            }
+
+            var url = '/panor-web/services/api/';
+            var client = new $.RestClient(url, {
+                stringifyData: true,
+                ajax: {
+                    complete: function (XMLHttpRequest, textStatus) {
+                        var sessionstatus = XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus，
+                        if (sessionstatus == "timeout") {
+                            //如果超时就处理 ，指定要跳转的页面
+                            window.location.replace("/login");
+                        }
+                    }
+                }
+
+            });
+            client.add('comment');
+            $("#comment").on("submit", function (event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                var that = this;
+                var $form = $(this);
+                var formdata = $form.serializeArray();
+                var data = {};
+                $.each(formdata, function (i, element) {
+                    data[element.name] = element.value;
+                })
+                client.comment.create(data).done(function (commentid) {
+                    if (commentid) {
+                        data.id = commentid;
+                        var res = template_comment(data);
+                        $("#comments_wrapper").append(res);
+                        $(that).find("#tcomment").val('');
+                    }
+                })
+            })
+
+            $('#comment').keydown(function (e) {
+                if (e.ctrlKey && e.keyCode == 13) {
+                    // Ctrl-Enter pressed
+                    $(this).trigger('submit')
+                }
+            });
+        })
     </script>
 </head>
 <body>
 <div class="interim-important_notice_wrapper">
-    <div class="interim-important_notice">将您的Google+帐户与Panoramio<a class="interim-important_notice_link" href="#" id="gplus_connector">相关联</a>。<a class="interim-important_notice_link" href="/help/gplus-faq">了解详情</a>。
+    <div class="interim-important_notice">将您的Google+帐户与Panoramio<a class="interim-important_notice_link" href="#"
+                                                                   id="gplus_connector">相关联</a>。<a
+            class="interim-important_notice_link" href="/help/gplus-faq">了解详情</a>。
     </div>
 </div>
 <div class="container">
@@ -90,7 +144,7 @@
                 Selected for Google Maps and Google Earth
             </div>
         </div>
-        <div class="photo_description" id="photo-description">
+        <div class="photo_description hide" id="photo-description">
             <div class="edit_icon"></div>
             <div class="photo_description_formatted gray" id="photo-description-formatted">
             </div>
@@ -131,17 +185,16 @@
             </div>
         </div>
 
-        <form action="/do/send_comment/" method="post" id="comment">
-            <input type="hidden" id="xsrf_token" name="xsrf_token" value="j00ml4JzPzIGSffn2Mb5eToxMzg4MTI1NjQ2NDcwNDY4">
+        <form action="" method="post" id="comment">
             <h3>发送评论 <span>(以 暗梅幽闻花身份)</span></h3>
             <textarea cols="50" rows="8" id="tcomment" name="comment"></textarea>
             <br>
             <input type="hidden" name="owner_id" value="4522308">
             <input type="hidden" name="photo_id" value="64742548">
             <input type="submit" name="submit" id="submit_comment" value="发送评论">
-            <a href="/help_format/" id="help_format" rel="help" target="_blank">
-                想用黑体，斜体或链接？
-            </a>
+            <!--            <a href="/help_format/" id="help_format" rel="help" target="_blank">
+                            想用黑体，斜体或链接？
+                        </a>-->
         </form>
     </div>
     <div class="info-col">
@@ -174,9 +227,9 @@
                 </p>
 
                 <div id="location" class="photo_mapped">
-                    <div class="geo"><a title="查看这片区域" href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=4&amp;k=2"><abbr
-                            class="latitude" title="13.4065313889">13° 24' 23.51" N</abbr>&nbsp;
-                        <abbr class="longitude" title="103.872784722">103° 52' 22.03" E</abbr></a></div>
+                    <div class="geo"><a title="查看这片区域" href="">
+                        <abbr class="latitude" title="${photo.gpsPoint.lat}"></abbr>&nbsp;
+                        <abbr class="longitude" title="${photo.gpsPoint.lng}"></abbr></a></div>
                     <p id="misplaced">
                         <a id="map_photo" href="/map_photo/?id=64643919">
                             放错地点了吗？建议新的位置
@@ -228,5 +281,21 @@
         </div>
     </div>
 </div>
+
+<script id="template-comment" type="text/x-tmpl">
+    <div class="comment" id="{%=o.id%}">
+        <img class="comment-avatar" width="48"
+             src="" alt="">
+        <div class="comment-inner">
+            <div class="comment-author">
+                <a href="/user/${userSettings.user.id}">${userSettings.user.username}</a> 于 2012-01-11
+            </div>
+            <div id="c{%=o.id%}" class="photo-comment-text">
+                <p>{%=o.comment%}</p>
+            </div>
+        </div>
+    </div>
+</script>
+
 </body>
 </html>

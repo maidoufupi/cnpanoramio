@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.PhotoDetails;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -46,6 +47,16 @@ public class PhotoDaoTest {
 	@Before
 	public void preMethodSetup() {
 		
+		
+	}
+
+	@After
+	public void postMethodTearDown() {
+		
+	}
+
+	@Test
+	public void testPicturePersisted() {
 		user = new User();
 		user.setFirstName("tw");
 		user.setLastName("w");
@@ -62,18 +73,27 @@ public class PhotoDaoTest {
 		photoDao.save(photo);
 		Assert.assertNotNull(photo.getId());
 		log.info(photo.getId());
-	}
-
-	@After
-	public void postMethodTearDown() {
+		final List<Photo> photos = photoDao.getUserPhotos(user);
+		Assert.assertEquals(1, photos.size());
+		
 		photoDao.remove(photo);
 		userDao.remove(user);
 	}
-
+	
 	@Test
-	public void testPicturePersisted() {
-		final List<Photo> photos = photoDao.getUserPhotos(user);
-		Assert.assertEquals(1, photos.size());
+	public void testPhotoDetials() {
+		photo = new Photo();
+		photo.setFilePath("D:\\");
+		photo.setFileType("jpg");
+		photo.setName("myPicture");
+//		photo.setOwner(user);
+		PhotoDetails details = new PhotoDetails();
+		details.setBrightnessValue(new Double(123));
+		details.setPhoto(photo);
+		photo.setDetails(details);
+		photoDao.save(photo);
+		photo = photoDao.get(photo.getId());
+		Assert.assertNotNull(photo.getDetails());
 	}
 
 	public UserDao getUserDao() {

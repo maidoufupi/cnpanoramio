@@ -1,7 +1,5 @@
 package com.cnpanoramio.service;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,10 +22,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.webapp.controller.BaseControllerTestCase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/applicationContext-resources.xml" })
+@ContextConfiguration(
+        locations = {"classpath:/applicationContext-resources.xml",
+                "classpath:/applicationContext-dao.xml",
+                "classpath:/applicationContext-service.xml",
+                "classpath*:/applicationContext.xml", // for modular archetypes
+                "classpath*:/applicationContext-test.xml",
+                "/WEB-INF/spring-security.xml",
+                "/WEB-INF/applicationContext*.xml",
+                "/WEB-INF/dispatcher-servlet.xml"})
 public class PhotoServiceTest {
+	
 	protected transient final Log log = LogFactory.getLog(getClass());
 
 	private PhotoService photoService;
@@ -38,8 +46,8 @@ public class PhotoServiceTest {
 
 	@Before
 	public void preMethodSetup() {
-		url = getClass().getResource("/image/IMAG1340.jpg");
-		ins = getClass().getResourceAsStream("/image/IMAG1340.jpg");
+//		url = getClass().getResource("/image/IMAG1340.jpg");
+		
 	}
 
 	@After
@@ -53,13 +61,32 @@ public class PhotoServiceTest {
 
 	@Test
 	public void testFillPhotoDetail() throws ImageReadException, IOException {
+		ins = getClass().getResourceAsStream("/image/image1.jpg");
 		Photo photo = new Photo();
 		photoService.fillPhotoDetail(ins, photo);
-		log.info(photo.getGpsPoint().getGeoLat());
-		log.info(photo.getGpsPoint().getGeoLng());
-		log.info(photo.getGpsPoint().getGeoAlti());
-		Assert.notNull(photo.getGpsPoint());
-		Assert.notNull(photo.getGpsPoint().getGeoAlti());
+		log.info(photo.getDetails().getExifVersion());
+		log.info(photo.getDetails().getMeteringMode());
+		log.info(photo.getDetails().getMake());
+		log.info(photo.getDetails().getModel());
+		log.info(photo.getDetails().getExposureTime());
+		log.info(photo.getDetails().getFocalLength());
+		log.info(photo.getDetails().getFNumber());
+		log.info(photo.getDetails().getISO());
+		
+		
+//		log.info(photo.getGpsPoint().getLat());
+//		log.info(photo.getGpsPoint().getLng());
+//		log.info(photo.getGpsPoint().getAlt());
+//		Assert.notNull(photo.getGpsPoint());
+//		Assert.notNull(photo.getGpsPoint().getAlt());
+	}
+	
+	@Test
+	public void testNoDetails() throws ImageReadException, IOException {
+		ins = getClass().getResourceAsStream("/image/image2.png");
+		Photo photo = new Photo();
+		photoService.fillPhotoDetail(ins, photo);
+		log.info(photo.getDetails().getExifVersion());
 	}
 
 	@Test

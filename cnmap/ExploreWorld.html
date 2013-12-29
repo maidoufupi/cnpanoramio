@@ -36,62 +36,88 @@
     <script src="js/imgLiquid.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-//            console.log($.cnmap.GPS.convert("39,52,28.0087"))
-//            console.log($.cnmap.GPS.convert('39°52\'28.0087"'));
-            $.cnmap.explore.initMap("map-canvas");
-            $.cnmap.explore.setPanoramioLayer();
-//            $.("#get_panoramio").click(function () {
-//                var client = new $.RestClient('/panor-web/services/api/', {
-//                    stringifyData: true
-//                });
-//                client.add('panoramiothumbnail');
-//                var rs = client.panoramiothumbnail.create({
-//                    boundNELat: 180,
-//                    boundNELng: 200,
-//                    boundSWLat: 1,
-//                    boundSWLng: 1,
-//                    sizeX: 100,
-//                    sizeY: 100
-//                }).done(function (data) {
-//                            console.log(data)
-//                        });
-//            })
-        })
+            var map = $.cnmap.initMap("map-canvas", {
+                toolbar: true,
+                scrollzoom: true,
+                overview: true,
+                locatecity: true
+            });
+            setPanoramioLayer(map);
 
+            function setPanoramioLayer(map) {
+                var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});
+                panoramioLayer.setMap(map);
+
+                var template_preview_thumb;
+                if (tmpl) {
+                    template_preview_thumb = tmpl("template-preview-thumb");
+                }
+
+                $(panoramioLayer).bind("data_changed", function(e, data) {
+                    var tiems = [];
+                    $.each(data, function(i, item) {
+                        var imgId = "#r" + item.photoId;
+                        var images = $("#preview").find(imgId);
+                        if(!images.length) {
+                            tiems.push(item);
+                        }
+                    })
+
+                    $("#preview .preview_thumb_area").each(function(i, element) {
+                        var exist;
+                        var id = $(this).attr("id");
+                        id = id.replace("p", "");
+                        $.each(data, function(i, item) {
+                            if(id == item.photoId) {
+                                exist = true;
+                            }
+                        })
+                        if(!exist) {
+                            $(this).remove();
+                        }
+                    })
+                    var result = template_preview_thumb({
+                        items: tiems
+                    });
+                    $("#preview").append(result);
+                })
+            }
+        })
     </script>
 </head>
 <body>
 <table class="front-root table table-striped">
     <tr>
-        <td class="col-xs-6">
+        <td class="">
             <div id="map-canvas"></div>
         </td>
-        <td class="col-xs-6">
+        <td id="thumbarea" class="" width="500px">
             <div id="thumbinnerarea">
                 <ul id="tabs" class="nav nav-pills">
                     <li id="tab_li_1" class="active">
-                        <a set="public" order="popularity" tab="1" kml_text="Google 地球中的热门照片" kml_link="/kml/" href="/map/?set=public&amp;order=popularity">热门照片<span style="display:none" class="total_photos"> (2294)</span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中" style="display: none;">
+                        <a set="public" order="popularity" tab="1" kml_text="Google 地球中的热门照片"
+                           kml_link="/kml/" href="/map/?set=public&amp;order=popularity">热门照片<span style="display:none" class="total_photos"> (2294)</span>
+                            <img class="loading" src="img/loading-p.gif" alt="读取中" style="display: none;">
                         </a>
                     </li>
                     <li id="tab_li_2">
                         <a set="recent" order="popularity" tab="2" kml_text="Google 地球中的最新照片" kml_link="/kml/?recent" href="/map/?set=recent&amp;order=popularity">最新照片<span style="display:none" class="total_photos"></span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中">
+                            <img class="loading hide" src="img/loading-p.gif" alt="读取中">
                         </a>
                     </li>
                     <li id="tab_li_7">
                         <a set="places" order="popularity" tab="7" kml_text="谷歌地球里这个地方在所有的照片。" kml_link="/kml/?place=place_id" href="/map/?set=places&amp;order=popularity">地点<span style="display:none" class="total_photos"></span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中">
+                            <img class="loading hide" src="img/loading-p.gif" alt="读取中">
                         </a>
                     </li>
                     <li id="tab_li_8">
                         <a set="indoor" order="popularity" tab="8" kml_text="谷歌地球里的室内照片" kml_link="/kml/?indoor" href="/map/?set=indoor&amp;order=popularity">室内<span style="display:none" class="total_photos"></span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中">
+                            <img class="loading hide" src="img/loading-p.gif" alt="读取中">
                         </a>
                     </li>
                     <li id="tab_li_4">
                         <a set="6324111" order="upload_date" tab="4" kml_text="您在Google 地球中的照片" kml_link="/kml/?user=6324111" href="/map/?set=6324111&amp;order=upload_date">您的照片<span style="display:none" class="total_photos"></span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中">
+                            <img class="loading hide" src="img/loading-p.gif" alt="读取中">
                         </a>
                     </li>
                 </ul>
@@ -135,8 +161,8 @@
 
 <script id="template-preview-thumb" type="text/x-tmpl">
     {% for (var i=0, item; item=o.items[i]; i++) { %}
-    <div class="preview_thumb_area" style="height: 112px;">
-        <a href="/photo/{%=item.photoId%}">
+    <div class="preview_thumb_area" id="p{%=item.photoId%}" style="height: 112px;">
+        <a href="photo/{%=item.photoId%}">
             <img title=""
                  id="r{%=item.photoId%}"
                  src="services/api/photos/{%=item.photoId%}"
@@ -145,5 +171,6 @@
     </div>
     {% } %}
 </script>
+
 </body>
 </html>

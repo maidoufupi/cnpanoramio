@@ -1,15 +1,21 @@
 package com.cnpanoramio.domain;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.appfuse.model.User;
@@ -21,6 +27,7 @@ public class Photo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
 	private String name;
 
 	@Column(name = "file_type")
@@ -51,6 +58,15 @@ public class Photo {
 
 	@Column(name = "mark_best")
 	private boolean markBest;
+	
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<LatLng> latlngs;
+	
+//	@OneToOne(optional = true, cascade = CascadeType.ALL)
+//	@JoinColumn(name="photo_details")
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="photo")
+    @PrimaryKeyJoinColumn
+	private PhotoDetails details;
 
 	public final Long getId() {
 		return id;
@@ -155,4 +171,23 @@ public class Photo {
 	public void setMarkBest(boolean markBest) {
 		this.markBest = markBest;
 	}
+
+	public List<LatLng> getLatlngs() {
+		return latlngs;
+	}
+
+	public void setLatlngs(List<LatLng> latlngs) {
+		this.latlngs = latlngs;
+	}
+
+	public PhotoDetails getDetails() {
+		return details;
+	}
+
+	public void setDetails(PhotoDetails details) {
+		this.details = details;
+	}
+	
+	
+	
 }

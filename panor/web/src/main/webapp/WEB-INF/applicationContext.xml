@@ -25,7 +25,12 @@
     <!-- Add new DAOs here -->
 
 	<!-- Add new Managers here -->
-
+	
+    <!-- Add Spring Interceptor -->
+    <mvc:interceptors>  
+      <bean class="com.cnpanoramio.webapp.spring.SessionTimeOutInterceptor" />  
+    </mvc:interceptors> 
+    
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />

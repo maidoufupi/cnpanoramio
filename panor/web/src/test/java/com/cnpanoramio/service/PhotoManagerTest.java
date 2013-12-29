@@ -57,11 +57,11 @@ public class PhotoManagerTest {
 	public void testFillPhotoDetail() throws ImageReadException, IOException {
 		Photo photo = new Photo();
 		photoService.fillPhotoDetail(ins, photo);
-		log.info(photo.getGpsPoint().getGeoLat());
-		log.info(photo.getGpsPoint().getGeoLng());
-		log.info(photo.getGpsPoint().getGeoAlti());
+		log.info(photo.getGpsPoint().getLat());
+		log.info(photo.getGpsPoint().getLng());
+		log.info(photo.getGpsPoint().getAlt());
 		Assert.notNull(photo.getGpsPoint());
-		Assert.notNull(photo.getGpsPoint().getGeoAlti());
+		Assert.notNull(photo.getGpsPoint().getAlt());
 	}
 	
 	@Test

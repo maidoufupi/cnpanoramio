@@ -35,10 +35,9 @@ public class AuthenticationListener implements ApplicationListener<Authenticatio
         UserDetails userDetails = (UserDetails) asEvent.getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
         UserSettings us = userSettingsService.getSettingsByUserName(username);
-        log.info(username);
-        log.info(httpSession.getId());
+        httpSession.setAttribute("username", username);
         if(null != us) {
-        	log.info(us.getMapVendor());
+        	log.debug(username + ": " + us.getMapVendor());
         	httpSession.setAttribute("mapVendor", us.getMapVendor());
         }
     	

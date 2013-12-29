@@ -13,9 +13,9 @@
     <file path="/FileUpload.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387627111572" ignored="false" />
     <file path="/a.dummy" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388136570075" ignored="false" />
     <file path="/jquery.fileupload-image.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387039399579" ignored="false" />
-    <file path="/cnmap.Explore.baidu.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388161719447" ignored="false" />
-    <file path="/ExploreWorld.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388152152414" ignored="false" />
-    <file path="/cnmap.baidu.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388160548780" ignored="false" />
+    <file path="/cnmap.Explore.baidu.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388198868685" ignored="false" />
+    <file path="/ExploreWorld.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388202890690" ignored="false" />
+    <file path="/cnmap.baidu.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388202862885" ignored="false" />
     <file path="$PROJECT_DIR$/../../GitHub/jquery.rest/examples/params.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387104398915" ignored="false" />
     <file path="/params.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387104348829" ignored="false" />
     <file path="/RestClient.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387104166668" ignored="false" />
@@ -56,14 +56,14 @@
     <file path="/settings.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387982013928" ignored="false" />
     <file path="/settings.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387986197861" ignored="false" />
     <file path="/Panoramio-settings.htm" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387985454321" ignored="false" />
-    <file path="/cnmap.Explore.qq.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388061825995" ignored="false" />
-    <file path="/PhotoDisplay.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388113045064" ignored="false" />
-    <file path="/PhotoDisplay.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388134022609" ignored="false" />
+    <file path="/cnmap.Explore.qq.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388198959254" ignored="false" />
+    <file path="/PhotoDisplay.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388328038268" ignored="false" />
+    <file path="/PhotoDisplay.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388300978772" ignored="false" />
     <file path="C:/netdisk/cnpanoramio/panor.v2/index-baidu.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388112587836" ignored="false" />
-    <file path="/ExploreWorld.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388162193909" ignored="false" />
-    <file path="/cnmap.qq.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388137087062" ignored="false" />
-    <file path="/cnmap.gaode.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388139600025" ignored="false" />
-    <file path="/cnmap.Explore.gaode.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388160846604" ignored="false" />
+    <file path="/ExploreWorld.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388197531224" ignored="false" />
+    <file path="/cnmap.qq.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388202358905" ignored="false" />
+    <file path="/cnmap.gaode.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388202467583" ignored="false" />
+    <file path="/cnmap.Explore.gaode.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388201783219" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,11 +83,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ExploreWorld.css" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/css/ExploreWorld.css">
+      <file leaf-file-name="PhotoDisplay.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PhotoDisplay.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="10" selection-start="515" selection-end="521" vertical-scroll-proportion="0.14035088">
-              <folding />
+            <state line="22" column="4" selection-start="1174" selection-end="3434" vertical-scroll-proportion="-1.2854915">
+              <folding>
+                <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#li#1;n#ul#0;n#div#2;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,19 +99,21 @@
       <file leaf-file-name="ExploreWorld.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ExploreWorld.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="136" column="77" selection-start="7313" selection-end="7313" vertical-scroll-proportion="-8.766666">
+            <state line="165" column="41" selection-start="8403" selection-end="8403" vertical-scroll-proportion="-10.166667">
               <folding>
-                <element signature="n#style#0;n#span#0;n#a#0;n#li#0;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#img#0;n#a#0;n#li#0;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#0;n#li#1;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#0;n#li#2;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#0;n#li#3;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#a#0;n#li#4;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#a#0;n#div#1;n#div#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#script#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/settings/settings.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="26" column="10" selection-start="593" selection-end="690" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -122,22 +128,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/settings/Panoramio - [设置]_files/settings.js" />
-        <option value="$PROJECT_DIR$/settings/Panoramio-settings.htm" />
-        <option value="$PROJECT_DIR$/settings/settings.css" />
-        <option value="$PROJECT_DIR$/settings/settings.js" />
         <option value="$PROJECT_DIR$/panor/css/explore.css" />
-        <option value="$PROJECT_DIR$/css/PhotoDisplay.css" />
-        <option value="$PROJECT_DIR$/PhotoDisplay.html" />
         <option value="$PROJECT_DIR$/panor/panoramio/cnmap.Panoramio.js" />
         <option value="$PROJECT_DIR$/panor/panoramio/cnmap.baidu.js" />
-        <option value="$PROJECT_DIR$/panor/panoramio/cnmap.gaode.js" />
-        <option value="$PROJECT_DIR$/panor/panoramio/cnmap.qq.js" />
-        <option value="$PROJECT_DIR$/panor/js/cnmap.Explore.qq.js" />
-        <option value="$PROJECT_DIR$/panor/js/cnmap.Explore.baidu.js" />
-        <option value="$PROJECT_DIR$/panor/js/cnmap.Explore.gaode.js" />
         <option value="$PROJECT_DIR$/css/ExploreWorld.css" />
+        <option value="$PROJECT_DIR$/panor/js/cnmap.Explore.baidu.js" />
+        <option value="$PROJECT_DIR$/panor/js/cnmap.Explore.qq.js" />
+        <option value="$PROJECT_DIR$/panor/panoramio/cnmap.qq.js" />
+        <option value="$PROJECT_DIR$/panor/panoramio/cnmap.gaode.js" />
+        <option value="$PROJECT_DIR$/panor/js/cnmap.Explore.gaode.js" />
+        <option value="$PROJECT_DIR$/panor/js/cnmap.Modal.gaode.js" />
+        <option value="$PROJECT_DIR$/panor/js/cnmap.qq.js" />
+        <option value="$PROJECT_DIR$/panor/js/cnmap.gaode.js" />
+        <option value="$PROJECT_DIR$/panor/js/cnmap.baidu.js" />
         <option value="$PROJECT_DIR$/ExploreWorld.html" />
+        <option value="$PROJECT_DIR$/css/PhotoDisplay.css" />
+        <option value="$PROJECT_DIR$/PhotoDisplay.html" />
       </list>
     </option>
   </component>
@@ -189,110 +195,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="panor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="panoramio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="panor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="panor" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fileUpload" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fileUpload" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="blueimp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fileUpload" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -450,140 +352,117 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/css/PhotoDisplay.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="14" selection-start="68" selection-end="68" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.Panoramio.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="49" selection-start="2541" selection-end="2561" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fileUpload/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="138" column="24" selection-start="5639" selection-end="5639" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/panor/js/cnmap.Modal.gaode.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="41" selection-start="2018" selection-end="2041" vertical-scroll-proportion="0.21907601">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.Modal.qq.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="29" selection-start="1663" selection-end="1663" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.alimap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="48" selection-start="399" selection-end="399" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1386321291275" expanded="false" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/FileUpload.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="269" column="63" selection-start="12848" selection-end="12848" vertical-scroll-proportion="-2.9333334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.qq.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="44" selection-start="3377" selection-end="3377" vertical-scroll-proportion="0.3114754">
-          <folding>
-            <element signature="e#1639#1674#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.gaode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="108" column="12" selection-start="3957" selection-end="3957" vertical-scroll-proportion="0.37555885">
-          <folding>
-            <element signature="e#1973#2008#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.baidu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="28" selection-start="2493" selection-end="2493" vertical-scroll-proportion="0.40685543">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.Explore.baidu.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="28" selection-start="1503" selection-end="1503" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.Explore.gaode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="29" selection-start="1029" selection-end="1029" vertical-scroll-proportion="0.874269">
+        <state line="59" column="53" selection-start="2429" selection-end="2429" vertical-scroll-proportion="0.5219298">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/panor/js/cnmap.Explore.qq.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="49" selection-start="1132" selection-end="1132" vertical-scroll-proportion="0.7850877">
+        <state line="20" column="45" selection-start="471" selection-end="471" vertical-scroll-proportion="0.23245615" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.qq.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="43" selection-start="210" selection-end="210" vertical-scroll-proportion="0.30701753" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.gaode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="24" selection-start="416" selection-end="423" vertical-scroll-proportion="0.32456142" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.baidu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="43" selection-start="426" selection-end="426" vertical-scroll-proportion="0.5833333" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.Explore.gaode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="53" selection-start="533" selection-end="533" vertical-scroll-proportion="0.24561404" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.Modal.baidu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="144" column="49" selection-start="5811" selection-end="5811" vertical-scroll-proportion="0.4473684">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PhotoDisplay.html">
+    <entry file="file://$PROJECT_DIR$/css/PhotoDisplay.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="73" selection-start="1312" selection-end="1312" vertical-scroll-proportion="-0.29485178">
+        <state line="76" column="48" selection-start="1313" selection-end="1313" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fileUpload/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="168" column="54" selection-start="6869" selection-end="6889" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#li#1;n#ul#0;n#div#2;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.comm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="32" selection-start="1360" selection-end="1360" vertical-scroll-proportion="0.52011925">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RestClient.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="30" selection-start="310" selection-end="310" vertical-scroll-proportion="-11.9">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/FileUpload.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="70" selection-start="313" selection-end="313" vertical-scroll-proportion="-0.7">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings/Panoramio-settings.htm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-9.756881">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings/settings.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="10" selection-start="593" selection-end="690" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ExploreWorld.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="136" column="77" selection-start="7313" selection-end="7313" vertical-scroll-proportion="-8.766666">
+        <state line="165" column="41" selection-start="8403" selection-end="8403" vertical-scroll-proportion="-10.166667">
           <folding>
-            <element signature="n#style#0;n#span#0;n#a#0;n#li#0;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#a#0;n#li#0;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#a#0;n#li#1;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#a#0;n#li#2;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#a#0;n#li#3;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#a#0;n#li#4;n#ul#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#a#0;n#div#1;n#div#0;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#td#1;n#tr#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#script#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/ExploreWorld.css">
+    <entry file="file://$PROJECT_DIR$/PhotoDisplay.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="10" selection-start="515" selection-end="521" vertical-scroll-proportion="0.14035088">
-          <folding />
+        <state line="22" column="4" selection-start="1174" selection-end="3434" vertical-scroll-proportion="-1.2854915">
+          <folding>
+            <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#1;n#ul#0;n#div#2;n#div#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

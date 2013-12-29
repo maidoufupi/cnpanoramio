@@ -69,8 +69,8 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>test-compile</id>
-						<phase>test-compile</phase>
+						<id>default-cli</id>
+						<phase>default-cli</phase>
 						<goals>
 							<goal>operation</goal>
 						</goals>

@@ -48,6 +48,17 @@ body {
     width: 112px;
 }
 
+#preview div a {
+    display: block;
+    margin: 0 auto;
+    font-size: 80%;
+}
+
+#preview img {
+    margin: 2px 2px;
+    background: white;
+}
+
 #map_pages {
     width: 425px;
     position: absolute;

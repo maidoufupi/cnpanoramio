@@ -27,6 +27,7 @@
 
            var latLng = new BMap.Point(102.8, 25);
            map.centerAndZoom(latLng, 13);
+           return map;
        },
        setPanoramioLayer: function() {
            var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});
@@ -36,6 +37,10 @@
                template_preview_thumb = tmpl("template-preview-thumb");
            }
            $(panoramioLayer).bind("data_changed", function(e, data) {
+               var tiems = data;
+               $.each(data, function(i, item) {
+
+               })
                var result = template_preview_thumb({
                    items: data
                });

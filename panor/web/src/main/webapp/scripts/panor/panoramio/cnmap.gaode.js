@@ -55,6 +55,12 @@
 
                 AMap.event.addListener(
                     map,
+                    'complete',
+                    getBoundsThumbnails
+                );
+
+                AMap.event.addListener(
+                    map,
                     'zoomend',
                     function () {
                         if (map.getZoom() != this.preZoom) {
@@ -147,7 +153,7 @@
                                         infoWindow.close();
                                     } else {
                                         infoWindow.setContent(panoramio.getInfoWindowContent(this.photoId));
-                                        infoWindow.open(map, label.getPosition());
+                                        infoWindow.open(map, this.getPosition());
 
                                     }
                                 }
@@ -157,7 +163,7 @@
                     }
 
                     // trigger data_changed event
-                    $(this).trigger("data_changed", [thumbs]);
+                    $(that).trigger("data_changed", [thumbs]);
                 })
             }
         };

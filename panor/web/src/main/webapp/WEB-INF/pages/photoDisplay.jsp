@@ -5,31 +5,80 @@
 <title><fmt:message key="display.title" /></title>
 <meta name="menu" content="AdminMenu" />
 <link href="<c:url value="/styles/PhotoDisplay.css"/>" rel="stylesheet">
-<script type="text/javascript"
-	src="<c:url value='/scripts/imgLiquid/imgLiquid.js'/>"></script>
 </head>
-
-<script type="text/javascript" src="<c:url value='/scripts/imgLiquid/imgLiquid.js'/>"></script>
-<script type="text/javascript">
+    <script type="text/javascript"
+		src="<c:url value="/scripts/lib/plugins/jquery.rest.min.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/fileupload/blueimp/tmpl.js"/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.comm.js'/>"></script>
+    <script type="text/javascript">
         $(document).ready(function () {
-            $(".imgLiquidFill").imgLiquid({fill: true});
-        })
-</script>
-<%-- <div>
-	<img src="<c:url value="/services/api/photos/${photoId}"/>"
-		alt="" id="main-photo_photo" style="max-height: 689px;"/>
-</div> --%>
+            $("abbr.latitude").each(function (i, element) {
+                $(this).text($.cnmap.GPS.convert(Number($(this).attr("title"))) + " N");
+            })
 
-<div class="interim-important_notice_wrapper">
+            $("abbr.longitude").each(function (i, element) {
+                $(this).text($.cnmap.GPS.convert(Number($(this).attr("title"))) + " E");
+            })
+
+            var template_comment;
+            if (tmpl) {
+                template_comment = tmpl("template-comment");
+            }
+
+            var url = '/panor-web/services/api/';
+            var client = new $.RestClient(url, {
+                stringifyData: true,
+                ajax: {
+                    complete: function (XMLHttpRequest, textStatus) {
+                        var sessionstatus = XMLHttpRequest.getResponseHeader("sessionstatus"); //通过XMLHttpRequest取得响应头，sessionstatus，
+                        if (sessionstatus == "timeout") {
+                            //如果超时就处理 ，指定要跳转的页面
+                            window.location.replace("/login");
+                        }
+                    }
+                }
+
+            });
+            client.add('comment');
+            $("#comment").on("submit", function (event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                var that = this;
+                var $form = $(this);
+                var formdata = $form.serializeArray();
+                var data = {};
+                $.each(formdata, function (i, element) {
+                    data[element.name] = element.value;
+                })
+                client.comment.create(data).done(function (commentid) {
+                    if (commentid) {
+                        data.id = commentid;
+                        var res = template_comment(data);
+                        $("#comments_wrapper").append(res);
+                        $(that).find("#tcomment").val('');
+                    }
+                })
+            })
+
+            $('#comment').keydown(function (e) {
+                if (e.ctrlKey && e.keyCode == 13) {
+                    // Ctrl-Enter pressed
+                    $(this).trigger('submit')
+                }
+            });
+        })
+    </script>
+
+<div class="interim-important_notice_wrapper hide">
     <div class="interim-important_notice">将您的Google+帐户与Panoramio<a class="interim-important_notice_link" href="#" id="gplus_connector">相关联</a>。<a class="interim-important_notice_link" href="/help/gplus-faq">了解详情</a>。
     </div>
 </div>
 <div class="container">
     <div class="photo-col">
-        <div id="main-photo-wrapper" class="imgLiquidFill imgLiquid">
-            <a id="main-photo" href="<c:url value="photo/${photoId}"/>">
-                <img src="<c:url value="/services/api/photos/${photoId}"/>" alt="around Angkor Wat" id="main-photo_photo"
-                     style="max-height: 541px;">
+        <div id="main-photo-wrapper">
+            <a id="main-photo" href="<c:url value="${photo.id}"/>">
+                <img src="<c:url value="/services/api/photos/${photo.id}"/>" alt="around Angkor Wat" id="main-photo_photo">
             </a>
         </div>
         <div>
@@ -81,7 +130,7 @@
                 Selected for Google Maps and Google Earth
             </div>
         </div>
-        <div class="photo_description" id="photo-description">
+        <div class="photo_description hide" id="photo-description">
             <div class="edit_icon"></div>
             <div class="photo_description_formatted gray" id="photo-description-formatted">
             </div>
@@ -121,19 +170,18 @@
                 </div>
             </div>
         </div>
-
-        <form action="/do/send_comment/" method="post" id="comment">
-            <input type="hidden" id="xsrf_token" name="xsrf_token" value="j00ml4JzPzIGSffn2Mb5eToxMzg4MTI1NjQ2NDcwNDY4">
-            <h3>发送评论 <span>(以 暗梅幽闻花身份)</span></h3>
-            <textarea cols="50" rows="8" id="tcomment" name="comment"></textarea>
-            <br>
-            <input type="hidden" name="owner_id" value="4522308">
-            <input type="hidden" name="photo_id" value="64742548">
-            <input type="submit" name="submit" id="submit_comment" value="发送评论">
-            <a href="/help_format/" id="help_format" rel="help" target="_blank">
-                想用黑体，斜体或链接？
-            </a>
-        </form>
+        <c:if test='${not empty userSettings}'>
+	        <form action="<c:url value='/services/api/comment'/>" method="post" id="comment">
+	            <h3>发送评论 <span>(以 ${userSettings.user.username})</span></h3>
+	            <textarea cols="50" rows="8" id="tcomment" name="comment"></textarea>
+	            <br>
+	            <input type="hidden" name="photoid" value="${photo.id}">
+	            <input type="submit" name="submit" id="submit_comment" value="发送评论">
+	           <!--  <a href="/help_format/" id="help_format" rel="help" target="_blank">
+	                想用黑体，斜体或链接？
+	            </a> -->
+	        </form>
+        </c:if>
     </div>
     <div class="info-col">
         <div class="interim-info-card photo-page-card"></div>
@@ -165,9 +213,9 @@
                 </p>
 
                 <div id="location" class="photo_mapped">
-                    <div class="geo"><a title="查看这片区域" href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=4&amp;k=2"><abbr
-                            class="latitude" title="13.4065313889">13° 24' 23.51" N</abbr>&nbsp;
-                        <abbr class="longitude" title="103.872784722">103° 52' 22.03" E</abbr></a></div>
+                    <div class="geo"><a title="查看这片区域" href="">
+                  	  <abbr class="latitude" title="${photo.gpsPoint.lat}"></abbr>&nbsp;
+                      <abbr class="longitude" title="${photo.gpsPoint.lng}"></abbr></a></div>
                     <p id="misplaced">
                         <a id="map_photo" href="/map_photo/?id=64643919">
                             放错地点了吗？建议新的位置
@@ -197,20 +245,20 @@
             <h2>Photo details</h2>
             <ul id="details">
                 <li>
-                    于 于 2012-01-10 上传
+                      于 ${photo.createDate} 上传
                 </li>
                 <li class="license c">
                     © 保留所有权利
-                    <br>作者 Ngo Minh Truc
+                    <br>作者 ${photo.owner.username}
                 </li>
                 <li id="tech-details">
-                    <ul>
-                        <li>相机型号：SONY DSC-HX5V</li>
-                        <li>拍摄日期：2011/11/26 09:17:56</li>
-                        <li>曝光时间：0.033s (1/30)</li>
-                        <li>焦距：4.25mm</li>
-                        <li>光圈： f/3.500</li>
-                        <li>ISO：ISO250</li>
+                   <ul>
+                        <li>相机型号：${details.model}</li>
+                        <li>拍摄日期：${details.dateTimeOriginal}</li>
+                        <li>曝光时间：${details.exposureTime}</li>
+                        <li>焦距：${details.focalLength} mm</li>
+                        <li>光圈： f/${details.FNumber}</li>
+                        <li>ISO：${details.ISO}</li>
                         <li>曝光补偿： 0.00 EV</li>
                         <li>无闪光灯</li>
                     </ul>
@@ -219,3 +267,18 @@
         </div>
     </div>
 </div>
+
+<script id="template-comment" type="text/x-tmpl">
+    <div class="comment" id="{%=o.id%}">
+        <img class="comment-avatar" width="48"
+             src="" alt="">
+        <div class="comment-inner">
+            <div class="comment-author">
+                <a href="/user/${userSettings.user.id}">${userSettings.user.username}</a> 于 2012-01-11
+            </div>
+            <div id="c{%=o.id%}" class="photo-comment-text">
+                <p>{%=o.comment%}</p>
+            </div>
+        </div>
+    </div>
+</script>

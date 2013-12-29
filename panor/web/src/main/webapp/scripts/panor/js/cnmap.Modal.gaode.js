@@ -47,7 +47,7 @@
 //            })
         },
         initMap: function (mapCanvas) {
-            map = new AMap.Map(mapCanvas);          // 创建地图实例
+            map = new AMap.Map(mapCanvas, {resizeEnable: true});          // 创建地图实例
 
             map.plugin(["AMap.ToolBar"], function(){
                 var toolBar = new AMap.ToolBar();

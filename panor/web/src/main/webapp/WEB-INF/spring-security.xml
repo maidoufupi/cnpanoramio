@@ -92,7 +92,7 @@
 	</http>
 	
 	<http xmlns="http://www.springframework.org/schema/security">
-		<intercept-url pattern="/photo/**" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
+	    <intercept-url pattern="/photo/*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/photoUpload" access="ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/exploreWorld" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
@@ -102,6 +102,7 @@
 		<intercept-url pattern="/signup*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/app/**" access="ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/services/api/photos" access="ROLE_USER" />
+		<intercept-url pattern="/services/api/comment" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/panoramiothumbnail" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/settings" access="ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/services/api/photo/trusted/**" access="ROLE_USER" />
@@ -111,6 +112,8 @@
 			authentication-failure-url="/login.jsp?error=true"
 			login-processing-url="/j_security_check" />
 		<logout logout-success-url="/index.jsp" logout-url="/logout.do" />
+		<remember-me user-service-ref="userDao"
+			key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" />
 		<!-- <remember-me/> -->
 	</http>
 

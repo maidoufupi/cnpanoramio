@@ -142,7 +142,7 @@
                                         infoWindow.setContent("<a href='photo/" + this.photoId +
                                             "'><img src='services/api/photos/" + this.photoId +
                                             "' style='width: 100px; height: 100px;'></a>");
-                                        infoWindow.setPosition(label.getPosition());
+                                        infoWindow.setPosition(this.getPosition());
                                         infoWindow.open();
                                         infoWindow.opened = true;
                                     }
@@ -151,7 +151,7 @@
                     }
 
                     // trigger data_changed event
-                    $(this).trigger("data_changed", [thumbs]);
+                    $(that).trigger("data_changed", [thumbs]);
                 })
             }
         };

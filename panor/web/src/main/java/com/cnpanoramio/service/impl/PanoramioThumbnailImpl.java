@@ -47,18 +47,14 @@ public class PanoramioThumbnailImpl implements PanoramioThumbnailService {
 			if(point == null) {
 				continue;
 			}			
-			if (log.isDebugEnabled()) {
-				log.debug("PhotoId:" + photo.getId() + " LatLng:"
-						+ point.getGeoLat() + point.getGeoLng());
-			}
-			if (point.getGeoLat() < boundSize.getBoundNELat()
-					&& point.getGeoLat() > boundSize.getBoundSWLat()
-					&& point.getGeoLng() > boundSize.getBoundSWLng()
-					&& point.getGeoLng() < boundSize.getBoundNELng()) {
+			if (point.getLat() < boundSize.getBoundNELat()
+					&& point.getLat() > boundSize.getBoundSWLat()
+					&& point.getLng() > boundSize.getBoundSWLng()
+					&& point.getLng() < boundSize.getBoundNELng()) {
 				PhotoThumbnail thumb = new PhotoThumbnail();
 				thumb.setPhotoId(photo.getId());
-				thumb.setLat(point.getGeoLat());
-				thumb.setLng(point.getGeoLng());
+				thumb.setLat(point.getLat());
+				thumb.setLng(point.getLng());
 				cPhotoThumbs.add(thumb);
 			}
 		}

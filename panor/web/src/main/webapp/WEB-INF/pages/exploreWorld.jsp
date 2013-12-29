@@ -28,65 +28,111 @@
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.baidu.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Explore.baidu.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.baidu.js"/>"></script>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
     <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.qq.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Explore.qq.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Explore.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
   
   </c:when>
   <c:otherwise>
-   </c:otherwise>
+    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+  </c:otherwise>
 </c:choose>
 
   <script type="text/javascript">
-    $(document).ready(function () {
-        $.cnmap.explore.initMap("map-canvas");
-        $.cnmap.explore.setPanoramioLayer();
-    })
-  </script>  
+        $(document).ready(function () {
+        	var map = $.cnmap.initMap("map-canvas", {
+                toolbar: true,
+                scrollzoom: true,
+                overview: true,
+                locatecity: true
+            });
+            setPanoramioLayer(map);
+
+            function setPanoramioLayer(map) {
+                var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});
+                panoramioLayer.setMap(map);
+
+                if (tmpl) {
+                    template_preview_thumb = tmpl("template-preview-thumb");
+                }
+                $(panoramioLayer).bind("data_changed", function(e, data) {
+                    var tiems = [];
+                    $.each(data, function(i, item) {
+                        var imgId = "#r" + item.photoId;
+                        var images = $("#preview").find(imgId);
+                        if(!images.length) {
+                            tiems.push(item);
+                        }
+                    })
+
+                    $("#preview .preview_thumb_area").each(function(i, element) {
+                        var exist;
+                        var id = $(this).attr("id");
+                        id = id.replace("p", "");
+                        $.each(data, function(i, item) {
+                            if(id == item.photoId) {
+                                exist = true;
+                            }
+                        })
+                        if(!exist) {
+                            $(this).remove();
+                        }
+                    })
+                    var result = template_preview_thumb({
+                        items: tiems
+                    });
+                    $("#preview").append(result);
+                })
+            }
+        })
+    </script> 
 
 <table class="front-root table table-striped">
     <tr>
-        <td class="col-xs-6">
+        <td class="">
             <div id="map-canvas"></div>
         </td>
-        <td class="col-xs-6">
+        <td id="thumbarea" class="" width="500px">
             <div id="thumbinnerarea">
                 <ul id="tabs" class="nav nav-pills">
                     <li id="tab_li_1" class="active">
-                        <a set="public" order="popularity" tab="1" kml_text="Google 地球中的热门照片" kml_link="/kml/" href="/map/?set=public&amp;order=popularity">热门照片<span style="display:none" class="total_photos"> (2294)</span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中" style="display: none;">
+                        <a set="public" order="popularity" tab="1" kml_text="Google 地球中的热门照片"
+                           kml_link="/kml/" href="/map/?set=public&amp;order=popularity">热门照片<span style="display:none" class="total_photos"> (2294)</span>
+                            <img class="loading" src="img/loading-p.gif" alt="读取中" style="display: none;">
                         </a>
                     </li>
                     <li id="tab_li_2">
                         <a set="recent" order="popularity" tab="2" kml_text="Google 地球中的最新照片" kml_link="/kml/?recent" href="/map/?set=recent&amp;order=popularity">最新照片<span style="display:none" class="total_photos"></span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中">
+                            <img class="loading hide" src="img/loading-p.gif" alt="读取中">
                         </a>
                     </li>
                     <li id="tab_li_7">
                         <a set="places" order="popularity" tab="7" kml_text="谷歌地球里这个地方在所有的照片。" kml_link="/kml/?place=place_id" href="/map/?set=places&amp;order=popularity">地点<span style="display:none" class="total_photos"></span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中">
+                            <img class="loading hide" src="img/loading-p.gif" alt="读取中">
                         </a>
                     </li>
                     <li id="tab_li_8">
                         <a set="indoor" order="popularity" tab="8" kml_text="谷歌地球里的室内照片" kml_link="/kml/?indoor" href="/map/?set=indoor&amp;order=popularity">室内<span style="display:none" class="total_photos"></span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中">
+                            <img class="loading hide" src="img/loading-p.gif" alt="读取中">
                         </a>
                     </li>
                     <li id="tab_li_4">
                         <a set="6324111" order="upload_date" tab="4" kml_text="您在Google 地球中的照片" kml_link="/kml/?user=6324111" href="/map/?set=6324111&amp;order=upload_date">您的照片<span style="display:none" class="total_photos"></span>
-                            <img class="loading" src="/img/loading-p.gif" alt="读取中">
+                            <img class="loading hide" src="img/loading-p.gif" alt="读取中">
                         </a>
                     </li>
                 </ul>
@@ -130,7 +176,7 @@
 
 <script id="template-preview-thumb" type="text/x-tmpl">
     {% for (var i=0, item; item=o.items[i]; i++) { %}
-    <div class="preview_thumb_area" style="height: 112px;">
+    <div class="preview_thumb_area" id="p{%=item.photoId%}" style="height: 112px;">
         <a href="photo/{%=item.photoId%}">
             <img title=""
                  id="r{%=item.photoId%}"
@@ -140,5 +186,6 @@
     </div>
     {% } %}
 </script>
+
 </body>
 </html>

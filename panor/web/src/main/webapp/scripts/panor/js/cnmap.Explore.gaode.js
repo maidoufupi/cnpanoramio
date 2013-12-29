@@ -16,7 +16,19 @@
     $.cnmap = $.cnmap || {};
     $.cnmap.explore = {
        initMap: function(mapCanvas) {
-           map = new AMap.Map(mapCanvas);
+           map = new AMap.Map(mapCanvas, {resizeEnable: true});
+           map.plugin(["AMap.ToolBar"], function(){
+               var toolBar = new AMap.ToolBar();
+               map.addControl(toolBar);
+           });
+           map.plugin(["AMap.MapType"],function(){
+               //地图类型切换
+               var type= new AMap.MapType({
+                   defaultType:0 //使用2D地图
+               });
+               map.addControl(type);
+           });
+           return map;
        },
        setPanoramioLayer: function() {
            var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});
@@ -31,7 +43,7 @@
                });
                $("#preview").html("");
                $("#preview").append(result);
-               $(".imgLiquidFill").imgLiquid({fill: true});
+//               $(".imgLiquidFill").imgLiquid({fill: true});
            })
        }
     }
