@@ -19,3 +19,5 @@
     </div>
     <c:remove var="successMessages" scope="session"/>
 </c:if>
+
+    <div data-alerts="alerts" data-titles="{'warning': '<em>Warning!</em>'}" data-ids="myid" data-fade="3000"></div>

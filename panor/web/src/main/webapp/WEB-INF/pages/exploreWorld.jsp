@@ -19,10 +19,9 @@
     
 </head>
 <body>
-    <script type="text/javascript" src="<c:url value="/scripts/fileupload/vendor/jquery.min.1.10.2.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/lib/plugins/jquery.rest.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/fileupload/blueimp/tmpl.min.js"/>"></script>
-    <%-- <script type="text/javascript" src="<c:url value='/scripts/imgLiquid/imgLiquid.js'/>"></script> --%>
+    <script type="text/javascript" src="<c:url value="/bower_components/fileupload/vendor/jquery.min.1.10.2.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/jquery/plugins/jquery.rest.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/tmpl.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.Panoramio.js"/>"></script>
 <c:choose>
@@ -101,12 +100,11 @@
         })
     </script> 
 
-<table class="front-root table table-striped">
-    <tr>
-        <td class="">
-            <div id="map-canvas"></div>
-        </td>
-        <td id="thumbarea" class="" width="500px">
+<div class="container container-main">
+    <div class="col-main">
+        <div id="map-canvas"></div>
+    </div>
+    <div class="col-info">
             <div id="thumbinnerarea">
                 <ul id="tabs" class="nav nav-pills">
                     <li id="tab_li_1" class="active">
@@ -170,9 +168,8 @@
 
                 <div style="clear:both"></div>
             </div>
-        </td>
-    </tr>
-</table>
+	</div>
+</div>
 
 <script id="template-preview-thumb" type="text/x-tmpl">
     {% for (var i=0, item; item=o.items[i]; i++) { %}
@@ -180,7 +177,7 @@
         <a href="photo/{%=item.photoId%}">
             <img title=""
                  id="r{%=item.photoId%}"
-                 src="services/api/photos/{%=item.photoId%}"
+                 src="services/api/photos/{%=item.photoId%}/2"
                  p_id="{%=item.photoId%}">
         </a>
     </div>

@@ -97,7 +97,7 @@
                         lat: bounds.getSouthWest().lat,
                         lng: bounds.getSouthWest().lng
                     }
-                }, size, function(thumbs) {
+                }, map.getZoom(), size, function(thumbs) {
                     for (var i in thumbs) {
                         var photoId = thumbs[i].photoId;
                         if(panoramio.getVisible(photoId)) {
@@ -109,7 +109,7 @@
                         }
                         var label = new BMap.Label();
                         label.photoId = photoId;
-                        label.setContent("<img src='services/api/photos/" + photoId + "' style='width: 34px; height: 34px;'>");
+                        label.setContent(panoramio.getLabelContent(photoId));
                         label.setPosition(new BMap.Point(thumbs[i].lng, thumbs[i].lat));
                         label.addEventListener(
                             'click',
@@ -118,9 +118,7 @@
                                     if (infoWindow.isOpen()) {
                                         infoWindow.close();
                                     } else {
-                                        infoWindow.setContent("<a href='photo/" + this.photoId +
-                                            "'><img src='services/api/photos/" + this.photoId +
-                                            "' style='width: 100px; height: 100px;'></a>");
+                                        infoWindow.setContent(panoramio.getInfoWindowContent(this.photoId));
                                         map.openInfoWindow(infoWindow, this.getPosition());
                                     }
                                 }

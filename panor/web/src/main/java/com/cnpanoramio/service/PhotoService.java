@@ -31,10 +31,6 @@ public interface PhotoService {
 	 * @throws IOException
 	 * @throws ImageReadException
 	 */
-//	@Produces("application/json")
-//	@POST
-//	public Photo store(MultipartBody body) throws ImageReadException;
-
 	@Produces("application/json")
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -80,10 +76,10 @@ public interface PhotoService {
 	 *            The id of the photo.
 	 * @return The photo that was read.
 	 */
-	@Path("/{id}")
+	@Path("/{id}/{level}")
 	@Produces("image/*")
 	@GET
 	@Consumes({ MediaType.APPLICATION_JSON})
-	public Response read(@PathParam("id") Long id);
+	public Response read(@PathParam("id") Long id, @PathParam("level") int level);
 
 }

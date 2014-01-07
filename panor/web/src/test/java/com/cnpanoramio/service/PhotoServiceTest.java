@@ -22,7 +22,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import com.cnpanoramio.domain.Photo;
-import com.cnpanoramio.webapp.controller.BaseControllerTestCase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(

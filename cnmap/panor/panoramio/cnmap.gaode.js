@@ -75,37 +75,6 @@
                     map,
                     'moveend',
                     getBoundsThumbnails
-//                    function () {
-//                        var label = new AMap.Marker({
-//                            map: map,
-//                            position: map.getCenter(), //基点位置
-//                            offset: new AMap.Pixel(0, 0), //相对于基点的偏移位置
-////                            draggable:true,  //是否可拖动
-//                            content: "<div style='background-color: rgb(255, 255, 255);padding: 2px;'><img src='1.jpg' style='width: 34px; height: 34px;'></img></div>"   //自定义点标记覆盖物内容
-//                        });
-////                        label.setContent("<img src=\"1.jpg\" style=\"width: 34px; height: 34px;\"></img>");
-////                        label.setMap(map);
-////                        var latLng = qq.maps.LatLng(25, 102.8);
-////                        label.setPosition(map.getCenter());
-//                        AMap.event.addListener(
-//                            label,
-//                            'click',
-//                            function () {
-//                                if (opts.suppressInfoWindows) {
-//                                    if (infoWindow.getIsOpen()) {
-//                                        infoWindow.close();
-//
-//                                    } else {
-//                                        infoWindow.setContent("<a href='http://www.baidu.com'><img src=\"1.jpg\" style=\"width: 100px; height: 100px;\"/></a>");
-////                                        infoWindow.setPosition(label.getPosition());
-//                                        infoWindow.open(map, label.getPosition());
-//
-//                                    }
-//                                }
-//                            });
-//                        label.setMap(map);  //在地图上添加点
-//                        infoWindows.push(label);
-//                    }
                 );
             } else {
                 opts.map;
@@ -126,7 +95,7 @@
                         lat: bounds.getSouthWest().lat,
                         lng: bounds.getSouthWest().lng
                     }
-                }, {width: size.getWidth(),
+                }, map.getZoom(), {width: size.getWidth(),
                     height: size.getHeight()}, function(thumbs) {
                     for (var i in thumbs) {
                         var photoId = thumbs[i].photoId;

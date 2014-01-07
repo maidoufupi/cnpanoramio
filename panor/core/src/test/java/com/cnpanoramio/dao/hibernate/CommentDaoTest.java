@@ -1,5 +1,7 @@
 package com.cnpanoramio.dao.hibernate;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -55,8 +57,15 @@ public class CommentDaoTest {
 		comment.setPhoto(photo);
 		comment.setUser(userDao.getUsers().get(1));
 		comment.setComment("Very good");
+		comment.setCreateTime(Calendar.getInstance());
 		comment = commentDao.save(comment);
-		log.info(comment.getId());
+		
+		comment = new Comment();
+		comment.setCreateTime(Calendar.getInstance());
+		comment.setPhoto(photo);
+		comment.setUser(userDao.getUsers().get(1));
+		comment.setComment("Very good 2");
+		comment = commentDao.save(comment);
 	}
 
 	@After
@@ -69,6 +78,21 @@ public class CommentDaoTest {
 	public void testGetPhotoComments() {
 		List<Comment> comments = commentDao.getComments(photo.getId());
 		Assert.assertTrue(comments.size() == 1);
+		log.info(comments.get(0).getComment());
+		log.info(comments.get(0).getPhoto().getOwner().getUsername());
+		log.info(comments.get(0).getUser().getUsername());
+	}
+	
+	@Test
+	public void testGetCommentsPager() {
+		Assert.assertEquals(commentDao.getCommentSize(photo.getId()).intValue(), 2);
+		List<Comment> comments = commentDao.getCommentPager(photo.getId(), 2, 1);
+		Assert.assertTrue(comments.size() == 1);
+		log.info(comments.get(0).getCreateTime().get(Calendar.YEAR));
+		log.info(comments.get(0).getCreateTime().get(Calendar.MONTH));
+		log.info(comments.get(0).getCreateTime().get(Calendar.DATE));
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+		log.info(format1.format(comments.get(0).getCreateTime().getTime()));
 		log.info(comments.get(0).getComment());
 		log.info(comments.get(0).getPhoto().getOwner().getUsername());
 		log.info(comments.get(0).getUser().getUsername());

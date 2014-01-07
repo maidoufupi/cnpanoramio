@@ -42,6 +42,7 @@
 		<mapping class="com.cnpanoramio.domain.UserSettings" />
 		<mapping class="com.cnpanoramio.domain.PhotoDetails" />
 		<mapping class="com.cnpanoramio.domain.LatLng" />
+		<mapping class="com.cnpanoramio.domain.PhotoGisIndex" />
 		
 	</session-factory>
 </hibernate-configuration>

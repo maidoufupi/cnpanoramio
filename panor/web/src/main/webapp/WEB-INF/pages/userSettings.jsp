@@ -14,21 +14,13 @@
 
 <body id="generic">
 
-	<script type="text/javascript"
-		src="<c:url value="/scripts/lib/plugins/jquery.rest.min.js"/>"></script>
-	<script type="text/javascript"
-		src="<c:url value="/scripts/settings.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/bower_components/jquery/plugins/jquery.rest.min.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/settings.js"/>"></script>
 
 	<div class="content_wrapper">
-
-
 		<div class="alert alert-success" ata-alert="alert">保存成功</div>
         <div class="alert alert-warning" ata-alert="alert">保存失败</div>
-
-
 		<div id="contenido" class="wide" style="height: 34px;">
-
-
 			<h1>
 				您的<span>设置</span>页面
 			</h1>

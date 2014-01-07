@@ -15,26 +15,30 @@
     $.cnmap = $.cnmap || {};
     $.cnmap.modal = {
 
-        setPlace: function (lat, lng) { // 此参数为baidu坐标
-//            $('.list-group-item.map_photo_cell.active').data("data").lat = lat;
-//            $('.list-group-item.map_photo_cell.active').data("data").lng = lng;
-
+        setPlace: function (lat, lng, address) { // 此参数为baidu坐标
             $("#the-place span.lng").text($.cnmap.GPS.convert(lng));
             $("#the-place span.comma").show();
             $("#the-place span.alt").hide();
             $("#the-place span.lat").text($.cnmap.GPS.convert(lat));
 
-            $.cnmap.utils.qq.getAddress(lat, lng, function(type, detail) {
-                if(detail.address) {
-                    $("#the-address").text(detail.address);
-                    $(".coder_place span.alt").hide();
-                }
-            })
+            if(address) {
+                $("#the-address").text(address);
+                $(".coder_place span.alt").hide();
+            }else {
+                $.cnmap.utils.qq.getAddress(lat, lng, function(data) {
+                    if(data.type == qq.maps.ServiceResultType.GEO_INFO) {
+                        if(data.detail.address) {
+                            $("#the-address").text(data.detail.address);
+                            $(".coder_place span.alt").hide();
+                        }
+                    }
+                })
+            }
         },
         initMap: function (mapCanvas) {
             map = new qq.maps.Map(document.getElementById(mapCanvas));
 
-            $.cnmap.utils.qq.getAddress("中国", function (type, detail) {
+            $.cnmap.utils.qq.getLocation("中国", function (type, detail) {
                 console.log(detail.address);
             })
         },
@@ -52,17 +56,21 @@
             $('#geocoder_form').submit(function (event) {
                 event.preventDefault();
                 // 将地址解析结果显示在地图上,并调整地图视野
-                $.cnmap.utils.qq.getLocation($("#location-search-input").val(), function (type, detail) {
-                    if (detail.location) {
-                        map.panTo(detail.location);
-                        if (marker) {
-                            marker.setPosition(detail.location);
-                            if (!marker.getMap()) {
-                                marker.setMap(map);
+                $.cnmap.utils.qq.getLocation($("#location-search-input").val(), function (data) {
+                    if(data.type == qq.maps.ServiceResultType.GEO_INFO) {
+                        var location = data.detail.location;
+                        if (location) {
+                            map.panTo(location);
+                            if (marker) {
+                                marker.setPosition(location);
+                                if (!marker.getMap()) {
+                                    marker.setMap(map);
+                                }
+                                setPlace(location.lat, location.lng, data.detail.address);
                             }
-                            setPlace(detail.location.lat, detail.location.lng);
                         }
                     }
+
                 })
             });
 

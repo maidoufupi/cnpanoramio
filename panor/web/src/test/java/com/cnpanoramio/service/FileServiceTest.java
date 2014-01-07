@@ -19,7 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.cnpanoramio.service.impl.FileServiceImpl;
+import com.cnpanoramio.service.impl.ali.FileServiceImpl;
+
 
 @RunWith(BlockJUnit4ClassRunner.class)
 //@RunWith(SpringJUnit4ClassRunner.class)
@@ -42,8 +43,12 @@ public class FileServiceTest {
 
 	@Before
 	public void preMethodSetup() {
-		setFileService(new FileServiceImpl());
-		ins = getClass().getResourceAsStream("/image/IMAG1340.jpg");
+		FileServiceImpl fileServiceImpl = new FileServiceImpl();
+		fileServiceImpl.setEndpoint("http://panor-image.oss-cn-qingdao.aliyuncs.com");
+		fileServiceImpl.setAccessKeyId("eKJUbg7d49ojjYCf");
+		fileServiceImpl.setAccessKeySecret("70URxtirPN2sFtiEAu2nlwVS59RMUZ");
+		setFileService(fileServiceImpl);
+		ins = getClass().getResourceAsStream("/image/image1.jpg");
 	}
 
 	@After
@@ -60,10 +65,11 @@ public class FileServiceTest {
 	@Test
 	public void testSaveFile() throws IOException, ImageReadException {
         String fileName = "IMAGE0001.jpg";
-		fileService.saveFile(FileService.TYPE_IMAGE, fileName, ins);
+		fileService.saveFile(FileService.TYPE_IMAGE, 1001L, ins);
 		
-		File file = new File(getClass().getResource("/resources").getPath()
-				+ "/" + FileService.TYPE_IMAGE + "/" + fileName);
+		File file = fileService.readFile(FileService.TYPE_IMAGE, 1001L, 3);
+		log.info(file.getAbsoluteFile());
+		
 		Assert.assertTrue(file.isFile());
 
 		Assert.assertTrue(fileService.deleteFile(FileService.TYPE_IMAGE, fileName));

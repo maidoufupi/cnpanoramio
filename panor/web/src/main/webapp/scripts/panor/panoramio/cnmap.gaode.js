@@ -126,7 +126,7 @@
                         lat: bounds.getSouthWest().lat,
                         lng: bounds.getSouthWest().lng
                     }
-                }, {width: size.getWidth(),
+                }, map.getZoom(), {width: size.getWidth(),
                     height: size.getHeight()}, function(thumbs) {
                     for (var i in thumbs) {
                         var photoId = thumbs[i].photoId;

@@ -16,8 +16,8 @@
     $.cnmap.modal = {
 
         setPlace: function (lat, lng) { // 此参数为baidu坐标
-            $('.list-group-item.map_photo_cell.active').data("data").lat = lat;
-            $('.list-group-item.map_photo_cell.active').data("data").lng = lng;
+//            $('.list-group-item.map_photo_cell.active').data("data").lat = lat;
+//            $('.list-group-item.map_photo_cell.active').data("data").lng = lng;
             $("#the-place span.lng").text($.cnmap.GPS.convert(lng));
             $("#the-place span.comma").show();
             $("#the-place span.alt").hide();

@@ -12,11 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cnpanoramio.dao.PhotoDao;
-import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.dao.PhotoGisIndexDao;
+import com.cnpanoramio.domain.PhotoGisIndex;
 import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.service.PanoramioThumbnailService;
-import com.cnpanoramio.service.PhotoService;
 import com.cnpanoramio.service.json.BoundSize;
 import com.cnpanoramio.service.json.PhotoThumbnail;
 import com.cnpanoramio.service.json.PhotoThumbnails;
@@ -27,36 +26,34 @@ public class PanoramioThumbnailImpl implements PanoramioThumbnailService {
 
 	private transient final Log log = LogFactory
 			.getLog(PanoramioThumbnailService.class);
-
-	private PhotoDao photoDao;
-	private PhotoService photoService = null;
+	
+	@Autowired
+	private PhotoGisIndexDao photoDao;
 
 	@Override
 	public PhotoThumbnails getPhotoThumbnails(BoundSize boundSize) {
 
 		PhotoThumbnails photoThumbs = new PhotoThumbnails();
 		Collection<PhotoThumbnail> cPhotoThumbs = new ArrayList<PhotoThumbnail>();
-		List<Photo> photos = photoDao.getAll();
+		// gaode zoom level 和 PhotoGisIndex zoomLevel对应关系
+		List<PhotoGisIndex> photos = photoDao
+				.getBoundPhotos(
+						new Point(boundSize.getBoundSWLat(), boundSize
+								.getBoundSWLng()),
+						new Point(boundSize.getBoundNELat(), boundSize
+								.getBoundNELng()), (int)Math.round(10 - Math.ceil(boundSize.getZoomLevel() / 2)),
+						boundSize.getWidth(), boundSize.getHeight());
 
 		if (log.isDebugEnabled()) {
 			log.debug(photos.size());
 		}
 
-		for (Photo photo : photos) {
-			Point point = photo.getGpsPoint();
-			if(point == null) {
-				continue;
-			}			
-			if (point.getLat() < boundSize.getBoundNELat()
-					&& point.getLat() > boundSize.getBoundSWLat()
-					&& point.getLng() > boundSize.getBoundSWLng()
-					&& point.getLng() < boundSize.getBoundNELng()) {
-				PhotoThumbnail thumb = new PhotoThumbnail();
-				thumb.setPhotoId(photo.getId());
-				thumb.setLat(point.getLat());
-				thumb.setLng(point.getLng());
-				cPhotoThumbs.add(thumb);
-			}
+		for (PhotoGisIndex photo : photos) {
+			PhotoThumbnail thumb = new PhotoThumbnail();
+			thumb.setPhotoId(photo.getPhotoId());
+			thumb.setLat(photo.getPk().getLat());
+			thumb.setLng(photo.getPk().getLng());
+			cPhotoThumbs.add(thumb);
 		}
 
 		photoThumbs.setThumbnails(cPhotoThumbs);
@@ -65,26 +62,8 @@ public class PanoramioThumbnailImpl implements PanoramioThumbnailService {
 
 	@Override
 	public Response read(Long photoId) {
-		Response response = photoService.read(photoId);
+		Response response = null;// photoService.read(photoId);
 		return response;
 
 	}
-
-	public PhotoDao getPhotoDao() {
-		return photoDao;
-	}
-
-	@Autowired
-	public void setPhotoDao(PhotoDao photoDao) {
-		this.photoDao = photoDao;
-	}
-
-	public PhotoService getPhotoService() {
-		return photoService;
-	}
-
-	public void setPhotoService(PhotoService photoService) {
-		this.photoService = photoService;
-	}
-
 }

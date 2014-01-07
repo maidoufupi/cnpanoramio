@@ -31,10 +31,28 @@
             map.addControl(overviewMapControl);
         }
         if(opts.locatecity) {
-            var latLng = new BMap.Point(102.8, 25);
-            map.centerAndZoom(latLng, 13);
+//            var latLng = new BMap.Point(102.8, 25);
+//            map.centerAndZoom(latLng, 13);
         }
 
         return map;
+    }
+
+    $.cnmap.addMarkerInCenter = function(imap) {
+        var thismap = imap || map;
+        var marker = new BMap.Marker();
+        marker.setPosition(thismap.getCenter());
+        thismap.addOverlay(marker);
+    }
+
+    $.cnmap.setCenter = function(lat, lng, imap) {
+        var thismap = imap || map;
+        var center = new BMap.Point(lng, lat);
+        thismap.centerAndZoom(center, 8);
+    }
+
+    $.cnmap.panBy = function(x, y, imap) {
+        var thismap = imap || map;
+        thismap.panBy(x, y);
     }
 })(jQuery)

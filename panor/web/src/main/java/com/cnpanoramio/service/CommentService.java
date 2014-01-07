@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.cnpanoramio.service.json.Comment;
+import com.cnpanoramio.service.json.CommentResult;
 
 @Path("/comment")
 public interface CommentService {
@@ -14,5 +15,7 @@ public interface CommentService {
 	@Produces("application/json")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public Long save(Comment comment);
+	public CommentResult save(Comment comment);
+	
+	
 }

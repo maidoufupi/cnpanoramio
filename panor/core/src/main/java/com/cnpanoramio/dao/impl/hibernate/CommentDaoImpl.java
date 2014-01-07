@@ -28,4 +28,27 @@ public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long> implement
         return res;
 	}
 
+	@Override
+	public List<Comment> getCommentPager(Long photoId, Integer pageNo,
+			Integer pageSize) {
+		Query query = getSession().createQuery("select c from Comment as c left join c.photo as p where p.id = :photoid");
+		
+		query.setParameter("photoid", photoId);
+		query.setFirstResult((pageNo - 1) * pageSize);  
+        query.setMaxResults(pageSize);  
+  
+		List<Comment> res = query.list();
+		return res;
+	}
+
+	@Override
+	public Long getCommentSize(Long photoId) {
+		Query query = getSession().createQuery("select count(*) from Comment as c left join c.photo as p where p.id = :photoid");
+		
+		query.setParameter("photoid", photoId);
+  
+		Long count = (Long) query.uniqueResult();
+		return count;
+	}
+
 }

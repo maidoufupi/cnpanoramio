@@ -9,20 +9,19 @@
     <link rel="icon" href="<c:url value="/images/favicon.ico"/>"/>
     <title><decorator:title/> | <fmt:message key="webapp.name"/></title>
 
-    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/bootstrap3/css/bootstrap.min.css'/>" />
+    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/bower_components/bootstrap3/css/bootstrap.min.css'/>" />
     <!-- Bootstrap theme -->
-    <link href="<c:url value="/bootstrap3/css/bootstrap-theme.min.css"/>" rel="stylesheet">
-    <%-- <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/bootstrap3/css/bootstrap-responsive-2.2.1.min.css'/>" /> --%>
+    <link href="<c:url value="/bower_components/bootstrap3/css/bootstrap-theme.min.css"/>" rel="stylesheet">
+    
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/style.css'/>" />
     <decorator:head/>
 
-    <script type="text/javascript" src="<c:url value='/scripts/lib/jquery-1.8.2.min.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/bootstrap3/js/bootstrap.min.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/lib/plugins/jquery.cookie.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/imgLiquid/imgLiquid.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/bootstrap3/js/bootstrap.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/jquery/plugins/jquery.cookie.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/imgLiquid/imgLiquid.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/Panor.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/Panor-init.js'/>"></script>
+    <script>var ctx = "${pageContext.request.contextPath}"</script>
 </head>
 <body<decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>>
     <c:set var="currentMenu" scope="request"><decorator:getProperty property="meta.menu"/></c:set>
@@ -37,13 +36,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<c:url value='/'/>"><fmt:message key="webapp.name"/></a>
+                <a class="navbar-brand" href="<c:url value='/'/>"><img src="<c:url value="/images/logo.png"/>" class="navbar-logo"/></a>
                 
-                <c:if test='${pageContext.request.locale.language ne "en"}'>
+                <%-- <c:if test='${pageContext.request.locale.language ne "en"}'>
                     <div id="switchLocale"><a href="<c:url value='/?locale=en'/>">
                         <fmt:message key="webapp.name"/> in English</a>
                     </div>
-                </c:if>
+                </c:if> --%>
             </div>
             <%@ include file="/common/menu.jsp" %>
         </div>
@@ -54,13 +53,13 @@
         <div class="row">
             <decorator:body/>
 
-            <c:if test="${currentMenu == 'AdminMenu'}">
+            <%-- <c:if test="${currentMenu == 'AdminMenu'}">
                 <div class="span2">
                 <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
                     <menu:displayMenu name="AdminMenu"/>
                 </menu:useMenuDisplayer>
                 </div>
-            </c:if>
+            </c:if> --%>
         </div>
     </div>
 

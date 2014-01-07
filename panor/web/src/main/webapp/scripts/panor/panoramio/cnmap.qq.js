@@ -126,7 +126,7 @@
                         }
                         var label = new qq.maps.Label();
                         label.photoId = photoId;
-                        label.setContent("<img src='services/api/photos/" + photoId + "' style='width: 34px; height: 34px;'>");
+                        label.setContent(panoramio.getLabelContent(photoId));
                         label.setMap(map);
                         label.setPosition(new qq.maps.LatLng(thumbs[i].lat, thumbs[i].lng));
                         labels[photoId] = label;
@@ -139,9 +139,7 @@
                                         infoWindow.close();
                                         infoWindow.opened = false;
                                     } else {
-                                        infoWindow.setContent("<a href='photo/" + this.photoId +
-                                            "'><img src='services/api/photos/" + this.photoId +
-                                            "' style='width: 100px; height: 100px;'></a>");
+                                        infoWindow.setContent(panoramio.getInfoWindowContent(this.photoId));
                                         infoWindow.setPosition(this.getPosition());
                                         infoWindow.open();
                                         infoWindow.opened = true;

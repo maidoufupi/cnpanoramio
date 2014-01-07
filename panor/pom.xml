@@ -47,9 +47,14 @@
 				</dependencies>
 			</plugin>
 
-			<!-- <plugin> <artifactId>maven-compiler-plugin</artifactId> <version>2.3.1</version> 
-				<configuration> <source>1.6</source> <target>1.6</target> </configuration> 
-				</plugin> -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -375,8 +380,7 @@
 		<web.framework>spring</web.framework>
 		<amp.genericCore>true</amp.genericCore>
 		<amp.fullSource>false</amp.fullSource>
-		<db.name>panor</db.name>
-
+		
 		<!-- Framework dependency versions -->
 		<appfuse.version>2.2.1</appfuse.version>
 		<commons.fileupload.version>1.2.1</commons.fileupload.version>
@@ -399,10 +403,10 @@
 
 		<cargo.container>tomcat7x</cargo.container>
 		<!-- <cargo.container.home>${env.CATALINA_HOME}</cargo.container.home> -->
-		<cargo.container.home>D:/portable/tomcat/tomcat-7</cargo.container.home>
+		<cargo.container.home>C:/dev/Java/apache-tomcat-7.0.47</cargo.container.home>
 		<cargo.container.url>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.33/bin/apache-tomcat-7.0.33.zip</cargo.container.url>
 		<cargo.host>localhost</cargo.host>
-		<cargo.port>8081</cargo.port>
+		<cargo.port>8080</cargo.port>
 		<cargo.wait>false</cargo.wait>
 
 		<!-- Jetty Cargo settings: <cargo.container>jetty6x</cargo.container> <cargo.container.url>http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip</cargo.container.url> -->
@@ -415,11 +419,18 @@
 		<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
 		<jdbc.version>5.1.22</jdbc.version>
 		<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+		
+		<db.name>panor</db.name>
 		<jdbc.url>jdbc:mysql://localhost/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
 		<jdbc.username>root</jdbc.username>
 		<jdbc.password>root</jdbc.password>
+		
+		<!-- <db.name>db775f7wf1lr50gp</db.name>
+		<jdbc.url>jdbc:mysql://panoramio.mysql.rds.aliyuncs.com/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
+		<jdbc.username>db775f7wf1lr50gp</jdbc.username>
+		<jdbc.password>String0int</jdbc.password> -->
 
-		<contextpath-name>/cnpanoramio</contextpath-name>
+		<contextpath-name>/</contextpath-name>
 	</properties>
 	<modules>
 		<module>core</module>

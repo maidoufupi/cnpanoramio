@@ -30,6 +30,8 @@
     $.cnmap = $.cnmap || {};
     $.cnmap.utils = $.cnmap.utils || {};
 
+    var geocoder, geo_listener;
+
     $.cnmap.utils.getLocalCity = function (callback/*city*/) {
         var url = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';
         $.getScript(url).done(function () {
@@ -146,7 +148,7 @@
             if(!this.geocoder) {
                 this.init();
             }
-            var latlng = new qq.maps.LatLng();
+            var latlng = new qq.maps.LatLng(lat, lng);
             this.geocoder.setComplete(callback);
             this.geocoder.getAddress(latlng);
         },
@@ -160,22 +162,42 @@
     }
 
     $.cnmap.utils.gaode = {
-        geocoder: null,
+        map: null,
         init: function () {
-            this.geocoder = new AMap.Geocoder();
+            //加载地理编码插件
+            this.map.plugin(["AMap.Geocoder"], function() { //加载地理编码插件
+                geocoder = new AMap.Geocoder({
+                    radius: 1000, //以已知坐标为中心点，radius为半径，返回范围内兴趣点和道路信息
+                    extensions: "all" //返回地址描述以及附近兴趣点和道路信息，默认“base”
+                });
+            });
         },
         getAddress: function(lat, lng, callback) {
-            if(!this.geocoder) {
+            if(!geocoder) {
                 this.init();
             }
             var latlng = new AMap.LngLat(lng, lat);
-            this.geocoder.regeocode(latlng, callback);
+//            this.geocoder.regeocode(latlng, callback);
+            if(geo_listener) {
+                AMap.event.removeListener(geo_listener);
+            }
+            //返回地理编码结果
+            geo_listener = AMap.event.addListener(geocoder, "complete", callback);
+            //逆地理编码
+            geocoder.getAddress(latlng);
         },
         getLocation: function(address, callback) {
-            if(!this.geocoder) {
+            if(!geocoder) {
                 this.init();
             }
-            this.geocoder.geocode(address, callback);
+//            this.geocoder.geocode(address, callback);
+            if(geo_listener) {
+                AMap.event.removeListener(geo_listener);
+            }
+            //返回地理编码结果
+            geo_listener = AMap.event.addListener(geocoder, "complete", callback);
+            //逆地理编码
+            geocoder.getLocation(address);
         }
     }
 

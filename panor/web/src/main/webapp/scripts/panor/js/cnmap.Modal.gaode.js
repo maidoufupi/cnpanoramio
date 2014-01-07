@@ -14,53 +14,44 @@
     $.cnmap = $.cnmap || {};
     $.cnmap.modal = {
 
-        setPlace: function (lat, lng) { // 此参数为非gps坐标
-            $('.list-group-item.map_photo_cell.active').data("data").lat = lat;
-            $('.list-group-item.map_photo_cell.active').data("data").lng = lng;
+        setPlace: function (lat, lng, address) { // 此参数为非gps坐标
+//            $('.list-group-item.map_photo_cell.active').data("data").lat = lat;
+//            $('.list-group-item.map_photo_cell.active').data("data").lng = lng;
             $("#the-place span.lng").text($.cnmap.GPS.convert(lng));
             $("#the-place span.comma").show();
             $("#the-place span.alt").hide();
             $("#the-place span.lat").text($.cnmap.GPS.convert(lat));
 
-            $.cnmap.utils.gaode.getAddress(lat, lng, function(res) {
-                console.log(res);
-                if(res.status == 'E0' && res.count) {
-                    var detail = res.list[0];
-                    var text = detail.city.name;
-                    text = text + detail.district.name;
-                    text = text + detail.province.name;
-                    $("#the-address").text(text);
-                    $(".coder_place span.alt").hide();
-                }
-            })
-//            geocoder.getLocation(point, function (rs) {
-//                if (rs) {
-//                    var addComp = rs.addressComponents;
-//                    var address = addComp.province +
-//                        (addComp.city ? ("," + addComp.city +
-//                            (addComp.street ? ("," + addComp.street +
-//                                (addComp.streetNumber ? ("," + addComp.streetNumber) : "")) : "")) : "");
-//                    $("#the-address").text(address);
-////                    $("#the-address").text( + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
-//                    $(".coder_place span.alt").hide();
-//                }
-//            })
+            if (address) {
+                $("#the-address").text(address);
+                $(".coder_place span.alt").hide();
+            } else {
+                $.cnmap.utils.gaode.getAddress(lat, lng, function (res) {
+                    if (res.info == "OK") {
+                        $("#the-address").text(res.regeocode.formattedAddress);
+                        $(".coder_place span.alt").hide();
+                    }
+                })
+            }
+
         },
         initMap: function (mapCanvas) {
             map = new AMap.Map(mapCanvas, {resizeEnable: true});          // 创建地图实例
 
-            map.plugin(["AMap.ToolBar"], function(){
+            map.plugin(["AMap.ToolBar"], function () {
                 var toolBar = new AMap.ToolBar();
                 map.addControl(toolBar);
             });
-            map.plugin(["AMap.MapType"],function(){
+            map.plugin(["AMap.MapType"], function () {
                 //地图类型切换
-                var type= new AMap.MapType({
-                    defaultType:0 //使用2D地图
+                var type = new AMap.MapType({
+                    defaultType: 0 //使用2D地图
                 });
                 map.addControl(type);
             });
-
+            // 新版geocoder配置
+            $.cnmap.utils.gaode.map = map;
+            $.cnmap.utils.gaode.init();
 //            $.cnmap.utils.gaode.getLocation("中国", function (res) {
 //                console.log(res);
 //            })
@@ -70,7 +61,7 @@
             var setPlace = this.setPlace,
                 savePlace = this.savePlace;
             marker = new AMap.Marker();
-            marker.setMap(map);
+            //marker.setMap(map);
             marker.setDraggable(true);
             AMap.event.addListener(marker, "dragend", function (event) {
                 setPlace(event.lnglat.lat, event.lnglat.lng);
@@ -79,24 +70,48 @@
             $('#geocoder_form').submit(function (event) {
                 event.preventDefault();
                 // 将地址解析结果显示在地图上,并调整地图视野
-                $.cnmap.utils.gaode.getLocation($("#location-search-input").val(), function (point) {
-//                    if (point) {
-//                        map.centerAndZoom(point, map.getZoom());
-//                        if (marker) {
-//                            marker.setPosition(point);
-//                            if (!marker.getMap()) {
-//                                map.addOverlay(marker);
-//                            }
-//
-//                            setPlace(point.lat, point.lng);
-//                        }
-//                    }
+                $.cnmap.utils.gaode.getLocation($("#location-search-input").val(), function (res) {
+//                    console.log(res);
+                    if (res.info == "OK") {
+                        var latlng = res.geocodes[0].location;
+                        map.setCenter(latlng);
+                        switch(res.geocodes[0].level) {
+                            case '省':
+                                map.setZoom(6);
+                                break;
+                            case '市':
+                                map.setZoom(8);
+                                break;
+                            case '区县':
+                                map.setZoom(11);
+                                break;
+                            case '乡镇':
+                                map.setZoom(12);
+                                break;
+                            case '村庄':
+                                map.setZoom(13);
+                                break;
+                            case '道路':
+                                map.setZoom(14);
+                                break;
+                            case '兴趣点':
+                                map.setZoom(15);
+                        }
+
+                        if (marker) {
+                            marker.setPosition(latlng);
+                            marker.setMap(map);
+                            marker.show();
+                            setPlace(latlng.lat, latlng.lng, res.geocodes[0].formattedAddress);
+                        }
+                    }
                 });
             });
 
             $("#button-set-place").click(function () {
                 var latlng = map.getCenter();
                 marker.setPosition(latlng);
+                marker.setMap(map);
                 marker.show();
                 setPlace(latlng.lat, latlng.lng);
             });
@@ -111,8 +126,8 @@
         },
         savePlace: function () {
             var placeData = {
-                lat: $.cnmap.GPS.convert($("#the-place span.lat").text()),
-                lng: $.cnmap.GPS.convert($("#the-place span.lng").text()),
+                lat: $.cnmap.GPS.convert($("#the-place span.lat").text()) || 0,
+                lng: $.cnmap.GPS.convert($("#the-place span.lng").text()) || 0,
                 address: $("#the-address").text(),
                 vendor: "gaode"
             };
@@ -126,6 +141,7 @@
 
             if (marker) {
                 marker.setPosition(point);
+                marker.setMap(map);
                 marker.show();
                 map.setCenter(marker.getPosition());
             }
@@ -140,10 +156,10 @@
                 $(this).addClass("active");
                 var data = $(this).data("data");
                 if (data.lat || data.lng) {
-                    if(data.vendor && data.vendor == "baidu") {
+                    if (data.vendor && data.vendor == "baidu") {
                         setPlace(data.lat, data.lng);
                         setMarkerPoint(new AMap.LngLat(data.lng, data.lat));
-                    }else {
+                    } else {
                         setPlace(data.lat, data.lng);
                         setMarkerPoint(new AMap.LngLat(data.lng, data.lat));
 //                        $.cnmap.utils.baidu.convert(data.lat, data.lng, function(point) {

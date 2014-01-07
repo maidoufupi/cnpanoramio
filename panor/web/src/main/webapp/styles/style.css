@@ -33,6 +33,59 @@ body#login {
     color: #0099ff;
 }
 
+/* navbar-start */
+.navbar.navbar-fixed-top {
+    background-color: #000000;
+}
+
+.glyphicon{
+    font-size: 16px;
+}
+
+.navbar.navbar-fixed-top a {
+    color: #7e7e7e;
+}
+
+.navbar.navbar-fixed-top span {
+    color: #7e7e7e;
+}
+
+.navbar.navbar-fixed-top a:hover {
+    color: #fff;
+}
+
+.white, .white a {
+    color: #7e7e7e;
+}
+
+.nav.navbar-nav .white:hover, .white a:hover {
+    color: #fff;
+}
+
+.nav.navbar-nav a:hover {
+    background-color: #000000;
+}
+
+#navbar-search {
+    width: 240px;
+    margin-top: 8px;
+    color: #f0ad4e;
+}
+
+.nav.navbar-nav .btn-group {
+    margin-bottom: 0;
+}
+
+.navbar-brand {
+    padding: 5px;
+    height: 50px;
+}
+.navbar-logo {
+    width: 130px;
+    height: 90%;
+}
+/* navbar-end */
+
 #switchLocale {
     position: absolute;
     right: 10px;

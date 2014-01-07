@@ -27,17 +27,18 @@
 	<!-- Add new Managers here -->
 	
     <!-- Add Spring Interceptor -->
-    <mvc:interceptors>  
+<!--     <mvc:interceptors>  
       <bean class="com.cnpanoramio.webapp.spring.SessionTimeOutInterceptor" />  
-    </mvc:interceptors> 
+    </mvc:interceptors>  -->
     
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="locations">
 			<list>
-				<value>classpath:jdbc.properties</value>
-				<value>classpath:mail.properties</value>
+				<value>classpath*:jdbc.properties</value>
+				<value>classpath*:mail.properties</value>
+				<value>classpath*:aliyun.properties</value>
 			</list>
 		</property>
 	</bean>

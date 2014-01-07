@@ -1,4 +1,5 @@
 <%@ include file="/common/taglibs.jsp"%>
+<%@ page language="java" pageEncoding="UTF-8"%>
 
 <html lang="en">
 <head>
@@ -13,45 +14,39 @@
 <meta name="description" content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap styles -->
-<!-- <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
-<%-- <link rel="stylesheet" href="<c:url value="/styles/fileupload/bootstrap.min.css"/>"> --%>
-<!-- blueimp Gallery styles -->
-<!-- <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css"> -->
-<link rel="stylesheet" href="<c:url value="/scripts/fileupload/css/blueimp-gallery.min.css"/>">
+<link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/blueimp-gallery.min.css"/>">
 <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-<link rel="stylesheet" href="<c:url value="/styles/fileupload/jquery.fileupload.css"/>">
-<link rel="stylesheet" href="<c:url value="/styles/fileupload/jquery.fileupload-ui.css"/>">
+<link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/jquery.fileupload.css"/>">
+<link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/jquery.fileupload-ui.css"/>">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
-<noscript><link rel="stylesheet" href="<c:url value="/styles/fileupload/jquery.fileupload-noscript.css"/>"></noscript>
-<noscript><link rel="stylesheet" href="<c:url value="/styles/fileupload/jquery.fileupload-ui-noscript.css"/>"></noscript>
-<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
-<script type="text/javascript" src="<c:url value="/scripts/fileupload/vendor/jquery.min.1.10.2.js"/>"></script>
-
+<noscript><link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/jquery.fileupload-noscript.css"/>"></noscript>
+<noscript><link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/jquery.fileupload-ui-noscript.css"/>"></noscript>
     <!-- Custom styles for this template -->
-    <link href="<c:url value="/styles/fileupload/modal.css"/>" rel="stylesheet">
+    <link href="<c:url value="/styles/modal.css"/>" rel="stylesheet">
+<script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery-1.8.2.min.js'/>"></script>
+</head>
 
-    <script type="text/javascript">
+<body>
+<script type="text/javascript">
         $(document).ready(function () {
             $('#myModal').modal({show: false});
             $.cnmap.modal.initMap("upload-map");
             $.cnmap.modal.initGeocoder();
         })
-
     </script>
-</head>
-
-<body>
+<!-- The main application script -->
+<script src="<c:url value="/bower_components/fileupload/main.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.canvas.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
-    <script type="text/javascript"
-            src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
+    <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.baidu.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
-<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.qq.js"/>"></script>
+  	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.qq.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
@@ -62,17 +57,18 @@
 	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.gaode.js"/>"></script>
    </c:otherwise>
 </c:choose>
-  
-<div class="span3">
+      
+<%-- <div class="span3">
 	<h2>
 		<fmt:message key="upload.heading" />
 	</h2>
 	<p>
 		<fmt:message key="upload.message" />
 	</p>
-</div>
+</div> --%>
 
 <div class="container">
+<h1>上传您的照片</h1>
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="<c:url value="/services/api/photos"/>" method="POST" enctype="multipart/form-data">
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
@@ -92,11 +88,11 @@
                     <i class="glyphicon glyphicon-ban-circle"></i>
                     <span>Cancel upload</span>
                 </button>
-                <button type="button" class="btn btn-danger delete">
-                    <i class="glyphicon glyphicon-trash"></i>
-                    <span>Delete</span>
-                </button>
-                <input type="checkbox" class="toggle">
+                <button id="b-change-location" type="button" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-tint"></i>
+                        <span>更改位置</span>
+                    </button>
+                <!-- <input type="checkbox" class="toggle"> -->
                 <!-- The loading indicator is shown during file processing -->
                 <span class="fileupload-loading"></span>
             </div>
@@ -210,7 +206,7 @@
             {% } %}
         </td>
         <td class="col-xs-3">
-            <a class="a-change-location" href="#">change the location</a>
+            <a class="a-change-location" href="#">更改位置</a>
             <div class="location-display-place">
                 <span class="lat"></span>
                 <span class="comma"></span>
@@ -278,43 +274,35 @@
 </script>
 
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-<script src="<c:url value="/scripts/fileupload/vendor/jquery.ui.widget.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/vendor/jquery.ui.widget.js"/>"></script>
 <!-- The Templates plugin is included to render the upload/download listings -->
-<!-- <script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script> -->
-<script type="text/javascript" src="<c:url value="/scripts/fileupload/blueimp/tmpl.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/tmpl.min.js"/>"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<!-- <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script> -->
-<script type="text/javascript" src="<c:url value="/scripts/fileupload/blueimp/load-image.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/load-image.min.js"/>"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<!-- <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script> -->
-<script type="text/javascript" src="<c:url value="/scripts/fileupload/blueimp/canvas-to-blob.min.js"/>"></script>
-<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<!-- <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script> -->
-<%-- <script type="text/javascript" src="<c:url value="/scripts/fileupload/vendor/bootstrap.min.js"/>"></script> --%>
+<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/canvas-to-blob.min.js"/>"></script>
 <!-- blueimp Gallery script -->
-<!-- <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script> -->
-<script type="text/javascript" src="<c:url value="/scripts/fileupload/blueimp/jquery.blueimp-gallery.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/jquery.blueimp-gallery.min.js"/>"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="<c:url value="/scripts/fileupload/jquery.iframe-transport.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/jquery.iframe-transport.js"/>"></script>
 <!-- The basic File Upload plugin -->
-<script src="<c:url value="/scripts/fileupload/jquery.fileupload.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/jquery.fileupload.js"/>"></script>
 <!-- The File Upload processing plugin -->
-<script src="<c:url value="/scripts/fileupload/jquery.fileupload-process.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-process.js"/>"></script>
 <!-- The File Upload image preview & resize plugin -->
-<script src="<c:url value="/scripts/fileupload/jquery.fileupload-image.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-image.js"/>"></script>
 <!-- The File Upload audio preview plugin -->
-<script src="<c:url value="/scripts/fileupload/jquery.fileupload-audio.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-audio.js"/>"></script>
 <!-- The File Upload video preview plugin -->
-<script src="<c:url value="/scripts/fileupload/jquery.fileupload-video.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-video.js"/>"></script>
 <!-- The File Upload validation plugin -->
-<script src="<c:url value="/scripts/fileupload/jquery.fileupload-validate.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-validate.js"/>"></script>
 <!-- The File Upload user interface plugin -->
-<script src="<c:url value="/scripts/fileupload/jquery.fileupload-ui.js"/>"></script>
-<!-- The main application script -->
-<script src="<c:url value="/scripts/fileupload/main.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-ui.js"/>"></script>
+
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
-<script src="<c:url value="/scripts/fileupload/cors/jquery.xdr-transport.js"/>"></script>
+<script src="<c:url value="/bower_components/fileupload/cors/jquery.xdr-transport.js"/>"></script>
 <![endif]-->
 </body> 
 </html>

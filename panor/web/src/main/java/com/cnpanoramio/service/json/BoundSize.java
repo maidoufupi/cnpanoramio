@@ -11,7 +11,9 @@ public class BoundSize {
 	private Double boundNELng;
 	private Double boundSWLat;
 	private Double boundSWLng;
-
+	
+	private int zoomLevel;
+	
 	private Integer width;
 	private Integer height;
 	
@@ -50,6 +52,12 @@ public class BoundSize {
 	}
 	public void setHeight(Integer height) {
 		this.height = height;
+	}
+	public int getZoomLevel() {
+		return zoomLevel;
+	}
+	public void setZoomLevel(int zoomLevel) {
+		this.zoomLevel = zoomLevel;
 	}
 
 }

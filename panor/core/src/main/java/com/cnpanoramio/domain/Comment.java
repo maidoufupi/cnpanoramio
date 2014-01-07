@@ -1,5 +1,8 @@
 package com.cnpanoramio.domain;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +31,8 @@ public class Comment {
 	private User user;
 	
 	private String comment;
+	
+	private Calendar createTime;
 
 	public Long getId() {
 		return id;
@@ -60,6 +65,13 @@ public class Comment {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
+
+	public Calendar getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Calendar createTime) {
+		this.createTime = createTime;
+	}	
 	
 }

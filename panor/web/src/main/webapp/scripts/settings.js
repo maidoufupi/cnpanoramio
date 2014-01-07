@@ -7,8 +7,8 @@
  */
 
 $(document).ready(function () {
-
-    var url = '/panor-web/services/api/';
+	ctx = ctx || "";
+    var url = ctx + '/services/api/';
     var client = new $.RestClient(url, {
         stringifyData: true
     });

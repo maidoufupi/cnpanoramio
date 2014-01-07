@@ -22,7 +22,7 @@
     $.cnmap = $.cnmap || {};
 
     $.cnmap.Panoramio = function (opts/*?:PanoramioOptions*/) {
-        var url = '/panor-web/services/api/';
+        var url = ctx + '/services/api/';
         var client = new $.RestClient(url, {
             stringifyData: true
         });
@@ -31,7 +31,7 @@
 
         var photos = {};
 
-        this.getBoundsThumbnails = function (bounds/*:LatLngBounds*/, size/*:Size*/, callback) {
+        this.getBoundsThumbnails = function (bounds/*:LatLngBounds*/, zoomLevel, size/*:Size*/, callback) {
             var clearVisible = this.clearVisible,
                 setVisible = this.setVisible;
             var thumbnails;
@@ -40,6 +40,7 @@
                 boundNELng: bounds.ne.lng,
                 boundSWLat: bounds.sw.lat,
                 boundSWLng: bounds.sw.lng,
+                zoomLevel : zoomLevel,
                 width: size.width,
                 height: size.height
             }).done(function (data) {
@@ -75,13 +76,12 @@
         }
 
         this.getLabelContent = function(photoId) {
-            return "<img src='services/api/photos/" + photoId + "' style='width: 34px; height: 34px;'>";
+            return "<img src='services/api/photos/" + photoId + "/3' style='width: 34px; height: 34px;'>";
         }
 
         this.getInfoWindowContent = function(photoId) {
-            return "<a href='photo/" + photoId +
-                "'><img src='services/api/photos/" + photoId +
-            "' style='width: 100px; height: 100px;'></a>";
+            return "<a href='photo/" + photoId +"'><img src='services/api/photos/" + photoId + "/2' style='width: 180px; height: 180px;'></a>";
+            // style='width: 100px; height: 100px;'
         }
     };
 

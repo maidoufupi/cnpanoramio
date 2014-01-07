@@ -17,4 +17,23 @@
            map = new qq.maps.Map(document.getElementById(mapCanvas));
            return map;
     };
+
+    $.cnmap.addMarkerInCenter = function(imap) {
+        var thismap = imap || map;
+        var marker = new qq.maps.Marker();
+        marker.setMap(thismap);
+        marker.setPosition(thismap.getCenter());
+        marker.setVisible(true);
+    }
+
+    $.cnmap.setCenter = function(lat, lng, imap) {
+        var thismap = imap || map;
+        var center = new qq.maps.LatLng(lat, lng);
+        thismap.setCenter(center);
+    }
+
+    $.cnmap.panBy = function(x, y, imap) {
+        var thismap = imap || map;
+        thismap.panBy(-x, -y);
+    }
 })(jQuery)

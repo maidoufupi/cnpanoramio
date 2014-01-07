@@ -54,6 +54,8 @@ public class Photo {
 
 	private String title;
 	private String description;
+	
+	@Column(nullable = true)
 	private boolean deleted;
 
 	@Column(name = "mark_best")
@@ -61,13 +63,14 @@ public class Photo {
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<LatLng> latlngs;
-	
-//	@OneToOne(optional = true, cascade = CascadeType.ALL)
-//	@JoinColumn(name="photo_details")
+
 	@OneToOne(cascade = CascadeType.ALL, mappedBy="photo")
     @PrimaryKeyJoinColumn
 	private PhotoDetails details;
-
+    
+	@Column(name = "rating")
+	private Integer Rating;
+	
 	public final Long getId() {
 		return id;
 	}
@@ -187,7 +190,13 @@ public class Photo {
 	public void setDetails(PhotoDetails details) {
 		this.details = details;
 	}
-	
-	
+
+	public Integer getRating() {
+		return Rating;
+	}
+
+	public void setRating(Integer rating) {
+		Rating = rating;
+	}
 	
 }

@@ -118,66 +118,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		return photo;
 	}
 	
-//	@Override
-//	public Photo store(MultipartBody body) throws ImageReadException {
-//
-//		Attachment attachment = body.getAttachment(contentId);
-//		ContentDisposition content = attachment.getContentDisposition();
-//		String fileName = content.getParameter("filename");
-//		
-//		String lat = null;
-//		String lng = null;
-//		String address = null;
-//		DataHandler dh = body.getAttachment(CON_LAT).getDataHandler();
-//		try {
-//			lat = dh.getContent().toString();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}		
-//
-//		dh = body.getAttachment(CON_LNG).getDataHandler();
-//		try {
-//			lng = dh.getContent().toString();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		
-//		dh = body.getAttachment(CON_ADDRESS).getDataHandler();
-//		try {
-//			address = dh.getContent().toString();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//
-//		dh = attachment.getDataHandler();
-//		InputStream ins = null;
-//		try {
-//			ins = dh.getInputStream();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		Photo photo = this.save(fileName, ins);
-//		
-//		Double latDouble = Double.valueOf(lat);
-//		Double lngDouble = Double.valueOf(lng);
-//		Point point;
-//		if (latDouble != 0 || lngDouble != 0) {
-//			point = new Point(latDouble, lngDouble);
-//			address = address.trim();
-//			if (address != null && address != "") {
-//				point.setAddress(address);
-//			}
-//			photo.setGpsPoint(point);
-//		}
-//
-//		return photo;
-//	}
-
 	@Override
 	public Photo fillPhotoDetail(InputStream is, Photo photo)
 			throws ImageReadException, IOException {
@@ -187,6 +127,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		IImageMetadata metadata = null;
 		try {
 			metadata = Imaging.getMetadata(is, "");
+			is.close();
 		} catch (ImageReadException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -292,7 +233,12 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			photoDetails.setSaturation(getTagValue(jpegMetadata, ExifTagConstants.EXIF_TAG_SATURATION_1));
 			photoDetails.setSharpness(getTagValue(jpegMetadata, ExifTagConstants.EXIF_TAG_SHARPNESS_1));
 			photoDetails.setWhiteBalance(getTagValue(jpegMetadata, ExifTagConstants.EXIF_TAG_WHITE_BALANCE_1));
-			photoDetails.setDigitalZoomRatio(Integer.valueOf(getTagValue(jpegMetadata, ExifTagConstants.EXIF_TAG_DIGITAL_ZOOM_RATIO)));
+			
+			final TiffField digitalZoomRatioField = jpegMetadata
+					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_DIGITAL_ZOOM_RATIO);
+			if(null != digitalZoomRatioField) {
+				photoDetails.setDigitalZoomRatio(digitalZoomRatioField.getIntValue());
+			}
 			
 			final TiffField exifVersionField = jpegMetadata
 					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_EXIF_VERSION);
@@ -437,6 +383,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 		try {
 			IOUtils.copy(ins, baos);
+			ins.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -444,7 +391,12 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		// IOUtils.copy(new FileReader(image), baos);
 
 		byte[] content = baos.toByteArray();
-
+		try {
+			baos.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		InputStream is1 = new ByteArrayInputStream(content);
 
 		Photo photo = new Photo();
@@ -470,29 +422,44 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		photoDao.save(photo);
+		photo = photoDao.save(photo);
 
 		is1 = new ByteArrayInputStream(content);
-		fileService.saveFile(FileService.TYPE_IMAGE, getName(photo), is1);
+		fileService.saveFile(FileService.TYPE_IMAGE, photo.getId(), is1);
 
 		return photo;
 	}
 
 	@Override
-	public Response read(Long id) {
+	public Response read(Long id, int level) {
 		Photo photo = photoDao.get(id);
-		File file = fileService.readFile(FileService.TYPE_IMAGE, getName(photo));
-		ResponseBuilder response = Response.ok((Object) file);
-		response.header("Content-Disposition",
-				"attachment; filename=" + getName(photo));
-		return response.build();
-
+		
+		File file = fileService.readFile(FileService.TYPE_IMAGE, id, level);
+		
+//		ResponseBuilder response = Response.ok((Object) file);
+		ResponseBuilder responseBuilder = null;
+		FileInputStream finputs = null;
+		Response response = null;
+		try {
+			finputs = new FileInputStream(file);
+			responseBuilder = Response.ok().entity(finputs);
+			responseBuilder.header("Content-Disposition",
+									"attachment; filename=" + getName(photo));
+			response = responseBuilder.build();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
 	}
 
 	@Override
 	public InputStream loadPhoto(Long id) {
-		Photo photo = photoDao.get(id);
-		File file = fileService.readFile(FileService.TYPE_IMAGE, getName(photo));
+//		Photo photo = photoDao.get(id);
+		File file = fileService.readFile(FileService.TYPE_IMAGE, id, 0);
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(file);

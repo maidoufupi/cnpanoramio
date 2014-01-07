@@ -46,3 +46,6 @@ panor上运行mvn tomcat6:run
 
 浏览器中打开：
 http://localhost:8080/panor-web
+
+打war包 panor
+mvn package -DskipTests

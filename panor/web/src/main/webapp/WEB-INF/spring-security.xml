@@ -52,17 +52,15 @@
 		<expression-handler ref="oauthWebExpressionHandler" />
 	</http>
 
-	<!-- <http pattern="/photo/**" create-session="never"
+	<http pattern="/services/api/**" 
+		create-session="never"
 		entry-point-ref="oauthAuthenticationEntryPoint"
 		access-decision-manager-ref="accessDecisionManager"
 		xmlns="http://www.springframework.org/schema/security">
-		<intercept-url pattern="/photo" access="ROLE_USER,SCOPE_READ" />
-		<intercept-url pattern="/photo/trusted/**" access="ROLE_CLIENT,SCOPE_TRUST" />
-		<intercept-url pattern="/photo/user/**" access="ROLE_USER,SCOPE_TRUST" />
-		<intercept-url pattern="/photo/**" access="ROLE_ANONYMOUS,ROLE_USER,SCOPE_READ" />
+		<intercept-url pattern="/services/api/photos" access="ROLE_USER,SCOPE_READ" />
 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
-	</http> -->
+	</http>
 
 	<!-- The OAuth2 protected resources are separated out into their own block 
 		so we can deal with authorization and error handling separately. This isn't 
@@ -82,16 +80,20 @@
 		disable-url-rewriting="true" 
 		xmlns="http://www.springframework.org/schema/security">
 		<intercept-url pattern="/oauth/**" access="ROLE_USER,ROLE_ADMIN" />
-		<form-login login-page="/login.jsp" default-target-url="/index.jsp"
+		<form-login login-page="/login.jsp" default-target-url="/"
 			authentication-failure-url="/login.jsp?error=true"
 			login-processing-url="/j_security_check" />
-		<logout logout-success-url="/index.jsp" logout-url="/logout.do" />
+		<logout logout-success-url="/" logout-url="/logout.do" />
 		<remember-me user-service-ref="userDao"
 			key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" />
 		<anonymous />
 	</http>
-	
-	<http xmlns="http://www.springframework.org/schema/security">
+	<bean id="authenticationEntryPoint"
+  		class="com.cnpanoramio.webapp.spring.AjaxAwareAuthenticationEntryPoint">
+		<constructor-arg name="loginUrl" value="/login"/>
+	</bean>
+	<http xmlns="http://www.springframework.org/schema/security"
+	      entry-point-ref="authenticationEntryPoint">
 	    <intercept-url pattern="/photo/*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/photoUpload" access="ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/exploreWorld" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
@@ -103,15 +105,17 @@
 		<intercept-url pattern="/app/**" access="ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/services/api/photos" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/comment" access="ROLE_USER" />
+		<intercept-url pattern="/services/api/commentquery" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/services/api/panoramiothumbnail" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/settings" access="ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/services/api/photo/trusted/**" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/photo/user/**" access="ROLE_USER" />
 		<intercept-url pattern="/services/api/photo/**" access="ROLE_USER" />
-		<form-login login-page="/login.jsp" default-target-url="/index.jsp"
+		<intercept-url pattern="/services/api/gisindex" access="ROLE_ADMIN" />
+		<form-login login-page="/login.jsp" default-target-url="/"
 			authentication-failure-url="/login.jsp?error=true"
 			login-processing-url="/j_security_check" />
-		<logout logout-success-url="/index.jsp" logout-url="/logout.do" />
+		<logout logout-success-url="/" logout-url="/logout.do" />
 		<remember-me user-service-ref="userDao"
 			key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" />
 		<!-- <remember-me/> -->

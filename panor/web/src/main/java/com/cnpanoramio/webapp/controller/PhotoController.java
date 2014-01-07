@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.service.CommentService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.UserSettingsManager;
 
@@ -25,6 +26,7 @@ public class PhotoController extends BaseFormController {
 	
 	@Autowired
 	private UserSettingsManager userSettingsService = null;
+	private CommentService commentService = null;
 
     @Autowired
     public void setUserManager(UserManager userManager) {
