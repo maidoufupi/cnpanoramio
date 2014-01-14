@@ -97,7 +97,7 @@
                         lat: bounds.getSouthWest().lat,
                         lng: bounds.getSouthWest().lng
                     }
-                }, size, function(thumbs) {
+                }, map.getZoom(), size, function(thumbs) {
                     for (var i in thumbs) {
                         var photoId = thumbs[i].photoId;
                         if(panoramio.getVisible(photoId)) {

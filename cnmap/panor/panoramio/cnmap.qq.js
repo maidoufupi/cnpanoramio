@@ -61,40 +61,11 @@
                     map,
                     'idle',
                     getBoundsThumbnails
-//                    function () {
-//
-//                        if (this.zoom != this.preZoom) {
-//                            this.preZoom = this.zoom;
-//                            for (var i in infoWindows) {
-//                                infoWindows[i].setVisible(false);
-//                            }
-//                        }
-//                        var label = new qq.maps.Label();
-//                        label.setContent("<img src=\"1.jpg\" style=\"width: 34px; height: 34px;\"></img>");
-//                        label.setMap(map);
-////                        var latLng = qq.maps.LatLng(25, 102.8);
-//                        label.setPosition(map.getCenter());
-//                        qq.maps.event.addListener(
-//                            label,
-//                            'click',
-//                            function () {
-//                                if (opts.suppressInfoWindows) {
-//                                    if (infoWindow.opened) {
-//                                        infoWindow.close();
-//                                        infoWindow.opened = false;
-//                                    } else {
-//                                        infoWindow.setContent("<img src=\"1.jpg\" style=\"width: 100px; height: 100px;\"></img>");
-//                                        infoWindow.setPosition(label.getPosition());
-//                                        infoWindow.open();
-//                                        infoWindow.opened = true;
-//                                    }
-//                                }
-//                            });
-//                        infoWindows.push(label);
-//                    }
                 );
             } else {
                 opts.map = null;
+                // TODO
+                panoramio.clearVisible();
             }
 
             var that = this;

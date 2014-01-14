@@ -66,4 +66,14 @@ public class PanoramioThumbnailImpl implements PanoramioThumbnailService {
 		return response;
 
 	}
+
+	public PhotoGisIndexDao getPhotoDao() {
+		return photoDao;
+	}
+
+	public void setPhotoDao(PhotoGisIndexDao photoDao) {
+		this.photoDao = photoDao;
+	}
+	
+	
 }

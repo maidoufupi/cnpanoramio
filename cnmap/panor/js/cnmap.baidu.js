@@ -31,8 +31,8 @@
             map.addControl(overviewMapControl);
         }
         if(opts.locatecity) {
-//            var latLng = new BMap.Point(102.8, 25);
-//            map.centerAndZoom(latLng, 13);
+            var latLng = new BMap.Point(102.8, 25);
+            map.centerAndZoom(latLng, 13);
         }
 
         return map;
@@ -54,5 +54,10 @@
     $.cnmap.panBy = function(x, y, imap) {
         var thismap = imap || map;
         thismap.panBy(x, y);
+    }
+
+    $.cnmap.setZoom = function(zoom, imap) {
+        var thismap = imap || map;
+        thismap.centerAndZoom(thismap.getCenter(), zoom);
     }
 })(jQuery)

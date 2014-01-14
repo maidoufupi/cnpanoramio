@@ -22,12 +22,14 @@
     <script type="text/javascript" src="<c:url value="/bower_components/fileupload/vendor/jquery.min.1.10.2.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/jquery/plugins/jquery.rest.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/tmpl.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/jquery/plugins/jquery.ba-bbq.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.Panoramio.js"/>"></script>
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.baidu.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.baidu.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.baidu.js"/>"></script>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
   </c:when>
@@ -35,11 +37,13 @@
     <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.qq.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.qq.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.gaode.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
   
@@ -48,57 +52,65 @@
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.gaode.js"/>"></script>
   </c:otherwise>
 </c:choose>
 
-  <script type="text/javascript">
-        $(document).ready(function () {
-        	var map = $.cnmap.initMap("map-canvas", {
-                toolbar: true,
-                scrollzoom: true,
-                overview: true,
-                locatecity: true
-            });
-            setPanoramioLayer(map);
+<script type="text/javascript">
+  $(document).ready(function () {
+      map = $.cnmap.initMap("map-canvas", {
+          toolbar: true,
+          scrollzoom: true,
+          maptype: true,
+          overview: true,
+          locatecity: true
+      });
+      setPanoramioLayer(map);
 
-            function setPanoramioLayer(map) {
-                var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});
-                panoramioLayer.setMap(map);
+      function setPanoramioLayer(map) {
+          var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});
+          panoramioLayer.setMap(map);
 
-                if (tmpl) {
-                    template_preview_thumb = tmpl("template-preview-thumb");
-                }
-                $(panoramioLayer).bind("data_changed", function(e, data) {
-                    var tiems = [];
-                    $.each(data, function(i, item) {
-                        var imgId = "#r" + item.photoId;
-                        var images = $("#preview").find(imgId);
-                        if(!images.length) {
-                            tiems.push(item);
-                        }
-                    })
+          var template_preview_thumb;
+          if (tmpl) {
+              template_preview_thumb = tmpl("template-preview-thumb");
+          }
 
-                    $("#preview .preview_thumb_area").each(function(i, element) {
-                        var exist;
-                        var id = $(this).attr("id");
-                        id = id.replace("p", "");
-                        $.each(data, function(i, item) {
-                            if(id == item.photoId) {
-                                exist = true;
-                            }
-                        })
-                        if(!exist) {
-                            $(this).remove();
-                        }
-                    })
-                    var result = template_preview_thumb({
-                        items: tiems
-                    });
-                    $("#preview").append(result);
-                })
-            }
-        })
-    </script> 
+          $(panoramioLayer).bind("data_changed", function(e, data) {
+              var tiems = [];
+              $.each(data, function(i, item) {
+                  var imgId = "#r" + item.photoId;
+                  var images = $("#preview").find(imgId);
+                  if(!images.length) {
+                      tiems.push(item);
+                  }
+              })
+
+              $("#preview .preview_thumb_area").each(function(i, element) {
+                  var exist;
+                  var id = $(this).attr("id");
+                  id = id.replace("p", "");
+                  $.each(data, function(i, item) {
+                      if(id == item.photoId) {
+                          exist = true;
+                      }
+                  })
+                  if(!exist) {
+                      $(this).remove();
+                  }
+              })
+              var result = template_preview_thumb({
+                  items: tiems
+              });
+              $("#preview").append(result);
+          })
+      }
+
+      $.explore(map);
+
+      $(window).trigger( 'hashchange' );
+  })
+</script> 
 
 <div class="container container-main">
     <div class="col-main">

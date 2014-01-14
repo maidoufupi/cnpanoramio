@@ -1,5 +1,6 @@
 package com.cnpanoramio.webapp.controller;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cnpanoramio.Constant;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.service.PhotoService;
 
@@ -28,12 +30,21 @@ public class IndexPageController extends BaseFormController {
 	@Autowired
 	private PhotoService photoService = null;
 	
+	@Autowired
+    private ServletContext sCtx;
+	
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request,
                                       HttpServletResponse response) {
-    	Photo photo = photoService.getPhoto(1L);
-    	log.info(photo.getId());    	
+    	Photo photo = null;
+    	Long photoId = (Long) sCtx.getAttribute(Constant.INDEX_PHOTO_ID);
+    	if(null == photoId) {
+    		photoId = 1L;
+    	}
+    	photo = photoService.getPhoto(photoId);
     	request.setAttribute("photo", photo);
+    	log.info(photo.getId()); 
+    	
     	return new ModelAndView("index");
     }
   

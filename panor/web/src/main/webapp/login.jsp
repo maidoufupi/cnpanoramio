@@ -19,10 +19,10 @@
 			</div>
 		</c:if>
 		<input type="text" name="j_username" id="j_username"
-			class="input-block-level"
+			class="form-control"
 			placeholder="<fmt:message key="label.username"/>" required
 			tabindex="1"> <input type="password"
-			class="input-block-level" name="j_password" id="j_password"
+			class="form-control" name="j_password" id="j_password"
 			tabindex="2" placeholder="<fmt:message key="label.password"/>"
 			required>
 

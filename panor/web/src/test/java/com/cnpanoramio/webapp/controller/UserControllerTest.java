@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 
 public class UserControllerTest extends BaseControllerTestCase {
     @Autowired
-    private UserController c;
+    private UsersController c;
 
     @Test
     public void testHandleRequest() throws Exception {

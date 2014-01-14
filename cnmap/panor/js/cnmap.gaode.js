@@ -21,7 +21,6 @@
                 var toolBar = new AMap.ToolBar();
                 map.addControl(toolBar);
             });
-
         }
 
         if (opts.maptype == "SATELLITE") {
@@ -37,6 +36,24 @@
                     showRoad: true
                 });
                 map.addControl(type);
+            });
+        }else if(opts.maptype) {
+            map.plugin(["AMap.MapType"], function () {
+                var type = new AMap.MapType({
+                    defaultType: 0,
+                    showRoad: true
+                });
+                map.addControl(type);
+            });
+        }
+
+        if(opts.overview) {
+            map.plugin(["AMap.OverView"],function(){
+                //加载鹰眼
+                var view = new AMap.OverView({
+                    isOpen: true
+                });
+                map.addControl(view);
             });
         }
         return map;
@@ -59,6 +76,11 @@
     $.cnmap.panBy = function(x, y, imap) {
         var thismap = imap || map;
         thismap.panBy(x, y);
+    }
+
+    $.cnmap.setZoom = function(zoom, imap) {
+        var thismap = imap || map;
+        thismap.setZoom(zoom);
     }
 
 })(jQuery)

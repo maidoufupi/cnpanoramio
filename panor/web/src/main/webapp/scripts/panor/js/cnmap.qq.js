@@ -32,8 +32,26 @@
         thismap.setCenter(center);
     }
 
+    $.cnmap.setZoom = function(zoom, imap) {
+        var thismap = imap || map;
+        thismap.setZoom(zoom);
+    }
+
     $.cnmap.panBy = function(x, y, imap) {
         var thismap = imap || map;
         thismap.panBy(-x, -y);
+    }
+
+    $.cnmap.getCenter = function(imap) {
+        var thismap = imap || map;
+        return thismap.getCenter();
+    }
+
+    $.cnmap.getLat = function(latlng) {
+        return latlng.lat;
+    }
+
+    $.cnmap.getLng = function(latlng) {
+        return latlng.lng;
     }
 })(jQuery)

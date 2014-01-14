@@ -19,19 +19,27 @@
     <link href="bower_components/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
 
     <script type="text/javascript" src="bower_components/fileUpload/js/blueimp/tmpl.min.js"></script>
-
+    <script type="text/javascript" src="bower_components/jquery/plugins/jquery.ba-bbq.js"></script>
     <!-- Map vendor -->
-    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
 
     <script type="text/javascript" src="panor/panoramio/cnmap.comm.js"></script>
     <script type="text/javascript" src="panor/panoramio/cnmap.Panoramio.js"></script>
 
+    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="panor/panoramio/cnmap.gaode.js"></script>
+    <script type="text/javascript" src="panor/js/cnmap.gaode.js"></script>
+    <script type="text/javascript" src="panor/js/explore/cnmap.explore.gaode.js"></script>
+
     <!--<script type="text/javascript" src="panor/panoramio/cnmap.baidu.js"></script>
-    <script type="text/javascript" src="panor/js/cnmap.Explore.baidu.js"></script>
+    <script type="text/javascript" src="panor/js/cnmap.baidu.js"></script>
+    <script type="text/javascript" src="panor/js/explore/cnmap.explore.baidu.js"></script>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>-->
+
+<!--    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
     <script type="text/javascript" src="panor/panoramio/cnmap.qq.js"></script>
     <script type="text/javascript" src="panor/js/cnmap.qq.js"></script>
+    <script type="text/javascript" src="panor/js/explore/cnmap.explore.qq.js"></script>-->
 
     <!-- Custom styles for this template -->
     <link href="css/ExploreWorld.css" rel="stylesheet">
@@ -40,9 +48,10 @@
         // var ctx = "http://115.28.21.165:8080";
         var ctx = "http://127.0.0.1:8080/panor-web";
         $(document).ready(function () {
-            var map = $.cnmap.initMap("map-canvas", {
+            map = $.cnmap.initMap("map-canvas", {
                 toolbar: true,
                 scrollzoom: true,
+                maptype: true,
                 overview: true,
                 locatecity: true
             });
@@ -86,6 +95,10 @@
                     $("#preview").append(result);
                 })
             }
+
+            $.explore(map);
+
+            $(window).trigger( 'hashchange' );
         })
     </script>
 </head>

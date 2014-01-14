@@ -42,19 +42,19 @@
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
     <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.baidu.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.baidu.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
   	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.qq.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.qq.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.gaode.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.gaode.js"/>"></script>
   </c:when>
   <c:otherwise>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.Modal.gaode.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.gaode.js"/>"></script>
    </c:otherwise>
 </c:choose>
       

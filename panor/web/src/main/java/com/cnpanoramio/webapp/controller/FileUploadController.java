@@ -1,17 +1,10 @@
 package com.cnpanoramio.webapp.controller;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.appfuse.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +13,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.cnpanoramio.domain.Photo;
-import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.service.PhotoManager;
-import com.cnpanoramio.service.PhotoService;
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.lang.GeoLocation;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.exif.GpsDirectory;
 
 /**
  * Controller class to upload Files.
