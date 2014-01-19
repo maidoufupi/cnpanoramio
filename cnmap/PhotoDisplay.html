@@ -10,6 +10,9 @@
     <meta name="description"
           content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="text/javascript" src="bower_components/jquery/jquery-1.8.2.min.js"></script>
+
     <!-- Bootstrap styles -->
     <link rel="stylesheet" href="bower_components/bootstrap/css/bootstrap.css">
     <!-- Bootstrap theme styles -->
@@ -17,8 +20,7 @@
     <script type="text/javascript" src="bower_components/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="bower_components/bootstrap/js/bootstrap-paginator.js"></script>
 
-    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery.rest.min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/plugins/jquery.rest.min.js"></script>
     <script type="text/javascript" src="bower_components/fileUpload/js/blueimp/tmpl.min.js"></script>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
             type="text/javascript"></script>
@@ -172,7 +174,7 @@
 <div class="photo-col">
     <div id="main-photo-wrapper" data-id="<c:url value='${photo.id}'/>">
         <a id="main-photo" href="#">
-            <img src="img/64643919.jpg" alt="around Angkor Wat" id="main-photo_photo"
+            <img src="images/IMAG2066.jpg" alt="around Angkor Wat" id="main-photo_photo"
                  style="max-height: 541px;">
         </a>
     </div>
@@ -210,6 +212,36 @@
             </h1>
         </div>
     </div>
+<!-- ******************************************************************************** -->
+    <div>
+        <div style="float: right;">
+
+            <a href="#" onclick="$('#delete').submit();return false" class="photo-page-edit">
+                <span class="icon_sprite icon_trash"></span>
+                <span class="photo-page-edit-label">Delete photo</span>
+            </a>
+
+            <a href="#" id="mark_as_best" class="photo-page-edit" style="display: inline;">
+                <span class="photo-page-edit-label">Mark as best</span>
+            </a>
+              <span id="marked_as_best">
+                <a id="mark_as_not_best" href="#">Remove from Best</a>
+              </span>
+
+            <form method="post" action="/do/delete_photo/" id="delete" onsubmit="return confirm('您确定要删除这张照片？');">
+                <input type="hidden" id="xsrf_token" name="xsrf_token" value="lzJDOpMCDknjCLS2bGO4sDoxMzg5ODU2Mjk4MDE5MDk1">
+                <input type="hidden" name="id" value="63753785">
+                <input type="hidden" name="token" value="">
+            </form>
+        </div>
+
+        <div class="photo-share-icons">
+            <a class="icon_sprite icon_twitter" target="_blank" title="在Twitter分享" href="http://twitter.com/?status=%E7%A7%8D%E8%92%9C%20-%20http%3A//panoramio.com/photo/63753785" onclick="_gaq.push(['_trackSocial', 'twitter', 'tweet', '/twitter/photo_id=63753785']);"></a>
+            <a href="#" id="sendLink" class="icon_sprite icon_mail" title="发送给朋友"></a>
+        </div>
+    </div>
+<!-- ******************************************************************************** -->
+
     <div>
         <div style="float: right;">
         </div>
@@ -272,7 +304,7 @@
 
     <form action="" method="post" id="comment">
         <h3>发送评论 <span>(以 暗梅幽闻花身份)</span></h3>
-        <textarea cols="50" rows="8" id="tcomment" name="comment"></textarea>
+        <textarea cols="50" rows="8" id="tcomment" name="comment" class="form-control"></textarea>
         <br>
         <input type="hidden" id="user_id" value="${userSettings.user.id}">
         <input type="hidden" name="photoid" value="64742548">
@@ -286,7 +318,7 @@
     <div class="interim-info-card photo-page-card">
         <div id="profile_pic_info">
             <a href="/user/3908287"><img
-                    src="//lh4.googleusercontent.com/-rzySgeME2jQ/AAAAAAAAAAI/AAAAAAAAAfo/RJqU4xuNP-I/photo.jpg?sz=60"
+                    src="img/user_avatar.png"
                     width="60" height="60" alt="Mehmet Gü?lü" id="profile_pic_avatar"></a>
 
             <div id="profile_info">

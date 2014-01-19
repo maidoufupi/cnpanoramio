@@ -76,12 +76,11 @@
         }
 
         this.getLabelContent = function(photoId) {
-            return "<img src='services/api/photos/" + photoId + "/3' style='width: 34px; height: 34px;'>";
+            return "<img src='" + ctx + "/services/api/photos/" + photoId + "/3' style='width: 34px; height: 34px;'>";
         }
 
         this.getInfoWindowContent = function(photoId) {
-            return "<a href='photo/" + photoId +"'><img src='services/api/photos/" + photoId + "/2' style='width: 180px; height: 180px;'></a>";
-            // style='width: 100px; height: 100px;'
+            return "<a href='" + ctx + "/photo/" + photoId +"'><img src='" + ctx + "/services/api/photos/" + photoId + "/2' style='width: 180px; height: 180px;'></a>";
         }
     };
 

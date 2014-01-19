@@ -201,4 +201,22 @@
         }
     }
 
+    $.cnmap.utils.compareArray = function(arrayA, arrayB, callback) {
+
+        var newArray = $.unique($.merge( $.merge( [], arrayA ), arrayB ));
+        $.each(newArray, function(index, value) {
+            if($.inArray( value, arrayA) > -1) {
+                if($.inArray( value, arrayB) > -1) {
+                    callback.apply(value, [null, value, null]);
+                }else {
+                    callback.apply(value, [value, null, null]);
+                }
+            }else {
+                if($.inArray( value, arrayB) > -1) {
+                    callback.apply(value, [null, null, value]);
+                }
+            }
+        })
+    }
+
 }))
