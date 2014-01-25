@@ -46,9 +46,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.PhotoDao;
+import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.Point;
+import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.PhotoCameraInfo;
+import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.PhotoService;
@@ -62,6 +66,8 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	private PhotoDao photoDao;
 	private FileService fileService;
 	private UserManager userManager = null;
+	@Autowired
+	private UserSettingsDao userSettingsDao = null;
 
 	@Autowired
 	public void setUserManager(UserManager userManager) {
@@ -365,6 +371,14 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		User user = userManager.getUserByUsername(username);
 		return photoDao.getUserPhotos(user);
 	}
+	
+	public Collection<Photo> getPhotosForUser(User user) {
+		return photoDao.getUserPhotos(user);
+	}
+	
+	public Collection<Photo> getPhotosForUser(User user, int pageNo, int pageSize) {
+		return photoDao.getUserPhotos(user);
+	}
 
 	/**
 	 * 获取图片文件名称
@@ -469,6 +483,54 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public int getPhotoCount(User user) {
+		return photoDao.getPhotoCount(user);
+	}
+
+	@Override
+	public boolean markBest(Long photoId, boolean best) {
+		Photo photo = photoDao.get(photoId);
+		photo.setMarkBest(best);
+		photoDao.save(photo);
+		return true;
+	}
+
+	@Override
+	public boolean properties(Long photoId, PhotoProperties properties) {
+		Photo photo = photoDao.get(photoId);
+		photo.setTitle(properties.getTitle());
+		photo.setDescription(properties.getDescription());
+		photoDao.save(photo);
+		return true;
+	}
+
+	@Override
+	public PhotoCameraInfo getCameraInfo(Long photoId) {
+		Photo photo = photoDao.get(photoId);
+		PhotoCameraInfo cameraInfo = new PhotoCameraInfo();
+		cameraInfo.setCreateDate(photo.getCreateDate());
+		
+		cameraInfo.setLat(photo.getGpsPoint().getLat());
+		cameraInfo.setLng(photo.getGpsPoint().getLng());
+		cameraInfo.setAlt(photo.getGpsPoint().getAlt());
+		
+		UserSettings user = userSettingsDao.get(photo.getOwner().getId());
+		cameraInfo.setUserName(user.getName());
+		
+		PhotoDetails details = photo.getDetails();
+		cameraInfo.setModel(details.getModel());
+		cameraInfo.setDateTimeOriginal(details.getDateTimeOriginal());
+		cameraInfo.setExposureTime(details.getExposureTime());
+		cameraInfo.setFocalLength(details.getFocalLength());
+		cameraInfo.setFNumber(details.getFNumber());
+		cameraInfo.setIso(details.getISO());
+		cameraInfo.set曝光补偿("0");
+		cameraInfo.set闪光灯("无闪光灯");
+				
+		return cameraInfo;
 	}
 
 }

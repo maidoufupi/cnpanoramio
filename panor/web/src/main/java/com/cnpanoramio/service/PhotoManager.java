@@ -11,8 +11,12 @@ import javax.ws.rs.PathParam;
 
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
+import org.apache.cxf.jaxws.javaee.TrueFalseType;
+import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.json.PhotoCameraInfo;
+import com.cnpanoramio.json.PhotoProperties;
 
 public interface PhotoManager {
 	
@@ -52,7 +56,23 @@ public interface PhotoManager {
 	 * @return The photos for the current user.
 	 */
 	public Collection<Photo> getPhotosForUser(String username);
+	
+	/**
+	 * Load the photos for the current user.
+	 * 
+	 * @return The photos for the current user.
+	 */
+	public Collection<Photo> getPhotosForUser(User user);
+	
+	/**
+	 * Load the photos for the current user.
+	 * 
+	 * @return The photos for the current user.
+	 */
+	public Collection<Photo> getPhotosForUser(User user, int pageNo, int pageSize);
 
+	public int getPhotoCount(User user);
+	
 	/**
 	 * Load a photo by id.
 	 * 
@@ -61,5 +81,12 @@ public interface PhotoManager {
 	 * @return The photo that was read.
 	 */
 	public InputStream loadPhoto(Long id);
+	
+	
+	public boolean markBest(Long photoId, boolean best);
+	
+	public boolean properties(Long photoId, PhotoProperties properties);
+	
+	public PhotoCameraInfo getCameraInfo(Long photoId);
 	
 }

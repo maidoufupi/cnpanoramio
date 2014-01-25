@@ -1,0 +1,22 @@
+{
+    "userId": "1",
+    "photos": [
+        {
+            "photoId": 1,
+            "title": "title 1",
+            "description": "photo 1 description",
+            "src": "img/IMAG2073.jpg",
+            "width": 2688,
+            "height": 1520
+        },
+        {
+            "photoId": 2,
+            "title": "title 2",
+            "description": "photo 2 description",
+            "src": "img/IMAG2076.jpg",
+            "width": 2688,
+            "height": 1520
+        }
+    ]
+
+}

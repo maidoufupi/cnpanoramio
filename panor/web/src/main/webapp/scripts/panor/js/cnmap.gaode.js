@@ -18,7 +18,9 @@
         map = new AMap.Map(mapCanvas, {resizeEnable: true});
         if (opts.toolbar) {
             map.plugin(["AMap.ToolBar"], function () {
-                var toolBar = new AMap.ToolBar();
+                var toolBar = new AMap.ToolBar({
+                    ruler: opts.ruler
+                });
                 map.addControl(toolBar);
             });
         }

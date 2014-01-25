@@ -24,8 +24,7 @@ import com.cnpanoramio.service.json.PhotoThumbnails;
 @Transactional
 public class PanoramioThumbnailImpl implements PanoramioThumbnailService {
 
-	private transient final Log log = LogFactory
-			.getLog(PanoramioThumbnailService.class);
+	private transient final Log log = LogFactory.getLog(PanoramioThumbnailService.class);
 	
 	@Autowired
 	private PhotoGisIndexDao photoDao;
@@ -35,13 +34,19 @@ public class PanoramioThumbnailImpl implements PanoramioThumbnailService {
 
 		PhotoThumbnails photoThumbs = new PhotoThumbnails();
 		Collection<PhotoThumbnail> cPhotoThumbs = new ArrayList<PhotoThumbnail>();
+		
+		if (log.isDebugEnabled()) {
+			log.debug(boundSize.getBoundSWLat() + ", " + boundSize
+					.getBoundSWLng() + ", " + boundSize.getBoundNELat() + ", "
+					+ boundSize.getBoundNELng() + ", " + (int) (10 - Math.ceil((boundSize.getZoomLevel() + 1) / 2)));
+		}
 		// gaode zoom level 和 PhotoGisIndex zoomLevel对应关系
 		List<PhotoGisIndex> photos = photoDao
 				.getBoundPhotos(
 						new Point(boundSize.getBoundSWLat(), boundSize
 								.getBoundSWLng()),
 						new Point(boundSize.getBoundNELat(), boundSize
-								.getBoundNELng()), (int)Math.round(10 - Math.ceil(boundSize.getZoomLevel() / 2)),
+								.getBoundNELng()), (int) (10 - Math.ceil((boundSize.getZoomLevel() + 1) / 2)),
 						boundSize.getWidth(), boundSize.getHeight());
 
 		if (log.isDebugEnabled()) {

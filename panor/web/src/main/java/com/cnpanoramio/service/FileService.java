@@ -3,6 +3,9 @@ package com.cnpanoramio.service;
 import java.io.File;
 import java.io.InputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public interface FileService {
 	
 	public static final String TYPE_IMAGE = "P";

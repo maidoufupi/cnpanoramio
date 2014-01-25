@@ -86,6 +86,22 @@
     <file path="/style.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389787245008" ignored="false" />
     <file path="/jquery.compareArray.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389964169105" ignored="false" />
     <file path="/compareArray.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389964644388" ignored="false" />
+    <file path="/Dummy.txt" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390284806377" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/app/index.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390121959884" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/app/js/controllers.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390124724808" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/app/css/app.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390121829647" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/test/unit/controllersSpec.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390121959884" ignored="false" />
+    <file path="/user.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390283804248" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/app/js/app.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390125189133" ignored="false" />
+    <file path="/controllers.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390296899823" ignored="false" />
+    <file path="/app.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390125115496" ignored="false" />
+    <file path="/1.json" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390138991353" ignored="false" />
+    <file path="/user.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390127172554" ignored="false" />
+    <file path="/directives.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390142081504" ignored="false" />
+    <file path="/directives-bak.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390143849815" ignored="false" />
+    <file path="$PROJECT_DIR$/../../../SourceCode/hana/tiwen/tiwen/workspace/MyHelloWorld/ui/map.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390219192238" ignored="false" />
+    <file path="/servicesSpec.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390287347627" ignored="false" />
+    <file path="/services.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390295683704" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +120,26 @@
     <favorites_list name="cnmap" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="services.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/userpage/services.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="42" selection-start="321" selection-end="321" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="controllers.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/userpage/controllers.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="23" column="44" selection-start="628" selection-end="628" vertical-scroll-proportion="0.70614034">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -114,22 +149,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/FileUpload.html" />
-        <option value="$PROJECT_DIR$/panor/js/cnmap.baidu.js" />
-        <option value="$PROJECT_DIR$/panor/js/explore/cnmap.explore.baidu.js" />
-        <option value="$PROJECT_DIR$/panor/js/explore/cnmap.explore.qq.js" />
-        <option value="$PROJECT_DIR$/panor/js/explore/cnmap.explore.gaode.js" />
-        <option value="$PROJECT_DIR$/ExploreWorld.html" />
-        <option value="$PROJECT_DIR$/SysSettings.html" />
-        <option value="$PROJECT_DIR$/panor/js/cnmap.gaode.js" />
-        <option value="$PROJECT_DIR$/css/style.css" />
-        <option value="$PROJECT_DIR$/modal/examples.css" />
-        <option value="$PROJECT_DIR$/modal/basic.html" />
-        <option value="$PROJECT_DIR$/PhotoDisplay.html" />
-        <option value="$PROJECT_DIR$/panor/panoramio/cnmap.Panoramio.js" />
-        <option value="$PROJECT_DIR$/panor/js/jquery.compareArray.js" />
-        <option value="$PROJECT_DIR$/test/compareArray.html" />
-        <option value="$PROJECT_DIR$/panor/panoramio/cnmap.comm.js" />
+        <option value="$PROJECT_DIR$/js/user/controllers.js" />
+        <option value="$PROJECT_DIR$/js/user/services.js" />
+        <option value="$PROJECT_DIR$/js/user/filters.js" />
+        <option value="$PROJECT_DIR$/js/user/app.js" />
+        <option value="$PROJECT_DIR$/js/userpage/app.js" />
+        <option value="$PROJECT_DIR$/api/rest/photos/1.json" />
+        <option value="$PROJECT_DIR$/api/rest/photos/2.json" />
+        <option value="$PROJECT_DIR$/js/userpage/directives-bak.js" />
+        <option value="$PROJECT_DIR$/css/user.css" />
+        <option value="$PROJECT_DIR$/js/userpage/directives.js" />
+        <option value="$PROJECT_DIR$/user.html" />
+        <option value="$PROJECT_DIR$/api/rest/photos/3.json" />
+        <option value="$PROJECT_DIR$/config/karma.conf.js" />
+        <option value="$PROJECT_DIR$/test/unit/userpage/servicesSpec.js" />
+        <option value="$PROJECT_DIR$/js/userpage/services.js" />
+        <option value="$PROJECT_DIR$/js/userpage/controllers.js" />
       </list>
     </option>
   </component>
@@ -165,6 +200,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -183,15 +219,59 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="userpage" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="photos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="user" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="options.lastSelected" value="preferences.sourceCode.General" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../SourceCode/hana/tiwen/tiwen/workspace/MyHelloWorld" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
     <property name="options.searchVisible" value="true" />
@@ -199,18 +279,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\panor\js" />
-      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\img" />
-      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\panor\js\explore" />
-      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\bower_components\jquery\plugins" />
-      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\bower_components\hogan" />
+      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\test\unit" />
+      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\api\rest\photos" />
+      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\js\userpage" />
+      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\bower_components\imagesloaded" />
+      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\js\user" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\api\rest\photos\user" />
+      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\test\unit\userpage" />
       <recent name="C:\dev\GitHub\cnpanoramio\cnmap\panor\js\modal" />
       <recent name="C:\dev\GitHub\cnpanoramio\cnmap\panor\js\explore" />
       <recent name="C:\dev\GitHub\cnpanoramio\cnmap\bower_components\jquery" />
-      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\bower_components\imgLiquid" />
-      <recent name="C:\dev\GitHub\cnpanoramio\cnmap\bower_components\jquery\plugins" />
     </key>
   </component>
   <component name="RestClientSettings">
@@ -244,13 +324,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1618" height="884" extended-state="7" />
+    <frame x="-9" y="-9" width="1618" height="884" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24984147" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23525682" sideWeight="0.5070225" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23779328" sideWeight="0.67134833" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286517" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
@@ -327,96 +407,92 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.qq.js">
+    <entry file="file://$PROJECT_DIR$/bower_components/imagesloaded/imagesloaded.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="9" selection-start="2498" selection-end="2498" vertical-scroll-proportion="-0.9076006" />
+        <state line="182" column="54" selection-start="4685" selection-end="4685" vertical-scroll-proportion="0.20547946" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RestClient.html">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+        <state line="49" column="38" selection-start="2077" selection-end="2087" vertical-scroll-proportion="0.22932917" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/uploadPhoto.html">
+    <entry file="file://$PROJECT_DIR$/css/user.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="87" selection-start="84" selection-end="163" vertical-scroll-proportion="0.03211009" />
+        <state line="26" column="52" selection-start="406" selection-end="406" vertical-scroll-proportion="0.030701755" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SysSettings.html">
+    <entry file="file://$PROJECT_DIR$/js/userpage/filters.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="53" column="42" selection-start="2006" selection-end="2006" vertical-scroll-proportion="0.19266056" />
+        <state line="4" column="0" selection-start="30" selection-end="68" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/FileUpload.html">
+    <entry file="file://$PROJECT_DIR$/js/userpage/directives.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="27" selection-start="2390" selection-end="2390" vertical-scroll-proportion="0.23088923" />
+        <state line="56" column="37" selection-start="2124" selection-end="2124" vertical-scroll-proportion="1.7192982" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/panor/js/modal/cnmap.Modal.gaode.js">
+    <entry file="file://$PROJECT_DIR$/api/rest/photos/user/2.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="28" selection-start="1197" selection-end="1197" vertical-scroll-proportion="0.33333334" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.gaode.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="64" selection-start="197" selection-end="197" vertical-scroll-proportion="-0.004385965" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modal/examples.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="116" column="25" selection-start="1813" selection-end="1813" vertical-scroll-proportion="0.0">
+        <state line="31" column="32" selection-start="895" selection-end="895" vertical-scroll-proportion="-21.7">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/style.css">
+    <entry file="file://$PROJECT_DIR$/api/rest/photos/user/3.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="202" column="1" selection-start="3297" selection-end="3297" vertical-scroll-proportion="0.81578946" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modal/basic.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="199" column="40" selection-start="8549" selection-end="8549" vertical-scroll-proportion="0.45412844" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.Panoramio.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="79" selection-start="2602" selection-end="2602" vertical-scroll-proportion="0.31296572" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/panor/js/jquery.compareArray.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="80" selection-start="91" selection-end="91" vertical-scroll-proportion="0.12280702">
+        <state line="63" column="50" selection-start="1859" selection-end="1859" vertical-scroll-proportion="0.57798165">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.comm.js">
+    <entry file="file://$PROJECT_DIR$/js/userpage/directives-bak.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="200" column="42" selection-start="7060" selection-end="7060" vertical-scroll-proportion="0.21162444">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
+        <state line="48" column="49" selection-start="1805" selection-end="1805" vertical-scroll-proportion="0.18421052" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ExploreWorld.html">
+    <entry file="file://$PROJECT_DIR$/user.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="39" selection-start="2906" selection-end="2937" vertical-scroll-proportion="0.03276131">
+        <state line="22" column="32" selection-start="1086" selection-end="1086" vertical-scroll-proportion="-0.6055046" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="45" selection-start="67" selection-end="78" vertical-scroll-proportion="0.12280702" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/rest/photos/user/1.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="19" selection-start="20" selection-end="20" vertical-scroll-proportion="0.03211009">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/compareArray.html">
+    <entry file="file://$PROJECT_DIR$/test/unit/userpage/servicesSpec.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="35" selection-start="506" selection-end="506" vertical-scroll-proportion="0.16513762">
+        <state line="20" column="52" selection-start="586" selection-end="586" vertical-scroll-proportion="0.29385966" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/karma.conf.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="52" selection-start="241" selection-end="241" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/test.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="39" selection-start="274" selection-end="274" vertical-scroll-proportion="0.3377193" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/services.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="42" selection-start="321" selection-end="321" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PhotoDisplay.html">
+    <entry file="file://$PROJECT_DIR$/js/userpage/controllers.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="382" column="32" selection-start="17710" selection-end="17710" vertical-scroll-proportion="0.03276131">
+        <state line="23" column="44" selection-start="628" selection-end="628" vertical-scroll-proportion="0.70614034">
           <folding />
         </state>
       </provider>

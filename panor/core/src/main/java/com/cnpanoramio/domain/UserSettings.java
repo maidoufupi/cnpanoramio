@@ -2,15 +2,10 @@ package com.cnpanoramio.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.appfuse.model.User;
@@ -18,7 +13,6 @@ import org.appfuse.model.User;
 import com.cnpanoramio.MapVendor;
 
 @XmlRootElement(name = "UserSettings")
-//@XmlAccessorType( XmlAccessType.PROPERTY )
 @Entity
 @Table(name = "user_settings")
 public class UserSettings {

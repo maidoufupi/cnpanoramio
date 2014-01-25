@@ -95,6 +95,13 @@ public class PhotoDaoTest {
 		photo = photoDao.get(photo.getId());
 		Assert.assertNotNull(photo.getDetails());
 	}
+	
+	@Test
+	public void testGetPhotoCount() {
+		User user = userDao.get(-1L);
+		int count = photoDao.getPhotoCount(user);
+		log.info(count);
+	}
 
 	public UserDao getUserDao() {
 		return userDao;

@@ -234,7 +234,7 @@
 				<h3>
 					发送评论 <span>(以 ${userSettings.user.username})</span>
 				</h3>
-				<textarea cols="50" rows="8" id="tcomment" name="comment"></textarea>
+				<textarea cols="50" rows="8" id="tcomment" name="comment" class="form-control"></textarea>
 				<br> <input type="hidden" name="photoid" value="${photo.id}">
 				<input type="hidden" id="userid" value="${userSettings.user.id}">
 				<input type="submit" name="submit" id="submit_comment" value="发送评论">
@@ -245,11 +245,74 @@
 		</c:if>
 	</div>
 	<div class="info-col">
-		<div class="interim-info-card photo-page-card"></div>
+		<div class="interim-info-card photo-page-card">
+        <div id="profile_pic_info">
+            <a href="<c:url value='/user/${photo.owner.id}'/>">
+            	<img src="<c:url value='/images/user_avatar.png'/>"
+                    width="60" height="60" alt="Mehmet Gü?lü" id="profile_pic_avatar"></a>
+
+            <div id="profile_info">
+                <div id="profile_name">
+                    <a href="/user/3908287?with_photo_id=41234541" rel="author">Mehmet Gü?lü</a>
+                </div>
+                <div id="profile_location">
+                    Istanbul
+                </div>
+                <div id="profile-stats">
+                    <a href="<c:url value='/user/${photo.owner.id}'/>">
+              <span class="profile-stats-text">
+                  320 photos</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="photo_page-info_card_img_row" id="photo_page-owner_photos">
+        </div>
+        <div id="wapi_photo_list">
+            <div class="panoramio-wapi-photolist-h panoramio-wapi-photolist" style="width: 295px; height: 48px;">
+                <a class="panoramio-wapi-arrow panoramio-wapi-prev" href="#" style="display: none;">
+                    <img src="http://www.panoramio.com/img/wapi/photo_list_widget/left_arrow.png" alt="??" width="39"
+                         height="38" title="??" style="margin-top: 5px;">
+                </a>
+                <span class="panoramio-wapi-arrowbox panoramio-wapi-arrowbox-prev"
+                      style="width: 39px; display: none;"></span>
+
+                <div class="panoramio-wapi-overlay" style="width: 265px; height: 48px; display: none;"></div>
+                <div class="panoramio-wapi-images" style="width: 265px; height: 48px;">
+                    <div class="panoramio-wapi-images" style="width: 265px; height: 48px;">
+                        <div class="panoramio-wapi-loaded-img-div" style="width: 44px; height: 48px;">
+                            <div class="panoramio-wapi-wrapper-div"
+                                 style="padding: 0px; border-width: 1px; margin: 4px 2px;">
+                                <div class="panoramio-wapi-crop-div" style="width: 38px; height: 38px;">
+                                    <a href="http://www.panoramio.com/photo/42477493">
+                                        <img id="loadedImage7"
+                                             src="http://mw2.google.com/mw-panoramio/photos/square/42477493.jpg"
+                                             class="panoramio-wapi-img panoramio-wapi-loaded-img" alt="" title="t"
+                                             style="width: 38px; height: 38px; left: 0px; top: 0px;"></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="panoramio-wapi-arrow panoramio-wapi-next" href="#" style="display: none;">
+                    <img src="http://www.panoramio.com/img/wapi/photo_list_widget/right_arrow.png" alt="??" width="39"
+                         height="38" title="??" style="margin-top: 5px;">
+                </a>
+                <span class="panoramio-wapi-arrowbox panoramio-wapi-arrowbox-next"
+                      style="width: 39px; display: none;"></span>
+            </div>
+            <div class="panoramio-wapi-tos">
+            </div>
+        </div>
+        <div class="photo_page-info_card_img_row_footer">
+
+            <h3 id="wapi_photo_h">
+                更多 <a href="/user/3908287?with_photo_id=41234541" rel="author">Mehmet Gü?lü</a> 的照片
+            </h3>
+
+        </div>
+    </div>
 		<div class="interim-info-card photo-page-card">
 			<div id="map_info_breadcrumbs">
-				<a href="/map/">World</a> • <a
-					href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=12&amp;k=2">柬埔寨</a>
+				<a href="/map/">World</a> • <a href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=12&amp;k=2">柬埔寨</a>
 				• <a href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=9&amp;k=2">暹粒省</a>
 			</div>
 			<div id="map_info_name">
