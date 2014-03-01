@@ -11,7 +11,7 @@ public interface PhotoDao extends GenericDao<Photo, Long>{
 
 	public List<Photo> getUserPhotos(User user);
 	
-	public List<Photo> getUserPhotos(User user, int pageNo, int pageSize);
+	public List<Photo> getUserPhotos(User user, int pageSize, int pageNo);
 	
 	public int getPhotoCount(User user);
 	

@@ -43,6 +43,7 @@ mvn dbunit:operation -Pprod
 
 每次运行：
 panor上运行mvn tomcat6:run
+panor上运行mvn tomcat7:redeploy -DskipTests
 
 浏览器中打开：
 http://localhost:8080/panor-web

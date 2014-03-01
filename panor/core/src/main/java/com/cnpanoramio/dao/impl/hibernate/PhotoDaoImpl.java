@@ -13,7 +13,6 @@ import com.cnpanoramio.domain.Comment;
 import com.cnpanoramio.domain.Photo;
 
 @Repository("photoDao")
-@Transactional
 public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements PhotoDao {
 
 	public PhotoDaoImpl() {
@@ -46,7 +45,7 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 	}
 
 	@Override
-	public List<Photo> getUserPhotos(User user, int pageNo, int pageSize) {
+	public List<Photo> getUserPhotos(User user, int pageSize, int pageNo) {
 		Query query = getSession().createQuery("from Photo where owner = :owner");
 		
 		query.setParameter("owner", user);

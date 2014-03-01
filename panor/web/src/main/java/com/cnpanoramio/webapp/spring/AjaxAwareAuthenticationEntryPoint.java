@@ -25,6 +25,7 @@ public class AjaxAwareAuthenticationEntryPoint extends
 				&& request.getHeader("x-requested-with").equalsIgnoreCase(
 						"XMLHttpRequest")) {// 如果是ajax请求响应头会有，x-requested-with；
 			response.sendError(403, "Forbidden");
+			System.out.println("response.sendError(403, 'Forbidden');");
 		} else {
 			super.commence(request, response, authException);
 		}

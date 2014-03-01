@@ -1,4 +1,4 @@
-package com.cnpanoramio.webapp.rest;
+package com.cnpanoramio.rest;
 
 import javax.servlet.ServletContext;
 

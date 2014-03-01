@@ -11,7 +11,6 @@ import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.UserSettings;
 
 @Repository("userSettingsDao")
-@Transactional
 public class UserSettingsDaoImpl extends GenericDaoHibernate<UserSettings, Long> implements UserSettingsDao {
 
 	public UserSettingsDaoImpl() {
@@ -30,6 +29,5 @@ public class UserSettingsDaoImpl extends GenericDaoHibernate<UserSettings, Long>
         }else {
         	return null;
         }
-		
 	}
 }

@@ -1,3 +1,6 @@
+panor/*/target
+panor/web/src/test/resources/image
+
 #################
 ## Eclipse
 #################

@@ -26,6 +26,7 @@
         <property name="useCodeAsDefaultMessage" value="true"/>
     </bean> 
 
+    <context:component-scan base-package="com.cnpanoramio.rest"/>
     <context:component-scan base-package="com.cnpanoramio.webapp"/>
 
     <!-- Configures the @Controller programming model -->
@@ -44,4 +45,6 @@
     </bean>
     
     <!-- Add additional controller beans here -->
+    
+    <bean class="com.cnpanoramio.webapp.listener.AuthenticationListener" />
 </beans>

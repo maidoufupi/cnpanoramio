@@ -1,8 +1,20 @@
-package com.cnpanoramio.webapp.rest;
+package com.cnpanoramio.rest;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.utils.UserUtil;
 
@@ -24,7 +37,10 @@ public class PhotoRestService {
 	private UserManager userManager = null; 
 	
 	@Autowired
-	private PhotoManager photoManager = null;
+	private PhotoManager photoService;
+	
+	@Autowired
+	private FileService fileService;
     
 	@RequestMapping(value = "/{photoId}/markbest", method = RequestMethod.GET)
 	@ResponseBody
@@ -34,9 +50,9 @@ public class PhotoRestService {
 		
 		User me = UserUtil.getCurrentUser(userManager);
 		id = Long.parseLong(photoId);
-		Photo photo = photoManager.getPhoto(id);
+		Photo photo = photoService.getPhoto(id);
 		if(photo.getOwner().equals(me)) {
-			photoManager.markBest(id, true);
+			photoService.markBest(id, true);
 			return true;
 		}else {
 			return false;
@@ -51,9 +67,9 @@ public class PhotoRestService {
 		
 		User me = UserUtil.getCurrentUser(userManager);
 		id = Long.parseLong(photoId);
-		Photo photo = photoManager.getPhoto(id);
+		Photo photo = photoService.getPhoto(id);
 		if(photo.getOwner().equals(me)) {
-			photoManager.markBest(id, false);
+			photoService.markBest(id, false);
 			return true;
 		}else {
 			return false;
@@ -69,9 +85,9 @@ public class PhotoRestService {
 		
 		User me = UserUtil.getCurrentUser(userManager);
 		id = Long.parseLong(photoId);
-		Photo photo = photoManager.getPhoto(id);
+		Photo photo = photoService.getPhoto(id);
 		if(photo.getOwner().equals(me)) {
-			return photoManager.properties(id, properties);
+			return photoService.properties(id, properties);
 		}else {
 			return false;
 		}
@@ -83,7 +99,22 @@ public class PhotoRestService {
 		
 		Long id = null;
 		id = Long.parseLong(photoId);
-		return photoManager.getCameraInfo(id);
+		return photoService.getCameraInfo(id);
+	}
+	
+	@RequestMapping(value = "/{photoId}/{level}", 
+			method = RequestMethod.GET,
+			produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
+	@ResponseBody
+	public FileSystemResource getPhoto(@PathVariable String photoId, @PathVariable int level) {
+		
+		Long id = null;
+		id = Long.parseLong(photoId);
+//		Photo photo = photoService.getPhoto(id);
+		
+		File file = fileService.readFile(FileService.TYPE_IMAGE, id, level);
+
+		return new FileSystemResource(file);
 	}
 
 }

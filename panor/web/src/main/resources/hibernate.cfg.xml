@@ -7,14 +7,14 @@
 <hibernate-configuration>
 	<session-factory>
 		<!--配置数据库的驱动程序，Hibernate在连接数据库时，需要用到数据库的驱动程序 -->
-		<property name="hibernate.connection.driver_class">${jdbc.driverClassName}</property>
+		<!-- <property name="hibernate.connection.driver_class">${jdbc.driverClassName}</property> -->
 		<!--设置数据库的连接url:jdbc:mysql://localhost/hibernate,其中localhost表示mysql服务器名称，此处为本机， 
 			hibernate是数据库名 -->
-		<property name="hibernate.connection.url">${jdbc.url}</property>
+		<!-- <property name="hibernate.connection.url">${jdbc.url}</property> -->
 		<!--连接数据库是用户名 -->
-		<property name="hibernate.connection.username">${jdbc.username}</property>
+		<!-- <property name="hibernate.connection.username">${jdbc.username}</property> -->
 		<!--连接数据库是密码 -->
-		<property name="hibernate.connection.password">${jdbc.password}</property>
+		<!-- <property name="hibernate.connection.password">${jdbc.password}</property> -->
 		<!--数据库连接池的大小 -->
 		<property name="hibernate.connection.pool.size">20</property>
 		<!--是否在后台显示Hibernate用到的SQL语句，开发时设置为true，便于差错，程序运行时可以在Eclipse的控制台显示Hibernate的执行Sql语句。项目部署后可以设置为false，提高运行效率 -->

@@ -14,5 +14,7 @@
 		class="org.springframework.mock.web.MockHttpSession">
 	</bean>
 	
-	
+	<bean id="servletContent"
+		class="org.springframework.mock.web.MockServletContext">
+	</bean>	
 </beans>

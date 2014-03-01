@@ -1,7 +1,5 @@
 package com.cnpanoramio.service;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -10,7 +8,6 @@ import java.util.Collection;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,12 +21,18 @@ import com.cnpanoramio.domain.Photo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-		"classpath*:/applicationContext.xml"
+		"classpath:/applicationContext-service.xml",
+		"classpath*:/applicationContext.xml",
+		"classpath*:/applicationContext-test.xml",
+		"/WEB-INF/applicationContext.xml",
+		"/WEB-INF/dispatcher-servlet.xml",
+		"/WEB-INF/spring-security.xml"
 		})
 public class PhotoManagerTest {
 	protected transient final Log log = LogFactory.getLog(getClass());
 	
-	private PhotoService photoService;
+	@Autowired
+	private PhotoManager photoManager;
 	
 	private InputStream ins;
 	URL url;
@@ -56,7 +59,7 @@ public class PhotoManagerTest {
 	@Test
 	public void testFillPhotoDetail() throws ImageReadException, IOException {
 		Photo photo = new Photo();
-		photoService.fillPhotoDetail(ins, photo);
+		photoManager.fillPhotoDetail(ins, photo);
 		log.info(photo.getGpsPoint().getLat());
 		log.info(photo.getGpsPoint().getLng());
 		log.info(photo.getGpsPoint().getAlt());
@@ -65,18 +68,14 @@ public class PhotoManagerTest {
 	}
 	
 	@Test
+	public void testGetUserPhotos() {
+		Collection<Photo> photos = photoManager.getPhotosForUser("1", 10, 1);
+		Assert.isTrue(photos.size() == 0);
+	}
+	
+	@Test
 	public void testGetPhotosForUser() {
-		photosForUser = photoService.getPhotosForUser("admin");
+		photosForUser = photoManager.getPhotosForUser("admin");
 		Assert.isTrue(photosForUser.isEmpty());
 	}
-	
-	public PhotoService getPhotoService() {
-		return photoService;
-	}
-	
-	@Autowired
-	public void setPhotoService(PhotoService photoService) {
-		this.photoService = photoService;
-	}
-		
 }

@@ -24,9 +24,8 @@ import org.springframework.util.Assert;
 import com.cnpanoramio.domain.Photo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        locations = {"classpath:/applicationContext-resources.xml",
-                "classpath:/applicationContext-dao.xml",
+@ContextConfiguration(inheritLocations = true,
+        locations = { 
                 "classpath:/applicationContext-service.xml",
                 "classpath*:/applicationContext.xml", // for modular archetypes
                 "classpath*:/applicationContext-test.xml",

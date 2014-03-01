@@ -17,7 +17,6 @@
 
 	<build>
 		<plugins>
-		<!-- 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>hibernate3-maven-plugin</artifactId>
@@ -31,7 +30,7 @@
 					</components>
 					<componentProperties>
 						<drop>true</drop>
-						<jdk5>true</jdk5>
+						<!-- <jdk5>true</jdk5> -->
 						<propertyfile>${project.build.testOutputDirectory}/jdbc.properties</propertyfile>
 						<skip>${skipTests}</skip>
 					</componentProperties>
@@ -85,7 +84,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			 -->
+			
 		</plugins>
 		<testResources>
 			<testResource>

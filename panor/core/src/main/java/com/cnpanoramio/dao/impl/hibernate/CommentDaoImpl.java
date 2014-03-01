@@ -11,7 +11,6 @@ import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.domain.Comment;
 
 @Repository("commentDao")
-@Transactional
 public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long> implements CommentDao {
 
 	public CommentDaoImpl() {
@@ -29,8 +28,7 @@ public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long> implement
 	}
 
 	@Override
-	public List<Comment> getCommentPager(Long photoId, Integer pageNo,
-			Integer pageSize) {
+	public List<Comment> getCommentPager(Long photoId, int pageSize, int pageNo) {
 		Query query = getSession().createQuery("select c from Comment as c left join c.photo as p where p.id = :photoid");
 		
 		query.setParameter("photoid", photoId);

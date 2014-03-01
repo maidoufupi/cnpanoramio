@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "PhotoProperties")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PhotoProperties {
+	
+	private Long id;
 
 	private String title;
 	
@@ -27,6 +29,13 @@ public class PhotoProperties {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}	
 	
 }

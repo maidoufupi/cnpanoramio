@@ -18,9 +18,10 @@
 	<http pattern="/scripts/**" security="none"
 		xmlns="http://www.springframework.org/schema/security" />
 
-	<http pattern="/oauth/token" create-session="stateless"
-		authentication-manager-ref="clientAuthenticationManager"
-		xmlns="http://www.springframework.org/schema/security">
+	<http pattern="/oauth/token" 
+	      create-session="stateless"
+	      authentication-manager-ref="clientAuthenticationManager"
+		  xmlns="http://www.springframework.org/schema/security">
 		<intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
 		<anonymous enabled="false" />
 		<http-basic entry-point-ref="clientAuthenticationEntryPoint" />
@@ -88,10 +89,23 @@
 			key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" />
 		<anonymous />
 	</http>
+	
+	<http xmlns="http://www.springframework.org/schema/security"
+	      pattern="/api/rest/**" >
+    	<intercept-url pattern="/api/rest/user/authenticate" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
+    	<intercept-url pattern="/api/rest/user/*/photos/**" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
+    	<intercept-url pattern="/api/rest/user/**" access="ROLE_ADMIN,ROLE_USER" />
+    	<intercept-url pattern="/api/rest/comment/photo/*/**" access="ROLE_ADMIN,ROLE_USER" />
+   		<http-basic />
+	</http>
+	
+	<!-- <bean id="ajaxAuthFailHandler" class=" com.cnpanoramio.webapp.spring.AjaxAuthenticationFailureHandler"></bean> -->
+			 
 	<bean id="authenticationEntryPoint"
   		class="com.cnpanoramio.webapp.spring.AjaxAwareAuthenticationEntryPoint">
 		<constructor-arg name="loginUrl" value="/login"/>
 	</bean>
+	
 	<http xmlns="http://www.springframework.org/schema/security"
 	      entry-point-ref="authenticationEntryPoint">
 	    <intercept-url pattern="/photo/*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
@@ -125,6 +139,18 @@
 		class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
 		<property name="realmName" value="sparklr2" />
 	</bean>
+	
+	<!-- <bean id="digestFilter"
+      class="org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
+        <property name="userDetailsService" ref="userDao" />
+        <property name="authenticationEntryPoint" ref="digestAuthenticationEntryPoint"/>
+    </bean>
+	
+	<bean id="digestAuthenticationEntryPoint"
+		class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
+		<property name="realmName" value="Contacts Realm via Digest Authentication" />
+		<property name="key" value="thisiskey" />
+	</bean> -->
 
 	<bean id="clientAuthenticationEntryPoint"
 		class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">

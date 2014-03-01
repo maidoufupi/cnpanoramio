@@ -66,6 +66,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	private PhotoDao photoDao;
 	private FileService fileService;
 	private UserManager userManager = null;
+	
 	@Autowired
 	private UserSettingsDao userSettingsDao = null;
 
@@ -376,8 +377,13 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		return photoDao.getUserPhotos(user);
 	}
 	
-	public Collection<Photo> getPhotosForUser(User user, int pageNo, int pageSize) {
-		return photoDao.getUserPhotos(user);
+	public Collection<Photo> getPhotosForUser(User user, int pageSize, int pageNo) {
+		return photoDao.getUserPhotos(user, pageSize, pageNo);
+	}
+	
+	public Collection<Photo> getPhotosForUser(String id, int pageSize, int pageNo) {
+		User user = userManager.getUser(id);
+		return this.getPhotosForUser(user, pageSize, pageNo);
 	}
 
 	/**

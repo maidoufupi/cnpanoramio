@@ -51,26 +51,38 @@ public interface PhotoManager {
 			throws ImageReadException, IOException;
 
 	/**
-	 * Load the photos for the current user.
+	 * Load the photos for the user.
 	 * 
 	 * @return The photos for the current user.
 	 */
 	public Collection<Photo> getPhotosForUser(String username);
 	
 	/**
-	 * Load the photos for the current user.
+	 * Load the photos for the user.
 	 * 
 	 * @return The photos for the current user.
 	 */
 	public Collection<Photo> getPhotosForUser(User user);
 	
 	/**
-	 * Load the photos for the current user.
+	 * Load the photos for the user.
 	 * 
 	 * @return The photos for the current user.
 	 */
-	public Collection<Photo> getPhotosForUser(User user, int pageNo, int pageSize);
+	public Collection<Photo> getPhotosForUser(User user, int pageSize, int pageNo);
+	
+	/**
+	 * Load the photos for the user.
+	 * 
+	 * @return The photos for the user.
+	 */
+	public Collection<Photo> getPhotosForUser(String id, int pageSize, int pageNo);
 
+	/**
+	 * Get the photos count for the user.
+	 * 
+	 * @return The photos count for the user.
+	 */
 	public int getPhotoCount(User user);
 	
 	/**

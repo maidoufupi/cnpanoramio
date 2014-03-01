@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/tx 
        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
        http://www.springframework.org/schema/mvc 
-       http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd"
-       >
+       http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+       http://www.springframework.org/schema/aop 
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-    <!-- Activates scanning of @Autowired -->
-    <context:annotation-config/>
-    
-    <mvc:annotation-driven />
+	<!-- Activates scanning of @Autowired -->
+	<context:annotation-config />
+
+	<mvc:annotation-driven />
+
 	<mvc:default-servlet-handler />
-	
-    <!-- Activates scanning of @Repository and @Service -->
-    <context:component-scan base-package="com.cnpanoramio"/>
-    <!-- <context:component-scan base-package="org.springframework.security.oauth2.provider"/> -->
-    <!-- <bean id="authorizationEndpoint" class="org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint"/> -->
-    	
-    <!-- Add new DAOs here -->
 
-	<!-- Add new Managers here -->
-	
-    <!-- Add Spring Interceptor -->
-<!--     <mvc:interceptors>  
-      <bean class="com.cnpanoramio.webapp.spring.SessionTimeOutInterceptor" />  
-    </mvc:interceptors>  -->
-    
+	<!-- Activates scanning of @Repository and @Service -->
+	<context:component-scan base-package="com.cnpanoramio.dao"/>
+	<context:component-scan base-package="com.cnpanoramio.service"/>
+	<context:component-scan base-package="org.appfuse.dao.hibernate"/>
+	<context:component-scan base-package="org.appfuse.service.impl"/>
+
+	<!-- Add Spring Interceptor -->
+	<!-- <mvc:interceptors> <bean class="com.cnpanoramio.webapp.spring.SessionTimeOutInterceptor" 
+		/> </mvc:interceptors> -->
+
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
@@ -62,8 +62,7 @@
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
-	
-	<bean class="com.cnpanoramio.webapp.listener.AuthenticationListener"/>
+
 </beans>

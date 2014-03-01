@@ -12,6 +12,6 @@ public interface CommentDao extends GenericDao<Comment, Long> {
 	
 	public List<Comment> getComments(Long photoId);
 	
-	public List<Comment> getCommentPager(Long photoId, Integer pageNo, Integer pageSize);
+	public List<Comment> getCommentPager(Long photoId, int pageSize, int pageNo);
 	
 }
