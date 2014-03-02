@@ -95,7 +95,7 @@
     	<intercept-url pattern="/api/rest/user/authenticate" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
     	<intercept-url pattern="/api/rest/user/*/photos/**" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
     	<intercept-url pattern="/api/rest/user/**" access="ROLE_ADMIN,ROLE_USER" />
-    	<intercept-url pattern="/api/rest/comment/photo/*/**" access="ROLE_ADMIN,ROLE_USER" />
+    	<intercept-url pattern="/api/rest/comment/photo/**" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
    		<http-basic />
 	</http>
 	

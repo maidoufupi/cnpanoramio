@@ -7,101 +7,6 @@
     <list default="true" id="34af2773-2e57-4985-84d1-6d551b155942" name="Default" comment="" />
     <ignored path="cnmap.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Modal.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389088769036" ignored="false" />
-    <file path="/modal.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389105598789" ignored="false" />
-    <file path="/form.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1386913200594" ignored="false" />
-    <file path="/Panor.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387015957512" ignored="false" />
-    <file path="/cnmap.Modal.baidu.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387457883473" ignored="false" />
-    <file path="/main.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389106054857" ignored="false" />
-    <file path="/FileUpload.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389694874475" ignored="false" />
-    <file path="/a.dummy" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388136570075" ignored="false" />
-    <file path="/jquery.fileupload-image.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387039399579" ignored="false" />
-    <file path="/cnmap.Explore.baidu.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388198868685" ignored="false" />
-    <file path="/ExploreWorld.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389704582966" ignored="false" />
-    <file path="/cnmap.baidu.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389695484102" ignored="false" />
-    <file path="$PROJECT_DIR$/../../GitHub/jquery.rest/examples/params.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387104398915" ignored="false" />
-    <file path="/params.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387104348829" ignored="false" />
-    <file path="/RestClient.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387104166668" ignored="false" />
-    <file path="/explore.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387187355667" ignored="false" />
-    <file path="$PROJECT_DIR$/../../GitHub/cnpanoramio/panor/web/target/m2e-wtp/web-resources/META-INF/maven/com.cnpanoramio/panor-web/pom.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387118160358" ignored="false" />
-    <file path="/cnmap.Panoramio.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388732375642" ignored="false" />
-    <file path="/Div.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389076020307" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/classes/META-INF/persistence.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/sitemesh.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/classes/ehcache.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/validation.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/classes/log4j.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/applicationContext.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/m2e-wtp/web-resources/META-INF/maven/com.cnpanoramio/panor-web/pom.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/web.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/security.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/urlrewrite.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/menu-config.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/web-tests.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/classes/applicationContext-resources.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/hibernate.cfg.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/dispatcher-servlet.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/sample-data.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/dwr.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/validator-rules.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/cxf-servlet.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/decorators.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/applicationContext-validation.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/spring-security.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/test-classes/WEB-INF/resin-web.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../panor/web/target/classes/default-data.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276005070" ignored="false" />
-    <file path="$PROJECT_DIR$/../../JavaScript-Load-Image/index.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387276082946" ignored="false" />
-    <file path="/index.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388513211084" ignored="false" />
-    <file path="/cnmap.comm.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389964190584" ignored="false" />
-    <file path="/cnmap.Modal.qq.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388594880039" ignored="false" />
-    <file path="/cnmap.Modal.gaode.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389105822312" ignored="false" />
-    <file path="/Panoramio - [设置].htm" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387795719770" ignored="false" />
-    <file path="/settings.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387982013928" ignored="false" />
-    <file path="/settings.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387986197861" ignored="false" />
-    <file path="/Panoramio-settings.htm" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1387985454321" ignored="false" />
-    <file path="/cnmap.Explore.qq.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388198959254" ignored="false" />
-    <file path="/PhotoDisplay.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389858098708" ignored="false" />
-    <file path="/PhotoDisplay.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388336452402" ignored="false" />
-    <file path="C:/netdisk/cnpanoramio/panor.v2/index-baidu.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388112587836" ignored="false" />
-    <file path="/ExploreWorld.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389080598510" ignored="false" />
-    <file path="/cnmap.qq.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389689089421" ignored="false" />
-    <file path="/cnmap.gaode.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389776276970" ignored="false" />
-    <file path="/cnmap.Explore.gaode.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388201783219" ignored="false" />
-    <file path="/navbar.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389081204292" ignored="false" />
-    <file path="/navbar.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389081466708" ignored="false" />
-    <file path="/cnmap.mapbar.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388512786515" ignored="false" />
-    <file path="/index.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388513304899" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SourceCode/FileUpload/test.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388568290339" ignored="false" />
-    <file path="/test.xml" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388567968872" ignored="false" />
-    <file path="/uploadPhoto.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388833215624" ignored="false" />
-    <file path="/tagsinput.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1388833330067" ignored="false" />
-    <file path="/SysSettings.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389710354706" ignored="false" />
-    <file path="/jquery.canvas.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389102576201" ignored="false" />
-    <file path="/examples.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389790684801" ignored="false" />
-    <file path="/basic.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389790818209" ignored="false" />
-    <file path="/cnmap.explore.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389689314819" ignored="false" />
-    <file path="/cnmap.explore.qq.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389694639502" ignored="false" />
-    <file path="/cnmap.explore.baidu.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389696532703" ignored="false" />
-    <file path="/cnmap.explore.gaode.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389704120213" ignored="false" />
-    <file path="/style.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389787245008" ignored="false" />
-    <file path="/jquery.compareArray.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389964169105" ignored="false" />
-    <file path="/compareArray.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1389964644388" ignored="false" />
-    <file path="/Dummy.txt" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390284806377" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/app/index.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390121959884" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/app/js/controllers.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390124724808" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/app/css/app.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390121829647" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/test/unit/controllersSpec.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390121959884" ignored="false" />
-    <file path="/user.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390283804248" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SourceCode/angular-phonecat/app/js/app.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390125189133" ignored="false" />
-    <file path="/controllers.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390296899823" ignored="false" />
-    <file path="/app.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390125115496" ignored="false" />
-    <file path="/1.json" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390138991353" ignored="false" />
-    <file path="/user.css" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390127172554" ignored="false" />
-    <file path="/directives.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390142081504" ignored="false" />
-    <file path="/directives-bak.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390143849815" ignored="false" />
-    <file path="$PROJECT_DIR$/../../../SourceCode/hana/tiwen/tiwen/workspace/MyHelloWorld/ui/map.html" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390219192238" ignored="false" />
-    <file path="/servicesSpec.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390287347627" ignored="false" />
-    <file path="/services.js" changelist="34af2773-2e57-4985-84d1-6d551b155942" time="1390295683704" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,19 +26,58 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="services.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/userpage/services.js">
+      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/userpage/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="42" selection-start="321" selection-end="321" vertical-scroll-proportion="0.0">
+            <state line="8" column="22" selection-start="173" selection-end="173" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="controllers.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="user.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/user.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="48" selection-start="372" selection-end="372" vertical-scroll-proportion="-4.827586" vertical-offset="60" max-vertical-offset="1620">
+              <folding>
+                <element signature="tag#div#0;tag#div#0;tag#body#0;tag#html#0" expanded="false" />
+                <element signature="tag#div#1;tag#div#0;tag#body#0;tag#html#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/css/user.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="105" column="21" selection-start="1602" selection-end="1602" vertical-scroll-proportion="-1.1451613" vertical-offset="2029" max-vertical-offset="2740">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="style.css" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/css/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="186" column="23" selection-start="3083" selection-end="3083" vertical-scroll-proportion="0.3220339" vertical-offset="3511" max-vertical-offset="4160">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="controllers.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/userpage/controllers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="44" selection-start="628" selection-end="628" vertical-scroll-proportion="0.70614034">
+            <state line="10" column="0" selection-start="247" selection-end="247" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="640">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="services.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/userpage/services.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="6" selection-start="328" selection-end="328" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
               <folding />
             </state>
           </provider>
@@ -158,13 +102,14 @@
         <option value="$PROJECT_DIR$/api/rest/photos/2.json" />
         <option value="$PROJECT_DIR$/js/userpage/directives-bak.js" />
         <option value="$PROJECT_DIR$/css/user.css" />
-        <option value="$PROJECT_DIR$/js/userpage/directives.js" />
         <option value="$PROJECT_DIR$/user.html" />
         <option value="$PROJECT_DIR$/api/rest/photos/3.json" />
         <option value="$PROJECT_DIR$/config/karma.conf.js" />
         <option value="$PROJECT_DIR$/test/unit/userpage/servicesSpec.js" />
         <option value="$PROJECT_DIR$/js/userpage/services.js" />
         <option value="$PROJECT_DIR$/js/userpage/controllers.js" />
+        <option value="$PROJECT_DIR$/js/userpage/directives.js" />
+        <option value="$PROJECT_DIR$/ExploreWorld.html" />
       </list>
     </option>
   </component>
@@ -200,7 +145,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -229,49 +173,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="userpage" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cnmap" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="api" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rest" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="photos" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="user" />
+              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="preferences.sourceCode.General" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../SourceCode/hana/tiwen/tiwen/workspace/MyHelloWorld" />
+    <property name="options.lastSelected" value="editor.preferences.import" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../ui-map" />
     <property name="FullScreen" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
     <property name="options.searchVisible" value="true" />
@@ -305,11 +220,32 @@
       <option name="testName" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugSession" factoryName="Local" singleton="true">
-      <JSDebuggerConfigurationSettings>
-        <option name="engineId" value="embedded" />
-        <option name="fileUrl" />
-      </JSDebuggerConfigurationSettings>
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="name" value="Dart" />
+      <option name="saveOutputToFile" value="false" />
+      <option name="showConsoleOnStdErr" value="false" />
+      <option name="showConsoleOnStdOut" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
+      <setting name="configLocationType" value="CONFIG_FILE" />
+      <setting name="settingsFile" value="" />
+      <setting name="serverType" value="INTERNAL" />
+      <setting name="preferredDebugBrowser" value="CHROME" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
+      <browser start="false" url="" with-js-debugger="false" />
       <method />
     </configuration>
     <list size="0" />
@@ -324,13 +260,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1618" height="884" extended-state="6" />
-    <editor active="false" />
+    <frame x="-9" y="-9" width="1618" height="884" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24984147" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23779328" sideWeight="0.67134833" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21116044" sideWeight="0.67134833" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286517" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
@@ -346,153 +283,299 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USERS">
+      <collection />
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="CHECK_NEW_TODO" value="true" />
     <option name="myTodoPanelSettings">
-      <value>
-        <are-packages-shown value="false" />
-        <are-modules-shown value="false" />
-        <flatten-packages value="false" />
-        <is-autoscroll-to-source value="false" />
-      </value>
+      <TodoPanelSettings />
     </option>
-    <option name="PERFORM_UPDATE_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_COMMIT_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_EDIT_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
-    <option name="PERFORM_ROLLBACK_IN_BACKGROUND" value="false" />
-    <option name="CHECK_LOCALLY_CHANGED_CONFLICTS_IN_BACKGROUND" value="false" />
-    <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
-    <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
-    <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
-    <option name="DEFAULT_PATCH_EXTENSION" value="patch" />
-    <option name="SHORT_DIFF_HORIZONTALLY" value="true" />
-    <option name="SHORT_DIFF_EXTRA_LINES" value="2" />
-    <option name="SOFT_WRAPS_IN_SHORT_DIFF" value="true" />
-    <option name="INCLUDE_TEXT_INTO_PATCH" value="false" />
-    <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
-    <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
-    <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
-    <option name="SHOW_DIRTY_RECURSIVELY" value="false" />
-    <option name="LIMIT_HISTORY" value="true" />
-    <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
-    <option name="UPDATE_FILTER_SCOPE_NAME" />
-    <option name="USE_COMMIT_MESSAGE_MARGIN" value="false" />
-    <option name="COMMIT_MESSAGE_MARGIN_SIZE" value="72" />
-    <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
-    <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" />
-    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
-    <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
-    <option name="FILE_HISTORY_DIALOG_COMMENTS_SPLITTER_PROPORTION" value="0.8" />
-    <option name="FILE_HISTORY_DIALOG_SPLITTER_PROPORTION" value="0.5" />
-    <option name="ACTIVE_VCS_NAME" />
-    <option name="UPDATE_GROUP_BY_PACKAGES" value="false" />
-    <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
-    <option name="UPDATE_FILTER_BY_SCOPE" value="false" />
-    <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
-    <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/bower_components/imagesloaded/imagesloaded.js">
+    <entry file="file://$PROJECT_DIR$/PhotoDisplay.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="182" column="54" selection-start="4685" selection-end="4685" vertical-scroll-proportion="0.20547946" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="38" selection-start="2077" selection-end="2087" vertical-scroll-proportion="0.22932917" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/user.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="52" selection-start="406" selection-end="406" vertical-scroll-proportion="0.030701755" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/userpage/filters.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="30" selection-end="68" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/userpage/directives.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="37" selection-start="2124" selection-end="2124" vertical-scroll-proportion="1.7192982" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/rest/photos/user/2.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="32" selection-start="895" selection-end="895" vertical-scroll-proportion="-21.7">
+        <state line="125" column="0" selection-start="5701" selection-end="5820" vertical-scroll-proportion="0.0" vertical-offset="2220" max-vertical-offset="9780">
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/rest/photos/user/3.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="50" selection-start="1859" selection-end="1859" vertical-scroll-proportion="0.57798165">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/userpage/directives-bak.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="49" selection-start="1805" selection-end="1805" vertical-scroll-proportion="0.18421052" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="32" selection-start="1086" selection-end="1086" vertical-scroll-proportion="-0.6055046" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/userpage/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="45" selection-start="67" selection-end="78" vertical-scroll-proportion="0.12280702" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/rest/photos/user/1.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="19" selection-start="20" selection-end="20" vertical-scroll-proportion="0.03211009">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/unit/userpage/servicesSpec.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="52" selection-start="586" selection-end="586" vertical-scroll-proportion="0.29385966" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/karma.conf.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="52" selection-start="241" selection-end="241" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/test.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="39" selection-start="274" selection-end="274" vertical-scroll-proportion="0.3377193" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/userpage/services.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="42" selection-start="321" selection-end="321" vertical-scroll-proportion="0.0">
+        <state line="9" column="3" selection-start="177" selection-end="177" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="300">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/userpage/controllers.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="44" selection-start="628" selection-end="628" vertical-scroll-proportion="0.70614034">
+        <state line="2" column="17" selection-start="32" selection-end="32" vertical-scroll-proportion="0.0" vertical-offset="40" max-vertical-offset="640">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/services.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="106" selection-end="106" vertical-scroll-proportion="0.0" vertical-offset="100" max-vertical-offset="360">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/PhotoDisplay.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="16" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="5320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PhotoDisplay.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="125" column="0" selection-start="5701" selection-end="5820" vertical-scroll-proportion="0.0" vertical-offset="2220" max-vertical-offset="9780">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/PhotoDisplay.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="16" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="5320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/directives.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="77" column="23" selection-start="2626" selection-end="2630" vertical-scroll-proportion="0.0" vertical-offset="1089" max-vertical-offset="1800" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/compareArray.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="40" selection-start="338" selection-end="338" vertical-scroll-proportion="0.0" vertical-offset="160" max-vertical-offset="780" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.gaode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="0" selection-start="399" selection-end="399" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="3600" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="3" selection-start="177" selection-end="177" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="300" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="0" selection-start="383" selection-end="383" vertical-scroll-proportion="0.0" vertical-offset="320" max-vertical-offset="640" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/services.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="0" selection-start="329" selection-end="329" vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="360" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="7" selection-start="1677" selection-end="1677" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3900" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/directives.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="48" selection-start="396" selection-end="436" vertical-scroll-proportion="0.0" vertical-offset="260" max-vertical-offset="1800" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="75" selection-start="5278" selection-end="5278" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3900" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ExploreWorld.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="29" selection-start="2967" selection-end="2967" vertical-scroll-proportion="0.0" vertical-offset="660" max-vertical-offset="3940" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.gaode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="17" selection-start="196" selection-end="196" vertical-scroll-proportion="0.0" vertical-offset="29" max-vertical-offset="2000" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="75" selection-start="5278" selection-end="5278" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3900" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ExploreWorld.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="54" column="31" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="3940" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="125" column="14" selection-start="5942" selection-end="5942" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="3900" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="84" column="57" selection-start="3976" selection-end="3976" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="3900" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="49" column="38" selection-start="2077" selection-end="2087" vertical-scroll-proportion="0.22932917" vertical-offset="0" max-vertical-offset="0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/unit/userpage/servicesSpec.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="0" selection-start="1022" selection-end="1022" vertical-scroll-proportion="0.0" vertical-offset="147" max-vertical-offset="860" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/explore/cnmap.explore.baidu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="197" selection-end="197" vertical-scroll-proportion="0.28129396" vertical-offset="0" max-vertical-offset="1240" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/web-server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="0" selection-start="2027" selection-end="2027" vertical-scroll-proportion="0.30942336" vertical-offset="1500" max-vertical-offset="5000" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/jquery/plugins/jquery.ba-hashchange.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.234957" vertical-offset="1560" max-vertical-offset="7920" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/jquery/plugins/jquery.jeditable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.2893983" vertical-offset="900" max-vertical-offset="11040" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/jquery/plugins/jquery.rest.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="698" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/jquery/jquery-migrate.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="279" selection-end="279" vertical-scroll-proportion="-0.34383956" vertical-offset="420" max-vertical-offset="10340" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/jquery/plugins/jquery.ba-bbq.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="88" column="22" selection-start="4667" selection-end="4667" vertical-scroll-proportion="0.37249285" vertical-offset="1500" max-vertical-offset="27660" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/jquery-bridget/jquery.bridget.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2860" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/outlayer/item.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="501" column="1" selection-start="12928" selection-end="12928" vertical-scroll-proportion="0.18424754" vertical-offset="9889" max-vertical-offset="10600" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Div.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="711" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/panoramio/cnmap.gaode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="93" column="25" selection-start="2693" selection-end="2693" vertical-scroll-proportion="0.0" vertical-offset="1620" max-vertical-offset="3600" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/compareArray.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="40" selection-start="338" selection-end="338" vertical-scroll-proportion="0.12463343" vertical-offset="75" max-vertical-offset="780" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/cnmap.gaode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="0" selection-start="656" selection-end="656" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2000" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/modal/cnmap.Modal.gaode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3800" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/panor/js/explore/cnmap.explore.gaode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="32" selection-start="230" selection-end="230" vertical-scroll-proportion="0.30942336" vertical-offset="0" max-vertical-offset="1840" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ExploreWorld.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="75" column="25" selection-start="3956" selection-end="3956" vertical-scroll-proportion="0.95665175" vertical-offset="860" max-vertical-offset="3940" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/PhotoDisplay.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="16" selection-start="86" selection-end="86" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PhotoDisplay.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="0" selection-start="5512" selection-end="5512" vertical-scroll-proportion="0.2690583" vertical-offset="2220" max-vertical-offset="9780">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="22" selection-start="173" selection-end="173" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="247" selection-end="247" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="640">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/directives.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="13" selection-start="2138" selection-end="2138" vertical-scroll-proportion="0.32489452" vertical-offset="909" max-vertical-offset="1800">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/userpage/services.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="6" selection-start="328" selection-end="328" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="360">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="48" selection-start="372" selection-end="372" vertical-scroll-proportion="-4.827586" vertical-offset="60" max-vertical-offset="1620">
+          <folding>
+            <element signature="tag#div#0;tag#div#0;tag#body#0;tag#html#0" expanded="false" />
+            <element signature="tag#div#1;tag#div#0;tag#body#0;tag#html#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/user.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="105" column="21" selection-start="1602" selection-end="1602" vertical-scroll-proportion="-1.1451613" vertical-offset="2029" max-vertical-offset="2740">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="186" column="23" selection-start="3083" selection-end="3083" vertical-scroll-proportion="0.3220339" vertical-offset="3511" max-vertical-offset="4160">
           <folding />
         </state>
       </provider>

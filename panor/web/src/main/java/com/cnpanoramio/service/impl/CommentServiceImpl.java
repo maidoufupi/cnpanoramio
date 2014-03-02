@@ -21,9 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.json.Comment;
+import com.cnpanoramio.json.PhotoComments;
 import com.cnpanoramio.service.CommentService;
-import com.cnpanoramio.service.json.Comment;
-import com.cnpanoramio.service.json.CommentResult;
+import com.cnpanoramio.utils.UserUtil;
 
 @Service("commentService")
 @Transactional
@@ -41,37 +42,56 @@ public class CommentServiceImpl implements CommentService {
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Override
-	public CommentResult save(Comment comment) {
-		User user = null;
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		if(null != auth) {
-			Object principal = auth.getPrincipal();
-			String username;
-			if (principal instanceof UserDetails) {
-				username = ((UserDetails) principal).getUsername();
-			} else {
-				username = principal.toString();
-			}
-			user = userManager.getUserByUsername(username);
+	public Comment save(Comment comment) {
+		
+		User me = UserUtil.getCurrentUser(userManager);
+		
+		com.cnpanoramio.domain.Comment commentD = new com.cnpanoramio.domain.Comment();
+		commentD.setComment(comment.getContent());
+		commentD.setCreateTime(Calendar.getInstance());
+		commentD.setUser(me);
+		Photo photo = photoDao.get(comment.getPhotoId());
+		commentD.setPhoto(photo);
+		commentD = commentDao.save(commentD);
+		
+		comment.setId(commentD.getId());
+		comment.setUsername(me.getUsername());
+		
+		return comment;		
+	}
+	
+	public boolean delete(Long id) {		
+		
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.Comment commentD = commentDao.get(id);
+		if(commentD.getUser().getId() == me.getId()) {
+			commentDao.remove(commentD);
+			return true;
 		}
-		com.cnpanoramio.domain.Comment commentd = new com.cnpanoramio.domain.Comment();
-		commentd.setCreateTime(Calendar.getInstance());
-		commentd.setComment(comment.getComment());
-		commentd.setUser(user);
 		
-		Photo photo = photoDao.get(comment.getPhotoid());
-		commentd.setPhoto(photo);
-		commentd = commentDao.save(commentd);
-		
-		CommentResult cResult = new CommentResult();
-		cResult.setId(commentd.getId());
-		cResult.setUserid(commentd.getUser().getId());
-		cResult.setUsername(commentd.getUser().getUsername());
-		cResult.setCreateTime(format.format(commentd.getCreateTime().getTime()));
-		cResult.setComment(commentd.getComment());
-		return cResult;
+		return false;
 	}
 
+	public PhotoComments getComments(Long id, int pageSize, int pageNo) {
+		List<com.cnpanoramio.domain.Comment> comments = commentDao.getCommentPager(id, pageSize, pageNo);
+		PhotoComments pc = new PhotoComments();
+		pc.setId(id);
+		List<Comment> cs = new ArrayList<Comment>();
+		for(com.cnpanoramio.domain.Comment comment : comments) {
+			Comment c1 = new Comment();
+			c1.setId(comment.getId());
+			c1.setUserId(comment.getUser().getId());
+			c1.setUsername(comment.getUser().getUsername());
+			c1.setCreateTime(format.format(comment.getCreateTime().getTime()));
+			c1.setContent(comment.getComment());
+			cs.add(c1);
+		}
+		pc.setComments(cs);
+		
+		return pc;
+	}
 	
+	public Long getCount(Long id) {
+		return commentDao.getCommentSize(id);
+	}
 }
