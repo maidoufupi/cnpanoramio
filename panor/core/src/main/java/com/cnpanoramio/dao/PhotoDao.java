@@ -15,4 +15,6 @@ public interface PhotoDao extends GenericDao<Photo, Long>{
 	
 	public int getPhotoCount(User user);
 	
+	public Photo delete(Long id);
+	
 }

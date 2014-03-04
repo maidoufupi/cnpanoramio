@@ -64,4 +64,12 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 		
 		return ((Long)query.list().get(0)).intValue();
 	}
+
+	@Override
+	public Photo delete(Long id) {
+		Photo photo = get(id);
+		photo.setDeleted(true);
+		save(photo);
+		return photo;
+	}
 }

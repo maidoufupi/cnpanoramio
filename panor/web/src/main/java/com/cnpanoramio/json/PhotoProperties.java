@@ -13,6 +13,8 @@ public class PhotoProperties {
 	private String title;
 	
 	private String description;
+	
+	private String createTime;
 
 	public String getTitle() {
 		return title;
@@ -38,4 +40,11 @@ public class PhotoProperties {
 		this.id = id;
 	}	
 	
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
 }

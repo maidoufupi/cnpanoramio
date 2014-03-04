@@ -42,7 +42,7 @@ public class PhotoRestService {
 	@Autowired
 	private FileService fileService;
     
-	@RequestMapping(value = "/{photoId}/markbest", method = RequestMethod.GET)
+	@RequestMapping(value = "/{photoId}/best", method = RequestMethod.PUT)
 	@ResponseBody
 	public boolean markBest(@PathVariable String photoId) {
 		
@@ -59,7 +59,7 @@ public class PhotoRestService {
 		}
 	}
 	
-	@RequestMapping(value = "/{photoId}/removebest", method = RequestMethod.GET)
+	@RequestMapping(value = "/{photoId}/best", method = RequestMethod.DELETE)
 	@ResponseBody
 	public boolean removeBest(@PathVariable String photoId) {
 		
@@ -117,4 +117,19 @@ public class PhotoRestService {
 		return new FileSystemResource(file);
 	}
 
+	@RequestMapping(value = "/{photoId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public PhotoProperties delete(@PathVariable String photoId) {
+		Long id = null;
+		id = Long.parseLong(photoId);
+		return photoService.delete(id);
+	}
+	
+	@RequestMapping(value = "/{photoId}", method = RequestMethod.GET)
+	@ResponseBody
+	public PhotoProperties get(@PathVariable String photoId) {
+		Long id = null;
+		id = Long.parseLong(photoId);
+		return photoService.getPhotoProperties(id);
+	}
 }

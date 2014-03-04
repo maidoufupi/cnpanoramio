@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +67,8 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	private PhotoDao photoDao;
 	private FileService fileService;
 	private UserManager userManager = null;
+	
+	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Autowired
 	private UserSettingsDao userSettingsDao = null;
@@ -537,6 +540,25 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		cameraInfo.set闪光灯("无闪光灯");
 				
 		return cameraInfo;
+	}
+
+	@Override
+	public PhotoProperties delete(Long id) {
+		return getPhotoProperties(photoDao.delete(id));
+	}
+	
+	private PhotoProperties getPhotoProperties(Photo photo) {
+		PhotoProperties pps = new PhotoProperties();
+		pps.setId(photo.getId());
+		pps.setTitle(photo.getTitle());
+		pps.setDescription(photo.getDescription());
+		pps.setCreateTime(format.format(photo.getCreateDate().getTime()));
+		return pps;
+	}
+
+	@Override
+	public PhotoProperties getPhotoProperties(Long id) {
+		return getPhotoProperties(getPhoto(id));
 	}
 
 }

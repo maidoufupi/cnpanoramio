@@ -13,16 +13,16 @@ public class UserTransfer {
 
 	private final Map<String, Boolean> roles;
 
-	private final String token;
+//	private final String token;
 
 
-	public UserTransfer(Long id, String userName, boolean loggedIn, Map<String, Boolean> roles, String token) {
+	public UserTransfer(Long id, String userName, boolean loggedIn, Map<String, Boolean> roles) {
 		
 		this.id = id;
 		this.name = userName;
 		this.loggedIn = loggedIn;
 		this.roles = roles;
-		this.token = token;
+//		this.token = token;
 	}
 
 
@@ -38,10 +38,10 @@ public class UserTransfer {
 	}
 
 
-	public String getToken() {
-
-		return this.token;
-	}
+//	public String getToken() {
+//
+//		return this.token;
+//	}
 	
 	public boolean isLoggedIn() {
 		return loggedIn;

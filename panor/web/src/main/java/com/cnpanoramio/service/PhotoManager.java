@@ -94,11 +94,45 @@ public interface PhotoManager {
 	 */
 	public InputStream loadPhoto(Long id);
 	
-	
+	/**
+	 * 对图片加星
+	 * 
+	 * @param photoId
+	 * @param best
+	 * @return
+	 */
 	public boolean markBest(Long photoId, boolean best);
 	
+	/**
+	 * 设置图片属性信息
+	 * 
+	 * @param photoId
+	 * @param properties
+	 * @return
+	 */
 	public boolean properties(Long photoId, PhotoProperties properties);
 	
+	/**
+	 * 获取图片相机信息
+	 * 
+	 * @param photoId
+	 * @return
+	 */
 	public PhotoCameraInfo getCameraInfo(Long photoId);
 	
+	/**
+	 * 删除图片
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public PhotoProperties delete(Long id);
+	
+	/**
+	 * 获取图片属性信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public PhotoProperties getPhotoProperties(Long id);
 }
