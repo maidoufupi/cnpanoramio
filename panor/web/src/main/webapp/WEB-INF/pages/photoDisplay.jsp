@@ -6,137 +6,37 @@
 <meta name="menu" content="AdminMenu" />
 <link href="<c:url value="/styles/PhotoDisplay.css"/>" rel="stylesheet">
 </head>
-<script type="text/javascript" src="<c:url value="/bower_components/jquery/plugins/jquery.rest.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/bower_components/bootstrap3/js/bootstrap-paginator.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/tmpl.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/bower_components/sass-bootstrap/dist/js/bootstrap.min.js"/>"></script>
+
+<!-- angularjs -->
+    <script type="text/javascript" src="<c:url value="/bower_components/angular/angular.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-cookies/angular-cookies.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-resource/angular-resource.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-sanitize/angular-sanitize.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-route/angular-route.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/app.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/controllers/main.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
+    
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
 <script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.comm.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/scripts/panor/js/cnmap.gaode.js'/>"></script>
 
 	<script type="text/javascript">
+        window.ctx = "http://localhost:8080/panor-web";
+
         $(document).ready(function () {
             var lat, lng;
             $("abbr.latitude").each(function (i, element) {
                 lat = Number($(this).attr("title"));
-                $(this).text($.cnmap.GPS.convert(lat) + " N");
+                $(this).text(cnmap.GPS.convert(lat) + " N");
             })
 
             $("abbr.longitude").each(function (i, element) {
                 lng = Number($(this).attr("title"));
-                $(this).text($.cnmap.GPS.convert(lng) + " E");
+                $(this).text(cnmap.GPS.convert(lng) + " E");
             })
-
-            var template_comment;
-            if (tmpl) {
-                template_comment = tmpl("template-comment");
-            }
-            var url = ctx + '/services/api/';
-            var client = new $.RestClient(url, {
-                stringifyData: true,
-                ajax: {
-                    complete: function (XMLHttpRequest, textStatus) {
-                        if(XMLHttpRequest.status == 403 && textStatus == "Forbidden") {
-                            window.location.replace(ctx + "/login");
-                        }
-                    }
-                }
-
-            });
-
-            client.add('comment');
-            $("#comment").on("submit", function (event) {
-                if (event) {
-                    event.preventDefault();
-                }
-                var that = this;
-                var $form = $(this);
-                var formdata = $form.serializeArray();
-                var data = {};
-                $.each(formdata, function (i, element) {
-                    data[element.name] = element.value;
-                })
-                if ($.trim(data.comment) != "") {
-                    client.comment.create(data).done(function (comment) {
-                        if (comment) {
-                            var res = template_comment(comment);
-                            if ($("#comments_container .comment:last").length > 0) {
-                                $(res).insertAfter($("#comments_container .comment:last"));
-                            } else {
-                                $("#comments_container").append(res);
-                            }
-                            $(that).find("#tcomment").val('');
-                        }
-                    })
-                }
-            })
-
-            $('#comment').keydown(function (e) {
-                if (e.ctrlKey && e.keyCode == 13) {
-                    // Ctrl-Enter pressed
-                    $(this).trigger('submit')
-                }
-            });
-
-            client.add('commentquery', {
-                stringifyData: true,
-                cache: 20, //This will cache requests for 5 seconds
-//                cachableTypes: ["GET"]
-            })
-
-            var photoId = $("#main-photo-wrapper").attr("data-id");
-            var pageSize = 10;
-            client.commentquery.read(photoId).done(function (res) {
-                if (res && res > 0) {
-                    $("#comment_size").text(res);
-                    var pageCount = Math.floor(res / pageSize) + 1;
-                    if (pageCount > 1) {
-                        var options = {
-                            currentPage: 1,
-                            totalPages: pageCount,
-                            onPageChanged: function (e, oldPage, newPage) {
-                                var commentquery = {
-                                    photoId: photoId,
-                                    pageNo: newPage,
-                                    pageSize: pageSize
-                                };
-                                readComments(commentquery);
-                                changePaginatorClass();
-                            }
-                        }
-
-                        $('.paginator-wrapper').bootstrapPaginator(options);
-                        changePaginatorClass();
-                    }
-                    var commentquery = {
-                        photoId: photoId,
-                        pageNo: 1,
-                        pageSize: pageSize
-                    };
-                    readComments(commentquery);
-                }else {
-                    $("#comment_size").text(0);
-                }
-            })
-
-            function readComments(query) {
-                client.commentquery.create(query).done(function (comments) {
-                    $("#comments_container").html("")
-                    $.each(comments, function (i, comment) {
-                        var res = template_comment(comment);
-                        if ($("#comments_container .comment:first").length > 0) {
-                            $(res).insertBefore($("#comments_container .comment:first"));
-                        } else {
-                            $("#comments_container").append(res);
-                        }
-                    })
-                    console.log(comments);
-                });
-            }
-
-            function changePaginatorClass() {
-                $('.pagination ul').addClass('pagination');
-                $('div.pagination').removeClass('pagination');
-            }
 
             $.cnmap.initMap("minimap1", {
                 maptype: "SATELLITE"
@@ -153,14 +53,14 @@
 			class="interim-important_notice_link" href="/help/gplus-faq">了解详情</a>。
 	</div>
 </div>
-<div class="container">
+<div class="container" ng-app="cnmapApp" ng-controller="PhotoCtrl">
 	<div class="photo-col">
 		<div id="main-photo-wrapper" data-id="<c:url value='${photo.id}'/>">
-			<a id="main-photo" href="<c:url value="${photo.id}"/>"> <img
-				src="<c:url value="/services/api/photos/${photo.id}/1"/>"
-				alt="around Angkor Wat" id="main-photo_photo">
-			</a>
-		</div>
+            <a id="main-photo" href="#">
+                <img ng-src="{{ctx}}/{{photoId}}/1" alt="around Angkor Wat" id="main-photo_photo"
+                     style="max-height: 541px;">
+            </a>
+        </div>
 		<div>
 			<div class="photo_page-stats_container">
 				<div id="counter_snippet" class="photo_page_counter_snippet">
@@ -220,29 +120,45 @@
 				想用黑体，斜体或链接？ </a>
 		</div>
 		<div id="comments_wrapper">
-			<h2 id="users_comments">Comments (<span id="comment_size"></span>)</h2>
+            <h2 id="users_comments">
+                Comments ({{comment.count}})
+            </h2>
 
-			<div class="paginator-wrapper"></div>
+            <div class="paginator-wrapper">
+            </div>
 
-			<div id="comments_container"></div>
+            <div class="comment" ng-repeat="comment in comments" id="{{comment.id}}">
+                <img class="comment-avatar" width="48"
+                     src="http://static.panoramio.com/avatars/user/5636966.jpg?v=000000" alt="">
 
-			<div class="paginator-wrapper"></div>
-		</div>
-		<c:if test='${not empty userSettings}'>
-			<form action="<c:url value='/services/api/comment'/>" method="post"
-				id="comment">
-				<h3>
-					发送评论 <span>(以 ${userSettings.user.username})</span>
-				</h3>
-				<textarea cols="50" rows="8" id="tcomment" name="comment" class="form-control"></textarea>
-				<br> <input type="hidden" name="photoid" value="${photo.id}">
-				<input type="hidden" id="userid" value="${userSettings.user.id}">
-				<input type="submit" name="submit" id="submit_comment" value="发送评论">
-				<!--  <a href="/help_format/" id="help_format" rel="help" target="_blank">
-	                想用黑体，斜体或链接？
-	            </a> -->
-			</form>
-		</c:if>
+                <div class="comment-inner">
+                    <div class="comment-author">
+                        <a href="#/event/user/{{comment.userId}}">{{comment.name}}</a> 于 {{comment.date}}
+                    </div>
+                    <div id="c49440741" class="photo-comment-text">
+                        <p>{{comment.content}}</p>
+                    </div>
+                    <div class="translated-text" id="{{comment.id}}"></div>
+                    <div class="translate-comment"><a class="translate-comment-link" id="t49440741" href="#">翻译</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="paginator-wrapper">
+            </div>
+        </div>
+
+        <form action="" method="post" id="comment" ng-show="user.loggedIn" class="ng-hide">
+            <h3>发送评论 <span>(以 暗梅幽闻花身份)</span></h3>
+            <textarea cols="50" rows="3" id="tcomment" name="comment" ng-model="comment.content" class="form-control"></textarea>
+            <br>
+            <input type="hidden" id="user_id" value="${userSettings.user.id}">
+            <input type="hidden" name="photoid" value="64742548">
+            <input ng-click="save(comment.content)" id="submit_comment" class="button button-positive" value="发送评论">
+            <!--            <a href="/help_format/" id="help_format" rel="help" target="_blank">
+                            想用黑体，斜体或链接？
+                        </a>-->
+        </form>
 	</div>
 	<div class="info-col">
 		<div class="interim-info-card photo-page-card">
@@ -384,16 +300,3 @@
 	</div>
 </div>
 
-<script id="template-comment" type="text/x-tmpl">
-    <div class="comment" id="{%=o.id%}">
-        <img class="comment-avatar" width="48" src="" alt="">
-        <div class="comment-inner">
-            <div class="comment-author">
-                <a href="{%=o.userid%}">{%=o.username%}</a> 于 {%=o.createTime%}
-            </div>
-            <div id="c{%=o.id%}" class="photo-comment-text">
-                <p>{%=o.comment%}</p>
-            </div>
-        </div>
-    </div>
-</script>

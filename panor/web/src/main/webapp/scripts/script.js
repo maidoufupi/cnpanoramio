@@ -2,7 +2,7 @@ $("document").ready(function() {
 	$(window).on('resize', windowresize);
     $(window).on('load', windowresize);
     function windowresize() {
-		$("body > .container").css("height", ($(window).height() - 84 ));
+		$("body > .container").css("height", ($(window).height() - 50 ));
 	}
 })
 // This function is used by the login screen to validate user/pass

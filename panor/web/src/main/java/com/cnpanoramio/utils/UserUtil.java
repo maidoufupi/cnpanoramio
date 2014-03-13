@@ -7,15 +7,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserUtil {
 
-	public synchronized static User getCurrentUser(UserManager mgr) { 
-        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
-        String username; 
-        if (obj instanceof UserDetails) { 
-                username = ((UserDetails) obj).getUsername(); 
-        } else { 
-                username = obj.toString(); 
-        } 
+	public synchronized static User getCurrentUser(UserManager mgr) {
+		Object obj = SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		String username;
+		if (obj instanceof UserDetails) {
+			username = ((UserDetails) obj).getUsername();
+		} else {
+			username = obj.toString();
+		}
 
-        return username != null ? mgr.getUserByUsername(username) : null; 
-} 
+		return username != null ? mgr.getUserByUsername(username) : null;
+	}
 }

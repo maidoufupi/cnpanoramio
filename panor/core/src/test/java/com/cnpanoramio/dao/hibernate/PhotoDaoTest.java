@@ -98,7 +98,7 @@ public class PhotoDaoTest {
 	
 	@Test
 	public void testGetPhotoCount() {
-		User user = userDao.get(-1L);
+		User user = userDao.get(1L);
 		int count = photoDao.getPhotoCount(user);
 		log.info(count);
 	}

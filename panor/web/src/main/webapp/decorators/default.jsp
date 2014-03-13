@@ -17,11 +17,13 @@
     <decorator:head/>
 
     <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/bower_components/bootstrap3/js/bootstrap.min.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/bower_components/jquery/plugins/jquery.cookie.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/bower_components/imgLiquid/imgLiquid.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/sass-bootstrap/dist/js/bootstrap.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/jquery.cookie/jquery.cookie.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
-    <script>var ctx = "${pageContext.request.contextPath}"</script>
+    <script>
+	    var ctx = "${pageContext.request.contextPath}";
+	    window.apirest = ctx + "/api/rest";
+    </script>
 </head>
 <body<decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>>
     <c:set var="currentMenu" scope="request"><decorator:getProperty property="meta.menu"/></c:set>

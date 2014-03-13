@@ -1,0 +1,261 @@
+body {
+    background-color: #ececec;
+}
+
+.container {
+    padding: 0;
+    width: auto;
+    margin: 0 auto;
+}
+
+#main-photo-wrapper img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+@media all and (max-width: 740px) {
+    .photo-col {
+        width: 100%;
+        margin: 20px 0 0 0;
+        display: inline-block;
+    }
+
+    .info-col {
+        width: 100%;
+    }
+
+    #main-photo-wrapper img {
+        max-width: 100%;
+    }
+}
+
+@media all and (max-width: 960px) and (min-width: 741px) {
+    .photo-col {
+        width: 700px;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+
+    #main-photo-wrapper img {
+        max-height: 700px;
+        max-width: 700px;
+    }
+}
+
+@media all and (max-width: 1023px) and (min-width: 961px) {
+    .photo-col {
+        width: 880px;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+
+    #main-photo-wrapper img {
+        max-height: 880px;
+        max-width: 880px;
+    }
+}
+
+@media all and (max-width: 1199px) and (min-width: 1024px) {
+    .photo-col {
+        width: 664px;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+
+    #main-photo-wrapper img {
+        max-height: 664px;
+        max-width: 664px;
+    }
+
+    .info-col {
+        width: 260px;
+    }
+}
+
+@media all and (min-width: 1200px) {
+    .container {
+        width: 1180px;
+    }
+
+    .photo-col {
+        width: 860px;
+        margin: 20px 17px 0 0;
+        display: inline-block;
+    }
+
+    #main-photo-wrapper img {
+        max-height: 860px;
+        max-width: 860px;
+    }
+
+    .info-col {
+        width: 260px;
+    }
+}
+
+.info-col {
+    display: inline-block;
+    vertical-align: top;
+    margin: 20px 0;
+}
+
+.photo_page-info_card_img_row_footer h3 {
+    font-size: 13px;
+    color: #999;
+    font-weight: 300;
+    margin: 0;
+}
+
+#profile_pic_avatar {
+    border-radius: 4px;
+}
+
+#profile_info {
+    height: 60px;
+    display: inline-block;
+    vertical-align: top;
+    width: 190px;
+    margin-left: 10px;
+}
+
+#minimap1 {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 10px;
+}
+
+#main-photo-wrapper {
+    /*height: 487px;*/
+    width: 100%;
+}
+
+.paginator-wrapper {
+    width: 100%;
+    text-align: center;
+}
+
+.pagination {
+    box-shadow: 0 2px 3px #dfdfdf;
+}
+
+.photo-page-card {
+    min-width: 250px;
+    max-width: 260px;
+    background-color: #fff;
+    padding: 10px;
+    margin: 0 0 13px;
+    box-shadow: 0 2px 3px #dfdfdf;
+    border-radius: 2px;
+}
+
+.interim-info-card>h2 {
+    margin: 0 0 5px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+#details li {
+    margin-bottom: 6px;
+    padding-top: 0;
+    font-size: 13px;
+    color: #999;
+    clear: both;
+}
+
+#details li#tech-details ul {
+    margin: 4px 0 0;
+    padding: 0;
+}
+
+#details li ul li {
+    margin: 0;
+}
+
+#tech-details li {
+    font-size: 13px;
+}
+
+.nearby-img, .selected-nearby-img {
+    border: 1px solid #ddd;
+    margin-right: 5px;
+}
+
+/****.photo-col********************************************************/
+
+.photo_page-stats_container {
+    float: right;
+    padding-top: 3px;
+}
+
+h1 {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 5px 0;
+}
+
+#photo-page-prev-next-container {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.photo-page-earth-status {
+    font-size: 13px;
+    color: #333;
+}
+
+.photo_description {
+    margin: 15px 0 0;
+    width: 800px;
+}
+
+.photo_description .photo_description_formatted {
+    border: 1px solid transparent;
+    font-size: 12px;
+    padding: 2px;
+    overflow: hidden;
+    cursor: text;
+    width: 100%;
+    position: relative;
+    left: -3px;
+    line-height: 14px;
+}
+
+#users_comments {
+    font-size: 18px;
+    color: #333;
+}
+
+div.comment {
+    font-size: 10pt;
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 5px;
+    color: #333;
+    background-color: #fff;
+    box-shadow: 0 2px 3px #dfdfdf;
+    border-radius: 2px;
+}
+
+.comment-inner {
+    display: inline-block;
+    vertical-align: top;
+    /*margin-left: 5px;*/
+    white-space: normal;
+}
+
+#tcomment {
+    width: 100%;
+    min-height: 100px;
+}

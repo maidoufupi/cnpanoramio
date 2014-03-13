@@ -8,12 +8,11 @@
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/index.css'/>" />
 
-<%-- <script type="text/javascript" src="<c:url value='/bower_components/jquery1.8/jquery-1.8.2.min.js'/>"></script> --%>
-<script type="text/javascript" src="<c:url value='/bower_components/imgLiquid/imgLiquid.js'/>"></script>
-
 </head>
 <body>
-
+<script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/bower_components/imgLiquid/js/imgLiquid.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/bower_components/jquery.rest/dist/jquery.rest.js'/>"></script>
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
@@ -38,15 +37,36 @@
 
 <script>
     var map;
+    var ctx = "http://127.0.0.1:8080/panor-web";
+
     function initialize() {
         $("div.imgLiquidFill").imgLiquid({
             fill : true
         });
-        var lat = <c:url value="${photo.gpsPoint.lat}"/>;
-        var lng = <c:url value="${photo.gpsPoint.lng}"/>;
-//        var width = $(window).width(),
-//            height = $(window).height();
-//        $("#map-canvas").attr("width", width).attr("height", height);
+
+        var photos, photo_index;
+
+        var restclient = new $.RestClient(ctx + '/api/rest/');
+        restclient.add('index');
+        
+        function setPhoto(photo) {
+            $(".front-photo_sizer img").attr("src", ctx + "/api/rest/photo/" + photo.id + "/1");
+            
+            $.cnmap.setCenter(photo.lat, photo.lng);
+            if(!photo.mark) {
+            	photo.mark = true;
+            	$.cnmap.addMarkerInCenter();
+            }
+            
+            $("div.imgLiquidFill").imgLiquid({
+                fill : true
+            });
+
+            setTimeout(function() {
+                setPhoto(photos[photo_index]);
+                photo_index = (photo_index + 1) % photos.length;
+            }, 8000);
+        }
 
         var map = $.cnmap.initMap("map-canvas", {
             //toolbar: true,
@@ -55,32 +75,19 @@
 //            locatecity: true
         });
 
-        var oldWidth;
-        $(window).bind('resizeEnd', function() {
-            //do something, window hasn't changed size in 500ms
-            var windowW = $(window).width();
-            var panX = windowW - oldWidth;
-            oldWidth = windowW;
-            $.cnmap.panBy(panX*3/4, 0);
-        });
-        $(window).resize(function() {
-            if(this.resizeTO) {
-                clearTimeout(this.resizeTO);
-            }
-            this.resizeTO = setTimeout(function() {
-                $(this).trigger('resizeEnd');
-            }, 500);
-        });
         $(window).on('load', windowresize);
         function windowresize() {
-            $.cnmap.setCenter(lat, lng);
-            $.cnmap.addMarkerInCenter();
-
             var windowW = $(window).width();
             oldWidth = windowW;
             windowW = windowW/4;
             $.cnmap.panBy(windowW, 0);
-//            $("body > .container").css("height", ($(window).height() - 84 ));
+            
+            restclient.index.read('photo').done(function(data) {
+                photos = data;
+                photo_index = 0;
+                setPhoto(photos[photo_index]);
+                photo_index = (photo_index + 1) % photos.length;
+            })
         }
     }
     $(document).ready(initialize);

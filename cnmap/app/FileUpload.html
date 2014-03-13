@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <!-- Force latest IE rendering engine or ChromeFrame if installed -->
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <![endif]-->
+    <meta charset="utf-8">
+    <title>jQuery File Upload Demo</title>
+    <meta name="description"
+          content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="bower_components/bootstrap/css/bootstrap.min.css">
+    <!-- Generic page styles -->
+    <link rel="stylesheet" href="bower_components/fileUpload/css/style.css">
+    <!-- blueimp Gallery styles -->
+    <link rel="stylesheet" href="bower_components/fileUpload/css/blueimp-gallery.min.css">
+    <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+    <link rel="stylesheet" href="bower_components/fileUpload/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="bower_components/fileUpload/css/jquery.fileupload-ui.css">
+
+    <script src="bower_components/fileUpload/js/vendor/jquery.min.1.10.2.js"></script>
+    <!-- Bootstrap theme -->
+    <link href="bower_components/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script type="text/javascript" src="bower_components/bootstrap/js/bootstrap.js"></script>
+
+    <link href="bower_components/bootstrap/tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+    <script type="text/javascript" src="bower_components/typeahead/typeahead.js"></script>
+
+    <script type="text/javascript" src="panor/js/jquery.canvas.js"></script>
+    <script type="text/javascript" src="panor/panoramio/cnmap.comm.js"></script>
+    <!--<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="panor/js/cnmap.Modal.gaode.js"></script>-->
+    <!--<script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=1.5&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
+    <script type="text/javascript"
+            src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>-->
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
+    <script type="text/javascript" src="panor/js/modal/cnmap.Modal.qq.js"></script>
+
+
+    <!-- Custom styles for this template -->
+    <link href="modal/modal.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- CSS adjustments for browsers with JavaScript disabled -->
+    <noscript>
+        <link rel="stylesheet" href="bower_components/fileUpload/css/jquery.fileupload-noscript.css">
+    </noscript>
+    <noscript>
+        <link rel="stylesheet" href="bower_components/fileUpload/css/jquery.fileupload-ui-noscript.css">
+    </noscript>
+
+    <script type="text/javascript">
+        var ctx = "http://127.0.0.1:8080";
+        $(document).ready(function () {
+
+            $('#myModal').modal({show: false});
+            $.cnmap.modal.initMap("upload-map");
+            $.cnmap.modal.initGeocoder();
+        })
+
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <h1>上传您的照片</h1>
+    <div class="photo-col">
+        <form id="fileupload" action="http://localhost:8080/panor-web/services/api/photos" method="POST"
+              enctype="multipart/form-data">
+            <!-- Redirect browsers with JavaScript disabled to the origin page -->
+            <noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/">
+            </noscript>
+            <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+            <div class="row fileupload-buttonbar">
+                <div class="col-lg-7">
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Add files...</span>
+                    <input type="file" name="files[]" multiple>
+                </span>
+                    <button type="submit" class="btn btn-primary start">
+                        <i class="glyphicon glyphicon-upload"></i>
+                        <span>Start upload</span>
+                    </button>
+                    <button type="reset" class="btn btn-warning cancel">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        <span>Cancel upload</span>
+                    </button>
+                    <button id="b-change-location" type="button" class="btn btn-primary">
+                        <i class="glyphicon glyphicon-tint"></i>
+                        <span>更改位置</span>
+                    </button>
+                    <!--<input type="checkbox" class="toggle">-->
+                    <!-- The global file processing state -->
+                    <span class="fileupload-process"></span>
+                </div>
+                <!-- The global progress state -->
+                <div class="col-lg-5 fileupload-progress fade">
+                    <!-- The global progress bar -->
+                    <div class="progress progress-striped active" role="progressbar" aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                    </div>
+                    <!-- The extended global progress state -->
+                    <div class="progress-extended">&nbsp;</div>
+                </div>
+            </div>
+            <input type="text" value="" data-role="tagsinput" placeholder="为全部图片添加标签        "/>
+            <!-- The table listing the files available for upload/download -->
+            <table role="presentation" class="table table-striped">
+                <tbody class="files"></tbody>
+            </table>
+        </form>
+    </div>
+    <div class="info-col">
+        <div class="interim-info-card photo-page-card">
+            asdfs
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><span>Map</span> your photos</h4>
+            </div>
+            <div class="modal-body">
+                <span class="mapping_info">
+                  Drag a photo or click on the map to select the photographer position.
+                    Please place the photo where the camera was, then select a place as the subject of the photo if applicable.
+                </span>
+
+                <div class="photo_list_and_map">
+                    <div class="photo_list_panel">
+                        <div id="map-photo-list" class="list-group map_photo_list">
+                        </div>
+                        <button id="button-save-complete" type="button" class="btn btn-primary">保存，完成</button>
+                    </div>
+                    <div class="map_panel">
+                        <div id="selected-photo-editor" class="selected_photo_editor">
+                            <div class="properties">
+                                <form id="geocoder_form" class="form">
+                                    <div class="col-12">
+                                        <div class="input-group input-group-sm">
+                                            <input id="location-search-input" type="text" class="form-control">
+                                            <span id="location-search-go" class="input-group-btn">
+                                               <button type="submit" class="btn btn-default">Go!</button>
+                                             </span>
+                                        </div>
+                                        <!-- /input-group -->
+                                    </div>
+                                </form>
+                                <div id="the-place" class="no_place disabled place_search_bar">
+                                    <span class="lat"></span>
+                                    <span class="comma"></span>
+                                    <span class="alt">[GPS地址]</span>
+                                    <span class="lng"></span>
+                                </div>
+                                <div class="coder_place"><span class="alt">[解析地址]</span>
+
+                                    <div id="the-address" class="original_place_name"></div>
+                                </div>
+                                <label class="indoors_info"><input type="checkbox">This photo is taken indoors</label>
+
+                                <div class="original_category_name">Original value: 否</div>
+                                <div>
+                                    <button id="button-set-place" type="button" class="btn btn-primary">设置拍摄点</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="upload-map" class="map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td id="preview">
+            <span class="preview"></span>
+        </td>
+        <td>
+            <p class="name">{%=file.name%}</p>
+            <strong class="error text-danger"></strong>
+            <div value="" data-role="tagsinput" placeholder="Add tags"></div>
+        </td>
+        <td id="progress">
+            <p class="size">Processing...</p>
+
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                 aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+            </div>
+        </td>
+        <td id="uploadButton" class="col-xs-3">
+            {% if (!i && !o.options.autoUpload) { %}
+            <button class="btn btn-primary start" disabled>
+                <i class="glyphicon glyphicon-upload"></i>
+                <span>Start</span>
+            </button>
+            {% } %}
+            {% if (!i) { %}
+            <button class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-ban-circle"></i>
+                <span>Cancel</span>
+            </button>
+            {% } %}
+        </td>
+        <td class="col-xs-3">
+            <a class="a-change-location" href="#">更改位置</a>
+
+            <div class="location-display-place">
+                <span class="lat"></span>
+                <span class="comma"></span>
+                <span class="lng"></span>
+            </div>
+            <div class="location-display-address"></div>
+        </td>
+    </tr>
+    {% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img
+                            src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                {% if (file.url) { %}
+                <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}"
+                {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                {% } else { %}
+                <span>{%=file.name%}</span>
+                {% } %}
+            </p>
+            {% if (file.error) { %}
+            <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td>
+            {% if (file.deleteUrl) { %}
+            <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"
+            {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+            <i class="glyphicon glyphicon-trash"></i>
+            <span>Delete</span>
+            </button>
+            <input type="checkbox" name="delete" value="1" class="toggle">
+            {% } else { %}
+            <button class="btn btn-warning cancel">
+                <i class="glyphicon glyphicon-ban-circle"></i>
+                <span>Cancel</span>
+            </button>
+            {% } %}
+        </td>
+    </tr>
+    {% } %}
+</script>
+<script id="template-mapPhotoThumb" type="text/x-tmpl">
+    {% for (var i=0, item; item=o.items[i]; i++) { %}
+    <a href="#" class="list-group-item map_photo_cell active">
+        <p class="map_photo_thumbnail">{%=item.src%}</p>
+        <span class="list-group-item-text map_photo_title">{%=item.name%}</span>
+    </a>
+    {% } %}
+</script>
+
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="bower_components/fileUpload/js/vendor/jquery.ui.widget.js"></script>
+<!-- The Templates plugin is included to render the upload/download listings -->
+<script src="bower_components/fileUpload/js/blueimp/tmpl.min.js"></script>
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="bower_components/fileUpload/js/blueimp/load-image.min.js"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="bower_components/fileUpload/js/blueimp/canvas-to-blob.min.js"></script>
+<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+<script src="bower_components/fileUpload/js/vendor/bootstrap.min.js"></script>
+<!-- blueimp Gallery script -->
+<script src="bower_components/fileUpload/js/blueimp/jquery.blueimp-gallery.min.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="bower_components/fileUpload/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="bower_components/fileUpload/js/jquery.fileupload.js"></script>
+<!-- The File Upload processing plugin -->
+<script src="bower_components/fileUpload/js/jquery.fileupload-process.js"></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src="bower_components/fileUpload/js/jquery.fileupload-image.js"></script>
+<!-- The File Upload audio preview plugin -->
+<script src="bower_components/fileUpload/js/jquery.fileupload-audio.js"></script>
+<!-- The File Upload video preview plugin -->
+<script src="bower_components/fileUpload/js/jquery.fileupload-video.js"></script>
+<!-- The File Upload validation plugin -->
+<script src="bower_components/fileUpload/js/jquery.fileupload-validate.js"></script>
+<!-- The File Upload user interface plugin -->
+<script src="bower_components/fileUpload/js/jquery.fileupload-ui.js"></script>
+<!-- The main application script -->
+<script src="bower_components/fileUpload/js/main.js"></script>
+<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
+<!--[if (gte IE 8)&(lt IE 10)]>
+<script src="bower_components/fileUpload/js/cors/jquery.xdr-transport.js"></script>
+<![endif]-->
+
+<script type="text/javascript" src="bower_components/bootstrap/tagsinput/bootstrap-tagsinput.js"></script>
+</body>
+</html>

@@ -11,8 +11,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.ws.rs.core.Response;
@@ -21,7 +19,6 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.IImageMetadata;
-import org.apache.commons.imaging.common.IImageMetadata.IImageMetadataItem;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.tiff.TiffField;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
@@ -29,15 +26,12 @@ import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
 import org.apache.commons.imaging.formats.tiff.constants.GpsTagConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
-import org.apache.commons.imaging.formats.tiff.taginfos.TagInfoLong;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
-import org.apache.cxf.jaxrs.ext.multipart.Multipart;
-import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +39,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.dao.PhotoDao;
+import com.cnpanoramio.dao.PhotoGpsDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
+import com.cnpanoramio.domain.PhotoGps;
+import com.cnpanoramio.domain.PhotoGps.PhotoGpsPK;
 import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoCameraInfo;
@@ -57,6 +56,7 @@ import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.PhotoService;
+import com.cnpanoramio.utils.PhotoUtil;
 
 @Service("photoService")
 @Transactional
@@ -72,6 +72,9 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	
 	@Autowired
 	private UserSettingsDao userSettingsDao = null;
+	
+	@Autowired
+	private PhotoGpsDao photoGpsDao = null;
 
 	@Autowired
 	public void setUserManager(UserManager userManager) {
@@ -263,8 +266,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 				photoDetails.setISO(isoField.getValueDescription());
 			}
 
-/* GPS */
-		
+/* GPS */		
 /********************************************************************************************/					
 //			getTagValue(jpegMetadata, TiffTagConstants.TIFF_TAG_XRESOLUTION);
 //            getTagValue(jpegMetadata, TiffTagConstants.TIFF_TAG_DATE_TIME);
@@ -300,18 +302,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 			// simple interface to GPS data
 			final TiffImageMetadata exifMetadata = jpegMetadata.getExif();
-/********************************************************************************************/				
-//			List<TiffField> fields = exifMetadata.getAllFields();
-//			for(TiffField field : fields) {
-//				log.info(field.getTagName() + " : " + field.getTag());
-//				String tagName = field.getTagName();
-//				if(tagName == "ExifVersion") {
-////					exifMetadata.getFieldValue((TagInfoLong) field.getTagInfo());
-//				}
-//				log.info(exifMetadata.getFieldValue(field.getTagInfo()));
-//				log.info("TiffField: " + field.getDescriptionWithoutValue() + " = " + field.getValueDescription());
-//			}
-/********************************************************************************************/	
 			if (null != exifMetadata) {
 				final TiffImageMetadata.GPSInfo gpsInfo = exifMetadata.getGPS();
 
@@ -400,8 +390,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	}
 
 	@Override
-	public Photo save(String fileName, InputStream ins)
-			throws ImageReadException {
+	public Photo save(String fileName, InputStream ins) throws ImageReadException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 		try {
@@ -411,7 +400,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// IOUtils.copy(new FileReader(image), baos);
 
 		byte[] content = baos.toByteArray();
 		try {
@@ -446,7 +434,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			e.printStackTrace();
 		}
 		photo = photoDao.save(photo);
-
+		
 		is1 = new ByteArrayInputStream(content);
 		fileService.saveFile(FileService.TYPE_IMAGE, photo.getId(), is1);
 
@@ -559,6 +547,62 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	@Override
 	public PhotoProperties getPhotoProperties(Long id) {
 		return getPhotoProperties(getPhoto(id));
+	}
+
+	@Override
+	public PhotoProperties upload(String fileName,
+						String lat,
+						String lng,
+						String address,
+						MapVendor vendor,
+						MultipartFile file) {
+		InputStream ins;
+		Photo photo = null;
+		PhotoGps gps = null;
+		try {
+			ins = file.getInputStream();
+			photo = this.save(fileName, ins);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ImageReadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+				
+		Double latDouble = Double.valueOf(lat);
+		Double lngDouble = Double.valueOf(lng);
+		
+		Point point = null;
+
+		if (latDouble != 0 || lngDouble != 0) {
+			point = new Point(latDouble, lngDouble);
+			address = address.trim();
+			if (address != null && address != "") {
+				point.setAddress(address);
+			}
+			photo.setGpsPoint(point);
+			gps = new PhotoGps();
+			gps.setPk(new PhotoGpsPK(photo.getId(), vendor));
+			gps.setGps(point);
+			photoGpsDao.save(gps);
+		}
+// save the image file's raw gps info
+		if(!(null != gps && vendor.equals(MapVendor.gps))) {
+			PhotoDetails detail = photo.getDetails();
+			if(null != detail) {			
+				if(null != detail.getGPSLatitude() && detail.getGPSLatitude() != 0 &&
+						null != detail.getGPSLongitude() && detail.getGPSLongitude() != 0) {
+					gps = new PhotoGps();
+					gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gps));
+					point = new Point(detail.getGPSLatitude(), detail.getGPSLongitude());
+					gps.setGps(point);
+					photoGpsDao.save(gps);
+				}
+			}
+		}		
+		
+		return PhotoUtil.transformProperties(photo);
 	}
 
 }

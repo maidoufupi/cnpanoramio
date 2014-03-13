@@ -20,14 +20,16 @@ import org.springframework.util.Assert;
 import com.cnpanoramio.domain.Photo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-		"classpath:/applicationContext-service.xml",
-		"classpath*:/applicationContext.xml",
-		"classpath*:/applicationContext-test.xml",
-		"/WEB-INF/applicationContext.xml",
-		"/WEB-INF/dispatcher-servlet.xml",
-		"/WEB-INF/spring-security.xml"
-		})
+@ContextConfiguration(inheritLocations = true,
+        locations = { 
+				"classpath:/applicationContext-resources.xml",
+                "classpath:/applicationContext-service.xml",
+                "classpath:/applicationContext-dao.xml",
+                "classpath*:/applicationContext.xml", // for modular archetypes
+                "classpath*:/applicationContext-test.xml",
+                "/WEB-INF/spring-security.xml",
+                "/WEB-INF/applicationContext*.xml",
+                "/WEB-INF/dispatcher-servlet.xml"})
 public class PhotoManagerTest {
 	protected transient final Log log = LogFactory.getLog(getClass());
 	

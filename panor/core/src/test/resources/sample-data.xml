@@ -21,7 +21,7 @@
         <column>account_locked</column>
         <column>credentials_expired</column>
         <row>
-            <value description="id">-1</value>
+            <value description="id">1</value>
             <value description="username">user</value>
             <value description="password">b6b1f4781776979c0775c71ebdd8bdc084aac5fe</value>
             <value description="first_name">Tomcat</value>
@@ -34,7 +34,7 @@
             <value description="postal_code">80210</value>
             <value description="province">CO</value>
             <value description="website">http://tomcat.apache.org</value>
-            <value description="password_hint"><![CDATA[A male kitty.]]></value>
+            <value description="password_hint"><![CDATA[The same as your username.]]></value>
             <value description="version">1</value>
             <value description="account_enabled">1</value>
             <value description="account_expired">0</value>
@@ -42,7 +42,7 @@
             <value description="credentials_expired">0</value>
         </row>
         <row>
-            <value description="id">-2</value>
+            <value description="id">2</value>
             <value description="username">admin</value>
             <value description="password">a40546cc4fd6a12572828bb803380888ad1bfdab</value>
             <value description="first_name">Matt</value>
@@ -55,7 +55,7 @@
             <value description="postal_code">80210</value>
             <value description="province">CO</value>
             <value description="website">http://raibledesigns.com</value>
-            <value description="password_hint"><![CDATA[Not a female kitty.]]></value>
+            <value description="password_hint"><![CDATA[The same as your username.]]></value>
             <value description="version">1</value>
             <value description="account_enabled">1</value>
             <value description="account_expired">0</value>
@@ -68,12 +68,12 @@
         <column>name</column>
         <column>description</column>
         <row>
-            <value description="id">-1</value>
+            <value description="id">1</value>
             <value description="name">ROLE_ADMIN</value>
             <value description="description"><![CDATA[Administrator role (can edit Users)]]></value>
         </row>
         <row>
-            <value description="id">-2</value>
+            <value description="id">2</value>
             <value description="name">ROLE_USER</value>
             <value description="description"><![CDATA[Default role for all Users]]></value>
         </row>
@@ -82,12 +82,186 @@
         <column>user_id</column>
         <column>role_id</column>
         <row>
-            <value description="user_id">-1</value>
-            <value description="role_id">-2</value>
+            <value description="user_id">1</value>
+            <value description="role_id">2</value>
         </row>
         <row>
-            <value description="user_id">-2</value>
-            <value description="role_id">-1</value>
+            <value description="user_id">2</value>
+            <value description="role_id">1</value>
         </row>
     </table>
+    
+    <table name="photo">
+        <column>id</column>
+        <column>name</column>
+        <column>file_type</column>
+        <column>deleted</column>
+        <column>mark_best</column>
+        <column>owner_id</column>
+        <column>lat</column>
+        <column>lng</column>
+        <column>alt</column>
+        
+        <row>
+            <value description="id">1</value>
+            <value description="name">filename1.jpg</value>
+            <value description="file_type">jpg</value>
+            <value description="deleted">0</value>
+            <value description="mark_best">0</value>
+            <value description="owner_id">1</value>
+            <value description="lat">36</value>
+            <value description="lng">118</value>
+            <value description="alt">0</value>
+        </row>
+        <row>
+            <value description="id">2</value>
+            <value description="name">filename2.jpg</value>
+            <value description="file_type">jpg</value>
+            <value description="deleted">0</value>
+            <value description="mark_best">0</value>
+            <value description="owner_id">1</value>
+            <value description="lat">35</value>
+            <value description="lng">116</value>
+            <value description="alt">0</value>
+        </row>
+        <row>
+            <value description="id">3</value>
+            <value description="name">filename3.jpg</value>
+            <value description="file_type">jpg</value>
+            <value description="deleted">0</value>
+            <value description="mark_best">0</value>
+            <value description="owner_id">2</value>
+            <value description="lat">32</value>
+            <value description="lng">120</value>
+            <value description="alt">0</value>
+        </row>
+        <row>
+            <value description="id">4</value>
+            <value description="name">filename4.jpg</value>
+            <value description="file_type">jpg</value>
+            <value description="deleted">0</value>
+            <value description="mark_best">0</value>
+            <value description="owner_id">1</value>
+            <value description="lat">36</value>
+            <value description="lng">104</value>
+            <value description="alt">0</value>
+        </row>
+        <row>
+            <value description="id">5</value>
+            <value description="name">filename5.jpg</value>
+            <value description="file_type">jpg</value>
+            <value description="deleted">0</value>
+            <value description="mark_best">0</value>
+            <value description="owner_id">1</value>
+            <value description="lat">37</value>
+            <value description="lng">100</value>
+            <value description="alt">0</value>
+        </row>
+    </table>
+    
+    <table name="photo_details">
+        <column>id</column>
+        <column>GPSLatitude</column>
+        <column>GPSLongitude</column>
+        <row>
+            <value description="id">1</value>
+            <value description="GPSLatitude">36</value>
+            <value description="GPSLongitude">125</value>
+        </row>
+        <row>
+            <value description="id">2</value>
+            <value description="GPSLatitude">35</value>
+            <value description="GPSLongitude">124</value>
+        </row>
+        <row>
+            <value description="id">3</value>
+            <value description="GPSLatitude">33</value>
+            <value description="GPSLongitude">126</value>
+        </row>
+        <row>
+            <value description="id">4</value>
+            <value description="GPSLatitude">35</value>
+            <value description="GPSLongitude">121</value>
+        </row>
+    </table>
+    
+    <table name="comment">
+        <column>id</column>
+        <column>photo_id</column>
+        <column>user_id</column>
+        <column>createTime</column>
+        <column>comment</column>
+        <row>
+            <value description="id">1</value>
+            <value description="photo_id">5</value>
+            <value description="user_id">2</value>
+            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="comment">comment content 1</value>
+        </row>
+        <row>
+            <value description="id">2</value>
+            <value description="photo_id">5</value>
+            <value description="user_id">2</value>
+            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="comment">comment content 2</value>
+        </row>
+        <row>
+            <value description="id">3</value>
+            <value description="photo_id">3</value>
+            <value description="user_id">1</value>
+            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="comment">comment content 3</value>
+        </row>
+        <row>
+            <value description="id">4</value>
+            <value description="photo_id">1</value>
+            <value description="user_id">2</value>
+            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="comment">comment content 4</value>
+        </row>
+        <row>
+            <value description="id">5</value>
+            <value description="photo_id">2</value>
+            <value description="user_id">2</value>
+            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="comment">comment content 5</value>
+        </row>
+    </table>
+    
+    <table name="photo_gps">
+        <column>vendor</column>
+        <column>photo_id</column>
+        <column>lat</column>
+        <column>lng</column>
+        <row>
+            <value description="vendor">gaode</value>
+            <value description="photo_id">1</value>
+            <value description="lat">36</value>
+            <value description="lng">118</value>
+        </row>
+        <row>
+            <value description="vendor">gaode</value>
+            <value description="photo_id">2</value>
+            <value description="lat">35</value>
+            <value description="lng">116</value>
+        </row>
+        <row>
+            <value description="vendor">gaode</value>
+            <value description="photo_id">3</value>
+            <value description="lat">32</value>
+            <value description="lng">120</value>
+        </row>
+        <row>
+            <value description="vendor">gaode</value>
+            <value description="photo_id">4</value>
+            <value description="lat">36</value>
+            <value description="lng">104</value>
+        </row>
+        <row>
+            <value description="vendor">gaode</value>
+            <value description="photo_id">5</value>
+            <value description="lat">37</value>
+            <value description="lng">100</value>
+        </row>
+     </table>
 </dataset>

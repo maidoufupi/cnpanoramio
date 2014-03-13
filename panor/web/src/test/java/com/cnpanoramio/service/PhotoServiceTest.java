@@ -26,7 +26,9 @@ import com.cnpanoramio.domain.Photo;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(inheritLocations = true,
         locations = { 
+				"classpath:/applicationContext-resources.xml",
                 "classpath:/applicationContext-service.xml",
+                "classpath:/applicationContext-dao.xml",
                 "classpath*:/applicationContext.xml", // for modular archetypes
                 "classpath*:/applicationContext-test.xml",
                 "/WEB-INF/spring-security.xml",

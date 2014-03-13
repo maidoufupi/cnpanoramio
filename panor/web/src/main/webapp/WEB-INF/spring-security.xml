@@ -75,7 +75,8 @@
 		entry-point-ref="oauthAuthenticationEntryPoint"
 		use-expressions="true"
 		xmlns="http://www.springframework.org/schema/security">
-		<anonymous enabled="false" />
+		<anonymous enabled="true" />
+		
     	<intercept-url pattern="/api/rest/user/[0-9]+/photos/.*" 
     		access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('read')"
 			method="GET"/>
@@ -86,9 +87,12 @@
     		access="#oauth2.clientHasRole('ROLE_CLIENT') and hasRole('ROLE_USER') and #oauth2.hasScope('write')"
     		/>
     	<intercept-url pattern="/api/rest/comment/photo/.*" 
-    		access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('read')" 
+    		access="#oauth2.clientHasRole('ROLE_CLIENT') or hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')" 
     		/>
-    	
+    	<intercept-url pattern="/api/rest/index/photo/?" access="hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"/>
+    	<intercept-url pattern="/api/rest/index/.*" access="hasRole('ROLE_ADMIN')"/>
+    	<intercept-url pattern="/api/rest/photo/.*" access="#oauth2.clientHasRole('ROLE_CLIENT') or hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"/>
+    	<intercept-url pattern="/api/rest/gps.*" access="#oauth2.clientHasRole('ROLE_CLIENT') or hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"/>
 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
 		<expression-handler ref="oauthWebExpressionHandler" />

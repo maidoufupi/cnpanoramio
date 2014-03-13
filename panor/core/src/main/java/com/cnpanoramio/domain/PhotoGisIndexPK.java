@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class PhotoGisIndexPK implements Serializable{
+public class PhotoGisIndexPK implements Serializable {
 	private static final long serialVersionUID = 4073768409031173807L;
 	
 	@Column(name="zoom_level", length = 2)
@@ -33,6 +33,7 @@ public class PhotoGisIndexPK implements Serializable{
 	public void setLng(Double lng) {
 		this.lng = lng;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

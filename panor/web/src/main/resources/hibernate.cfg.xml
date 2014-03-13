@@ -7,7 +7,6 @@
 <hibernate-configuration>
 	<session-factory>
 
-
 		<mapping class="org.appfuse.model.User" />
 		<mapping class="org.appfuse.model.Role" />
 		<mapping class="com.cnpanoramio.domain.Photo" />
@@ -17,6 +16,10 @@
 		<mapping class="com.cnpanoramio.domain.PhotoDetails" />
 		<mapping class="com.cnpanoramio.domain.LatLng" />
 		<mapping class="com.cnpanoramio.domain.PhotoGisIndex" />
-		
+		<mapping class="com.cnpanoramio.domain.IndexPhoto" />
+		<mapping class="com.cnpanoramio.domain.PhotoGps" />		
+		<mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex" />		
+		<mapping class="com.cnpanoramio.domain.PhotoPanoramio" />
+				
 	</session-factory>
 </hibernate-configuration>

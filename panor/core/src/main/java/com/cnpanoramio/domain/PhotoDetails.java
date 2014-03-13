@@ -91,26 +91,20 @@ public class PhotoDetails {
 	private Double GPSTimeStamp;
 	private String GPSProcessingMethod;
 	private Date GPSDateStamp;
+	
+	
 	public Photo getPhoto() {
 		return photo;
 	}
 	public void setPhoto(Photo photo) {
 		this.photo = photo;
-//		this.id = photo.getId();
 	}
-	
-//	@Id 
-//	@GenericGenerator(name="fk1", strategy = "foreign", 
-//	  parameters={ @Parameter (name="property", value="photo") }
-//	)
-//	@GeneratedValue(strategy = GenerationType.AUTO, generator="fk1")  
-//	@GenericGenerator(strategy="foreign", name = "foreign")
-	
+		
 	public Long getId() {
 		return id;
 	}
-	public void setId(Long photo_id) {
-		this.id = photo_id;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getPixelXDimension() {

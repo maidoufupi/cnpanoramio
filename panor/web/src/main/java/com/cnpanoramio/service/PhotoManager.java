@@ -13,12 +13,28 @@ import org.apache.commons.imaging.ImageReadException;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.apache.cxf.jaxws.javaee.TrueFalseType;
 import org.appfuse.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
 
 public interface PhotoManager {
+	
+	/**
+	 * 上传图片
+	 * 
+	 * @param fileName
+	 * @param file
+	 * @return
+	 */
+	public PhotoProperties upload(String fileName,
+						String lat,
+						String lng,
+						String address,
+						MapVendor vendor,
+						MultipartFile file);
 	
 	/**
 	 * Store photo

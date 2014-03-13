@@ -17,10 +17,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.cnpanoramio.domain.UserSettings;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        locations = {"classpath:/applicationContext-resources.xml",
-                "classpath:/applicationContext-dao.xml",
+@ContextConfiguration(inheritLocations = true,
+        locations = { 
+				"classpath:/applicationContext-resources.xml",
                 "classpath:/applicationContext-service.xml",
+                "classpath:/applicationContext-dao.xml",
                 "classpath*:/applicationContext.xml", // for modular archetypes
                 "classpath*:/applicationContext-test.xml",
                 "/WEB-INF/spring-security.xml",

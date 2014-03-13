@@ -11,33 +11,48 @@
 <![endif]-->
 <meta charset="utf-8">
 <title>Photo Upload</title>
-<meta name="description" content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
+<meta name="description" content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for AngularJS. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap styles -->
-<link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/blueimp-gallery.min.css"/>">
-<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-<link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/jquery.fileupload.css"/>">
-<link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/jquery.fileupload-ui.css"/>">
-<!-- CSS adjustments for browsers with JavaScript disabled -->
-<noscript><link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/jquery.fileupload-noscript.css"/>"></noscript>
-<noscript><link rel="stylesheet" href="<c:url value="/bower_components/fileupload/css/jquery.fileupload-ui-noscript.css"/>"></noscript>
-    <!-- Custom styles for this template -->
-    <link href="<c:url value="/styles/modal.css"/>" rel="stylesheet">
-<script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery-1.8.2.min.js'/>"></script>
-</head>
+<link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>">
+<link rel="stylesheet" href="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css"/>">
 
+<!-- blueimp Gallery styles -->
+<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-gallery/css/blueimp-gallery.min.css"/>">
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload.css"/>">
+<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload-ui.css"/>">
+<!-- CSS adjustments for browsers with JavaScript disabled -->
+<noscript><link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload-noscript.css"/>"></noscript>
+<noscript><link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload-ui-noscript.css"/>"></noscript>
+<style>
+/* Hide Angular JS elements before initializing */
+.ng-cloak {
+    display: none;
+}
+</style>
+	<link rel="stylesheet" href="<c:url value="/styles/style.css"/>">
+    <link rel="stylesheet" href="<c:url value="/styles/modal.css"/>">
+
+</head>
 <body>
-<script type="text/javascript">
-        $(document).ready(function () {
-            $('#myModal').modal({show: false});
-            $.cnmap.modal.initMap("upload-map");
-            $.cnmap.modal.initGeocoder();
-        })
-    </script>
-<!-- The main application script -->
-<script src="<c:url value="/bower_components/fileupload/main.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.canvas.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
+
+	<script src="<c:url value="/bower_components/jquery/jquery.min.js"/>"></script>
+    <script src="<c:url value="/bower_components/angular/angular.min.js"/>"></script>
+    <script src="<c:url value="/bower_components/angular-resource/angular-resource.min.js"/>"></script>
+    <script src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap.min.js"/>"></script>
+    <script src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"/>"></script>
+    <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"/>"></script>
+    <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-mapgaode/src/ui-map.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.canvas.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
+    <!-- The main application script -->
+    <script src="<c:url value="/scripts/controllers/fileupload.js"/>"></script>
+    <script src="<c:url value="/scripts/controllers/ChLocModalCtrl.js"/>"></script>
+    <script src="<c:url value="/scripts/services/main.js"/>"></script>
+    
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
@@ -57,252 +72,170 @@
 	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.gaode.js"/>"></script>
    </c:otherwise>
 </c:choose>
-      
-<%-- <div class="span3">
-	<h2>
-		<fmt:message key="upload.heading" />
-	</h2>
-	<p>
-		<fmt:message key="upload.message" />
-	</p>
-</div> --%>
 
 <div class="container">
-<h1>上传您的照片</h1>
-    <!-- The file upload form used as target for the file upload widget -->
-    <form id="fileupload" action="<c:url value="/services/api/photos"/>" method="POST" enctype="multipart/form-data">
+    <h1>jQuery File Upload Demo</h1>
+    <h2 class="lead">AngularJS version</h2>
+    
+     <!-- The file upload form used as target for the file upload widget -->
+    <form id="fileupload" action="<c:url value="/api/rest/photo/upload"/>" method="POST" enctype="multipart/form-data" data-ng-app="cnmapApp" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
+        <!-- Redirect browsers with JavaScript disabled to the origin page -->
+        <noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
             <div class="col-lg-7">
                 <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="btn btn-success fileinput-button">
+                <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>Add files...</span>
-                    <input type="file" name="image" multiple>
+                    <input type="file" name="files[]" multiple ng-disabled="disabled">
                 </span>
-                <button type="submit" class="btn btn-primary start">
+                <button type="button" class="btn btn-primary start" data-ng-click="submit()">
                     <i class="glyphicon glyphicon-upload"></i>
                     <span>Start upload</span>
                 </button>
-                <button type="reset" class="btn btn-warning cancel">
+                <button type="button" class="btn btn-warning cancel" data-ng-click="cancel()">
                     <i class="glyphicon glyphicon-ban-circle"></i>
                     <span>Cancel upload</span>
                 </button>
-                <button id="b-change-location" type="button" class="btn btn-primary">
-                        <i class="glyphicon glyphicon-tint"></i>
-                        <span>更改位置</span>
-                    </button>
-                <!-- <input type="checkbox" class="toggle"> -->
-                <!-- The loading indicator is shown during file processing -->
-                <span class="fileupload-loading"></span>
+                <button type="button" class="btn btn-primary" data-ng-click="changeLocation(queue)">
+                    <i class="glyphicon glyphicon-tint"></i>
+                    <span>更改位置</span>
+                </button>
+                <!-- The global file processing state -->
+                <span class="fileupload-process"></span>
             </div>
-            <!-- The global progress information -->
-            <div class="col-lg-5 fileupload-progress fade">
+            <!-- The global progress state -->
+            <div class="col-lg-5 fade" data-ng-class="{in: active()}">
                 <!-- The global progress bar -->
-                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-                </div>
-                <!-- The extended global progress information -->
+                <div class="progress progress-striped active" data-file-upload-progress="progress()"><div class="progress-bar progress-bar-success" data-ng-style="{width: num + '%'}"></div></div>
+                <!-- The extended global progress state -->
                 <div class="progress-extended">&nbsp;</div>
             </div>
         </div>
-        <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
-    </form>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel"><span>Map</span> your photos</h4>
-            </div>
-            <div class="modal-body">
-                <span class="mapping_info">
-                  Drag a photo or click on the map to select the photographer position.
-                    Please place the photo where the camera was, then select a place as the subject of the photo if applicable.
-                </span>
-
-                <div class="photo_list_and_map">
-                    <div class="photo_list_panel">
-                        <div id="map-photo-list" class="list-group map_photo_list">
-                        </div>
-                        <button id="button-save-complete" type="button" class="btn btn-primary"><fmt:message key="upload.save" /></button>
-                    </div>
-                    <div class="map_panel">
-                        <div id="selected-photo-editor" class="selected_photo_editor">
-                            <div class="properties">
-                                <form id="geocoder_form" class="form">
-                                    <div class="col-12">
-                                        <div class="input-group input-group-sm">
-                                            <input id="location-search-input" type="text" class="form-control">
-                                            <span id="location-search-go" class="input-group-btn">
-                                               <button type="submit" class="btn btn-default">Go!</button>
-                                             </span>
-                                        </div>
-                                        <!-- /input-group -->
-                                    </div>
-                                </form>
-                                <div id="the-place" class="no_place disabled place_search_bar">
-                                    <span class="lat"></span>
-                                    <span class="comma"></span>
-                                    <span class="alt"><fmt:message key="upload.place" /></span>
-                                    <span class="lng"></span>
-                                </div>
-                                <div class="coder_place"><span class="alt"><fmt:message key="upload.address" /></span><div id="the-address" class="original_place_name"></div></div>
-                                
-                                <label class="indoors_info"><input type="checkbox">This photo is taken indoors</label>
-
-                                <div class="original_category_name">Original value: no</div>
-                                <div>
-                                    <button id="button-set-place" type="button" class="btn btn-primary"><fmt:message key="upload.setPlace" /></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="upload-map" class="map"></div>
-                    </div>
-                </div>
-            </div>
+        <div data-ng-show="queue.length">
+            <label>为所有图添加标签：</label>
+            <bootstrap-tagsinput ng-model="tags"
+                                 tagclass="getTagClass"></bootstrap-tagsinput>
         </div>
-        <!-- /.modal-content -->
+        <!-- The table listing the files available for upload/download -->
+        <table class="table table-striped files ng-cloak">
+            <tr data-ng-repeat-start="file in queue" data-ng-class="{'processing': file.$processing()}">
+                <td data-ng-switch data-on="!!file.thumbnailUrl">
+                    <div class="preview" data-ng-switch-when="true">
+                        <a data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery><img data-ng-src="{{file.thumbnailUrl}}" alt=""></a>
+                    </div>
+                    <div class="preview" data-ng-switch-default data-file-upload-preview="file"></div>
+                </td>
+                <td>
+                    <p class="name" data-ng-switch data-on="!!file.url">
+                        <span data-ng-switch-when="true" data-ng-switch data-on="!!file.thumbnailUrl">
+                            <a data-ng-switch-when="true" data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery>{{file.name}}</a>
+                            <a data-ng-switch-default data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}">{{file.name}}</a>
+                        </span>
+                        <span data-ng-switch-default>{{file.name}}</span>
+                    </p>
+                    <strong data-ng-show="file.error" class="error text-danger">{{file.error}}</strong>
+                </td>
+                <td>
+                    <p class="size">{{file.size | formatFileSize}}</p>
+                    <div class="progress progress-striped active fade" data-ng-class="{pending: 'in'}[file.$state()]" data-file-upload-progress="file.$progress()"><div class="progress-bar progress-bar-success" data-ng-style="{width: num + '%'}"></div></div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary start" data-ng-click="file.$submit()" data-ng-hide="!file.$submit || options.autoUpload" data-ng-disabled="file.$state() == 'pending' || file.$state() == 'rejected'">
+                        <i class="glyphicon glyphicon-upload"></i>
+                        <span>Start</span>
+                    </button>
+                    <button type="button" class="btn btn-warning cancel" data-ng-click="file.$cancel()" data-ng-hide="!file.$cancel">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        <span>Cancel</span>
+                    </button>
+                    <button data-ng-controller="FileDestroyController" type="button" class="btn btn-danger destroy" data-ng-click="file.$destroy()" data-ng-hide="!file.$endestroy">
+                        <i class="glyphicon glyphicon-trash"></i>
+                        <span>Delete</span>
+                    </button>
+                </td>
+                <td>
+                    <a class="a-change-location" href data-ng-click="changeLocation([file])">更改位置</a>
+                    <div class="location-display-place">
+                        <span class="lat">{{file.latPritty}} {{file.latRef}}</span>
+                        <span class="comma">{{file.latPritty && ", "}} </span>
+                        <span class="lng">{{file.lngPritty}} {{file.lngRef}}</span>
+                    </div>
+                    <div class="location-display-address">{{file.address}}</div>
+                </td>
+                <td data-ng-class="{'photo-upload-ok': file.photoId}">
+                    <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-ok': file.photoId}"></span>
+                    <a href="/photo/{{file.photoId}}">
+                        <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-globe': file.photoId}"></span>
+                    </a>
+                </td>
+            </tr>
+            <tr data-ng-repeat-end>
+                <td colspan=6>
+                    <label>为上图添加标签：</label>
+                    <bootstrap-tagsinput ng-model="file.tags"
+                                         tagclass="getTagClass"
+                                         placeholder="Last name"></bootstrap-tagsinput>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <br>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Demo Notes</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li>The maximum file size for uploads in this demo is <strong>5 MB</strong> (default file size is unlimited).</li>
+                <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no file type restriction).</li>
+                <li>Uploaded files will be deleted automatically after <strong>5 minutes</strong> (demo setting).</li>
+                <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage (see <a href="https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support">Browser support</a>).</li>
+                <li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.</li>
+                <li>Built with Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> CSS framework and Icons from <a href="http://glyphicons.com/">Glyphicons</a>.</li>
+            </ul>
+        </div>
     </div>
-    <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
-
-<!-- The template to display files available for upload -->
-<script id="template-upload" type="text/x-tmpl">
-    {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-upload fade">
-        <td id="preview">
-            <span class="preview"></span>
-        </td>
-        <td>
-            <p class="name">{%=file.name%}</p>
-            <strong class="error text-danger"></strong>
-        </td>
-        <td id="progress">
-            <p class="size">Processing...</p>
-
-            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-                 aria-valuenow="0">
-                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-            </div>
-        </td>
-        <td id="uploadButton" class="col-xs-3">
-            {% if (!i && !o.options.autoUpload) { %}
-            <button class="btn btn-primary start" disabled>
-                <i class="glyphicon glyphicon-upload"></i>
-                <span>Start</span>
-            </button>
-            {% } %}
-            {% if (!i) { %}
-            <button class="btn btn-warning cancel">
-                <i class="glyphicon glyphicon-ban-circle"></i>
-                <span>Cancel</span>
-            </button>
-            {% } %}
-        </td>
-        <td class="col-xs-3">
-            <a class="a-change-location" href="#">更改位置</a>
-            <div class="location-display-place">
-                <span class="lat"></span>
-                <span class="comma"></span>
-                <span class="lng"></span>
-            </div>
-            <div class="location-display-address"></div>
-        </td>
-    </tr>
-    {% } %}
-</script>
-
-<!-- The template to display files available for download -->
-<script id="template-download" type="text/x-tmpl">
-    {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-download fade">
-        <td>
-            <span class="preview">
-                {% if (file.thumbnailUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img
-                            src="{%=file.thumbnailUrl%}"></a>
-                {% } %}
-            </span>
-        </td>
-        <td>
-            <p class="name">
-                {% if (file.url) { %}
-                <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}"
-                {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
-                {% } else { %}
-                <span>{%=file.name%}</span>
-                {% } %}
-            </p>
-            {% if (file.error) { %}
-            <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-            {% } %}
-        </td>
-        <td>
-            <span class="size">{%=o.formatFileSize(file.size)%}</span>
-        </td>
-        <td>
-            {% if (file.deleteUrl) { %}
-            <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"
-            {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-            <i class="glyphicon glyphicon-trash"></i>
-            <span>Delete</span>
-            </button>
-            <input type="checkbox" name="delete" value="1" class="toggle">
-            {% } else { %}
-            <button class="btn btn-warning cancel">
-                <i class="glyphicon glyphicon-ban-circle"></i>
-                <span>Cancel</span>
-            </button>
-            {% } %}
-        </td>
-    </tr>
-    {% } %}
-</script>
-<script id="template-mapPhotoThumb" type="text/x-tmpl">
-    {% for (var i=0, item; item=o.items[i]; i++) { %}
-    <a href="#" class="list-group-item map_photo_cell active">
-        <p class="map_photo_thumbnail">{%=item.src%}</p>
-        <span class="list-group-item-text map_photo_title">{%=item.name%}</span>
-    </a>
-    {% } %}
-</script>
+<!-- The blueimp Gallery widget -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">?</a>
+    <a class="next">?</a>
+    <a class="close">¡@</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
 
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-<script src="<c:url value="/bower_components/fileupload/vendor/jquery.ui.widget.js"/>"></script>
-<!-- The Templates plugin is included to render the upload/download listings -->
-<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/tmpl.min.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"/>"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/load-image.min.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-load-image/js/load-image.min.js"/>"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/canvas-to-blob.min.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"/>"></script>
+<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+<script src="<c:url value="/bower_components/sass-bootstrap/dist/js/bootstrap.min.js"/>"></script>
 <!-- blueimp Gallery script -->
-<script type="text/javascript" src="<c:url value="/bower_components/fileupload/blueimp/jquery.blueimp-gallery.min.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min.js"/>"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="<c:url value="/bower_components/fileupload/jquery.iframe-transport.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js"/>"></script>
 <!-- The basic File Upload plugin -->
-<script src="<c:url value="/bower_components/fileupload/jquery.fileupload.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload.js"/>"></script>
 <!-- The File Upload processing plugin -->
-<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-process.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"/>"></script>
 <!-- The File Upload image preview & resize plugin -->
-<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-image.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"/>"></script>
 <!-- The File Upload audio preview plugin -->
-<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-audio.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-audio.js"/>"></script>
 <!-- The File Upload video preview plugin -->
-<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-video.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-video.js"/>"></script>
 <!-- The File Upload validation plugin -->
-<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-validate.js"/>"></script>
-<!-- The File Upload user interface plugin -->
-<script src="<c:url value="/bower_components/fileupload/jquery.fileupload-ui.js"/>"></script>
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js"/>"></script>
+<!-- The File Upload Angular JS module -->
+<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-angular.js"/>"></script>
 
-<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
-<!--[if (gte IE 8)&(lt IE 10)]>
-<script src="<c:url value="/bower_components/fileupload/cors/jquery.xdr-transport.js"/>"></script>
-<![endif]-->
-</body> 
+</body>
 </html>

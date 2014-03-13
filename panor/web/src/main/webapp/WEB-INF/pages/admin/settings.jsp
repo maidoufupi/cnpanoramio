@@ -36,7 +36,7 @@
             $(this).addClass("disable");
             var that = this;
             var photoid = $("#photo-id").val();
-            restclient.index.read(photoid).done(function() {
+            restclient.index.update(photoid).done(function() {
                 $(document).trigger("add-alerts", [
                     {
                         message: "This is success",

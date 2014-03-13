@@ -3,7 +3,7 @@
 
 <html lang="en">
 <head>
-<title><fmt:message key="upload.title" /></title>
+<title><fmt:message key="menu.explore" /></title>
 <meta name="menu" content="AdminMenu" />
 <!-- Force latest IE rendering engine or ChromeFrame if installed -->
 <!--[if IE]>

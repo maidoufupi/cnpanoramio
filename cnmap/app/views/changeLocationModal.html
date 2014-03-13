@@ -1,0 +1,61 @@
+<!-- Modal -->
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+    <h4 class="modal-title" id="myModalLabel"><span>Map</span> your photos</h4>
+</div>
+<div class="modal-body">
+
+    <div class="photo_list_and_map">
+        <div class="photo_list_panel">
+            <div id="map-photo-list" class="list-group map_photo_list">
+                <div data-ng-repeat="file in files" data-ng-class="{'processing': file.$processing(), 'active': file.active}"
+                     class="list-group-item map_photo_cell" data-ng-click="activePhoto(file)">
+                    <a data-ng-click="activePhoto(file)">
+                    <div data-ng-switch data-on="!!file.thumbnailUrl">
+                        <div class="preview" data-ng-switch-when="true">
+                            <a data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery><img data-ng-src="{{file.thumbnailUrl}}" alt=""></a>
+                        </div>
+                         <div class="preview" data-ng-switch-default data-file-upload-preview="file.modal"></div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <button data-ng-click="ok()" type="button" class="btn btn-primary">保存，完成</button>
+        </div>
+        <div class="map_panel">
+            <div id="selected-photo-editor" class="selected_photo_editor">
+                <div class="properties">
+                    <form id="geocoder_form" class="form" ng-submit="getLocation(address)">
+                        <div class="col-12">
+                            <div class="input-group input-group-sm">
+                                <input ng-model="address" type="text" class="form-control">
+                                            <span id="location-search-go" class="input-group-btn">
+                                               <button type="submit" class="btn btn-default">Go!</button>
+                                             </span>
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+                    </form>
+                    <div id="the-place" class="no_place disabled place_search_bar">
+                        <span class="lat">{{file.mapVendor.latPritty}} {{file.latRef}}</span>
+                        <span class="comma">{{((file.mapVendor.lat && file.mapVendor.lng) && ", ") || "[GPS地址]"}}</span>
+                        <span class="lng">{{file.mapVendor.lngPritty}} {{file.lngRef}}</span>
+                    </div>
+                    <div class="coder_place">
+                        <div id="the-address" class="original_place_name">{{file.mapVendor.address || "[解析地址]"}}</div>
+                    </div>
+                    <label class="indoors_info"><input type="checkbox">This photo is taken indoors</label>
+
+                    <div class="original_category_name">Original value: 否</div>
+                    <div>
+                        <button data-ng-click="setMarker()" id="button-set-place" type="button" class="btn btn-primary">设置拍摄点</button>
+                    </div>
+                </div>
+            </div>
+            <div id="upload-map" class="map">
+                <div id="map_canvas" ui-map="myMap" ui-options="mapOptions">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,15 +1,11 @@
 package com.cnpanoramio.rest;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.Consumes;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +16,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
+import com.cnpanoramio.utils.PhotoUtil;
 import com.cnpanoramio.utils.UserUtil;
 
 @Controller
 @RequestMapping("/api/rest/photo")
 public class PhotoRestService {
+	
+	private transient final Log log = LogFactory.getLog(getClass());
 	
 	@Autowired
 	private UserManager userManager = null; 
@@ -132,4 +135,49 @@ public class PhotoRestService {
 		id = Long.parseLong(photoId);
 		return photoService.getPhotoProperties(id);
 	}
+	
+	@RequestMapping(value="/upload", method=RequestMethod.GET)
+    public @ResponseBody String provideUploadInfo() {
+        return "You can upload a file by posting to this same URL.";
+    }
+
+    @RequestMapping(value="/upload", 
+    		method=RequestMethod.POST,
+    		consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+    public @ResponseBody PhotoProperties handleFileUpload(
+    		@RequestParam("lat") String lat,
+    		@RequestParam("lng") String lng,
+    		@RequestParam(value="address", required=false) String address,
+    		@RequestParam("vendor") String vendor,
+    		@RequestParam("files[]") MultipartFile file){
+    	
+    	MapVendor mVendor;
+		if (vendor.equalsIgnoreCase("gaode")) {
+			mVendor = MapVendor.gaode;
+		} else if (vendor.equalsIgnoreCase("qq")) {
+			mVendor = MapVendor.qq;
+		} else if (vendor.equalsIgnoreCase("baidu")) {
+			mVendor = MapVendor.baidu;
+		} else if (vendor.equalsIgnoreCase("ali")) {
+			mVendor = MapVendor.ali;
+		} else if (vendor.equalsIgnoreCase("sogou")) {
+			mVendor = MapVendor.sogou;
+		} else if (vendor.equalsIgnoreCase("mapbar")) {
+			mVendor = MapVendor.mapbar;
+		} else {
+			mVendor = MapVendor.gps;
+		}
+		
+        if (!file.isEmpty()) {
+            try {
+            	return photoService.upload(file.getOriginalFilename(), lat, lng, address, mVendor, file);
+            } catch (Exception e) {
+            	e.printStackTrace();
+                return null;
+            }
+        } else {
+        	log.debug("file is empty");
+            return null;
+        }
+    }
 }

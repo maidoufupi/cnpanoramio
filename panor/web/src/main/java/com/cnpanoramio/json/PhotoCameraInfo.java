@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "PhotoCameraInfo")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PhotoCameraInfo {
+	
+	private Long id;
 
 	private Date createDate;
 	private Double lat;
@@ -25,7 +27,19 @@ public class PhotoCameraInfo {
 	private String iso;
 	private String 曝光补偿;
 	private String 闪光灯;
-	
+		
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Double getfNumber() {
+		return fNumber;
+	}
+	public void setfNumber(Double fNumber) {
+		this.fNumber = fNumber;
+	}
 	public Date getCreateDate() {
 		return createDate;
 	}

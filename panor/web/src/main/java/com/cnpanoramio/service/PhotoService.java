@@ -38,7 +38,7 @@ public interface PhotoService {
 	 @Multipart(value = "lat", type = "text/plain") String lat,
      @Multipart(value = "lng", type = "text/plain") String lng,
      @Multipart(value = "address", type = "text/plain") String address,
-     @Multipart(value = "image", type = "image/jpeg") Attachment image) throws ImageReadException;;
+     @Multipart(value = "image", type = "image/jpeg") Attachment image) throws ImageReadException;
 
 	/**
 	 * 根据ID获取图片
