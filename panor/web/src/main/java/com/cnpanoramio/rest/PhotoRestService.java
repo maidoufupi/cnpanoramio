@@ -1,8 +1,8 @@
 package com.cnpanoramio.rest;
 
 import java.io.File;
-
-import javax.ws.rs.Consumes;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,17 +17,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
-import com.cnpanoramio.utils.PhotoUtil;
 import com.cnpanoramio.utils.UserUtil;
 
 @Controller
@@ -179,5 +179,17 @@ public class PhotoRestService {
         	log.debug("file is empty");
             return null;
         }
+    }
+        
+    @RequestMapping(value = "/{photoId}/tag", 
+    		method = RequestMethod.POST,
+    		consumes=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public boolean addTags(@PathVariable String photoId,
+			@RequestBody final Tags tags) {
+    	log.info(tags.size());
+    	Long id = Long.parseLong(photoId);
+    	photoService.addTags(id, tags);
+    	return true;
     }
 }

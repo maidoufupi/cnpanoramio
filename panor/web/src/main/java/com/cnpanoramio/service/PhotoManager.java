@@ -3,22 +3,19 @@ package com.cnpanoramio.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.imaging.ImageReadException;
-import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
-import org.apache.cxf.jaxws.javaee.TrueFalseType;
 import org.appfuse.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.json.Tags;
 
 public interface PhotoManager {
 	
@@ -151,4 +148,13 @@ public interface PhotoManager {
 	 * @return
 	 */
 	public PhotoProperties getPhotoProperties(Long id);
+	
+	/**
+	 * 为图片添加tag
+	 * 
+	 * @param id
+	 * @param tags
+	 * @return
+	 */
+	public Set<Tag> addTags(Long id, Tags tags);
 }

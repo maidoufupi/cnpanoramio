@@ -21,7 +21,8 @@
     <script type="text/javascript" src="<c:url value='/bower_components/jquery.cookie/jquery.cookie.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
     <script>
-	    var ctx = "${pageContext.request.contextPath}";
+	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径
+	    window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录
 	    window.apirest = ctx + "/api/rest";
     </script>
 </head>

@@ -9,6 +9,7 @@ import javax.persistence.Table;
 
 import com.cnpanoramio.MapVendor;
 
+@Deprecated
 @Entity
 @Table(name = "latlng")
 public class LatLng {

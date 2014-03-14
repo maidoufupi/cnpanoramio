@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
+import com.cnpanoramio.domain.Tag;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -45,9 +46,7 @@ public class PhotoDaoTest {
 	}
 
 	@Before
-	public void preMethodSetup() {
-		
-		
+	public void preMethodSetup() {		
 	}
 
 	@After
@@ -102,6 +101,34 @@ public class PhotoDaoTest {
 		int count = photoDao.getPhotoCount(user);
 		log.info(count);
 	}
+
+	@Test
+	public void testAddPhotoTags() {
+		photo = new Photo();
+		photo.addTag(new Tag("This is a tag"));
+		photo.addTag(new Tag("tagA"));
+		photo.addTag(new Tag("tagA"));
+		photo = photoDao.save(photo);
+		Assert.assertTrue(null != photo.getId());
+		Assert.assertTrue(0 != photo.getId());
+		Assert.assertTrue(photo.getTags().size() == 2);
+		photo.getTags().clear();
+		photo.addTag(new Tag("tagB"));
+		photo = photoDao.save(photo);
+		Assert.assertTrue(null != photo.getId());
+		Assert.assertTrue(0 != photo.getId());
+		log.info(photo.getTags());
+		Assert.assertEquals(1, photo.getTags().size());
+		photo = new Photo();
+//		photo.addTag(new Tag("This is a tag"));
+		photo.addTag(new Tag("tagA"));
+		photo = photoDao.save(photo);
+		Assert.assertTrue(null != photo.getId());
+		Assert.assertTrue(0 != photo.getId());
+		log.info(photo.getTags());
+		Assert.assertEquals(1, photo.getTags().size());
+	}
+	
 
 	public UserDao getUserDao() {
 		return userDao;

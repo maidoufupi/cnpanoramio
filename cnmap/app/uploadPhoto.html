@@ -3,46 +3,44 @@
 <head>
     <title></title>
     <!-- Bootstrap styles -->
-    <link rel="stylesheet" href="bower_components/bootstrap/css/bootstrap.min.css">
-    <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
-    <!--<script src="bower_components/fileUpload/js/vendor/jquery.min.1.10.2.js"></script>-->
-    <script src="bower_components/bootstrap/js/bootstrap.js"></script>
-    <!-- Bootstrap theme -->
-    <link href="bower_components/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="bower_components/bootstrap/tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
-    <script type="text/javascript" src="bower_components/bootstrap/tagsinput/bootstrap-tagsinput.js"></script>
-    <script type="text/javascript" src="bower_components/jquery/plugins/jquery.jeditable.js"></script>
-    <link href="css/tagsinput.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css">
+
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
+    <script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"></script>
+    <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-//            $('input').tagsinput({
-//                tagClass: function(item) {
-//                    return (item.length > 2 ? 'big' : 'small');
-//                }
-//            });
+        var app = angular.module('cnmapApp', ["xeditable"])
+        app.controller('TextareaCtrl', function($scope) {
+            $scope.user = {
+                desc: 'Awesome user \ndescription!'
+            };
 
-            $('.editable').editable(function(value, settings) {
-                console.log(this);
-                console.log(value);
-                console.log(settings);
-                return(value);
-            }, {
-                type    : 'textarea',
-                onblur: 'submit',
-                indicator : 'Saving...',
-                tooltip   : 'Click to edit...'
-            });
-
-        })
+            $scope.$watch('editableForm', function() {
+                $scope.editableForm.$show();
+            })
+        });
     </script>
-</head>
-<body>
-<div class="container">
-    <input type="button" value="submit"/>
-    <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput" placeholder="Add tags"/>
+    <style>
+        textarea.editable-input:focus {
 
-    <div class="editable" id="div_1">Dolor</div>
-    <textarea></textarea>
+        }
+    </style>
+</head>
+<body data-ng-app="cnmapApp">
+<div ng-controller="TextareaCtrl">
+
+    <form editable-form name="editableForm" onaftersave="saveUser()">
+        <a href="#" editable-textarea="user.desc" e-rows="7" e-cols="40">
+            <pre>{{ user.desc || 'no description' }}</pre>
+        </a>
+    </form>
 </div>
 </body>
 </html>

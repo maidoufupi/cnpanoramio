@@ -91,6 +91,25 @@
         </row>
     </table>
     
+    <table name="user_settings">
+        <column>id</column>
+        <column>name</column>
+        <column>url_name</column>
+        <column>avatar</column>
+        <row>
+            <value description="id">1</value>
+            <value description="name">暗梅幽闻花</value>
+            <value description="url_name">anypossible</value>
+            <value description="avatar">1</value>
+        </row>
+        <row>
+            <value description="id">2</value>
+            <value description="name">卧似透春绿</value>
+            <value description="url_name">wstcl</value>
+            <value description="avatar">2</value>
+        </row>
+    </table>
+    
     <table name="photo">
         <column>id</column>
         <column>name</column>

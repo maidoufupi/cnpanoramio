@@ -5,6 +5,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+@Deprecated
 @Entity
 @Table(name = "photo_gisindex")
 public class PhotoGisIndex {

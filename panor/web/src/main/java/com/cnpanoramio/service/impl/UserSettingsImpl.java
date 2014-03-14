@@ -13,8 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.service.UserSettingsService;
 
@@ -32,6 +34,9 @@ public class UserSettingsImpl implements UserSettingsService, UserSettingsManage
 	
 	@Autowired
 	private HttpSession httpSession;
+	
+	@Autowired
+	private PhotoDao photoDao;
 	
 	@Override
 	public Boolean save(UserSettings userSettings) {
@@ -99,6 +104,20 @@ public class UserSettingsImpl implements UserSettingsService, UserSettingsManage
 
 	public void setUserManager(UserManager userManager) {
 		this.userManager = userManager;
+	}
+
+	@Override
+	public UserOpenInfo getOpenInfo(Long id) {
+		UserOpenInfo openInfo = new UserOpenInfo();
+		UserSettings setting = userSettingsDao.get(id);
+		openInfo.setId(setting.getId());
+		openInfo.setName(setting.getName());
+		openInfo.setAvatar(setting.getAvatar());
+		
+		User user = userManager.get(id);
+		int count = photoDao.getPhotoCount(user);
+		openInfo.setPhotoCount(count);
+		return openInfo;
 	}
 
 	

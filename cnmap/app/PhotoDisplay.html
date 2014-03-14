@@ -29,7 +29,7 @@
     <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="scripts/app.js"></script>
-    <script type="text/javascript" src="scripts/controllers/main.js"></script>
+    <script type="text/javascript" src="scripts/controllers/PhotoCtrl.js"></script>
     <script type="text/javascript" src="scripts/services/main.js"></script>
 
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="styles/PhotoDisplay.css">
 
     <script type="text/javascript">
+        window.login = true;
         window.ctx = "http://localhost:8080/panor-web";
 
         $(document).ready(function () {
@@ -67,7 +68,7 @@
     <div class="photo-col">
         <div id="main-photo-wrapper" data-id="<c:url value='${photo.id}'/>">
             <a id="main-photo" href="#">
-                <img ng-src="{{ctx}}/{{photoId}}/1" alt="around Angkor Wat" id="main-photo_photo"
+                <img ng-src="{{apirest}}/{{photoId}}/1" alt="{{photo.description}}" id="main-photo_photo"
                      style="max-height: 541px;">
             </a>
         </div>
@@ -100,13 +101,20 @@
             </div>
             <div id="photo-title-box">
                 <div id="photo-title-icon"></div>
-                <h1 id="photo-title">
-                    admire the culture of ancient Angkor...
+                <h1 id="photo-title"
+                    data-ng-click="user.login && (editable = 'title')"
+                    ng-hide="editable == 'title'">
+                    {{photo.title}}
                 </h1>
+                <span class="photo_description">
+                    <input ng-show="editable == 'title'"
+                           type="text" size="30" name="title" ng-model="photo.title"
+                           ng-blur="photo.save()">
+                </span>
             </div>
         </div>
         <!-- ******************************************************************************** -->
-        <div>
+        <div data-ng-show="false">
             <div style="float: right;">
 
                 <a href="#" onclick="$('#delete').submit();return false" class="photo-page-edit">
@@ -138,7 +146,7 @@
         </div>
         <!-- ******************************************************************************** -->
 
-        <div>
+        <div data-ng-show="false">
             <div style="float: right;">
             </div>
             <!--<g:plusone size="medium" annotation="none"></g:plusone>-->
@@ -148,25 +156,18 @@
                    onclick="_gaq.push(['_trackSocial', 'twitter', 'tweet', '/twitter/photo_id=64742548']);"></a>
             </div>
         </div>
-        <div>
+        <div data-ng-show="false">
             <div class="photo-page-earth-status">
                 Selected for Google Maps and Google Earth
             </div>
         </div>
-        <div class="photo_description hide" id="photo-description">
-            <div class="edit_icon"></div>
-            <div class="photo_description_formatted gray" id="photo-description-formatted">
-            </div>
-            <div class="show_more_bar" id="show-more-bar">
-                <span>Show more</span></div>
-            <div class="show_less_bar" id="show-less-bar">
-                <span>Show less</span></div>
-            <textarea class="photo_description_editor" id="photo-description-editor"></textarea>
-            <a class="group_button save_description_button" id="save-description-button">保存</a>
-            <a class="cancel_description_button" id="cancel-description-button">取消</a>
-            <a href="/help_format/" class="help_format" id="help_format_description" rel="help" target="_blank">
-                想用黑体，斜体或链接？
-            </a>
+        <div class="photo_description" id="photo-description">
+            <span class="center" ng-click="user.login && (editable = 'description')"
+                  ng-hide="editable == 'description'">{{photo.description || '添加描述'}}</span>
+            <span ng-show="editable == 'description'" class="photo_description">
+                <textarea type="text" size="30" name="description" ng-model="photo.description"
+                          ng-blur="photo.save()"></textarea>
+            </span>
         </div>
         <div id="comments_wrapper">
             <h2 id="users_comments">
@@ -197,13 +198,12 @@
             </div>
         </div>
 
-        <form action="" method="post" id="comment" ng-show="user.loggedIn" class="ng-hide">
-            <h3>发送评论 <span>(以 暗梅幽闻花身份)</span></h3>
+        <form action="" method="post" id="comment" ng-show="user.login" >
+            <h3>发送评论 <span>(以 {{user.name}})</span></h3>
             <textarea cols="50" rows="3" id="tcomment" name="comment" ng-model="comment.content" class="form-control"></textarea>
             <br>
-            <input type="hidden" id="user_id" value="${userSettings.user.id}">
-            <input type="hidden" name="photoid" value="64742548">
-            <input ng-click="save(comment.content)" id="submit_comment" class="button button-positive" value="发送评论">
+            <button ng-click="save(comment.content)" id="submit_comment"
+                   class="button button-positive">发送评论</button>
             <!--            <a href="/help_format/" id="help_format" rel="help" target="_blank">
                             想用黑体，斜体或链接？
                         </a>-->
@@ -212,22 +212,21 @@
     <div class="info-col">
         <div class="interim-info-card photo-page-card">
             <div id="profile_pic_info">
-                <a href="/user/3908287"><img
+                <a href="{{ctx}}/user/{{userOpenInfo.id}}"><img
                         src="img/user_avatar.png"
-                        width="60" height="60" alt="Mehmet Gü?lü" id="profile_pic_avatar"></a>
+                        width="60" height="60" alt="{{userOpenInfo.name}}" id="profile_pic_avatar"></a>
 
                 <div id="profile_info">
                     <div id="profile_name">
-                        <a href="/user/3908287?with_photo_id=41234541" rel="author">Mehmet Gü?lü</a>
+                        <a href="{{ctx}}/user/{{userOpenInfo.id}}?with_photo_id={{photoId}}" rel="author">{{userOpenInfo.name}}</a>
                     </div>
                     <div id="profile_location">
-                        Istanbul
+                        {{userOpenInfo.location}}
                     </div>
                     <div id="profile-stats">
-
-                        <a href="/user/3908287">
+                        <a href="{{ctx}}/user/{{userOpenInfo.id}}">
                   <span class="profile-stats-text">
-                      320 photos</span></a>
+                      {{userOpenInfo.photoCount}} photos</span></a>
                     </div>
                 </div>
             </div>
@@ -271,7 +270,7 @@
             <div class="photo_page-info_card_img_row_footer">
 
                 <h3 id="wapi_photo_h">
-                    更多 <a href="/user/3908287?with_photo_id=41234541" rel="author">Mehmet Gü?lü</a> 的照片
+                    更多 <a href="/user/3908287?with_photo_id=41234541" rel="author">{{userOpenInfo.name}}</a> 的照片
                 </h3>
 
             </div>
@@ -300,7 +299,7 @@
             </div>
             <div id="nearby">
                 <p id="place">
-                    Photo taken in Siem Reap, 柬埔寨
+                    Photo taken in {{}}
                 </p>
 
                 <div id="location" class="photo_mapped">
@@ -358,24 +357,6 @@
         </div>
     </div>
 </div>
-
-<script id="template-comment" type="text/x-tmpl">
-    <div class="comment" id="{%=o.id%}">
-        <img class="comment-avatar" width="48"
-             src="" alt="">
-
-        <div class="comment-inner">
-            <div class="comment-author">
-                <a href="{%=o.userid%}">{%=o.username%}</a> 于 {%=o.createTime%}
-            </div>
-            <div id="c{%=o.id%}" class="photo-comment-text">
-                <p>{%=o.comment%}</p>
-            </div>
-        </div>
-    </div>
-
-
-</script>
 
 </body>
 </html>

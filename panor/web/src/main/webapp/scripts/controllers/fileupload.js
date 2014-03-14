@@ -15,8 +15,8 @@
 (function () {
     'use strict';
 
-    var isOnGitHub = window.location.hostname === 'blueimp.github.io',
-        url = isOnGitHub ? '//jquery-file-upload.appspot.com/' : 'server/php/';
+//    var isOnGitHub = window.location.hostname === 'blueimp.github.io',
+//        url = isOnGitHub ? '//jquery-file-upload.appspot.com/' : 'server/php/';
 
     angular.module('cnmapApp', [
             'ngResource',
@@ -26,31 +26,38 @@
             'bootstrap-tagsinput'
         ])
         .config([
-            '$httpProvider', 'fileUploadProvider',
-            function ($httpProvider, fileUploadProvider) {
+            '$httpProvider', 'fileUploadProvider', '$logProvider',
+            function ($httpProvider, fileUploadProvider, $logProvider) {
                 delete $httpProvider.defaults.headers.common['X-Requested-With'];
                 fileUploadProvider.defaults.redirect = window.location.href.replace(
                     /\/[^\/]*$/,
                     '/cors/result.html?%s'
                 );
-                if (isOnGitHub) {
-                    // Demo settings:
-                    angular.extend(fileUploadProvider.defaults, {
-                        // Enable image resizing, except for Android and Opera,
-                        // which actually support image resizing, but fail to
-                        // send Blob objects via XHR requests:
-                        disableImageResize: /Android(?!.*Chrome)|Opera/
-                            .test(window.navigator.userAgent),
-                        maxFileSize: 5000000,
-                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
-                    });
-                }
+
+                // enable log debug level
+                $logProvider.debugEnabled = true;
+//                if (isOnGitHub) {
+//                    // Demo settings:
+//                    angular.extend(fileUploadProvider.defaults, {
+//                        // Enable image resizing, except for Android and Opera,
+//                        // which actually support image resizing, but fail to
+//                        // send Blob objects via XHR requests:
+//                        disableImageResize: /Android(?!.*Chrome)|Opera/
+//                            .test(window.navigator.userAgent),
+//                        maxFileSize: 5000000,
+//                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+//                    });
+//                }
             }
         ])
 
         .controller('DemoFileUploadController', [
-            '$scope', '$http', 'fileUpload', '$modal', '$log', '$window',
-            function ($scope, $http, fileUpload, $modal, $log) {
+            '$scope', '$http', 'fileUpload', '$modal', '$log', 'PhotoService', '$window',
+            function ($scope, $http, fileUpload, $modal, $log, PhotoService, $window) {
+
+                $scope.apirest = $window.apirest;
+                $scope.ctx = $window.ctx;
+
                 $scope.options = {
                     //url: url,
                     formData: function () {
@@ -111,28 +118,27 @@
                             data.files[0].$cancel = false;
                             data.files[0].$endestroy = true;
                             data.files[0].photoId = data.result.id;
+                            data.files[0].saveProperties();
+                            data.files[0].saveTags();
                         } else {
                             data.files[0].error = '上传出错';
                             data.files[0].$endestroy = false;
                         }
-                    },
-                    abort: function (data) {
-
                     }
                 };
-                if (!isOnGitHub) {
-                    $scope.loadingFiles = true;
-                    $http.get(url)
-                        .then(
-                        function (response) {
-                            $scope.loadingFiles = false;
-                            $scope.queue = response.data.files || [];
-                        },
-                        function () {
-                            $scope.loadingFiles = false;
-                        }
-                    );
-                }
+//                if (!isOnGitHub) {
+//                    $scope.loadingFiles = true;
+//                    $http.get(url)
+//                        .then(
+//                        function (response) {
+//                            $scope.loadingFiles = false;
+//                            $scope.queue = response.data.files || [];
+//                        },
+//                        function () {
+//                            $scope.loadingFiles = false;
+//                        }
+//                    );
+//                }
 
                 /**
                  * change image's gps location
@@ -192,6 +198,50 @@
                     };
                 }
             }
-        ]);
+        ])
+
+        .controller('TitleEditorCtrl', [
+            '$scope', '$http', 'PhotoService', '$log',
+            function ($scope, $http, PhotoService, $log) {
+                var file = $scope.file,
+                    state;
+
+                file.saveProperties = function() {
+                    PhotoService.updateProperties({photoId: file.photoId}, {
+                        'title': file.title,
+                        'description': file.description
+                    }, function(data) {
+                        if(data) {
+                            $log.debug("properties update successful");
+                        }
+                    })
+                }
+
+                file.saveTags = function() {
+                    var tags = file.tags.concat($scope.tags);
+                    PhotoService.tag({photoId: file.photoId}, tags, function(data) {
+                        if(data) {
+                            $log.debug("tags update successful");
+                        }
+                    })
+                }
+
+                $scope.saveDesc = function() {
+                    $scope.file.description = $scope.text;
+                    $scope.editable = '';
+
+                    file.saveProperties();
+                }
+
+                $scope.saveTitle = function() {
+                    $scope.file.title = $scope.title;
+                    $scope.editable = '';
+
+                    file.saveProperties();
+                }
+
+            }])
+
+    ;
 
 }());

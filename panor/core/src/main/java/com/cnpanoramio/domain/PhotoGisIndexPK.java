@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+@Deprecated
 @Embeddable
 public class PhotoGisIndexPK implements Serializable {
 	private static final long serialVersionUID = 4073768409031173807L;

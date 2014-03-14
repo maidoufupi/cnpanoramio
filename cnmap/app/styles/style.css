@@ -545,3 +545,8 @@ body {
     background-color: #47a447;
     border-radius: 4px;
 }
+
+.bootstrap-tagsinput {
+    padding: 1px;
+    margin: 0;
+}

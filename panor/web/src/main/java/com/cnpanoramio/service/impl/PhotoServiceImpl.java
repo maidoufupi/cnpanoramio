@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import javax.activation.DataHandler;
 import javax.ws.rs.core.Response;
@@ -50,9 +52,11 @@ import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.PhotoGps.PhotoGpsPK;
 import com.cnpanoramio.domain.Point;
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.PhotoService;
@@ -532,21 +536,12 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 	@Override
 	public PhotoProperties delete(Long id) {
-		return getPhotoProperties(photoDao.delete(id));
+		return PhotoUtil.transformProperties(photoDao.delete(id));
 	}
 	
-	private PhotoProperties getPhotoProperties(Photo photo) {
-		PhotoProperties pps = new PhotoProperties();
-		pps.setId(photo.getId());
-		pps.setTitle(photo.getTitle());
-		pps.setDescription(photo.getDescription());
-		pps.setCreateTime(format.format(photo.getCreateDate().getTime()));
-		return pps;
-	}
-
 	@Override
 	public PhotoProperties getPhotoProperties(Long id) {
-		return getPhotoProperties(getPhoto(id));
+		return PhotoUtil.transformProperties(getPhoto(id));
 	}
 
 	@Override
@@ -603,6 +598,17 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		}		
 		
 		return PhotoUtil.transformProperties(photo);
+	}
+
+	@Override
+	public Set<Tag> addTags(Long id, Tags tags) {
+		Photo photo = photoDao.get(id);
+		photo.getTags().clear();
+		for(Tag tag : tags) {
+			photo.addTag(tag);			
+		}
+		photoDao.save(photo);
+		return photo.getTags();
 	}
 
 }

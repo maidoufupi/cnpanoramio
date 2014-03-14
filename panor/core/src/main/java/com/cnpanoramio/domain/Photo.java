@@ -1,7 +1,11 @@
 package com.cnpanoramio.domain;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -70,6 +75,9 @@ public class Photo {
     
 	@Column(name = "rating")
 	private Integer Rating;
+	
+	@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Tag> tags = new HashSet<Tag>(0);
 	
 	public final Long getId() {
 		return id;
@@ -197,6 +205,20 @@ public class Photo {
 
 	public void setRating(Integer rating) {
 		Rating = rating;
+	}	
+	
+	public Set<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
+	}
+
+	public void addTag(Tag tag) {
+		if(!this.tags.contains(tag)) {
+			this.tags.add(tag);			
+		}
 	}
 	
 }

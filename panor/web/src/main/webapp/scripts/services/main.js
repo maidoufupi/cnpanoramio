@@ -36,6 +36,14 @@ angular.module('cnmapApp')
                 },
                 delete: {
                     method: 'DELETE'
+                },
+                tag: {
+                    method: 'POST',
+                    params: {'type': 'tag'}
+                },
+                updateProperties: {
+                    method: 'POST',
+                    params: {'type': 'properties'}
                 }
             });
     }])

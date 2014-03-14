@@ -83,6 +83,7 @@
 		<intercept-url pattern="/api/rest/user" 
     		access="hasRole('ROLE_USER')"
     		/>
+    	<intercept-url pattern="/api/rest/user/[0-9]+/openinfo" access="#oauth2.clientHasRole('ROLE_CLIENT') or hasRole('ROLE_ANONYMOUS') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"/>
     	<intercept-url pattern="/api/rest/user/.*" 
     		access="#oauth2.clientHasRole('ROLE_CLIENT') and hasRole('ROLE_USER') and #oauth2.hasScope('write')"
     		/>

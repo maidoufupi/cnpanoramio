@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserTransfer;
 import com.cnpanoramio.service.PhotoManager;
+import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.UserUtil;
 
 @Controller
@@ -29,6 +31,9 @@ public class UserRestService {
 	
 	@Autowired
 	private UserManager userManager = null; 
+	
+	@Autowired
+	private UserSettingsManager userSettingsManager;
 	
 	@Autowired
 	private PhotoManager photoService;
@@ -74,5 +79,12 @@ public class UserRestService {
 		}
 		
 		return photos;
+	}
+	
+	@RequestMapping(value = "/{userId}/openinfo", method = RequestMethod.GET)
+	@ResponseBody
+	public UserOpenInfo getOpenInfo(@PathVariable String userId) {
+		Long id = Long.parseLong(userId);
+		return userSettingsManager.getOpenInfo(id);
 	}
 }

@@ -80,6 +80,10 @@ public class UserSettings {
 	// 是否允许修改？
 	@Column(name = "modify")
 	private Boolean modify;
+	
+	// 头像图片的ID
+	@Column(name = "avatar")
+	private Long avatar;
 
 	public User getUser() {
 		return user;
@@ -184,5 +188,20 @@ public class UserSettings {
 
 	public void setModify(Boolean modify) {
 		this.modify = modify;
-	}		
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Long getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(Long avatar) {
+		this.avatar = avatar;
+	}	
+	
+	
+	
 }

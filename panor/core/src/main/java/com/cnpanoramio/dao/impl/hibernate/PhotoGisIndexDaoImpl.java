@@ -14,6 +14,7 @@ import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoGisIndex;
 import com.cnpanoramio.domain.Point;
 
+@Deprecated
 @Repository("photoGisIndexDao")
 public class PhotoGisIndexDaoImpl extends GenericDaoHibernate<PhotoGisIndex, Long> implements PhotoGisIndexDao {
 

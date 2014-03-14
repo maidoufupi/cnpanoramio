@@ -15,6 +15,8 @@ public class PhotoProperties {
 	private String description;
 	
 	private String createTime;
+	
+	private Long userId;
 
 	public String getTitle() {
 		return title;
@@ -47,4 +49,14 @@ public class PhotoProperties {
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	
 }

@@ -1,6 +1,7 @@
 package com.cnpanoramio.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
@@ -44,7 +45,11 @@ public class PhotoUtil {
 		pp.setId(photo.getId());
 		pp.setTitle(photo.getTitle());
 		pp.setDescription(photo.getDescription());
-		pp.setCreateTime(format.format(photo.getCreateDate().getTime()));
+		Date createTime = photo.getCreateDate();
+		if(null != createTime) {
+			pp.setCreateTime(format.format(createTime.getTime()));
+		}
+		pp.setUserId(photo.getOwner().getId());
 		return pp;
 	}
 }

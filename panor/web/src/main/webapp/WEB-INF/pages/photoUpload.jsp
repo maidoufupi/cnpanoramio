@@ -74,8 +74,8 @@
 </c:choose>
 
 <div class="container">
-    <h1>jQuery File Upload Demo</h1>
-    <h2 class="lead">AngularJS version</h2>
+    <h1>上传图片</h1>
+    <h2 class="lead">到地图上</h2>
     
      <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="<c:url value="/api/rest/photo/upload"/>" method="POST" enctype="multipart/form-data" data-ng-app="cnmapApp" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
@@ -120,7 +120,7 @@
         </div>
         <!-- The table listing the files available for upload/download -->
         <table class="table table-striped files ng-cloak">
-            <tr data-ng-repeat-start="file in queue" data-ng-class="{'processing': file.$processing()}">
+            <tr data-ng-repeat="file in queue" data-ng-class="{'processing': file.$processing()}">
                 <td data-ng-switch data-on="!!file.thumbnailUrl">
                     <div class="preview" data-ng-switch-when="true">
                         <a data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery><img data-ng-src="{{file.thumbnailUrl}}" alt=""></a>
@@ -128,13 +128,30 @@
                     <div class="preview" data-ng-switch-default data-file-upload-preview="file"></div>
                 </td>
                 <td>
-                    <p class="name" data-ng-switch data-on="!!file.url">
-                        <span data-ng-switch-when="true" data-ng-switch data-on="!!file.thumbnailUrl">
-                            <a data-ng-switch-when="true" data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery>{{file.name}}</a>
-                            <a data-ng-switch-default data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}">{{file.name}}</a>
-                        </span>
-                        <span data-ng-switch-default>{{file.name}}</span>
-                    </p>
+                    <div data-ng-controller="TitleEditorCtrl">
+                        <p>
+                            <span class="center" ng-click="editable = 'title'"
+                                  ng-hide="editable == 'title'"
+                                  ng-mouseenter="editable == 'title'"
+                                  ng-mouseleave="editable == ''">{{file.title || file.name || ''}}</span>
+                            <span class="photo_description">
+                                <input ng-show="editable == 'title'"
+                                       type="text" size="30" name="title" ng-model="title"
+                                       ng-blur="saveTitle()">
+                            </span>
+                        </p>
+                        <p>
+                            <span class="center" ng-click="editable = 'description'"
+                                  ng-hide="editable == 'description'">{{file.description || '添加描述'}}</span>
+                            <span ng-show="editable == 'description'" class="photo_description">
+                                <textarea type="text" size="30" name="description" ng-model="text"
+                                          ng-blur="saveDesc()"></textarea>
+                            </span>
+                        </p>
+                    </div>
+                    <bootstrap-tagsinput ng-model="file.tags"
+                                         tagclass="getTagClass"
+                                         placeholder="Last name"></bootstrap-tagsinput>
                     <strong data-ng-show="file.error" class="error text-danger">{{file.error}}</strong>
                 </td>
                 <td>
@@ -166,17 +183,9 @@
                 </td>
                 <td data-ng-class="{'photo-upload-ok': file.photoId}">
                     <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-ok': file.photoId}"></span>
-                    <a href="/photo/{{file.photoId}}">
+                    <a href="{{ctx}}/photo/{{file.photoId}}">
                         <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-globe': file.photoId}"></span>
                     </a>
-                </td>
-            </tr>
-            <tr data-ng-repeat-end>
-                <td colspan=6>
-                    <label>为上图添加标签：</label>
-                    <bootstrap-tagsinput ng-model="file.tags"
-                                         tagclass="getTagClass"
-                                         placeholder="Last name"></bootstrap-tagsinput>
                 </td>
             </tr>
         </table>
