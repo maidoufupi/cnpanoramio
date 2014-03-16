@@ -3,9 +3,11 @@ package com.cnpanoramio.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.Point;
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
 
@@ -24,18 +26,23 @@ public class PhotoUtil {
 			cameraInfo.setLng(gps.getLng());
 			cameraInfo.setAlt(gps.getAlt());
 		}
-
 		cameraInfo.setUserName(photo.getOwner().getUsername());
 
 		PhotoDetails details = photo.getDetails();
 		cameraInfo.setModel(details.getModel());
 		cameraInfo.setDateTimeOriginal(details.getDateTimeOriginal());
-		cameraInfo.setExposureTime(details.getExposureTime());
-		cameraInfo.setFocalLength(details.getFocalLength());
-		cameraInfo.setFNumber(details.getFNumber());
-		cameraInfo.setIso(details.getISO());
-		cameraInfo.set曝光补偿("0");
-		cameraInfo.set闪光灯("无闪光灯");
+		if(null != details.getExposureTime()) {
+			cameraInfo.setExposureTime(details.getExposureTime()*10000 + "/10000 s");
+		}
+		cameraInfo.setFocalLength(details.getFocalLength() == null ? "" : details.getFocalLength() + " mm");
+		cameraInfo.setFNumber("f/" + details.getFNumber());
+		cameraInfo.setISO(details.getISO() == null ? "" : "ISO-" + details.getISO());
+		if(details.getExposureBias() == null || details.getExposureBias() == 0) {
+			cameraInfo.setExposureBias("0 step");
+		}else {
+			cameraInfo.setExposureBias(details.getExposureBias() + " step");			
+		}		
+		cameraInfo.setFlash(details.getFlash());
 
 		return cameraInfo;
 	}
@@ -50,6 +57,30 @@ public class PhotoUtil {
 			pp.setCreateTime(format.format(createTime.getTime()));
 		}
 		pp.setUserId(photo.getOwner().getId());
+		
+		for(Tag tag : photo.getTags()) {
+			pp.getTags().add(tag.getTag());
+		}
 		return pp;
 	}
+	
+	public synchronized static MapVendor getMapVendor(String vendor) {
+    	MapVendor mVendor;
+		if (vendor.equalsIgnoreCase("gaode")) {
+			mVendor = MapVendor.gaode;
+		} else if (vendor.equalsIgnoreCase("qq")) {
+			mVendor = MapVendor.qq;
+		} else if (vendor.equalsIgnoreCase("baidu")) {
+			mVendor = MapVendor.baidu;
+		} else if (vendor.equalsIgnoreCase("ali")) {
+			mVendor = MapVendor.ali;
+		} else if (vendor.equalsIgnoreCase("sogou")) {
+			mVendor = MapVendor.sogou;
+		} else if (vendor.equalsIgnoreCase("mapbar")) {
+			mVendor = MapVendor.mapbar;
+		} else {
+			mVendor = MapVendor.gps;
+		}
+		return mVendor;
+    }
 }

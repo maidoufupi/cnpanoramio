@@ -13,7 +13,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getPhotoPanoramioIndex`(in swLat do
 	                                       in i_width int4,
 									       in i_height int4)
 BEGIN
-	DECLARE l_measure DOUBLE DEFAULT 20;
+	DECLARE l_measure DOUBLE DEFAULT 40;
 	DECLARE swLatLow DOUBLE;
 	DECLARE swLngLow DOUBLE;
 	DECLARE l_south DOUBLE;

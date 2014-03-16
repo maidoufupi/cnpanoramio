@@ -5,7 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
 import org.appfuse.service.MailEngine;
 import org.appfuse.service.UserManager;
+
+import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.webapp.util.RequestUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -19,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +36,8 @@ import java.util.List;
 public class PasswordHintController {
     private final Log log = LogFactory.getLog(PasswordHintController.class);
     private UserManager userManager = null;
+    @Autowired
+    private UserSettingsManager userSettingsService = null;
     private MessageSource messageSource = null;
     protected MailEngine mailEngine = null;
     protected SimpleMailMessage message = null;
@@ -58,7 +64,7 @@ public class PasswordHintController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView handleRequest(HttpServletRequest request)
-    throws Exception {
+    		throws Exception {
         log.debug("entering 'handleRequest' method...");
 
         String username = request.getParameter("username");
@@ -75,7 +81,7 @@ public class PasswordHintController {
 
         // look up the user's information
         try {
-            User user = userManager.getUserByUsername(username);
+            User user = userSettingsService.getUser(username);
 
             StringBuffer msg = new StringBuffer();
             msg.append("Your password hint is: ").append(user.getPasswordHint());

@@ -25,7 +25,6 @@
 		<param-value>
             classpath:/applicationContext-resources.xml
             classpath:/applicationContext-dao.xml
-            classpath:/applicationContext-service.xml
             classpath*:/applicationContext.xml
             /WEB-INF/applicationContext*.xml
             /WEB-INF/cxf-servlet.xml
@@ -210,9 +209,9 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
-	<!-- <welcome-file-list>
+	<welcome-file-list>
 		<welcome-file>/index.jsp</welcome-file>
-	</welcome-file-list> -->
+	</welcome-file-list>
 
 	<error-page>
 		<error-code>500</error-code>

@@ -24,6 +24,7 @@ import com.cnpanoramio.service.PhotoPanoramioIndexService;
 import com.cnpanoramio.service.json.BoundSize;
 import com.cnpanoramio.service.json.PhotoThumbnail;
 import com.cnpanoramio.service.json.PhotoThumbnails;
+import com.cnpanoramio.utils.PhotoUtil;
 
 @Controller
 @RequestMapping("/api/rest/panoramio")
@@ -99,22 +100,8 @@ public class PanoramioRestService {
 			int levelI = Integer.parseInt(level);
 			int widthI = Integer.parseInt(width);
 			int heightI = Integer.parseInt(height);
-			MapVendor mVendor;
-			if (vendor.equalsIgnoreCase("gaode")) {
-				mVendor = MapVendor.gaode;
-			} else if (vendor.equalsIgnoreCase("qq")) {
-				mVendor = MapVendor.qq;
-			} else if (vendor.equalsIgnoreCase("baidu")) {
-				mVendor = MapVendor.baidu;
-			} else if (vendor.equalsIgnoreCase("ali")) {
-				mVendor = MapVendor.ali;
-			} else if (vendor.equalsIgnoreCase("sogou")) {
-				mVendor = MapVendor.sogou;
-			} else if (vendor.equalsIgnoreCase("mapbar")) {
-				mVendor = MapVendor.mapbar;
-			} else {
-				mVendor = MapVendor.gps;
-			}
+			MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
+			
 			log.debug("getPanoramio [" + swLatD + ", " + swLngD + ", " + neLatD
 					+ ", " + neLngD + ", " + levelI + ", " + mVendor + ", "
 					+ widthI + ", " + heightI + "]");

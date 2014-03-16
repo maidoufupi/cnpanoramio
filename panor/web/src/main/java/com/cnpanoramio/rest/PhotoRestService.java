@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
@@ -29,6 +30,7 @@ import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.utils.UserUtil;
+import com.cnpanoramio.utils.PhotoUtil;
 
 @Controller
 @RequestMapping("/api/rest/photo")
@@ -151,26 +153,11 @@ public class PhotoRestService {
     		@RequestParam("vendor") String vendor,
     		@RequestParam("files[]") MultipartFile file){
     	
-    	MapVendor mVendor;
-		if (vendor.equalsIgnoreCase("gaode")) {
-			mVendor = MapVendor.gaode;
-		} else if (vendor.equalsIgnoreCase("qq")) {
-			mVendor = MapVendor.qq;
-		} else if (vendor.equalsIgnoreCase("baidu")) {
-			mVendor = MapVendor.baidu;
-		} else if (vendor.equalsIgnoreCase("ali")) {
-			mVendor = MapVendor.ali;
-		} else if (vendor.equalsIgnoreCase("sogou")) {
-			mVendor = MapVendor.sogou;
-		} else if (vendor.equalsIgnoreCase("mapbar")) {
-			mVendor = MapVendor.mapbar;
-		} else {
-			mVendor = MapVendor.gps;
-		}
+    	MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
 		
         if (!file.isEmpty()) {
             try {
-            	return photoService.upload(file.getOriginalFilename(), lat, lng, address, mVendor, file);
+            	return photoService.upload(lat, lng, address, mVendor, file);
             } catch (Exception e) {
             	e.printStackTrace();
                 return null;
@@ -192,4 +179,17 @@ public class PhotoRestService {
     	photoService.addTags(id, tags);
     	return true;
     }
+    
+    @RequestMapping(value = "/{photoId}/gps", 
+    		method = RequestMethod.GET)
+	@ResponseBody
+	public PhotoGps getGPSInfo(@PathVariable String photoId,
+			@RequestParam String vendor) {
+    	
+    	MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
+    	Long id = Long.parseLong(photoId);
+    	return photoService.getGPSInfo(id, mVendor);
+    }
+    
+    
 }

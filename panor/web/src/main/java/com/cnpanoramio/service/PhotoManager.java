@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
@@ -22,16 +23,18 @@ public interface PhotoManager {
 	/**
 	 * 上传图片
 	 * 
-	 * @param fileName
+	 * @param lat
+	 * @param lng
+	 * @param address
+	 * @param vendor
 	 * @param file
 	 * @return
 	 */
-	public PhotoProperties upload(String fileName,
-						String lat,
-						String lng,
-						String address,
-						MapVendor vendor,
-						MultipartFile file);
+	public PhotoProperties upload(String lat,
+								  String lng,
+								  String address,
+								  MapVendor vendor,
+								  MultipartFile file);
 	
 	/**
 	 * Store photo
@@ -41,7 +44,7 @@ public interface PhotoManager {
 	 * @throws IOException
 	 * @throws ImageReadException
 	 */
-	public Photo save(String fileName, InputStream ins) throws ImageReadException;
+	public Photo save(Photo photo, InputStream ins) throws ImageReadException;
 
 	/**
 	 * 根据ID获取图片
@@ -157,4 +160,12 @@ public interface PhotoManager {
 	 * @return
 	 */
 	public Set<Tag> addTags(Long id, Tags tags);
+	
+	/**
+	 * 获取图片GPS位置信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public PhotoGps getGPSInfo(Long id, MapVendor vendor);
 }

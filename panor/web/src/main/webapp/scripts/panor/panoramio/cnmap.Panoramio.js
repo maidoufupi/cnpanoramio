@@ -76,11 +76,18 @@
         }
 
         this.getLabelContent = function(photoId) {
-            return "<img src='" + this.ctx + "/services/api/photos/" + photoId + "/3' style='width: 34px; height: 34px;'>";
+            if(this.opts.suppressInfoWindows) {
+                return "<img src='" + this.ctx + "/api/rest/photo/" + photoId
+                    + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
+            }else {
+                return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
+                    + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'></a>";
+            }
         }
 
         this.getInfoWindowContent = function(photoId) {
-            return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/services/api/photos/" + photoId + "/2' style='width: 180px; height: 180px;'></a>";
+            return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
+                + photoId + "/2' style='max-height: 200px; max-width: 200px;'></a>";
         }
 
         /**

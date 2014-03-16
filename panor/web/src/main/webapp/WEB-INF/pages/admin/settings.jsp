@@ -6,20 +6,19 @@
     <meta name="menu" content="AdminMenu"/>
 </head>
 
-<%-- <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.js'/>"></script> --%>
-<script type="text/javascript" src="<c:url value='/bower_components/jquery/plugins/jquery.rest.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/bower_components/jquery/plugins/jquery.bsAlerts.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value='/bower_components/jquery-bs-alerts/build/jquery.bsAlerts.min.js'/>"></script>
 
     <script type="text/javascript">
     $(document).ready(function() {
 
         $("#header-alert").hide();
-        var client = new $.RestClient(ctx + '/services/api/');
-        client.add('gisindex');
+        var client = new $.RestClient(apirest + "/");
+        client.add('panoramio');
         $("#update-gisindex").click(function() {
             $(this).addClass("disable");
             var that = this;
-            client.gisindex.read().done(function() {
+            client.panoramio.read().done(function() {
                 $(document).trigger("add-alerts", [
                     {
                         message: "This is success",

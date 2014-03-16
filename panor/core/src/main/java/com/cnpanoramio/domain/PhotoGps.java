@@ -9,9 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.cnpanoramio.MapVendor;
 
+@XmlRootElement
 @Entity
 @Table(name = "photo_gps")
 public class PhotoGps {
@@ -37,6 +39,7 @@ public class PhotoGps {
 		this.gps = gps;
 	}
 
+	@XmlRootElement
 	@Embeddable
 	public static class PhotoGpsPK implements Serializable {
 		

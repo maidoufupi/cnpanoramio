@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.appfuse.model.User;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,5 +48,12 @@ public class UserSettingsServiceTest {
 	public void testGetUserSettings() throws IOException, ImageReadException {
 		UserSettings settings = userSettingsService.getCurrentUserSettings();
 		Assert.assertNull(settings);
+	}
+	
+	@Test
+	public void testGetUser() {
+		User user = userSettingsService.getUser("matt_raible@yahoo.com");
+		Assert.assertNotNull(user);
+		Assert.assertTrue(user.getUsername().equals("user"));
 	}
 }

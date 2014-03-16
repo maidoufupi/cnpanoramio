@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('cnmapApp')
+angular.module('cnmapApp', ['ngCookies',
+        'ngResource'])
     .factory('CommentService', ['$window', '$resource', function ($window, $resource) {
         return $resource($window.apirest + '/comment/photo/:photoId/:pageSize/:pageNo',
             {'photoId': "@photoId"},
@@ -13,7 +14,7 @@ angular.module('cnmapApp')
                 }
             });
     }])
-    .factory('UserPhoto', ['$window', '$resource', 'TokenService', function ($window, $resource, TokenService) {
+    .factory('UserPhoto', ['$window', '$resource', function ($window, $resource) {
         return $resource($window.apirest + '/user/:userId/photos/:pageSize/:pageNo',
             {'userId': "@id"}, {
                 query: {
@@ -52,6 +53,10 @@ angular.module('cnmapApp')
                 },
                 getPhoto: {
                     method: 'GET'
+                },
+                getGPSInfo: {
+                    method: 'GET',
+                    params: {'type': 'gps'}
                 }
             });
     }])

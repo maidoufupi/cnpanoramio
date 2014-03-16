@@ -27,8 +27,8 @@
     <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
     <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="scripts/app.js"></script>
-    <script type="text/javascript" src="scripts/controllers/main.js"></script>
+    <script type="text/javascript" src="scripts/services/main.js"></script>
+    <script type="text/javascript" src="scripts/controllers/ExploreWorldCtrl.js"></script>
 
     <!-- Map vendor -->
     <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
@@ -71,7 +71,7 @@
             function setPanoramioLayer(map) {
                 var panoramioLayer = new cnmap.PanoramioLayer(
                         {suppressInfoWindows: true,
-                         mapVendor: "gaode"});
+                         mapVendor: window.mapVendor});
                 panoramioLayer.initEnv(ctx);
                 panoramioLayer.setMap(map);
 
@@ -128,7 +128,7 @@
             <div id="place_detail_area" style="display: none;">
                 <div id="cover_photo_box">
                     <a id="cover_photo_link" href="">
-                        <img alt="Cover photo" id="cover_photo" src="/img/place_cover_photo.jpg">
+                        <img alt="Cover photo" id="cover_photo" ng-src="{{ctx}}/images/place_cover_photo.jpg">
                     </a>
                 </div>
                 <div id="place_description">
@@ -148,7 +148,7 @@
                     <a href="photo/{{photo.photoId}}">
                         <img title=""
                              id="r{{photo.photoId}}"
-                             ng-src="services/api/photos/{{photo.photoId}}/2">
+                             ng-src="{{apirest}}/photo/{{photo.photoId}}/2">
                     </a>
                 </div>
             </div>

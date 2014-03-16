@@ -48,8 +48,13 @@
         window.apirest = "http://127.0.0.1:8080/panor-web/api/rest"
     </script>
     <script src="bower_components/jquery/jquery.min.js"></script>
+    <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+    <script src="bower_components/sass-bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
@@ -60,9 +65,9 @@
     <script type="text/javascript" src="scripts/panor/js/jquery.canvas.js"></script>
     <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
     <!-- The main application script -->
-    <script src="scripts/controllers/fileupload.js"></script>
-    <script src="scripts/controllers/ChLocModalCtrl.js"></script>
     <script src="scripts/services/main.js"></script>
+    <script src="scripts/controllers/ChLocModalCtrl.js"></script>
+    <script src="scripts/controllers/fileupload.js"></script>
 
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
             type="text/javascript"></script>
@@ -74,7 +79,7 @@
     <h2 class="lead">到地图上</h2>
 
     <!-- The file upload form used as target for the file upload widget -->
-    <form id="fileupload" action="http://127.0.0.1:8080/panor-web/api/rest/photo/upload" method="POST" enctype="multipart/form-data" data-ng-app="cnmapApp" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}"
+    <form id="fileupload" action="http://127.0.0.1:8080/panor-web/api/rest/photo/upload" method="POST" enctype="multipart/form-data" data-ng-app="fileuploadApp" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}"
           >
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
         <noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/"></noscript>
@@ -198,7 +203,6 @@
             <ul>
                 <li>The maximum file size for uploads in this demo is <strong>5 MB</strong> (default file size is unlimited).</li>
                 <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no file type restriction).</li>
-                <li>Uploaded files will be deleted automatically after <strong>5 minutes</strong> (demo setting).</li>
                 <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage (see <a href="https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support">Browser support</a>).</li>
                 <li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.</li>
                 <li>Built with Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> CSS framework and Icons from <a href="http://glyphicons.com/">Glyphicons</a>.</li>
@@ -223,8 +227,6 @@
 <script src="bower_components/blueimp-load-image/js/load-image.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"></script>
-<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<script src="bower_components/sass-bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- blueimp Gallery script -->
 <script src="bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->

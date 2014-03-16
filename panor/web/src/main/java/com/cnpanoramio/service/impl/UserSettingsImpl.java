@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.appfuse.dao.UserDao;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class UserSettingsImpl implements UserSettingsService, UserSettingsManage
 	
 	@Autowired
 	private PhotoDao photoDao;
+	
+	@Autowired
+	private UserDao userloginDao;
 	
 	@Override
 	public Boolean save(UserSettings userSettings) {
@@ -110,17 +114,19 @@ public class UserSettingsImpl implements UserSettingsService, UserSettingsManage
 	public UserOpenInfo getOpenInfo(Long id) {
 		UserOpenInfo openInfo = new UserOpenInfo();
 		UserSettings setting = userSettingsDao.get(id);
-		openInfo.setId(setting.getId());
-		openInfo.setName(setting.getName());
+		openInfo.setId(setting.getId());		
 		openInfo.setAvatar(setting.getAvatar());
 		
 		User user = userManager.get(id);
+		openInfo.setName(user.getUsername());
 		int count = photoDao.getPhotoCount(user);
 		openInfo.setPhotoCount(count);
 		return openInfo;
 	}
 
-	
-
+	@Override
+	public User getUser(String nameOrEmail) {
+		return (User)userloginDao.loadUserByUsername(nameOrEmail);
+	}
 	
 }

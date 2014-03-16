@@ -7,7 +7,7 @@ userPageDirectives.directive('masonry', function ($parse, $timeout) {
         restrict: 'AC',
         link: function (scope, elem, attrs) {
             elem.masonry({
-                itemSelector: '.masonry-item',
+                itemSelector: '.masonry-item'
 //                isFitWidth: true
             });
         },

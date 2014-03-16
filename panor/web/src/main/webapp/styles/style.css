@@ -105,6 +105,10 @@ legend {
     padding-top: 5px;
 }
 
+.well.form-horizontal {
+    background-image: -webkit-gradient(linear,left 0,left 100%,from(#FFFFFF),to(#f5f5f5));
+}
+
 .well.form-horizontal .form-actions {
     margin-bottom: 0;
 }
@@ -162,6 +166,9 @@ legend {
 
 .span7 > form.well, .span7 > form.well {
     margin-top: 20px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* form input {
@@ -549,4 +556,5 @@ body {
 .bootstrap-tagsinput {
     padding: 1px;
     margin: 0;
+
 }

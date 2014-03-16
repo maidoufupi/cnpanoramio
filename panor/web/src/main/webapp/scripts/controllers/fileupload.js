@@ -18,12 +18,13 @@
 //    var isOnGitHub = window.location.hostname === 'blueimp.github.io',
 //        url = isOnGitHub ? '//jquery-file-upload.appspot.com/' : 'server/php/';
 
-    angular.module('cnmapApp', [
+    angular.module('fileuploadApp', [
             'ngResource',
             'ui.bootstrap',
             'blueimp.fileupload',
             'ui.mapgaode',
-            'bootstrap-tagsinput'
+            'bootstrap-tagsinput',
+            'cnmapApp'
         ])
         .config([
             '$httpProvider', 'fileUploadProvider', '$logProvider',
@@ -38,15 +39,15 @@
                 $logProvider.debugEnabled = true;
 //                if (isOnGitHub) {
 //                    // Demo settings:
-//                    angular.extend(fileUploadProvider.defaults, {
-//                        // Enable image resizing, except for Android and Opera,
-//                        // which actually support image resizing, but fail to
-//                        // send Blob objects via XHR requests:
+                    angular.extend(fileUploadProvider.defaults, {
+                        // Enable image resizing, except for Android and Opera,
+                        // which actually support image resizing, but fail to
+                        // send Blob objects via XHR requests:
 //                        disableImageResize: /Android(?!.*Chrome)|Opera/
 //                            .test(window.navigator.userAgent),
-//                        maxFileSize: 5000000,
-//                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
-//                    });
+                        maxFileSize: 5000000,
+                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+                    });
 //                }
             }
         ])

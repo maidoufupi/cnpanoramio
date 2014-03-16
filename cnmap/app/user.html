@@ -1,5 +1,5 @@
 <!doctype html >
-<html ng-app="userPageApp">
+<html>
 <head>
     <meta charset="utf-8">
 
@@ -14,32 +14,46 @@
     <script type="text/javascript" src="bower_components/jquery.rest/dist/jquery.rest.min.js"></script>
 
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-mapgaode/src/ui-map.js"></script>
 
-    <script type="text/javascript" src="scripts/userpage/app.js"></script>
-    <script type="text/javascript" src="scripts/userpage/controllers.js"></script>
-    <script type="text/javascript" src="scripts/userpage/directives.js"></script>
-    <script type="text/javascript" src="scripts/userpage/filters.js"></script>
-    <script type="text/javascript" src="scripts/userpage/services.js"></script>
+    <script src="bower_components/get-style-property/get-style-property.js"></script>
+    <script src="bower_components/get-size/get-size.js"></script>
+    <script src="bower_components/eventie/eventie.js"></script>
+    <script src="bower_components/doc-ready/doc-ready.js"></script>
+    <script src="bower_components/eventEmitter/EventEmitter.js"></script>
+    <script src="bower_components/jquery-bridget/jquery.bridget.js"></script>
+    <script src="bower_components/matches-selector/matches-selector.js"></script>
+    <script src="bower_components/outlayer/item.js"></script>
+    <script src="bower_components/outlayer/outlayer.js"></script>
+    <script src="bower_components/masonry/masonry.js"></script>
+    <script src="bower_components/imagesloaded/imagesloaded.js"></script>
+    <script src="bower_components/angular-masonry/angular-masonry.js"></script>
 
-    <!--<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"-->
-            <!--type="text/javascript"></script>-->
+    <script type="text/javascript" src="scripts/services/main.js"></script>
+    <script type="text/javascript" src="scripts/controllers/UserPageCtrl.js"></script>
+
+    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
+            type="text/javascript"></script>
     <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
-    <script type="text/javascript" src="scripts/panor/panoramio/cnmap.gaode.js"></script>
     <script type="text/javascript" src="scripts/panor/panoramio/cnmap.Panoramio.js"></script>
+    <script type="text/javascript" src="scripts/panor/panoramio/cnmap.gaode.js"></script>
     <script type="text/javascript" src="scripts/panor/js/cnmap.gaode.js"></script>
     <script type="text/javascript">
-        ctx = "";
+        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.apirest = "http://127.0.0.1:8080/panor-web/api/rest"
     </script>
 </head>
 <body>
-<div id="basic" class="container">
+<div id="basic" class="container" data-ng-app="userPageApp">
 
-    <div class="photo-col" ng-controller="UserPhotoCtrl">
+    <div class="photo-col" data-ng-controller="UserCtrl">
 
         <div id="user-page_main-header">
             <div class="user-page_main-header_card">
-                <img src="img/user_avatar.png" alt="" class="user_page-profile_img">
+                <img ng-src="{{ctx}}/images/user_avatar.png" width="120" height="120" alt="" class="user_page-profile_img">
 
                 <div id="user_profile_info">
                     <div class="user-page_profile_info user-page_main-lede">
@@ -57,7 +71,7 @@
                         </div>
                         <a href="/map/?user=6324111">
                             <img id="user_header-icon"
-                                 src="../img/marker.png"
+                                 ng-src="{{ctx}}/images/marker.png"
                                  height="16" alt="">
                             <span id="user_header-map">view on map</span>
                         </a>
@@ -99,17 +113,17 @@
             </div>
             <div style="clear: both;"></div>
         </div>
-        <div class="masonry-container" masonry>
-            <div id="masonry-{{photo.photoId}}" class="masonry-item" ng-repeat="photo in photos" masonryItem>
-                <a href="{{photo.src}}">
-                    <img ng-src="{{photo.src}}" class="item-img"></a>
+        <div class="masonry-container" masonry preserve-order>
+            <div id="masonry-{{photo.id}}" class="masonry-brick" ng-repeat="photo in photos" masonry-brick>
+                <a href="{{ctx}}/photo/{{photo.id}}">
+                    <img ng-src="{{apirest}}/photo/{{photo.id}}/2" class="item-img" alt="{{photo.title}}"></a>
 
-                <div class="thumb-overlay">
+                <div data-ng-hide="true" class="thumb-overlay">
                     <div class="thumb-overlay-text" style="max-width: 189.2885400512707px">
                         <a href="/photo/52034419">{{photo.title}}</a></div>
                     <div class="thumb-overlay-icons" style="max-width: 189.2885400512707px">
                         <div class="thumb-overlay-icon">
-                            <img src="/img/marker.png"
+                            <img ng-src="{{ctx}}/images/marker.png"
                                  title="Selected for Google Maps and Google Earth"
                                  width="16" height="16" alt="">
                         </div>
@@ -149,19 +163,6 @@
     </div>
 </div>
 
-<script src="bower_components/eventEmitter/EventEmitter.js"></script>
-<script src="bower_components/eventie/eventie.js"></script>
-<script src="bower_components/doc-ready/doc-ready.js"></script>
-<script src="bower_components/get-style-property/get-style-property.js"></script>
-<script src="bower_components/get-size/get-size.js"></script>
-<script src="bower_components/jquery-bridget/jquery.bridget.js"></script>
-<script src="bower_components/matches-selector/matches-selector.js"></script>
-<script src="bower_components/outlayer/item.js"></script>
-<script src="bower_components/outlayer/outlayer.js"></script>
-
-
-<script src="bower_components/masonry/masonry.js"></script>
-
 <script>
     docReady(function () {
 //        var container = document.querySelector('.masonry-container');
@@ -176,7 +177,8 @@
         })
         $.cnmap.setZoom(1);
 
-        var panoramioLayer = new $.cnmap.PanoramioLayer({suppressInfoWindows: true});
+        var panoramioLayer = new cnmap.PanoramioLayer({suppressInfoWindows: false, mapVendor: window.mapVendor});
+        panoramioLayer.initEnv(ctx);
         panoramioLayer.setMap(map);
     });
 </script>

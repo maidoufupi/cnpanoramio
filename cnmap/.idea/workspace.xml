@@ -23,16 +23,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="google_geo.json" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/views/google_geo.json">
+      <file leaf-file-name="user.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/user.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="302" column="1" selection-start="9190" selection-end="9190" vertical-scroll-proportion="0.2639296" vertical-offset="0" max-vertical-offset="682">
+            <state line="81" column="18" selection-start="4224" selection-end="4224" vertical-scroll-proportion="0.49120235" vertical-offset="1285" max-vertical-offset="3860">
               <folding>
-                <element signature="e#27#2289#0" expanded="false" />
-                <element signature="e#2299#4373#0" expanded="false" />
-                <element signature="e#4383#6207#0" expanded="false" />
-                <element signature="e#6217#7816#0" expanded="false" />
-                <element signature="e#7826#9162#0" expanded="false" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#li#1;n#ul#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#li#2;n#ul#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bower.json" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bower.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="4" selection-start="627" selection-end="627" vertical-scroll-proportion="-16.241379" vertical-offset="9" max-vertical-offset="720">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserPageCtrl.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/scripts/controllers/UserPageCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="12" column="37" selection-start="338" selection-end="338" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="680">
+              <folding>
+                <element signature="e#0#37#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -65,13 +86,8 @@
         <option value="$PROJECT_DIR$/js/userpage/controllers.js" />
         <option value="$PROJECT_DIR$/js/userpage/directives.js" />
         <option value="$PROJECT_DIR$/ExploreWorld.html" />
-        <option value="$PROJECT_DIR$/app/user.html" />
-        <option value="$PROJECT_DIR$/app/admin/SysSettings.html" />
-        <option value="$PROJECT_DIR$/app/index.html" />
-        <option value="$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.Panoramio.js" />
         <option value="$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.gaode.js" />
         <option value="$PROJECT_DIR$/app/styles/ExploreWorld.css" />
-        <option value="$PROJECT_DIR$/app/ExploreWorld.html" />
         <option value="$PROJECT_DIR$/app/scripts/app.js" />
         <option value="$PROJECT_DIR$/app/FileUpload.html" />
         <option value="$PROJECT_DIR$/app/scripts/panor/js/jquery.canvas.js" />
@@ -83,16 +99,26 @@
         <option value="$PROJECT_DIR$/app/scripts/controllers/ChLocModalCtrl.js" />
         <option value="$PROJECT_DIR$/app/scripts/services/PhotoService.js" />
         <option value="$PROJECT_DIR$/app/uploadPhoto.html" />
-        <option value="$PROJECT_DIR$/bower.json" />
-        <option value="$PROJECT_DIR$/app/scripts/controllers/fileupload.js" />
-        <option value="$PROJECT_DIR$/app/FileUpload-angularjs.html" />
-        <option value="$PROJECT_DIR$/app/styles/style.css" />
         <option value="$PROJECT_DIR$/app/scripts/controllers/main.js" />
-        <option value="$PROJECT_DIR$/app/scripts/services/main.js" />
-        <option value="$PROJECT_DIR$/app/scripts/controllers/PhotoCtrl.js" />
         <option value="$PROJECT_DIR$/app/styles/PhotoDisplay.css" />
-        <option value="$PROJECT_DIR$/app/PhotoDisplay.html" />
         <option value="$PROJECT_DIR$/app/views/google_geo.json" />
+        <option value="$PROJECT_DIR$/app/scripts/controllers/ExploreWorld.js" />
+        <option value="$PROJECT_DIR$/app/scripts/controllers/ExploreWorldCtrl.js" />
+        <option value="$PROJECT_DIR$/app/ExploreWorld.html" />
+        <option value="$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.Panoramio.js" />
+        <option value="$PROJECT_DIR$/app/index.html" />
+        <option value="$PROJECT_DIR$/app/styles/style.css" />
+        <option value="$PROJECT_DIR$/app/admin/SysSettings.html" />
+        <option value="$PROJECT_DIR$/app/FileUpload-angularjs.html" />
+        <option value="$PROJECT_DIR$/app/scripts/controllers/fileupload.js" />
+        <option value="$PROJECT_DIR$/app/scripts/controllers/PhotoCtrl.js" />
+        <option value="$PROJECT_DIR$/app/PhotoDisplay.html" />
+        <option value="$PROJECT_DIR$/app/scripts/userpage/directives.js" />
+        <option value="$PROJECT_DIR$/app/scripts/services/main.js" />
+        <option value="$PROJECT_DIR$/app/scripts/controllers/UserPageCtrl.js" />
+        <option value="$PROJECT_DIR$/bower.json" />
+        <option value="$PROJECT_DIR$/app/styles/user.css" />
+        <option value="$PROJECT_DIR$/app/user.html" />
       </list>
     </option>
   </component>
@@ -128,7 +154,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -175,12 +200,75 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
+              <option name="myItemId" value="styles" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="services" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cnmap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -195,11 +283,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\dev\source\github\cnpanoramio\cnmap\app\bower_components" />
       <recent name="D:\dev\source\github\cnpanoramio\cnmap\app\bower_components\angular-ui-mapgaode\src" />
       <recent name="D:\dev\source\github\cnpanoramio\cnmap\app\styles" />
       <recent name="D:\dev\source\github\cnpanoramio\cnmap\app\views" />
       <recent name="D:\dev\source\github\cnpanoramio\cnmap\app\scripts\controllers" />
-      <recent name="D:\dev\source\github\cnpanoramio\cnmap\app" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\dev\source\github\cnpanoramio\cnmap\app\admin" />
@@ -213,6 +301,14 @@
     <option name="LAST_HOST" value="http://localhost:8080/" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -223,12 +319,8 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -236,10 +328,6 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="CHROME" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
@@ -276,12 +364,12 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41374663" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41374663" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="REST Client" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36376405" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -301,51 +389,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="35" selection-start="1956" selection-end="1956" vertical-scroll-proportion="0.0" vertical-offset="820" max-vertical-offset="2220" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/services/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="13" selection-start="259" selection-end="259" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="900" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/ExploreWorld.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="147" column="0" selection-start="7991" selection-end="7991" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3540" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/ExploreWorld.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="22" selection-start="1414" selection-end="1414" vertical-scroll-proportion="0.0" vertical-offset="260" max-vertical-offset="3640" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/ExploreWorld.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="0" selection-start="3231" selection-end="3231" vertical-scroll-proportion="0.0" vertical-offset="840" max-vertical-offset="3960" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.Panoramio.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="9" selection-start="2027" selection-end="2027" vertical-scroll-proportion="0.0" vertical-offset="1360" max-vertical-offset="2580" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/PhotoDisplay.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="35" selection-start="1918" selection-end="1918" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9900" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/user.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="62" selection-start="2021" selection-end="2021" vertical-scroll-proportion="0.0" vertical-offset="820" max-vertical-offset="3820" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/styles/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="159" column="15" selection-start="2661" selection-end="2661" vertical-scroll-proportion="0.0" vertical-offset="2845" max-vertical-offset="4260" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="61" selection-start="245" selection-end="276" vertical-scroll-proportion="0.0" vertical-offset="160" max-vertical-offset="2100" />
@@ -386,39 +429,14 @@
         <state line="10" column="38" selection-start="286" selection-end="286" vertical-scroll-proportion="0.29325512" vertical-offset="0" max-vertical-offset="682" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/user.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="62" selection-start="2021" selection-end="2021" vertical-scroll-proportion="0.0" vertical-offset="820" max-vertical-offset="3820" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/admin/SysSettings.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="4" selection-start="379" selection-end="454" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1660" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/panor/js/cnmap.gaode.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="67" column="28" selection-start="2001" selection-end="2001" vertical-scroll-proportion="0.4458509" vertical-offset="1023" max-vertical-offset="2000" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="8" selection-start="1547" selection-end="1547" vertical-scroll-proportion="0.3721973" vertical-offset="391" max-vertical-offset="1960" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.gaode.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="103" column="40" selection-start="3110" selection-end="3110" vertical-scroll-proportion="-0.34670487" vertical-offset="2302" max-vertical-offset="4200" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.Panoramio.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="24" selection-start="632" selection-end="632" vertical-scroll-proportion="0.34383956" vertical-offset="300" max-vertical-offset="2660" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/styles/ExploreWorld.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="1" selection-start="498" selection-end="498" vertical-scroll-proportion="0.07172996" vertical-offset="669" max-vertical-offset="1960" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Div.html">
@@ -446,36 +464,14 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="711" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/ExploreWorld.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="4" selection-start="2249" selection-end="2366" vertical-scroll-proportion="-7.586207" vertical-offset="500" max-vertical-offset="3360" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/bower_components/angular-ui-mapgaode/src/ui-map.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="35" selection-start="976" selection-end="976" vertical-scroll-proportion="0.42979944" vertical-offset="0" max-vertical-offset="3340" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.comm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="165" column="36" selection-start="6047" selection-end="6047" vertical-scroll-proportion="0.0" vertical-offset="3128" max-vertical-offset="4580" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/styles/modal.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="85" column="16" selection-start="1316" selection-end="1316" vertical-scroll-proportion="0.4092827" vertical-offset="1409" max-vertical-offset="2120">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/changeLocationModal.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="37" selection-start="1256" selection-end="1256" vertical-scroll-proportion="0.40209267" vertical-offset="171" max-vertical-offset="1320" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/ChLocModalCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="49" selection-start="1223" selection-end="1223" vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="3740">
           <folding />
         </state>
       </provider>
@@ -490,97 +486,9 @@
         <state line="34" column="39" selection-start="1134" selection-end="1134" vertical-scroll-proportion="-7.6551723" vertical-offset="458" max-vertical-offset="1140" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/uploadPhoto.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="13" selection-start="1408" selection-end="1408" vertical-scroll-proportion="0.41348973" vertical-offset="278" max-vertical-offset="1020">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/FileUpload.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="1528" selection-end="1528" vertical-scroll-proportion="0.5979073" vertical-offset="180" max-vertical-offset="6680">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bower.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="23" selection-start="453" selection-end="453" vertical-scroll-proportion="0.48533726" vertical-offset="9" max-vertical-offset="720">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/fileupload.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="213" column="34" selection-start="8614" selection-end="8614" vertical-scroll-proportion="3.6722925" vertical-offset="1469" max-vertical-offset="4880">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="28" selection-start="43" selection-end="43" vertical-scroll-proportion="0.05625879" vertical-offset="0" max-vertical-offset="711">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="0" selection-start="1516" selection-end="1516" vertical-scroll-proportion="1.3094233" vertical-offset="69" max-vertical-offset="1140">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/FileUpload-angularjs.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="134" column="19" selection-start="7845" selection-end="7845" vertical-scroll-proportion="0.2032885" vertical-offset="2544" max-vertical-offset="5060">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/styles/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="526" column="1" selection-start="8338" selection-end="8338" vertical-scroll-proportion="0.12798874" vertical-offset="10429" max-vertical-offset="11140">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/styles/PhotoDisplay.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="121" column="11" selection-start="2005" selection-end="2005" vertical-scroll-proportion="0.57935286" vertical-offset="2044" max-vertical-offset="5320">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/services/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="26" selection-start="41" selection-end="41" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1240">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/PhotoCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="36" selection-start="374" selection-end="377" vertical-scroll-proportion="0.22012578" vertical-offset="0" max-vertical-offset="1560">
-          <folding>
-            <element signature="e#0#37#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/services/GPSConvertService.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="80" selection-end="80" vertical-scroll-proportion="0.16877638" vertical-offset="0" max-vertical-offset="711">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/PhotoDisplay.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="295" column="0" selection-start="15803" selection-end="15803" vertical-scroll-proportion="0.4245142" vertical-offset="5616" max-vertical-offset="7340">
-          <folding />
-        </state>
+        <state line="29" column="0" selection-start="1528" selection-end="1528" vertical-scroll-proportion="0.5979073" vertical-offset="180" max-vertical-offset="6680" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/views/google_geo.json">
@@ -592,6 +500,240 @@
             <element signature="e#4383#6207#0" expanded="false" />
             <element signature="e#6217#7816#0" expanded="false" />
             <element signature="e#7826#9162#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.comm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="15" selection-start="965" selection-end="972" vertical-scroll-proportion="0.4756447" vertical-offset="308" max-vertical-offset="4580">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="6" selection-start="153" selection-end="302" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="400">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/changeLocationModal.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="22" selection-start="3186" selection-end="3186" vertical-scroll-proportion="1.554559" vertical-offset="0" max-vertical-offset="1320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/services/GPSConvertService.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="0" selection-start="80" selection-end="80" vertical-scroll-proportion="0.16877638" vertical-offset="0" max-vertical-offset="711">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/ChLocModalCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="15" selection-start="482" selection-end="482" vertical-scroll-proportion="-2.6722925" vertical-offset="2160" max-vertical-offset="3740">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/styles/ExploreWorld.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="0" selection-start="155" selection-end="155" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1960">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/uploadPhoto.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="28" column="13" selection-start="1408" selection-end="1408" vertical-scroll-proportion="0.82111436" vertical-offset="0" max-vertical-offset="1020">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/RestClient.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="711">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/404.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="138" column="7" selection-start="2953" selection-end="2953" vertical-scroll-proportion="0.26686218" vertical-offset="2578" max-vertical-offset="3260">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="41" selection-start="1485" selection-end="1485" vertical-scroll-proportion="0.0" vertical-offset="429" max-vertical-offset="1140">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/ExploreWorldCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="9" selection-start="638" selection-end="638" vertical-scroll-proportion="-0.08438819" vertical-offset="480" max-vertical-offset="1220">
+          <folding>
+            <element signature="e#0#37#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/ExploreWorld.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="73" column="52" selection-start="4114" selection-end="4141" vertical-scroll-proportion="0.40209267" vertical-offset="1191" max-vertical-offset="3360">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/panor/panoramio/cnmap.Panoramio.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="90" column="9" selection-start="2992" selection-end="2992" vertical-scroll-proportion="0.6590258" vertical-offset="1220" max-vertical-offset="2680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/navbar.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1860">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="15" selection-start="1967" selection-end="1967" vertical-scroll-proportion="-10.655172" vertical-offset="571" max-vertical-offset="2020">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/styles/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="105" column="1" selection-start="1459" selection-end="1459" vertical-scroll-proportion="-2.8387096" vertical-offset="1924" max-vertical-offset="11300">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin/SysSettings.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="38" selection-start="677" selection-end="677" vertical-scroll-proportion="-4.8965516" vertical-offset="138" max-vertical-offset="1660">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/fileupload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="69" selection-start="1444" selection-end="1444" vertical-scroll-proportion="0.84388185" vertical-offset="60" max-vertical-offset="4900">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/styles/PhotoDisplay.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="112" column="0" selection-start="1863" selection-end="1863" vertical-scroll-proportion="0.0" vertical-offset="4609" max-vertical-offset="5320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/PhotoDisplay.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="209" column="31" selection-start="10643" selection-end="10643" vertical-scroll-proportion="7.6703296" vertical-offset="4878" max-vertical-offset="7420">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/userpage/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="20" selection-start="128" selection-end="128" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="300">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/userpage/controllers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="247" selection-end="247" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="640">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/userpage/directives.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="45" selection-start="324" selection-end="324" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1800">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/FileUpload-angularjs.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="178" column="56" selection-start="11110" selection-end="11110" vertical-scroll-proportion="0.25261584" vertical-offset="3391" max-vertical-offset="5100">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/PhotoCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="53" selection-start="242" selection-end="254" vertical-scroll-proportion="0.25787964" vertical-offset="0" max-vertical-offset="2320">
+          <folding>
+            <element signature="e#0#37#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/services/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="7" selection-start="517" selection-end="517" vertical-scroll-proportion="0.38115332" vertical-offset="29" max-vertical-offset="1340">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/controllers/UserPageCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="37" selection-start="338" selection-end="338" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="680">
+          <folding>
+            <element signature="e#0#37#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/styles/user.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="71" column="34" selection-start="1090" selection-end="1090" vertical-scroll-proportion="0.26040062" vertical-offset="1251" max-vertical-offset="1900">
+          <folding>
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1394904524582" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="4" selection-start="627" selection-end="627" vertical-scroll-proportion="-16.241379" vertical-offset="9" max-vertical-offset="720">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/user.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="81" column="18" selection-start="4224" selection-end="4224" vertical-scroll-proportion="0.49120235" vertical-offset="1285" max-vertical-offset="3860">
+          <folding>
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#1;n#ul#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#li#2;n#ul#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

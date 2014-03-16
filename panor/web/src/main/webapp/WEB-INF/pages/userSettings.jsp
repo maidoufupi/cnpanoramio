@@ -14,7 +14,7 @@
 
 <body id="generic">
 
-	<script type="text/javascript" src="<c:url value="/bower_components/jquery/plugins/jquery.rest.min.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/settings.js"/>"></script>
 
 	<div class="content_wrapper">

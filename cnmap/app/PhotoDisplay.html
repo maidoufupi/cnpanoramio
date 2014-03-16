@@ -28,9 +28,10 @@
     <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
     <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="scripts/app.js"></script>
-    <script type="text/javascript" src="scripts/controllers/PhotoCtrl.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-mapgaode/src/ui-map.js"></script>
     <script type="text/javascript" src="scripts/services/main.js"></script>
+    <script type="text/javascript" src="scripts/controllers/PhotoCtrl.js"></script>
 
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
             type="text/javascript"></script>
@@ -44,26 +45,26 @@
 
         $(document).ready(function () {
             var lat, lng;
-            $("abbr.latitude").each(function (i, element) {
-                lat = Number($(this).attr("title"));
-                $(this).text(cnmap.GPS.convert(lat) + " N");
-            })
+//            $("abbr.latitude").each(function (i, element) {
+//                lat = Number($(this).attr("title"));
+//                $(this).text(cnmap.GPS.convert(lat) + " N");
+//            })
+//
+//            $("abbr.longitude").each(function (i, element) {
+//                lng = Number($(this).attr("title"));
+//                $(this).text(cnmap.GPS.convert(lng) + " E");
+//            })
 
-            $("abbr.longitude").each(function (i, element) {
-                lng = Number($(this).attr("title"));
-                $(this).text(cnmap.GPS.convert(lng) + " E");
-            })
-
-            $.cnmap.initMap("minimap1", {
-                maptype: "SATELLITE"
-            })
-            $.cnmap.setCenter(lat, lng);
-            $.cnmap.addMarkerInCenter();
+//            $.cnmap.initMap("minimap1", {
+//                maptype: "SATELLITE"
+//            })
+//            $.cnmap.setCenter(lat, lng);
+//            $.cnmap.addMarkerInCenter();
         })
     </script>
 </head>
 <body>
-<div class="container" ng-app="cnmapApp" ng-controller="PhotoCtrl">
+<div class="container" ng-app="photoApp" ng-controller="PhotoCtrl">
 
     <div class="photo-col">
         <div id="main-photo-wrapper" data-id="<c:url value='${photo.id}'/>">
@@ -95,14 +96,14 @@
                    title="举报内容不当或带有攻击性的照片"></a>
 
                 <div id="photo-page-prev-next-container">
-                    <a href="/photo/64742707"><img src="/img/prev-uphoto.png" width="21" height="21" alt=""></a>
-                    <a href="/photo/64644016"><img src="/img/next-uphoto.png" width="21" height="21" alt=""></a>
+                    <a href="/photo/64742707"><img ng-src="{{ctx}}/images/prev-uphoto.png" width="21" height="21" alt=""></a>
+                    <a href="/photo/64644016"><img ng-src="{{ctx}}/images/next-uphoto.png" width="21" height="21" alt=""></a>
                 </div>
             </div>
             <div id="photo-title-box">
                 <div id="photo-title-icon"></div>
                 <h1 id="photo-title"
-                    data-ng-click="user.login && (editable = 'title')"
+                    data-ng-click="setEditable('title')"
                     ng-hide="editable == 'title'">
                     {{photo.title}}
                 </h1>
@@ -162,7 +163,7 @@
             </div>
         </div>
         <div class="photo_description" id="photo-description">
-            <span class="center" ng-click="user.login && (editable = 'description')"
+            <span class="center" ng-click="setEditable('description')"
                   ng-hide="editable == 'description'">{{photo.description || '添加描述'}}</span>
             <span ng-show="editable == 'description'" class="photo_description">
                 <textarea type="text" size="30" name="description" ng-model="photo.description"
@@ -179,11 +180,11 @@
 
             <div class="comment" ng-repeat="comment in comments" id="{{comment.id}}">
                 <img class="comment-avatar" width="48"
-                     src="http://static.panoramio.com/avatars/user/5636966.jpg?v=000000" alt="">
+                     ng-src="{{ctx}}/images/user_avatar.png" alt="">
 
                 <div class="comment-inner">
                     <div class="comment-author">
-                        <a href="#/event/user/{{comment.userId}}">{{comment.name}}</a> 于 {{comment.date}}
+                        <a href="{{ctx}}/user/{{comment.userId}}">{{comment.username}}</a> 于 {{comment.createTime}}
                     </div>
                     <div id="c49440741" class="photo-comment-text">
                         <p>{{comment.content}}</p>
@@ -199,7 +200,7 @@
         </div>
 
         <form action="" method="post" id="comment" ng-show="user.login" >
-            <h3>发送评论 <span>(以 {{user.name}})</span></h3>
+            <h3>发送评论 <span>(以 {{userOpenInfo.name}})</span></h3>
             <textarea cols="50" rows="3" id="tcomment" name="comment" ng-model="comment.content" class="form-control"></textarea>
             <br>
             <button ng-click="save(comment.content)" id="submit_comment"
@@ -213,7 +214,7 @@
         <div class="interim-info-card photo-page-card">
             <div id="profile_pic_info">
                 <a href="{{ctx}}/user/{{userOpenInfo.id}}"><img
-                        src="img/user_avatar.png"
+                        ng-src="{{ctx}}/images/user_avatar.png"
                         width="60" height="60" alt="{{userOpenInfo.name}}" id="profile_pic_avatar"></a>
 
                 <div id="profile_info">
@@ -284,7 +285,7 @@
             <div id="map_info_name">
                 <a href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=12&amp;k=2">Siem Reap</a>
             </div>
-            <div id="minimap1"></div>
+            <div id="minimap1" ui-map="minimap1" ui-options="mapOptions"></div>
             <div id="nearby_photos"><a href="/photo/54671273"><img class="nearby-img"
                                                                    src="http://mw2.google.com/mw-panoramio/photos/square/54671273.jpg"
                                                                    height="44" width="44" alt=""></a><a
@@ -299,13 +300,16 @@
             </div>
             <div id="nearby">
                 <p id="place">
-                    Photo taken in {{}}
+                    Photo taken in {{gpsInfo.gps.address}}
                 </p>
 
                 <div id="location" class="photo_mapped">
-                    <div class="geo"><a title="查看这片区域" href="">
-                        <abbr class="latitude" title="35"></abbr>&nbsp;
-                        <abbr class="longitude" title="117"></abbr></a></div>
+                    <div class="geo">
+                        <a title="查看这片区域" href="">
+                            <abbr class="latitude" title="{{gpsInfo.gps.lat}}">{{gpsInfo.lat}}</abbr>&nbsp;
+                            <abbr class="longitude" title="{{gpsInfo.gps.lng}}">{{gpsInfo.lng}}</abbr>
+                        </a>
+                    </div>
                     <p id="misplaced">
                         <a id="map_photo" href="/map_photo/?id=64643919">
                             放错地点了吗？建议新的位置
@@ -318,9 +322,9 @@
             <h2>标签</h2>
             <ul id="interim-tags">
 
-                <li id="tag_element_0">
-                    <a href="/user/4522308/tags/Cambodia">
-                        Cambodia
+                <li data-ng-repeat="tag in photo.tags" id="tag_element_{{$index}}">
+                    <a  href="{{ctx}}/user/{{userOpenInfo.id}}/tags/{{tag}}">
+                        {{tag}}
                     </a>
                 </li>
 
@@ -335,22 +339,22 @@
             <h2>Photo details</h2>
             <ul id="details">
                 <li>
-                    于 于 2012-01-10 上传
+                    于 {{photo.createTime}} 上传
                 </li>
                 <li class="license c">
                     © 保留所有权利
-                    <br>作者 Ngo Minh Truc
+                    <br>作者 {{userOpenInfo.name}}
                 </li>
                 <li id="tech-details">
                     <ul>
-                        <li>相机型号：SONY DSC-HX5V</li>
-                        <li>拍摄日期：2011/11/26 09:17:56</li>
-                        <li>曝光时间：0.033s (1/30)</li>
-                        <li>焦距：4.25mm</li>
-                        <li>光圈： f/3.500</li>
-                        <li>ISO：ISO250</li>
-                        <li>曝光补偿： 0.00 EV</li>
-                        <li>无闪光灯</li>
+                        <li>相机型号：{{cameraInfo.model}}</li>
+                        <li>拍摄日期：{{cameraInfo.dateTimeOriginal}}</li>
+                        <li>曝光时间：{{cameraInfo.exposureTime}}</li>
+                        <li>焦距：{{cameraInfo.focalLength}}</li>
+                        <li>光圈： {{cameraInfo.fnumber}}</li>
+                        <li>ISO：{{cameraInfo.iso}}</li>
+                        <li>曝光补偿： {{cameraInfo.exposureBias}}</li>
+                        <li>{{cameraInfo.flash ? ('闪光灯：' + cameraInfo.flash) : '无闪光灯'}}</li>
                     </ul>
                 </li>
             </ul>

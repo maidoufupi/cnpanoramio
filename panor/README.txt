@@ -36,10 +36,11 @@ To get started, complete the following steps:
 
 第一次运行创建数据库：
 panor-core上运行mvn hibernate3:hbm2ddl
+
 初始化数据库：
 mvn dbunit:operation -Pprod
 
-或者mvn install -SkipTests将执行build里的所有goal
+或者mvn install -DSkipTests将执行build里的所有goal
 
 每次运行：
 panor上运行mvn tomcat6:run

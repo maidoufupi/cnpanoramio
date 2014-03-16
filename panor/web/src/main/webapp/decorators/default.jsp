@@ -9,9 +9,9 @@
     <link rel="icon" href="<c:url value="/images/favicon.ico"/>"/>
     <title><decorator:title/> | <fmt:message key="webapp.name"/></title>
 
-    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/bower_components/bootstrap3/css/bootstrap.min.css'/>" />
+    <link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>">
     <!-- Bootstrap theme -->
-    <link href="<c:url value="/bower_components/bootstrap3/css/bootstrap-theme.min.css"/>" rel="stylesheet">
+    <link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap-theme.min.css"/>">
     
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/style.css'/>" />
     <decorator:head/>
@@ -24,6 +24,7 @@
 	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径
 	    window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录
 	    window.apirest = ctx + "/api/rest";
+	    window.mapVendor = '<c:out value="${sessionScope.mapVendor}"/>' || "gps";
     </script>
 </head>
 <body<decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>>

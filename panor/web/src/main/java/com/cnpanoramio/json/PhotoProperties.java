@@ -1,8 +1,13 @@
 package com.cnpanoramio.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.cnpanoramio.domain.Tag;
 
 @XmlRootElement(name = "PhotoProperties")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -17,6 +22,11 @@ public class PhotoProperties {
 	private String createTime;
 	
 	private Long userId;
+	
+	private Double lat;
+	private Double lng;
+	
+	private List<String> tags = new ArrayList<String>(0);
 
 	public String getTitle() {
 		return title;
@@ -56,6 +66,30 @@ public class PhotoProperties {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	public Double getLat() {
+		return lat;
+	}
+
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public Double getLng() {
+		return lng;
+	}
+
+	public void setLng(Double lng) {
+		this.lng = lng;
 	}
 	
 	

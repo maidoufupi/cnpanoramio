@@ -99,8 +99,8 @@
 		<div id="front-photo_stack" class="front-photo_stack">
 			<div class="imgLiquidFill front-photo_sizer"
 				style="z-index: 2; visibility: visible; opacity: 1;">
-				<a href="<c:url value='/photo/${photo.id}'/>"
-					class="front-photo_link"><img src="<c:url value="/services/api/photos/${photo.id}/1"/>"
+				<a href="<c:url value='/photo/1'/>"
+					class="front-photo_link"><img src="<c:url value="/api/rest/photo/1/1"/>"
 					class="front-photo_img"
 					style="position: relative; left: 0px; top: 0.5px;">
 				</a>

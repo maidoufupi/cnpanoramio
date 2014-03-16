@@ -19,26 +19,28 @@ public class PhotoCameraInfo {
 	private Double alt;
 	private String userName;
 	
+	// 相机型号
 	private String model;
+	// 拍摄日期
 	private String dateTimeOriginal;
+	// 曝光时间
 	private String exposureTime;
-	private Double focalLength;
-	private Double fNumber;
-	private String iso;
-	private String 曝光补偿;
-	private String 闪光灯;
+	// 焦距
+	private String focalLength;
+	// 光圈
+	private String FNumber;
+	// ISO
+	private String ISO;
+	// 曝光补偿
+	private String ExposureBias;
+	// 闪光灯
+	private Short Flash;
 		
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public Double getfNumber() {
-		return fNumber;
-	}
-	public void setfNumber(Double fNumber) {
-		this.fNumber = fNumber;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -88,34 +90,37 @@ public class PhotoCameraInfo {
 	public void setExposureTime(String exposureTime) {
 		this.exposureTime = exposureTime;
 	}
-	public Double getFocalLength() {
+	public String getFocalLength() {
 		return focalLength;
 	}
-	public void setFocalLength(Double focalLength) {
+	public void setFocalLength(String focalLength) {
 		this.focalLength = focalLength;
 	}
-	public Double getFNumber() {
-		return fNumber;
+
+	public String getISO() {
+		return ISO;
 	}
-	public void setFNumber(Double fNumber) {
-		this.fNumber = fNumber;
+	public void setISO(String iSO) {
+		ISO = iSO;
 	}
-	public String getIso() {
-		return iso;
+	public String getExposureBias() {
+		return ExposureBias;
 	}
-	public void setIso(String iso) {
-		this.iso = iso;
+	public void setExposureBias(String exposureBias) {
+		ExposureBias = exposureBias;
 	}
-	public String get曝光补偿() {
-		return 曝光补偿;
+	public Short getFlash() {
+		return Flash;
 	}
-	public void set曝光补偿(String 曝光补偿) {
-		this.曝光补偿 = 曝光补偿;
+	public void setFlash(Short flash) {
+		Flash = flash;
 	}
-	public String get闪光灯() {
-		return 闪光灯;
+	public String getFNumber() {
+		return FNumber;
 	}
-	public void set闪光灯(String 闪光灯) {
-		this.闪光灯 = 闪光灯;
-	}	
+	public void setFNumber(String fNumber) {
+		FNumber = fNumber;
+	}
+	
+	
 }

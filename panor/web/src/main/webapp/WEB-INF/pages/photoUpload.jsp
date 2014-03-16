@@ -14,7 +14,6 @@
 <meta name="description" content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for AngularJS. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap styles -->
-<link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>">
 <link rel="stylesheet" href="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css"/>">
 
 <!-- blueimp Gallery styles -->
@@ -23,6 +22,7 @@
 <link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload.css"/>">
 <link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload-ui.css"/>">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
+
 <noscript><link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload-noscript.css"/>"></noscript>
 <noscript><link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload-ui-noscript.css"/>"></noscript>
 <style>
@@ -33,12 +33,11 @@
 </style>
 	<link rel="stylesheet" href="<c:url value="/styles/style.css"/>">
     <link rel="stylesheet" href="<c:url value="/styles/modal.css"/>">
-
 </head>
 <body>
-
-	<script src="<c:url value="/bower_components/jquery/jquery.min.js"/>"></script>
     <script src="<c:url value="/bower_components/angular/angular.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-cookies/angular-cookies.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-route/angular-route.js"/>"></script>
     <script src="<c:url value="/bower_components/angular-resource/angular-resource.min.js"/>"></script>
     <script src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap.min.js"/>"></script>
     <script src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"/>"></script>
@@ -49,9 +48,9 @@
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.canvas.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
     <!-- The main application script -->
-    <script src="<c:url value="/scripts/controllers/fileupload.js"/>"></script>
-    <script src="<c:url value="/scripts/controllers/ChLocModalCtrl.js"/>"></script>
     <script src="<c:url value="/scripts/services/main.js"/>"></script>
+    <script src="<c:url value="/scripts/controllers/ChLocModalCtrl.js"/>"></script>
+    <script src="<c:url value="/scripts/controllers/fileupload.js"/>"></script>
     
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
@@ -78,7 +77,7 @@
     <h2 class="lead">到地图上</h2>
     
      <!-- The file upload form used as target for the file upload widget -->
-    <form id="fileupload" action="<c:url value="/api/rest/photo/upload"/>" method="POST" enctype="multipart/form-data" data-ng-app="cnmapApp" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
+    <form id="fileupload" action="<c:url value="/api/rest/photo/upload"/>" method="POST" enctype="multipart/form-data" data-ng-app="fileuploadApp" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
         <noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
@@ -200,7 +199,6 @@
             <ul>
                 <li>The maximum file size for uploads in this demo is <strong>5 MB</strong> (default file size is unlimited).</li>
                 <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no file type restriction).</li>
-                <li>Uploaded files will be deleted automatically after <strong>5 minutes</strong> (demo setting).</li>
                 <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage (see <a href="https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support">Browser support</a>).</li>
                 <li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.</li>
                 <li>Built with Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> CSS framework and Icons from <a href="http://glyphicons.com/">Glyphicons</a>.</li>
@@ -225,8 +223,6 @@
 <script src="<c:url value="/bower_components/blueimp-load-image/js/load-image.min.js"/>"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="<c:url value="/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"/>"></script>
-<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<script src="<c:url value="/bower_components/sass-bootstrap/dist/js/bootstrap.min.js"/>"></script>
 <!-- blueimp Gallery script -->
 <script src="<c:url value="/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min.js"/>"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->

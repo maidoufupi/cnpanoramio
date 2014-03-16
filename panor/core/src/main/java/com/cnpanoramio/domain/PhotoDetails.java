@@ -46,13 +46,16 @@ public class PhotoDetails {
 	private String model;
     
 	// 曝光时间 即快门速度
-	private String exposureTime;
+	private Double exposureTime;
 	
 	// FNumber光圈系数
 	private Double FNumber;
     
-	// ExposureBiasValue曝光补偿
-	private Integer ExposureBiasValue;
+	// ExposureBias曝光补偿
+	private Double ExposureBias;
+	
+	// Flash闪光灯
+	private Short Flash;
 	
 	// 焦距
 	private Double FocalLength;
@@ -91,6 +94,7 @@ public class PhotoDetails {
 	private Double GPSTimeStamp;
 	private String GPSProcessingMethod;
 	private Date GPSDateStamp;
+	private String GPSInfo;
 	
 	
 	public Photo getPhoto() {
@@ -155,10 +159,10 @@ public class PhotoDetails {
 	public void setModel(String model) {
 		this.model = model;
 	}
-	public String getExposureTime() {
+	public Double getExposureTime() {
 		return exposureTime;
 	}
-	public void setExposureTime(String exposureTime) {
+	public void setExposureTime(Double exposureTime) {
 		this.exposureTime = exposureTime;
 	}
 		
@@ -167,13 +171,13 @@ public class PhotoDetails {
 	}
 	public void setFNumber(Double fNumber) {
 		this.FNumber = fNumber;
+	}		
+
+	public Double getExposureBias() {
+		return ExposureBias;
 	}
-		
-	public Integer getExposureBiasValue() {
-		return ExposureBiasValue;
-	}
-	public void setExposureBiasValue(Integer exposureBiasValue) {
-		ExposureBiasValue = exposureBiasValue;
+	public void setExposureBias(Double exposureBias) {
+		ExposureBias = exposureBias;
 	}
 	public Double getFocalLength() {
 		return FocalLength;
@@ -331,8 +335,17 @@ public class PhotoDetails {
 	public void setISO(String iSO) {
 		ISO = iSO;
 	}
-
-	
-	
+	public Short getFlash() {
+		return Flash;
+	}
+	public void setFlash(Short flash) {
+		Flash = flash;
+	}
+	public String getGPSInfo() {
+		return GPSInfo;
+	}
+	public void setGPSInfo(String gPSInfo) {
+		GPSInfo = gPSInfo;
+	}	
 
 }

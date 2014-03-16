@@ -74,9 +74,10 @@ public class PhotoUploadController extends BaseFormController {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		CommonsMultipartFile file = (CommonsMultipartFile) multipartRequest
 				.getFile("file");
-		Photo photo = null;
+		Photo photo = new Photo();
+		photo.setName(file.getOriginalFilename());
 		try {
-		   photo = photoService.save(file.getOriginalFilename(), file.getInputStream());
+		   photo = photoService.save(photo, file.getInputStream());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
