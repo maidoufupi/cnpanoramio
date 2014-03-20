@@ -7,10 +7,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +23,6 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.IImageMetadata;
-import org.apache.commons.imaging.common.IImageMetadata.IImageMetadataItem;
 import org.apache.commons.imaging.common.RationalNumber;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.tiff.TiffField;
@@ -49,24 +50,25 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.MapVendor;
+import com.cnpanoramio.dao.FavoriteDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.PhotoGpsDao;
 import com.cnpanoramio.dao.UserSettingsDao;
+import com.cnpanoramio.domain.Favorite;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.PhotoGps.PhotoGpsPK;
 import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.domain.Tag;
-import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.PhotoService;
+import com.cnpanoramio.utils.GpsConverter;
 import com.cnpanoramio.utils.PhotoUtil;
-import com.ctc.wstx.util.StringUtil;
 
 @Service("photoService")
 @Transactional
@@ -79,12 +81,16 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	private UserManager userManager = null;
 
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	private GpsConverter gpsc = new GpsConverter();
 
 	@Autowired
 	private UserSettingsDao userSettingsDao = null;
 
 	@Autowired
 	private PhotoGpsDao photoGpsDao = null;
+	
+	@Autowired
+	private FavoriteDao favoriteDao = null;
 
 	@Autowired
 	public void setUserManager(UserManager userManager) {
@@ -210,10 +216,10 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 					.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_MAKE);
 			if (null != makeField) {
 				Object out = makeField.getFieldType().getValue(makeField);
-				if(out instanceof String) {
+				if (out instanceof String) {
 					photoDetails.setMake((String) out);
-				}else if(out instanceof String[]) {
-					photoDetails.setMake(((String[]) out)[0]);					
+				} else if (out instanceof String[]) {
+					photoDetails.setMake(((String[]) out)[0]);
 				}
 			}
 
@@ -221,10 +227,10 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 					.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_MODEL);
 			if (null != modelField) {
 				Object out = modelField.getFieldType().getValue(modelField);
-				if(out instanceof String) {
+				if (out instanceof String) {
 					photoDetails.setModel((String) out);
-				}else if(out instanceof String[]) {
-					photoDetails.setModel(((String[]) out)[0]);					
+				} else if (out instanceof String[]) {
+					photoDetails.setModel(((String[]) out)[0]);
 				}
 			}
 
@@ -369,10 +375,11 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			final TiffField GPSProcessingMethodField = jpegMetadata
 					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_PROCESSING_METHOD);
 			if (null != GPSProcessingMethodField) {
-				photoDetails
-						.setGPSProcessingMethod(((String[]) GPSProcessingMethodField
-								.getFieldType().getValue(
-										GPSProcessingMethodField))[0]);
+				Object out = GPSProcessingMethodField.getFieldType().getValue(GPSProcessingMethodField);
+				if(out instanceof String[]) {
+					photoDetails.setGPSProcessingMethod(((String[]) out )[0]);
+				}
+				
 			}
 			/********************************************************************************************/
 			// getTagValue(jpegMetadata, TiffTagConstants.TIFF_TAG_XRESOLUTION);
@@ -615,10 +622,15 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	}
 
 	@Override
-	public boolean markBest(Long photoId, boolean best) {
+	public boolean markBest(Long photoId, Long userId, boolean best) {
 		Photo photo = photoDao.get(photoId);
-		photo.setMarkBest(best);
-		photoDao.save(photo);
+		if(best) {
+			Favorite f = new Favorite(userId);
+			f.setDate(Calendar.getInstance().getTime());
+			photo.addFavorite(f);
+		}else {
+			photo.removeFavorite(userId);
+		}
 		return true;
 	}
 
@@ -646,8 +658,15 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	}
 
 	@Override
-	public PhotoProperties getPhotoProperties(Long id) {
-		return PhotoUtil.transformProperties(getPhoto(id));
+	public PhotoProperties getPhotoProperties(Long id, Long userId) {
+		PhotoProperties prop = PhotoUtil.transformProperties(getPhoto(id));
+		if(null != userId) {
+			Favorite f = favoriteDao.get(id, userId);
+			if(null != f) {
+				prop.setFavorite(true);
+			}
+		}
+		return prop;
 	}
 
 	@Override
@@ -675,41 +694,89 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			lngDouble = Double.valueOf(lng);
 		}
 
-		Point point = null;
-
-		if (latDouble != 0 || lngDouble != 0) {
-			point = new Point(latDouble, lngDouble);
-
-			if (StringUtils.hasText(address)) {
-				point.setAddress(address.trim());
-			}
-			gps = new PhotoGps();
-			gps.setPk(new PhotoGpsPK(photo.getId(), vendor));
-			gps.setGps(point);
-			photoGpsDao.save(gps);
-		}
-
 		PhotoDetails detail = photo.getDetails();
-
-		// save the image file's raw gps info
-		if (null != detail
-				&& (null != detail.getGPSLatitude()
-						&& detail.getGPSLatitude() != 0
-						&& null != detail.getGPSLongitude() && detail
-						.getGPSLongitude() != 0)) {
-			if (!(null != gps && vendor.equals(MapVendor.gps))) {
-				gps = new PhotoGps();
-				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gps));
-				point = new Point(detail.getGPSLatitude(),
-						detail.getGPSLongitude(), detail.getGPSAltitude());
-				gps.setGps(point);
-				photoGpsDao.save(gps);
-			}
-		} else {
-			// 如果图片没有gps信息，则把用户设置的位置信息填入photo的gps信息中
-			if(null != point) {
+		Point point = null;
+		if (latDouble != 0 || lngDouble != 0) {
+			if (vendor.equals(MapVendor.gps)) {
+				// 用户设置GPS为标准GPS坐标
+				// 转化GPS坐标为高德地图坐标
+				GpsConverter.Point p = gpsc.getEncryPoint(lngDouble, latDouble);
+				point = new Point(p.getY(), p.getX(), 0D);
+				if (StringUtils.hasText(address)) {
+					point.setAddress(address.trim());
+				}
 				photo.setGpsPoint(point);
 				photoDao.save(photo);
+
+				gps = new PhotoGps();
+				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gaode));
+				gps.setGps(point);
+				photoGpsDao.save(gps);
+
+				// 保存原始GPS坐标
+				point = new Point(latDouble, lngDouble);
+				if (StringUtils.hasText(address)) {
+					point.setAddress(address.trim());
+				}
+				gps = new PhotoGps();
+				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gps));
+				gps.setGps(point);
+				photoGpsDao.save(gps);
+			} else {
+				// 用户设置位置不为GPS，则默认为高德地图坐标
+				point = new Point(latDouble, lngDouble);
+				if (StringUtils.hasText(address)) {
+					point.setAddress(address.trim());
+				}
+				photo.setGpsPoint(point);
+				photoDao.save(photo);
+
+				gps = new PhotoGps();
+				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gaode));
+				gps.setGps(point);
+				photoGpsDao.save(gps);
+
+				// 保存图片原有GPS信息为GPS坐标
+				if (null != detail
+						&& (null != detail.getGPSLatitude()
+								&& detail.getGPSLatitude() != 0
+								&& null != detail.getGPSLongitude() && detail
+								.getGPSLongitude() != 0)) {
+					gps = new PhotoGps();
+					gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gps));
+					point = new Point(detail.getGPSLatitude(),
+							detail.getGPSLongitude(), detail.getGPSAltitude());
+					gps.setGps(point);
+					photoGpsDao.save(gps);
+				}
+			}
+		} else {
+			// 如果用户没有设置位置，则使用图片自带GPS信息
+			if (null != detail
+					&& (null != detail.getGPSLatitude()
+							&& detail.getGPSLatitude() != 0
+							&& null != detail.getGPSLongitude() && detail
+							.getGPSLongitude() != 0)) {
+				lngDouble = detail.getGPSLongitude();
+				latDouble = detail.getGPSLatitude();
+
+				// 转化GPS坐标为高德地图坐标
+				GpsConverter.Point p = gpsc.getEncryPoint(lngDouble, latDouble);
+				point = new Point(p.getY(), p.getX());
+				photo.setGpsPoint(point);
+				photoDao.save(photo);
+
+				gps = new PhotoGps();
+				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gaode));
+				gps.setGps(point);
+				photoGpsDao.save(gps);
+
+				// 保存原始GPS坐标
+				point = new Point(latDouble, lngDouble);
+				gps = new PhotoGps();
+				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gps));
+				gps.setGps(point);
+				photoGpsDao.save(gps);
 			}
 		}
 
@@ -728,8 +795,15 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	}
 
 	@Override
-	public PhotoGps getGPSInfo(Long id, MapVendor vendor) {
-		return photoGpsDao.get(new PhotoGpsPK(id, vendor));
+	public List<PhotoGps> getGPSInfo(Long id, MapVendor vendor) {
+		if (null == vendor) {
+			return photoGpsDao.getAll(id);
+		} else {
+			PhotoGps gps = photoGpsDao.get(new PhotoGps.PhotoGpsPK(id, vendor));
+			List<PhotoGps> gpss = new ArrayList<PhotoGps>();
+			gpss.add(gps);
+			return gpss;
+		}
 	}
 
 }

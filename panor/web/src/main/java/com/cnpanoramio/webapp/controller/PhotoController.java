@@ -16,23 +16,20 @@ import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.service.CommentService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.UserSettingsManager;
+import com.cnpanoramio.service.ViewsManager;
 
 @Controller
 @RequestMapping("/photo")
 public class PhotoController extends BaseFormController {
 
-	private UserManager userManager = null;
 	private PhotoManager photoService = null;
 	
 	@Autowired
 	private UserSettingsManager userSettingsService = null;
-	private CommentService commentService = null;
 
-    @Autowired
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-    	
+	@Autowired
+	private ViewsManager viewsManager = null;
+	    	
 	@Autowired
 	public void setPhotoService(PhotoManager photoService) {
 		this.photoService = photoService;
@@ -63,10 +60,13 @@ public class PhotoController extends BaseFormController {
 		}
 
 		Photo photo = photoService.getPhoto(photoId);
+		
 		PhotoDetails details = photo.getDetails();
 		
 		request.setAttribute("photo", photo);
 		request.setAttribute("details", details);
+		
+		viewsManager.view(photo.getId(), "main");
 		
 		return getSuccessView();
 	}

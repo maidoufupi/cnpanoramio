@@ -1,7 +1,6 @@
 package com.cnpanoramio.rest;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -10,8 +9,11 @@ import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,100 +25,151 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoGps;
-import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.json.PhotoResponse;
 import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
-import com.cnpanoramio.utils.UserUtil;
+import com.cnpanoramio.service.ViewsManager;
 import com.cnpanoramio.utils.PhotoUtil;
+import com.cnpanoramio.utils.UserUtil;
 
 @Controller
 @RequestMapping("/api/rest/photo")
 public class PhotoRestService {
-	
+
 	private transient final Log log = LogFactory.getLog(getClass());
-	
+
 	@Autowired
-	private UserManager userManager = null; 
-	
+	private UserManager userManager = null;
+
 	@Autowired
 	private PhotoManager photoService;
-	
+
 	@Autowired
 	private FileService fileService;
-    
-	@RequestMapping(value = "/{photoId}/best", method = RequestMethod.PUT)
+
+	@Autowired
+	private ViewsManager viewsManager;
+
+	@RequestMapping(value = "/{photoId}/favorite", method = RequestMethod.PUT)
 	@ResponseBody
-	public boolean markBest(@PathVariable String photoId) {
-		
+	public PhotoResponse markFavorite(@PathVariable String photoId) {
+
+		PhotoResponse reponse = new PhotoResponse();
+
 		Long id = null;
-		
-		User me = UserUtil.getCurrentUser(userManager);
-		id = Long.parseLong(photoId);
-		Photo photo = photoService.getPhoto(id);
-		if(photo.getOwner().equals(me)) {
-			photoService.markBest(id, true);
-			return true;
-		}else {
-			return false;
+		User me;
+		try {
+			me = UserUtil.getCurrentUser(userManager);
+		} catch (UsernameNotFoundException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
+			return reponse;
 		}
+		try {
+			id = Long.parseLong(photoId);
+		} catch (NumberFormatException ex) {
+			reponse.setStatus(PhotoResponse.Status.ID_FORMAT_ERROR.name());
+			return reponse;
+		}
+		try {
+			photoService.markBest(id, me.getId(), true);
+			reponse.setStatus(PhotoResponse.Status.OK.name());
+		} catch (DataAccessException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+		}
+		return reponse;
 	}
-	
-	@RequestMapping(value = "/{photoId}/best", method = RequestMethod.DELETE)
+
+	@RequestMapping(value = "/{photoId}/favorite", method = RequestMethod.DELETE)
 	@ResponseBody
-	public boolean removeBest(@PathVariable String photoId) {
-		
+	public PhotoResponse removeFvorite(@PathVariable String photoId) {
+		PhotoResponse reponse = new PhotoResponse();
 		Long id = null;
-		
-		User me = UserUtil.getCurrentUser(userManager);
-		id = Long.parseLong(photoId);
-		Photo photo = photoService.getPhoto(id);
-		if(photo.getOwner().equals(me)) {
-			photoService.markBest(id, false);
-			return true;
-		}else {
-			return false;
+
+		User me;
+		try {
+			me = UserUtil.getCurrentUser(userManager);
+		} catch (UsernameNotFoundException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
+			return reponse;
 		}
+		try {
+			id = Long.parseLong(photoId);
+		} catch (NumberFormatException ex) {
+			reponse.setStatus(PhotoResponse.Status.ID_FORMAT_ERROR.name());
+			return reponse;
+		}
+		try {
+			photoService.markBest(id, me.getId(), false);
+			reponse.setStatus(PhotoResponse.Status.OK.name());
+		} catch (DataAccessException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+		}		
+		return reponse;
 	}
-	
+
 	@RequestMapping(value = "/{photoId}/properties", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean properties(@PathVariable String photoId,
+	public PhotoResponse properties(@PathVariable String photoId,
 			@RequestBody final PhotoProperties properties) {
-		
+		PhotoResponse reponse = new PhotoResponse();
 		Long id = null;
 		
-		User me = UserUtil.getCurrentUser(userManager);
-		id = Long.parseLong(photoId);
-		Photo photo = photoService.getPhoto(id);
-		if(photo.getOwner().equals(me)) {
-			return photoService.properties(id, properties);
-		}else {
-			return false;
+		User me;
+		try {
+			me = UserUtil.getCurrentUser(userManager);
+		} catch (UsernameNotFoundException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
+			return reponse;
 		}
+		try {
+			id = Long.parseLong(photoId);
+		} catch (NumberFormatException ex) {
+			reponse.setStatus(PhotoResponse.Status.ID_FORMAT_ERROR.name());
+			return reponse;
+		}
+		try {
+			Photo photo = photoService.getPhoto(id);
+			if (photo.getOwner().equals(me)) {
+				photoService.properties(id, properties);
+				reponse.setStatus(PhotoResponse.Status.OK.name());
+			} else {
+				reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
+			}
+		} catch (DataAccessException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+		}		
+		return reponse;
 	}
-	
+
 	@RequestMapping(value = "/{photoId}/camerainfo", method = RequestMethod.GET)
 	@ResponseBody
-	public PhotoCameraInfo cameraInfo(@PathVariable String photoId) {
-		
+	public PhotoResponse cameraInfo(@PathVariable String photoId) {
+
 		Long id = null;
 		id = Long.parseLong(photoId);
-		return photoService.getCameraInfo(id);
+		PhotoResponse reponse = new PhotoResponse();
+		try {
+			PhotoCameraInfo camerainfo = photoService.getCameraInfo(id);
+			reponse.setStatus(PhotoResponse.Status.OK.name());
+			reponse.setCamerainfo(camerainfo);
+		} catch (DataAccessException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+		}
+		return reponse;
 	}
-	
-	@RequestMapping(value = "/{photoId}/{level}", 
-			method = RequestMethod.GET,
-			produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
+
+	@RequestMapping(value = "/{photoId}/{level}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
 	@ResponseBody
-	public FileSystemResource getPhoto(@PathVariable String photoId, @PathVariable int level) {
-		
+	public FileSystemResource getPhoto(@PathVariable String photoId,
+			@PathVariable int level) {
+
 		Long id = null;
 		id = Long.parseLong(photoId);
-//		Photo photo = photoService.getPhoto(id);
-		
+		// Photo photo = photoService.getPhoto(id);
+
 		File file = fileService.readFile(FileService.TYPE_IMAGE, id, level);
 
 		return new FileSystemResource(file);
@@ -124,72 +177,124 @@ public class PhotoRestService {
 
 	@RequestMapping(value = "/{photoId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public PhotoProperties delete(@PathVariable String photoId) {
+	public PhotoResponse delete(@PathVariable String photoId) {
 		Long id = null;
 		id = Long.parseLong(photoId);
-		return photoService.delete(id);
+		PhotoResponse reponse = new PhotoResponse();
+		try {
+			PhotoProperties prop = photoService.delete(id);
+			reponse.setStatus(PhotoResponse.Status.OK.name());
+			reponse.setProp(prop);
+		} catch (DataAccessException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+		}
+		return reponse;
 	}
-	
+
+	/**
+	 * 获取图片常用属性
+	 * 
+	 * @param photoId
+	 * @return
+	 */
 	@RequestMapping(value = "/{photoId}", method = RequestMethod.GET)
 	@ResponseBody
-	public PhotoProperties get(@PathVariable String photoId) {
+	public PhotoResponse get(@PathVariable String photoId) {
 		Long id = null;
 		id = Long.parseLong(photoId);
-		return photoService.getPhotoProperties(id);
-	}
-	
-	@RequestMapping(value="/upload", method=RequestMethod.GET)
-    public @ResponseBody String provideUploadInfo() {
-        return "You can upload a file by posting to this same URL.";
-    }
-
-    @RequestMapping(value="/upload", 
-    		method=RequestMethod.POST,
-    		consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
-    public @ResponseBody PhotoProperties handleFileUpload(
-    		@RequestParam("lat") String lat,
-    		@RequestParam("lng") String lng,
-    		@RequestParam(value="address", required=false) String address,
-    		@RequestParam("vendor") String vendor,
-    		@RequestParam("files[]") MultipartFile file){
-    	
-    	MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
+		PhotoResponse reponse = new PhotoResponse();
 		
-        if (!file.isEmpty()) {
-            try {
-            	return photoService.upload(lat, lng, address, mVendor, file);
-            } catch (Exception e) {
-            	e.printStackTrace();
-                return null;
-            }
-        } else {
-        	log.debug("file is empty");
-            return null;
-        }
-    }
-        
-    @RequestMapping(value = "/{photoId}/tag", 
-    		method = RequestMethod.POST,
-    		consumes=MediaType.APPLICATION_JSON_VALUE)
+		Long userId = null;
+		try {
+			User me = UserUtil.getCurrentUser(userManager);
+			userId = me.getId();
+		} catch (UsernameNotFoundException ex) {
+		}
+		
+		try {
+			PhotoProperties prop = photoService.getPhotoProperties(id, userId);
+
+			// 设置图片总访问量
+			prop.setViews(viewsManager.getViewsCount(id));
+			reponse.setStatus(PhotoResponse.Status.OK.name());
+			reponse.setProp(prop);
+		} catch (DataAccessException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+		}
+		return reponse;
+	}
+
+	@RequestMapping(value = "/upload", method = RequestMethod.GET)
+	public @ResponseBody
+	String provideUploadInfo() {
+		return "You can upload a file by posting to this same URL.";
+	}
+
+	@RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public @ResponseBody
+	PhotoResponse handleFileUpload(@RequestParam("lat") String lat,
+			@RequestParam("lng") String lng,
+			@RequestParam(value = "address", required = false) String address,
+			@RequestParam("vendor") String vendor,
+			@RequestParam("files[]") MultipartFile file) {
+
+		MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
+		PhotoResponse reponse = new PhotoResponse();
+
+		if (!file.isEmpty()) {
+			try {
+
+				PhotoProperties prop = photoService.upload(lat, lng, address,
+						mVendor, file);
+				reponse.setProp(prop);
+				reponse.setStatus(PhotoResponse.Status.OK.name());
+				return reponse;
+			} catch (Exception e) {
+				reponse.setStatus(PhotoResponse.Status.EXCEPTION.name());
+				reponse.setInfo(e.getMessage());
+				return reponse;
+			}
+		} else {
+			log.debug("file is empty");
+
+			reponse.setStatus(PhotoResponse.Status.EXCEPTION.name());
+			reponse.setInfo("file is empty");
+			return reponse;
+		}
+	}
+
+	@RequestMapping(value = "/{photoId}/tag", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public boolean addTags(@PathVariable String photoId,
 			@RequestBody final Tags tags) {
-    	log.info(tags.size());
-    	Long id = Long.parseLong(photoId);
-    	photoService.addTags(id, tags);
-    	return true;
-    }
-    
-    @RequestMapping(value = "/{photoId}/gps", 
-    		method = RequestMethod.GET)
+		log.info(tags.size());
+		Long id = Long.parseLong(photoId);
+		photoService.addTags(id, tags);
+		return true;
+	}
+
+	@RequestMapping(value = "/{photoId}/gps", method = RequestMethod.GET)
 	@ResponseBody
-	public PhotoGps getGPSInfo(@PathVariable String photoId,
-			@RequestParam String vendor) {
-    	
-    	MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
-    	Long id = Long.parseLong(photoId);
-    	return photoService.getGPSInfo(id, mVendor);
-    }
-    
-    
+	public PhotoResponse getGPSInfo(@PathVariable String photoId,
+			@RequestParam(required = false) String vendor) {
+
+		MapVendor mVendor;
+		if (StringUtils.hasText(vendor)) {
+			mVendor = PhotoUtil.getMapVendor(vendor);
+		} else {
+			mVendor = null;
+		}
+		Long id = Long.parseLong(photoId);
+		PhotoResponse reponse = new PhotoResponse();
+		try {
+			List<PhotoGps> gps = photoService.getGPSInfo(id, mVendor);
+			reponse.setGps(gps);
+			;
+			reponse.setStatus(PhotoResponse.Status.OK.name());
+		} catch (DataAccessException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+		}
+		return reponse;
+	}
+
 }

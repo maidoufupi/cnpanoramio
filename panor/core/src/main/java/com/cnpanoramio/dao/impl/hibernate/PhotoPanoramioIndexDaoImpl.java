@@ -1,17 +1,13 @@
 package com.cnpanoramio.dao.impl.hibernate;
 
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
 import java.util.List;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.dao.PhotoPanoramioIndexDao;
-import com.cnpanoramio.domain.PhotoGisIndex;
 import com.cnpanoramio.domain.PhotoPanoramio;
 import com.cnpanoramio.domain.PhotoPanoramioIndex;
 import com.cnpanoramio.domain.Point;
@@ -66,4 +62,43 @@ public class PhotoPanoramioIndexDaoImpl extends GenericDaoHibernate<PhotoPanoram
 		return true;
 	}
 
+	@Override
+	public List<PhotoPanoramio> getUserPhotoPanoramio(Double swLat,
+			Double swLng, Double neLat, Double neLng, int level,
+			MapVendor vendor, int width, int height, Long userId) {
+		Query query = getSession().createSQLQuery(
+				"CALL getUserPhotoPanoramio(:swLat, :swLng, :neLat, :neLng, :level, :vendor, :width, :height, :userId)")
+				.addEntity(PhotoPanoramio.class)
+				.setParameter("swLat", swLat)
+				.setParameter("swLng", swLng)
+				.setParameter("neLat", neLat)
+				.setParameter("neLng", neLng)
+				.setParameter("level", level)
+				.setParameter("vendor", vendor.name())
+				.setParameter("width", width)
+				.setParameter("height", height)
+				.setParameter("userId", userId);
+			 
+		return query.list();
+	}
+
+	@Override
+	public List<PhotoPanoramio> getUserFavPanoramio(Double swLat, Double swLng,
+			Double neLat, Double neLng, int level, MapVendor vendor, int width,
+			int height, Long userId) {
+		Query query = getSession().createSQLQuery(
+				"CALL getUserFavPanoramio(:swLat, :swLng, :neLat, :neLng, :level, :vendor, :width, :height, :userId)")
+				.addEntity(PhotoPanoramio.class)
+				.setParameter("swLat", swLat)
+				.setParameter("swLng", swLng)
+				.setParameter("neLat", neLat)
+				.setParameter("neLng", neLng)
+				.setParameter("level", level)
+				.setParameter("vendor", vendor.name())
+				.setParameter("width", width)
+				.setParameter("height", height)
+				.setParameter("userId", userId);
+			 
+		return query.list();
+	}
 }

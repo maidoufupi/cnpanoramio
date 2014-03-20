@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="styles/index.css"/>
+    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+
+    <script type="text/javascript">
+        function init() {
+            angular.bootstrap(document.getElementById("map-AMap"), ['map.AMap']);
+        }
+        function loadScript() {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f&callback=init";
+            document.body.appendChild(script);
+        }
+        window.onload = loadScript;
+    </script>
+</head>
+<body>
+<script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
+<script type="text/javascript" src="bower_components/sass-bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+<script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+<script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-mapgaode/src/ui-map.js"></script>
+<script type="text/javascript" src="scripts/services/GPSConvertService.js"></script>
+
+<!--<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>-->
+
+<div id="map-AMap"  data-ng-controller="AMapAutoCompleteCtrl">
+    <div id="map_canvas" ui-map="myMap" ui-options="mapOptions" style="width:800px; height:400px">
+    </div>
+    <form novalidate ngSubmit="update(asyncSelected)">
+        Lat: <input type="text" ng-model="lat" required class="form-control"/><br />
+        Lng: <input type="text" ng-model="lng" required class="form-control"/><br />
+        address: <input type="text" ng-model="address" ng-keypress="search(address)" class="form-control"/><br />
+        <h4>Asynchronous results</h4>
+        <pre>Model: {{asyncSelected.geometry.location | json}}</pre>
+        <input type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control">
+        <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+        <br>
+        <button type="submit" ng-click="update(asyncSelected)" class="btn btn-default">SAVE</button>
+        <button ng-click="getAddress(lat, lng)" class="btn btn-primary">SEARCH</button>
+    </form>
+</div>
+</body>

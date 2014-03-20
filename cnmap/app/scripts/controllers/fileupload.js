@@ -64,7 +64,8 @@
                     formData: function () {
                         var lat = this.files[0].lat || 0,
                             lng = this.files[0].lng || 0,
-                            address = this.files[0].address || '';
+                            address = this.files[0].address || '',
+                            vendor = this.files[0].vendor || 'gps';
                         return [
                             {
                                 name: "lat",
@@ -80,7 +81,7 @@
                             },
                             {
                                 name: "vendor",
-                                value: "gaode"
+                                value: vendor
                             }
                         ]
                     },
@@ -114,15 +115,16 @@
                     },
                     done: function (e, data) {
                         console.log(data)
-                        if (data.result.id) {
+                        if(data.result.status == "OK") {
+                            var photo = data.result.prop;
                             data.files[0].$submit = false;
                             data.files[0].$cancel = false;
                             data.files[0].$endestroy = true;
-                            data.files[0].photoId = data.result.id;
+                            data.files[0].photoId = photo.id;
                             data.files[0].saveProperties();
                             data.files[0].saveTags();
-                        } else {
-                            data.files[0].error = '上传出错';
+                        }else {
+                            data.files[0].error = data.result.info;
                             data.files[0].$endestroy = false;
                         }
                     }

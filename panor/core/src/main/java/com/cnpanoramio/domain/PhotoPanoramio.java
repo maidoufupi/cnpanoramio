@@ -6,8 +6,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@Entity
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 @XmlRootElement
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@Entity
+@Table(name="photo_panoramio")
 public class PhotoPanoramio {
 
 	@Id
@@ -22,7 +26,9 @@ public class PhotoPanoramio {
 	
 	private String address;
 	
-	private int rating;
+	private Integer rating;
+	
+	private String title;
 
 	public Long getPhotoId() {
 		return photoId;
@@ -64,12 +70,20 @@ public class PhotoPanoramio {
 		this.address = address;
 	}
 
-	public int getRating() {
+	public Integer getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(Integer rating) {
 		this.rating = rating;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	

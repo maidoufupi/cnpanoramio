@@ -7,10 +7,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import com.cnpanoramio.domain.Tag;
 
 @XmlRootElement(name = "PhotoProperties")
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class PhotoProperties {
 	
 	private Long id;
@@ -19,14 +23,31 @@ public class PhotoProperties {
 	
 	private String description;
 	
+	@JsonProperty("create_time")
 	private String createTime;
 	
+	@JsonProperty("user_id")
 	private Long userId;
 	
 	private Double lat;
 	private Double lng;
 	
 	private List<String> tags = new ArrayList<String>(0);
+	
+	private int views;
+	
+	@JsonProperty("fav_count")
+	private int favCount;
+	
+	private boolean favorite;
+
+	public int getFavCount() {
+		return favCount;
+	}
+
+	public void setFavCount(int favCount) {
+		this.favCount = favCount;
+	}
 
 	public String getTitle() {
 		return title;
@@ -90,6 +111,22 @@ public class PhotoProperties {
 
 	public void setLng(Double lng) {
 		this.lng = lng;
+	}
+
+	public int getViews() {
+		return views;
+	}
+
+	public void setViews(int views) {
+		this.views = views;
+	}
+
+	public boolean isFavorite() {
+		return favorite;
+	}
+
+	public void setFavorite(boolean favorite) {
+		this.favorite = favorite;
 	}
 	
 	

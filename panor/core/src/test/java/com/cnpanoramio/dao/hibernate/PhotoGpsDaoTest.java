@@ -1,5 +1,7 @@
 package com.cnpanoramio.dao.hibernate;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
@@ -52,5 +54,12 @@ public class PhotoGpsDaoTest {
 		PhotoGps out = photoGpsDao.get(new PhotoGps.PhotoGpsPK(photoId, MapVendor.gaode));
 		Assert.assertTrue(out.getPk().getPhotoId()== photoId);
 		Assert.assertTrue(out.getGps().getLat() == 33D);
+	}
+	
+	@Test
+	public void testGetAllByPhotoId() {
+		Long photoId = 1L;
+		List<PhotoGps> gps = photoGpsDao.getAll(photoId);
+		Assert.assertEquals(1, gps.size());
 	}
 }

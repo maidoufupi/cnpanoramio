@@ -25,6 +25,7 @@ angular.module('cnmapApp')
                         value.latPritty = value.mapVendor.latPritty;
                         value.lngPritty = value.mapVendor.lngPritty
                         value.address = value.mapVendor.address;
+                        value.vendor = 'gaode';
                     }
                 });
                 $modalInstance.close($scope.file);

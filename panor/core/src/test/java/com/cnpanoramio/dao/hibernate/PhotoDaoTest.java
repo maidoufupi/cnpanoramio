@@ -8,6 +8,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.dao.UserDao;
 import org.appfuse.model.User;
+import org.hibernate.SessionFactory;
+import org.hibernate.hql.internal.ast.util.SessionFactoryHelper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.PhotoDao;
+import com.cnpanoramio.domain.Favorite;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.Tag;
@@ -127,6 +130,19 @@ public class PhotoDaoTest {
 		Assert.assertTrue(0 != photo.getId());
 		log.info(photo.getTags());
 		Assert.assertEquals(1, photo.getTags().size());
+	}
+	
+	@Test
+	public void testAddFavorite() {
+		
+		Photo photo = photoDao.get(1L);
+//		photo.addFavorite(new Favorite(1L));
+//		photo = photoDao.save(photo);
+		Favorite f = photo.getFavorites().iterator().next();
+		if(f != null) {
+			photo.getFavorites().remove(f);
+		}
+		
 	}
 	
 

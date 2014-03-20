@@ -35,7 +35,7 @@ public class PhotoUtil {
 			cameraInfo.setExposureTime(details.getExposureTime()*10000 + "/10000 s");
 		}
 		cameraInfo.setFocalLength(details.getFocalLength() == null ? "" : details.getFocalLength() + " mm");
-		cameraInfo.setFNumber("f/" + details.getFNumber());
+		cameraInfo.setFNumber(details.getFNumber() == null ? "" : "f/" + details.getFNumber());
 		cameraInfo.setISO(details.getISO() == null ? "" : "ISO-" + details.getISO());
 		if(details.getExposureBias() == null || details.getExposureBias() == 0) {
 			cameraInfo.setExposureBias("0 step");
@@ -61,6 +61,8 @@ public class PhotoUtil {
 		for(Tag tag : photo.getTags()) {
 			pp.getTags().add(tag.getTag());
 		}
+		
+		pp.setFavCount(photo.getFavorites().size());
 		return pp;
 	}
 	

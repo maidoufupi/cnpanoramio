@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.json.PhotoResponse;
 import com.cnpanoramio.utils.PhotoUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,11 +57,17 @@ public class PhotoManagerTest {
 	URL url;
 	private Collection<Photo> photosForUser;
 	
+	private Long photoId;
+	
+	private Long userId;
+	
 	@Before
 	public void preMethodSetup() {
 //		ins = getClass().getResourceAsStream("/image/photo.jpg");
 		// 测试不同设备拍出来的图片
-		ins = getClass().getResourceAsStream("/image/IMG_2401.JPG");
+//		ins = getClass().getResourceAsStream("/image/IMG_2401.JPG");
+		// 测试不同设备拍出来的图片
+		ins = getClass().getResourceAsStream("/image/IMAG2290.JPG");
 		User user = new User();
 		user.addRole(roleManager.getRole(Constants.USER_ROLE));
 		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
@@ -141,7 +149,26 @@ public class PhotoManagerTest {
 		Assert.isTrue(photo.getDetails().getGPSLatitude() != 0);
 		log.info(photo.getDetails().getGPSLatitude());
 		log.info(photo.getGpsPoint().getLat());
-		Assert.isTrue(photo.getDetails().getGPSLatitude().equals(photo.getGpsPoint().getLat()));
+		Assert.isTrue(!photo.getDetails().getGPSLatitude().equals(photo.getGpsPoint().getLat()));
 		Assert.notNull(photo.getGpsPoint());
+	}
+	
+	@Test
+	public void testGetCameraInfo() {
+		
+		try {
+			photoManager.getCameraInfo(6L);
+		}catch(DataAccessException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testMarkFav() {
+		photoId = 1L;
+		userId = 1L;
+		photoManager.markBest(photoId, userId, true);
+		photoManager.markBest(photoId, userId, false);
+		photoManager.markBest(photoId, userId, true);
 	}
 }

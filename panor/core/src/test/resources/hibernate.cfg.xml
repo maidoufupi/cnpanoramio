@@ -14,12 +14,12 @@
 		<mapping class="com.cnpanoramio.domain.Tag" />
 		<mapping class="com.cnpanoramio.domain.UserSettings" />
 		<mapping class="com.cnpanoramio.domain.PhotoDetails" />
-		<mapping class="com.cnpanoramio.domain.LatLng" />
-		<mapping class="com.cnpanoramio.domain.PhotoGisIndex" />
 		<mapping class="com.cnpanoramio.domain.IndexPhoto" />		
 		<mapping class="com.cnpanoramio.domain.PhotoGps" />		
-		<mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex" />		
 		<mapping class="com.cnpanoramio.domain.PhotoPanoramio" />		
+		<mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex" />		
+		<mapping class="com.cnpanoramio.domain.Views" />		
+		<mapping class="com.cnpanoramio.domain.Favorite" />		
 		
 	</session-factory>
 </hibernate-configuration>

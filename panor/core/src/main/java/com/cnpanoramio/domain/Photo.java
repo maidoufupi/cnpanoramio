@@ -3,6 +3,7 @@ package com.cnpanoramio.domain;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +25,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.appfuse.model.User;
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name = "photo")
@@ -32,7 +34,7 @@ public class Photo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private String name;
 
 	@Column(name = "file_type")
@@ -59,26 +61,33 @@ public class Photo {
 
 	private String title;
 	private String description;
-	
+
 	@Column(nullable = true)
 	private boolean deleted;
 
 	@Column(name = "mark_best")
 	private boolean markBest;
-	
-	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<LatLng> latlngs;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy="photo")
-    @PrimaryKeyJoinColumn
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<PhotoGps> gps;
+
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "photo")
+	@PrimaryKeyJoinColumn
 	private PhotoDetails details;
-    
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "photo_id")
+	private Set<Views> views = new HashSet<Views>(0);
+
+	@OneToMany(mappedBy="pk.photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Set<Favorite> favorites = new HashSet<Favorite>(0);
+
 	@Column(name = "rating")
 	private Integer Rating;
-	
-	@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Tag> tags = new HashSet<Tag>(0);
-	
+
 	public final Long getId() {
 		return id;
 	}
@@ -183,12 +192,12 @@ public class Photo {
 		this.markBest = markBest;
 	}
 
-	public List<LatLng> getLatlngs() {
-		return latlngs;
+	public Set<PhotoGps> getGps() {
+		return gps;
 	}
 
-	public void setLatlngs(List<LatLng> latlngs) {
-		this.latlngs = latlngs;
+	public void setGps(Set<PhotoGps> gps) {
+		this.gps = gps;
 	}
 
 	public PhotoDetails getDetails() {
@@ -205,8 +214,8 @@ public class Photo {
 
 	public void setRating(Integer rating) {
 		Rating = rating;
-	}	
-	
+	}
+
 	public Set<Tag> getTags() {
 		return tags;
 	}
@@ -216,9 +225,52 @@ public class Photo {
 	}
 
 	public void addTag(Tag tag) {
-		if(!this.tags.contains(tag)) {
-			this.tags.add(tag);			
+		if (!this.tags.contains(tag)) {
+			this.tags.add(tag);
+		}
+	}
+
+	public Set<Views> getViews() {
+		return views;
+	}
+
+	public void setViews(Set<Views> views) {
+		this.views = views;
+	}
+
+	public Set<Favorite> getFavorites() {
+		return favorites;
+	}
+
+	public void setFavorites(Set<Favorite> favorites) {
+		this.favorites = favorites;
+	}
+
+	public void addFavorite(Favorite favorite) {
+		Iterator<Favorite> iter = this.favorites.iterator();
+		Favorite fav;
+		boolean has = false;
+		while (iter.hasNext()) {
+			fav = iter.next();
+			if (fav.getPk().getUserId().equals(favorite.getPk().getUserId())) {
+				has = true;
+				break;
+			}
+		}
+		if(!has) {
+			favorite.getPk().setPhoto(this);
+			this.favorites.add(favorite);			
 		}
 	}
 	
+	public void removeFavorite(Long userId) {
+		Iterator<Favorite> iter = this.favorites.iterator();
+		Favorite fav;
+		while (iter.hasNext()) {
+			fav = iter.next();
+			if (fav.getPk().getUserId().equals(userId)) {
+				iter.remove();
+			}
+		}
+	}
 }

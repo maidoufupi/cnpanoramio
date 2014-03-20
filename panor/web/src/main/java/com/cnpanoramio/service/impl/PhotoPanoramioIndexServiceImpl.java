@@ -7,12 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.MapVendor;
-import com.cnpanoramio.dao.PhotoGisIndexDao;
 import com.cnpanoramio.dao.PhotoPanoramioIndexDao;
-import com.cnpanoramio.domain.PhotoGisIndex;
 import com.cnpanoramio.domain.PhotoPanoramio;
+import com.cnpanoramio.domain.PhotoPanoramioIndex;
 import com.cnpanoramio.domain.Point;
-import com.cnpanoramio.service.PhotoGisIndexService;
 import com.cnpanoramio.service.PhotoPanoramioIndexService;
 
 @Service("panoramioIndexService")
@@ -31,6 +29,20 @@ public class PhotoPanoramioIndexServiceImpl implements PhotoPanoramioIndexServic
 	public List<PhotoPanoramio> getPanoramio(Point sw, Point ne, int level,
 			MapVendor vendor, int width, int height) {
 		return panorIndexDao.getPhotoPanoramio(sw, ne, level, vendor, width, height);
+	}
+
+	@Override
+	public List<PhotoPanoramio> getUserPhotoPanoramio(Double swLat,
+			Double swLng, Double neLat, Double neLng, int level,
+			MapVendor vendor, int width, int height, Long userId) {
+		return panorIndexDao.getUserPhotoPanoramio(swLat, swLng, neLat, neLng, level, vendor, width, height, userId);
+	}
+
+	@Override
+	public List<PhotoPanoramio> getUserFavPanoramio(Double swLat, Double swLng,
+			Double neLat, Double neLng, int level, MapVendor vendor, int width,
+			int height, Long userId) {
+		return panorIndexDao.getUserFavPanoramio(swLat, swLng, neLat, neLng, level, vendor, width, height, userId);
 	}	
 
 }

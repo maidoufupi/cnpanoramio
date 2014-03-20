@@ -111,13 +111,13 @@ public interface PhotoManager {
 	public InputStream loadPhoto(Long id);
 	
 	/**
-	 * 对图片加星
+	 * 对图片加星 favorite
 	 * 
 	 * @param photoId
 	 * @param best
 	 * @return
 	 */
-	public boolean markBest(Long photoId, boolean best);
+	public boolean markBest(Long photoId, Long userId, boolean best);
 	
 	/**
 	 * 设置图片属性信息
@@ -150,7 +150,7 @@ public interface PhotoManager {
 	 * @param id
 	 * @return
 	 */
-	public PhotoProperties getPhotoProperties(Long id);
+	public PhotoProperties getPhotoProperties(Long id, Long userId);
 	
 	/**
 	 * 为图片添加tag
@@ -167,5 +167,5 @@ public interface PhotoManager {
 	 * @param id
 	 * @return
 	 */
-	public PhotoGps getGPSInfo(Long id, MapVendor vendor);
+	public List<PhotoGps> getGPSInfo(Long id, MapVendor vendor);
 }

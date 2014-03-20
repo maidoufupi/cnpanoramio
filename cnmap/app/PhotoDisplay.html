@@ -42,6 +42,7 @@
     <script type="text/javascript">
         window.login = true;
         window.ctx = "http://localhost:8080/panor-web";
+        window.apirest = window.ctx + "/api/rest";
 
         $(document).ready(function () {
             var lat, lng;
@@ -77,24 +78,23 @@
             <div class="photo_page-stats_container">
                 <div id="counter_snippet" class="photo_page_counter_snippet">
                         <span class="photo-page-stats" id="total-views-sum">
-                        <a href="/photo/64742548/stats">
-                            1841 views
+                        <a href="/photo/{{photoId}}/stats">
+                            {{photo.views}} views
                         </a>
                         </span>
                         <span class="photo-page-stats" id="favorites-sum">
-                        <a href="/photo/64742548/stats">
-                            1 favorite
-                        </a>
-                        </span>
-                        <span class="photo-page-stats" id="likes-sum">
-                        <a href="/photo/64742548/stats">
-                            7 likes
-                        </a>
+                            <a href="/photo/{{photoId}}/stats">
+                                {{photo.fav_count}} favorite
+                            </a>
                         </span>
                 </div>
-                <a class="icon_sprite icon_flag photo_page-stats" href="/offensive/photo?id=64742548"
+                <a class="icon_sprite icon_flag photo_page-stats" href="/offensive/photo?id={{photoId}}"
                    title="举报内容不当或带有攻击性的照片"></a>
-
+                <span id="favorite">
+                    <a href="#" data-ng-click="favorite()">
+                        <span class="glyphicon glyphicon-heart favorite " data-ng-class="{active: photo.favorite}"/>
+                    </a>
+                </span>
                 <div id="photo-page-prev-next-container">
                     <a href="/photo/64742707"><img ng-src="{{ctx}}/images/prev-uphoto.png" width="21" height="21" alt=""></a>
                     <a href="/photo/64644016"><img ng-src="{{ctx}}/images/next-uphoto.png" width="21" height="21" alt=""></a>
@@ -339,7 +339,7 @@
             <h2>Photo details</h2>
             <ul id="details">
                 <li>
-                    于 {{photo.createTime}} 上传
+                    于 {{photo.create_time}} 上传
                 </li>
                 <li class="license c">
                     © 保留所有权利
@@ -348,12 +348,12 @@
                 <li id="tech-details">
                     <ul>
                         <li>相机型号：{{cameraInfo.model}}</li>
-                        <li>拍摄日期：{{cameraInfo.dateTimeOriginal}}</li>
-                        <li>曝光时间：{{cameraInfo.exposureTime}}</li>
-                        <li>焦距：{{cameraInfo.focalLength}}</li>
+                        <li>拍摄日期：{{cameraInfo.date_time_original}}</li>
+                        <li>曝光时间：{{cameraInfo.exposure_time}}</li>
+                        <li>焦距：{{cameraInfo.focal_length}}</li>
                         <li>光圈： {{cameraInfo.fnumber}}</li>
                         <li>ISO：{{cameraInfo.iso}}</li>
-                        <li>曝光补偿： {{cameraInfo.exposureBias}}</li>
+                        <li>曝光补偿： {{cameraInfo.exposure_bias}}</li>
                         <li>{{cameraInfo.flash ? ('闪光灯：' + cameraInfo.flash) : '无闪光灯'}}</li>
                     </ul>
                 </li>

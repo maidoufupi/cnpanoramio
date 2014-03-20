@@ -11,11 +11,15 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import com.cnpanoramio.MapVendor;
 
 @XmlRootElement
 @Entity
 @Table(name = "photo_gps")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class PhotoGps {
 	
 	@EmbeddedId
@@ -58,10 +62,12 @@ public class PhotoGps {
 		private static final long serialVersionUID = 7688224326101899701L;
 
 		@Column(name = "photo_id")
+		@JsonProperty("photo_id")
 		private Long photoId;
 
 		@Enumerated(EnumType.STRING)
 		@Column(name = "vendor")
+		@JsonProperty("vendor")
 		private MapVendor mapVendor;
 		
 		@Override

@@ -57,6 +57,14 @@ angular.module('cnmapApp', ['ngCookies',
                 getGPSInfo: {
                     method: 'GET',
                     params: {'type': 'gps'}
+                },
+                favorite: {
+                    method: 'PUT',
+                    params: {'type': 'favorite'}
+                },
+                removeFavorite: {
+                    method: 'DELETE',
+                    params: {'type': 'favorite'}
                 }
             });
     }])

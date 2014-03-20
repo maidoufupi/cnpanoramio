@@ -7,32 +7,43 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 @XmlRootElement(name = "PhotoCameraInfo")
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class PhotoCameraInfo {
 	
 	private Long id;
 
+	@JsonProperty("create_date")
 	private Date createDate;
 	private Double lat;
 	private Double lng;
 	private Double alt;
+	@JsonProperty("username")
 	private String userName;
 	
 	// 相机型号
 	private String model;
 	// 拍摄日期
+	@JsonProperty("date_time_original")
 	private String dateTimeOriginal;
 	// 曝光时间
+	@JsonProperty("exposure_time")
 	private String exposureTime;
 	// 焦距
+	@JsonProperty("focal_length")
 	private String focalLength;
 	// 光圈
+	@JsonProperty("fnumber")
 	private String FNumber;
 	// ISO
 	private String ISO;
 	// 曝光补偿
-	private String ExposureBias;
+	@JsonProperty("exposure_bias")
+	private String exposureBias;
 	// 闪光灯
 	private Short Flash;
 		
@@ -103,11 +114,12 @@ public class PhotoCameraInfo {
 	public void setISO(String iSO) {
 		ISO = iSO;
 	}
+
 	public String getExposureBias() {
-		return ExposureBias;
+		return exposureBias;
 	}
 	public void setExposureBias(String exposureBias) {
-		ExposureBias = exposureBias;
+		this.exposureBias = exposureBias;
 	}
 	public Short getFlash() {
 		return Flash;

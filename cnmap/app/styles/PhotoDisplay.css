@@ -259,3 +259,13 @@ div.comment {
     width: 100%;
     min-height: 100px;
 }
+
+.glyphicon.favorite.glyphicon-heart {
+    color: #d7d7d7;
+    font-size: 1.2em;
+}
+
+.glyphicon.favorite.glyphicon-heart.active {
+    color: #d7332b;
+    font-size: 1.2em;
+}

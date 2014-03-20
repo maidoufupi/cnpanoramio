@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.PhotoPanoramio;
+import com.cnpanoramio.domain.PhotoPanoramioIndex;
 import com.cnpanoramio.domain.Point;
 
 @RunWith(SpringJUnit4ClassRunner.class)

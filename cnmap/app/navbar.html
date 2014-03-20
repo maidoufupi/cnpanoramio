@@ -6,17 +6,22 @@
     <meta name="description"
           content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="bower_components/jquery/jquery-1.8.2.min.js"></script>
     <!-- Bootstrap styles -->
-    <link rel="stylesheet" href="bower_components/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css">
     <!-- Bootstrap theme styles -->
-    <link rel="stylesheet" href="bower_components/bootstrap/css/bootstrap-theme.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <script type="text/javascript" src="bower_components/bootstrap/js/bootstrap.js"></script>
-
+    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="scripts/controllers/GeoSearchCtrl.js"></script>
 </head>
 <body>
-<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-app="map.AMap">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -32,43 +37,33 @@
             <ul class="nav navbar-nav">
                 <li class="active white"><a href="/panor-web/login">登录</a></li>
                 <li>
-                    <div id="navbar-search" class="input-group">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Action
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                        <!-- /btn-group -->
-                        <input type="text" class="form-control">
+                    <div id="nav-search-form" ng-controller="TypeaheadCtrl">
+                        <form class="navbar-form navbar-left" ng-submit="update(asyncSelected)" novalidate>
+                            <input type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control">
+                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                        </form>
                     </div>
-                    <!-- /input-group -->
                 </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
 
-                <li>
-                    <a href="/exploreWorld">
+                <li popover="游览地图" popover-trigger="mouseenter" popover-placement="bottom">
+                    <a href="/exploreWorld" >
                         <span class="glyphicon glyphicon-plane white"></span>
                     </a>
                 </li>
-                <li>
-                    <a href="/photoUpload">
+                <li popover="图片上传" popover-trigger="mouseenter" popover-placement="bottom">
+                    <a href="/photoUpload" >
                         <span class="glyphicon glyphicon-camera white"></span>
                     </a>
                 </li>
-                <li>
+                <li popover="用户" popover-trigger="mouseenter" popover-placement="bottom">
                     <a href="<c:url value='/user/xxxx'/>">
                         <span class="glyphicon glyphicon-user white"></span>
                     </a>
                 </li>
-                <li class="btn-group">
+                <li class="btn-group" popover="设置" popover-trigger="mouseenter" popover-placement="bottom">
                     <a class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-th-list white"></span>
                     </a>

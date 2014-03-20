@@ -19,7 +19,7 @@ angular.module('photoApp', ['ngCookies',
             if(photo) {
                 $scope.photoId = photo[0].match(/[0-9]+/g)[0];
             }else {
-                $scope.photoId = 6;
+                $scope.photoId = 1;
             }
 
             $scope.apirest = $window.apirest + "/photo";
@@ -32,28 +32,34 @@ angular.module('photoApp', ['ngCookies',
             $scope.user = {};
             $scope.user.username = $cookies['username'];
             $scope.user.login = $window.login;
-
-            $scope.photo = PhotoService.getPhoto({photoId: $scope.photoId}, function() {
-                $log.debug($scope.photo);
-                UserService.getOpenInfo({'userId': $scope.photo["userId"]}, function(openInfo) {
-                    $scope.userOpenInfo = openInfo;
-                })
-
-                $scope.photo.save = function() {
-                    $scope.editable = '';
-                    PhotoService.updateProperties({photoId: $scope.photoId}, {
-                        'title': $scope.photo.title,
-                        'description': $scope.photo.description
-                    }, function() {
-
+            $scope.photo = {};
+            PhotoService.getPhoto({photoId: $scope.photoId}, function(data) {
+                $log.debug(data);
+                if(data.status == 'OK') {
+                    $scope.photo = data.prop;
+                    UserService.getOpenInfo({'userId': $scope.photo["user_id"]}, function(openInfo) {
+                        $scope.userOpenInfo = openInfo;
                     })
+
+                    $scope.photo.save = function() {
+                        $scope.editable = '';
+                        PhotoService.updateProperties({photoId: $scope.photoId}, {
+                            'title': $scope.photo.title,
+                            'description': $scope.photo.description
+                        }, function() {
+
+                        })
+                    }
                 }
             })
 
-            $scope.gpsInfo = PhotoService.getGPSInfo({photoId: $scope.photoId, 'vendor':'gaode'}, function() {
+            PhotoService.getGPSInfo({photoId: $scope.photoId, 'vendor':'gaode'}, function(data) {
+                if(data.status == "OK") {
+                    $scope.gpsInfo = data.gps[0];
+                }
+                $log.debug($scope.gpsInfo);
                 $scope.gpsInfo.lat = cnmap.GPS.convert($scope.gpsInfo.gps.lat);
                 $scope.gpsInfo.lng = cnmap.GPS.convert($scope.gpsInfo.gps.lng);
-                $log.debug($scope.gpsInfo);
                 var point = new AMap.LngLat($scope.gpsInfo.gps.lng, $scope.gpsInfo.gps.lat);
                 $scope.minimap1.setCenter(point);
                 new AMap.Marker({
@@ -61,7 +67,10 @@ angular.module('photoApp', ['ngCookies',
                     position: point
                 })
             })
-            $scope.cameraInfo = PhotoService.getCameraInfo({photoId: $scope.photoId}, function() {
+            PhotoService.getCameraInfo({photoId: $scope.photoId}, function(data) {
+                if(data.status == "OK") {
+                    $scope.cameraInfo = data.camera_info;
+                }
                 $log.debug($scope.cameraInfo);
             })
 
@@ -73,7 +82,6 @@ angular.module('photoApp', ['ngCookies',
             })
 
             CommentService.getPhotos({photoId: $scope.photoId, pageSize: 10, pageNo: 1}, function (data) {
-//                console.log(photoComments);
                 $scope.comments = data.comments;
 
             }, function(error) {
@@ -96,6 +104,25 @@ angular.module('photoApp', ['ngCookies',
                     $scope.comment.count = $scope.comment.count + 1;
                     $scope.comments.push(data);
                 })
+            }
+
+            $scope.favorite = function() {
+                if($scope.user.login) {
+
+                    if($scope.photo.favorite) {
+                        PhotoService.removeFavorite({photoId: $scope.photoId}, function (data) {
+                            if(data.status == "OK") {
+                                $scope.photo.favorite = false;
+                            }
+                        })
+                    }else {
+                        PhotoService.favorite({photoId: $scope.photoId}, {}, function (data) {
+                            if(data.status == "OK") {
+                                $scope.photo.favorite = true;
+                            }
+                        })
+                    }
+                }
             }
 
             $scope.mapOptions = {
