@@ -34,7 +34,7 @@
                 setVisible = this.setVisible;
             var thumbnails;
 
-            client.photo.read({
+            var params = {
                 nelat: bounds.ne.lat,
                 nelng: bounds.ne.lng,
                 swlat: bounds.sw.lat,
@@ -43,13 +43,28 @@
                 vendor: (this.opts && this.opts.mapVendor) || "gps",
                 width: size.width,
                 height: size.height
-            }).done(function (data) {
-                    for (var i in data) {
-                        if (!photos[data[i].photoId]) {
-                            photos[data[i].photoId] = data[i];
+            };
+
+            if(!!this.opts.userId) {
+                params.userId = this.opts.userId;
+                if(!!this.opts.favorite) {
+                    params.favorite = !!this.opts.favorite;
+                }
+            }
+
+            if(!!this.opts.tag) {
+                params.tag = this.opts.tag;
+            }
+
+            client.photo.read(params).done(function (data) {
+                if(data.status == "OK") {
+                    for (var i in data.photos) {
+                        if (!photos[data.photos[i].photoId]) {
+                            photos[data.photos[i].photoId] = data.photos[i];
                         }
                     }
-                    callback.apply(null, [data]);
+                    callback.apply(null, [data.photos]);
+                }
                 });
         };
 
@@ -80,8 +95,13 @@
                 return "<img src='" + this.ctx + "/api/rest/photo/" + photoId
                     + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
             }else {
-                return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
-                    + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'></a>";
+                if(this.opts.phone) {
+                    return "<img src='" + this.ctx + "/api/rest/photo/"
+                        + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
+                }else {
+                    return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
+                        + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'></a>";
+                }
             }
         }
 
@@ -101,6 +121,56 @@
                 //stringifyData: true
             });
             client.add('photo');
+        }
+
+        /**
+         * 设置用户ID
+         * A user ID. If provided, only photos by this user will be displayed on the map.
+         * If both a tag and user ID are provided, the tag will take precedence.
+         *
+         * @param userId
+         */
+        this.setUserId = function(userId) {
+            this.opts.userId = userId;
+        }
+
+        this.getUserId = function() {
+            return this.opts.userId;
+        }
+
+        /**
+         * A tag used to filter the photos which are displayed.
+         * Only photos which have been tagged with the supplied string will be shown.
+         *
+         * @param tag
+         */
+        this.setTag = function(tag) {
+            this.opts.tag = tag;
+        }
+
+        this.getTag = function() {
+            return this.opts.tag;
+        }
+
+        /**
+         * 设置用户收藏标记，如果为true怎获取用户收藏的图片
+         *
+         * @param fav
+         */
+        this.setFavorite = function(fav) {
+            this.opts.favorite = !!fav;
+        }
+
+        this.getFavorite = function() {
+            return this.opts.favorite;
+        }
+
+        /**
+         * 出发地图状态改变事件，使数据重新获取
+         *
+         * @param event
+         */
+        this.trigger = function(event) {
         }
     };
 

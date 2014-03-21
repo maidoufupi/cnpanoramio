@@ -15,9 +15,6 @@
 <script type="text/javascript" src="<c:url value='/scripts/panor/js/cnmap.gaode.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.gaode.js'/>"></script>
 
-	<script type="text/javascript" src="<c:url value="/bower_components/angular/angular.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-cookies/angular-cookies.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-resource/angular-resource.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-mapgaode/src/ui-map.js"/>"></script>
 
@@ -36,16 +33,20 @@
 
     <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/controllers/UserPageCtrl.js"/>"></script>
-
+<script>
+	$(document).ready(function () {
+			angular.bootstrap(document.getElementById("userPageApp"), ['userPageApp']);
+	})
+</script>
 <script>
     docReady(function () {
 
-        var map = $.cnmap.initMap("user_page-map", {
+        var map = cnmap.initMap("user_page-map", {
             toolbar: true,
             ruler: false,
             maptype: true
         })
-        $.cnmap.setZoom(1);
+        cnmap.setZoom(1);
 
         var panoramioLayer = new cnmap.PanoramioLayer({suppressInfoWindows: false, mapVendor: window.mapVendor});
         panoramioLayer.initEnv(ctx);
@@ -53,7 +54,7 @@
     });
 </script>
 
-<div id="basic" class="container" data-ng-app="userPageApp">
+<div id="userPageApp" class="container">
 
     <div class="photo-col" data-ng-controller="UserCtrl">
 

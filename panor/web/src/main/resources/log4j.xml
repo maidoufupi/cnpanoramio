@@ -54,7 +54,7 @@
     </logger>
   
     <logger name="org.hibernate.SQL">
-        <level value="DEBUG"/>
+        <level value="WARN"/>
     </logger>
 
     <logger name="org.springframework">
@@ -74,8 +74,8 @@
     </logger>
  
  <!--  com.cnpanoramio.service.impl -->   
-    <logger name="com.cnpanoramio.service">
-      <level value="DEBUG"/>
+    <logger name="com.cnpanoramio.webapp.listener">
+      <level value="INFO"/>
     </logger>
 
     <root>

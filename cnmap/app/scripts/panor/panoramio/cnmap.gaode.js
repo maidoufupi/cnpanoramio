@@ -31,21 +31,11 @@
         this.preZoom = 0;
         this.preBounds = null;
 
-        this.opts = opts || {};
+        this.opts = $.extend( {clickable: true}, opts);
 
         if (this.opts.map) {
             this.setMap(this.opts.map);
         }
-
-        this.getMap = function () { //    Map    Returns the map on which this layer is displayed.
-            return this.opts.map;
-        };
-
-        this.getTag = function () { //     string
-        };
-
-        this.getUserId = function () { //	string
-        };
 
         /**
          *
@@ -53,7 +43,7 @@
          */
         this.setMap = function (map/*:Map*/) { //	None	Renders the layer on the specified map. If map is set to null, the layer will be removed.
             if (map) {
-                opts.map = map;
+                this.opts.map = map;
 
                 AMap.event.addListener(
                     map,
@@ -137,21 +127,23 @@
                                             content: that.getLabelContent(b)  //自定义点标记覆盖物内容
                                         });
                                         label.photoId = b;
-                                        AMap.event.addListener(
-                                            label,
-                                            'click',
-                                            function () {
-                                                if (opts.suppressInfoWindows) {
-                                                    if (infoWindow.getIsOpen()) {
-                                                        infoWindow.close();
-                                                    } else {
-                                                        infoWindow.setContent(that.getInfoWindowContent(this.photoId));
-                                                        infoWindow.open(map, this.getPosition());
+                                        if(that.opts.clickable) {
+                                            AMap.event.addListener(
+                                                label,
+                                                'click',
+                                                function () {
+                                                    if (opts.suppressInfoWindows) {
+                                                        if (infoWindow.getIsOpen()) {
+                                                            infoWindow.close();
+                                                        } else {
+                                                            infoWindow.setContent(that.getInfoWindowContent(this.photoId));
+                                                            infoWindow.open(map, this.getPosition());
+                                                        }
+                                                    }else {
+                                                        $(that).trigger("data_clicked", [this.photoId]);
                                                     }
-                                                }else {
-                                                    $(that).trigger("data_clicked", [this.photoId]);
-                                                }
-                                            });
+                                                });
+                                        }
                                         labels[b] = label;
                                         label.setMap(map);  //在地图上添加点
                                     }
@@ -167,13 +159,11 @@
 
         this.setOptions = function (options/*:PanoramioLayerOptions*/) { //	None
             opts = options;
-        };
+        }
 
-        this.setTag = function (tag/*:string*/) { //	None
-        };
-
-        this.setUserId = function (userId/*:string*/) { //	None
-        };
+        this.trigger = function(event) {
+            AMap.event.trigger(this.opts.map, "moveend");
+        }
 
 //        function open() {
 //            for (var infoWindow in infoWindows) {

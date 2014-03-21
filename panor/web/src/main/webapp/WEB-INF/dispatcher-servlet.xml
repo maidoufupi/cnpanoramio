@@ -50,5 +50,5 @@
     
     <!-- Add additional controller beans here -->
     
-    <bean class="com.cnpanoramio.webapp.listener.AuthenticationListener" />
+    
 </beans>

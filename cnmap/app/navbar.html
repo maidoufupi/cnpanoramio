@@ -18,10 +18,11 @@
     <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script type="text/javascript" src="scripts/controllers/GeoSearchCtrl.js"></script>
+    <!--<script type="text/javascript" src="scripts/controllers/GeoSearchCtrl.js"></script>-->
+    <script type="text/javascript" src="scripts/controllers/NavbarCtrl.js"></script>
 </head>
 <body>
-<div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-app="map.AMap">
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-app="ponm.NavbarCtrl">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -37,9 +38,9 @@
             <ul class="nav navbar-nav">
                 <li class="active white"><a href="/panor-web/login">登录</a></li>
                 <li>
-                    <div id="nav-search-form" ng-controller="TypeaheadCtrl">
+                    <div id="nav-search-form" ng-controller="SearchLocCtrl">
                         <form class="navbar-form navbar-left" ng-submit="update(asyncSelected)" novalidate>
-                            <input type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control">
+                            <input type="text" ng-model="asyncSelected" placeholder="搜索地址" typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control">
                             <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                         </form>
                     </div>
@@ -60,6 +61,7 @@
                 </li>
                 <li popover="用户" popover-trigger="mouseenter" popover-placement="bottom">
                     <a href="<c:url value='/user/xxxx'/>">
+                        <span>user</span>
                         <span class="glyphicon glyphicon-user white"></span>
                     </a>
                 </li>

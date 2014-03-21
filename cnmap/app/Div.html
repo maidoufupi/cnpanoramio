@@ -6,9 +6,19 @@
         padding: 0px;
         overflow: hidden;
     }</style>
+
+    <style type="text/css">
+        div[contentEditable] {
+            cursor: pointer;
+            background-color: #D0D0D0;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
+
+    <div contentEditable="true" ng-model="content" title="Click to edit">Some</div>
+
     <div style="width: 500px; height: 100%; background-color: #006600; float: left; ">
         <div style="width: 100%; margin-top: 50px; margin-bottom: 50px; background-color: #222222"></div>
     </div>

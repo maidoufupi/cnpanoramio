@@ -296,4 +296,5 @@
 
 	<oauth:web-expression-handler id="oauthWebExpressionHandler" />
 
+	<bean class="com.cnpanoramio.webapp.listener.AuthenticationListener" />
 </beans>

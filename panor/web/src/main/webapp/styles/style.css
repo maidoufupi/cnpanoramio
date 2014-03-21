@@ -33,7 +33,7 @@ body#login {
     color: #0099ff;
 }
 
-/* navbar-start */
+/* navbar-start *******************************************************/
 .navbar.navbar-fixed-top {
     background-color: #000000;
 }
@@ -42,8 +42,8 @@ body#login {
     font-size: 16px;
 }
 
-.navbar.navbar-fixed-top a {
-    color: #7e7e7e;
+#nav-search-form .form-control {
+    width: auto;
 }
 
 .navbar.navbar-fixed-top span {
@@ -84,7 +84,8 @@ body#login {
     width: 130px;
     height: 90%;
 }
-/* navbar-end */
+
+/* navbar-end *********************************/
 
 #switchLocale {
     position: absolute;

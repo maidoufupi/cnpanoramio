@@ -478,15 +478,15 @@
 		<jdbc.version>5.1.22</jdbc.version>
 		<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
 
-		<db.name>panor</db.name>
+		<!-- <db.name>panor</db.name>
 		<jdbc.url>jdbc:mysql://localhost/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
 		<jdbc.username>root</jdbc.username>
-		<jdbc.password>root</jdbc.password>
+		<jdbc.password>root</jdbc.password> -->
 
-		<!-- <db.name>db775f7wf1lr50gp</db.name>
+		<db.name>db775f7wf1lr50gp</db.name>
 		<jdbc.url>jdbc:mysql://panoramio.mysql.rds.aliyuncs.com/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
 		<jdbc.username>db775f7wf1lr50gp</jdbc.username>
-		<jdbc.password>String0int</jdbc.password> -->
+		<jdbc.password>String0int</jdbc.password>
 
 		<contextpath-name>/</contextpath-name>
 	</properties>

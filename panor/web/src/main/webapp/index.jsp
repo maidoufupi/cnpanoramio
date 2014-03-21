@@ -52,7 +52,7 @@
         function setPhoto(photo) {
             $(".front-photo_sizer img").attr("src", ctx + "/api/rest/photo/" + photo.id + "/1");
             
-            $.cnmap.setCenter(photo.lat, photo.lng);
+            cnmap.setCenter(photo.lat, photo.lng);
             if(!photo.mark) {
             	photo.mark = true;
             	$.cnmap.addMarkerInCenter();
@@ -70,7 +70,7 @@
             }
         }
 
-        var map = $.cnmap.initMap("map-canvas", {
+        var map = cnmap.initMap("map-canvas", {
             //toolbar: true,
 //            scrollzoom: true,
             overview: true,
@@ -82,13 +82,16 @@
             var windowW = $(window).width();
             oldWidth = windowW;
             windowW = windowW/4;
-            $.cnmap.panBy(windowW, 0);
+            cnmap.panBy(windowW, 0);
             
             restclient.index.read('photo').done(function(data) {
                 photos = data;
                 photo_index = 0;
-                setPhoto(photos[photo_index]);
-                photo_index = (photo_index + 1) % photos.length;
+                if(photos[photo_index]) {
+                	setPhoto(photos[photo_index]);
+                	photo_index = (photo_index + 1) % photos.length;
+                }                
+                
             })
         }
     }

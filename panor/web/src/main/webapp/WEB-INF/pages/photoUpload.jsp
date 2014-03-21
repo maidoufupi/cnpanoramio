@@ -35,12 +35,6 @@
     <link rel="stylesheet" href="<c:url value="/styles/modal.css"/>">
 </head>
 <body>
-    <script src="<c:url value="/bower_components/angular/angular.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-cookies/angular-cookies.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-route/angular-route.js"/>"></script>
-    <script src="<c:url value="/bower_components/angular-resource/angular-resource.min.js"/>"></script>
-    <script src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap.min.js"/>"></script>
-    <script src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"/>"></script>
     <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"/>"></script>
     <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
@@ -71,13 +65,17 @@
 	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.gaode.js"/>"></script>
    </c:otherwise>
 </c:choose>
-
+<script>
+	$(document).ready(function () {
+			angular.bootstrap(document.getElementById("fileupload"), ['fileuploadApp']);
+	})
+</script>
 <div class="container">
     <h1>上传图片</h1>
     <h2 class="lead">到地图上</h2>
     
      <!-- The file upload form used as target for the file upload widget -->
-    <form id="fileupload" action="<c:url value="/api/rest/photo/upload"/>" method="POST" enctype="multipart/form-data" data-ng-app="fileuploadApp" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
+    <form id="fileupload" action="<c:url value="/api/rest/photo/upload"/>" method="POST" enctype="multipart/form-data" data-ng-controller="DemoFileUploadController" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
         <noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->

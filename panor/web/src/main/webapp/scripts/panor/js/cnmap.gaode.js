@@ -5,14 +5,14 @@
  * Time: 下午5:45
  * To change this template use File | Settings | File Templates.
  */
-(function ($) {
+(function (window, $) {
     "use strict";
 
     var map;
     var geocoder;
 
-    $.cnmap = $.cnmap || {};
-    $.cnmap.initMap = function (mapCanvas, opts) {
+    window.cnmap = window.cnmap || {};
+    window.cnmap.initMap = function (mapCanvas, opts) {
         opts = opts || {};
 
         map = new AMap.Map(mapCanvas, {resizeEnable: true});
@@ -61,7 +61,7 @@
         return map;
     }
 
-    $.cnmap.addMarkerInCenter = function(imap) {
+    window.cnmap.addMarkerInCenter = function(imap) {
         var thismap = imap || map;
         var marker = new AMap.Marker();
         marker.setMap(thismap);
@@ -69,23 +69,23 @@
         marker.show();
     }
 
-    $.cnmap.setCenter = function(lat, lng, imap) {
+    window.cnmap.setCenter = function(lat, lng, imap) {
         var thismap = imap || map;
         var center = new AMap.LngLat(lng, lat);
         thismap.setCenter(center);
     }
 
-    $.cnmap.panBy = function(x, y, imap) {
+    window.cnmap.panBy = function(x, y, imap) {
         var thismap = imap || map;
         thismap.panBy(x, y);
     }
 
-    $.cnmap.setZoom = function(zoom, imap) {
+    window.cnmap.setZoom = function(zoom, imap) {
         var thismap = imap || map;
         thismap.setZoom(zoom);
     }
 
-})(jQuery)
+})(window, jQuery)
 
 /*
  HYBRID	This map type displays a transparent layer of major streets on satellite images.

@@ -33,8 +33,8 @@
 						<table class="table table-hover">
 							<tr class="row">
 								<td><label for="name">用户名称：</label></td>
-								<td><input class="text" id="name" name="name" value="${settings.name}"
-									size="40"> <span class="form-help">
+								<td><input class="text form-control" id="name" name="name" value="${settings.name}"
+									size="40" > <span class="form-help">
 
 										用户名称将显示在您的照片下方、讨论区帖子等等… </span></td>
 							</tr>
@@ -42,25 +42,23 @@
 							<tr class="row">
 								<td><label for="username">易记名字 <span>（可选）</span>︰
 								</label></td>
-								<td><input class="text" id="username" name="urlName"
+								<td><input class="text form-control" id="username" name="urlName"
 									value="${settings.urlName}" size="40"> <span
-									class="form-help twolines"> 它将会出现在您的网址中。 <br>
-
-										比如：http://panoramio.cn/user/<strong>eduardo</strong>
+									class="form-help twolines"> 它将会出现在您的网址中。比如：http://panoramio.cn/user/<strong>eduardo</strong>
 								</span></td>
 							</tr>
 							<tr class="row">
 								<td><label for="homepage_url">您的网页<span>（可选）</span>：
 								</label></td>
-								<td><input class="text" id="homepage_url"
-									name="homepageUrl" value="${settings.homepageUrl}" size="55"></td>
+								<td><input class="text form-control" id="homepage_url"
+									name="homepageUrl" value="${settings.homepageUrl}" size="55" ></td>
 							</tr>
 							<tr class="row">
 								<td><label for="homepage_url"> 您的头像 <span>（可选）</span>：
 								</label></td>
 								<td>
 									<div id="current-picture">
-										<img id="avatar_picture" src="user_avatar.png" width="96"
+										<img id="avatar_picture" src="images/user_avatar.png" width="96"
 											height="96" alt="您的头像"> <a href="#" id="change_avatar">更改头像</a>
 									</div>
 								</td>
@@ -69,7 +67,7 @@
 								<td><label for="description"> 写一些关于您自己 <span>（可选）</span>︰
 								</label></td>
 								<td><textarea id="description" name="description" cols="55"
-										rows="9">${settings.description}</textarea></td>
+										rows="9" class="form-control">${settings.description}</textarea></td>
 							</tr>
 						</table>
 					</div>

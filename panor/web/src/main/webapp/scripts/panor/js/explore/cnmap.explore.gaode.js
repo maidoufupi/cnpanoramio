@@ -55,33 +55,33 @@
             }
         }
 
-        $(window).bind( 'hashchange', function(e) {
-            // Get the hash (fragment) as a string, with any leading # removed. Note that
-            // in jQuery 1.4, you should use e.fragment instead of $.param.fragment().
-            if(changeState) {
-                return;
-            }
-            var url = $.param.fragment();
-            var stateObj = $.deparam(url);
-
-            if(stateObj.lat && stateObj.lng) {
-                if(hashObj.lat != stateObj.lat ||
-                    hashObj.lng != stateObj.lng ||
-                    hashObj.zoom != stateObj.zoom ) {
-                    if(this.setState) {
-                        clearTimeout(this.setState);
-                    }
-                    changeState = true;
-                    hashObj = stateObj;
-                    $.cnmap.setCenter(stateObj.lat, stateObj.lng, map);
-                    if(stateObj.zoom) {
-                        $.cnmap.setZoom(stateObj.zoom, map);
-                    }
-                    this.setState = setTimeout(function() {
-                        changeState = false;
-                    }, 500);
-                }
-            }
-        })
+//        $(window).bind( 'hashchange', function(e) {
+//            // Get the hash (fragment) as a string, with any leading # removed. Note that
+//            // in jQuery 1.4, you should use e.fragment instead of $.param.fragment().
+//            if(changeState) {
+//                return;
+//            }
+//            var url = $.param.fragment();
+//            var stateObj = $.deparam(url);
+//
+//            if(stateObj.lat && stateObj.lng) {
+//                if(hashObj.lat != stateObj.lat ||
+//                    hashObj.lng != stateObj.lng ||
+//                    hashObj.zoom != stateObj.zoom ) {
+//                    if(this.setState) {
+//                        clearTimeout(this.setState);
+//                    }
+//                    changeState = true;
+//                    hashObj = stateObj;
+//                    $.cnmap.setCenter(stateObj.lat, stateObj.lng, map);
+//                    if(stateObj.zoom) {
+//                        $.cnmap.setZoom(stateObj.zoom, map);
+//                    }
+//                    this.setState = setTimeout(function() {
+//                        changeState = false;
+//                    }, 500);
+//                }
+//            }
+//        })
     }
-})(jQuery)
+})(jQuery);

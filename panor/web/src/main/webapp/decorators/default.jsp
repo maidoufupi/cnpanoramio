@@ -16,18 +16,28 @@
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/style.css'/>" />
     <decorator:head/>
 
-    <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/sass-bootstrap/dist/js/bootstrap.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/jquery.cookie/jquery.cookie.js'/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular/angular.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-route/angular-route.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-resource/angular-resource.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-cookies/angular-cookies.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-sanitize/angular-sanitize.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"/>"></script>
+    
+    <script type="text/javascript" src="<c:url value='/scripts/controllers/NavbarCtrl.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
     <script>
 	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径
 	    window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录
+	    window.userId = "${sessionScope.userId}"; // 用户ID
 	    window.apirest = ctx + "/api/rest";
-	    window.mapVendor = '<c:out value="${sessionScope.mapVendor}"/>' || "gps";
+	    window.mapVendor = '<c:out value="${sessionScope.mapVendor}"/>' || "gaode";
     </script>
 </head>
-<body<decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>>
+<body <decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>>
     <c:set var="currentMenu" scope="request"><decorator:getProperty property="meta.menu"/></c:set>
 
     <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
@@ -53,17 +63,10 @@
     </div>
 
     <div class="container">
+    	
         <%@ include file="/common/messages.jsp" %>
         <div class="row">
             <decorator:body/>
-
-            <%-- <c:if test="${currentMenu == 'AdminMenu'}">
-                <div class="span2">
-                <menu:useMenuDisplayer name="Velocity" config="navlistMenu.vm" permissions="rolesAdapter">
-                    <menu:displayMenu name="AdminMenu"/>
-                </menu:useMenuDisplayer>
-                </div>
-            </c:if> --%>
         </div>
     </div>
 

@@ -1,14 +1,14 @@
 'use strict';
 
-angular.module('cnmapApp', [
+angular.module('ponm.mApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'ponm.NavbarCtrl',
+  'exploreWorldApp'
 ])
   .config(function ($routeProvider) {
   })
     .run(function() {
-        window.ctx = "http://localhost:8080/panor-web";
-        window.apirest = "http://localhost:8080/panor-web/api/rest";
     });

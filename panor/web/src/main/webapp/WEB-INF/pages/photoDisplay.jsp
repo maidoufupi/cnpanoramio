@@ -6,14 +6,8 @@
 <meta name="menu" content="AdminMenu" />
 <link href="<c:url value="/styles/PhotoDisplay.css"/>" rel="stylesheet">
 </head>
-<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
 
-<!-- angularjs -->
-    <script type="text/javascript" src="<c:url value="/bower_components/angular/angular.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-cookies/angular-cookies.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-resource/angular-resource.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-sanitize/angular-sanitize.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-route/angular-route.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-mapgaode/src/ui-map.js"/>"></script>
     
@@ -24,15 +18,12 @@
 <script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.comm.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/scripts/panor/js/cnmap.gaode.js'/>"></script>
 
-
-<div class="interim-important_notice_wrapper hide">
-	<div class="interim-important_notice">
-		将您的Google+帐户与Panoramio<a class="interim-important_notice_link"
-			href="#" id="gplus_connector">相关联</a>。<a
-			class="interim-important_notice_link" href="/help/gplus-faq">了解详情</a>。
-	</div>
-</div>
-<div class="container" ng-app="photoApp" ng-controller="PhotoCtrl">
+<script>
+	$(document).ready(function () {
+			angular.bootstrap(document.getElementById("photoApp"), ['photoApp']);
+	})
+</script>
+<div id="photoApp" class="container" ng-controller="PhotoCtrl">
 
     <div class="photo-col">
         <div id="main-photo-wrapper" data-id="<c:url value='${photo.id}'/>">
