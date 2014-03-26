@@ -15,7 +15,8 @@ import com.cnpanoramio.service.PhotoPanoramioIndexService;
 
 @Service("panoramioIndexService")
 @Transactional
-public class PhotoPanoramioIndexServiceImpl implements PhotoPanoramioIndexService {
+public class PhotoPanoramioIndexServiceImpl implements
+		PhotoPanoramioIndexService {
 
 	@Autowired
 	private PhotoPanoramioIndexDao panorIndexDao;
@@ -28,21 +29,37 @@ public class PhotoPanoramioIndexServiceImpl implements PhotoPanoramioIndexServic
 	@Override
 	public List<PhotoPanoramio> getPanoramio(Point sw, Point ne, int level,
 			MapVendor vendor, int width, int height) {
-		return panorIndexDao.getPhotoPanoramio(sw, ne, level, vendor, width, height);
+		return panorIndexDao.getPhotoPanoramio(sw, ne, level, vendor, width,
+				height);
 	}
 
 	@Override
 	public List<PhotoPanoramio> getUserPhotoPanoramio(Double swLat,
 			Double swLng, Double neLat, Double neLng, int level,
 			MapVendor vendor, int width, int height, Long userId) {
-		return panorIndexDao.getUserPhotoPanoramio(swLat, swLng, neLat, neLng, level, vendor, width, height, userId);
+		return panorIndexDao.getUserPhotoPanoramio(swLat, swLng, neLat, neLng,
+				level, vendor, width, height, userId);
 	}
 
 	@Override
 	public List<PhotoPanoramio> getUserFavPanoramio(Double swLat, Double swLng,
 			Double neLat, Double neLng, int level, MapVendor vendor, int width,
 			int height, Long userId) {
-		return panorIndexDao.getUserFavPanoramio(swLat, swLng, neLat, neLng, level, vendor, width, height, userId);
-	}	
+		return panorIndexDao.getUserFavPanoramio(swLat, swLng, neLat, neLng,
+				level, vendor, width, height, userId);
+	}
+
+	@Override
+	public boolean updatePhotoLatestIndex() {
+		return panorIndexDao.updatePhotoLatestIndex();
+	}
+
+	@Override
+	public List<PhotoPanoramio> getLatestPanoramio(Double swLat, Double swLng,
+			Double neLat, Double neLng, int level, MapVendor vendor, int width,
+			int height) {
+		return panorIndexDao.getLatestPanoramio(swLat, swLng, neLat, neLng,
+				level, vendor, width, height);
+	}
 
 }

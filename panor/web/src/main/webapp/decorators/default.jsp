@@ -24,8 +24,8 @@
     <script type="text/javascript" src="<c:url value="/bower_components/angular-resource/angular-resource.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-cookies/angular-cookies.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-sanitize/angular-sanitize.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"/>"></script>
     
     <script type="text/javascript" src="<c:url value='/scripts/controllers/NavbarCtrl.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>

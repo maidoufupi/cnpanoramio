@@ -20,9 +20,14 @@
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <!--<script type="text/javascript" src="scripts/controllers/GeoSearchCtrl.js"></script>-->
     <script type="text/javascript" src="scripts/controllers/NavbarCtrl.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('#exploreWorld').popover()
+        })
+    </script>
 </head>
 <body>
-<div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-app="ponm.NavbarCtrl">
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-app="ponm.Navbar" data-ng-app="ponm.NavbarCtrl">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -49,8 +54,9 @@
 
             <ul class="nav navbar-nav navbar-right">
 
-                <li popover="游览地图" popover-trigger="mouseenter" popover-placement="bottom">
-                    <a href="/exploreWorld" >
+                <li id="exploreWorld" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="游览地图"
+                    >
+                    <a href="/map" >
                         <span class="glyphicon glyphicon-plane white"></span>
                     </a>
                 </li>
@@ -81,5 +87,12 @@
     </div>
 </div>
 
+<div id="footer">
+        <span class="left">Version 1.0-SNAPSHOT
+            | 当前用户: user</span>
+        <span class="right">
+            © 2014<a href="http://raibledesigns.com">China Panoramio</a>
+        </span>
+</div>
 </body>
 </html>

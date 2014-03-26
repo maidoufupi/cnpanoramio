@@ -26,7 +26,7 @@ import java.util.List;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 @Controller
-@RequestMapping("/exploreWorld*")
+@RequestMapping("/map*")
 public class ExploreWorldController {
     private transient final Log log = LogFactory.getLog(ExploreWorldController.class);
 

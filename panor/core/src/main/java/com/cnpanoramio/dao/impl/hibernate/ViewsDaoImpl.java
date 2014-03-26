@@ -60,7 +60,11 @@ public class ViewsDaoImpl extends GenericDaoHibernate<Views, Views.ViewsPK>
 
 		criteria.setProjection(Projections.sum("count"));
 		List<Long> views = criteria.list();
-		return views.get(0).intValue();
+		if(null == views.get(0)) {
+			return 0;
+		}else {
+			return views.get(0).intValue();			
+		}
 	}
 
 	@Override

@@ -5,7 +5,11 @@ import org.appfuse.Constants;
 import org.appfuse.model.User;
 import org.appfuse.service.RoleManager;
 import org.appfuse.service.UserExistsException;
+
+import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.webapp.util.RequestUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.Locale;
 
 /**
@@ -30,6 +35,9 @@ import java.util.Locale;
 @RequestMapping("/signup*")
 public class SignupController extends BaseFormController {
     private RoleManager roleManager;
+    
+    @Autowired
+	private UserSettingsManager userSettingsService = null;
 
     @Autowired
     public void setRoleManager(RoleManager roleManager) {
@@ -68,9 +76,14 @@ public class SignupController extends BaseFormController {
 
         // Set the default user role on this new user
         user.addRole(roleManager.getRole(Constants.USER_ROLE));
+        
+        // 用户默认详细设置
+        UserSettings userSettings = new UserSettings();
+        userSettings.setAvatar(1L);
 
         try {
             this.getUserManager().saveUser(user);
+            userSettingsService.save(userSettings);
         } catch (AccessDeniedException ade) {
             // thrown by UserSecurityAdvice configured in aop:advisor userManagerSecurity
             log.warn(ade.getMessage());

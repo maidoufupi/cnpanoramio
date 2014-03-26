@@ -43,7 +43,7 @@ public class UserSettingsImpl implements UserSettingsService, UserSettingsManage
 	private UserDao userloginDao;
 	
 	@Override
-	public Boolean save(UserSettings userSettings) {
+	public UserSettings save(UserSettings userSettings) {
 		
 		User user = getCurrentUser();
         
@@ -53,9 +53,9 @@ public class UserSettingsImpl implements UserSettingsService, UserSettingsManage
 			httpSession.setAttribute("mapVendor", userSettings.getMapVendor());
 		}catch(Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}		
-		return true;
+		return userSettings;
 	}
 	
 	@Override

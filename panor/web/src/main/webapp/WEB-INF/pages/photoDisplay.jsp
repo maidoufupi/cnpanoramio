@@ -14,9 +14,37 @@
     <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/controllers/PhotoCtrl.js"/>"></script>
     
-<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
 <script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.comm.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/scripts/panor/js/cnmap.gaode.js'/>"></script>
+<script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.Panoramio.js"/>"></script>
+
+<c:choose>
+  <c:when test='${sessionScope.mapVendor eq "baidu"}'>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.baidu.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.baidu.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.baidu.js"/>"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
+  </c:when>
+  <c:when test='${sessionScope.mapVendor eq "qq"}'>
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.qq.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.qq.js"/>"></script>
+  </c:when>
+  <c:when test='${sessionScope.mapVendor eq "gaode"}'>
+    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+  </c:when>
+  <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
+  
+  </c:when>
+  <c:otherwise>
+    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+  </c:otherwise>
+</c:choose>
 
 <script>
 	$(document).ready(function () {
@@ -28,7 +56,7 @@
     <div class="photo-col">
         <div id="main-photo-wrapper" data-id="<c:url value='${photo.id}'/>">
             <a id="main-photo" href="#">
-                <img ng-src="{{apirest}}/{{photoId}}/1" alt="{{photo.description}}" id="main-photo_photo"
+                <img ng-src="{{apirest}}/photo/{{photoId}}/1" alt="{{photo.description}}" id="main-photo_photo"
                      style="max-height: 541px;">
             </a>
         </div>
@@ -130,7 +158,7 @@
         </div>
         <div id="comments_wrapper">
             <h2 id="users_comments">
-                Comments ({{comment.count}})
+             	评论 ({{comment.totalItems}})
             </h2>
 
             <div class="paginator-wrapper">
@@ -153,23 +181,28 @@
                 </div>
             </div>
 
-            <div class="paginator-wrapper">
+            <div class="paginator-wrapper" data-ng-show="comment.totalItems > 0">
+            	<pagination items-per-page="comment.pageSize" total-items="comment.totalItems" 
+            				page="comment.currentPage" max-size="comment.maxSize" class="pagination-sm" 
+            				boundary-links="true" rotate="false" num-pages="comment.numPages"></pagination>
             </div>
         </div>
 
         <form action="" method="post" id="comment" ng-show="user.login" >
             <h3>发送评论 <span>(以 {{userOpenInfo.name}})</span></h3>
-            <textarea cols="50" rows="3" id="tcomment" name="comment" ng-model="comment.content" class="form-control"></textarea>
+            <textarea data-ng-trim cols="50" rows="3" id="tcomment" name="comment" ng-model="comment.content" class="form-control"></textarea>
             <br>
             <button ng-click="save(comment.content)" id="submit_comment"
-                   class="button button-positive">发送评论</button>
+                   class="btn btn-default">发送评论</button>
             <!--            <a href="/help_format/" id="help_format" rel="help" target="_blank">
                             想用黑体，斜体或链接？
                         </a>-->
+            <div style="height: 50px"></div>
         </form>
     </div>
     <div class="info-col">
         <div class="interim-info-card photo-page-card">
+       		<h2>用户</h2>
             <div id="profile_pic_info">
                 <a href="{{ctx}}/user/{{userOpenInfo.id}}">
                 	<img ng-src="{{ctx}}/images/user_avatar.png"
@@ -235,41 +268,28 @@
             </div>
         </div>
         <div class="interim-info-card photo-page-card">
-            <div id="map_info_breadcrumbs">
-                <a href="/map/">World</a> •
-                <a href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=12&amp;k=2">柬埔寨</a> • <a
-                    href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=9&amp;k=2">暹粒省</a>
-            </div>
-            <div id="map_info_name">
-                <a href="/map/#lt=13.406531&amp;ln=103.872785&amp;z=12&amp;k=2">Siem Reap</a>
-            </div>
+            <h2>地图</h2>
             <div id="minimap1" ui-map="minimap1" ui-options="mapOptions"></div>
-            <div id="nearby_photos"><a href="/photo/54671273"><img class="nearby-img"
-                                                                   src="http://mw2.google.com/mw-panoramio/photos/square/54671273.jpg"
-                                                                   height="44" width="44" alt=""></a><a
-                    href="/photo/145928"><img class="nearby-img"
-                                              src="http://mw2.google.com/mw-panoramio/photos/square/145928.jpg"
-                                              height="44" width="44" alt=""></a><a href="/photo/64643919"><img
-                    class="selected-nearby-img" src="http://mw2.google.com/mw-panoramio/photos/square/64643919.jpg"
-                    height="44" width="44" alt=""></a>
-
-                <div class="next-photo"></div>
-                <div class="next-photo"></div>
+            <div id="nearby_photos">
+                <a data-ng-repeat="photo in nearby_photos" data-ng-href="{{ctx}}/photo/{{photo.photoId}}">
+                    <img class="nearby-img" data-ng-src="{{apirest}}/photo/{{photo.photoId}}/3"
+                         height="44" width="44" alt="">
+                </a>
             </div>
             <div id="nearby">
                 <p id="place">
-                    Photo taken in {{gpsInfo.gps.address}}
+                    照片拍摄于 {{gpsInfo.gps.address}}
                 </p>
 
                 <div id="location" class="photo_mapped">
                     <div class="geo">
-                        <a title="查看这片区域" href="">
+                        <a title="查看这片区域" href="/map#lat={{gpsInfo.gps.lat}}&{{gpsInfo.gps.lng}}&zoom=17">
                             <abbr class="latitude" title="{{gpsInfo.gps.lat}}">{{gpsInfo.lat}}</abbr>&nbsp;
                             <abbr class="longitude" title="{{gpsInfo.gps.lng}}">{{gpsInfo.lng}}</abbr>
                         </a>
                     </div>
                     <p id="misplaced">
-                        <a id="map_photo" href="/map_photo/?id=64643919">
+                        <a id="map_photo" href="/map_photo/?id={{photoId}}">
                             放错地点了吗？建议新的位置
                         </a>
                     </p>
@@ -294,7 +314,7 @@
             </ul>
         </div>
         <div class="interim-info-card photo-page-card">
-            <h2>Photo details</h2>
+            <h2>相机信息</h2>
             <ul id="details">
                 <li>
                     于 {{photo.create_time}} 上传

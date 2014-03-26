@@ -8,8 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 @Entity
-@Table(name = "photo_panoramio_index")
-public class PhotoPanoramioIndex {
+@Table(name = "photo_latest_index")
+public class PhotoLatestIndex {
 
 	@EmbeddedId
 	private PhotoPanoramioIndexPK pk;

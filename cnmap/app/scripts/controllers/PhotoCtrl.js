@@ -7,26 +7,37 @@ angular.module('photoApp', ['ngCookies',
         'ngResource',
         'ngSanitize',
         'ngRoute',
+        'ui.bootstrap',
         'ui.mapgaode',
         'cnmapApp'])
     .controller('PhotoCtrl', ['$window', '$location', '$log', '$rootScope', '$scope', '$cookieStore', '$cookies', 'PhotoService', 'CommentService', 'UserService',
         function ($window, $location, $log, $rootScope, $scope, $cookieStore, $cookies, PhotoService, CommentService, UserService) {
 
             $scope.ctx = $window.ctx;
+            $scope.apirest = $window.apirest;
 
             var url = $location.absUrl();
             var photo = url.match(/\/photo\/[0-9]+/g);
             if(photo) {
                 $scope.photoId = photo[0].match(/[0-9]+/g)[0];
             }else {
-                $scope.photoId = 1;
+                $scope.photoId = 9;
             }
 
-            $scope.apirest = $window.apirest + "/photo";
-
             $scope.photo = {};
-            $scope.comment = {};
+            // comments vars
+            $scope.comment = {
+                pageSize: 10,
+                totalItems: 0,
+                numPages: 0,
+                currentPage: 1,
+                maxSize: 10
+            };
             $scope.comments = [];
+
+            $scope.$watch('comment.currentPage', function() {
+                getComments();
+            });
 
             // 用户属性
             $scope.user = {};
@@ -75,17 +86,24 @@ angular.module('photoApp', ['ngCookies',
             })
 
             CommentService.getPhotos({photoId: $scope.photoId}, function (data) {
-                $scope.comment.count = data.count;
-                console.log(data);
+                $scope.comment.totalItems = data.count;
+                $scope.comment.numPages = Math.round($scope.bigTotalItems / $scope.comment.pageSize);
             }, function(error) {
                 console.log(error)
             })
 
-            CommentService.getPhotos({photoId: $scope.photoId, pageSize: 10, pageNo: 1}, function (data) {
-                $scope.comments = data.comments;
+            /**
+             * 获取评论
+             */
+            function getComments() {
+                CommentService.getPhotos({photoId: $scope.photoId, pageSize: $scope.comment.pageSize, pageNo: $scope.comment.currentPage}, function (data) {
+                    $scope.comments = data.comments;
+                }, function(error) {
+                });
+            }
 
-            }, function(error) {
-            });
+            //
+            getComments();
 
             $scope.setEditable = function(who) {
                 if($scope.user.login == 'true' &&
@@ -99,11 +117,14 @@ angular.module('photoApp', ['ngCookies',
             };
 
             $scope.save = function(content) {
-                CommentService.save({photoId: $scope.photoId, content: content}, function(data) {
-                    $scope.comment.content = "";
-                    $scope.comment.count = $scope.comment.count + 1;
-                    $scope.comments.push(data);
-                })
+                if(content) {
+                    CommentService.save({photoId: $scope.photoId, content: content}, function(data) {
+                        $scope.comment.content = "";
+                        $scope.comment.count = $scope.comment.count + 1;
+                        $scope.comments.push(data);
+                    })
+                }
+
             }
 
             $scope.favorite = function() {
@@ -128,13 +149,43 @@ angular.module('photoApp', ['ngCookies',
             $scope.mapOptions = {
                 // map plugin config
                 toolbar: true,
-                scrollzoom: true,
+                scrollzoom: false,
                 maptype: 'SATELLITE',
 //                overview: true,
 //                locatecity: true,
                 // map-self config
                 resizeEnable: true,
+                level: 13,
                 // ui map config
                 uiMapCache: false
             }
-        }])
+
+            var panoramioLayer = new cnmap.PanoramioLayer(
+                {suppressInfoWindows: false,
+                    mapVendor: $window.mapVendor || "gaode"});
+            panoramioLayer.initEnv($window.ctx);
+            $(panoramioLayer).bind("data_changed", function (e, data) {
+                $scope.$apply(function (scope) {
+
+                    // 更新图片
+                    $scope.update_nearby_photos(data);
+                });
+            })
+            $scope.$watch('minimap1', function () {
+                if (!$scope.map) {
+                    $scope.map = $scope.minimap1;
+                    var mapObj = $scope.minimap1;
+                    panoramioLayer.setMap(mapObj);
+
+                    mapObj.plugin(["AMap.ToolBar"], function () {
+                        //加载工具条
+                        var tool = new AMap.ToolBar();
+                        mapObj.addControl(tool);
+                    });
+                }
+            });
+
+            $scope.update_nearby_photos = function (photos) {
+                $scope.nearby_photos = photos && photos.slice(0,5);
+            }
+        }]);

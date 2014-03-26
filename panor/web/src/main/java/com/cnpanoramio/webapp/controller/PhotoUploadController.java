@@ -25,7 +25,7 @@ import com.cnpanoramio.service.PhotoManager;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 @Controller
-@RequestMapping("/photoUpload*")
+@RequestMapping("/upload*")
 public class PhotoUploadController extends BaseFormController {
  
 	PhotoManager photoService = null;

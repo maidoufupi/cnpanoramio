@@ -18,6 +18,7 @@ import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.dao.PhotoPanoramioIndexDao;
 import com.cnpanoramio.domain.PhotoPanoramio;
 import com.cnpanoramio.domain.PhotoPanoramioIndex;
+import com.cnpanoramio.domain.PhotoPanoramioIndexPK;
 import com.cnpanoramio.domain.Point;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,12 +46,12 @@ public class PhotoPanoramioIndexDaoTest {
 	public void testPersisted() {
 		Long photoId = 5L;
 		PhotoPanoramioIndex index = new PhotoPanoramioIndex();
-		index.setPk(new PhotoPanoramioIndex.PhotoPanoramioIndexPK(1, 36D, 123D));
+		index.setPk(new PhotoPanoramioIndexPK(1, 36D, 123D));
 		index.setPhotoId(photoId);
 		photoPanoramioIndexDao.save(index);
 
 		PhotoPanoramioIndex out = photoPanoramioIndexDao
-				.get(new PhotoPanoramioIndex.PhotoPanoramioIndexPK(1, 36D, 123D));
+				.get(new PhotoPanoramioIndexPK(1, 36D, 123D));
 		Assert.assertTrue(out.getPhotoId() == photoId);
 	}
 
@@ -75,5 +76,11 @@ public class PhotoPanoramioIndexDaoTest {
 		for (PhotoPanoramio photo : photos) {
 			log.info(photo.getPhotoId());
 		}
+	}
+	
+	@Test
+	public void testGetLatestPanoramio() {
+		List<PhotoPanoramio> photos = photoPanoramioIndexDao.getLatestPanoramio(23D, 110D, 40D, 130D, 2, MapVendor.gaode, 100, 100);
+		Assert.assertTrue(photos.size() == 2);
 	}
 }

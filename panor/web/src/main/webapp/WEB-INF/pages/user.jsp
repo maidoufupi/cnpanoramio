@@ -73,12 +73,12 @@
 
                     <div id="user_header" style="display: block;">
                         <div class="user_header-best-or-all">
-                            <a class="user-page-best-enabled" href="/user/6324111?show=best">Best photos</a>
+                            <a class="user-page-best-enabled" href="/user/{{userId}}?show=best">Best photos</a>
                             <span class="user-page-best-disabled">All photos</span>
                         </div>
-                        <a href="/map/?user=6324111">
+                        <a href="/map/?user={{userId}}">
                             <img id="user_header-icon"
-                                 ng-src="{{ctx}}/images/marker.png"
+                                 ng-src="/images/marker.png"
                                  height="16" alt="">
                             <span id="user_header-map">view on map</span>
                         </a>
@@ -93,7 +93,7 @@
                 <div id="top-line-stats">
                     <div class="user-page_top-line-stat">
                         <div class="user-page_top-line-stat-value">
-                            <a href="/user/6324111/stats">30</a>
+                            <a href="/user/{{userId}}/stats">{{userOpenInfo.photoCount}}</a>
                         </div>
                         <div class="user-page_top-line-stat-label">
                             photos
@@ -101,7 +101,7 @@
                     </div>
                     <div class="user-page_top-line-stat">
                         <div class="user-page_top-line-stat-value">
-                            <a href="/user/6324111/stats">24</a>
+                            <a href="/user/{{userId}}/stats">24</a>
                         </div>
                         <div class="user-page_top-line-stat-label">
                             on Google Maps
@@ -110,7 +110,7 @@
 
                     <div class="user-page_top-line-stat">
                         <div class="user-page_top-line-stat-value">
-                            <a href="/user/6324111/stats">1539</a>
+                            <a href="/user/{{userId}}/stats">1539</a>
                         </div>
                         <div class="user-page_top-line-stat-label">
                             views
@@ -120,6 +120,10 @@
             </div>
             <div style="clear: both;"></div>
         </div>
+        <div class="paginator-wrapper" data-ng-show="photo.totalItems > 0">
+            <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
+        </div>
+
         <div class="masonry-container" masonry preserve-order>
             <div id="masonry-{{photo.id}}" class="masonry-brick" ng-repeat="photo in photos" masonry-brick>
                 <a href="{{ctx}}/photo/{{photo.id}}">
@@ -140,6 +144,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="paginator-wrapper" >
+            <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
         </div>
     </div>
     <div class="info-col">

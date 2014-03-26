@@ -56,7 +56,8 @@ public class CommentServiceImpl implements CommentService {
 		
 		comment.setId(commentD.getId());
 		comment.setUsername(me.getUsername());
-		
+		comment.setCreateTime(format.format(commentD.getCreateTime().getTime()));
+		comment.setUserId(commentD.getUser().getId());
 		return comment;		
 	}
 	

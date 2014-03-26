@@ -55,7 +55,7 @@
             cnmap.setCenter(photo.lat, photo.lng);
             if(!photo.mark) {
             	photo.mark = true;
-            	$.cnmap.addMarkerInCenter();
+            	cnmap.addMarkerInCenter();
             }
             
             $("div.imgLiquidFill").imgLiquid({

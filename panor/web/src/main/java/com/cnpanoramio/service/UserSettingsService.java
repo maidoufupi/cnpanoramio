@@ -14,7 +14,7 @@ public interface UserSettingsService {
 	@Produces("application/json")
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public Boolean save(UserSettings userSettings);
+	public UserSettings save(UserSettings userSettings);
 	
 	
 }

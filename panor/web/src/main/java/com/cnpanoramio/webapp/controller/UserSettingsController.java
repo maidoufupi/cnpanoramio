@@ -22,7 +22,7 @@ import com.cnpanoramio.service.UserSettingsManager;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 @Controller
-@RequestMapping("/userSettings*")
+@RequestMapping("/user_settings*")
 public class UserSettingsController extends BaseFormController {
 	
 	@Autowired

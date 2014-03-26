@@ -53,16 +53,15 @@ body {
 
 #preview div {
     padding: 0;
-    margin: 0;
+    margin: 2px;
     width: 112px;
     display: inline;
     float: left;
-    text-align: center;
-    overflow: hidden;
 }
 
 .preview_thumb_area img {
-    width: 112px;
+    max-width: 112px;
+    max-height: 112px;
 }
 
 #preview div a {

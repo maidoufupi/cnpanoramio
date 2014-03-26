@@ -45,6 +45,10 @@
                 height: size.height
             };
 
+            if(!!this.opts.latest) {
+                params.latest = true;
+            }
+
             if(!!this.opts.userId) {
                 params.userId = this.opts.userId;
                 if(!!this.opts.favorite) {
@@ -163,6 +167,19 @@
 
         this.getFavorite = function() {
             return this.opts.favorite;
+        }
+
+        /**
+         * 设置最新照片
+         *
+         * @param latest
+         */
+        this.setLatest = function(latest) {
+            this.opts.latest = !!latest;
+        }
+
+        this.getLatest = function() {
+            return this.opts.latest;
         }
 
         /**

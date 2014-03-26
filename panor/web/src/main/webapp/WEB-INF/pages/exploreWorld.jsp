@@ -12,11 +12,11 @@
 <body>
 	
     <script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/jquery-bbq/jquery.ba-bbq.js"/>"></script> 
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-mapgaode/src/ui-map.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.Panoramio.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/jQuery.parseParams.js"/>"></script> 
     <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/controllers/ExploreWorldCtrl.js"/>"></script>
 <c:choose>
@@ -66,24 +66,19 @@
                         <img class="loading" src="images/loading-p.gif" alt="读取中" style="display: none;">
                     </a>
                 </li>
-                <li id="tab_li_2">
-                    <a set="recent" order="popularity" tab="2" kml_text="Google 地球中的最新照片" kml_link="/kml/?recent" href="/map/?set=recent&amp;order=popularity">最新照片<span style="display:none" class="total_photos"></span>
-                        <img class="loading hide" src="images/loading-p.gif" alt="读取中">
-                    </a>
-                </li>
-                <li id="tab_li_7">
-                    <a set="places" order="popularity" tab="7" kml_text="谷歌地球里这个地方在所有的照片。" kml_link="/kml/?place=place_id" href="/map/?set=places&amp;order=popularity">地点<span style="display:none" class="total_photos"></span>
+                <li id="tab_li_2" data-ng-class="{active: tabs.latest}">
+                    <a data-ng-click="setPanormaioType('latest')" href="">最新照片<span style="display:none" class="total_photos"></span>
                         <img class="loading hide" src="images/loading-p.gif" alt="读取中">
                     </a>
                 </li>
                 <li id="tab_li_8" data-ng-class="{active: tabs.favorite}">
                     <a data-ng-click="setPanormaioType('favorite')" href="">收藏<span style="display:none" class="total_photos"></span>
-                        <img class="loading hide" src="img/loading-p.gif" alt="读取中">
+                        <img class="loading hide" src="images/loading-p.gif" alt="读取中">
                     </a>
                 </li>
                 <li id="tab_li_4" data-ng-class="{active: tabs.user}">
                     <a data-ng-click="setPanormaioType('user')" href="">您的照片<span style="display:none" class="total_photos"></span>
-                        <img class="loading hide" src="img/loading-p.gif" alt="读取中">
+                        <img class="loading hide" src="images/loading-p.gif" alt="读取中">
                     </a>
                 </li>
             </ul>
@@ -92,7 +87,7 @@
                     <a href="photo/{{photo.photoId}}">
                         <img title=""
                              id="r{{photo.photoId}}"
-                             ng-src="{{apirest}}/photo/{{photo.photoId}}/2">
+                             ng-src="api/rest/photo/{{photo.photoId}}/2">
                     </a>
                 </div>
             </div>

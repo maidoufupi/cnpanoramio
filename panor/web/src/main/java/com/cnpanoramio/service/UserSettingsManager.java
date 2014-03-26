@@ -7,7 +7,19 @@ import com.cnpanoramio.json.UserOpenInfo;
 
 public interface UserSettingsManager {
 	
+	/**
+	 * 获取当前用户的详细设置
+	 * 
+	 * @return
+	 */
 	public UserSettings getCurrentUserSettings();
+	
+	/**
+	 * 通过用户名查找详细设置
+	 * 
+	 * @param userName
+	 * @return
+	 */
 	public UserSettings getSettingsByUserName(String userName);
 	
 	/**
@@ -25,5 +37,13 @@ public interface UserSettingsManager {
 	 * @return
 	 */
 	public User getUser(String nameOrEmail);
+	
+	/**
+	 * 保存用户详细设置
+	 * 
+	 * @param settings
+	 * @return
+	 */
+	public UserSettings save(UserSettings settings);
 	
 }

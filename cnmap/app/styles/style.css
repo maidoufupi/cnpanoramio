@@ -247,13 +247,20 @@ span.pagelinks {
     position: fixed;
     bottom: 0;
     clear: both;
-    margin: 0 auto;
+    margin: auto auto;
     padding: 0 0 5px 0;
     border-top: 0 solid #f0f0f0;
     text-align: center;
     background-color: white;
     color: #808080;
     font-size: 0.9em;
+
+    -webkit-transition: right 2s; /* For Safari 3.1 to 6.0 */
+    transition: right 2s;
+}
+
+#footer:active {
+    right: 0;
 }
 
 #footer a {
@@ -470,9 +477,14 @@ body {
     font-weight: normal;
 }
 
+.interim-info-card {
+    display: inline-block;
+    width: 270px;
+    vertical-align: top;
+}
+
 .photo-page-card {
     min-width: 250px;
-    max-width: 260px;
     background-color: #fff;
     padding: 10px;
     margin: 0 0 13px;
@@ -567,4 +579,11 @@ body {
 .navbar-logo {
     width: 130px;
     height: 90%;
+}
+
+.paginator-wrapper {
+    width: 100%;
+    float: left;
+    margin-left: auto;
+    margin-right: auto;
 }

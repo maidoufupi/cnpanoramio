@@ -37,7 +37,7 @@
             $.cnmap.setCenter(photo.lat, photo.lng);
             if(!photo.mark) {
             	photo.mark = true;
-            	$.cnmap.addMarkerInCenter();
+            	cnmap.addMarkerInCenter();
             }
             
             $("div.imgLiquidFill").imgLiquid({
@@ -53,7 +53,7 @@
 
         }
 
-        var map = $.cnmap.initMap("map-canvas", {
+        var map = cnmap.initMap("map-canvas", {
             //toolbar: true,
 //            scrollzoom: true,
             overview: true,
@@ -65,7 +65,7 @@
             var windowW = $(window).width();
             oldWidth = windowW;
             windowW = windowW/4;
-            $.cnmap.panBy(windowW, 0);
+            cnmap.panBy(windowW, 0);
             
             restclient.index.read('photo').done(function(data) {
                 photos = data;

@@ -58,4 +58,27 @@ public interface PhotoPanoramioIndexService {
 	 * @return
 	 */
 	public List<PhotoPanoramio> getUserFavPanoramio(Double swLat, Double swLng, Double neLat, Double neLng, int level, MapVendor vendor, int width, int height, Long userId);
+	
+	/**
+	 * 更新最新图片索引表
+	 * 
+	 * @return
+	 */
+	public boolean updatePhotoLatestIndex();
+	
+	/**
+	 * 获取最新的图片
+	 * 
+	 * @param swLat
+	 * @param swLng
+	 * @param neLat
+	 * @param neLng
+	 * @param level
+	 * @param vendor
+	 * @param width
+	 * @param height
+	 * @param userId
+	 * @return
+	 */
+	public List<PhotoPanoramio> getLatestPanoramio(Double swLat, Double swLng, Double neLat, Double neLng, int level, MapVendor vendor, int width, int height);
 }
