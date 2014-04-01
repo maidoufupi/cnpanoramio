@@ -17,8 +17,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cnpanoramio.dao.AvatarDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.UserSettingsDao;
+import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.UserSettings;
 
@@ -39,6 +41,8 @@ public class UserSettingsDaoTest {
 	
 	@Autowired
 	UserSettingsDao userSettingsDao;
+	@Autowired
+	AvatarDao avatarDao;
 
 	UserSettings userSettings;
 
@@ -48,8 +52,8 @@ public class UserSettingsDaoTest {
 		user = new User();
 		user.setFirstName("tw");
 		user.setLastName("w");
-		user.setUsername("any");
-		user.setEmail("anypossible@foxmail.com");
+		user.setUsername("anyp");
+		user.setEmail("anypossible.w@foxmail.com");
 		user.setPassword("123456");
 		userDao.saveUser(user);
 		
@@ -67,10 +71,32 @@ public class UserSettingsDaoTest {
 
 	@Test
 	public void testUserSettingsPersisted() {
+		
 		userSettingsDao.save(userSettings);
 		userSettings = userSettingsDao.getByUserName("any");
 		log.info(userSettings.getName());
 		Assert.assertFalse(userSettingsDao.getAll().size() == 0);
+	}
+	
+	@Test
+	public void testGetUserTags() {
+		User user = userDao.get(3L);
+		List<String> tags = userSettingsDao.getUserTags(user);
+		
+		log.info(tags.size());
+		for(String tag : tags) {
+			log.info(tag);
+		}
+	}
+	
+	@Test
+	public void testAvatar() {
+		userSettings = userSettingsDao.get(3L);
+		Avatar avatar = new Avatar();
+		avatar.setUserSettings(userSettings);
+		avatar = avatarDao.save(avatar);
+		userSettings.setAvatar(avatar);
+		log.info(userSettings.getAvatar().getId());
 	}
 
 	public UserDao getUserDao() {

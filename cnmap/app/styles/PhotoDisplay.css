@@ -154,15 +154,6 @@ li {
     text-align: -webkit-match-parent;
 }
 
-#interim-tags li {
-    display: inline;
-    list-style-type: none;
-}
-
-#interim-tags li:before {
-    content: " \002022 ";
-}
-
 #details li {
     margin-bottom: 6px;
     padding-top: 0;

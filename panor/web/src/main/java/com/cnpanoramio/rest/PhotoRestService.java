@@ -115,6 +115,7 @@ public class PhotoRestService {
 	public PhotoResponse properties(@PathVariable String photoId,
 			@RequestBody final PhotoProperties properties) {
 		PhotoResponse reponse = new PhotoResponse();
+		
 		Long id = null;
 		
 		User me;
@@ -168,9 +169,10 @@ public class PhotoRestService {
 
 		Long id = null;
 		id = Long.parseLong(photoId);
-		// Photo photo = photoService.getPhoto(id);
+		
+		Photo photo = photoService.getPhoto(id);
 
-		File file = fileService.readFile(FileService.TYPE_IMAGE, id, level);
+		File file = fileService.readFile(FileService.TYPE_IMAGE, id, photo.getFileType(), level);
 
 		return new FileSystemResource(file);
 	}
@@ -209,6 +211,7 @@ public class PhotoRestService {
 			User me = UserUtil.getCurrentUser(userManager);
 			userId = me.getId();
 		} catch (UsernameNotFoundException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
 		}
 		
 		try {
@@ -241,6 +244,13 @@ public class PhotoRestService {
 		MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
 		PhotoResponse reponse = new PhotoResponse();
 
+		try {
+			User me = UserUtil.getCurrentUser(userManager);
+		} catch (UsernameNotFoundException ex) {
+			reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
+			return reponse;
+		}
+		
 		if (!file.isEmpty()) {
 			try {
 

@@ -6,6 +6,7 @@ import org.appfuse.model.User;
 import org.appfuse.service.RoleManager;
 import org.appfuse.service.UserExistsException;
 
+import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.webapp.util.RequestUtil;
@@ -34,6 +35,9 @@ import java.util.Locale;
 @Controller
 @RequestMapping("/signup*")
 public class SignupController extends BaseFormController {
+	
+	private Long avatarId = 1L;
+	
     private RoleManager roleManager;
     
     @Autowired
@@ -79,7 +83,10 @@ public class SignupController extends BaseFormController {
         
         // 用户默认详细设置
         UserSettings userSettings = new UserSettings();
-        userSettings.setAvatar(1L);
+        
+        // 设置默认头像
+//        Avatar avatar = userSettingsService.getAvatar(avatarId);
+//        userSettings.setAvatar(avatar);
 
         try {
             this.getUserManager().saveUser(user);

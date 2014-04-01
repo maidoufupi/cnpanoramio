@@ -72,8 +72,7 @@ public class PhotoServiceTest {
 		log.info(photo.getDetails().getFocalLength());
 		log.info(photo.getDetails().getFNumber());
 		log.info(photo.getDetails().getISO());
-		
-		
+				
 //		log.info(photo.getGpsPoint().getLat());
 //		log.info(photo.getGpsPoint().getLng());
 //		log.info(photo.getGpsPoint().getAlt());

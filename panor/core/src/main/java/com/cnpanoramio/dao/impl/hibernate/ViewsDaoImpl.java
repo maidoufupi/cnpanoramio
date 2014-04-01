@@ -1,11 +1,15 @@
 package com.cnpanoramio.dao.impl.hibernate;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
+import org.appfuse.model.User;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -121,6 +125,15 @@ public class ViewsDaoImpl extends GenericDaoHibernate<Views, Views.ViewsPK>
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
+	}
+	
+	@Override
+	public Long getUserPhotoViewCount(User user) {
+		SQLQuery query = getSession().createSQLQuery("select sum(v.count) from photo as p inner join views as v on p.id = v.photo_id where p.owner_id = :userid");
+		query.setParameter("userid", user.getId());
+		  
+		BigDecimal count = (BigDecimal) query.uniqueResult();
+		return count.longValue();
 	}
 
 }

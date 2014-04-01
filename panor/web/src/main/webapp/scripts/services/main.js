@@ -15,11 +15,17 @@ angular.module('cnmapApp', ['ngCookies',
             });
     }])
     .factory('UserPhoto', ['$window', '$resource', function ($window, $resource) {
-        return $resource($window.apirest + '/user/:userId/photos/:pageSize/:pageNo',
+        return $resource($window.apirest + '/user/:userId/photos/:type/:tag/:pageSize/:pageNo',
             {'userId': "@id"}, {
                 query: {
                     method: 'GET',
                     isArray: true
+                },
+                getByTag: {
+                    method: 'GET',
+                    params: {
+                        'type': 'tag'
+                    }
                 }
             });
     }])
@@ -68,3 +74,14 @@ angular.module('cnmapApp', ['ngCookies',
                 }
             });
     }])
+    .service('GPSConvertService', ['$window', '$resource', function ($window, $resource) {
+        return $resource($window.apirest + '/gps', {},
+            {
+                convert: {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            });
+    }]);

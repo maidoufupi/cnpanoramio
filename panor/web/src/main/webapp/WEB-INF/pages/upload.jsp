@@ -84,19 +84,19 @@
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
                     <i class="glyphicon glyphicon-plus"></i>
-                    <span>Add files...</span>
+                    <span>添加图片...</span>
                     <input type="file" name="files[]" multiple ng-disabled="disabled">
                 </span>
                 <button type="button" class="btn btn-primary start" data-ng-click="submit()">
                     <i class="glyphicon glyphicon-upload"></i>
-                    <span>Start upload</span>
+                    <span>开始上传</span>
                 </button>
                 <button type="button" class="btn btn-warning cancel" data-ng-click="cancel()">
                     <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel upload</span>
+                    <span>取消上传</span>
                 </button>
-                <button type="button" class="btn btn-primary" data-ng-click="changeLocation(queue)">
-                    <i class="glyphicon glyphicon-tint"></i>
+                <button type="button" class="btn btn-primary" data-ng-show="queue.length" data-ng-click="changeLocation(queue)">
+                    <i class="glyphicon glyphicon-map-marker"></i>
                     <span>更改位置</span>
                 </button>
                 <!-- The global file processing state -->
@@ -149,24 +149,25 @@
                     <bootstrap-tagsinput ng-model="file.tags"
                                          tagclass="getTagClass"
                                          placeholder="Last name"></bootstrap-tagsinput>
-                    <strong data-ng-show="file.error" class="error text-danger">{{file.error}}</strong>
+                    
                 </td>
                 <td>
                     <p class="size">{{file.size | formatFileSize}}</p>
                     <div class="progress progress-striped active fade" data-ng-class="{pending: 'in'}[file.$state()]" data-file-upload-progress="file.$progress()"><div class="progress-bar progress-bar-success" data-ng-style="{width: num + '%'}"></div></div>
+                    <strong data-ng-show="file.error" class="error text-danger">{{file.error}}</strong>
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary start" data-ng-click="file.$submit()" data-ng-hide="!file.$submit || options.autoUpload" data-ng-disabled="file.$state() == 'pending' || file.$state() == 'rejected'">
                         <i class="glyphicon glyphicon-upload"></i>
-                        <span>Start</span>
+                        <span>上传</span>
                     </button>
                     <button type="button" class="btn btn-warning cancel" data-ng-click="file.$cancel()" data-ng-hide="!file.$cancel">
                         <i class="glyphicon glyphicon-ban-circle"></i>
-                        <span>Cancel</span>
+                        <span>取消</span>
                     </button>
                     <button data-ng-controller="FileDestroyController" type="button" class="btn btn-danger destroy" data-ng-click="file.$destroy()" data-ng-hide="!file.$endestroy">
                         <i class="glyphicon glyphicon-trash"></i>
-                        <span>Delete</span>
+                        <span>删除</span>
                     </button>
                 </td>
                 <td>

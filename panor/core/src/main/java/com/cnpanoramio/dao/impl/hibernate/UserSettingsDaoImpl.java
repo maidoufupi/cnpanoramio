@@ -3,11 +3,13 @@ package com.cnpanoramio.dao.impl.hibernate;
 import java.util.List;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
+import org.appfuse.model.User;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.UserSettingsDao;
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 
 @Repository("userSettingsDao")
@@ -29,5 +31,14 @@ public class UserSettingsDaoImpl extends GenericDaoHibernate<UserSettings, Long>
         }else {
         	return null;
         }
+	}
+
+	@Override
+	public List<String> getUserTags(User user) {
+		Query query = getSession()
+				.createQuery("select distinct t.tag from Photo as p inner join p.tags as t where p.owner = :user");
+		query.setParameter("user", user);
+		List res = query.list();
+		return res;
 	}
 }

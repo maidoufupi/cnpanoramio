@@ -8,7 +8,9 @@ import org.apache.commons.logging.LogFactory;
 
 public interface FileService {
 	
-	public static final String TYPE_IMAGE = "P";
+	public static final String TYPE_IMAGE = "image";
+	public static final String TYPE_AVATAR = "avatar";
+	
 	public static final int THUMBNAIL_LEVEL_0 = 0;
 	public static final int THUMBNAIL_LEVEL_1 = 1;
 	public static final int THUMBNAIL_LEVEL_2 = 2;
@@ -36,8 +38,8 @@ public interface FileService {
      * @param ins
      * @return String
      */
-    public boolean saveFile(String fileType, Long fileKey, InputStream ins);
-    
+    public boolean saveFile(String fileType, Long fileKey, String fileExt, InputStream ins);
+
     /**
      * 读取文件
      * 
@@ -45,7 +47,7 @@ public interface FileService {
      * @param fileName
      * @return
      */
-    public File readFile(String fileType, Long fileKey, int level);
+    public File readFile(String fileType, Long fileKey, String fileExt, int level);
     
     /**
      * 删除文件
@@ -54,5 +56,5 @@ public interface FileService {
      * @param fileName
      * @return boolean
      */
-    public boolean deleteFile(String fileType, String fileName);
+    public boolean deleteFile(String fileType, Long fileKey, String fileExt);
 }

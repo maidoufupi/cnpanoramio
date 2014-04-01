@@ -1,7 +1,5 @@
 package com.cnpanoramio.webapp.controller;
 
-import java.util.Collection;
-
 import org.appfuse.dao.SearchException;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.UserSettingsManager;
@@ -58,13 +55,11 @@ public class UserController {
 		
 		try {
 			User user = userManager.get(Long.parseLong(userId));
-			Collection<Photo> photos = photoManager.getPhotosForUser(user, photo_page, pageSize);
 			int count = photoManager.getPhotoCount(user);
 			UserSettings userSettings = userSettingsManager.getSettingsByUserName(user.getUsername());
 			
 			model.addAttribute("count", count);
 			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("photos", photos);
 			model.addAttribute("user", user);
 			model.addAttribute("userSettings", userSettings);
 		} catch (Exception se) {

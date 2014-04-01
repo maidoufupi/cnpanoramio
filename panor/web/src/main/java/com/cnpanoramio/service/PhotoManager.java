@@ -85,14 +85,14 @@ public interface PhotoManager {
 	 * 
 	 * @return The photos for the current user.
 	 */
-	public Collection<Photo> getPhotosForUser(User user, int pageSize, int pageNo);
+	public Collection<PhotoProperties> getPhotosForUser(User user, int pageSize, int pageNo);
 	
 	/**
 	 * Load the photos for the user.
 	 * 
 	 * @return The photos for the user.
 	 */
-	public Collection<Photo> getPhotosForUser(String id, int pageSize, int pageNo);
+	public Collection<PhotoProperties> getPhotosForUser(String id, int pageSize, int pageNo);
 
 	/**
 	 * Get the photos count for the user.
@@ -102,13 +102,30 @@ public interface PhotoManager {
 	public int getPhotoCount(User user);
 	
 	/**
+	 * 获取用户图片在用户全部图片中的位置（按时间由大到小排序）
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public int getUserPhotoNum(User user, Long photoId);
+	
+	/**
+	 * 获取用户图片分页（按时间由大到小排序）
+	 * 
+	 * @param user
+	 * @param photoId
+	 * @return
+	 */
+	public Collection<PhotoProperties> getUserPhotosWithPhoto(User user, Long photoId);
+	
+	/**
 	 * Load a photo by id.
 	 * 
 	 * @param id
 	 *            The id of the photo.
 	 * @return The photo that was read.
 	 */
-	public InputStream loadPhoto(Long id);
+//	public InputStream loadPhoto(Long id);
 	
 	/**
 	 * 对图片加星 favorite
@@ -168,4 +185,33 @@ public interface PhotoManager {
 	 * @return
 	 */
 	public List<PhotoGps> getGPSInfo(Long id, MapVendor vendor);
+	
+	/**
+	 * 获取用户某个tag的图片总数
+	 * 
+	 * @param user
+	 * @param tag
+	 * @return
+	 */
+	public Long getUserPhotoCountByTag(Long userId, String tag);
+	
+	/**
+	 * 获取用户某个tag的所有图片
+	 * 
+	 * @param user
+	 * @param tag
+	 * @return
+	 */
+	public Collection<PhotoProperties> getUserPhotosByTag(Long userId, String tag);
+	
+	/**
+	 * 获取用户某个tag的图片(分页)
+	 * 
+	 * @param userId
+	 * @param tag
+	 * @param pageSize
+	 * @param pageNo
+	 * @return
+	 */
+	public Collection<PhotoProperties> getUserPhotoPageByTag(Long userId, String tag, int pageSize, int pageNo);
 }

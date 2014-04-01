@@ -88,7 +88,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 	@Autowired
 	private PhotoGpsDao photoGpsDao = null;
-	
+
 	@Autowired
 	private FavoriteDao favoriteDao = null;
 
@@ -375,11 +375,12 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			final TiffField GPSProcessingMethodField = jpegMetadata
 					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_PROCESSING_METHOD);
 			if (null != GPSProcessingMethodField) {
-				Object out = GPSProcessingMethodField.getFieldType().getValue(GPSProcessingMethodField);
-				if(out instanceof String[]) {
-					photoDetails.setGPSProcessingMethod(((String[]) out )[0]);
+				Object out = GPSProcessingMethodField.getFieldType().getValue(
+						GPSProcessingMethodField);
+				if (out instanceof String[]) {
+					photoDetails.setGPSProcessingMethod(((String[]) out)[0]);
 				}
-				
+
 			}
 			/********************************************************************************************/
 			// getTagValue(jpegMetadata, TiffTagConstants.TIFF_TAG_XRESOLUTION);
@@ -502,13 +503,20 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		return photoDao.getUserPhotos(user);
 	}
 
-	public Collection<Photo> getPhotosForUser(User user, int pageSize,
-			int pageNo) {
-		return photoDao.getUserPhotos(user, pageSize, pageNo);
+	public Collection<PhotoProperties> getPhotosForUser(User user,
+			int pageSize, int pageNo) {
+		List<Photo> photos = photoDao.getUserPhotos(user, pageSize, pageNo);
+		Collection<PhotoProperties> pps = new ArrayList<PhotoProperties>();
+		;
+		for (Photo photo : photos) {
+			PhotoProperties pp = PhotoUtil.transformProperties(photo);
+			pps.add(pp);
+		}
+		return pps;
 	}
 
-	public Collection<Photo> getPhotosForUser(String id, int pageSize,
-			int pageNo) {
+	public Collection<PhotoProperties> getPhotosForUser(String id,
+			int pageSize, int pageNo) {
 		User user = userManager.getUser(id);
 		return this.getPhotosForUser(user, pageSize, pageNo);
 	}
@@ -570,7 +578,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		photo = photoDao.save(photo);
 
 		is1 = new ByteArrayInputStream(content);
-		fileService.saveFile(FileService.TYPE_IMAGE, photo.getId(), is1);
+		fileService.saveFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType(), is1);
 
 		return photo;
 	}
@@ -579,7 +587,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	public Response read(Long id, int level) {
 		Photo photo = photoDao.get(id);
 
-		File file = fileService.readFile(FileService.TYPE_IMAGE, id, level);
+		File file = fileService.readFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType(), level);
 
 		// ResponseBuilder response = Response.ok((Object) file);
 		ResponseBuilder responseBuilder = null;
@@ -601,20 +609,20 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		return response;
 	}
 
-	@Override
-	public InputStream loadPhoto(Long id) {
-		// Photo photo = photoDao.get(id);
-		File file = fileService.readFile(FileService.TYPE_IMAGE, id, 0);
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(file);
-			return fis;
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	@Override
+//	public InputStream loadPhoto(Long id) {
+//		// Photo photo = photoDao.get(id);
+//		File file = fileService.readFile(FileService.TYPE_IMAGE, id, 0);
+//		FileInputStream fis;
+//		try {
+//			fis = new FileInputStream(file);
+//			return fis;
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 
 	@Override
 	public int getPhotoCount(User user) {
@@ -624,11 +632,11 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	@Override
 	public boolean markBest(Long photoId, Long userId, boolean best) {
 		Photo photo = photoDao.get(photoId);
-		if(best) {
+		if (best) {
 			Favorite f = new Favorite(userId);
 			f.setDate(Calendar.getInstance().getTime());
 			photo.addFavorite(f);
-		}else {
+		} else {
 			photo.removeFavorite(userId);
 		}
 		return true;
@@ -637,8 +645,23 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	@Override
 	public boolean properties(Long photoId, PhotoProperties properties) {
 		Photo photo = photoDao.get(photoId);
-		photo.setTitle(properties.getTitle());
-		photo.setDescription(properties.getDescription());
+		if (null != properties.getTitle()) {
+			photo.setTitle(properties.getTitle());
+		}
+
+		if (null != properties.getDescription()) {
+			photo.setDescription(properties.getDescription());
+		}
+		if(null != properties.getPoint()) {
+			if ((null != properties.getPoint().getLat() && properties.getPoint().getLat() != 0)
+					|| (null != properties.getPoint().getLng() && properties.getPoint().getLng() != 0)) {
+				updatePhotoGps(photo, properties.getPoint().getLat(), properties
+						.getPoint().getLng(), properties.getPoint().getAddress(),
+						PhotoUtil.getMapVendor(properties.getVendor()));
+			}
+		}
+		
+
 		photoDao.save(photo);
 		return true;
 	}
@@ -654,15 +677,17 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 	@Override
 	public PhotoProperties delete(Long id) {
-		return PhotoUtil.transformProperties(photoDao.delete(id));
+		PhotoProperties pp = PhotoUtil.transformProperties(photoDao.get(id));
+		photoDao.remove(id);
+		return pp;
 	}
 
 	@Override
 	public PhotoProperties getPhotoProperties(Long id, Long userId) {
 		PhotoProperties prop = PhotoUtil.transformProperties(getPhoto(id));
-		if(null != userId) {
+		if (null != userId) {
 			Favorite f = favoriteDao.get(id, userId);
-			if(null != f) {
+			if (null != f) {
 				prop.setFavorite(true);
 			}
 		}
@@ -674,7 +699,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			MapVendor vendor, MultipartFile file) {
 		InputStream ins;
 		Photo photo = new Photo();
-		PhotoGps gps = null;
 
 		photo.setName(file.getOriginalFilename());
 		try {
@@ -687,12 +711,45 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		updatePhotoGps(photo, lat, lng, address, vendor);
+
+		return PhotoUtil.transformProperties(photo);
+	}
+
+	/**
+	 * 更新图片GPS信息
+	 * 
+	 * @param photo
+	 * @param lat
+	 * @param lng
+	 * @param address
+	 * @param vendor
+	 */
+	private void updatePhotoGps(Photo photo, String lat, String lng,
+			String address, MapVendor vendor) {
 		Double latDouble = 0D;
 		Double lngDouble = 0D;
 		if (StringUtils.hasText(lat) && StringUtils.hasText(lng)) {
 			latDouble = Double.valueOf(lat);
 			lngDouble = Double.valueOf(lng);
+			updatePhotoGps(photo, latDouble, lngDouble, address, vendor);
 		}
+	}
+
+	/**
+	 * 更新图片GPS信息
+	 * 
+	 * @param photo
+	 * @param latDouble
+	 * @param lngDouble
+	 * @param address
+	 * @param vendor
+	 */
+	private void updatePhotoGps(Photo photo, Double latDouble, Double lngDouble,
+			String address, MapVendor vendor) {
+
+		PhotoGps gps = null;
 
 		PhotoDetails detail = photo.getDetails();
 		Point point = null;
@@ -779,8 +836,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 				photoGpsDao.save(gps);
 			}
 		}
-
-		return PhotoUtil.transformProperties(photo);
 	}
 
 	@Override
@@ -804,6 +859,114 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			gpss.add(gps);
 			return gpss;
 		}
+	}
+
+	@Override
+	public int getUserPhotoNum(User user, Long photoId) {
+
+		int num = 0;
+		boolean exist = false;
+
+		Collection<Photo> photos = this.getPhotosForUser(user);
+		for (Photo photo : photos) {
+			num++;
+			if (photo.getId().equals(photoId)) {
+				exist = true;
+				break;
+			}
+		}
+		if (!exist) {
+			num = 0;
+		}
+		return num;
+	}
+
+	@Override
+	public Collection<PhotoProperties> getUserPhotosWithPhoto(User user,
+			Long photoId) {
+
+		Collection<PhotoProperties> pps = new ArrayList<PhotoProperties>();
+		int num = 0;
+		boolean exist = false;
+		Photo p1 = null;
+		Photo p2 = null;
+		Photo p4 = null;
+		Photo p5 = null;
+		Photo p6 = null;
+
+		Collection<Photo> photos = this.getPhotosForUser(user);
+		for (Photo photo : photos) {
+			if (exist) {
+				num++;
+				p4 = p5;
+				p5 = p6;
+				p6 = photo;
+			}
+
+			if (photo.getId().equals(photoId)) {
+				exist = true;
+				if (null != p1) {
+					pps.add(PhotoUtil.transformProperties(p1));
+				}
+
+				if (null != p2) {
+					pps.add(PhotoUtil.transformProperties(p2));
+				}
+
+				pps.add(PhotoUtil.transformProperties(photo));
+			}
+			if (num > 2) {
+				if (null != p4) {
+					pps.add(PhotoUtil.transformProperties(p4));
+				}
+
+				if (null != p5) {
+					pps.add(PhotoUtil.transformProperties(p5));
+				}
+				if (null != p6) {
+					pps.add(PhotoUtil.transformProperties(p6));
+				}
+				break;
+			}
+			p1 = p2;
+			p2 = photo;
+		}
+		return pps;
+	}
+
+	@Override
+	public Long getUserPhotoCountByTag(Long userId, String tag) {
+		User user = userManager.get(userId);
+		return photoDao.getUserPhotoCountBytag(user, tag);
+	}
+
+	@Override
+	public Collection<PhotoProperties> getUserPhotosByTag(Long userId,
+			String tag) {
+		User user = userManager.get(userId);
+		List<Photo> photos = photoDao.getUserPhotosByTag(user, tag);
+		Collection<PhotoProperties> pps = new ArrayList<PhotoProperties>();
+		;
+		for (Photo photo : photos) {
+			PhotoProperties pp = PhotoUtil.transformProperties(photo);
+			pps.add(pp);
+		}
+		return pps;
+	}
+
+	@Override
+	public Collection<PhotoProperties> getUserPhotoPageByTag(Long userId,
+			String tag, int pageSize, int pageNo) {
+		User user = userManager.get(userId);
+		List<Photo> photos = photoDao.getUserPhotoPageByTag(user, tag,
+				pageSize, pageNo);
+		Collection<PhotoProperties> pps = new ArrayList<PhotoProperties>();
+		;
+		for (Photo photo : photos) {
+			PhotoProperties pp = PhotoUtil.transformProperties(photo);
+			pps.add(pp);
+		}
+		return pps;
 	}
 
 }

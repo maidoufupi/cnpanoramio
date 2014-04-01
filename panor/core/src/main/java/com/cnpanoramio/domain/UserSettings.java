@@ -1,8 +1,11 @@
 package com.cnpanoramio.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -82,8 +85,9 @@ public class UserSettings {
 	private Boolean modify;
 	
 	// 头像图片的ID
-	@Column(name = "avatar")
-	private Long avatar;
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="avatar")
+	private Avatar avatar;
 
 	public User getUser() {
 		return user;
@@ -194,11 +198,11 @@ public class UserSettings {
 		return id;
 	}
 
-	public Long getAvatar() {
+	public Avatar getAvatar() {
 		return avatar;
 	}
 
-	public void setAvatar(Long avatar) {
+	public void setAvatar(Avatar avatar) {
 		this.avatar = avatar;
 	}	
 	

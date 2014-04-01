@@ -87,7 +87,7 @@
                     <a href="photo/{{photo.photoId}}">
                         <img title=""
                              id="r{{photo.photoId}}"
-                             ng-src="api/rest/photo/{{photo.photoId}}/2">
+                             ng-src="{{apirest}}/photo/{{photo.photoId}}/2">
                     </a>
                 </div>
             </div>

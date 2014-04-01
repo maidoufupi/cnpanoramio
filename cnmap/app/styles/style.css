@@ -14,9 +14,9 @@ body > .navbar.navbar-fixed-top {
 
 body > .container {
     position: absolute;
-    margin-top: 50px;
+    top: 50px;
     padding: 0;
-    height: 100%;
+    bottom: 0;
     width: 100%
 }
 
@@ -586,4 +586,36 @@ body {
     float: left;
     margin-left: auto;
     margin-right: auto;
+}
+
+.panoramio-wapi-photolist .panoramio-wapi-loaded-img-div, .panoramio-wapi-photolist .panoramio-wapi-empty-img-div {
+    position: relative;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    float: left;
+    overflow: hidden;
+}
+
+#interim-tags li {
+    display: inline;
+    list-style-type: none;
+}
+
+#interim-tags li:before {
+    content: " \002022 ";
+}
+
+.modal-dialog {
+    width: auto
+}
+
+#img-cropper {
+    width: 800px;
+}
+
+#img-cropper img {
+    max-width: 700px;
+    max-height: 500px;
+    margin: 3px;
 }

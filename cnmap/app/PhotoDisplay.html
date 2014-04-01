@@ -74,8 +74,7 @@
     <div class="photo-col">
         <div id="main-photo-wrapper" data-id="<c:url value='${photo.id}'/>">
             <a id="main-photo" href="#">
-                <img ng-src="{{apirest}}/photo/{{photoId}}/1" alt="{{photo.description}}" id="main-photo_photo"
-                     style="max-height: 541px;">
+                <img ng-src="{{apirest}}/photo/{{photoId}}/1" alt="{{photo.description}}" id="main-photo_photo">
             </a>
         </div>
         <div>
@@ -205,7 +204,7 @@
         </div>
 
         <form action="" method="post" id="comment" ng-show="user.login" >
-            <h3>发送评论 <span>(以 {{userOpenInfo.name}})</span></h3>
+            <h3>发送评论 <span>(以 {{user.open_info.name}})</span></h3>
             <textarea data-ng-trim cols="50" rows="3" id="tcomment" name="comment" ng-model="comment.content" class="form-control"></textarea>
             <br>
             <button ng-click="save(comment.content)" id="submit_comment"
@@ -225,7 +224,7 @@
 
                 <div id="profile_info">
                     <div id="profile_name">
-                        <a href="{{ctx}}/user/{{userOpenInfo.id}}?with_photo_id={{photoId}}" rel="author">{{userOpenInfo.name}}</a>
+                        <a href="{{ctx}}/user/{{userOpenInfo.id}}#?with_photo_id={{photoId}}" rel="author">{{userOpenInfo.name}}</a>
                     </div>
                     <div id="profile_location">
                         {{userOpenInfo.location}}
@@ -233,7 +232,7 @@
                     <div id="profile-stats">
                         <a href="{{ctx}}/user/{{userOpenInfo.id}}">
                   <span class="profile-stats-text">
-                      {{userOpenInfo.photoCount}} photos</span></a>
+                      {{userOpenInfo.photo_count || '0' }} 张图片 </span></a>
                     </div>
                 </div>
             </div>
@@ -251,13 +250,12 @@
                     <div class="panoramio-wapi-overlay" style="width: 265px; height: 48px; display: none;"></div>
                     <div class="panoramio-wapi-images" style="width: 265px; height: 48px;">
                         <div class="panoramio-wapi-images" style="width: 265px; height: 48px;">
-                            <div class="panoramio-wapi-loaded-img-div" style="width: 44px; height: 48px;">
+                            <div data-ng-repeat="photo in user_photos" class="panoramio-wapi-loaded-img-div" style="width: 44px; height: 48px;">
                                 <div class="panoramio-wapi-wrapper-div"
                                      style="padding: 0px; border-width: 1px; margin: 4px 2px;">
                                     <div class="panoramio-wapi-crop-div" style="width: 38px; height: 38px;">
-                                        <a href="http://www.panoramio.com/photo/42477493">
-                                            <img id="loadedImage7"
-                                                 src="http://mw2.google.com/mw-panoramio/photos/square/42477493.jpg"
+                                        <a href="{{ctx}}/photo/{{photo.id}}">
+                                            <img data-ng-src="{{apirest}}/photo/{{photo.id}}/3"
                                                  class="panoramio-wapi-img panoramio-wapi-loaded-img" alt="" title="t"
                                                  style="width: 38px; height: 38px; left: 0px; top: 0px;"></a></div>
                                 </div>
@@ -277,7 +275,7 @@
             <div class="photo_page-info_card_img_row_footer">
 
                 <h3 id="wapi_photo_h">
-                    更多 <a href="/user/3908287?with_photo_id=41234541" rel="author">{{userOpenInfo.name}}</a> 的照片
+                    更多 <a href="{{ctx}}/user/{{userOpenInfo.id}}#?with_photo_id={{photoId}}" rel="author">{{userOpenInfo.name}}</a> 的照片
                 </h3>
 
             </div>
@@ -306,13 +304,13 @@
 
                 <div id="location" class="photo_mapped">
                     <div class="geo">
-                        <a title="查看这片区域" href="/map#lat={{gpsInfo.gps.lat}}&{{gpsInfo.gps.lng}}&zoom=17">
+                        <a title="查看这片区域" href="{{ctx}}/map##lat={{gpsInfo.gps.lat}}&lng={{gpsInfo.gps.lng}}&zoom=17">
                             <abbr class="latitude" title="{{gpsInfo.gps.lat}}">{{gpsInfo.lat}}</abbr>&nbsp;
                             <abbr class="longitude" title="{{gpsInfo.gps.lng}}">{{gpsInfo.lng}}</abbr>
                         </a>
                     </div>
                     <p id="misplaced">
-                        <a id="map_photo" href="/map_photo/?id={{photoId}}">
+                        <a id="map_photo" href="{{ctx}}/map_photo/#?id={{photoId}}">
                             放错地点了吗？建议新的位置
                         </a>
                     </p>
@@ -324,7 +322,7 @@
             <ul id="interim-tags">
 
                 <li data-ng-repeat="tag in photo.tags" id="tag_element_{{$index}}">
-                    <a  href="{{ctx}}/user/{{userOpenInfo.id}}/tags/{{tag}}">
+                    <a  href="{{ctx}}/user/{{userOpenInfo.id}}#?tag={{tag}}">
                         {{tag}}
                     </a>
                 </li>

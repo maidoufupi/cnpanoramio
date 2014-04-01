@@ -47,5 +47,4 @@ angular.module('cnmapApp')
                 $scope.photoStart = true;
             }
         }
-  }])
-
+  }]);

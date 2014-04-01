@@ -1,0 +1,23 @@
+<!-- Modal -->
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+    <h4 class="modal-title" id="myModalLabel"><span>更改</span> 你的头像</h4>
+</div>
+<div class="modal-body">
+    <form >
+        <input type="file" ng-file-select="onFileSelect($files)" >
+        <div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class"
+             ng-show="dropSupported">drop files here</div>
+        <button ng-click="upload.abort()">Cancel Upload</button>
+        <div ng-file-drop-available="dropSupported=true"
+             ng-show="!dropSupported">HTML5 Drop File is not supported!</div>
+        <div id="img-cropper">
+            <img-cropped src='{{imageUrl}}' previewUrl='previewUrl'></img-cropped>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="fileUpload()">上传</button>
+    <button class="btn btn-primary" ng-click="ok()">保存，完成</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

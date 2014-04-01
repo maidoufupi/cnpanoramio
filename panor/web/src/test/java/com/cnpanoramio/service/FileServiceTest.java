@@ -19,36 +19,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.cnpanoramio.service.impl.ali.FileServiceImpl;
+import com.cnpanoramio.service.impl.FileServiceImpl;
 
 
 @RunWith(BlockJUnit4ClassRunner.class)
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = { "classpath*:/applicationContext.xml" })
+@ContextConfiguration(inheritLocations = true,
+locations = { 
+		"classpath:/applicationContext-resources.xml",
+        "classpath:/applicationContext-service.xml",
+        "classpath:/applicationContext-dao.xml",
+        "classpath*:/applicationContext.xml", // for modular archetypes
+        "classpath*:/applicationContext-test.xml",
+        "/WEB-INF/spring-security.xml",
+        "/WEB-INF/applicationContext*.xml",
+        "/WEB-INF/dispatcher-servlet.xml"})
 public class FileServiceTest {
 	protected transient final Log log = LogFactory.getLog(getClass());
-
+	
+	@Autowired
 	private FileService fileService;
 
 	private InputStream ins;
 
-	public FileService getFileService() {
-		return fileService;
-	}
-
-	@Autowired
-	public void setFileService(FileService fileService) {
-		this.fileService = fileService;
-	}
-
 	@Before
 	public void preMethodSetup() {
 		FileServiceImpl fileServiceImpl = new FileServiceImpl();
-		fileServiceImpl.setEndpoint("http://panor-image.oss-cn-qingdao.aliyuncs.com");
-		fileServiceImpl.setAccessKeyId("eKJUbg7d49ojjYCf");
-		fileServiceImpl.setAccessKeySecret("70URxtirPN2sFtiEAu2nlwVS59RMUZ");
-		setFileService(fileServiceImpl);
-		ins = getClass().getResourceAsStream("/image/image1.jpg");
+//		fileServiceImpl.setEndpoint("http://panor-image.oss-cn-qingdao.aliyuncs.com");
+//		fileServiceImpl.setAccessKeyId("eKJUbg7d49ojjYCf");
+//		fileServiceImpl.setAccessKeySecret("70URxtirPN2sFtiEAu2nlwVS59RMUZ");
+		fileServiceImpl.setParentPath("D:/dev/source/images");
+		fileService = fileServiceImpl;
+		ins = getClass().getResourceAsStream("/image/photo.jpg");
 	}
 
 	@After
@@ -65,14 +66,15 @@ public class FileServiceTest {
 	@Test
 	public void testSaveFile() throws IOException, ImageReadException {
         String fileName = "IMAGE0001.jpg";
-		fileService.saveFile(FileService.TYPE_IMAGE, 1001L, ins);
+        log.info(ins);
+		fileService.saveFile(FileService.TYPE_IMAGE, 1001L, "jpg", ins);
 		
-		File file = fileService.readFile(FileService.TYPE_IMAGE, 1001L, 3);
+		File file = fileService.readFile(FileService.TYPE_IMAGE, 1001L, "jpg", FileService.THUMBNAIL_LEVEL_1);
 		log.info(file.getAbsoluteFile());
 		
 		Assert.assertTrue(file.isFile());
 
-		Assert.assertTrue(fileService.deleteFile(FileService.TYPE_IMAGE, fileName));
+		Assert.assertTrue(fileService.deleteFile(FileService.TYPE_IMAGE, 1001L ,"jpg"));
 		
 		Assert.assertFalse(file.isFile());
 	}

@@ -1,39 +1,78 @@
 .modal-dialog {
-     width: auto;
+    width: auto;
     height: 96%;
     margin: 10px;
+    padding: 0;
 }
 
 .modal-content {
     height: 100%;
+    background-color: #f5f6f5;
+}
+
+.modal-header {
+    height: 50px;
 }
 
 .modal-body {
-    height: 90%;
+    position: absolute;
+    top: 50px;
+    bottom: 50px;
+    width: 100%;
+    padding: 10px;
+}
+
+.modal-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    text-align: right;
+    padding: 9px 20px 2px;
 }
 
 .photo_list_and_map {
-    position: static;
+    position: relative;
     height: 100%;
 }
 
 .photo_list_panel {
+    height: 100%;
     display: inline-block;
     float:left;
-    position: relative;
+    position: absolute;
     vertical-align: top;
-    width: 20%;
-    max-width: 200px;
+    width: 130px;
+    max-width: 130px;
     margin: 0 5px 5px 0;
     zoom: 1;
+    z-index: 100;
+}
+
+.map_photo_marker {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    height: 33px;
+    width: 28px;
+    z-index: 400;
+
+    background-image: url(../images/photo-page.png);
+    background-position: 0px -1450px;
 }
 
 .map_panel {
+    position: relative;
     overflow: hidden;
     float: left;
     vertical-align: top;
-    width: 75%;
+    padding-left: 130px;
+    margin-left: 10px;
+    width: 100%;
+    /*right: 10px;*/
+    /*left: 150px;*/
     height: 100%;
+    /*margin-left: 5px;*/
 }
 
 @media (max-width: 767px) {
@@ -60,6 +99,7 @@
         vertical-align: top;
         width: 100%;
         height: 100%;
+        padding: 0;
     }
 
     .list-group-item {
@@ -68,22 +108,39 @@
 }
 
 .selected_photo_editor {
-    position: static;
+    position: absolute;
     background-color: #ececec;
     margin-bottom: 5px;
+    height: 151px;
     padding: 2px;
+    top: 0;
+    z-index: 100;
 }
 
 .selected_photo_editor .thumbnail {
     float: left;
 }
 
+.selected_photo_editor .thumbnail canvas {
+    vertical-align: middle;
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid #ccc;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 1px 1px 2px #ccc;
+    -moz-box-shadow: 1px 1px 2px #ccc;
+    -webkit-box-shadow: 1px 1px 2px #ccc;
+}
+
 .map_panel #upload-map {
     position: relative;
     width: 100%;
-    /*left: -200px;*/
     margin: 0;
-    height: 72%;
+    height: 100%;
+    padding-top: 160px;
+    /*top: 160px;*/
+    /*bottom: 0px;*/
 }
 
 .map_photo_thumbnail {
@@ -94,4 +151,21 @@ max-width: 60px;
 .map_photo_title {
     word-break:break-all;
     word-wrap:break-word;
+}
+
+.active {
+    background-color: #3276b1;
+}
+
+#map-photo-list {
+    height: 100%;
+    position: relative;
+    top: 0;
+    bottom: 30px;
+    overflow-y: auto;
+}
+
+.map_photo_cell {
+    cursor: pointer;
+    padding: 5px 10px;
 }

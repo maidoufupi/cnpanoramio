@@ -46,15 +46,28 @@
 //                        disableImageResize: /Android(?!.*Chrome)|Opera/
 //                            .test(window.navigator.userAgent),
                         maxFileSize: 5000000,
-                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+                        loadImageMaxFileSize: 10000000,
+                        imageQuality: 2000000,
+                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                        disableImageResize: /Android(?!.*Chrome)|Opera/
+                            .test(window.navigator && navigator.userAgent),
+                        //previewMaxWidth: 200,
+                        //previewMaxHeight: 200,
+                        //previewCrop: true, // Force cropped images,
+                        //previewCanvas: false
+                        disableImageMetaDataLoad: true,
+                        imageMinHeight: 1098,
+                        imageMaxWidth: 5000,
+                        imageMaxHeight: 2000
+
                     });
 //                }
             }
         ])
 
         .controller('DemoFileUploadController', [
-            '$scope', '$http', 'fileUpload', '$modal', '$log', 'PhotoService', '$window',
-            function ($scope, $http, fileUpload, $modal, $log, PhotoService, $window) {
+            '$scope', '$http', 'fileUpload', '$modal', '$log', 'PhotoService', '$window', 'GPSConvertService',
+            function ($scope, $http, fileUpload, $modal, $log, PhotoService, $window, GPSConvertService) {
 
                 $scope.apirest = $window.apirest;
                 $scope.ctx = $window.ctx;
@@ -98,7 +111,6 @@
                                 var lat = data.exif.getText('GPSLatitude');
                                 if (lat && lat != "undefined") {
                                     file.lat = cnmap.GPS.convert(lat);
-                                    file.latPritty = cnmap.GPS.convert(file.lat);
                                     var latRef = data.exif.getText('GPSLatitudeRef');
                                     file.latRef = latRef;
                                 }
@@ -106,9 +118,22 @@
                                 var lng = data.exif.getText('GPSLongitude');
                                 if (lng && lng != "undefined") {
                                     file.lng = cnmap.GPS.convert(lng);
-                                    file.lngPritty = cnmap.GPS.convert(file.lng);
                                     var lngRef = data.exif.getText('GPSLongitudeRef');
                                     file.lngRef = lngRef;
+                                }
+
+                                // 转换坐标体系
+                                if(file.lng || file.lat) {
+                                    GPSConvertService.convert({
+                                        'lat': file.lat,
+                                        'lng': file.lng
+                                    }, function (data) {
+                                        file.lat = data.lat;
+                                        file.lng = data.lng;
+                                        file.vendor = "gaode";
+                                        file.latPritty = cnmap.GPS.convert(file.lat);
+                                        file.lngPritty = cnmap.GPS.convert(file.lng);
+                                    })
                                 }
                             }
                         });
@@ -116,32 +141,22 @@
                     done: function (e, data) {
                         console.log(data)
                         if(data.result.status == "OK") {
-                        	var photo = data.result.prop;
-                        	data.files[0].$submit = false;
+                            var photo = data.result.prop;
+                            data.files[0].$submit = false;
                             data.files[0].$cancel = false;
                             data.files[0].$endestroy = true;
                             data.files[0].photoId = photo.id;
                             data.files[0].saveProperties();
                             data.files[0].saveTags();
+                        }else if(data.result.status == "NO_AUTHORIZE") {
+                            data.files[0].error = "请登录";
+                            data.files[0].$endestroy = false;
                         }else {
                             data.files[0].error = data.result.info;
                             data.files[0].$endestroy = false;
                         }
                     }
                 };
-//                if (!isOnGitHub) {
-//                    $scope.loadingFiles = true;
-//                    $http.get(url)
-//                        .then(
-//                        function (response) {
-//                            $scope.loadingFiles = false;
-//                            $scope.queue = response.data.files || [];
-//                        },
-//                        function () {
-//                            $scope.loadingFiles = false;
-//                        }
-//                    );
-//                }
 
                 /**
                  * change image's gps location
@@ -160,18 +175,35 @@
                     });
 
                     modalInstance.result.then(function (selectedItem) {
-                        $scope.selected = selectedItem;
+                        angular.forEach(selectedItem, function (file, key) {
+                            file.saveProperties();
+                        })
                     }, function () {
                         $log.info('Modal dismissed at: ' + new Date());
                     });
                 }
 
-                $scope.getTagClass = function (city) {
-                    switch (city.continent) {
-                        default:
-                            return 'label label-primary';
-                    }
+                /**
+                 * 获取tag的class
+                 *
+                 * @param data
+                 * @returns {string}
+                 */
+                $scope.getTagClass = function (data) {
+                    return 'label label-primary';
                 };
+
+                $scope.resizeFile = function(data) {
+                    return fileUpload.processActions.resizeImage.call(
+                        fileUpload,
+                        data,
+                        {
+                            maxWidth: 3000,
+                            maxHeight: 2000
+                        }
+                    );
+                }
+
             }
         ])
 
@@ -210,23 +242,34 @@
                     state;
 
                 file.saveProperties = function() {
-                    PhotoService.updateProperties({photoId: file.photoId}, {
-                        'title': file.title,
-                        'description': file.description
-                    }, function(data) {
-                        if(data) {
-                            $log.debug("properties update successful");
-                        }
-                    })
+                    if(file.photoId) {
+                        PhotoService.updateProperties({photoId: file.photoId}, {
+                            'title': file.title,
+                            'description': file.description,
+                            'point': {
+                                'lat': file.lat,
+                                'lng': file.lng,
+                                'address': file.address
+                            },
+                            'vendor': 'gaode'
+                        }, function(data) {
+                            if(data) {
+                                $log.debug("properties update successful");
+                            }
+                        })
+                    }
+
                 }
 
                 file.saveTags = function() {
                     var tags = file.tags.concat($scope.tags);
-                    PhotoService.tag({photoId: file.photoId}, tags, function(data) {
-                        if(data) {
-                            $log.debug("tags update successful");
-                        }
-                    })
+                    if(tags.length) {
+                        PhotoService.tag({photoId: file.photoId}, tags, function(data) {
+                            if(data) {
+                                $log.debug("tags update successful");
+                            }
+                        })
+                    }
                 }
 
                 $scope.saveDesc = function() {
@@ -243,8 +286,6 @@
                     file.saveProperties();
                 }
 
-            }])
-
-    ;
+            }]);
 
 }());

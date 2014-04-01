@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.cnpanoramio.service.FileService;
 
@@ -24,7 +25,7 @@ import com.cnpanoramio.service.FileService;
 public class FileServiceImpl implements FileService {
 
 	private transient final Log log = LogFactory.getLog(FileService.class);
-	
+
 	@Value(value = "${file.parent.path}")
 	private String parentPath;
 
@@ -33,16 +34,17 @@ public class FileServiceImpl implements FileService {
 		return null;
 	}
 
-	public boolean saveFile(String fileType, Long fileKey, InputStream ins) {
+	
+	public boolean saveFile(String fileType, Long fileKey, String fileExt, InputStream ins) {
 		String key;
 		String uploadDir;
 		FileOutputStream fos;
 		String parent = getParentPath();
 		if (fileType == TYPE_IMAGE) {
-			saveImage(fileKey, ins);
+			saveImage(fileKey, fileExt, ins);
 			return true;
 		} else {
-			key = getPhotoKey(fileKey, 0);
+			key = getPhotoKey(fileKey, fileExt, THUMBNAIL_LEVEL_0);
 			uploadDir = parent + "/" + fileType + "/" + key;
 			try {
 				fos = FileUtils.openOutputStream(new File(uploadDir));
@@ -58,11 +60,23 @@ public class FileServiceImpl implements FileService {
 		return false;
 	}
 
-	private String getPhotoKey(Long id, int level) {
-		return id + "-th" + level;
+	/**
+	 * 根据文件ID 扩展名 图片缩略图级别 组装文件名
+	 * 
+	 * @param id
+	 * @param fileExt
+	 * @param level
+	 * @return
+	 */
+	private String getPhotoKey(Long id, String fileExt, int level) {
+		if (StringUtils.hasText(fileExt)) {
+			return id + "-th" + level + "." + fileExt.trim();
+		} else {
+			return id + "-th" + level;
+		}
 	}
 
-	private void saveImage(Long id, InputStream inputStream) {
+	private void saveImage(Long id, String fileExt, InputStream inputStream) {
 
 		String uploadDir;
 		File uploadFile;
@@ -80,7 +94,7 @@ public class FileServiceImpl implements FileService {
 		log.info("THUMBNAIL_LEVEL_0");
 		// THUMBNAIL_LEVEL_0
 		uploadDir = parent + "/" + TYPE_IMAGE + "/"
-				+ getPhotoKey(id, THUMBNAIL_LEVEL_0);
+				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_0);
 		try {
 			uploadFile = new File(uploadDir);
 			FileUtils.touch(uploadFile);
@@ -89,13 +103,13 @@ public class FileServiceImpl implements FileService {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		BufferedImage thumbnail = null;
 
 		log.info("THUMBNAIL_LEVEL_1");
 		// THUMBNAIL_LEVEL_1
 		uploadDir = parent + "/" + TYPE_IMAGE + "/"
-				+ getPhotoKey(id, THUMBNAIL_LEVEL_1);
+				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_1);
 		try {
 			thumbnail = Thumbnails.of(originalImage)
 					.size(THUMBNAIL_PIX_LEVEL_1, THUMBNAIL_PIX_LEVEL_1)
@@ -111,7 +125,7 @@ public class FileServiceImpl implements FileService {
 		log.info("THUMBNAIL_LEVEL_2");
 		// THUMBNAIL_LEVEL_2
 		uploadDir = parent + "/" + TYPE_IMAGE + "/"
-				+ getPhotoKey(id, THUMBNAIL_LEVEL_2);
+				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_2);
 		try {
 			thumbnail = Thumbnails.of(originalImage)
 					.size(THUMBNAIL_PIX_LEVEL_2, THUMBNAIL_PIX_LEVEL_2)
@@ -127,7 +141,7 @@ public class FileServiceImpl implements FileService {
 		log.info("THUMBNAIL_LEVEL_3");
 		// THUMBNAIL_LEVEL_3
 		uploadDir = parent + "/" + TYPE_IMAGE + "/"
-				+ getPhotoKey(id, THUMBNAIL_LEVEL_3);
+				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_3);
 		try {
 			thumbnail = Thumbnails.of(originalImage)
 					.size(THUMBNAIL_PIX_LEVEL_3, THUMBNAIL_PIX_LEVEL_3)
@@ -135,7 +149,7 @@ public class FileServiceImpl implements FileService {
 			uploadFile = new File(uploadDir);
 			FileUtils.touch(uploadFile);
 			ImageIO.write(thumbnail, "jpg", uploadFile);
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,18 +158,21 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public boolean deleteFile(String fileType, String fileName) {
+	public boolean deleteFile(String fileType, Long fileKey, String fileExt) {
 
-		if (null == fileName) {
-			return false;
-		} else {
-			fileName.trim();
-			if ("" == fileName)
-				return false;
-		}
 		String parent = getParentPath();
 		if (null != parent) {
-			String uploadDir = parent + "/" + fileType + "/" + fileName;
+			String uploadDir = parent + "/" + fileType + "/"
+					+ getPhotoKey(fileKey, fileExt, THUMBNAIL_LEVEL_0);
+			new File(uploadDir).delete();
+			uploadDir = parent + "/" + fileType + "/"
+					+ getPhotoKey(fileKey, fileExt, THUMBNAIL_LEVEL_1);
+			new File(uploadDir).delete();
+			uploadDir = parent + "/" + fileType + "/"
+					+ getPhotoKey(fileKey, fileExt, THUMBNAIL_LEVEL_2);
+			new File(uploadDir).delete();
+			uploadDir = parent + "/" + fileType + "/"
+					+ getPhotoKey(fileKey, fileExt, THUMBNAIL_LEVEL_3);
 			return new File(uploadDir).delete();
 			// return FileUtils.deleteQuietly(new File(uploadDir));
 		}
@@ -174,19 +191,29 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public File readFile(String fileType, Long fileKey, int level) {
-		String key = fileKey + "-th" + level;
-		if (null == fileKey) {
-			return null;
-		} else {
+	public File readFile(String fileType, Long fileKey, String fileExt,
+			int level) {
+		String uploadDir = getFilePath(fileType, fileKey, fileExt, level);
+		return new File(uploadDir);
+	}
 
-		}
-		String parent = getParentPath();
-		if (null != parent) {
-			String uploadDir = parent + "/" + fileType + "/" + key;
-			return new File(uploadDir);
-		}
-		return null;
+	/**
+	 * 获取文件路径名
+	 * 
+	 * @param fileType
+	 * @param fileKey
+	 * @param fileExt
+	 * @param level
+	 * @return
+	 */
+	private String getFilePath(String fileType, Long fileKey, String fileExt,
+			int level) {
+		return getParentPath() + "/" + fileType + "/"
+				+ getPhotoKey(fileKey, fileExt, level);
+	}
+
+	public void setParentPath(String parentPath) {
+		this.parentPath = parentPath;
 	}
 
 }

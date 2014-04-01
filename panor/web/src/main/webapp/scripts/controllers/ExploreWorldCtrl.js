@@ -38,8 +38,8 @@ angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
 
         var panoramioLayer = new cnmap.PanoramioLayer(
             {suppressInfoWindows: true,
-                mapVendor: window.mapVendor || "gaode"});
-        panoramioLayer.initEnv(ctx);
+                mapVendor: $window.mapVendor || "gaode"});
+        panoramioLayer.initEnv($window.ctx);
         $(panoramioLayer).bind("data_changed", function (e, data) {
             $scope.$apply(function (scope) {
                 // 计算可显示图片行数
@@ -95,8 +95,10 @@ angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
                     }
                     break;
                 case "userid":
+                    hashObj.userid = userid;
                     panoramioLayer.setFavorite(false);
                     panoramioLayer.setUserId(userid);
+
             }
             panoramioLayer.trigger("changed")
         }
@@ -167,7 +169,7 @@ angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
         /**
         *  change the url hash params
         * ***********************************************************************************/
-        var hashObj = {};
+        var hashObj = jQuery.deparam($location.hash());
         // changeState状态标志，记录上次动作不超过0.5秒，不能进行state更改的触发
         // 高德地图有setCenter后取getCenter不完全一致问题
         var changeState = false;
@@ -247,7 +249,7 @@ angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
                         }, 500);
                     }
                 }
-                angular.copy(stateObj, hashObj)
+                angular.copy(stateObj, hashObj);
                 if(!!stateObj.latest) {
                     $scope.setPanormaioType("latest")
                 }else {

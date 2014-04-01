@@ -22,7 +22,7 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Photo> getUserPhotos(User user) {
-		Query photoListQuery = getSession().createQuery("from Photo p where owner = :owner");
+		Query photoListQuery = getSession().createQuery("from Photo p where owner = :owner order by createDate asc");
 				
 		photoListQuery.setParameter("owner", user);
 
@@ -46,7 +46,7 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 
 	@Override
 	public List<Photo> getUserPhotos(User user, int pageSize, int pageNo) {
-		Query query = getSession().createQuery("from Photo where owner = :owner");
+		Query query = getSession().createQuery("from Photo where owner = :owner order by createDate asc");
 		
 		query.setParameter("owner", user);
 		query.setFirstResult((pageNo - 1) * pageSize);  
@@ -72,4 +72,39 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 		save(photo);
 		return photo;
 	}
+
+	@Override
+	public Long getUserPhotoCountBytag(User user, String tag) {
+		Query query = getSession().createQuery("select count(distinct p.id) from Photo as p inner join p.tags as t where p.owner = :owner and t.tag = :tag");
+		
+		query.setParameter("owner", user);
+		query.setParameter("tag", tag);
+		
+		return (Long)query.list().get(0);
+	}
+
+	@Override
+	public List<Photo> getUserPhotosByTag(User user, String tag) {
+		Query query = getSession().createQuery("select distinct p from Photo as p inner join p.tags as t where p.owner = :owner and t.tag = :tag");
+		
+		query.setParameter("owner", user);
+		query.setParameter("tag", tag);
+		
+		return query.list();
+	}
+
+	@Override
+	public List<Photo> getUserPhotoPageByTag(User user, String tag,
+			int pageSize, int pageNo) {
+		Query query = getSession().createQuery("select distinct p from Photo as p inner join p.tags as t where p.owner = :owner and t.tag = :tag");
+		
+		query.setParameter("owner", user);
+		query.setParameter("tag", tag);
+		query.setFirstResult((pageNo - 1) * pageSize);  
+        query.setMaxResults(pageSize);
+		
+		return query.list();
+	}
+
+	
 }

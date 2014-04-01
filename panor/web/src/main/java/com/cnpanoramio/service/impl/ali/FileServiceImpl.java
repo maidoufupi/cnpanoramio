@@ -55,7 +55,7 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public boolean saveFile(String fileType, Long fileKey, InputStream ins) {
+	public boolean saveFile(String fileType, Long fileKey, String fileExt, InputStream ins) {
 		String key;
 		String uploadDir;
 		FileOutputStream fos;
@@ -166,7 +166,7 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public boolean deleteFile(String fileType, String fileName) {
+	public boolean deleteFile(String fileType, Long id, String fileName) {
 
 		if (null == fileName) {
 			return false;
@@ -179,7 +179,7 @@ public class FileServiceImpl implements FileService {
 	}
 	
 	@Override
-	public File readFile(String fileType, Long fileKey, int level) {
+	public File readFile(String fileType, Long fileKey, String fileExt, int level) {
 		String key = fileKey + "-th" + level;
 		if (null == fileKey) {
 			return null;

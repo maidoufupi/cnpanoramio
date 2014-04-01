@@ -1,6 +1,11 @@
 package com.cnpanoramio.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.annotate.JsonProperty;
 
 @XmlRootElement
 public class UserOpenInfo {
@@ -11,8 +16,17 @@ public class UserOpenInfo {
 	
 	private Long avatar;
 	
+	@JsonProperty("photo_count")
 	private int photoCount;
+	
+	@JsonProperty("photo_views")
+	private int photoViews;
 
+	@JsonProperty("photo_favorites")
+	private int photoFavorites;
+	
+	private List<String> tags = new ArrayList<String>(0);
+	
 	public Long getId() {
 		return id;
 	}
@@ -43,6 +57,30 @@ public class UserOpenInfo {
 
 	public void setPhotoCount(int photoCount) {
 		this.photoCount = photoCount;
+	}
+
+	public int getPhotoViews() {
+		return photoViews;
+	}
+
+	public void setPhotoViews(int photoViews) {
+		this.photoViews = photoViews;
+	}
+
+	public int getPhotoFavorites() {
+		return photoFavorites;
+	}
+
+	public void setPhotoFavorites(int photoFavorites) {
+		this.photoFavorites = photoFavorites;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}	
 	
 }

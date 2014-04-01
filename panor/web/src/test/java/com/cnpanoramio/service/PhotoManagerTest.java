@@ -61,6 +61,8 @@ public class PhotoManagerTest {
 	
 	private Long userId;
 	
+	private User user;
+	
 	@Before
 	public void preMethodSetup() {
 //		ins = getClass().getResourceAsStream("/image/photo.jpg");
@@ -68,7 +70,7 @@ public class PhotoManagerTest {
 //		ins = getClass().getResourceAsStream("/image/IMG_2401.JPG");
 		// 测试不同设备拍出来的图片
 		ins = getClass().getResourceAsStream("/image/IMAG2290.JPG");
-		User user = new User();
+		user = new User();
 		user.addRole(roleManager.getRole(Constants.USER_ROLE));
 		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                 "user", "user", user.getAuthorities());
@@ -127,7 +129,7 @@ public class PhotoManagerTest {
 	
 	@Test
 	public void testGetUserPhotos() {
-		Collection<Photo> photos = photoManager.getPhotosForUser("1", 10, 1);
+		Collection<PhotoProperties> photos = photoManager.getPhotosForUser("1", 10, 1);
 		Assert.isTrue(photos.size() == 0);
 	}
 	
@@ -170,5 +172,16 @@ public class PhotoManagerTest {
 		photoManager.markBest(photoId, userId, true);
 		photoManager.markBest(photoId, userId, false);
 		photoManager.markBest(photoId, userId, true);
+	}
+	
+	@Test
+	public void testgetUserPhotosWithPhoto() {
+		user = userManager.getUser("3");
+		Collection<PhotoProperties> pps = photoManager.getUserPhotosWithPhoto(user, 26L);
+		log.info(pps.size());
+		Assert.isTrue(pps.size() == 5);
+		for(PhotoProperties p : pps) {
+			log.info(p.getId());
+		}
 	}
 }

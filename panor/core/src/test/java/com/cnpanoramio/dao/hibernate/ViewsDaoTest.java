@@ -8,6 +8,8 @@ import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.appfuse.dao.UserDao;
+import org.appfuse.model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +37,9 @@ public class ViewsDaoTest {
 	private ViewsDao viewsDao;	
 	@Autowired
 	private PhotoDao photoDao;	
+	
+	@Autowired
+	private UserDao userDao;
 	
 	private String appId = "my_app";
 	private String appId_2 = "my_app2";
@@ -117,6 +122,13 @@ public class ViewsDaoTest {
 		List<Views> views = viewsDao.getViewsList(photoId, date);
 		Assert.assertEquals(2, views.size());
 	}
+	
+	@Test
+	public void testGetUserPhotoViewCount() {
+		User user = userDao.get(3L);
+		Long views = viewsDao.getUserPhotoViewCount(user);
+		log.info(views);
+	}	
 
 	public ViewsDao getViewsDao() {
 		return viewsDao;

@@ -104,6 +104,13 @@ public class PhotoDaoTest {
 		int count = photoDao.getPhotoCount(user);
 		log.info(count);
 	}
+	
+	@Test
+	public void testGetUserPhotos() {
+		User user = userDao.get(3L);
+		List<Photo> photos = photoDao.getUserPhotos(user, 10, 1);
+		Assert.assertEquals(10, photos.size());
+	}
 
 	@Test
 	public void testAddPhotoTags() {
@@ -142,9 +149,19 @@ public class PhotoDaoTest {
 		if(f != null) {
 			photo.getFavorites().remove(f);
 		}
-		
 	}
 	
+	@Test
+	public void testgetUserPhotoCountBytag() {
+		User user = userDao.get(3L);
+		String tag = "北京";
+		Long count = photoDao.getUserPhotoCountBytag(user, tag);
+		log.info(count);
+		List<Photo> photos = photoDao.getUserPhotosByTag(user, tag);
+		for(Photo photo : photos) {
+			log.info(photo.getId());
+		}
+	}
 
 	public UserDao getUserDao() {
 		return userDao;

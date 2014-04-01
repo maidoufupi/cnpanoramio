@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.appfuse.dao.GenericDao;
+import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Views;
 
@@ -77,4 +78,12 @@ public interface ViewsDao extends GenericDao<Views, Views.ViewsPK> {
 	 * @return
 	 */
 	public int getViewsCount(Long photoId, Date date);
+	
+	/**
+	 * 获取用户图片被查看总数
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public Long getUserPhotoViewCount(User user);
 }

@@ -11,7 +11,9 @@ angular.module('photoApp', ['ngCookies',
         'ui.mapgaode',
         'cnmapApp'])
     .controller('PhotoCtrl', ['$window', '$location', '$log', '$rootScope', '$scope', '$cookieStore', '$cookies', 'PhotoService', 'CommentService', 'UserService',
-        function ($window, $location, $log, $rootScope, $scope, $cookieStore, $cookies, PhotoService, CommentService, UserService) {
+        'UserPhoto',
+        function ($window, $location, $log, $rootScope, $scope, $cookieStore, $cookies, PhotoService, CommentService, UserService,
+                  UserPhoto) {
 
             $scope.ctx = $window.ctx;
             $scope.apirest = $window.apirest;
@@ -33,7 +35,6 @@ angular.module('photoApp', ['ngCookies',
                 currentPage: 1,
                 maxSize: 10
             };
-            $scope.totalComments = [];
             $scope.comments = [];
 
             $scope.$watch('comment.currentPage', function() {
@@ -42,17 +43,17 @@ angular.module('photoApp', ['ngCookies',
 
             // 用户属性
             $scope.user = {};
+            $scope.user.userId = $window.userId;
             $scope.user.username = $cookies['username'];
             $scope.user.login = $window.login;
             $scope.photo = {};
+            // 获取图片各种信息
             PhotoService.getPhoto({photoId: $scope.photoId}, function(data) {
                 $log.debug(data);
                 if(data.status == 'OK') {
                     $scope.photo = data.prop;
-                    UserService.getOpenInfo({'userId': $scope.photo["user_id"]}, function(openInfo) {
-                        $scope.userOpenInfo = openInfo;
-                    })
 
+                    // 设置图片属性保存函数
                     $scope.photo.save = function() {
                         $scope.editable = '';
                         PhotoService.updateProperties({photoId: $scope.photoId}, {
@@ -61,7 +62,22 @@ angular.module('photoApp', ['ngCookies',
                         }, function() {
 
                         })
-                    }
+                    };
+
+                    // 获取图片的用户信息
+                    UserService.getOpenInfo({'userId': $scope.photo["user_id"]}, function(data) {
+                        if(data.status == "OK") {
+                            $scope.userOpenInfo = data.open_info;
+                        }
+                    })
+
+                    // 获取图片主人的图片
+                    UserPhoto.get({userId: $scope.photo["user_id"], pageSize: $scope.photoId},
+                        function(data) {
+                            if(data.status == "OK") {
+                                $scope.user_photos = data.photos.slice(0, 6);
+                            }
+                        })
                 }
             })
 
@@ -86,6 +102,7 @@ angular.module('photoApp', ['ngCookies',
                 $log.debug($scope.cameraInfo);
             })
 
+            // 获取评论总数
             CommentService.getPhotos({photoId: $scope.photoId}, function (data) {
                 $scope.comment.totalItems = data.count;
                 $scope.comment.numPages = Math.round($scope.bigTotalItems / $scope.comment.pageSize);
@@ -94,7 +111,7 @@ angular.module('photoApp', ['ngCookies',
             })
 
             /**
-             * 获取评论
+             * 获取详细评论(分页)
              */
             function getComments() {
                 CommentService.getPhotos({photoId: $scope.photoId, pageSize: $scope.comment.pageSize, pageNo: $scope.comment.currentPage}, function (data) {
@@ -105,6 +122,15 @@ angular.module('photoApp', ['ngCookies',
 
             //
             getComments();
+
+            if($scope.user.login && $scope.user.userId) {
+                // 获取图片的用户信息
+                UserService.getOpenInfo({'userId': $scope.user.userId}, function(data) {
+                    if(data.status == "OK") {
+                        $scope.user.open_info = data.open_info;
+                    }
+                })
+            }
 
             $scope.setEditable = function(who) {
                 if($scope.user.login == 'true' &&
@@ -177,16 +203,11 @@ angular.module('photoApp', ['ngCookies',
                     $scope.map = $scope.minimap1;
                     var mapObj = $scope.minimap1;
                     panoramioLayer.setMap(mapObj);
-
-                    mapObj.plugin(["AMap.ToolBar"], function () {
-                        //加载工具条
-                        var tool = new AMap.ToolBar();
-                        mapObj.addControl(tool);
-                    });
                 }
             });
 
             $scope.update_nearby_photos = function (photos) {
                 $scope.nearby_photos = photos && photos.slice(0,5);
             }
-        }]);
+        }])
+;

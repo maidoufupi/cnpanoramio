@@ -38,25 +38,10 @@
 			angular.bootstrap(document.getElementById("userPageApp"), ['userPageApp']);
 	})
 </script>
-<script>
-    docReady(function () {
 
-        var map = cnmap.initMap("user_page-map", {
-            toolbar: true,
-            ruler: false,
-            maptype: true
-        })
-        cnmap.setZoom(1);
+<div id="userPageApp" class="container" data-ng-controller="UserCtrl">
 
-        var panoramioLayer = new cnmap.PanoramioLayer({suppressInfoWindows: false, mapVendor: window.mapVendor});
-        panoramioLayer.initEnv(ctx);
-        panoramioLayer.setMap(map);
-    });
-</script>
-
-<div id="userPageApp" class="container">
-
-    <div class="photo-col" data-ng-controller="UserCtrl">
+    <div class="photo-col" >
 
         <div id="user-page_main-header">
             <div class="user-page_main-header_card">
@@ -73,14 +58,13 @@
 
                     <div id="user_header" style="display: block;">
                         <div class="user_header-best-or-all">
-                            <a class="user-page-best-enabled" href="/user/{{userId}}?show=best">Best photos</a>
-                            <span class="user-page-best-disabled">All photos</span>
+                            <a class="user-page-best-enabled" href="{{ctx}}/map##userid={{userId}}&favorite=true">在地图上查看收藏的照片</a>
                         </div>
-                        <a href="/map/?user={{userId}}">
+                        <a href="{{ctx}}/map/##userid={{userId}}">
                             <img id="user_header-icon"
-                                 ng-src="/images/marker.png"
+                                 ng-src="{{ctx}}/images/marker.png"
                                  height="16" alt="">
-                            <span id="user_header-map">view on map</span>
+                            <span id="user_header-map">在地图上查看照片</span>
                         </a>
 
                     </div>
@@ -90,30 +74,30 @@
 
             <div class="user-page_main-header_card_stats user-page_main-header_card">
 
-                <div id="top-line-stats">
+               <div id="top-line-stats">
                     <div class="user-page_top-line-stat">
                         <div class="user-page_top-line-stat-value">
-                            <a href="/user/{{userId}}/stats">{{userOpenInfo.photoCount}}</a>
+                            <a href="/user/{{userId}}/stats">{{userOpenInfo.photo_count}}</a>
                         </div>
                         <div class="user-page_top-line-stat-label">
-                            photos
+                            张图片
                         </div>
                     </div>
                     <div class="user-page_top-line-stat">
                         <div class="user-page_top-line-stat-value">
-                            <a href="/user/{{userId}}/stats">24</a>
+                            <a href="/user/{{userId}}/stats">{{userOpenInfo.photo_favorites}}</a>
                         </div>
                         <div class="user-page_top-line-stat-label">
-                            on Google Maps
+                            张被收藏
                         </div>
                     </div>
 
                     <div class="user-page_top-line-stat">
                         <div class="user-page_top-line-stat-value">
-                            <a href="/user/{{userId}}/stats">1539</a>
+                            <a href="/user/{{userId}}/stats">{{userOpenInfo.photo_views}}</a>
                         </div>
                         <div class="user-page_top-line-stat-label">
-                            views
+                            次被查看
                         </div>
                     </div>
                 </div>
@@ -146,32 +130,21 @@
             </div>
         </div>
         
-        <div class="paginator-wrapper" >
+        <div class="paginator-wrapper" data-ng-show="photo.totalItems > 0">
             <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
         </div>
     </div>
     <div class="info-col">
         <div class="interim-info-card" id="user_page-map_card">
-            <div class="user_page-map" id="user_page-map">
+            <div class="user_page-map" id="user_page-map" ui-map="minimap" ui-options="mapOptions">
             </div>
         </div>
 
         <div class="interim-info-card">
             <h3>标签</h3>
-            <ul id="list-inline">
-
-                <li id="tag_element_0">
-                    <a href="/user/5851975/tags/Antrim">Antrim</a>
-                </li>
-
-                <li id="tag_element_10" style="display: inline;">
-                    <a href="/user/5851975/tags/Benone">Benone</a>
-                </li>
-
-                <li id="show_all_tags" style="display: none;">
-                    <a href="#">
-                        Show all tags (73)
-                    </a>
+            <ul id="interim-tags">
+         	    <li data-ng-repeat="tag in userOpenInfo.tags">
+                    <a href="{{ctx}}/user/{{userId}}#?tag={{tag}}">{{tag}}</a>
                 </li>
             </ul>
         </div>

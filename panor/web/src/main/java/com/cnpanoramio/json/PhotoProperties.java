@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.domain.Tag;
 
 @XmlRootElement(name = "PhotoProperties")
@@ -29,11 +30,13 @@ public class PhotoProperties {
 	@JsonProperty("user_id")
 	private Long userId;
 	
-	private Double lat;
-	private Double lng;
+	private Point point;
+	private String vendor;
 	
+	// tags
 	private List<String> tags = new ArrayList<String>(0);
 	
+	// views
 	private int views;
 	
 	@JsonProperty("fav_count")
@@ -97,22 +100,6 @@ public class PhotoProperties {
 		this.tags = tags;
 	}
 
-	public Double getLat() {
-		return lat;
-	}
-
-	public void setLat(Double lat) {
-		this.lat = lat;
-	}
-
-	public Double getLng() {
-		return lng;
-	}
-
-	public void setLng(Double lng) {
-		this.lng = lng;
-	}
-
 	public int getViews() {
 		return views;
 	}
@@ -128,6 +115,21 @@ public class PhotoProperties {
 	public void setFavorite(boolean favorite) {
 		this.favorite = favorite;
 	}
-	
+
+	public String getVendor() {
+		return vendor;
+	}
+
+	public void setVendor(String vendor) {
+		this.vendor = vendor;
+	}
+
+	public Point getPoint() {
+		return point;
+	}
+
+	public void setPoint(Point point) {
+		this.point = point;
+	}	
 	
 }
