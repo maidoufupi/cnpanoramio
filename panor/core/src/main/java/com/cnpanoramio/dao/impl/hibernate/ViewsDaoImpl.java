@@ -133,7 +133,11 @@ public class ViewsDaoImpl extends GenericDaoHibernate<Views, Views.ViewsPK>
 		query.setParameter("userid", user.getId());
 		  
 		BigDecimal count = (BigDecimal) query.uniqueResult();
-		return count.longValue();
+		if(null == count) {
+			return 0L;
+		}else {
+			return count.longValue();			
+		}
 	}
 
 }

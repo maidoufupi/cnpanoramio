@@ -74,8 +74,8 @@
     </logger>
  
  <!--  com.cnpanoramio.service.impl -->   
-    <logger name="com.cnpanoramio.webapp.listener">
-      <level value="INFO"/>
+    <logger name="com.cnpanoramio.service">
+      <level value="DEBUG"/>
     </logger>
 
     <root>

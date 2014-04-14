@@ -8,22 +8,22 @@ angular.module('photoApp', ['ngCookies',
         'ngSanitize',
         'ngRoute',
         'ui.bootstrap',
-        'ui.mapgaode',
+        'ui.map',
         'cnmapApp'])
-    .controller('PhotoCtrl', ['$window', '$location', '$log', '$rootScope', '$scope', '$cookieStore', '$cookies', 'PhotoService', 'CommentService', 'UserService',
-        'UserPhoto',
-        function ($window, $location, $log, $rootScope, $scope, $cookieStore, $cookies, PhotoService, CommentService, UserService,
-                  UserPhoto) {
-
+    .controller('PhotoCtrl', ['$window', '$location', '$log', '$rootScope', '$scope', '$cookieStore', '$cookies',
+        'PhotoService', 'CommentService', 'UserService', 'UserPhoto',
+        function ($window, $location, $log, $rootScope, $scope, $cookieStore, $cookies,
+                  PhotoService, CommentService, UserService, UserPhoto) {
             $scope.ctx = $window.ctx;
             $scope.apirest = $window.apirest;
+            var mapEventListener = $window.cnmap.MapEventListener.factory();
 
             var url = $location.absUrl();
             var photo = url.match(/\/photo\/[0-9]+/g);
             if(photo) {
                 $scope.photoId = photo[0].match(/[0-9]+/g)[0];
             }else {
-                $scope.photoId = 9;
+                $scope.photoId = 100;
             }
 
             $scope.photo = {};
@@ -47,6 +47,7 @@ angular.module('photoApp', ['ngCookies',
             $scope.user.username = $cookies['username'];
             $scope.user.login = $window.login;
             $scope.photo = {};
+            
             // 获取图片各种信息
             PhotoService.getPhoto({photoId: $scope.photoId}, function(data) {
                 $log.debug(data);
@@ -82,18 +83,15 @@ angular.module('photoApp', ['ngCookies',
             })
 
             PhotoService.getGPSInfo({photoId: $scope.photoId, 'vendor':'gaode'}, function(data) {
-                if(data.status == "OK") {
+                if(data.status == "OK" && data.gps.length) {
                     $scope.gpsInfo = data.gps[0];
+                    $log.debug($scope.gpsInfo);
+	                $scope.gpsInfo.lat = cnmap.GPS.convert($scope.gpsInfo.gps.lat);
+	                $scope.gpsInfo.lng = cnmap.GPS.convert($scope.gpsInfo.gps.lng);
+
+                    mapEventListener.setCenter($scope.minimap1, $scope.gpsInfo.gps.lat, $scope.gpsInfo.gps.lng);
                 }
-                $log.debug($scope.gpsInfo);
-                $scope.gpsInfo.lat = cnmap.GPS.convert($scope.gpsInfo.gps.lat);
-                $scope.gpsInfo.lng = cnmap.GPS.convert($scope.gpsInfo.gps.lng);
-                var point = new AMap.LngLat($scope.gpsInfo.gps.lng, $scope.gpsInfo.gps.lat);
-                $scope.minimap1.setCenter(point);
-                new AMap.Marker({
-                    map: $scope.minimap1,
-                    position: point
-                })
+                
             })
             PhotoService.getCameraInfo({photoId: $scope.photoId}, function(data) {
                 if(data.status == "OK") {
@@ -114,7 +112,8 @@ angular.module('photoApp', ['ngCookies',
              * 获取详细评论(分页)
              */
             function getComments() {
-                CommentService.getPhotos({photoId: $scope.photoId, pageSize: $scope.comment.pageSize, pageNo: $scope.comment.currentPage}, function (data) {
+                CommentService.getPhotos({photoId: $scope.photoId, pageSize: $scope.comment.pageSize,
+                    pageNo: $scope.comment.currentPage}, function (data) {
                     $scope.comments = data.comments;
                 }, function(error) {
                 });
@@ -182,11 +181,15 @@ angular.module('photoApp', ['ngCookies',
 //                locatecity: true,
                 // map-self config
                 resizeEnable: true,
+                panControl: false,
                 level: 13,
                 // ui map config
                 uiMapCache: false
             }
 
+            if($window.mapVendor == "qq") {
+                $window.mapVendor = "gaode";
+            }
             var panoramioLayer = new cnmap.PanoramioLayer(
                 {suppressInfoWindows: false,
                     mapVendor: $window.mapVendor || "gaode"});

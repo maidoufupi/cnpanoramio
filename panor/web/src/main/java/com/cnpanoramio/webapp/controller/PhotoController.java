@@ -5,10 +5,12 @@ import javax.servlet.http.HttpSession;
 
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
@@ -59,13 +61,21 @@ public class PhotoController extends BaseFormController {
 			}			
 		}
 
-		Photo photo = photoService.getPhoto(photoId);
+		Photo photo = null;
+		try {
+			photo = photoService.getPhoto(photoId);
+		}catch(ObjectRetrievalFailureException ex) {
+			return "redirect:/404.jsp";
+		}catch (Exception se) {			
+			return "redirect:/404.jsp";
+		}		
 		
 		PhotoDetails details = photo.getDetails();
 		
 		request.setAttribute("photo", photo);
 		request.setAttribute("details", details);
 		
+		// 图片被查看
 		viewsManager.view(photo.getId(), "main");
 		
 		return getSuccessView();

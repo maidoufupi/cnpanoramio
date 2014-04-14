@@ -22,7 +22,7 @@ import com.cnpanoramio.service.UserSettingsManager;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 @Controller
-@RequestMapping("/user_settings*")
+@RequestMapping("/settings*")
 public class UserSettingsController extends BaseFormController {
 	
 	@Autowired
@@ -32,9 +32,9 @@ public class UserSettingsController extends BaseFormController {
     @SuppressWarnings("unchecked")
     public ModelAndView handleRequest(HttpServletRequest request,
                                       HttpServletResponse response) {
-    	UserSettings us = userSettingsService.getCurrentUserSettings();
-    	request.setAttribute("settings", us);
-    	return new ModelAndView("userSettings");
+//    	UserSettings us = userSettingsService.getCurrentUserSettings();
+//    	request.setAttribute("settings", us);
+    	return new ModelAndView("settings");
     }
 
 	public UserSettingsManager getUserSettingsService() {

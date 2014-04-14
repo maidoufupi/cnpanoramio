@@ -28,7 +28,7 @@ public interface FileService {
      * @param file
      * @return String
      */
-    public String uploadFile(String fileType, String fileName, File file);
+//    public String uploadFile(String fileType, String fileName, File file);
     
     /**
      * 保存文件
@@ -39,6 +39,16 @@ public interface FileService {
      * @return String
      */
     public boolean saveFile(String fileType, Long fileKey, String fileExt, InputStream ins);
+    
+    /**
+     * 保存图片缩略图
+     * 
+     * @param fileType
+     * @param fileKey
+     * @param fileExt
+     * @param ins
+     */
+    public void saveThumbnails(String fileType, Long fileKey, String fileExt, InputStream ins);
 
     /**
      * 读取文件

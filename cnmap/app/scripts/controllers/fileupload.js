@@ -22,7 +22,7 @@
             'ngResource',
             'ui.bootstrap',
             'blueimp.fileupload',
-            'ui.mapgaode',
+            'ui.map',
             'bootstrap-tagsinput',
             'cnmapApp'
         ])
@@ -46,19 +46,19 @@
 //                        disableImageResize: /Android(?!.*Chrome)|Opera/
 //                            .test(window.navigator.userAgent),
                         maxFileSize: 5000000,
-                        loadImageMaxFileSize: 10000000,
-                        imageQuality: 2000000,
-                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                        disableImageResize: /Android(?!.*Chrome)|Opera/
-                            .test(window.navigator && navigator.userAgent),
+//                        loadImageMaxFileSize: 10000000,
+//                        imageQuality: 2000000,
+//                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+//                        disableImageResize: /Android(?!.*Chrome)|Opera/
+//                            .test(window.navigator && navigator.userAgent),
                         //previewMaxWidth: 200,
                         //previewMaxHeight: 200,
                         //previewCrop: true, // Force cropped images,
                         //previewCanvas: false
-                        disableImageMetaDataLoad: true,
-                        imageMinHeight: 1098,
-                        imageMaxWidth: 5000,
-                        imageMaxHeight: 2000
+//                        disableImageMetaDataLoad: true,
+//                        imageMinHeight: 1098,
+//                        imageMaxWidth: 5000,
+//                        imageMaxHeight: 2000
 
                     });
 //                }

@@ -35,6 +35,14 @@ angular.module('cnmapApp', ['ngCookies',
                 getOpenInfo: {
                     method: 'GET',
                     params: {'type': 'openinfo'}
+                },
+                getSettings: {
+                    method: 'GET',
+                    params: {'type': 'settings'}
+                },
+                updateSettings: {
+                    method: 'POST',
+                    params: {'type': 'settings'}
                 }
             });
     }])
@@ -80,6 +88,18 @@ angular.module('cnmapApp', ['ngCookies',
                 convert: {
                     method: 'GET',
                     headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            });
+    }])
+    .service('AvatarService', ['$window', '$resource', function ($window, $resource) {
+        return $resource($window.apirest + '/user/avatar', {},
+            {
+                upload: {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': false,
                         'Accept': 'application/json'
                     }
                 }

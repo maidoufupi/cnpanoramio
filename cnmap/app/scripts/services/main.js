@@ -35,6 +35,14 @@ angular.module('cnmapApp', ['ngCookies',
                 getOpenInfo: {
                     method: 'GET',
                     params: {'type': 'openinfo'}
+                },
+                getSettings: {
+                    method: 'GET',
+                    params: {'type': 'settings'}
+                },
+                updateSettings: {
+                    method: 'POST',
+                    params: {'type': 'settings'}
                 }
             });
     }])
@@ -91,7 +99,7 @@ angular.module('cnmapApp', ['ngCookies',
                 upload: {
                     method: 'POST',
                     headers: {
-                        'Content-Type': "multipart/form-data",
+                        'Content-Type': false,
                         'Accept': 'application/json'
                     }
                 }

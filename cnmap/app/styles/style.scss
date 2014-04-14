@@ -66,6 +66,22 @@ body#login {
     background-color: #000000;
 }
 
+.nav.navbar-nav a.user {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+.navbar-profile-image {
+    margin-left: 15px;
+    vertical-align: middle;
+    height: 30px;
+    width: 30px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: 0;
+}
+
 #navbar-search {
     width: 240px;
     margin-top: 8px;
@@ -248,7 +264,6 @@ span.pagelinks {
     bottom: 0;
     clear: both;
     margin: auto auto;
-    padding: 0 0 5px 0;
     border-top: 0 solid #f0f0f0;
     text-align: center;
     background-color: white;
@@ -501,6 +516,10 @@ body {
 #user_page-map_card {
     width: 100%;
     height: 190px;
+  .user_page-map {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .user-page_main-header_card {
@@ -560,8 +579,8 @@ body {
 }
 
 /************************************************************/
-.photo-upload-ok {
-    background-color: #47a447;
+.table-striped>tbody>tr:nth-child(odd)>td.photo-upload-ok {
+    background-color: #6DCE6D;
     border-radius: 4px;
 }
 
@@ -618,4 +637,17 @@ body {
     max-width: 700px;
     max-height: 500px;
     margin: 3px;
+    border-radius: 6px;
+}
+
+.alert {
+    position: fixed;
+    left: 0;
+    top: 50px;
+    width: 100%;
+  z-index: 10000;
+}
+
+.fileupload-buttonbar {
+ margin-right: 0;
 }

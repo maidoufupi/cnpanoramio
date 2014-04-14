@@ -6,17 +6,9 @@
 <meta name="menu" content="AdminMenu" />
 <link href="<c:url value="/styles/user.css"/>" rel="stylesheet">
 </head>
-
 <script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
-
-<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
 <script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.comm.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.Panoramio.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/scripts/panor/js/cnmap.gaode.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.gaode.js'/>"></script>
-
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-mapgaode/src/ui-map.js"/>"></script>
 
     <script src="<c:url value="/bower_components/get-style-property/get-style-property.js"/>"></script>
     <script src="<c:url value="/bower_components/get-size/get-size.js"/>"></script>
@@ -33,6 +25,38 @@
 
     <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/controllers/UserPageCtrl.js"/>"></script>
+    
+<c:choose>
+  <c:when test='${sessionScope.mapVendor eq "baidu"}'>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
+    <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.baidu.js"/>"></script>
+  </c:when>
+  <c:when test='${sessionScope.mapVendor eq "qq"}'>
+  	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
+	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapEventListenerImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapServiceImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.qq.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
+  </c:when>
+  <c:when test='${sessionScope.mapVendor eq "gaode"}'>
+  	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapServiceImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+  </c:when>
+  <c:otherwise>
+  	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+  	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapServiceImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+   </c:otherwise>
+</c:choose>
 <script>
 	$(document).ready(function () {
 			angular.bootstrap(document.getElementById("userPageApp"), ['userPageApp']);
@@ -45,11 +69,11 @@
 
         <div id="user-page_main-header">
             <div class="user-page_main-header_card">
-                <img ng-src="{{ctx}}/images/user_avatar.png" width="120" height="120" alt="" class="user_page-profile_img">
+                <img ng-src="{{apirest}}/user/{{userId}}/avatar" width="120" height="120" alt="" class="user_page-profile_img">
 
                 <div id="user_profile_info">
                     <div class="user-page_profile_info user-page_main-lede">
-                        ${userSettings.name}
+                        {{userOpenInfo.name}}
                     </div>
 
                     <div id="profile_icons_user">

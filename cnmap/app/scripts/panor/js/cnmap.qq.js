@@ -54,4 +54,4 @@
     $.cnmap.getLng = function(latlng) {
         return latlng.lng;
     }
-})(jQuery)
+})(window)

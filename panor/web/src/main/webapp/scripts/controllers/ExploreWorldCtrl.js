@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
+angular.module('exploreWorldApp', ['cnmapApp', 'ui.map'])
 //    .config(['$locationProvider', function ($locationProvider) {
 //        $locationProvider.html5Mode(true)
 //                        .hashPrefix('');
@@ -27,7 +27,10 @@ angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
             overview: true,
 //                locatecity: true,
             // map-self config
-            resizeEnable: true
+            resizeEnable: true,
+            scaleControl: true
+//            panControl: false,
+//            zoomControl: false
             // ui map config
 //            uiMapCache: false
         }
@@ -35,7 +38,9 @@ angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
         $scope.tabs = {map: true};
 
         var photoSize = 20;
-
+        if($window.mapVendor == "qq") {
+            $window.mapVendor = "gaode";
+        }
         var panoramioLayer = new cnmap.PanoramioLayer(
             {suppressInfoWindows: true,
                 mapVendor: $window.mapVendor || "gaode"});
@@ -143,17 +148,15 @@ angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
             }
         }
 
+        var mapEventListener = $window.cnmap.MapEventListener.factory();
+
         $scope.$watch('myMap', function () {
             if (!$scope.map) {
                 $scope.map = $scope.myMap;
                 var mapObj = $scope.myMap;
                 panoramioLayer.setMap(mapObj);
                 locationHash(mapObj);
-                mapObj.plugin(["AMap.ToolBar"], function () {
-                    //加载工具条
-                    var tool = new AMap.ToolBar();
-                    mapObj.addControl(tool);
-                });
+                mapEventListener.addToolBar(mapObj);
                 //jQuery.explore(mapObj);
                 //$($window).trigger('hashchange');
 
@@ -174,54 +177,40 @@ angular.module('exploreWorldApp', ['cnmapApp', 'ui.mapgaode'])
         // 高德地图有setCenter后取getCenter不完全一致问题
         var changeState = false;
 
-        function setState() {
-
-            if (changeState) {
-                return;
-            }
-
-            var stateObj = jQuery.deparam($location.hash());
-//            angular.copy(hashObj, stateObj);
-            var latlng = this.getCenter(),
-                zoom = this.getZoom();
-
-            if (latlng) {
-                hashObj['lat'] = latlng.lat;
-                hashObj['lng'] = latlng.lng;
-                hashObj['zoom'] = zoom;
-                if (hashObj.lat != stateObj.lat ||
-                    hashObj.lng != stateObj.lng ||
-                    hashObj.zoom != stateObj.zoom ||
-                    hashObj.latest != stateObj.latest ||
-                    hashObj.userid != stateObj.userid ||
-                    hashObj.favorite != stateObj.favorite
-                    ) {
-                    if (this.setState) {
-                        clearTimeout(this.setState);
-                    }
-                    changeState = true;
-//                    angular.copy(hashObj, stateObj);
-                    $location.hash(jQuery.param(hashObj));
-//                    jQuery.bbq.pushState(stateObj);
-                    this.setState = setTimeout(function () {
-                        changeState = false;
-                    }, 500);
-
-                }
-            }
-        }
-
         function locationHash(map) {
-            AMap.event.addListener(
-                map,
-                'zoomend',
-                setState);
 
-            AMap.event.addListener(
-                map,
-                'moveend',
-                setState
-            );
+            mapEventListener.addLocationHashListener(map, function(lat ,lng, zoom) {
+                if (changeState) {
+                    return;
+                }
+
+                var stateObj = jQuery.deparam($location.hash());
+
+                if (lat && lng) {
+                    hashObj['lat'] = lat;
+                    hashObj['lng'] = lng;
+                    hashObj['zoom'] = zoom;
+                    if (hashObj.lat != stateObj.lat ||
+                        hashObj.lng != stateObj.lng ||
+                        hashObj.zoom != stateObj.zoom ||
+                        hashObj.latest != stateObj.latest ||
+                        hashObj.userid != stateObj.userid ||
+                        hashObj.favorite != stateObj.favorite
+                        ) {
+                        if (this.setState) {
+                            clearTimeout(this.setState);
+                        }
+                        changeState = true;
+//                    angular.copy(hashObj, stateObj);
+                        $location.hash(jQuery.param(hashObj));
+//                    jQuery.bbq.pushState(stateObj);
+                        this.setState = setTimeout(function () {
+                            changeState = false;
+                        }, 500);
+
+                    }
+                }
+            });
 
             $scope.$watch(function () {
                 return $location.hash();

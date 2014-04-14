@@ -14,7 +14,8 @@
 			<fmt:message key="login.heading" />
 		</h2>
 		<c:if test="${param.error != null}">
-			<div class="alert alert-error fade in">
+			<div class="alert alert-danger fade in">
+				<a href="#" data-dismiss="alert" class="close">×</a>
 				<fmt:message key="errors.password.mismatch" />
 			</div>
 		</c:if>

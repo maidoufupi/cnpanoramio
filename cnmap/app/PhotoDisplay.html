@@ -30,22 +30,28 @@
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
-    <script type="text/javascript" src="bower_components/angular-ui-mapgaode/src/ui-map.js"></script>
+
     <script type="text/javascript" src="scripts/services/main.js"></script>
     <script type="text/javascript" src="scripts/controllers/PhotoCtrl.js"></script>
-
-    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
-            type="text/javascript"></script>
     <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
     <script type="text/javascript" src="scripts/panor/panoramio/cnmap.Panoramio.js"></script>
+
+    <!--<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
     <script type="text/javascript" src="scripts/panor/panoramio/cnmap.gaode.js"></script>
-    <script type="text/javascript" src="scripts/panor/js/cnmap.gaode.js"></script>
-    <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="styles/PhotoDisplay.css">
+    <script type="text/javascript" src="scripts/panor/js/cnmap.gaode.js"></script>-->
+
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
+    <script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>
+    <script type="text/javascript" src="scripts/panor/js/cnmap.qq.js"></script>
+
+    <link rel="stylesheet" href="styles/main.css">
 
     <script type="text/javascript">
         window.login = true;
-        window.ctx = "http://localhost:8080/panor-web";
+//        window.ctx = "http://localhost:8080/panor-web";
+        window.ctx = "http://115.28.21.165";
         window.apirest = window.ctx + "/api/rest";
 
         $(document).ready(function () {
@@ -218,8 +224,8 @@
     <div class="info-col">
         <div class="interim-info-card photo-page-card">
             <div id="profile_pic_info">
-                <a href="{{ctx}}/user/{{userOpenInfo.id}}"><img
-                        ng-src="{{ctx}}/images/user_avatar.png"
+                <a href="{{ctx}}/user/{{userOpenInfo.id}}">
+                    <img ng-src="{{apirest}}/user/{{userOpenInfo.id || 1}}/avatar"
                         width="60" height="60" alt="{{userOpenInfo.name}}" id="profile_pic_avatar"></a>
 
                 <div id="profile_info">
@@ -310,7 +316,7 @@
                         </a>
                     </div>
                     <p id="misplaced">
-                        <a id="map_photo" href="{{ctx}}/map_photo/#?id={{photoId}}">
+                        <a id="map_photo" href="{{ctx}}/map_photo/##id={{photoId}}">
                             放错地点了吗？建议新的位置
                         </a>
                     </p>

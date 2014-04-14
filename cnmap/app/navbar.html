@@ -45,7 +45,8 @@
                 <li>
                     <div id="nav-search-form" ng-controller="SearchLocCtrl">
                         <form class="navbar-form navbar-left" ng-submit="update(asyncSelected)" novalidate>
-                            <input type="text" ng-model="asyncSelected" placeholder="搜索地址" typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control">
+                            <input type="text" ng-model="asyncSelected" placeholder="搜索地址"
+                                   typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control">
                             <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                         </form>
                     </div>

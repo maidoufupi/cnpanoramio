@@ -28,34 +28,25 @@ public class FileServiceImpl implements FileService {
 
 	@Value(value = "${file.parent.path}")
 	private String parentPath;
-
-	public String uploadFile(String fileType, String fileName, File file) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
 	public boolean saveFile(String fileType, Long fileKey, String fileExt, InputStream ins) {
-		String key;
+//		String key;
 		String uploadDir;
 		FileOutputStream fos;
 		String parent = getParentPath();
-		if (fileType == TYPE_IMAGE) {
-			saveImage(fileKey, fileExt, ins);
+		
+//		key = getPhotoKey(fileKey, fileExt, THUMBNAIL_LEVEL_0);
+//		uploadDir = parent + "/" + fileType + "/" + key;
+		uploadDir = getFilePath(fileType, fileKey, fileExt, THUMBNAIL_LEVEL_0);
+		try {
+			fos = FileUtils.openOutputStream(new File(uploadDir));
+			IOUtils.copy(ins, fos);
+			ins.close();
+			fos.close();
 			return true;
-		} else {
-			key = getPhotoKey(fileKey, fileExt, THUMBNAIL_LEVEL_0);
-			uploadDir = parent + "/" + fileType + "/" + key;
-			try {
-				fos = FileUtils.openOutputStream(new File(uploadDir));
-				IOUtils.copy(ins, fos);
-				ins.close();
-				fos.close();
-				return true;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -69,10 +60,14 @@ public class FileServiceImpl implements FileService {
 	 * @return
 	 */
 	private String getPhotoKey(Long id, String fileExt, int level) {
+		String l = "";
+		if(level > 0) {
+			l = "-th" + level;
+		}
 		if (StringUtils.hasText(fileExt)) {
-			return id + "-th" + level + "." + fileExt.trim();
+			return id + l + "." + fileExt.trim();
 		} else {
-			return id + "-th" + level;
+			return id + l;
 		}
 	}
 
@@ -85,76 +80,81 @@ public class FileServiceImpl implements FileService {
 		BufferedImage originalImage = null;
 		try {
 			originalImage = ImageIO.read(inputStream);
+			
 			inputStream.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		log.info("THUMBNAIL_LEVEL_0");
-		// THUMBNAIL_LEVEL_0
-		uploadDir = parent + "/" + TYPE_IMAGE + "/"
-				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_0);
-		try {
-			uploadFile = new File(uploadDir);
-			FileUtils.touch(uploadFile);
-			ImageIO.write(originalImage, "jpg", uploadFile);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		log.info("THUMBNAIL_LEVEL_0");
+//		// THUMBNAIL_LEVEL_0
+//		uploadDir = parent + "/" + TYPE_IMAGE + "/"
+//				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_0);
+//		
+//		try {
+//			uploadFile = new File(uploadDir);
+//			FileUtils.touch(uploadFile);
+//			ImageIO.write(originalImage, fileExt, uploadFile);
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 
 		BufferedImage thumbnail = null;
 
-		log.info("THUMBNAIL_LEVEL_1");
+		log.debug("THUMBNAIL_LEVEL_1 " + id);
 		// THUMBNAIL_LEVEL_1
-		uploadDir = parent + "/" + TYPE_IMAGE + "/"
-				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_1);
+//		uploadDir = parent + "/" + TYPE_IMAGE + "/"
+//				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_1);
+		uploadDir = getFilePath(TYPE_IMAGE, id, fileExt, THUMBNAIL_LEVEL_1);
 		try {
 			thumbnail = Thumbnails.of(originalImage)
 					.size(THUMBNAIL_PIX_LEVEL_1, THUMBNAIL_PIX_LEVEL_1)
 					.asBufferedImage();
 			uploadFile = new File(uploadDir);
 			FileUtils.touch(uploadFile);
-			ImageIO.write(thumbnail, "jpg", uploadFile);
+			ImageIO.write(thumbnail, fileExt, uploadFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		log.info("THUMBNAIL_LEVEL_2");
+		log.debug("THUMBNAIL_LEVEL_2 " + id);
 		// THUMBNAIL_LEVEL_2
-		uploadDir = parent + "/" + TYPE_IMAGE + "/"
-				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_2);
+//		uploadDir = parent + "/" + TYPE_IMAGE + "/"
+//				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_2);
+		uploadDir = getFilePath(TYPE_IMAGE, id, fileExt, THUMBNAIL_LEVEL_2);
 		try {
 			thumbnail = Thumbnails.of(originalImage)
 					.size(THUMBNAIL_PIX_LEVEL_2, THUMBNAIL_PIX_LEVEL_2)
 					.asBufferedImage();
 			uploadFile = new File(uploadDir);
 			FileUtils.touch(uploadFile);
-			ImageIO.write(thumbnail, "jpg", uploadFile);
+			ImageIO.write(thumbnail, fileExt, uploadFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		log.info("THUMBNAIL_LEVEL_3");
+		log.debug("THUMBNAIL_LEVEL_3 " + id);
 		// THUMBNAIL_LEVEL_3
-		uploadDir = parent + "/" + TYPE_IMAGE + "/"
-				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_3);
+//		uploadDir = parent + "/" + TYPE_IMAGE + "/"
+//				+ getPhotoKey(id, fileExt, THUMBNAIL_LEVEL_3);
+		uploadDir = getFilePath(TYPE_IMAGE, id, fileExt, THUMBNAIL_LEVEL_3);
 		try {
 			thumbnail = Thumbnails.of(originalImage)
 					.size(THUMBNAIL_PIX_LEVEL_3, THUMBNAIL_PIX_LEVEL_3)
 					.crop(Positions.CENTER).asBufferedImage();
 			uploadFile = new File(uploadDir);
 			FileUtils.touch(uploadFile);
-			ImageIO.write(thumbnail, "jpg", uploadFile);
+			ImageIO.write(thumbnail, fileExt, uploadFile);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		log.info("THUMBNAIL_LEVEL_end");
+		log.debug("THUMBNAIL_LEVEL_end");
 	}
 
 	@Override
@@ -214,6 +214,13 @@ public class FileServiceImpl implements FileService {
 
 	public void setParentPath(String parentPath) {
 		this.parentPath = parentPath;
+	}
+
+
+	@Override
+	public void saveThumbnails(String fileType, Long fileKey, String fileExt,
+			InputStream ins) {
+		saveImage(fileKey, fileExt, ins);
 	}
 
 }

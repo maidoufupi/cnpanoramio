@@ -26,7 +26,7 @@ import java.util.List;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 @Controller
-@RequestMapping("/map*")
+@RequestMapping("/map")
 public class ExploreWorldController {
     private transient final Log log = LogFactory.getLog(ExploreWorldController.class);
 
@@ -39,7 +39,7 @@ public class ExploreWorldController {
             log.debug("Entering 'execute' method");
         }
 
-        return new ModelAndView("exploreWorld");
+        return new ModelAndView("map");
     }
     
 }

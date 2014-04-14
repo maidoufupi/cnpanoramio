@@ -31,14 +31,12 @@
     display: none;
 }
 </style>
-	<link rel="stylesheet" href="<c:url value="/styles/style.css"/>">
-    <link rel="stylesheet" href="<c:url value="/styles/modal.css"/>">
+<%-- 	<link rel="stylesheet" href="<c:url value="/styles/style.css"/>">
+    <link rel="stylesheet" href="<c:url value="/styles/modal.css"/>"> --%>
 </head>
 <body>
     <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"/>"></script>
     <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-mapgaode/src/ui-map.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.canvas.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
     <!-- The main application script -->
@@ -54,15 +52,21 @@
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
   	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.qq.js"/>"></script>
+	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapEventListenerImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapServiceImpl.js'/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.gaode.js"/>"></script>
+	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapServiceImpl.js'/>"></script>
   </c:when>
   <c:otherwise>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.gaode.js"/>"></script>
+  	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapServiceImpl.js'/>"></script>
    </c:otherwise>
 </c:choose>
 <script>

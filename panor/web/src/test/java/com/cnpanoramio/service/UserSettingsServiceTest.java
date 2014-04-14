@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.UserResponse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(inheritLocations = true,
@@ -46,7 +47,7 @@ public class UserSettingsServiceTest {
 
 	@Test
 	public void testGetUserSettings() throws IOException, ImageReadException {
-		UserSettings settings = userSettingsService.getCurrentUserSettings();
+		UserResponse.Settings settings = userSettingsService.getCurrentUserSettings();
 		Assert.assertNull(settings);
 	}
 	

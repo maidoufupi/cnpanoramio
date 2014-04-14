@@ -14,17 +14,25 @@
 <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/bower_components/imgLiquid/js/imgLiquid.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/bower_components/jquery.rest/dist/jquery.rest.js'/>"></script>
+
+<script type="text/javascript" src="<c:url value='/scripts/services/main.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/scripts/controllers/main.js'/>"></script>
+
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.baidu.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
-    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
@@ -32,74 +40,17 @@
   </c:when>
   <c:otherwise>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
   </c:otherwise>
 </c:choose>
-
 <script>
-    var map;
-
-    function initialize() {
-        $("div.imgLiquidFill").imgLiquid({
-            fill : true
-        });
-
-        var photos, photo_index;
-
-        var restclient = new $.RestClient(ctx + '/api/rest/');
-        restclient.add('index');
-        
-        function setPhoto(photo) {
-            $(".front-photo_sizer img").attr("src", ctx + "/api/rest/photo/" + photo.id + "/1");
-            $(".front-photo_sizer a").attr("href", ctx + "/photo/" + photo.id);
-            
-            cnmap.setCenter(photo.lat, photo.lng);
-            if(!photo.mark) {
-            	photo.mark = true;
-            	cnmap.addMarkerInCenter();
-            }
-            
-            $("div.imgLiquidFill").imgLiquid({
-                fill : true
-            });
-
-            if(photos.length > 1) {
-                setTimeout(function() {
-                    setPhoto(photos[photo_index]);
-                    photo_index = (photo_index + 1) % photos.length;
-                }, 4000);
-            }
-        }
-
-        var map = cnmap.initMap("map-canvas", {
-            //toolbar: true,
-//            scrollzoom: true,
-            overview: true,
-//            locatecity: true
-        });
-
-        $(window).on('load', windowresize);
-        function windowresize() {
-            var windowW = $(window).width();
-            oldWidth = windowW;
-            windowW = windowW/4;
-            cnmap.panBy(windowW, 0);
-            
-            restclient.index.read('photo').done(function(data) {
-                photos = data;
-                photo_index = 0;
-                if(photos[photo_index]) {
-                	setPhoto(photos[photo_index]);
-                	photo_index = (photo_index + 1) % photos.length;
-                }                
-                
-            })
-        }
-    }
-    $(document).ready(initialize);
+	$(document).ready(function () {
+			angular.bootstrap(document.getElementById("indexApp"), ['indexApp']);
+	})
 </script>
-
-	<div class="front-root">
+	<div id="indexApp" class="front-root" data-ng-app="indexApp" data-ng-controller="IndexCtrl">
 		<div id="front-photo_stack" class="front-photo_stack">
 			<div class="imgLiquidFill front-photo_sizer"
 				style="z-index: 2; visibility: visible; opacity: 1;">
@@ -110,7 +61,7 @@
 		</div>
 
 		<div class="front-main_map">
-			<div id="map-canvas"></div>
+			<div id="map_canvas" ui-map="map" ui-options="mapOptions"></div>
 		</div>
 	</div>
 </body>

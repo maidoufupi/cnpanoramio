@@ -8,17 +8,34 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.UserOpenInfo;
+import com.cnpanoramio.json.UserResponse.Settings;
 
 public interface UserSettingsManager {
 	
 	public static String AVATAR_FILE_TYPE = "png";
 	
 	/**
+	 * 保存用户详细设置
+	 * 
+	 * @param userSettings
+	 * @return
+	 */
+	public UserSettings save(UserSettings userSettings);
+	
+	/**
+	 * 创建用户详细设置
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public UserSettings create(User user);
+	
+	/**
 	 * 获取当前用户的详细设置
 	 * 
 	 * @return
 	 */
-	public UserSettings getCurrentUserSettings();
+	public Settings getCurrentUserSettings();
 	
 	/**
 	 * 通过用户名查找详细设置
@@ -43,15 +60,7 @@ public interface UserSettingsManager {
 	 * @return
 	 */
 	public User getUser(String nameOrEmail);
-	
-	/**
-	 * 保存用户详细设置
-	 * 
-	 * @param settings
-	 * @return
-	 */
-	public UserSettings save(UserSettings settings);
-	
+		
 	/**
 	 * 
 	 * @return

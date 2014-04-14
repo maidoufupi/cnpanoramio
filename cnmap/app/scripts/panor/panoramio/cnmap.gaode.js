@@ -79,17 +79,19 @@
                 var bounds = map.getBounds();
                 var size = map.getSize();
                 var thumbs = that.getBoundsThumbnails({
-                    ne: {
-                        lat: bounds.getNorthEast().lat,
-                        lng: bounds.getNorthEast().lng
+                        ne: {
+                            lat: bounds.getNorthEast().lat,
+                            lng: bounds.getNorthEast().lng
+                        },
+                        sw: {
+                            lat: bounds.getSouthWest().lat,
+                            lng: bounds.getSouthWest().lng
+                        }
                     },
-                    sw: {
-                        lat: bounds.getSouthWest().lat,
-                        lng: bounds.getSouthWest().lng
-                    }
-                }, map.getZoom(),
+                    map.getZoom(),
                     {width: size.getWidth(),
-                     height: size.getHeight()}, function(thumbs) {
+                     height: size.getHeight()},
+                    function(thumbs) {
                         var photoIds = [];
                         var photos = {};
                         for (var i in thumbs) {
@@ -103,7 +105,6 @@
                                 if(a) {
                                     if(labels[a]) {
                                         labels[a].setMap(null);
-                                        console.log("delete labels[a]");
                                     }
                                     var index = thumbPhotoIds.indexOf(a);
                                     if (index > -1) {

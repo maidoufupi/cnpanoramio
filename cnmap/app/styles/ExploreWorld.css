@@ -1,92 +1,77 @@
-html, body{ height: 100% }
+html, body {
+  height: 100%; }
 
 body {
-    background-color: #ececec;
-}
+  background-color: #ececec; }
 
 .container-main {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-}
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%; }
 
 .col-main {
-    width: 60%;
-    height: 100%;
-    float: left;
-}
+  width: 60%;
+  height: 100%;
+  float: left; }
 
 .col-info {
-    width: 40%;
-    height: 100%;
-    float: left;
-}
+  width: 40%;
+  height: 100%;
+  float: left; }
 
 @media (max-width: 767px) {
-    .col-main {
-        width: 100%;
-        height: 60%;
-    }
-    .col-info {
-        width: 100%;
-        height: 100%;
-        float: left;
-        display: inline-block;
-    }
-}
-
-#map-canvas {
-    height: 100%;
+  .col-main {
     width: 100%;
-    margin: 0px;
-    padding: 0px
-}
+    height: 60%; }
+
+  .col-info {
+    width: 100%;
+    height: 100%;
+    float: left;
+    display: inline-block; } }
+#map-canvas {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px; }
 
 /************************************************************/
 #thumbinnerarea {
-    position: relative;
-    padding: 22px 20px 0;
-    height: 100%;
-}
-
+  position: relative;
+  padding: 22px 20px 0;
+  height: 100%; }
 
 #preview div {
-    padding: 0;
-    margin: 2px;
-    width: 112px;
-    display: inline;
-    float: left;
-}
+  padding: 0;
+  margin: 2px;
+  width: 112px;
+  display: inline;
+  float: left; }
 
 .preview_thumb_area img {
-    max-width: 112px;
-    max-height: 112px;
-}
+  max-width: 112px;
+  max-height: 112px; }
 
 #preview div a {
-    display: block;
-    margin: 0 auto;
-    font-size: 80%;
-}
+  display: block;
+  margin: 0 auto;
+  font-size: 80%; }
 
 #preview img {
-    margin: 2px 2px;
-    background: white;
-}
+  margin: 2px 2px;
+  background: white; }
 
 #map_pages {
-    width: 425px;
-    position: absolute;
-    bottom: 10px;
-    margin: 15px 0 5px;
-    display: block;
-}
+  width: 425px;
+  position: absolute;
+  bottom: 10px;
+  margin: 15px 0 5px;
+  display: block; }
 
 .pager {
-    width: 230px;
-    position: absolute;
-    bottom: 10px;
-    margin: 15px 0 5px;
-    display: block;
-}
+  width: 230px;
+  position: absolute;
+  bottom: 10px;
+  margin: 15px 0 5px;
+  display: block; }

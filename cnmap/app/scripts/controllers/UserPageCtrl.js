@@ -6,7 +6,7 @@
 angular.module('userPageApp', [
         'ngResource',
         'ui.bootstrap',
-        'ui.mapgaode',
+        'ui.map',
         'cnmapApp'])
     .controller('UserCtrl', ['$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService',
         function ($window, $location, $rootScope, $scope, UserPhoto, UserService) {
@@ -145,6 +145,9 @@ angular.module('userPageApp', [
                 uiMapCache: false
             }
 
+            if($window.mapVendor == "qq") {
+                $window.mapVendor = "gaode";
+            }
             var panoramioLayer = new cnmap.PanoramioLayer({
                                             suppressInfoWindows: false,
                                             mapVendor: $window.mapVendor || "gaode"});

@@ -89,8 +89,8 @@ public class SignupController extends BaseFormController {
 //        userSettings.setAvatar(avatar);
 
         try {
-            this.getUserManager().saveUser(user);
-            userSettingsService.save(userSettings);
+            user = this.getUserManager().saveUser(user);
+            userSettingsService.create(user);
         } catch (AccessDeniedException ade) {
             // thrown by UserSecurityAdvice configured in aop:advisor userManagerSecurity
             log.warn(ade.getMessage());
@@ -127,6 +127,8 @@ public class SignupController extends BaseFormController {
         } catch (MailException me) {
             saveError(request, me.getMostSpecificCause().getMessage());
         }
+        
+        request.getSession().setAttribute("userId", user.getId());
         
         return getSuccessView();
     }

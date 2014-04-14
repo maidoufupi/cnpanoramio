@@ -4,6 +4,7 @@ import org.appfuse.dao.SearchException;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
@@ -45,25 +46,16 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-	public ModelAndView getUserPage(@PathVariable String userId, @RequestParam(required=false) Integer photo_page, @RequestParam(required=false) String show)
+	public ModelAndView getUserPage(@PathVariable String userId)
 			throws Exception {
 		Model model = new ExtendedModelMap();
-		
-		if(null == photo_page || 0 == photo_page) {
-			photo_page = 1;
-		}
-		
+				
 		try {
 			User user = userManager.get(Long.parseLong(userId));
-			int count = photoManager.getPhotoCount(user);
-			UserSettings userSettings = userSettingsManager.getSettingsByUserName(user.getUsername());
-			
-			model.addAttribute("count", count);
-			model.addAttribute("pageSize", pageSize);
-			model.addAttribute("user", user);
-			model.addAttribute("userSettings", userSettings);
-		} catch (Exception se) {
-			model.addAttribute("searchError", se.getMessage());
+		} catch(ObjectRetrievalFailureException ex) {
+			return new ModelAndView("redirect:/404.jsp");
+		}catch (Exception se) {			
+			return new ModelAndView("redirect:/404.jsp");
 		}
 		return new ModelAndView("user", model.asMap());
 	}
@@ -79,7 +71,10 @@ public class UserController {
 			UserSettings userSettings = userSettingsManager.getSettingsByUserName(user.getUsername());
 			model.addAttribute("user", user);
 			model.addAttribute("userSettings", userSettings);
-		} catch (SearchException se) {
+		} catch(ObjectRetrievalFailureException ex) {
+			
+		}
+		catch (SearchException se) {
 			model.addAttribute("searchError", se.getMessage());
 		}
 		return new ModelAndView("user", model.asMap());

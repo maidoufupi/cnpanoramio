@@ -8,41 +8,34 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as anonymous module.
-        define(['jquery'], factory);
+        define([window, 'jquery', 'Panoramio'], factory);
     } else {
         // Browser globals.
-        factory(window);
+        factory(window, jQuery);
     }
-}(function ($) {
+
+})(function ($window, $jQuery) {
 
 // 全局命名空间
-    $.cnmap = $.cnmap || {};
+    $window.cnmap = $window.cnmap || {};
 
-    $.cnmap.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
+    $window.cnmap.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
 
-        var panoramio = new $.cnmap.Panoramio();
-
-        var infoWindows = [];
-        var infoWindow = new qq.maps.InfoWindow();
-        var labels = [];
+        var infoWindow = new qq.maps.InfoWindow();;
+        var labels = {};
+        var thumbPhotoIds = [];
 
         this.preZoom = 0;
         this.preBounds = null;
 
-        opts = opts ? opts : {};
+        this.opts = $jQuery.extend( {clickable: true}, opts);
 
-        if (opts.map) {
-            this.setMap(opts.map);
+        if (this.opts.map) {
+            this.setMap(this.opts.map);
         }
 
         this.getMap = function () { //    Map    Returns the map on which this layer is displayed.
-            return opts.map;
-        };
-
-        this.getTag = function () { //     string
-        };
-
-        this.getUserId = function () { //	string
+            return this.opts.map;
         };
 
         /**
@@ -51,7 +44,7 @@
          */
         this.setMap = function (map/*:Map*/) { //	None	Renders the layer on the specified map. If map is set to null, the layer will be removed.
             if (map) {
-                opts.map = map;
+                this.opts.map = map;
                 this.bindTo("zoom", map);
                 this.bindTo("center", map);
 
@@ -63,84 +56,139 @@
                     getBoundsThumbnails
                 );
             } else {
-                opts.map = null;
+                this.opts.map = undefined;
                 // TODO
-                panoramio.clearVisible();
+                this.clearVisible();
             }
 
             var that = this;
             function getBoundsThumbnails() {
                 var bounds = map.getBounds();
-                var mapContainer = map.getContainer();
+                var mapContainer = $jQuery(map.getContainer());
                 var size = {
-                    width: parseInt(mapContainer.width),
-                    height: parseInt(mapContainer.height)
+                    width: parseInt(mapContainer.width()),
+                    height: parseInt(mapContainer.height())
                 };
-                var thumbs = panoramio.getBoundsThumbnails({
-                    ne: {
-                        lat: bounds.getNorthEast().lat,
-                        lng: bounds.getNorthEast().lng
+                var thumbs = that.getBoundsThumbnails({
+                        ne: {
+                            lat: bounds.getNorthEast().lat,
+                            lng: bounds.getNorthEast().lng
+                        },
+                        sw: {
+                            lat: bounds.getSouthWest().lat,
+                            lng: bounds.getSouthWest().lng
+                        }
                     },
-                    sw: {
-                        lat: bounds.getSouthWest().lat,
-                        lng: bounds.getSouthWest().lng
-                    }
-                }, map.getZoom(), size, function(thumbs) {
-                    for (var i in thumbs) {
-                        var photoId = thumbs[i].photoId;
-                        if(panoramio.getVisible(photoId)) {
-                            continue;
-                        }
-                        if(labels[photoId]) {
-                            labels[photoId].setMap(map);
-                            continue;
-                        }
-                        var label = new qq.maps.Label();
-                        label.photoId = photoId;
-                        label.setContent(panoramio.getLabelContent(photoId));
-                        label.setMap(map);
-                        label.setPosition(new qq.maps.LatLng(thumbs[i].lat, thumbs[i].lng));
-                        labels[photoId] = label;
-                        qq.maps.event.addListener(
-                            label,
-                            'click',
-                            function () {
-                                if (opts.suppressInfoWindows) {
-                                    if (infoWindow.opened) {
-                                        infoWindow.close();
-                                        infoWindow.opened = false;
-                                    } else {
-                                        infoWindow.setContent(panoramio.getInfoWindowContent(this.photoId));
-                                        infoWindow.setPosition(this.getPosition());
-                                        infoWindow.open();
-                                        infoWindow.opened = true;
-                                    }
-                                }
-                            });
-                    }
+                    map.getZoom(),
+                    size,
+                    processRes
+                )
+            }
 
-                    // trigger data_changed event
-                    $(that).trigger("data_changed", [thumbs]);
-                })
+            function processRes(thumbs) {
+                var photoIds = [];
+                var photos = {};
+                for (var i in thumbs) {
+                    photoIds.push(thumbs[i].photoId);
+                    photos[thumbs[i].photoId] = thumbs[i];
+                }
+                cnmap.utils.compareArray(
+                    thumbPhotoIds,
+                    photoIds,
+                    function(a, c, b) {
+                        if(a) {
+                            if(labels[a]) {
+                                labels[a].setVisible(false);
+                            }
+                            var index = thumbPhotoIds.indexOf(a);
+                            if (index > -1) {
+                                thumbPhotoIds.splice(index, 1);
+                            }
+                        }
+
+                        if(c) {
+                            // do nothing
+                        }
+
+                        if(b) {
+                            thumbPhotoIds.push(b);
+                            if(labels[b]) {
+                                labels[b].setVisible(true);
+                                labels[b].setMap(map);
+                            }else{
+                                var label = new qq.maps.Label();
+                                label.photoId = b;
+                                label.setContent(that.getLabelContent(b));  //自定义点标记覆盖物内容);
+                                label.setMap(map);
+                                label.setPosition(new qq.maps.LatLng(photos[b].lat, photos[b].lng));
+                                if(that.opts.clickable) {
+                                    qq.maps.event.addListener(
+                                        label,
+                                        'click',
+                                        function () {
+                                            if (that.opts.suppressInfoWindows) {
+                                                infoWindow.setOptions({
+                                                    content: that.getInfoWindowContent(this.photoId),
+                                                    position: this.getPosition()
+                                                })
+                                                infoWindow.open();
+                                            }else {
+                                                $jQuery(that).trigger("data_clicked", [this.photoId]);
+                                            }
+                                        });
+                                }
+                                labels[b] = label;
+                            }
+                        }
+                    })
+
+                // trigger data_changed event
+                $jQuery(that).trigger("data_changed", [thumbs]);
             }
         };
 
+        this.getLabelContent = function(photoId) {
+            if(this.opts.suppressInfoWindows) {
+                return "<img src='" + this.ctx + "/api/rest/photo/" + photoId
+                    + "/3' style='width: 34px; height: 34px;'>";
+            }else {
+                if(this.opts.phone) {
+                    return "<img src='" + this.ctx + "/api/rest/photo/"
+                        + photoId + "/3' style='width: 34px; height: 34px;'>";
+                }else {
+                    return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
+                        + photoId + "/3' style='width: 34px; height: 34px;'></a>";
+                }
+            }
+        }
+
+        this.getInfoWindowContent = function(photoId) {
+            var infoWindow = document.createElement("div");
+            $jQuery(infoWindow).css({
+                'width': '200px',
+                'height': '200px',
+                'display': 'inline-block'
+            }).append(
+                "<a href='" + this.ctx + "/photo/" + photoId+ "'><img src='" + this.ctx + "/api/rest/photo/" + photoId + "/2' ></a>"
+            )
+            return infoWindow;
+        }
+
         this.setOptions = function (options/*:PanoramioLayerOptions*/) { //	None
-            opts = options;
-        };
+            this.opts = options;
+        }
 
-        this.setTag = function (tag/*:string*/) { //	None
-        };
-
-        this.setUserId = function (userId/*:string*/) { //	None
-        };
+        this.trigger = function(event) {
+            qq.maps.event.trigger(this.opts.map, "idle");
+        }
 
         this.center_changed = function () {
 //            infoWindows = [];
         };
     };
 
-    $.cnmap.PanoramioLayer.prototype = new qq.maps.MVCObject();
+    $window.cnmap.Panoramio.prototype = new qq.maps.MVCObject();
+    $window.cnmap.PanoramioLayer.prototype = new $window.cnmap.Panoramio();
 
 //    $.cnmap.qq.PanoramioLayer.prototype.zoom_changed = function () {
 //        infoWindows = [];
@@ -154,4 +202,5 @@
 //        userId : string, // A Panoramio user ID. If provided, only photos by this user will be displayed on the map. If both a tag and user ID are provided, the tag will take precedence.
 //    };
 
-}));
+    return $window.cnmap.PanoramioLayer;
+});

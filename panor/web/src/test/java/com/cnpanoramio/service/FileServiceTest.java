@@ -69,8 +69,9 @@ public class FileServiceTest {
         log.info(ins);
 		fileService.saveFile(FileService.TYPE_IMAGE, 1001L, "jpg", ins);
 		
-		File file = fileService.readFile(FileService.TYPE_IMAGE, 1001L, "jpg", FileService.THUMBNAIL_LEVEL_1);
+		File file = fileService.readFile(FileService.TYPE_IMAGE, 1001L, "jpg", FileService.THUMBNAIL_LEVEL_0);
 		log.info(file.getAbsoluteFile());
+		log.info(file.length());
 		
 		Assert.assertTrue(file.isFile());
 

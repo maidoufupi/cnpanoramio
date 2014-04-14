@@ -1,50 +1,58 @@
 'use strict';
 
-angular.module('cnmapApp')
-  .controller('ExploreWorldCtrl', ['$scope', function ($scope) {
-        $scope.photos = [];
-        $scope.allPhotos = [];
-        $scope.slice = 0;
-        $scope.photoStart = true;
-        $scope.photoEnd = true;
-        var photoSize = 4;
+angular.module('indexApp', ["cnmapApp", "ui.map"])
+  .controller('IndexCtrl', ['$window', '$scope', function ($window, $scope) {
 
+        var mapEventListener = $window.cnmap.MapEventListener.factory();
+        $scope.mapOptions = {
+            // map plugin config
+            // map-self config
+            resizeEnable: true,
+            panControl: false,
+            zoomControl: false,
 
-        $scope.updatePhoto = function(photos) {
-            $scope.allPhotos = photos;
-            $scope.photos = photos.slice(0, photoSize);
-            $scope.slice = 0;
-            setPhotoStartEnd();
+            // ui map config
+            uiMapCache: false
         }
 
-        $scope.nextPhoto = function() {
-            if($scope.slice <= $scope.allPhotos.length) {
-                $scope.slice = $scope.slice + photoSize;
-                $scope.photos = $scope.allPhotos.slice($scope.slice, $scope.slice + photoSize);
-                setPhotoStartEnd();
+        $("div.imgLiquidFill").imgLiquid({
+            fill : true
+        });
+
+        var photos, photo_index;
+
+        var restclient = new $.RestClient(window.ctx + '/api/rest/');
+        restclient.add('index');
+
+        function setPhoto(photo) {
+            $(".front-photo_sizer img").attr("src", ctx + "/api/rest/photo/" + photo.id + "/1");
+            $(".front-photo_sizer a").attr("href", ctx + "/photo/" + photo.id);
+
+            mapEventListener.setCenter($scope.map, photo.lat, photo.lng);
+            if(!photo.mark) {
+                photo.mark = true;
+                mapEventListener.createDraggableMarker($scope.map, photo.lat, photo.lng);
+            }
+
+            $("div.imgLiquidFill").imgLiquid({
+                fill : true
+            });
+
+            if(photos.length > 1) {
+                setTimeout(function() {
+                    setPhoto(photos[photo_index]);
+                    photo_index = (photo_index + 1) % photos.length;
+                }, 4000);
             }
         }
 
-        $scope.prePhoto = function() {
-            if($scope.slice >= photoSize) {
-                $scope.slice = $scope.slice - photoSize;
-                $scope.photos = $scope.allPhotos.slice($scope.slice, $scope.slice + photoSize);
-                setPhotoStartEnd();
+        restclient.index.read('photo').done(function(data) {
+            photos = data;
+            photo_index = 0;
+            if(photos.length) {
+                setPhoto(photos[photo_index]);
+                photo_index = (photo_index + 1) % photos.length;
             }
 
-        }
-
-        function setPhotoStartEnd() {
-            if($scope.slice + photoSize <= $scope.allPhotos.length) {
-                $scope.photoEnd = false;
-            }else {
-                $scope.photoEnd = true;
-            }
-
-            if($scope.slice >= photoSize) {
-                $scope.photoStart = false;
-            }else {
-                $scope.photoStart = true;
-            }
-        }
+        })
   }]);

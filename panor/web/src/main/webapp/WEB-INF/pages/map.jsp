@@ -7,14 +7,13 @@
 <meta name="menu" content="AdminMenu" />
 
     <!-- Custom styles for this template -->
-    <link href="<c:url value="/styles/ExploreWorld.css"/>" rel="stylesheet">
+    <%-- <link href="<c:url value="/styles/ExploreWorld.css"/>" rel="stylesheet"> --%>
 </head>
 <body>
 	
     <script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/jquery-bbq/jquery.ba-bbq.js"/>"></script> 
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-mapgaode/src/ui-map.js"/>"></script>
+    
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.Panoramio.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
@@ -28,13 +27,17 @@
             src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
-    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.qq.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.qq.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.gaode.js"/>"></script>
@@ -44,6 +47,8 @@
   </c:when>
   <c:otherwise>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.gaode.js"/>"></script>
@@ -54,11 +59,11 @@
 			angular.bootstrap(document.getElementById("exploreWorld"), ['exploreWorldApp']);
 	})
 </script>
-<div id="exploreWorld" class="container container-main" ng-controller="ExploreWorldCtrl">
+<div id="exploreWorld" class="container-explore-map" ng-controller="ExploreWorldCtrl">
     <div class="col-main">
         <div id="map-canvas" ui-map="myMap" ui-options="mapOptions"></div>
     </div>
-    <div class="col-info">
+    <div class="col-info" >
         <div id="thumbinnerarea">
             <ul id="tabs" class="nav nav-pills">
                 <li id="tab_li_1" data-ng-class="{active: tabs.map}">
@@ -82,6 +87,7 @@
                     </a>
                 </li>
             </ul>
+
             <div id="preview">
                 <div class="preview_thumb_area" ng-repeat="photo in photos" id="pid{{photo.photoId}}" style="height: 112px;">
                     <a href="photo/{{photo.photoId}}">

@@ -7,16 +7,16 @@
 	<parent>
 		<groupId>com.cnpanoramio</groupId>
 		<artifactId>panor</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>panor-core</artifactId>
 	<packaging>jar</packaging>
-	<name>AppFuse Modular Application - Core</name>
+	<name>Photo on map Modular Application - Core</name>
 
 	<build>
-		<!-- plugins>
+		<!-- <plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>hibernate3-maven-plugin</artifactId>
@@ -85,7 +85,7 @@
 				</dependencies>
 			</plugin>
 			
-		</plugins-->
+		</plugins> -->
 		<testResources>
 			<testResource>
 				<directory>src/test/resources</directory>

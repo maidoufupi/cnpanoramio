@@ -14,13 +14,10 @@
         <a href="<c:url value='/userform'/>"><fmt:message key="menu.user"/></a>
     </li>
     <li>
-        <a href="<c:url value='/fileupload'/>"><fmt:message key="menu.selectFile"/></a>
+        <a href="<c:url value='/upload'/>"><fmt:message key="menu.selectFile"/></a>
     </li>
     <li>
-        <a href="<c:url value='/photoUpload'/>"><fmt:message key="menu.selectFile"/></a>
-    </li>
-    <li>
-        <a href="<c:url value='/exploreWorld'/>"><fmt:message key="menu.explore"/></a>
+        <a href="<c:url value='/map'/>"><fmt:message key="menu.explore"/></a>
     </li>
 </ul>
 </body>

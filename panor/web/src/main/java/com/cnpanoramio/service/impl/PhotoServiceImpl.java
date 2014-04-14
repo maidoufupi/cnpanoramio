@@ -579,8 +579,37 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 		is1 = new ByteArrayInputStream(content);
 		fileService.saveFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType(), is1);
-
+		
+		// 新线程运行生成图片缩略图
+		is1 = new ByteArrayInputStream(content);
+		new Thread(new SaveThumbnailsRunnable(is1, photo.getId(), photo.getFileType())).start();
+		
 		return photo;
+	}
+	
+	/**
+	 * 新线程运行生成图片缩略图
+	 * 
+	 * @author any
+	 *
+	 */
+	private class SaveThumbnailsRunnable implements Runnable {
+		
+		private InputStream ins;
+		private Long id;
+		private String type;
+		
+		public SaveThumbnailsRunnable(InputStream ins, Long id, String type) {
+			this.ins = ins;
+			this.id = id;
+			this.type = type;
+		}
+
+		@Override
+		public void run() {
+			fileService.saveThumbnails(FileService.TYPE_IMAGE, id, type, ins);			
+		}
+		
 	}
 
 	@Override
@@ -608,21 +637,6 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		}
 		return response;
 	}
-
-//	@Override
-//	public InputStream loadPhoto(Long id) {
-//		// Photo photo = photoDao.get(id);
-//		File file = fileService.readFile(FileService.TYPE_IMAGE, id, 0);
-//		FileInputStream fis;
-//		try {
-//			fis = new FileInputStream(file);
-//			return fis;
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
 
 	@Override
 	public int getPhotoCount(User user) {

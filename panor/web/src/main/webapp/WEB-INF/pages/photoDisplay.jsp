@@ -4,12 +4,9 @@
 <head>
 <title><fmt:message key="photo.display.title" /></title>
 <meta name="menu" content="AdminMenu" />
-<link href="<c:url value="/styles/PhotoDisplay.css"/>" rel="stylesheet">
+<%-- <link href="<c:url value="/styles/PhotoDisplay.css"/>" rel="stylesheet"> --%>
 </head>
 	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
-
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-mapgaode/src/ui-map.js"/>"></script>
     
     <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/controllers/PhotoCtrl.js"/>"></script>
@@ -26,13 +23,16 @@
             src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
-    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.qq.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.qq.js"/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
   </c:when>
@@ -41,6 +41,8 @@
   </c:when>
   <c:otherwise>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
   </c:otherwise>
@@ -204,7 +206,7 @@
        		<h2>用户</h2>
             <div id="profile_pic_info">
                 <a href="{{ctx}}/user/{{userOpenInfo.id}}">
-                	<img ng-src="{{ctx}}/images/user_avatar.png"
+                	<img ng-src="{{apirest}}/user/{{userOpenInfo.id || 1}}/avatar"
                         width="60" height="60" alt="{{userOpenInfo.name}}" id="profile_pic_avatar"></a>
 
                 <div id="profile_info">
@@ -225,10 +227,6 @@
             </div>
             <div id="wapi_photo_list">
                 <div class="panoramio-wapi-photolist-h panoramio-wapi-photolist" style="width: 295px; height: 48px;">
-                    <a class="panoramio-wapi-arrow panoramio-wapi-prev" href="#" style="display: none;">
-                        <img src="http://www.panoramio.com/img/wapi/photo_list_widget/left_arrow.png" alt="??" width="39"
-                             height="38" title="??" style="margin-top: 5px;">
-                    </a>
                     <span class="panoramio-wapi-arrowbox panoramio-wapi-arrowbox-prev"
                           style="width: 39px; display: none;"></span>
 
@@ -247,10 +245,6 @@
                             </div>
                         </div>
                     </div>
-                    <a class="panoramio-wapi-arrow panoramio-wapi-next" href="#" style="display: none;">
-                        <img src="http://www.panoramio.com/img/wapi/photo_list_widget/right_arrow.png" alt="??" width="39"
-                             height="38" title="??" style="margin-top: 5px;">
-                    </a>
                     <span class="panoramio-wapi-arrowbox panoramio-wapi-arrowbox-next"
                           style="width: 39px; display: none;"></span>
                 </div>
@@ -287,7 +281,7 @@
                         </a>
                     </div>
                     <p id="misplaced">
-                        <a id="map_photo" href="{{ctx}}/map_photo#?id={{photoId}}">
+                        <a id="map_photo" href="{{ctx}}/map_photo##id={{photoId}}">
                             放错地点了吗？建议新的位置
                         </a>
                     </p>

@@ -47,12 +47,6 @@ public class FileServiceImpl implements FileService {
 	private String endpoint;
 	
 	private OSSClient client;
-	
-	@Override
-	public String uploadFile(String fileType, String fileName, File file) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public boolean saveFile(String fileType, Long fileKey, String fileExt, InputStream ins) {
@@ -231,6 +225,13 @@ public class FileServiceImpl implements FileService {
 
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
+	}
+
+	@Override
+	public void saveThumbnails(String fileType, Long fileKey, String fileExt,
+			InputStream ins) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

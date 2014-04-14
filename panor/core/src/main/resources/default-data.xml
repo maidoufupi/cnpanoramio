@@ -91,6 +91,13 @@
         </row>
     </table>    
     
+    <table name="avatar">
+        <column>id</column>
+        <row>
+            <value description="id">1</value>
+        </row>
+    </table>
+    
     <table name="user_settings">
         <column>id</column>
         <column>name</column>
@@ -106,7 +113,7 @@
             <value description="id">2</value>
             <value description="name">卧似透春绿</value>
             <value description="url_name">wstcl</value>
-            <value description="avatar">2</value>
+            <value description="avatar">1</value>
         </row>
     </table>
 </dataset>

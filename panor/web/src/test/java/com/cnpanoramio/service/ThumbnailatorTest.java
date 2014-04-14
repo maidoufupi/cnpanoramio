@@ -2,6 +2,7 @@ package com.cnpanoramio.service;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -13,6 +14,9 @@ import net.coobird.thumbnailator.Thumbnails.Builder;
 import net.coobird.thumbnailator.geometry.Positions;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.imgscalr.Scalr;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +29,8 @@ import com.cnpanoramio.service.impl.FileServiceImpl;
 @RunWith(BlockJUnit4ClassRunner.class)
 public class ThumbnailatorTest {
 	
+	protected transient final Log log = LogFactory.getLog(getClass());
+	
 	private InputStream ins;
     URL url;
     
@@ -34,8 +40,33 @@ public class ThumbnailatorTest {
 	@Before
 	public void preMethodSetup() {
 		fileService = new FileServiceImpl();
-		ins = getClass().getResourceAsStream("/image/image1.jpg");		
+		ins = getClass().getResourceAsStream("/image/photo.jpg");		
 		url = getClass().getResource("/image");
+	}
+	
+	@Test
+	public void testImageRead() throws IOException {
+		BufferedImage originalImage = null;
+		FileOutputStream fos;
+		try {
+			File uploadFile = new File("A:\\photo.jpg");
+			fos = FileUtils.openOutputStream(new File("A:\\photo.jpg"));
+			IOUtils.copy(ins, fos);
+			ins.close();
+			fos.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+//		try {
+//			originalImage = ImageIO.read(ins);
+//			log.info(originalImage.getWidth());
+//			log.info(originalImage.getHeight());
+//			ins.close();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 	}
 	
 	@Test

@@ -1,91 +1,79 @@
 /**
  * Created by any on 14-3-12.
  */
-angular.module('cnmapApp')
-    .controller('ChUserAvatarCtrl', ['$scope', '$log', '$sce', '$http', '$modalInstance', '$upload', 'AvatarService',
-        function ($scope, $log, $sce, $http, $modalInstance, $upload, AvatarService) {
+angular.module('userSettingsApp')
+    .controller('ChUserAvatarCtrl', ['$window', '$scope', '$log', '$sce', '$http', '$modalInstance',
+        function ($window, $scope, $log, $sce, $http, $modalInstance) {
 
-            var getBlobURL = (window.URL && URL.createObjectURL.bind(URL)) ||
-                (window.webkitURL && webkitURL.createObjectURL.bind(webkitURL)) ||
-                window.createObjectURL;
-
-            $scope.fileReaderSupported = window.FileReader != null;
-            $scope.uploadRightAway = true;
-            $scope.changeAngularVersion = function() {
-                window.location.hash = $scope.angularVersion;
-                window.location.reload(true);
-            }
-            $scope.hasUploader = function(index) {
-                return $scope.upload[index] != null;
-            };
-            $scope.abort = function(index) {
-                $scope.upload[index].abort();
-                $scope.upload[index] = null;
-            };
+            var url = $window.apirest + "/user/avatar";
 
             $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
+                $modalInstance.dismiss($scope.avatar);
             };
+
+            var getBlobURL = ($window.URL && $window.URL.createObjectURL.bind($window.URL)) ||
+                ($window.webkitURL && $window.webkitURL.createObjectURL.bind($window.webkitURL)) ||
+                $window.createObjectURL;
 
             $scope.fileUpload = function () {
 
-                var formData = new FormData();
-                $log.debug($scope.imageUrl.$$unwrapTrustedValue());
-                formData.append('file', [$scope.imageUrl.$$unwrapTrustedValue()]);
+                $scope.closeAlert(0);
+                if(!$scope.$$childTail.$$childTail.previewUrl) {
+                    return;
+                }
 
-                $http({method: 'POST', url: 'http://127.0.0.1:8080/panor-web/api/rest/user/avatar',
-                    data: formData, headers: {'Content-Type': "multipart/form-data"}, transformRequest: angular.identity})
-                    .success(function(data, status, headers, config) {
+                var boundary = Math.random().toString().substr(2);
+                var multipart = "";
+                multipart += "--" + boundary
+                    + "\r\nContent-Disposition: form-data; name=" + "\"file\"" + '; filename="avatar.png"'
+                    + "\r\nContent-type: application/octet-stream"
+                    + "\r\n\r\n" + $scope.$$childTail.$$childTail.previewUrl + "\r\n";
 
+                multipart += "--" + boundary + "--\r\n";
+
+                $http({method: 'POST', url: url,
+                    data: multipart,
+                    headers: {
+                        "Content-Type": "multipart/form-data; charset=utf-8; boundary=" + boundary
+                    }
+                }).success(function (data, status, headers, config) {
+                        if (data.status == "OK") {
+                            $scope.avatar = data.open_info.avatar;
+                            $scope.addAlert({type: "success", msg: "上传成功!"});
+                        } else {
+                            $scope.addAlert({type: "danger", msg: "上传失败!"});
+                        }
                     });
-
-                AvatarService.upload({}, formData, function(data) {
-                    $log.debug(data);
-                })
-                return ;
-
-                    $scope.upload = $upload.upload({
-                        url: 'http://127.0.0.1:8080/panor-web/api/rest/photo/upload', //upload.php script, node.js route, or servlet url
-                        method: "POST",
-                        headers: {'Content-Type': "image/png"},
-                        // withCredentials: true,
-                        data: $scope.previewUrl
-                        //file: file // or list of files: $files for html5 only
-                        /* set the file formData name ('Content-Desposition'). Default is 'file' */
-                        //fileFormDataName: myFile, //or a list of names for multiple files (html5).
-                        /* customize how data is added to formData. See #40#issuecomment-28612000 for sample code */
-                        //formDataAppender: function(formData, key, val){}
-                    })
-//                        .then(function(response) {
-//                            $scope.uploadResult.push(response.data);
-//                        }, null, function(evt) {
-//                            $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
-//                        });
-                    //.error(...)
-                    //.then(success, error, progress);
-                    //.xhr(function(xhr){xhr.upload.addEventListener(...)})// access and attach any event listener to XMLHttpRequest.
-
             }
-
 
             $scope.onFileSelect = function ($files) {
-
-                $scope.$apply(function () {
-                    var url = $sce.trustAsResourceUrl(getBlobURL($files[0]))
-                    $scope.imageUrl = url;
-                })
+                $scope.closeAlert(0);
+                var url = $sce.trustAsResourceUrl(getBlobURL($files[0]));
+                $scope.imageUrl = url;
             }
 
+            $scope.addAlert = function(msg) {
+                $scope.alerts = [];
+                $scope.alerts.push(msg);
+            };
+
+            $scope.closeAlert = function (index) {
+                if($scope.alerts) {
+                    $scope.alerts.splice(index, 1);
+                }
+            };
         }])
+
     .directive('imgCropped', function () {
         return {
             restrict: 'E',
             replace: true,
-            scope: { src: '@', previewUrl: '@' },
+            scope: { 'src': '@',
+                'bind': '=previewUrl' },
             link: function (scope, element, attr) {
 
                 var boxWidth = 800;
-                var boxHeight = 520;
+                var boxHeight = 420;
                 var myImg;
                 var preview;
 
@@ -96,7 +84,7 @@ angular.module('cnmapApp')
                         myImg = undefined;
                     }
 
-                    if(preview) {
+                    if (preview) {
                         preview.next().remove();
                         preview.remove();
                         preview = undefined;
@@ -113,13 +101,8 @@ angular.module('cnmapApp')
                             bgFade: true,
                             boxWidth: boxWidth,
                             boxHeight: boxHeight,
-                            minSize: [16,16],
+                            minSize: [16, 16],
                             onSelect: updatePreview,
-//                            onSelect: function (x) {
-//                                scope.$apply(function () {
-//                                    scope.selected({cords: x});
-//                                });
-//                            },
                             aspectRatio: 1
                         });
 
@@ -145,8 +128,10 @@ angular.module('cnmapApp')
                     canvas.height = 100;
                     var ctx = canvas.getContext("2d");
                     ctx.drawImage(image, sx, sy, swidth, sheight, 0, 0, 100, 100);
-                    scope.previewUrl = canvas.toDataURL("image/png");
-                    preview.attr('src', scope.previewUrl);
+                    scope.$apply(function () {
+                        scope.previewUrl = canvas.toDataURL("image/png");
+                        preview.attr('src', scope.previewUrl);
+                    })
                 }
 
                 scope.$on('$destroy', clear);
@@ -154,5 +139,29 @@ angular.module('cnmapApp')
         };
     })
 
-    ;
+    .directive('ngFileSelect', [ '$parse', '$timeout', function($parse, $timeout) {
+        return function(scope, elem, attr) {
+            var fn = $parse(attr['ngFileSelect']);
+            elem.bind('change', function(evt) {
+                var files = [], fileList, i;
+                fileList = evt.target.files;
+                if (fileList != null) {
+                    for (i = 0; i < fileList.length; i++) {
+                        files.push(fileList.item(i));
+                    }
+                }
+                $timeout(function() {
+                    fn(scope, {
+                        $files : files,
+                        $event : evt
+                    });
+                });
+            });
+            elem.bind('click', function(){
+                this.value = null;
+            });
+        };
+    } ])
+
+;
 

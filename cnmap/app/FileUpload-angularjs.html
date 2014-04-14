@@ -41,8 +41,7 @@
 }
 </style>
     <!-- Generic page styles -->
-    <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="styles/modal.css">
+    <link rel="stylesheet" href="styles/main.css">
 
     <script type="text/javascript">
         //window.apirest = "http://127.0.0.1:8080/panor-web/api/rest"
@@ -62,16 +61,25 @@
     <script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"></script>
     <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
-    <script type="text/javascript" src="bower_components/angular-ui-mapgaode/src/ui-map.js"></script>
     <script type="text/javascript" src="scripts/panor/js/jquery.canvas.js"></script>
     <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
     <!-- The main application script -->
     <script src="scripts/services/main.js"></script>
     <script src="scripts/controllers/ChLocModalCtrl.js"></script>
     <script src="scripts/controllers/fileupload.js"></script>
+    <script type="text/javascript" src="scripts/panor/MapEventListener.js"></script>
+    <script type="text/javascript" src="scripts/panor/MapService.js"></script>
 
-    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
-            type="text/javascript"></script>
+    <!--<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
+    <script type="text/javascript" src="scripts/panor/gaode/MapEventListenerImpl.js"></script>
+    <script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>-->
+
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57&libraries=drawing"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
+    <script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>
+    <script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>
+
 </head>
 <body>
 
@@ -181,7 +189,6 @@
                 </td>
                 <td>
                     <a class="a-change-location" href data-ng-click="changeLocation([file])">更改位置</a>
-                    <a class="a-change-location" href data-ng-click="options.resizeMyImage()">更改位置</a>
                     <div class="location-display-place">
                         <span class="lat">{{file.latPritty}} {{file.latRef}}</span>
                         <span class="comma">{{file.latPritty && ", "}} </span>

@@ -10,6 +10,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DataBinder;
+import org.springframework.validation.ObjectError;
 import org.subethamail.wiser.Wiser;
 
 import javax.servlet.http.HttpServletResponse;
@@ -57,6 +58,9 @@ public class SignupControllerTest extends BaseControllerTestCase {
 
         BindingResult errors = new DataBinder(user).getBindingResult();
         c.onSubmit(user, errors, request, response);
+        for(ObjectError error : errors.getAllErrors()) {
+        	log.info(error.getDefaultMessage());
+        }
         assertFalse("errors returned in model", errors.hasErrors());
 
         // verify an account information e-mail was sent

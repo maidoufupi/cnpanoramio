@@ -3,8 +3,13 @@
  */
 angular.module('cnmapApp')
 
-    .controller('ChLocModalCtrl', ['$scope', '$log', '$modalInstance', 'files', 'GPSConvertService',
-        function ($scope, $log, $modalInstance, files, GPSConvertService) {
+    .controller('ChLocModalCtrl', ['$window', '$scope', '$log', '$modalInstance', 'files', 'GPSConvertService',
+        function ($window, $scope, $log, $modalInstance, files, GPSConvertService) {
+
+            var mapEventListener = $window.cnmap.MapEventListener.factory();
+            var mapService = $window.cnmap.MapService.factory();
+            $scope.mapEventListener = mapEventListener;
+            $scope.mapService = mapService;
 
             angular.forEach(files, function (file, key) {
                 file.active = false;
@@ -13,12 +18,16 @@ angular.module('cnmapApp')
                     var preview = cnmap.cloneCanvas(file.preview);
                     file.modal = {'preview': preview};
                 }
+            })
+            angular.forEach(files, function (file, key) {
                 if (!file.loc_preview && !!loadImage) {
                     // load image data preview
                     loadImage(
                         file,
                         function (img) {
                             file.loc_preview = file.loc_preview || {};
+                            jQuery(img).removeAttr('width').removeAttr('height');
+                            delete img.width;
                             file.loc_preview.preview = img;
                         },
                         {
@@ -26,7 +35,7 @@ angular.module('cnmapApp')
                             maxHeight: 300,
                             minWidth: 100,
                             minHeight: 50,
-                            canvas: true
+                            canvas: false
                         }
                     );
                 }
@@ -40,13 +49,13 @@ angular.module('cnmapApp')
                 var res = [];
                 angular.forEach(files, function (file, key) {
                     if (file.mapVendor) {
-                        if(file.lat != file.mapVendor.lat
+                        file.address = file.mapVendor.address;
+                        if (file.lat != file.mapVendor.lat
                             || file.lng != file.mapVendor.lng) {
                             file.lat = file.mapVendor.lat;
                             file.lng = file.mapVendor.lng;
                             file.latPritty = file.mapVendor.latPritty;
-                            file.lngPritty = file.mapVendor.lngPritty
-                            file.address = file.mapVendor.address;
+                            file.lngPritty = file.mapVendor.lngPritty;
                             file.vendor = 'gaode';
                             res.push(file);
                         }
@@ -59,22 +68,18 @@ angular.module('cnmapApp')
                 $modalInstance.dismiss('cancel');
             };
 
-            if (!$scope.marker) {
-                $scope.marker = new AMap.Marker({
-                    draggable: true
-                });
-                AMap.event.addListener($scope.marker, "dragend", function (event) {
-                    $scope.setPlace(event.lnglat.lat, event.lnglat.lng);
-                });
-            }
-
             $scope.$watch('$$childTail', function () {
                 if ($scope.$$childTail) {
                     $scope.$$childTail.$watch('myMap', function () {
                         if ($scope.$$childTail.myMap) {
                             $scope.map = $scope.$$childTail.myMap;
-                            cnmap.utils.gaode.map = $scope.$$childTail.myMap;
-                            cnmap.utils.gaode.init();
+
+                            angular.forEach(files, function (file, key) {
+                                createMarker(file);
+                            })
+
+                            mapService.init($scope.map);
+
                             addMapClickEvent($scope.map);
                             $scope.activePhoto($scope.file);
 
@@ -83,59 +88,58 @@ angular.module('cnmapApp')
                 }
             })
 
-            function addMapClickEvent(map) {
-                AMap.event.addListener(map, "click", function (event) {
-                    $log.debug(event);
-                    var lnglat = event.lnglat;
-                    addOrUpdateMarker($scope.file, lnglat);
-                    $scope.setPlace(lnglat.lat, lnglat.lng);
+            function createMarker(file, lat, lng) {
+                // create marker
+                file.mapVendor = file.mapVendor || {};
+                if(lat && lng) {
+                    file.mapVendor.lat = lat;
+                    file.mapVendor.lng = lng;
+                }else {
+                    if(!file.lat && !file.lng) {
+                        return;
+                    }else {
+                        file.mapVendor.lat = file.lat;
+                        file.mapVendor.lng = file.lng;
+                    }
+                }
+
+                file.mapVendor.marker = mapEventListener.createDraggableMarker(
+                    $scope.map, file.mapVendor.lat, file.mapVendor.lng
+                );
+                file.mapVendor.marker.photo_file = file;
+//                mapEventListener.setPosition(file.mapVendor.marker, file.lat, file.lng);
+                mapEventListener.setMap(file.mapVendor.marker, $scope.map);
+                mapEventListener.addMarkerActiveListener(file.mapVendor.marker, function () {
+                    $scope.activePhoto(this.photo_file);
                 });
+
+                mapEventListener.addDragendListener(file.mapVendor.marker, function (lat, lng) {
+                    $scope.setPlace(this.photo_file, lat, lng);
+                })
+
             }
 
-            function addOrUpdateMarker(file, lnglat) {
+            function addMapClickEvent(map) {
+                mapEventListener.addMapClickListener(map, function (lat, lng) {
+                    addOrUpdateMarker($scope.file, lat, lng);
+                    $scope.setPlace($scope.file, lat, lng);
+                })
+            }
+
+            function addOrUpdateMarker(file, lat, lng) {
                 file.mapVendor = file.mapVendor || {};
                 if (!file.mapVendor.marker) {
-                    file.mapVendor.marker = new AMap.Marker({
-                        draggable: true
-                    });
-                    file.mapVendor.marker.photo_file = file;
-
-                    AMap.event.addListener(file.mapVendor.marker, "dragend", function (event) {
-                        updatePhoto(this.photo_file);
-                        $scope.setPlace(event.lnglat.lat, event.lnglat.lng);
-                    });
+                    createMarker(file, lat, lng);
+                    mapEventListener.activeMarker(file.mapVendor.marker);
+                }else {
+                    mapEventListener.setPosition(file.mapVendor.marker, lat, lng);
+                    mapEventListener.setMap(file.mapVendor.marker, $scope.map);
                 }
-                file.mapVendor.marker.setPosition(lnglat);
-                file.mapVendor.marker.setMap($scope.map);
-                file.mapVendor.marker.show();
             }
 
-//            $scope.setMarker = function () {
-//                var latlng = $scope.map.getCenter();
-//                $scope.marker.setPosition(latlng);
-//                $scope.marker.setMap($scope.map);
-//                $scope.marker.show();
-//                $scope.setPlace(latlng.lat, latlng.lng);
-//            }
+            $scope.addOrUpdateMarker = addOrUpdateMarker;
 
-            $scope.hideMarker = function () {
-                $scope.marker.hide();
-            }
-
-//            $scope.updateMarker = function (lat, lng) {
-//                var point = new AMap.LngLat(lng, lat);
-//                $scope.file.mapVendor = $scope.file.mapVendor || {};
-//                if(!$scope.file.mapVendor.marker) {
-//
-//                }
-//                $scope.file.mapVendor.marker.setPosition(point);
-//                $scope.file.mapVendor.marker.setMap($scope.map);
-//                $scope.file.mapVendor.marker.show();
-//                $scope.map.setCenter(point);
-//                $scope.setPlace(lat, lng);
-//            }
-
-            $scope.setPlace = function (lat, lng, address) { // 此参数为非gps坐标
+            $scope.setPlace = function (file, lat, lng, address) { // 此参数为非gps坐标
 
                 $scope.file.mapVendor = $scope.file.mapVendor || {};
                 $scope.file.mapVendor.lat = lat;
@@ -146,91 +150,134 @@ angular.module('cnmapApp')
                 if (address) {
                     $scope.file.mapVendor.address = address;
                 } else {
-                    cnmap.utils.gaode.getAddress(lat, lng, function (res) {
-                        $scope.file.mapVendor.address = "";
-                        if (res.info == "OK") {
-                            $scope.$apply(function () {
-                                $scope.file.mapVendor.address = res.regeocode.formattedAddress;
-                            })
-                        }
+                    mapService.getAddress(lat, lng, function (res) {
+                        $scope.$apply(function () {
+                            $scope.file.mapVendor.address = res;
+                        })
                     })
+//                    cnmap.utils.gaode.getAddress(lat, lng, function (res) {
+//                        $scope.file.mapVendor.address = "";
+//                        if (res.info == "OK") {
+//
+//                        }
+//                    })
                 }
             }
 
-            $scope.getLocation = function (address) {
-                // 将地址解析结果显示在地图上,并调整地图视野
-                cnmap.utils.gaode.getLocation(address, function (res) {
-                    if (res.info == "OK") {
-                        var latlng = res.geocodes[0].location;
-                        $scope.map.setCenter(latlng);
-                        switch (res.geocodes[0].level) {
-                            case '省':
-                                $scope.map.setZoom(6);
-                                break;
-                            case '市':
-                                $scope.map.setZoom(8);
-                                break;
-                            case '区县':
-                                $scope.map.setZoom(11);
-                                break;
-                            case '乡镇':
-                                $scope.map.setZoom(12);
-                                break;
-                            case '村庄':
-                                $scope.map.setZoom(13);
-                                break;
-                            case '道路':
-                                $scope.map.setZoom(14);
-                                break;
-                            case '兴趣点':
-                                $scope.map.setZoom(15);
-                        }
+            /*
+             $scope.getLocation = function (address) {
+             // 将地址解析结果显示在地图上,并调整地图视野
+             cnmap.utils.gaode.getLocation(address, function (res) {
+             if (res.info == "OK") {
+             var latlng = res.geocodes[0].location;
+             $scope.map.setCenter(latlng);
+             switch (res.geocodes[0].level) {
+             case '省':
+             $scope.map.setZoom(6);
+             break;
+             case '市':
+             $scope.map.setZoom(8);
+             break;
+             case '区县':
+             $scope.map.setZoom(11);
+             break;
+             case '乡镇':
+             $scope.map.setZoom(12);
+             break;
+             case '村庄':
+             $scope.map.setZoom(13);
+             break;
+             case '道路':
+             $scope.map.setZoom(14);
+             break;
+             case '兴趣点':
+             $scope.map.setZoom(15);
+             }
 
-                        addOrUpdateMarker($scope.file, lnglat);
-                    }
-                })
-            }
+             addOrUpdateMarker($scope.file, lnglat);
+             }
+             })
+             }
+             */
 
             $scope.clearPlace = function () {
-                $scope.hideMarker();
-                delete $scope.file.mapVendor;
+                //$scope.hideMarker();
+                //delete $scope.file.mapVendor;
             }
 
-            function updatePhoto(file) {
-                $scope.file.active = false;
-                $scope.file = file;
-                $scope.file.active = true;
-            }
-
+            /**
+             * 激活图片
+             *
+             * @param file
+             */
             $scope.activePhoto = function (file) {
                 $scope.file.active = false;
+                if ($scope.file.mapVendor) {
+                    mapEventListener.deactiveMarker($scope.file.mapVendor.marker);
+                }
                 $scope.file = file;
                 $scope.file.active = true;
-
-                if ($scope.file.mapVendor &&
-                    ($scope.file.mapVendor.lat || $scope.file.mapVendor.lng)) {
-                    var point = new AMap.LngLat($scope.file.mapVendor.lng, $scope.file.mapVendor.lat);
-                    addOrUpdateMarker($scope.file, point);
-                    $scope.map.setCenter(point);
-//                    $scope.updateMarker($scope.file.mapVendor.lat, $scope.file.mapVendor.lng);
-                } else {
-                    if ($scope.file.lat || $scope.file.lng) {
-                        $scope.file.mapVendor = $scope.file.mapVendor || {};
-                        $scope.file.mapVendor.lat = $scope.file.lat;
-                        $scope.file.mapVendor.lng = $scope.file.lng;
-
-                        addOrUpdateMarker($scope.file, new AMap.LngLat($scope.file.lng, $scope.file.lat));
-                        $scope.map.setCenter(new AMap.LngLat($scope.file.lng, $scope.file.lat));
-                        $scope.setPlace($scope.file.lat, $scope.file.lng);
+                if ($scope.file.mapVendor) {
+                    if ($scope.file.mapVendor.lat) {
+                        mapEventListener.activeMarker($scope.file.mapVendor.marker);
+                        if(!mapEventListener
+                            .inMapView($scope.file.mapVendor.lat, $scope.file.mapVendor.lng, $scope.map)) {
+                            mapEventListener.setCenter($scope.map, $scope.file.mapVendor.lat, $scope.file.mapVendor.lng);
+                        }
+                        $scope.setPlace($scope.file, $scope.file.mapVendor.lat, $scope.file.mapVendor.lng);
                     } else {
                         $scope.clearPlace();
                     }
                 }
             }
-        }])
-    .controller('PhotoListScrollCtrl', ['$scope', '$location', '$anchorScroll',
-        function ($scope, $location, $anchorScroll) {
 
+            $scope.mapOptions = {
+                // map plugin config
+                toolbar: true,
+                scrollzoom: true,
+                maptype: true, //'SATELLITE',
+                overview: true,
+//                locatecity: true,
+                // map-self config
+                resizeEnable: true
+                // ui map config
+//            uiMapCache: false
+            }
         }])
+    .controller('TypeaheadCtrl', ['$scope', '$http', function ($scope, $http) {
+        $scope.selected = undefined;
+        $scope.states = [];
+        // Any function returning a promise object can be used to load values asynchronously
+        $scope.getLocation = function (val) {
+            return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
+                params: {
+                    address: val,
+                    sensor: false
+                }
+            }).then(function (res) {
+                    var addresses = [];
+                    angular.forEach(res.data.results, function (item) {
+                        addresses.push(item);
+                    });
+                    return addresses;
+                });
+        };
+
+        $scope.goLocation = function (address) {
+            var geometry = address.geometry;
+            if (geometry) {
+                $scope.mapEventListener.setCenter($scope.map, geometry.location.lat, geometry.location.lng);
+                $scope.addOrUpdateMarker($scope.file, geometry.location.lat, geometry.location.lng);
+                $scope.setPlace($scope.file,
+                    geometry.location.lat,
+                    geometry.location.lng,
+                    address.formatted_address);
+
+                $scope.mapEventListener.setBounds($scope.map,
+                    geometry.viewport.southwest,
+                    geometry.viewport.northeast);
+            }
+        }
+    }])
 ;
 
