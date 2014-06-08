@@ -1,8 +1,8 @@
 /**
  * Created by any on 14-3-12.
  */
-angular.module('cnmapApp')
-
+'use strict';
+angular.module('ponmApp.controllers')
     .controller('ChLocModalCtrl', ['$window', '$scope', '$log', '$modalInstance', 'files', 'GPSConvertService',
         function ($window, $scope, $log, $modalInstance, files, GPSConvertService) {
 
@@ -14,11 +14,14 @@ angular.module('cnmapApp')
             angular.forEach(files, function (file, key) {
                 file.active = false;
                 delete file.mapVendor;
-                if (!file.modal) {
+                if (!file.modal && file.preview) {
                     var preview = cnmap.cloneCanvas(file.preview);
                     file.modal = {'preview': preview};
                 }
-            })
+                file.mapVendor = file.mapVendor || {};
+                file.mapVendor.is360 = file.is360;
+            });
+
             angular.forEach(files, function (file, key) {
                 if (!file.loc_preview && !!loadImage) {
                     // load image data preview
@@ -27,7 +30,7 @@ angular.module('cnmapApp')
                         function (img) {
                             file.loc_preview = file.loc_preview || {};
                             jQuery(img).removeAttr('width').removeAttr('height');
-                            delete img.width;
+//                            delete img.width;
                             file.loc_preview.preview = img;
                         },
                         {
@@ -50,15 +53,16 @@ angular.module('cnmapApp')
                 angular.forEach(files, function (file, key) {
                     if (file.mapVendor) {
                         file.address = file.mapVendor.address;
-                        if (file.lat != file.mapVendor.lat
-                            || file.lng != file.mapVendor.lng) {
+                        file.is360 = file.mapVendor.is360;
+//                        if (file.lat != file.mapVendor.lat
+//                            || file.lng != file.mapVendor.lng) {
                             file.lat = file.mapVendor.lat;
                             file.lng = file.mapVendor.lng;
                             file.latPritty = file.mapVendor.latPritty;
                             file.lngPritty = file.mapVendor.lngPritty;
                             file.vendor = 'gaode';
-                            res.push(file);
-                        }
+//                        }
+                        res.push(file);
                     }
                 });
                 $modalInstance.close(res);

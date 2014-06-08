@@ -5,7 +5,6 @@
 <meta name="menu" content="SettingsMenu" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<link href="<c:url value="/styles/settings.css"/>" rel="stylesheet" />
 <link rel="stylesheet" href='<c:url value="bower_components/Jcrop/css/jquery.Jcrop.css"/>'/>
 
 <title>Panoramio - [设置]</title>
@@ -18,13 +17,6 @@
 	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/Jcrop/js/jquery.Jcrop.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/Jcrop/js/jquery.color.js"/>"></script>
-
-    <!-- The main application script -->
-    <script src="<c:url value="/scripts/services/main.js"/>"></script>
-    <script src="<c:url value="/scripts/controllers/UserSettingsCtrl.js"/>"></script>
-    <script src="<c:url value="/scripts/controllers/ChUserAvatarCtrl.js"/>"></script>
-
-	<%-- <script type="text/javascript" src="<c:url value="/scripts/settings.js"/>"></script> --%>
 
 <script>
 	$(document).ready(function () {

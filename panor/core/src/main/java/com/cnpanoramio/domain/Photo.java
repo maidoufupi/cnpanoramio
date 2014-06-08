@@ -87,7 +87,14 @@ public class Photo {
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Tag> tags = new HashSet<Tag>(0);
-
+	
+	@ManyToOne
+	@JoinColumn(name = "travel_id")
+	private Travel travel;
+	
+	@Column(name = "is360")
+	private Boolean is360;
+	
 	public final Long getId() {
 		return id;
 	}
@@ -273,4 +280,21 @@ public class Photo {
 			}
 		}
 	}
+
+	public Travel getTravel() {
+		return travel;
+	}
+
+	public void setTravel(Travel travel) {
+		this.travel = travel;
+	}
+
+	public Boolean isIs360() {
+		return is360;
+	}
+
+	public void setIs360(Boolean is360) {
+		this.is360 = is360;
+	}
+	
 }

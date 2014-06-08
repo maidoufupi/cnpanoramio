@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('mapPhotoApp', ['cnmapApp', 'ui.bootstrap', 'ui.map'])
+angular.module('mapPhotoApp', ['ponmApp', 'ui.bootstrap', 'ui.map'])
     .controller('MapPhotoCtrl', ['$window', '$location', '$log', '$scope', 'PhotoService',
         function ($window, $location, $log, $scope, PhotoService) {
         $scope.ctx = $window.ctx;
@@ -24,17 +24,18 @@ angular.module('mapPhotoApp', ['cnmapApp', 'ui.bootstrap', 'ui.map'])
                 updatePhotoIdListener($scope.photoId);
 
             }
-        })
+        });
 
         $scope.ok = function () {
 
             PhotoService.updateProperties({photoId: $scope.photoId}, {
                 'point': {
-                    'lat': $scope.file.lat,
-                    'lng': $scope.file.lng,
-                    'address': $scope.file.address
+                    'lat': $scope.file.mapVendor.lat,
+                    'lng': $scope.file.mapVendor.lng,
+                    'address': $scope.file.mapVendor.address
                 },
-                'vendor': 'gaode'
+                'vendor': 'gaode',
+                'is360': $scope.file.is360
             }, function(data) {
                 if(data.status == "OK") {
                     $log.debug("properties update successful");
@@ -55,8 +56,7 @@ angular.module('mapPhotoApp', ['cnmapApp', 'ui.bootstrap', 'ui.map'])
             mapService.init(map);
             addMapClickEvent($scope.map);
             updatePhotoIdListener();
-
-        })
+        });
 
         function updatePhotoIdListener() {
             if($scope.file && $scope.file.mapVendor && $scope.file.mapVendor.marker) {
@@ -64,8 +64,15 @@ angular.module('mapPhotoApp', ['cnmapApp', 'ui.bootstrap', 'ui.map'])
             }
             $scope.file = {
                 photoId: $scope.photoId
-            }
-            PhotoService.getGPSInfo({'photoId': $scope.photoId}, function(res) {
+            };
+
+            PhotoService.getPhoto({photoId: $scope.photoId}, function(data) {
+                if (data.status == 'OK') {
+                    $scope.file.is360 = data.prop.is360;
+                }
+            });
+
+            PhotoService.getGPSInfo({photoId: $scope.photoId}, function(res) {
                 if(res.status == "OK") {
                     addOrUpdateMarker($scope.file, res.gps[0].gps.lat, res.gps[0].gps.lng);
                     mapEventListener.setCenter($scope.map, res.gps[0].gps.lat, res.gps[0].gps.lng);

@@ -38,6 +38,8 @@ public class PhotoDaoTest {
 
 	PhotoDao photoDao;
 	UserDao userDao;
+	
+	private Long userId;
 
 	public PhotoDao getPictureDao() {
 		return photoDao;
@@ -49,7 +51,8 @@ public class PhotoDaoTest {
 	}
 
 	@Before
-	public void preMethodSetup() {		
+	public void preMethodSetup() {
+		userId = 1L;
 	}
 
 	@After
@@ -107,8 +110,15 @@ public class PhotoDaoTest {
 	
 	@Test
 	public void testGetUserPhotos() {
-		User user = userDao.get(3L);
+		User user = userDao.get(userId);
 		List<Photo> photos = photoDao.getUserPhotos(user, 10, 1);
+		for(Photo photo : photos) {
+			log.info("All : " + photo.getId());
+		}
+		photos = photoDao.getUserPhotos(user, 10, 1);
+		for(Photo photo : photos) {
+			log.info("Page : " + photo.getId());
+		}
 		Assert.assertEquals(10, photos.size());
 	}
 

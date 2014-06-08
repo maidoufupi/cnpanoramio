@@ -2,7 +2,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 <html lang="en">
 <head>
-    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
     <meta http-equiv="Pragma" content="no-cache"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
     <!-- Bootstrap theme -->
     <%-- <link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap-theme.min.css"/>"> --%>
     
-    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/main.css'/>" />
+    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/main.min.css'/>" />
     <decorator:head/>
 
     <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.min.js'/>"></script>
@@ -28,10 +28,11 @@
     <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
     
-    <script type="text/javascript" src="<c:url value="/scripts/panor/MapEventListener.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/MapService.js"/>"></script>
-    
-    <script type="text/javascript" src="<c:url value='/scripts/controllers/NavbarCtrl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ponmApp.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/controllers/scripts.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/directives/scripts.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/scripts.min.js"/>"></script>
+
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
     <script>
 	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径

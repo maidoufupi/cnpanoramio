@@ -26,7 +26,7 @@
 
         var labels = [];
         var thumbPhotoIds = [];
-        var infoWindow = new AMap.InfoWindow({isCustom: false});
+        var infoWindow = new AMap.InfoWindow({isCustom: false, closeWhenClickMap: true});
 
         this.preZoom = 0;
         this.preBounds = null;
@@ -38,10 +38,11 @@
         }
 
         /**
+         * Renders the layer on the specified map. If map is set to null, the layer will be removed.
          *
          * @param map {Map}
          */
-        this.setMap = function (map/*:Map*/) { //	None	Renders the layer on the specified map. If map is set to null, the layer will be removed.
+        this.setMap = function (map/*:Map*/) { //	None
             if (map) {
                 this.opts.map = map;
 
@@ -95,8 +96,8 @@
                         var photoIds = [];
                         var photos = {};
                         for (var i in thumbs) {
-                            photoIds.push(thumbs[i].photoId);
-                            photos[thumbs[i].photoId] = thumbs[i];
+                            photoIds.push(thumbs[i].photo_id);
+                            photos[thumbs[i].photo_id] = thumbs[i];
                         }
                         cnmap.utils.compareArray(
                             thumbPhotoIds,
@@ -137,7 +138,7 @@
                                                         if (infoWindow.getIsOpen()) {
                                                             infoWindow.close();
                                                         } else {
-                                                            infoWindow.setContent(that.getInfoWindowContent(this.photoId));
+                                                            infoWindow.setContent(that.getInfoWindowContent(photos[this.photoId]));
                                                             infoWindow.open(map, this.getPosition());
                                                         }
                                                     }else {
@@ -160,11 +161,11 @@
 
         this.setOptions = function (options/*:PanoramioLayerOptions*/) { //	None
             opts = options;
-        }
+        };
 
         this.trigger = function(event) {
             AMap.event.trigger(this.opts.map, "moveend");
-        }
+        };
 
 //        function open() {
 //            for (var infoWindow in infoWindows) {
@@ -175,7 +176,7 @@
         this.center_changed = function () {
 //            infoWindows = [];
         };
-    }
+    };
 
     window.cnmap.PanoramioLayer.prototype = new window.cnmap.Panoramio();
 

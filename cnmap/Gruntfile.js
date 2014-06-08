@@ -320,28 +320,63 @@ module.exports = function (grunt) {
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css',
-    //         '<%= yeoman.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= yeoman.dist %>/scripts/scripts.js': [
-    //         '<%= yeoman.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
+    cssmin: {
+       dist: {
+         files: {
+           '<%= yeoman.app %>/styles/main.min.css': [
+             '<%= yeoman.app %>/styles/main.css'
+           ]
+         }
+       }
+    },
+    uglify: {
+        options: {
+            mangle: {
+                except: ['jQuery', 'Backbone']
+            }
+        },
+       dist: {
+           options: {
+//               beautify: true
+           },
+         files: {
+             '<%= yeoman.app %>/scripts/ponmApp.min.js': [
+                 '<%= yeoman.app %>/scripts/app.js',
+                 '<%= yeoman.app %>/scripts/controllers.js',
+                 '<%= yeoman.app %>/scripts/directives.js',
+                 '<%= yeoman.app %>/scripts/services.js'
+             ],
+           '<%= yeoman.app %>/scripts/directives/scripts.min.js': [
+               '<%= yeoman.app %>/scripts/directives/filters.js',
+               '<%= yeoman.app %>/scripts/directives/FlexText.js',
+               '<%= yeoman.app %>/scripts/directives/ponmPhotoContainer.js',
+               '<%= yeoman.app %>/scripts/directives/PhotoFluidContainer.js',
+               '<%= yeoman.app %>/scripts/directives/repeatComplete.js'
+               ],
+           '<%= yeoman.app %>/scripts/panor/scripts.min.js': [
+               '<%= yeoman.app %>/scripts/panor/MapUtils.js',
+               '<%= yeoman.app %>/scripts/panor/MapTravel.js',
+               '<%= yeoman.app %>/scripts/panor/Map*.js',
+               '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.comm.js',
+               '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.Panoramio.js'
+             ],
+           '<%= yeoman.app %>/scripts/panor/scripts.gaode.min.js': [
+             '<%= yeoman.app %>/scripts/panor/gaode/Map*.js',
+             '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.gaode.js'
+           ],
+           '<%= yeoman.app %>/scripts/panor/scripts.qq.min.js': [
+               '<%= yeoman.app %>/scripts/panor/qq/Map*.js',
+               '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.qq.js'
+             ],
+           '<%= yeoman.app %>/scripts/controllers/scripts.min.js': [
+                 '<%= yeoman.app %>/scripts/controllers/*Ctrl.js'
+             ]
+         }
+       }
+    },
+    concat: {
+       dist: {}
+    },
 
     // Test settings
     karma: {

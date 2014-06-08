@@ -10,7 +10,7 @@ import com.cnpanoramio.domain.Photo;
 public interface PhotoDao extends GenericDao<Photo, Long>{
 
 	/**
-	 * 获取用户全部图片 
+	 * 获取用户全部图片, 按最新到最旧排列图片
 	 * 
 	 * @param user
 	 * @return
@@ -18,7 +18,7 @@ public interface PhotoDao extends GenericDao<Photo, Long>{
 	public List<Photo> getUserPhotos(User user);
 	
 	/**
-	 * 分页获取用户图片
+	 * 分页获取用户图片, 按最新到最旧排列图片
 	 * 
 	 * @param user
 	 * @param pageSize

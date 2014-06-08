@@ -30,7 +30,7 @@
                 callback.apply(this, [lnglat.lat, lnglat.lng, map.getZoom()]);
             }
 
-        }
+        };
 
         this.addToolBar = function(mapObj) {
             mapObj.plugin(["AMap.ToolBar"], function () {
@@ -43,20 +43,31 @@
         this.setCenter = function(map, lat, lng) {
             var point = new AMap.LngLat(lng, lat);
             map.setCenter(point);
-        }
+        };
+
+        this.setZoom = function(map, zoom) {
+            map.setZoom(zoom);
+        };
 
         this.setBounds = function(map, southwest, northeast){
             map.setBounds(new AMap.Bounds(
                 new AMap.LngLat(southwest.lng, southwest.lat),
                 new AMap.LngLat(northeast.lng, northeast.lat)
             ))
-        }
+        };
 
         this.inMapView = function(lat, lng, map) {
             map = map || this.opts.map;
             var point = new AMap.LngLat(lng, lat);
             return map.getBounds().contains(point);
-        }
+        };
+
+        this.addMarker = function(map, lat, lng) {
+            return new AMap.Marker({
+                map: map,
+                position: new AMap.LngLat(lng, lat)
+            });
+        };
 
         this.createDraggableMarker = function(map, lat, lng) {
             return new AMap.Marker({
@@ -64,20 +75,20 @@
                 map: map,
                 position: new AMap.LngLat(lng, lat)
             });
-        }
+        };
 
         this.activeMarker = function(marker) {
             if(marker) {
                 marker.setIcon("images/marker.png");
             }
 
-        }
+        };
 
         this.deactiveMarker = function(marker){
             if(marker) {
                 marker.setIcon("");
             }
-        }
+        };
 
         this.addMarkerActiveListener = function(marker, callback) {
             AMap.event.addListener(marker, "click", cback);
@@ -86,30 +97,30 @@
             function cback(evt) {
                 callback.apply(marker, []);
             }
-        }
+        };
 
         this.addDragendListener = function(marker, callback) {
             AMap.event.addListener(marker, "dragend", function (event) {
                 callback.apply(marker, [event.lnglat.lat, event.lnglat.lng]);
             });
-        }
+        };
 
         this.addMapClickListener = function(map, callback) {
             AMap.event.addListener(map, "click", function (event) {
                 var lnglat = event.lnglat;
                 callback.apply(map, [lnglat.lat, lnglat.lng]);
             });
-        }
+        };
 
         this.setPosition = function(target, lat, lng) {
             var point = new AMap.LngLat(lng, lat);
             target.setPosition(point);
-        }
+        };
 
         this.setMap = function(target, map){
             target.setMap(map);
             target.show();
-        }
+        };
     };
 
     $window.cnmap.MapEventListener.prototype = $window.cnmap.IMapEventListener;

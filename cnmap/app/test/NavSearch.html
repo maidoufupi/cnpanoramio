@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Photo Display</title>
+    <meta name="description"
+          content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.css">
+    <!-- Bootstrap theme styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <script type="text/javascript" src="../bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <!--<script type="text/javascript" src="scripts/controllers/GeoSearchCtrl.js"></script>-->
+    <script type="text/javascript" src="../scripts/controllers/NavbarCtrl.js"></script>
+    <script type="text/javascript" src="NavSearch.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            angular.bootstrap(document.getElementById("locationHashApp"), ['LocationHashApp']);
+        })
+    </script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-app="ponm.Navbar" data-ng-app="ponm.NavbarCtrl">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/panor-web/"><img src="../images/logo.png" class="navbar-logo"></a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active white"><a href="/panor-web/login">登录</a></li>
+                <li>
+                    <div class="nav-search-form" ng-controller="SearchLocCtrl">
+                        <form class="navbar-form navbar-left" ng-submit="update(asyncSelected)" novalidate>
+                            <input type="text" ng-model="asyncSelected" placeholder="搜索地址"
+                                   typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue"
+                                   typeahead-loading="loadingLocations"
+                                   class="form-control">
+                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+
+                <li id="exploreWorld" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="游览地图"
+                        >
+                    <a href="/map" >
+                        <span class="glyphicon glyphicon-plane white"></span>
+                    </a>
+                </li>
+                <li popover="图片上传" popover-trigger="mouseenter" popover-placement="bottom">
+                    <a href="/photoUpload" >
+                        <span class="glyphicon glyphicon-camera white"></span>
+                    </a>
+                </li>
+                <li popover="用户" popover-trigger="mouseenter" popover-placement="bottom">
+                    <a href="<c:url value='/user/xxxx'/>">
+                        <span>user</span>
+                        <span class="glyphicon glyphicon-user white"></span>
+                    </a>
+                </li>
+                <li class="btn-group" popover="设置" popover-trigger="mouseenter" popover-placement="bottom">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-th-list white"></span>
+                    </a>
+                    <ul id="dropdown" class="dropdown dropdown-menu">
+                        <li><a href="/userSettings"><span class="glyphicon glyphicon-cog"></span>用户设置</a></li>
+                        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>注销</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="locationHashApp" class="container" data-ng-controller="LocationHashCtrl">
+    <input class="btn btn-primary" value="sss" data-ng-model="userid"
+            data-ng-click="setUserId(userid)">
+</div>
+
+<div id="footer">
+        <span class="left">Version 1.0-SNAPSHOT
+            | 当前用户: user</span>
+        <span class="right">
+            © 2014<a href="http://raibledesigns.com">China Panoramio</a>
+        </span>
+</div>
+</body>
+</html>

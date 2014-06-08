@@ -64,6 +64,10 @@
             var that = this;
             function getBoundsThumbnails() {
                 var bounds = map.getBounds();
+                // 地图为初始化完时 getBounds()为空
+                if(!bounds) {
+                    return;
+                }
                 var mapContainer = $jQuery(map.getContainer());
                 var size = {
                     width: parseInt(mapContainer.width()),
@@ -89,8 +93,8 @@
                 var photoIds = [];
                 var photos = {};
                 for (var i in thumbs) {
-                    photoIds.push(thumbs[i].photoId);
-                    photos[thumbs[i].photoId] = thumbs[i];
+                    photoIds.push(thumbs[i].photo_id);
+                    photos[thumbs[i].photo_id] = thumbs[i];
                 }
                 cnmap.utils.compareArray(
                     thumbPhotoIds,
@@ -128,9 +132,9 @@
                                         function () {
                                             if (that.opts.suppressInfoWindows) {
                                                 infoWindow.setOptions({
-                                                    content: that.getInfoWindowContent(this.photoId),
+                                                    content: that.getInfoWindowContent(photos[this.photoId]),
                                                     position: this.getPosition()
-                                                })
+                                                });
                                                 infoWindow.open();
                                             }else {
                                                 $jQuery(that).trigger("data_clicked", [this.photoId]);
@@ -160,27 +164,58 @@
                         + photoId + "/3' style='width: 34px; height: 34px;'></a>";
                 }
             }
-        }
+        };
 
-        this.getInfoWindowContent = function(photoId) {
-            var infoWindow = document.createElement("div");
-            $jQuery(infoWindow).css({
-                'width': '200px',
-                'height': '200px',
-                'display': 'inline-block'
-            }).append(
-                "<a href='" + this.ctx + "/photo/" + photoId+ "'><img src='" + this.ctx + "/api/rest/photo/" + photoId + "/2' ></a>"
-            )
-            return infoWindow;
-        }
+//        this.getInfoWindowContent = function(photoId) {
+//            var infoWindow = document.createElement("div");
+//            $jQuery(infoWindow).css({
+//                'width': '200px',
+//                'height': '200px',
+//                'display': 'inline-block'
+//            }).append(
+//                "<a href='" + this.ctx + "/photo/" + photoId+ "'><img src='" + this.ctx + "/api/rest/photo/" + photoId + "/2' ></a>"
+//            )
+//            return infoWindow;
+//        };
+
+        this.getInfoWindowContent = function(photo) {
+
+            var date = new Date(photo.create_date),
+                dates;
+            dates = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+            return '<div class="panoramio-info-window" style="\'width\': \'200px\',\'height\': \'200px\',\'display\': \'inline-block\'">' +
+                '<div class="header">' +
+                photo.address +
+                '</div>' +
+                '<div class="body">' +
+                '<a href="'+ this.ctx + '/photo/' + photo.photo_id +'">' +
+                '<img src="'+ this.ctx + '/api/rest/photo/' + photo.photo_id +'/2">' +
+                '</a>' +
+                '</div>' +
+                '<div class="media">' +
+                '<a class="pull-left" href="'+ this.ctx + '/user/' + photo.user_id +'">' +
+                '<img class="media-object" src="'+ this.ctx + '/api/rest/user/' + photo.user_id +'/avatar" alt="'
+                +photo.username+'">' +
+                '</a>' +
+                '<div class="media-body">' +
+                '<h4 class="media-heading">作者：<a href="'+ this.ctx + '/user/' + photo.user_id +'">'
+                +photo.username+'</a></h4>' +
+                dates +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+//            return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
+//                + photoId + "/2' style='max-height: 200px; max-width: 200px;'></a>";
+        };
 
         this.setOptions = function (options/*:PanoramioLayerOptions*/) { //	None
             this.opts = options;
-        }
+        };
 
         this.trigger = function(event) {
             qq.maps.event.trigger(this.opts.map, "idle");
-        }
+        };
 
         this.center_changed = function () {
 //            infoWindows = [];

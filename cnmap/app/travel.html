@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>a travel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="styles/main.css">
+
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/jquery.rest/dist/jquery.rest.min.js"></script>
+
+    <!-- angularjs -->
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
+    <script type="text/javascript" src="bower_components/eventie/eventie.js"></script>
+    <script type="text/javascript" src="bower_components/eventEmitter/EventEmitter.js"></script>
+    <script type="text/javascript" src="bower_components/imagesloaded/imagesloaded.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
+
+    <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="scripts/controllers/ATravelCtrl.js"></script>
+    <script type="text/javascript" src="scripts/directives/filters.js"></script>
+    <script type="text/javascript" src="scripts/directives/FlexText.js"></script>
+    <script type="text/javascript" src="scripts/directives/PhotoFluidContainer.js"></script>
+
+    <script type="text/javascript" src="scripts/panor/scripts.min.js"></script>
+    <!--<script type="text/javascript" src="scripts/panor/MapTravel.js"></script>-->
+
+    <!-- Map vendor -->
+    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
+    <script type="text/javascript" src="scripts/panor/gaode/MapEventListenerImpl.js"></script>
+    <script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>
+
+    <script type="text/javascript">
+//        window.ctx = "http://115.28.21.165";
+        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.apirest = window.ctx + "/api/rest";
+    </script>
+</head>
+<body>
+<div class="container travel" ng-app="aTravelApp" ng-controller="ATravelCtrl">
+    <div class="container left-map">
+        <div class="map-container">
+            <div class="map-canvas" ui-map="myMap" ui-options="mapOptions"></div>
+            <div class="map-plugins">
+
+            </div>
+        </div>
+    </div>
+    <div class="container right-content" ng-click="getTravel()"
+         ui-event="{ scroll : 'scrollCallback($event)' }">
+
+        <div class="page-header travel-header">
+            <h2>{{travel.title}}</h2>
+            <h4>{{travel.create_time | date:'yyyy-MM-dd'}}</h4>
+            <small>{{travel.description}}</small>
+        </div>
+
+        <div class="container travel-content">
+            <div class="panel panel-default"
+                    ng-repeat="spot in travel.spots">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <div class="travel-circle-header" >
+                        <a href="" data-ng-click="activeSpot(spot)">
+                            <div class="spot-date">
+                                <span class="spot-date-txt ">{{spot.day}}</span>
+                                <span class="spot-date-flag">DAY</span>
+                            </div>
+                        </a>
+                        <div class="info">
+                            <div contentEditable="true"
+                                 data-ng-model="travel.spots[$index].address"
+                                 data-place-holder="添加地点"
+                                 editable="true"
+                                 multiple-line="3"
+                                 title="Click to edit"></div>
+                        </div>
+                        <div>
+                            {{spot.address}}
+                        </div>
+                        <div>
+                            {{spot.time}}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-body">
+                    <div photo-fluid-container class="photo-fluid-container">
+                        <a ng-repeat="photo in spot.photos"
+                           ng-click="activePhoto(photo)"
+                           href=""
+                           class="fluid-brick"
+                           ponm-photo>
+                            <img
+                                 ng-src="{{apirest}}/photo/{{photo.id}}/2">
+                            <div class="ponm-photo-footer">
+                                <p>{{photo.point.address}}</p>
+                                <p>{{photo.description | newlines}}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

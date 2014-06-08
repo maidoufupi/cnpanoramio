@@ -77,6 +77,9 @@
     <logger name="com.cnpanoramio.service">
       <level value="DEBUG"/>
     </logger>
+    <logger name="com.cnpanoramio.rest">
+      <level value="DEBUG"/>
+    </logger>
 
     <root>
         <level value="INFO"/>

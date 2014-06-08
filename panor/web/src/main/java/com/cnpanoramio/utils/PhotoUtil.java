@@ -30,7 +30,11 @@ public class PhotoUtil {
 
 		PhotoDetails details = photo.getDetails();
 		cameraInfo.setModel(details.getModel());
-		cameraInfo.setDateTimeOriginal(details.getDateTimeOriginal());
+		cameraInfo.setMake(details.getMake());
+		if(null != details.getDateTimeOriginal()) {
+			cameraInfo.setDateTimeOriginal(format.format(details.getDateTimeOriginal()));
+		}
+		
 		if(null != details.getExposureTime()) {
 			cameraInfo.setExposureTime(details.getExposureTime()*10000 + "/10000 s");
 		}
@@ -63,6 +67,17 @@ public class PhotoUtil {
 		}
 		
 		pp.setFavCount(photo.getFavorites().size());
+		pp.setPoint(photo.getGpsPoint());
+		// 目前默认高德供应商坐标
+		pp.setVendor(MapVendor.gaode.name());
+		pp.setIs360(photo.isIs360());
+		
+		PhotoDetails details = photo.getDetails();
+		if(null != details) {
+			pp.setWidth(details.getPixelXDimension());
+			pp.setHeight(details.getPixelYDimension());
+			pp.setDateTime(details.getDateTime());
+		}
 		return pp;
 	}
 	

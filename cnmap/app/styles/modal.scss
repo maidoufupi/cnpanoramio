@@ -42,11 +42,33 @@
     float:left;
 //    position: absolute;
     vertical-align: top;
-    width: 130px;
-    max-width: 130px;
+    width: 160px;
+    max-width: 160px;
     margin: 0 5px 5px 0;
     zoom: 1;
     z-index: 100;
+
+  .list-group {
+    height: 100%;
+    overflow-y: auto;
+    .list-group-item {
+      width: 80%;
+
+      -webkit-transition:all linear 0.3s;
+      -moz-transition:all linear 0.3s;
+      -ms-transition:all linear 0.3s;
+      -o-transition:all linear 0.3s;
+      transition:all linear 0.3s;
+    }
+    .list-group-item.active {
+      width: 100%;
+//      border-color:green;
+      border-right: solid blue;
+//      background-color: ghostwhite;
+    }
+  }
+
+
 }
 
 .map_photo_marker {

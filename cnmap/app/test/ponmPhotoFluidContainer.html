@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="../bower_components/eventEmitter/EventEmitter.js"></script>
+    <script type="text/javascript" src="../bower_components/eventie/eventie.js"></script>
+    <script type="text/javascript" src="../bower_components/imagesloaded/imagesloaded.js"></script>
+    <script type="text/javascript" src="../scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="../scripts/directives/filters.js"></script>
+    <script type="text/javascript" src="../scripts/directives/PhotoFluidContainer.js"></script>
+    <script type="text/javascript" src="../scripts/directives/repeatComplete.js"></script>
+    <script type="text/javascript" src="ponmPhotoFluidContainer.js"></script>
+    <script type="text/javascript" src="../scripts/services/deparam.js"></script>
+    <script type="text/javascript">
+//                window.ctx = "http://115.28.21.165";
+        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.apirest = window.ctx + "/api/rest";
+    </script>
+</head>
+<body data-ng-app="ponmApp.test">
+    <div class="container" data-ng-controller="photoFluidContainerCtrl">
+        <div data-ng-repeat="spot in travel.spots">
+            <div photo-fluid-container
+                 photos="spot.photos"
+                 item-selector=".fluid-brick"
+                 class="photo-fluid-container"
+                 ponm-hover="{enter: enterHover, leave: leaveHover}"
+                 fluid-line-max-height="200"
+                 fluid-line-min-height="100">
+                <a ng-repeat="photo in spot.photos"
+                   ng-click="activePhoto(photo)"
+                   href=""
+                   class="fluid-brick"
+                   ponm-photo
+                        >
+                    <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
+                    <div class="ponm-photo-footer">
+                        <p>{{photo.point.address}}</p>
+                        <p>{{photo.description | newlines}}</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

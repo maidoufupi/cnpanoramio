@@ -22,7 +22,7 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Photo> getUserPhotos(User user) {
-		Query photoListQuery = getSession().createQuery("from Photo p where owner = :owner order by createDate asc");
+		Query photoListQuery = getSession().createQuery("from Photo p where owner = :owner order by createDate desc");
 				
 		photoListQuery.setParameter("owner", user);
 
@@ -46,7 +46,8 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 
 	@Override
 	public List<Photo> getUserPhotos(User user, int pageSize, int pageNo) {
-		Query query = getSession().createQuery("from Photo where owner = :owner order by createDate asc");
+		// 按最新到最旧排列图片
+		Query query = getSession().createQuery("from Photo where owner = :owner order by createDate desc");
 		
 		query.setParameter("owner", user);
 		query.setFirstResult((pageNo - 1) * pageSize);  

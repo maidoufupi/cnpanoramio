@@ -5,10 +5,9 @@
 
     <title>basic</title>
 
-    <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap-theme.css"/>
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css"/>
-    <link rel="stylesheet" href="styles/style.css"/>
-    <link rel="stylesheet" href="styles/user.css"/>
+    <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css"/>
+    <link rel="stylesheet" href="styles/main.css"/>
 
     <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
     <script type="text/javascript" src="bower_components/jquery.rest/dist/jquery.rest.min.js"></script>
@@ -16,10 +15,16 @@
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-mapgaode/src/ui-map.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+
+    <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
 
     <script src="bower_components/get-style-property/get-style-property.js"></script>
     <script src="bower_components/get-size/get-size.js"></script>
@@ -34,22 +39,25 @@
     <script src="bower_components/imagesloaded/imagesloaded.js"></script>
     <script src="bower_components/angular-masonry/angular-masonry.js"></script>
 
-    <script type="text/javascript" src="scripts/services/main.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="scripts/controllers/scripts.min.js"></script>
+    <script type="text/javascript" src="scripts/directives/scripts.min.js"></script>
     <script type="text/javascript" src="scripts/controllers/UserPageCtrl.js"></script>
 
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
             type="text/javascript"></script>
-    <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
-    <script type="text/javascript" src="scripts/panor/panoramio/cnmap.Panoramio.js"></script>
-    <script type="text/javascript" src="scripts/panor/panoramio/cnmap.gaode.js"></script>
-    <script type="text/javascript" src="scripts/panor/js/cnmap.gaode.js"></script>
+
+    <script type="text/javascript" src="scripts/panor/scripts.min.js"></script>
+    <script type="text/javascript" src="scripts/panor/scripts.gaode.min.js"></script>
+
     <script type="text/javascript">
         window.ctx = "http://127.0.0.1:8080/panor-web";
         window.apirest = "http://127.0.0.1:8080/panor-web/api/rest"
     </script>
 </head>
 <body>
-<div id="basic" class="container" data-ng-app="userPageApp" data-ng-controller="UserCtrl">
+<div class="container" ng-app="userPageApp"
+     data-ng-controller="UserCtrl">
 
     <div class="photo-col" >
 
@@ -119,19 +127,56 @@
             <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
         </div>
 
-        <div class="masonry-container" masonry preserve-order>
-            <div id="masonry-{{photo.id}}" class="masonry-brick" ng-repeat="photo in photos" masonry-brick>
+<!--        <div>
+            <div class="masonry-block"
+                 ng-repeat="photo in photos"
+                 style="">
+                    <img ng-src="{{apirest}}/photo/{{photo.id}}/2" class="item-img" alt="{{photo.title}}">
+            </div>
+        </div>-->
+
+        <div photo-fluid-container="photos"
+             item-selector=".fluid-brick"
+             class="photo-fluid-container"
+             fluid-line-max-height="200"
+             fluid-line-min-height="100">
+            <a ng-repeat="photo in photos"
+               repeat-complete="updateFluid"
+               ng-click="activePhoto(photo)"
+               href=""
+               class="fluid-brick"
+               ponm-photo
+                    >
+                <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
+                <div class="ponm-photo-footer">
+                    <p>{{photo.point.address}}</p>
+                    <p>{{photo.description | newlines}}</p>
+                </div>
+            </a>
+        </div>
+
+        <!--<div class="masonry-container masonry" masonry="{columnWidth: 200, isAnimated: true animationOptions: {
+                                                                                                                duration: 750,
+                                                                                                                easing: 'linear',
+                                                                                                                queue: false
+                                                                                                              }}"
+             preserve-order>
+            <div id="masonry-{{photo.id}}"
+                 class="masonry-brick"
+                 ng-repeat="photo in photos"
+                 masonry-brick
+                 ng-style="{'background-color': photo.backgroundColor}">
                 <a href="{{ctx}}/photo/{{photo.id}}">
                     <img ng-src="{{apirest}}/photo/{{photo.id}}/2" class="item-img" alt="{{photo.title}}"></a>
 
-                <div data-ng-hide="true" class="thumb-overlay">
+                <div class="thumb-overlay">
                     <div class="thumb-overlay-text" style="max-width: 189.2885400512707px">
                         <a href="/photo/52034419">{{photo.title}}</a></div>
                     <div class="thumb-overlay-icons" style="max-width: 189.2885400512707px">
                         <div class="thumb-overlay-icon">
                             <img ng-src="{{ctx}}/images/marker.png"
                                  title="Selected for Google Maps and Google Earth"
-                                 width="16" height="16" alt="">
+                                 width="11" height="16" alt="">
                         </div>
                         <div class="thumb-overlay-icon">
                             <a href="/photo/52034419/stats"><span id="counter_5203441">274073 次查看</span></a>
@@ -139,7 +184,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <div class="paginator-wrapper" data-ng-show="photo.totalItems > 0">
             <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>

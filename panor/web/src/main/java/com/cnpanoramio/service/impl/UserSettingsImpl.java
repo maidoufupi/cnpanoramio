@@ -1,7 +1,9 @@
 package com.cnpanoramio.service.impl;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,6 +26,7 @@ import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.dao.ViewsDao;
 import com.cnpanoramio.domain.Avatar;
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
@@ -31,7 +34,7 @@ import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.UserUtil;
 
-@Service("userSettingsService")
+@Service
 @Transactional
 public class UserSettingsImpl implements UserSettingsManager {
 
@@ -151,7 +154,10 @@ public class UserSettingsImpl implements UserSettingsManager {
 		UserOpenInfo openInfo = new UserOpenInfo();
 		UserSettings setting = userSettingsDao.get(id);
 		openInfo.setId(setting.getId());
-
+		
+		// 昵称
+		openInfo.setName(setting.getName());
+		
 		// 用户头像
 		if (null != setting.getAvatar()) {
 			openInfo.setAvatar(setting.getAvatar().getId());
@@ -160,9 +166,9 @@ public class UserSettingsImpl implements UserSettingsManager {
 			openInfo.setAvatar(0L);
 		}
 
-		// 用户名
+		// 系统用户名
 		User user = userManager.get(id);
-		openInfo.setName(user.getUsername());
+		openInfo.setUsername(user.getUsername());
 
 		// 拥有照片数
 		int count = photoDao.getPhotoCount(user);
@@ -228,6 +234,35 @@ public class UserSettingsImpl implements UserSettingsManager {
 			userSettingsDao.save(settings);
 		}
 		return settings;
+	}
+
+	@Override
+	public List<String> getUserTags(User user) {
+		UserSettings settings = userSettingsDao.get(user.getId());
+		return convertTags(settings.getTags());
+	}
+
+	@Override
+	public List<String> createTag(User user, String tag) {
+		UserSettings settings = userSettingsDao.get(user.getId());
+		Set<Tag> tags = userSettingsDao.createTag(settings, tag);
+		return convertTags(tags);
+	}
+
+	@Override
+	public List<String> deleteTag(User user, String tag) {
+		UserSettings settings = userSettingsDao.get(user.getId());
+		Tag t = new Tag(tag);
+		settings.getTags().remove(t);
+		return convertTags(settings.getTags());
+	}
+	
+	private List<String> convertTags(Set<Tag> tags) {
+		List<String> list = new ArrayList<String>();
+		for(Tag t: tags) {
+			list.add(t.getTag());
+		}
+		return list;
 	}
 
 }

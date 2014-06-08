@@ -4,57 +4,50 @@
 <head>
 <title><fmt:message key="user.page.title" /></title>
 <meta name="menu" content="AdminMenu" />
-<link href="<c:url value="/styles/user.css"/>" rel="stylesheet">
 </head>
-<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.comm.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.Panoramio.js'/>"></script>
 
-    <script src="<c:url value="/bower_components/get-style-property/get-style-property.js"/>"></script>
-    <script src="<c:url value="/bower_components/get-size/get-size.js"/>"></script>
+	<link rel="stylesheet" href="<c:url value="/bower_components/angular-xeditable/dist/css/xeditable.css"/>"/>
+	
+	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/bower_components/angular-xeditable/dist/js/xeditable.js"/>"></script>
+
+    <%-- <script src="<c:url value="/bower_components/get-style-property/get-style-property.js"/>"></script>
+    <script src="<c:url value="/bower_components/get-size/get-size.js"/>"></script> --%>
     <script src="<c:url value="/bower_components/eventie/eventie.js"/>"></script>
-    <script src="<c:url value="/bower_components/doc-ready/doc-ready.js"/>"></script>
+    <%-- <script src="<c:url value="/bower_components/doc-ready/doc-ready.js"/>"></script> --%>
     <script src="<c:url value="/bower_components/eventEmitter/EventEmitter.js"/>"></script>
-    <script src="<c:url value="/bower_components/jquery-bridget/jquery.bridget.js"/>"></script>
+<%--     <script src="<c:url value="/bower_components/jquery-bridget/jquery.bridget.js"/>"></script>
     <script src="<c:url value="/bower_components/matches-selector/matches-selector.js"/>"></script>
     <script src="<c:url value="/bower_components/outlayer/item.js"/>"></script>
-    <script src="<c:url value="/bower_components/outlayer/outlayer.js"/>"></script>
-    <script src="<c:url value="/bower_components/masonry/masonry.js"/>"></script>
+    <script src="<c:url value="/bower_components/outlayer/outlayer.js"/>"></script> --%>
+    <%-- <script src="<c:url value="/bower_components/masonry/masonry.js"/>"></script> --%>
     <script src="<c:url value="/bower_components/imagesloaded/imagesloaded.js"/>"></script>
-    <script src="<c:url value="/bower_components/angular-masonry/angular-masonry.js"/>"></script>
-
-    <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/controllers/UserPageCtrl.js"/>"></script>
+    <%-- <script src="<c:url value="/bower_components/angular-masonry/angular-masonry.js"/>"></script> --%>
+    
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.mousewheel.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.panzoom.js"/>"></script>
     
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
     <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.baidu.js"/>"></script>
+	
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
   	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
 	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapServiceImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.qq.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
 	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapServiceImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
   </c:when>
   <c:otherwise>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
   	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapServiceImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
    </c:otherwise>
 </c:choose>
 <script>
@@ -132,26 +125,22 @@
             <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
         </div>
 
-        <div class="masonry-container" masonry preserve-order>
-            <div id="masonry-{{photo.id}}" class="masonry-brick" ng-repeat="photo in photos" masonry-brick>
-                <a href="{{ctx}}/photo/{{photo.id}}">
-                    <img ng-src="{{apirest}}/photo/{{photo.id}}/2" class="item-img" alt="{{photo.title}}"></a>
-
-                <div data-ng-hide="true" class="thumb-overlay">
-                    <div class="thumb-overlay-text" style="max-width: 189.2885400512707px">
-                        <a href="/photo/52034419">{{photo.title}}</a></div>
-                    <div class="thumb-overlay-icons" style="max-width: 189.2885400512707px">
-                        <div class="thumb-overlay-icon">
-                            <img ng-src="{{ctx}}/images/marker.png"
-                                 title="Selected for Google Maps and Google Earth"
-                                 width="16" height="16" alt="">
-                        </div>
-                        <div class="thumb-overlay-icon">
-                            <a href="/photo/52034419/stats"><span id="counter_5203441">274073 次查看</span></a>
-                        </div>
-                    </div>
+        <div photo-fluid-container="photos"
+             item-selector=".fluid-brick"
+             class="photo-fluid-container"
+             fluid-line-max-height="200"
+             fluid-line-min-height="100">
+            <a ng-repeat="photo in photos"
+               ng-click="activePhoto(photo)"
+               href=""
+               class="fluid-brick"
+               ponm-photo>
+                <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
+                <div class="ponm-photo-footer">
+                    <p>{{photo.point.address}}</p>
+                    <p>{{photo.description | newlines}}</p>
                 </div>
-            </div>
+            </a>
         </div>
         
         <div class="paginator-wrapper" data-ng-show="photo.totalItems > 0">

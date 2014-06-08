@@ -1,7 +1,7 @@
 /**
  * Created by any on 14-3-12.
  */
-angular.module('userSettingsApp')
+angular.module('ponmApp.controllers')
     .controller('ChUserAvatarCtrl', ['$window', '$scope', '$log', '$sce', '$http', '$modalInstance',
         function ($window, $scope, $log, $sce, $http, $modalInstance) {
 

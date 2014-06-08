@@ -35,15 +35,10 @@
     <link rel="stylesheet" href="<c:url value="/styles/modal.css"/>"> --%>
 </head>
 <body>
-    <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"/>"></script>
-    <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"/>"></script>
+    <%-- <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"/>"></script>
+    <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"/>"></script> --%>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.canvas.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.comm.js"/>"></script>
-    <!-- The main application script -->
-    <script src="<c:url value="/scripts/services/main.js"/>"></script>
-    <script src="<c:url value="/scripts/controllers/ChLocModalCtrl.js"/>"></script>
-    <script src="<c:url value="/scripts/controllers/fileupload.js"/>"></script>
-    
+        
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
@@ -53,20 +48,17 @@
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
   	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
 	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapServiceImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
 	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapServiceImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
   </c:when>
   <c:otherwise>
   	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
   	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapServiceImpl.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
    </c:otherwise>
 </c:choose>
 <script>
@@ -91,15 +83,13 @@
                     <span>添加图片...</span>
                     <input type="file" name="files[]" multiple ng-disabled="disabled">
                 </span>
-                <button type="button" class="btn btn-primary start" data-ng-click="submit()">
-                    <i class="glyphicon glyphicon-upload"></i>
-                    <span>开始上传</span>
-                </button>
-                <button type="button" class="btn btn-warning cancel" data-ng-click="cancel()">
+                <button type="button" class="btn btn-warning cancel" data-ng-click="cancel()"
+                	data-ng-show="queue.length">
                     <i class="glyphicon glyphicon-ban-circle"></i>
                     <span>取消上传</span>
                 </button>
-                <button type="button" class="btn btn-primary" data-ng-show="queue.length" data-ng-click="changeLocation(queue)">
+                <button type="button" class="btn btn-primary" data-ng-click="changeLocation(queue)"
+                	data-ng-show="queue.length">
                     <i class="glyphicon glyphicon-map-marker"></i>
                     <span>更改位置</span>
                 </button>
@@ -115,9 +105,23 @@
             </div>
         </div>
         <div data-ng-show="queue.length">
-            <label>为所有图添加标签：</label>
-            <bootstrap-tagsinput ng-model="tags"
-                                 tagclass="getTagClass"></bootstrap-tagsinput>
+            <div class="container-fluid">
+                <div class="row">
+                    <label class="col-sm-2 control-label">旅行：</label>
+                    <item-picker ng-model="travel"
+                                 load-data="loadTravelData"
+                                 new-data="newTravelData"
+                                 item-value-name="title"
+                            class="col-sm-3"></item-picker>
+                    <label class="col-sm-2 control-label">标签：</label>
+                    <item-picker ng-model="tags"
+                                 load-data="loadTagData"
+                                 new-data="newTagData"
+                                 multiple-select
+                                 class="col-sm-5"></item-picker>
+
+                </div>
+            </div>
         </div>
         <!-- The table listing the files available for upload/download -->
         <table class="table table-striped files ng-cloak">
@@ -131,29 +135,22 @@
                 <td>
                     <div data-ng-controller="TitleEditorCtrl">
                         <p>
-                            <span class="center" ng-click="editable = 'title'"
-                                  ng-hide="editable == 'title'"
-                                  ng-mouseenter="editable == 'title'"
-                                  ng-mouseleave="editable == ''">{{file.title || file.name || ''}}</span>
-                            <span class="photo_description">
-                                <input ng-show="editable == 'title'"
-                                       type="text" size="30" name="title" ng-model="title"
-                                       ng-blur="saveTitle()">
-                            </span>
+                            <div contentEditable
+                                 ng-model="title"
+                                 data-place-holder="{{file.name}}"></div>
                         </p>
                         <p>
-                            <span class="center" ng-click="editable = 'description'"
-                                  ng-hide="editable == 'description'">{{file.description || '添加描述'}}</span>
-                            <span ng-show="editable == 'description'" class="photo_description">
-                                <textarea type="text" size="30" name="description" ng-model="text"
-                                          ng-blur="saveDesc()"></textarea>
-                            </span>
+                            <div contentEditable
+                                 ng-model="description"
+                                 data-place-holder="添加描述"
+                                 multiple-line="4"></div>
                         </p>
                     </div>
-                    <bootstrap-tagsinput ng-model="file.tags"
-                                         tagclass="getTagClass"
-                                         placeholder="Last name"></bootstrap-tagsinput>
-                    
+                    <item-picker ng-model="file.tags"
+                                 load-data="loadTagData"
+                                 new-data="newTagData"
+                                 multiple-select
+                                 ></item-picker>
                 </td>
                 <td>
                     <p class="size">{{file.size | formatFileSize}}</p>
@@ -177,13 +174,17 @@
                 <td>
                     <a class="a-change-location" href data-ng-click="changeLocation([file])">更改位置</a>
                     <div class="location-display-place">
-                        <span class="lat">{{file.latPritty}} {{file.latRef}}</span>
+                        <span class="lat">{{file.latPritty}} {{file.latPritty && file.latRef}}</span>
                         <span class="comma">{{file.latPritty && ", "}} </span>
-                        <span class="lng">{{file.lngPritty}} {{file.lngRef}}</span>
+                        <span class="lng">{{file.lngPritty}} {{file.lngPritty && file.lngRef}}</span>
                     </div>
                     <div class="location-display-address">{{file.address}}</div>
                 </td>
-                <td data-ng-class="{'photo-upload-ok': file.photoId}">
+                <td class="info-tag">
+                    <span class="label label-primary"
+                          data-ng-show="file.is360">全景</span>
+                </td>
+                <td class="link-tag" data-ng-class="{'photo-upload-ok': file.photoId}">
                     <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-ok': file.photoId}"></span>
                     <a href="{{ctx}}/photo/{{file.photoId}}">
                         <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-globe': file.photoId}"></span>
@@ -191,33 +192,31 @@
                 </td>
             </tr>
         </table>
+        <div data-ng-show="queue.length">
+            <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span>添加图片...</span>
+                        <input type="file" name="files[]" multiple ng-disabled="disabled">
+                    </span>
+            <a type="button" class="btn btn-primary" data-ng-href="{{ctx}}/map##userid={{userId}}">
+                <i class="glyphicon glyphicon-ok-circle"></i>
+                <span>完成</span>
+            </a>
+        </div>
     </form>
 
     <br>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Demo Notes</h3>
+            <h3 class="panel-title">注意事项</h3>
         </div>
         <div class="panel-body">
             <ul>
-                <li>The maximum file size for uploads in this demo is <strong>5 MB</strong> (default file size is unlimited).</li>
-                <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no file type restriction).</li>
-                <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage (see <a href="https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support">Browser support</a>).</li>
-                <li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.</li>
-                <li>Built with Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> CSS framework and Icons from <a href="http://glyphicons.com/">Glyphicons</a>.</li>
+                <li>上传文件最大为<strong>5 MB</strong></li>
+                <li>你可以拖动电脑上的图片到网页上进行上传</li>
             </ul>
         </div>
     </div>
-</div>
-<!-- The blueimp Gallery widget -->
-<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
-    <div class="slides"></div>
-    <h3 class="title"></h3>
-    <a class="prev">?</a>
-    <a class="next">?</a>
-    <a class="close">¡@</a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
 </div>
 
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->

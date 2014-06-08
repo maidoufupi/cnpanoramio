@@ -40,7 +40,7 @@
                 }
 
             });
-        }
+        };
 
         this.getAddress = function(lat, lng, callback) {
             var point = new AMap.LngLat(lng, lat);
@@ -60,7 +60,7 @@
                 })
                 geocoder.getAddress(point);
             }
-        }
+        };
 
         this.getLocation = function (address, callback) {
             if (!geocoder) {
@@ -75,11 +75,11 @@
                     if (res.info == "OK") {
                         callback.apply(undefined, [res]);
                     }
-                })
+                });
                 geocoder.getLocation(address);
             }
-        }
-    }
+        };
+    };
 
     $window.cnmap.MapService.prototype = $window.cnmap.IMapService;
     $window.cnmap.MapService.factory = function() {

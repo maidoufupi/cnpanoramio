@@ -33,14 +33,18 @@
         this.setCenter = function(map, lat, lng) {
             var point = new qq.maps.LatLng(lat, lng);
             map.setCenter(point);
-        }
+        };
+
+        this.setZoom = function(map, zoom) {
+            map.setZoom(Number(zoom));
+        };
 
         this.setBounds = function(map, southwest, northeast){
             map.fitBounds(new qq.maps.LatLngBounds(
                 new qq.maps.LatLng(southwest.lat, southwest.lng),
                 new qq.maps.LatLng(northeast.lat, northeast.lng)
             ))
-        }
+        };
 
         this.inMapView = function(lat, lng, map) {
             map = map || this.opts.map;
@@ -51,7 +55,14 @@
             }else {
                 return false;
             }
-        }
+        };
+
+        this.addMarker = function(map, lat, lng) {
+            return new qq.maps.Marker({
+                map: map,
+                position: new qq.maps.LatLng(lat, lng)
+            });
+        };
 
         this.createDraggableMarker = function(map, lat, lng) {
             return new qq.maps.Marker({
@@ -59,19 +70,19 @@
                 map: map,
                 position: new qq.maps.LatLng(lat, lng)
             });
-        }
+        };
 
         this.activeMarker = function(marker) {
             if(marker) {
                 marker.setIcon("images/marker.png");
             }
-        }
+        };
 
         this.deactiveMarker = function(marker){
             if(marker) {
                 marker.setIcon("");
             }
-        }
+        };
 
         this.addMarkerActiveListener = function(marker, callback) {
             $window.qq.maps.event.addListener(marker, "click", cback);
@@ -79,29 +90,29 @@
             function cback(evt) {
                 callback.apply(marker, []);
             }
-        }
+        };
 
         this.addDragendListener = function(marker, callback) {
             $window.qq.maps.event.addListener(marker, "dragend", function (event) {
                 callback.apply(marker, [event.latLng.lat, event.latLng.lng]);
             });
-        }
+        };
 
         this.addMapClickListener = function(map, callback) {
             $window.qq.maps.event.addListener(map, "click", function (event) {
                 var point = event.latLng;
                 callback.apply(map, [point.lat, point.lng]);
             });
-        }
+        };
 
         this.setPosition = function(target, lat, lng) {
             var point = new qq.maps.LatLng(lat, lng);
             target.setPosition(point);
-        }
+        };
 
         this.setMap = function(target, map){
             target.setMap(map);
-        }
+        };
     };
 
     $window.cnmap.MapEventListener.prototype = $window.cnmap.IMapEventListener;

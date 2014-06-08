@@ -15,10 +15,10 @@
 
     <jaxws:endpoint id="userService" implementor="#userManager" address="/UserService"/>
     <!-- Add new endpoints for additional services you'd like to expose -->
-    <jaxws:endpoint id="photoServiceApi" implementor="#photoService" address="/PhotoService"/>
+    <!-- <jaxws:endpoint id="photoServiceApi" implementor="#photoService" address="/PhotoService"/>
     <jaxws:endpoint id="settingsServiceApi" implementor="#userSettingsService" address="/UserSettingsService"/>
     <jaxws:endpoint id="commentServiceApi" implementor="#commentService" address="/CommentService"/>
-    <jaxws:endpoint id="commentqueryServiceApi" implementor="#commentqueryService" address="/CommentQueryService"/>
+    <jaxws:endpoint id="commentqueryServiceApi" implementor="#commentqueryService" address="/CommentQueryService"/> -->
     
     <jaxrs:server address="/api">
         <jaxrs:features>
@@ -26,10 +26,10 @@
         </jaxrs:features>
         <jaxrs:serviceBeans>
             <ref bean="userManager"/>
-            <ref bean="photoService"/>
+            <!-- <ref bean="photoService"/>
             <ref bean="userSettingsService"/>
             <ref bean="commentService"/>
-            <ref bean="commentqueryService"/>
+            <ref bean="commentqueryService"/> -->
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jsonProvider"/>

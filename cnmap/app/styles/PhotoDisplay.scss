@@ -120,6 +120,7 @@ body {
 }
 
 #main-photo-wrapper {
+  height: 400px;
 }
 
 #main-photo-wrapper img {
@@ -187,12 +188,6 @@ li {
     padding-top: 3px;
 }
 
-//h1 {
-//    font-size: 18px;
-//    font-weight: normal;
-//    margin: 5px 0;
-//}
-
 #photo-page-prev-next-container {
     margin-left: 5px;
     display: inline-block;
@@ -225,7 +220,7 @@ li {
     color: #333;
 }
 
-div.comment {
+#comments_wrapper.comment {
     font-size: 10pt;
     width: 100%;
     margin-bottom: 5px;
@@ -257,3 +252,5 @@ div.comment {
     color: #d7332b;
     font-size: 1.2em;
 }
+
+/** photo container */

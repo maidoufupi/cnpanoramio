@@ -3,6 +3,8 @@ package com.cnpanoramio.domain;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,8 +16,9 @@ public class PhotoPanoramioIndex {
 	@EmbeddedId
 	private PhotoPanoramioIndexPK pk;
 	
-	@Column(name = "photo_id")
-	private Long photoId;
+	@ManyToOne()
+	@JoinColumn(name = "photo_id")
+	private Photo photo;
 	
 	@Column(name = "rating")
 	private Integer rating;
@@ -31,12 +34,12 @@ public class PhotoPanoramioIndex {
 		this.pk = pk;
 	}
 
-	public Long getPhotoId() {
-		return photoId;
+	public Photo getPhoto() {
+		return photo;
 	}
 
-	public void setPhotoId(Long photoId) {
-		this.photoId = photoId;
+	public void setPhoto(Photo photo) {
+		this.photo = photo;
 	}
 
 	public Integer getRating() {

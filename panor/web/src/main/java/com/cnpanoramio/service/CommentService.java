@@ -1,16 +1,10 @@
 package com.cnpanoramio.service;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 
-import com.cnpanoramio.json.Comment;
+import com.cnpanoramio.json.CommentResponse.Comment;
 import com.cnpanoramio.json.PhotoComments;
 
-
-@Path("/comment")
 public interface CommentService {
 	
 	/**
@@ -19,9 +13,6 @@ public interface CommentService {
 	 * @param comment
 	 * @return
 	 */
-	@Produces("application/json")
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON })
 	public Comment save(Comment comment);
 	
 	/**
@@ -40,7 +31,7 @@ public interface CommentService {
 	 * @param pageNo
 	 * @return
 	 */
-	public PhotoComments getComments(Long id, int pageSize, int pageNo);
+	public Collection<Comment> getComments(Long id, int pageSize, int pageNo);
 	
 	/**
 	 * 获取图片评论总数

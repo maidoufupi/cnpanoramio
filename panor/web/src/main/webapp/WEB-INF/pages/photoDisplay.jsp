@@ -7,34 +7,24 @@
 <%-- <link href="<c:url value="/styles/PhotoDisplay.css"/>" rel="stylesheet"> --%>
 </head>
 	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
-    
-    <script type="text/javascript" src="<c:url value="/scripts/services/main.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/controllers/PhotoCtrl.js"/>"></script>
-    
-<script type="text/javascript" src="<c:url value='/scripts/panor/panoramio/cnmap.comm.js'/>"></script>
-<script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.Panoramio.js"/>"></script>
-
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/three.min.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.panzoom.js"/>"></script>
+	<script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.mousewheel.js"/>"></script>
+        
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.baidu.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.baidu.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/explore/cnmap.explore.baidu.js"/>"></script>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
     <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/qq/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.qq.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.qq.js"/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
   
@@ -42,9 +32,7 @@
   <c:otherwise>
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/gaode/MapEventListenerImpl.js'/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/panoramio/cnmap.gaode.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.gaode.js"/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
   </c:otherwise>
 </c:choose>
 
@@ -57,9 +45,13 @@
 
     <div class="photo-col">
         <div id="main-photo-wrapper" data-id="<c:url value='${photo.id}'/>">
-            <a id="main-photo" href="#">
-                <img ng-src="{{apirest}}/photo/{{photoId}}/1" alt="{{photo.description}}" id="main-photo_photo">
-            </a>
+            <div ponm-photo-container
+                 ponm-photo-src-l1="{{apirest}}/photo/{{photoId}}/{{(!photo.is360 && 1) || 0}}"
+                 ponm-photo-width="{{photo.width}}"
+                 ponm-photo-height="{{photo.height}}"
+                 ponm-photo-color="{{photo.color}}"
+                 ponm-photo-is360="{{!!photo.is360}}"
+                    ></div>
         </div>
         <div>
             <div class="photo_page-stats_container">
@@ -82,10 +74,10 @@
                         <span class="glyphicon glyphicon-heart favorite " data-ng-class="{active: photo.favorite}"/>
                     </a>
                 </span>
-                <div id="photo-page-prev-next-container">
+                <!-- <div id="photo-page-prev-next-container">
                     <a href="/photo/64742707"><img ng-src="{{ctx}}/images/prev-uphoto.png" width="21" height="21" alt=""></a>
                     <a href="/photo/64644016"><img ng-src="{{ctx}}/images/next-uphoto.png" width="21" height="21" alt=""></a>
-                </div>
+                </div> -->
             </div>
             <div id="photo-title-box">
                 <div id="photo-title-icon"></div>
@@ -165,20 +157,17 @@
             <div class="paginator-wrapper">
             </div>
 
-            <div class="comment" ng-repeat="comment in comments" id="{{comment.id}}">
-                <img class="comment-avatar" width="48"
-                     ng-src="{{ctx}}/images/user_avatar.png" alt="">
-
-                <div class="comment-inner">
-                    <div class="comment-author">
+            <div class="media comment" ng-repeat="comment in comments">
+                <a class="pull-left" href="{{ctx}}/user/{{comment.userId}}">
+                    <img class="media-object"
+                         data-ng-src="{{apirest}}/user/{{comment.userId}}/avatar"
+                         width="60" height="60" alt="{{comment.username}}">
+                </a>
+                <div class="media-body">
+                    <h6 class="media-heading">
                         <a href="{{ctx}}/user/{{comment.userId}}">{{comment.username}}</a> 于 {{comment.createTime}}
-                    </div>
-                    <div id="c49440741" class="photo-comment-text">
-                        <p>{{comment.content}}</p>
-                    </div>
-                    <div class="translated-text" id="{{comment.id}}"></div>
-                    <div class="translate-comment"><a class="translate-comment-link" id="t49440741" href="#">翻译</a>
-                    </div>
+                    </h6>
+                    <p ng-repeat="line in (comment.content | newlines) track by $index">{{line}}</p>
                 </div>
             </div>
 
@@ -193,7 +182,7 @@
             <h3>发送评论 <span>(以 {{user.open_info.name}})</span></h3>
             <textarea data-ng-trim cols="50" rows="3" id="tcomment" name="comment" ng-model="comment.content" class="form-control"></textarea>
             <br>
-            <button ng-click="save(comment.content)" id="submit_comment"
+            <button ng-click="createComment(comment.content)" id="submit_comment"
                    class="btn btn-default">发送评论</button>
             <!--            <a href="/help_format/" id="help_format" rel="help" target="_blank">
                             想用黑体，斜体或链接？
@@ -263,8 +252,8 @@
             <h2>地图</h2>
             <div id="minimap1" ui-map="minimap1" ui-options="mapOptions"></div>
             <div id="nearby_photos">
-                <a data-ng-repeat="photo in nearby_photos" data-ng-href="{{ctx}}/photo/{{photo.photoId}}">
-                    <img class="nearby-img" data-ng-src="{{apirest}}/photo/{{photo.photoId}}/3"
+                <a data-ng-repeat="photo in nearby_photos" data-ng-href="{{ctx}}/photo/{{photo.photo_id}}">
+                    <img class="nearby-img" data-ng-src="{{apirest}}/photo/{{photo.photo_id}}/3"
                          height="44" width="44" alt="">
                 </a>
             </div>

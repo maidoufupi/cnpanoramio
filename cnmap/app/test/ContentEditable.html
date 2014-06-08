@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
+    <!--<script type="text/javascript" src="../bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>-->
+    <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="../scripts/services.js"></script>
+    <script type="text/javascript" src="../scripts/directives.js"></script>
+    <script type="text/javascript" src="ContentEditable.js"></script>
+</head>
+<body ng-app="contentEditableApp" ng-controller="ContentEditableCtrl">
+<div contentEditable
+     ng-model="title"
+     data-place-holder="{{name}}"
+     editable="false"></div>
+<div contentEditable
+     ng-model="title"
+     data-place-holder="{{name}}"></div>
+<div contentEditable
+     ng-model="description"
+     data-place-holder="添加描述"
+     multiple-line="3"></div>
+<div contentEditable
+     ng-model="title"
+     data-place-holder="{{name}}"></div>
+</body>
+</html>

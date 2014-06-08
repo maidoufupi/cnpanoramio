@@ -15,7 +15,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.MapVendor;
+import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.PhotoPanoramioIndexDao;
+import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.PhotoLatestIndex;
 import com.cnpanoramio.domain.PhotoPanoramio;
 import com.cnpanoramio.domain.PhotoPanoramioIndex;
 import com.cnpanoramio.domain.PhotoPanoramioIndexPK;
@@ -31,6 +34,8 @@ public class PhotoPanoramioIndexDaoTest {
 
 	@Autowired
 	private PhotoPanoramioIndexDao photoPanoramioIndexDao;
+	@Autowired
+	private PhotoDao photoDao;
 
 	@Before
 	public void preMethodSetup() {
@@ -45,42 +50,61 @@ public class PhotoPanoramioIndexDaoTest {
 	@Test
 	public void testPersisted() {
 		Long photoId = 5L;
+		Photo photo = photoDao.get(photoId);
 		PhotoPanoramioIndex index = new PhotoPanoramioIndex();
 		index.setPk(new PhotoPanoramioIndexPK(1, 36D, 123D));
-		index.setPhotoId(photoId);
+		index.setPhoto(photo);
 		photoPanoramioIndexDao.save(index);
 
 		PhotoPanoramioIndex out = photoPanoramioIndexDao
 				.get(new PhotoPanoramioIndexPK(1, 36D, 123D));
-		Assert.assertTrue(out.getPhotoId() == photoId);
+		Assert.assertTrue(out.getPhoto().getId() == photoId);
 	}
 
 	@Test
 	public void testGetPhotoPanoramio() {
-		List<PhotoPanoramio> photos = photoPanoramioIndexDao.getPhotoPanoramio(
-				new Point(34D, 110D), new Point(36D, 126D), 2, MapVendor.gaode,
-				100, 100);
-		Assert.assertTrue(photos.size() == 2);
-		for (PhotoPanoramio photo : photos) {
-			log.info(photo.getPhotoId());
+		List<Photo> photos = photoPanoramioIndexDao.getPhotoPanoramio(
+				29.964453D, 120.352478D, 31.805227D, 121.912537D, 9, MapVendor.gaode,
+				387, 781);
+		Assert.assertEquals(2, photos.size());
+		for (Photo photo : photos) {
+			log.info(photo.getId());
 		}
 	}
 
 	@Test
 	public void testUpdatePhotoPanoramio() {
 		photoPanoramioIndexDao.updatePhotoPanoramioIndex();
-		List<PhotoPanoramio> photos = photoPanoramioIndexDao.getPhotoPanoramio(
-				new Point(34D, 110D), new Point(36D, 126D), 2, MapVendor.gaode,
+		List<Photo> photos = photoPanoramioIndexDao.getPhotoPanoramio(
+				34D, 110D, 36D, 126D, 2, MapVendor.gaode,
 				100, 100);
 		Assert.assertTrue(photos.size() == 2);
-		for (PhotoPanoramio photo : photos) {
-			log.info(photo.getPhotoId());
+		for (Photo photo : photos) {
+			log.info(photo.getId());
 		}
 	}
 	
 	@Test
 	public void testGetLatestPanoramio() {
-		List<PhotoPanoramio> photos = photoPanoramioIndexDao.getLatestPanoramio(23D, 110D, 40D, 130D, 2, MapVendor.gaode, 100, 100);
-		Assert.assertTrue(photos.size() == 2);
+		List<Photo> photos = photoPanoramioIndexDao.getLatestPanoramio(23D, 110D, 40D, 130D, 2, MapVendor.gaode, 100, 100);
+		Assert.assertEquals(2, photos.size());
+	}
+	
+	@Test
+	public void testGetUserPanoramio() {
+		List<Photo> photos = photoPanoramioIndexDao.getUserPhotoPanoramio(23D, 110D, 40D, 130D, 2, MapVendor.gaode, 100, 100, 1L, false);
+		Assert.assertEquals(2, photos.size());
+		for(Photo photo : photos) {
+			log.info(photo.getId());
+		}
+	}
+	
+	@Test
+	public void testGetUserFavPanoramio() {
+		List<Photo> photos = photoPanoramioIndexDao.getUserPhotoPanoramio(23D, 110D, 40D, 130D, 2, MapVendor.gaode, 100, 100, 1L, true);
+		Assert.assertEquals(2, photos.size());
+		for(Photo photo : photos) {
+			log.info(photo.getId());
+		}
 	}
 }

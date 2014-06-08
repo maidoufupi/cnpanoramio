@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +24,7 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.IImageMetadata;
+import org.apache.commons.imaging.common.IImageMetadata.IImageMetadataItem;
 import org.apache.commons.imaging.common.RationalNumber;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.tiff.TiffField;
@@ -42,6 +44,7 @@ import org.apache.http.impl.cookie.DateUtils;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -50,6 +53,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.MapVendor;
+import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.dao.FavoriteDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.PhotoGpsDao;
@@ -61,18 +65,21 @@ import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.PhotoGps.PhotoGpsPK;
 import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.domain.Tag;
+import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.PhotoService;
-import com.cnpanoramio.utils.GpsConverter;
+import com.cnpanoramio.service.imaging.ImageInfoExtractor;
+import com.cnpanoramio.service.lbs.GpsConverter;
 import com.cnpanoramio.utils.PhotoUtil;
+import com.cnpanoramio.utils.UserUtil;
 
 @Service("photoService")
 @Transactional
-public class PhotoServiceImpl implements PhotoService, PhotoManager {
+public class PhotoServiceImpl implements PhotoManager {
 
 	protected final Log log = LogFactory.getLog(getClass());
 
@@ -80,7 +87,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	private FileService fileService;
 	private UserManager userManager = null;
 
-	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
 	private GpsConverter gpsc = new GpsConverter();
 
 	@Autowired
@@ -91,6 +98,9 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 	@Autowired
 	private FavoriteDao favoriteDao = null;
+	
+	@Autowired
+	private CommentDao commentDao = null;
 
 	@Autowired
 	public void setUserManager(UserManager userManager) {
@@ -115,378 +125,40 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		this.fileService = fileService;
 	}
 
-	@Override
-	public Photo store(String lat, String lng, String address, Attachment image)
-			throws ImageReadException {
-
-		ContentDisposition content = image.getContentDisposition();
-		String fileName = content.getParameter("filename");
-		DataHandler dh = image.getDataHandler();
-		InputStream ins = null;
-		try {
-			ins = dh.getInputStream();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Photo photo = new Photo();
-		photo.setName(fileName);
-		photo.setFileType(FilenameUtils.getExtension(fileName));
-		photo = this.save(photo, ins);
-
-		Double latDouble = Double.valueOf(lat);
-		Double lngDouble = Double.valueOf(lng);
-		Point point;
-		if (latDouble != 0 || lngDouble != 0) {
-			point = new Point(latDouble, lngDouble);
-			address = address.trim();
-			if (address != null && address != "") {
-				point.setAddress(address);
-			}
-			photo.setGpsPoint(point);
-		}
-		// 返回json时从Photo里去掉PhotoDetials
-		photo.setDetails(null);
-		return photo;
-	}
-
-	@Override
-	public Photo fillPhotoDetail(InputStream is, Photo photo)
-			throws ImageReadException, IOException {
-		Point point = null;
-		PhotoDetails photoDetails = new PhotoDetails();
-
-		IImageMetadata metadata = null;
-		try {
-			metadata = Imaging.getMetadata(is, "");
-			is.close();
-		} catch (ImageReadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		if (metadata instanceof JpegImageMetadata) {
-			final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
-
-			/* Origin */
-			final TiffField dateTimeOriginalField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-			if (null != dateTimeOriginalField) {
-				photoDetails.setDateTimeOriginal((String) dateTimeOriginalField
-						.getFieldType().getValue(dateTimeOriginalField));
-			}
-
-			final TiffField dateTimeDigitizedField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_DATE_TIME_DIGITIZED);
-			if (null != dateTimeDigitizedField) {
-				photoDetails
-						.setDateTimeDigitized((String) dateTimeDigitizedField
-								.getFieldType()
-								.getValue(dateTimeDigitizedField));
-			}
-
-			final TiffField dateTimeField = jpegMetadata
-					.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_DATE_TIME);
-			if (null != dateTimeField) {
-				photoDetails.setDateTime((String) dateTimeField.getFieldType()
-						.getValue(dateTimeField));
-			}
-
-			/* Image */
-			photoDetails.setPixelXDimension(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_EXIF_IMAGE_WIDTH));
-			photoDetails.setPixelYDimension(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_EXIF_IMAGE_LENGTH));
-			photoDetails.setxResolution(getTagValue(jpegMetadata,
-					TiffTagConstants.TIFF_TAG_XRESOLUTION));
-			photoDetails.setyResolution(getTagValue(jpegMetadata,
-					TiffTagConstants.TIFF_TAG_YRESOLUTION));
-			photoDetails
-					.setResolutionUnit(getTagValue(
-							jpegMetadata,
-							ExifTagConstants.EXIF_TAG_FOCAL_PLANE_RESOLUTION_UNIT_EXIF_IFD));
-			photoDetails.setCompressedBitsPerPixel(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_COMPRESSED_BITS_PER_PIXEL));
-
-			/* Camera */
-			final TiffField makeField = jpegMetadata
-					.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_MAKE);
-			if (null != makeField) {
-				Object out = makeField.getFieldType().getValue(makeField);
-				if (out instanceof String) {
-					photoDetails.setMake((String) out);
-				} else if (out instanceof String[]) {
-					photoDetails.setMake(((String[]) out)[0]);
-				}
-			}
-
-			final TiffField modelField = jpegMetadata
-					.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_MODEL);
-			if (null != modelField) {
-				Object out = modelField.getFieldType().getValue(modelField);
-				if (out instanceof String) {
-					photoDetails.setModel((String) out);
-				} else if (out instanceof String[]) {
-					photoDetails.setModel(((String[]) out)[0]);
-				}
-			}
-
-			final TiffField exposureTimeField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_EXPOSURE_TIME);
-			if (null != exposureTimeField) {
-				// log.info(exposureTimeField.getValueDescription());
-				// BigDecimal b = new
-				// BigDecimal(exposureTimeField.getDoubleValue());
-				// b = b.setScale(4, BigDecimal.ROUND_FLOOR);
-				photoDetails
-						.setExposureTime(((RationalNumber) exposureTimeField
-								.getFieldType().getValue(exposureTimeField))
-								.doubleValue());
-			}
-
-			// FNumber
-			final TiffField fnumberField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_FNUMBER);
-			if (null != fnumberField) {
-				photoDetails.setFNumber(((RationalNumber) fnumberField
-						.getFieldType().getValue(fnumberField)).doubleValue());
-			}
-
-			final TiffField exposureCompensationField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_EXPOSURE_COMPENSATION);
-			if (null != exposureCompensationField) {
-				// log.info(((RationalNumber)exposureCompensationField.getFieldType().getValue(exposureCompensationField)).doubleValue());
-				photoDetails
-						.setExposureBias(((RationalNumber) exposureCompensationField
-								.getFieldType().getValue(
-										exposureCompensationField))
-								.doubleValue());
-			}
-
-			final TiffField flashField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_FLASH);
-			if (null != flashField) {
-				photoDetails.setFlash((Short) flashField.getFieldType()
-						.getValue(flashField));
-			}
-
-			final TiffField focalLengthField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_FOCAL_LENGTH);
-			if (null != focalLengthField) {
-				photoDetails.setFocalLength(focalLengthField.getDoubleValue());
-			}
-
-			final TiffField maxApertureValueField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_MAX_APERTURE_VALUE);
-			if (null != maxApertureValueField) {
-				photoDetails.setMaxApertureValue(maxApertureValueField
-						.getDoubleValue());
-			}
-
-			final TiffField meteringModeField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_METERING_MODE);
-			if (null != meteringModeField) {
-				photoDetails.setMeteringMode(meteringModeField
-						.getValueDescription());
-			}
-
-			final TiffField focalLengthIn35mmFilmField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_FOCAL_LENGTH_IN_35MM_FORMAT);
-			if (null != focalLengthIn35mmFilmField) {
-				photoDetails
-						.setFocalLengthIn35mmFilm(focalLengthIn35mmFilmField
-								.getDoubleValue());
-			}
-
-			/* Advanced photo */
-			photoDetails.setContrast(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_CONTRAST_1));
-
-			final TiffField brightnessValueField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_BRIGHTNESS_VALUE);
-			if (null != brightnessValueField) {
-				photoDetails.setBrightnessValue(brightnessValueField
-						.getDoubleValue());
-			}
-
-			photoDetails.setLightSource(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_LIGHT_SOURCE));
-			photoDetails.setExposureProgram(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_EXPOSURE_PROGRAM));
-			photoDetails.setSaturation(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_SATURATION_1));
-			photoDetails.setSharpness(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_SHARPNESS_1));
-			photoDetails.setWhiteBalance(getTagValue(jpegMetadata,
-					ExifTagConstants.EXIF_TAG_WHITE_BALANCE_1));
-
-			final TiffField digitalZoomRatioField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_DIGITAL_ZOOM_RATIO);
-			if (null != digitalZoomRatioField) {
-				photoDetails.setDigitalZoomRatio(digitalZoomRatioField
-						.getIntValue());
-			}
-
-			final TiffField exifVersionField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_EXIF_VERSION);
-			if (null != exifVersionField) {
-				photoDetails.setExifVersion(new String(exifVersionField
-						.getByteArrayValue()));
-			}
-
-			// ISO
-			final TiffField isoField = jpegMetadata
-					.findEXIFValueWithExactMatch(ExifTagConstants.EXIF_TAG_ISO);
-			if (null != isoField) {
-				photoDetails.setISO(isoField.getValueDescription());
-			}
-
-			/* GPS */
-			// GPSInfo
-			final TiffField GPSInfoField = jpegMetadata
-					.findEXIFValue(ExifTagConstants.EXIF_TAG_GPSINFO);
-			if (null != GPSInfoField) {
-				photoDetails.setGPSInfo(GPSInfoField.getValueDescription());
-			}
-			// GPSDateStamp
-			final TiffField GPSDateStampField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_DATE_STAMP);
-			if (null != GPSDateStampField) {
-				try {
-					Date date = DateUtils.parseDate((String) GPSDateStampField
-							.getFieldType().getValue(GPSDateStampField),
-							new String[] { "yyyy:MM:dd" });
-					photoDetails.setGPSDateStamp(date);
-				} catch (DateParseException e) {
-					// TODO Auto-generated catch block
-					log.debug(e.getMessage());
-				}
-			}
-
-			// GPSTimeStamp
-			final TiffField GPSTimeStampField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_TIME_STAMP);
-			if (null != GPSTimeStampField) {
-				// TODO
-			}
-			final TiffField GPSProcessingMethodField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_PROCESSING_METHOD);
-			if (null != GPSProcessingMethodField) {
-				Object out = GPSProcessingMethodField.getFieldType().getValue(
-						GPSProcessingMethodField);
-				if (out instanceof String[]) {
-					photoDetails.setGPSProcessingMethod(((String[]) out)[0]);
-				}
-
-			}
-			/********************************************************************************************/
-			// getTagValue(jpegMetadata, TiffTagConstants.TIFF_TAG_XRESOLUTION);
-			// getTagValue(jpegMetadata, TiffTagConstants.TIFF_TAG_DATE_TIME);
-			// getTagValue(jpegMetadata,
-			// ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-			// getTagValue(jpegMetadata,
-			// ExifTagConstants.EXIF_TAG_DATE_TIME_DIGITIZED);
-			// getTagValue(jpegMetadata, ExifTagConstants.EXIF_TAG_ISO);
-			// getTagValue(jpegMetadata,
-			// ExifTagConstants.EXIF_TAG_SHUTTER_SPEED_VALUE);
-			// getTagValue(jpegMetadata,
-			// ExifTagConstants.EXIF_TAG_APERTURE_VALUE);
-			// getTagValue(jpegMetadata,
-			// ExifTagConstants.EXIF_TAG_BRIGHTNESS_VALUE);
-			// getTagValue(jpegMetadata,
-			// GpsTagConstants.GPS_TAG_GPS_LATITUDE_REF);
-			// log.info(getTagValue(jpegMetadata,
-			// GpsTagConstants.GPS_TAG_GPS_LATITUDE));
-			// TiffField field =
-			// jpegMetadata.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LATITUDE);
-			// log.info(((RationalNumber[])field.getFieldType().getValue(field)).length);
-			// log.info(((RationalNumber[])field.getFieldType().getValue(field))[0].intValue());
-			// log.info(((RationalNumber[])field.getFieldType().getValue(field))[1].intValue());
-			// log.info(((RationalNumber[])field.getFieldType().getValue(field))[2].doubleValue());
-			// getTagValue(jpegMetadata,
-			// GpsTagConstants.GPS_TAG_GPS_LONGITUDE_REF);
-			// getTagValue(jpegMetadata, GpsTagConstants.GPS_TAG_GPS_LONGITUDE);
-
-			// List<IImageMetadataItem> items = jpegMetadata.getItems();
-			// for(IImageMetadataItem item : items) {
-			// log.info(item.toString("IImageMetadataItem: "));
-			// }
-			/********************************************************************************************/
-
-			// Jpeg EXIF metadata is stored in a TIFF-based directory structure
-			// and is identified with TIFF tags.
-			// Here we look for the "x resolution" tag, but
-			// we could just as easily search for any other tag.
-			//
-			// see the TiffConstants file for a list of TIFF tags.
-
-			// simple interface to GPS data
-			final TiffImageMetadata exifMetadata = jpegMetadata.getExif();
-			if (null != exifMetadata) {
-
-				// /**********************************************************************************************/
-				// List<? extends IImageMetadataItem> iiitems =
-				// exifMetadata.getItems();
-				// for(IImageMetadataItem i : iiitems) {
-				// log.info(i.toString());
-				// }
-				// /**********************************************************************************************/
-				final TiffImageMetadata.GPSInfo gpsInfo = exifMetadata.getGPS();
-
-				if (null != gpsInfo) {
-					point = new Point();
-					// final String gpsDescription = gpsInfo.toString();
-					final double longitude = gpsInfo
-							.getLongitudeAsDegreesEast();
-					final double latitude = gpsInfo.getLatitudeAsDegreesNorth();
-
-					point.setLat(latitude);
-					point.setLng(longitude);
-
-					photoDetails.setGPSLatitudeRef(gpsInfo.latitudeRef);
-					photoDetails.setGPSLatitude(latitude);
-					photoDetails.setGPSLongitudeRef(gpsInfo.longitudeRef);
-					photoDetails.setGPSLongitude(longitude);
-				}
-			}
-
-			// get 海拔高度
-			final TiffField altitudeField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_ALTITUDE);
-			final TiffField altitudeRefField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_ALTITUDE_REF);
-			if (null != altitudeField) {
-				if (null == point) {
-					point = new Point();
-				}
-				point.setAlt(altitudeField.getDoubleValue());
-				if (null != altitudeRefField) {
-					photoDetails.setGPSAltitudeRef(altitudeRefField
-							.getValueDescription());
-				}
-				photoDetails.setGPSAltitude(altitudeField.getDoubleValue());
-			}
-
-			photo.setGpsPoint(point);
-		}
-		photoDetails.setPhoto(photo);
-		photo.setDetails(photoDetails);
-		return photo;
-	}
-
-	private static String getTagValue(final JpegImageMetadata jpegMetadata,
-			final TagInfo tagInfo) {
-		final TiffField field = jpegMetadata
-				.findEXIFValueWithExactMatch(tagInfo);
-		if (field == null) {
-			return "";
-		} else {
-			return field.getValueDescription();
-		}
-	}
+//	@Override
+//	public Photo store(String lat, String lng, String address, Attachment image)
+//			throws ImageReadException {
+//
+//		ContentDisposition content = image.getContentDisposition();
+//		String fileName = content.getParameter("filename");
+//		DataHandler dh = image.getDataHandler();
+//		InputStream ins = null;
+//		try {
+//			ins = dh.getInputStream();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		Photo photo = new Photo();
+//		photo.setName(fileName);
+//		photo.setFileType(FilenameUtils.getExtension(fileName));
+//		photo = this.save(photo, ins);
+//
+//		Double latDouble = Double.valueOf(lat);
+//		Double lngDouble = Double.valueOf(lng);
+//		Point point;
+//		if (latDouble != 0 || lngDouble != 0) {
+//			point = new Point(latDouble, lngDouble);
+//			address = address.trim();
+//			if (address != null && address != "") {
+//				point.setAddress(address);
+//			}
+//			photo.setGpsPoint(point);
+//		}
+//		// 返回json时从Photo里去掉PhotoDetials
+//		photo.setDetails(null);
+//		return photo;
+//	}
 
 	@Override
 	public Photo getPhoto(Long id) {
@@ -556,49 +228,57 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		InputStream is1 = new ByteArrayInputStream(content);
 
 		photo.setCreateDate(new Date());
+		
+		User user = UserUtil.getCurrentUser(userManager);
 
-		Object principal = SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		String username;
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails) principal).getUsername();
-		} else {
-			username = principal.toString();
-		}
-
-		User user = userManager.getUserByUsername(username);
+//		Object principal = SecurityContextHolder.getContext()
+//				.getAuthentication().getPrincipal();
+//		String username;
+//		if (principal instanceof UserDetails) {
+//			username = ((UserDetails) principal).getUsername();
+//		} else {
+//			username = principal.toString();
+//		}
+//
+//		User user = userManager.getUserByUsername(username);
+		// 先、保存photo table record
 		photo.setOwner(user);
+		photo = photoDao.save(photo);
+		
+		// 再、保存原始photo file
+		fileService.saveFile(FileService.TYPE_IMAGE, photo.getId(),
+				photo.getFileType(), is1);		
 
+		// 第三、获取图片exif详细信息
+		is1 = new ByteArrayInputStream(content);
 		try {
-			fillPhotoDetail(is1, photo);
-		} catch (IOException e) {
+//			fillPhotoDetail(is1, photo);
+			new ImageInfoExtractor(is1, photo).process();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		photo = photoDao.save(photo);
+		
+		// 第四、新线程运行生成图片缩略图
+		is1 = new ByteArrayInputStream(content);
+		new Thread(new SaveThumbnailsRunnable(is1, photo.getId(),
+				photo.getFileType())).start();
 
-		is1 = new ByteArrayInputStream(content);
-		fileService.saveFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType(), is1);
-		
-		// 新线程运行生成图片缩略图
-		is1 = new ByteArrayInputStream(content);
-		new Thread(new SaveThumbnailsRunnable(is1, photo.getId(), photo.getFileType())).start();
-		
 		return photo;
 	}
-	
+
 	/**
 	 * 新线程运行生成图片缩略图
 	 * 
 	 * @author any
-	 *
+	 * 
 	 */
 	private class SaveThumbnailsRunnable implements Runnable {
-		
+
 		private InputStream ins;
 		private Long id;
 		private String type;
-		
+
 		public SaveThumbnailsRunnable(InputStream ins, Long id, String type) {
 			this.ins = ins;
 			this.id = id;
@@ -607,36 +287,37 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 
 		@Override
 		public void run() {
-			fileService.saveThumbnails(FileService.TYPE_IMAGE, id, type, ins);			
+			fileService.saveThumbnails(FileService.TYPE_IMAGE, id, type, ins);
 		}
-		
+
 	}
 
-	@Override
-	public Response read(Long id, int level) {
-		Photo photo = photoDao.get(id);
-
-		File file = fileService.readFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType(), level);
-
-		// ResponseBuilder response = Response.ok((Object) file);
-		ResponseBuilder responseBuilder = null;
-		FileInputStream finputs = null;
-		Response response = null;
-		try {
-			finputs = new FileInputStream(file);
-			responseBuilder = Response.ok().entity(finputs);
-			responseBuilder.header("Content-Disposition",
-					"attachment; filename=" + getName(photo));
-			response = responseBuilder.build();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return response;
-	}
+//	@Override
+//	public Response read(Long id, int level) {
+//		Photo photo = photoDao.get(id);
+//
+//		File file = fileService.readFile(FileService.TYPE_IMAGE, photo.getId(),
+//				photo.getFileType(), level);
+//
+//		// ResponseBuilder response = Response.ok((Object) file);
+//		ResponseBuilder responseBuilder = null;
+//		FileInputStream finputs = null;
+//		Response response = null;
+//		try {
+//			finputs = new FileInputStream(file);
+//			responseBuilder = Response.ok().entity(finputs);
+//			responseBuilder.header("Content-Disposition",
+//					"attachment; filename=" + getName(photo));
+//			response = responseBuilder.build();
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return response;
+//	}
 
 	@Override
 	public int getPhotoCount(User user) {
@@ -657,7 +338,7 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	}
 
 	@Override
-	public boolean properties(Long photoId, PhotoProperties properties) {
+	public PhotoProperties properties(Long photoId, PhotoProperties properties) {
 		Photo photo = photoDao.get(photoId);
 		if (null != properties.getTitle()) {
 			photo.setTitle(properties.getTitle());
@@ -666,18 +347,25 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 		if (null != properties.getDescription()) {
 			photo.setDescription(properties.getDescription());
 		}
-		if(null != properties.getPoint()) {
-			if ((null != properties.getPoint().getLat() && properties.getPoint().getLat() != 0)
-					|| (null != properties.getPoint().getLng() && properties.getPoint().getLng() != 0)) {
-				updatePhotoGps(photo, properties.getPoint().getLat(), properties
-						.getPoint().getLng(), properties.getPoint().getAddress(),
+		if (null != properties.getPoint()) {
+			if ((null != properties.getPoint().getLat() && properties
+					.getPoint().getLat() != 0)
+					|| (null != properties.getPoint().getLng() && properties
+							.getPoint().getLng() != 0)) {
+				updatePhotoGps(photo, properties.getPoint().getLat(),
+						properties.getPoint().getLng(), properties.getPoint()
+								.getAddress(),
 						PhotoUtil.getMapVendor(properties.getVendor()));
 			}
 		}
+		if(null != properties.getFileSize()) {
+			photo.setFileSize(properties.getFileSize());
+		}
+		// 是否是360°全景照片
+		photo.setIs360(properties.isIs360());
 		
-
 		photoDao.save(photo);
-		return true;
+		return getPhotoProperties(photoId, photo.getOwner().getId());
 	}
 
 	@Override
@@ -699,35 +387,40 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	@Override
 	public PhotoProperties getPhotoProperties(Long id, Long userId) {
 		PhotoProperties prop = PhotoUtil.transformProperties(getPhoto(id));
+		// 如果用户ID不为空，则返回此图片是否被他收藏
 		if (null != userId) {
 			Favorite f = favoriteDao.get(id, userId);
 			if (null != f) {
 				prop.setFavorite(true);
 			}
 		}
+		// 图片的评论总数
+		Long count = commentDao.getCommentSize(id);
+		prop.setCommentCount(count.intValue());
 		return prop;
 	}
 
 	@Override
 	public PhotoProperties upload(String lat, String lng, String address,
-			MapVendor vendor, MultipartFile file) {
+			MapVendor vendor, MultipartFile file) throws Exception {
 		InputStream ins;
 		Photo photo = new Photo();
 
 		photo.setName(file.getOriginalFilename());
-		try {
-			ins = file.getInputStream();
-			photo = this.save(photo, ins);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ImageReadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
+		ins = file.getInputStream();
+		photo = this.save(photo, ins);
+	
 		updatePhotoGps(photo, lat, lng, address, vendor);
-
+		PhotoDetails detail = photo.getDetails();
+		if(null != detail) {
+			if(null != detail.getgPanoUsePanoramaViewer()) {
+				if(detail.getgPanoUsePanoramaViewer().equalsIgnoreCase("true")) {
+					photo.setIs360(true);
+				}
+			}
+		}
+		
 		return PhotoUtil.transformProperties(photo);
 	}
 
@@ -760,8 +453,8 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	 * @param address
 	 * @param vendor
 	 */
-	private void updatePhotoGps(Photo photo, Double latDouble, Double lngDouble,
-			String address, MapVendor vendor) {
+	private void updatePhotoGps(Photo photo, Double latDouble,
+			Double lngDouble, String address, MapVendor vendor) {
 
 		PhotoGps gps = null;
 
@@ -855,11 +548,17 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 	@Override
 	public Set<Tag> addTags(Long id, Tags tags) {
 		Photo photo = photoDao.get(id);
+		// 权限检查
+		checkIsMyPhoto(photo);
+
+		UserSettings user = userSettingsDao.get(photo.getOwner().getId());
+
 		photo.getTags().clear();
 		for (Tag tag : tags) {
-			photo.addTag(tag);
+			Tag t = userSettingsDao.getOrCreateUserTag(user, tag.getTag());
+			photo.addTag(t);
+			t.getPhoto().add(photo);
 		}
-		photoDao.save(photo);
 		return photo.getTags();
 	}
 
@@ -981,6 +680,22 @@ public class PhotoServiceImpl implements PhotoService, PhotoManager {
 			pps.add(pp);
 		}
 		return pps;
+	}
+
+	/**
+	 * 权限检查：是否是操作属于自己的图片
+	 * 
+	 * @param photo
+	 * @return
+	 */
+	private boolean checkIsMyPhoto(Photo photo) {
+		User me = UserUtil.getCurrentUser(userManager);
+		if (photo.getOwner().equals(me)) {
+			return true;
+		} else {
+			throw new AccessDeniedException("Access Denied! Photo Id: "
+					+ photo.getId());
+		}
 	}
 
 }

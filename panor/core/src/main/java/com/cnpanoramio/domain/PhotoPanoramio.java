@@ -1,11 +1,14 @@
 package com.cnpanoramio.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @XmlRootElement
@@ -16,19 +19,27 @@ public class PhotoPanoramio {
 
 	@Id
 	@Column(name = "photo_id")
+	@JsonProperty("photo_id")
 	private Long photoId;
 	
+	// gps address info
 	private Double lat;
-	
 	private Double lng;
-	
 	private Double alt;
-	
 	private String address;
 	
+	// photo info
 	private Integer rating;
-	
 	private String title;
+	@JsonProperty("create_date")
+	@Column(name = "create_date")
+	private Date createDate;
+	
+	// owner info
+	@JsonProperty("user_id")
+	@Column(name = "user_id")
+	private Long userId;
+	private String username;
 
 	public Long getPhotoId() {
 		return photoId;
@@ -84,6 +95,30 @@ public class PhotoPanoramio {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	

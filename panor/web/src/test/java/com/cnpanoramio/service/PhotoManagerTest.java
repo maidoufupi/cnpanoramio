@@ -95,7 +95,7 @@ public class PhotoManagerTest {
 		Photo photo = new Photo();
 		User user = userManager.get(1L);
 		photo.setOwner(user);
-		photoManager.fillPhotoDetail(ins, photo);
+//		photoManager.fillPhotoDetail(ins, photo);
 		PhotoDetails details = photo.getDetails();
 		/* Camera */
 		log.info(details.getMake());
@@ -140,7 +140,7 @@ public class PhotoManagerTest {
 	}
 	
 	@Test
-	public void testUpload() throws IOException {
+	public void testUpload() throws Exception {
 		
 		MockMultipartFile file = new MockMultipartFile("test.jpg", "photo.jpg", "jpg", ins);
 		log.info(file.getName());

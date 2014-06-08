@@ -1,18 +1,16 @@
 package com.cnpanoramio.domain;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -23,9 +21,14 @@ public class Tag {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private Long id;
-     	
+	
 	@ManyToMany
-	private Set<Photo> photo;
+	@JoinTable(name="tag_user")
+	private Set<UserSettings> users = new HashSet<UserSettings>(0);
+	
+	@ManyToMany
+	@JoinTable(name="tag_photo")
+	private Set<Photo> photo = new HashSet<Photo>(0);;
 	
 	private String tag;
 	
@@ -57,8 +60,16 @@ public class Tag {
 
 	public void setPhoto(Set<Photo> photo) {
 		this.photo = photo;
+	}	
+
+	public Set<UserSettings> getUsers() {
+		return users;
 	}
-	
+
+	public void setUsers(Set<UserSettings> users) {
+		this.users = users;
+	}
+
 	@Override
 	public String toString() {
 		return tag;
@@ -68,7 +79,6 @@ public class Tag {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((photo == null) ? 0 : photo.hashCode());
 		result = prime * result + ((tag == null) ? 0 : tag.hashCode());
 		return result;
 	}
@@ -82,11 +92,6 @@ public class Tag {
 		if (getClass() != obj.getClass())
 			return false;
 		Tag other = (Tag) obj;
-		if (photo == null) {
-			if (other.photo != null)
-				return false;
-		} else if (!photo.equals(other.photo))
-			return false;
 		if (tag == null) {
 			if (other.tag != null)
 				return false;
@@ -94,6 +99,5 @@ public class Tag {
 			return false;
 		return true;
 	}
-	
 	
 }

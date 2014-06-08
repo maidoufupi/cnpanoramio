@@ -1,0 +1,22 @@
+<div class="dropdown dropdown-picker">
+    <div contentEditable class="dropdown-toggle"
+         ng-model="item"
+         data-place-holder="添加"
+         editable="false"></div>
+    <div class="dropdown-menu">
+        <div class="dropdown-body">
+            <span class="label label-selectable"
+                  ng-class="{'label-default': item.$active, 'label-primary': !item.$active}"
+                  ng-repeat="item in items"
+                  ng-click="setItem(item)">{{item.value}}</span>
+        </div>
+        <div class="form-inline" role="form">
+            <div class="form-group">
+                <label class="sr-only" for="pickerNew">Email address</label>
+                <input type="text" class="form-control input-sm" id="pickerNew"
+                       placeholder="添加" ng-model="newItem">
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="createData(newItem)">新建</button>
+        </div>
+    </div>
+</div>

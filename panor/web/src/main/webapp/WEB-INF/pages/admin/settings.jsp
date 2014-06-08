@@ -15,10 +15,20 @@
         $("#header-alert").hide();
         var client = new $.RestClient(apirest + "/");
         client.add('panoramio');
+        client.panoramio.add('latest');
         $("#update-gisindex").click(function() {
             $(this).addClass("disable");
             var that = this;
             client.panoramio.read().done(function() {
+                $(document).trigger("add-alerts", [
+                    {
+                        message: "This is success",
+                        priority: "success"
+                    }
+                ]);
+                $(that).removeClass("disable");
+            });
+            client.panoramio.latest.read().done(function() {
                 $(document).trigger("add-alerts", [
                     {
                         message: "This is success",

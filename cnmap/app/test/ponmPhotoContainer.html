@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
+    <!--<script type="text/javascript" src="../bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>-->
+    <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="../scripts/panor/js/three.min.js"></script>
+    <script type="text/javascript" src="../scripts/services.js"></script>
+    <script type="text/javascript" src="../scripts/directives.js"></script>
+    <script type="text/javascript" src="../scripts/directives/ponmPhotoContainer.js"></script>
+    <script type="text/javascript" src="../scripts/panor/js/jquery.panzoom.js"></script>
+    <script type="text/javascript" src="../scripts/panor/js/jquery.mousewheel.js"></script>
+    <style>
+        body > .container {
+            width: 80%;
+            height: 80%;
+            margin: 0 auto;
+        }
+        .img-container {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body ng-app="ponmApp.directives">
+<div class="container">
+    <div class="img-container">
+        <div ponm-photo-container
+             ponm-photo-src-l1="images/IMAG2534.jpg"
+             ponm-photo-width="900"
+             ponm-photo-height="450"
+             ponm-photo-color="#887348"
+             ponm-photo-is360="false"
+                >
+
+            <div class="flat-image show">
+            </div>
+            <div class="p360-image">
+                <a class="flat-image-button" href=""><div class="icon-pflat"></div></a>
+            </div>
+
+        </div>
+        <div class="buttons">
+            <button class="zoom-in">放大</button>
+            <button class="zoom-out">缩小</button>
+            <input type="range" class="zoom-range">
+            <button class="reset">重置</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

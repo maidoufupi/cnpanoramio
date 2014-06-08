@@ -1,11 +1,20 @@
 package com.cnpanoramio.domain;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -26,6 +35,14 @@ public class UserSettings {
 	
 	@Id 
     private Long id;
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="user_tag")
+	private Set<Tag> tags = new HashSet<Tag>(0);
+	
+	@OneToMany
+	@JoinTable(name="user_travel")
+	private List<Travel> travels = new ArrayList<Travel>(0);
 	
 	// 地图供应商
 //	@XmlAttribute(name = "map_vendor")
@@ -88,6 +105,17 @@ public class UserSettings {
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="avatar")
 	private Avatar avatar;
+	
+	// follower
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinTable(name="user_follower")
+	private Set<User> follower = new HashSet<User>(0);
+	
+	// following
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinTable(name="user_following")
+	private Set<User> following = new HashSet<User>(0);
+	
 
 	public User getUser() {
 		return user;
@@ -204,8 +232,67 @@ public class UserSettings {
 
 	public void setAvatar(Avatar avatar) {
 		this.avatar = avatar;
+	}
+
+	public Set<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<Travel> getTravels() {
+		return travels;
+	}
+
+	public void setTravels(List<Travel> travels) {
+		this.travels = travels;
+	}
+
+	public Set<User> getFollower() {
+		return follower;
+	}
+
+	public void setFollower(Set<User> follower) {
+		this.follower = follower;
+	}
+
+	public Set<User> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Set<User> following) {
+		this.following = following;
 	}	
-	
-	
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserSettings other = (UserSettings) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}	
+		
 }

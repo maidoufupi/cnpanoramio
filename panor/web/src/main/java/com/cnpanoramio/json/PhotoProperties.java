@@ -1,6 +1,7 @@
 package com.cnpanoramio.json;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,7 +12,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.cnpanoramio.domain.Point;
-import com.cnpanoramio.domain.Tag;
 
 @XmlRootElement(name = "PhotoProperties")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -19,39 +19,41 @@ import com.cnpanoramio.domain.Tag;
 public class PhotoProperties {
 	
 	private Long id;
-
 	private String title;
-	
 	private String description;
-	
 	@JsonProperty("create_time")
 	private String createTime;
-	
 	@JsonProperty("user_id")
 	private Long userId;
-	
 	private Point point;
+	// 地图供应商
 	private String vendor;
+	private Integer width;
+	private Integer height;
+	private Boolean is360;
 	
 	// tags
 	private List<String> tags = new ArrayList<String>(0);
 	
 	// views
-	private int views;
+	private Integer views;
 	
 	@JsonProperty("fav_count")
-	private int favCount;
+	private Integer favCount;
 	
 	private boolean favorite;
-
-	public int getFavCount() {
-		return favCount;
-	}
-
-	public void setFavCount(int favCount) {
-		this.favCount = favCount;
-	}
-
+	
+	// 图片的评论总数
+	@JsonProperty("comment_count")
+	private Integer commentCount;
+	
+	@JsonProperty("file_size")
+	private Integer fileSize;
+	
+	// 拍摄日期
+	@JsonProperty("date_time")
+	private Date dateTime;
+	
 	public String getTitle() {
 		return title;
 	}
@@ -100,14 +102,6 @@ public class PhotoProperties {
 		this.tags = tags;
 	}
 
-	public int getViews() {
-		return views;
-	}
-
-	public void setViews(int views) {
-		this.views = views;
-	}
-
 	public boolean isFavorite() {
 		return favorite;
 	}
@@ -130,6 +124,69 @@ public class PhotoProperties {
 
 	public void setPoint(Point point) {
 		this.point = point;
+	}
+
+	public Integer getWidth() {
+		return width;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	public Integer getHeight() {
+		return height;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+
+	public Integer getViews() {
+		return views;
+	}
+
+	public void setViews(Integer views) {
+		this.views = views;
+	}
+
+	public Integer getFavCount() {
+		return favCount;
+	}
+
+	public void setFavCount(Integer favCount) {
+		this.favCount = favCount;
+	}
+
+	public Integer getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Integer fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public Date getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(Date dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public Boolean isIs360() {
+		return is360;
+	}
+
+	public void setIs360(Boolean is360) {
+		this.is360 = is360;
+	}
+
+	public Integer getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(Integer commentCount) {
+		this.commentCount = commentCount;
 	}	
-	
 }

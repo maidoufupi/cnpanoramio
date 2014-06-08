@@ -3,8 +3,8 @@ package com.cnpanoramio.service;
 import java.util.List;
 
 import com.cnpanoramio.MapVendor;
-import com.cnpanoramio.domain.PhotoPanoramio;
 import com.cnpanoramio.domain.Point;
+import com.cnpanoramio.json.PanoramioResponse.PhotoPanoramio;
 
 public interface PhotoPanoramioIndexService {
 
@@ -25,7 +25,8 @@ public interface PhotoPanoramioIndexService {
 	 * @param height
 	 * @return
 	 */
-	public List<PhotoPanoramio> getPanoramio(Point sw, Point ne, int level, MapVendor vendor, int width, int height);
+	public List<PhotoPanoramio> getPanoramio(Double swLat,
+			Double swLng, Double neLat, Double neLng, int level, MapVendor vendor, int width, int height);
 	
 	/**
 	 * 获取地图上用户自己的图片信息
@@ -81,4 +82,5 @@ public interface PhotoPanoramioIndexService {
 	 * @return
 	 */
 	public List<PhotoPanoramio> getLatestPanoramio(Double swLat, Double swLng, Double neLat, Double neLng, int level, MapVendor vendor, int width, int height);
+
 }

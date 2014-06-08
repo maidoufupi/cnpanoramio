@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>Panzoom for jQuery</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <style type="text/css">
+        body { background: #F5FCFF; color: #333666; }
+        section { text-align: center; margin: 50px 0; }
+        .panzoom-parent { border: 2px solid #333; }
+        /*.panzoom-parent .panzoom { border: 2px dashed #666; }*/
+        .buttons { margin: 40px 0 0; }
+    </style>
+    <script src="../bower_components/jquery/jquery.min.js"></script>
+    <script src="../scripts/panor/js/jquery.panzoom.js"></script>
+    <script src="../scripts/panor/js/jquery.mousewheel.js"></script>
+</head>
+<body>
+<section id="focal">
+    <h1>Use the mousewheel to zoom on a focal point</h1>
+    <div class="panzoom-parent">
+        <div class="panzoom">
+            <img src="images/IMAG2534.jpg" width="900" height="450">
+        </div>
+    </div>
+    <div class="buttons">
+        <button class="zoom-in">Zoom In</button>
+        <button class="zoom-out">Zoom Out</button>
+        <input type="range" class="zoom-range">
+        <button class="reset">Reset</button>
+    </div>
+    <script>
+        (function() {
+            var $section = $('#focal');
+            var $panzoom = $section.find('.panzoom').panzoom({
+                $zoomIn: $section.find(".zoom-in"),
+                $zoomOut: $section.find(".zoom-out"),
+                $zoomRange: $section.find(".zoom-range"),
+                $reset: $section.find(".reset"),
+                $set: $section.find('.panzoom-parent > div')
+            });
+            $panzoom.panzoom("option", "transition", true);
+            $panzoom.parent().on('mousewheel.focal', function( e ) {
+                e.preventDefault();
+                var delta = e.delta || e.originalEvent.wheelDelta;
+                var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+                $panzoom.panzoom('zoom', zoomOut, {
+                    increment: 0.1,
+                    animate: true,
+                    focal: e
+                });
+
+            });
+
+            $panzoom.on('panzoomzoom', function(e, panzoom, scale, changed) {
+                if(Math.abs(scale - 1) < 0.05) {
+                    if(scale != 1) {
+                        $panzoom.panzoom("resetZoom");
+                    }
+                    $panzoom.panzoom("resetPan");
+                }
+
+
+            });
+            $panzoom.on('panzoomend', function(e, panzoom, matrix, changed) {
+//                var option = $panzoom.panzoom("option");
+//                if(Math.abs(scale - 1) < 0.01) {
+//                    $panzoom.panzoom("resetPan");
+//                }
+                if (changed) {
+                    // deal with drags or touch moves
+                } else {
+                    // deal with clicks or taps
+                }
+            });
+        })();
+
+    </script>
+</section>
+
+<!-- Load livereload if not phantom or github -->
+<script>
+    if ( !window.phantom && !/github/.test(window.location.hostname) ) document.write('<scr' + 'ipt src="http://' + location.hostname + ':35711/livereload.js"></scr' + 'ipt>');
+</script>
+</body>
+</html>

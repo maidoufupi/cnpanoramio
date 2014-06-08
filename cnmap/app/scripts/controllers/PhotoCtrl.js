@@ -3,13 +3,16 @@
  */
 'use strict';
 
-angular.module('photoApp', ['ngCookies',
-        'ngResource',
-        'ngSanitize',
-        'ngRoute',
-        'ui.bootstrap',
-        'ui.map',
-        'cnmapApp'])
+angular.module('photoApp', [
+    'ngCookies',
+    'ngResource',
+    'ngSanitize',
+    'ngRoute',
+    'ui.bootstrap',
+    'ui.map',
+    'ponmApp',
+    'ponmApp.services',
+    'ponmApp.directives'])
     .controller('PhotoCtrl', ['$window', '$location', '$log', '$rootScope', '$scope', '$cookieStore', '$cookies',
         'PhotoService', 'CommentService', 'UserService', 'UserPhoto',
         function ($window, $location, $log, $rootScope, $scope, $cookieStore, $cookies,
@@ -23,7 +26,8 @@ angular.module('photoApp', ['ngCookies',
             if(photo) {
                 $scope.photoId = photo[0].match(/[0-9]+/g)[0];
             }else {
-                $scope.photoId = 100;
+                // for test
+                $scope.photoId = 8;
             }
 
             $scope.photo = {};
@@ -53,6 +57,9 @@ angular.module('photoApp', ['ngCookies',
                 $log.debug(data);
                 if(data.status == 'OK') {
                     $scope.photo = data.prop;
+                    // 评论
+                    $scope.comment.totalItems = data.prop.comment_count;
+                    $scope.comment.numPages = Math.ceil($scope.comment.totalItems / $scope.comment.pageSize);
 
                     // 设置图片属性保存函数
                     $scope.photo.save = function() {
@@ -70,7 +77,7 @@ angular.module('photoApp', ['ngCookies',
                         if(data.status == "OK") {
                             $scope.userOpenInfo = data.open_info;
                         }
-                    })
+                    });
 
                     // 获取图片主人的图片
                     UserPhoto.get({userId: $scope.photo["user_id"], pageSize: $scope.photoId},
@@ -78,9 +85,9 @@ angular.module('photoApp', ['ngCookies',
                             if(data.status == "OK") {
                                 $scope.user_photos = data.photos.slice(0, 6);
                             }
-                        })
+                        });
                 }
-            })
+            });
 
             PhotoService.getGPSInfo({photoId: $scope.photoId, 'vendor':'gaode'}, function(data) {
                 if(data.status == "OK" && data.gps.length) {
@@ -90,31 +97,34 @@ angular.module('photoApp', ['ngCookies',
 	                $scope.gpsInfo.lng = cnmap.GPS.convert($scope.gpsInfo.gps.lng);
 
                     mapEventListener.setCenter($scope.minimap1, $scope.gpsInfo.gps.lat, $scope.gpsInfo.gps.lng);
+                    mapEventListener.addMarker($scope.minimap1, $scope.gpsInfo.gps.lat, $scope.gpsInfo.gps.lng);
                 }
                 
-            })
+            });
             PhotoService.getCameraInfo({photoId: $scope.photoId}, function(data) {
                 if(data.status == "OK") {
                     $scope.cameraInfo = data.camera_info;
                 }
                 $log.debug($scope.cameraInfo);
-            })
+            });
 
-            // 获取评论总数
-            CommentService.getPhotos({photoId: $scope.photoId}, function (data) {
-                $scope.comment.totalItems = data.count;
-                $scope.comment.numPages = Math.round($scope.bigTotalItems / $scope.comment.pageSize);
-            }, function(error) {
-                console.log(error)
-            })
+//            获取评论总数
+//            CommentService.getPhotos({photoId: $scope.photoId}, function (data) {
+//                $scope.comment.totalItems = data.count;
+//                $scope.comment.numPages = Math.round($scope.bigTotalItems / $scope.comment.pageSize);
+//            }, function(error) {
+//                console.log(error)
+//            });
 
             /**
              * 获取详细评论(分页)
              */
             function getComments() {
-                CommentService.getPhotos({photoId: $scope.photoId, pageSize: $scope.comment.pageSize,
+                PhotoService.getComments({photoId: $scope.photoId, pageSize: $scope.comment.pageSize,
                     pageNo: $scope.comment.currentPage}, function (data) {
-                    $scope.comments = data.comments;
+                    if(data.status == "OK") {
+                        $scope.comments = data.comments;
+                    }
                 }, function(error) {
                 });
             }
@@ -136,22 +146,29 @@ angular.module('photoApp', ['ngCookies',
                     $scope.userOpenInfo.name == $scope.user.username) {
                     $scope.editable = who;
                 }
-            }
+            };
 
             $scope.deletePhoto = function () {
                 $window.alert("您确定要删除这张照片？");
             };
 
-            $scope.save = function(content) {
+            /**
+             * 创建评论
+             *
+             * @param content
+             */
+            $scope.createComment = function(content) {
                 if(content) {
                     CommentService.save({photoId: $scope.photoId, content: content}, function(data) {
-                        $scope.comment.content = "";
-                        $scope.comment.count = $scope.comment.count + 1;
-                        $scope.comments.push(data);
+                        if(data.status == "OK") {
+                            $scope.comment.content = "";
+                            $scope.comment.count = $scope.comment.count + 1;
+                            $scope.comments.splice(0, 0, data.comment);
+                        }
                     })
                 }
 
-            }
+            };
 
             $scope.favorite = function() {
                 if($scope.user.login) {
@@ -170,7 +187,7 @@ angular.module('photoApp', ['ngCookies',
                         })
                     }
                 }
-            }
+            };
 
             $scope.mapOptions = {
                 // map plugin config
@@ -185,7 +202,7 @@ angular.module('photoApp', ['ngCookies',
                 level: 13,
                 // ui map config
                 uiMapCache: false
-            }
+            };
 
             if($window.mapVendor == "qq") {
                 $window.mapVendor = "gaode";
@@ -200,7 +217,7 @@ angular.module('photoApp', ['ngCookies',
                     // 更新图片
                     $scope.update_nearby_photos(data);
                 });
-            })
+            });
             $scope.$watch('minimap1', function () {
                 if (!$scope.map) {
                     $scope.map = $scope.minimap1;
@@ -211,6 +228,6 @@ angular.module('photoApp', ['ngCookies',
 
             $scope.update_nearby_photos = function (photos) {
                 $scope.nearby_photos = photos && photos.slice(0,5);
-            }
+            };
         }])
 ;

@@ -1,6 +1,7 @@
 package com.cnpanoramio.dao.impl.hibernate;
 
 import java.util.List;
+import java.util.Set;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
 import org.appfuse.model.User;
@@ -25,12 +26,7 @@ public class UserSettingsDaoImpl extends GenericDaoHibernate<UserSettings, Long>
 		Query photoListQuery = getSession().createQuery("select us from UserSettings as us left join us.user as u where u.username = :username");
 		
 		photoListQuery.setParameter("username", userName);
-		List res = photoListQuery.list();
-        if(res.size() > 0) {
-        	return (UserSettings) res.get(0);
-        }else {
-        	return null;
-        }
+		return (UserSettings) photoListQuery.uniqueResult();
 	}
 
 	@Override
@@ -40,5 +36,42 @@ public class UserSettingsDaoImpl extends GenericDaoHibernate<UserSettings, Long>
 		query.setParameter("user", user);
 		List res = query.list();
 		return res;
+	}
+
+	@Override
+	public Tag getTag(String tag) {
+		Query query = getSession()
+				.createQuery("from Tag where tag = :tag");
+		query.setParameter("tag", tag);
+		return (Tag) query.uniqueResult();
+	}
+
+	@Override
+	public Set<Tag> createTag(UserSettings user, String tag) {
+		Tag t = getTag(tag);
+		if(null == t) {
+			t = new Tag(tag);
+		}
+		user.getTags().add(t);
+		return user.getTags();
+	}
+
+	@Override
+	public Tag getOrCreateUserTag(UserSettings user, String tag) {
+		
+		Query query = getSession()
+				.createQuery("select distinct t from Tag as t inner join t.users as u where u = :user and t.tag = :tag");
+		query.setParameter("user", user);
+		query.setParameter("tag", tag);
+		Tag t = (Tag) query.uniqueResult();
+		if(null == t) {
+			t = getTag(tag);
+			if(null == t) {
+				t = new Tag(tag);
+				t.getUsers().add(user);
+			}
+			user.getTags().add(t);
+		}
+		return t;
 	}
 }

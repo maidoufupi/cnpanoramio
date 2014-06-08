@@ -17,7 +17,7 @@
 	<!-- Force a single locale using param-name 'javax.servlet.jsp.jstl.fmt.locale' -->
 	<context-param>
 		<param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
-		<param-value>en</param-value>
+		<param-value>zh</param-value>
 	</context-param>
 	<!-- Context Configuration locations for Spring XML files -->
 	<context-param>
@@ -101,7 +101,7 @@
 		<filter-name>simpleCORS</filter-name>
 		<filter-class>com.cnpanoramio.webapp.filter.SimpleCORSFilter</filter-class>
 	</filter>
-
+	
 	<filter-mapping>
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -163,11 +163,11 @@
 	</listener>
 
 	<!-- 负责将 Web 应用根目录以 webAppRootKey 上下文参数指定的属性名添加到系统参数中 -->  
-	 <listener>   
+<!-- 	 <listener>   
 	    <listener-class>   
 	    org.springframework.web.util.WebAppRootListener   
 	    </listener-class>   
-	 </listener>
+	 </listener> -->
  
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
@@ -209,9 +209,9 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
-	<welcome-file-list>
+	<!-- <welcome-file-list>
 		<welcome-file>/index.jsp</welcome-file>
-	</welcome-file-list>
+	</welcome-file-list> -->
 
 	<error-page>
 		<error-code>500</error-code>
@@ -238,7 +238,7 @@
 	</jsp-config>
 
 	<session-config>
-		<session-timeout>15</session-timeout>
+		<session-timeout>6000</session-timeout>
 		<cookie-config>
 			<http-only>true</http-only>
 			<!--<secure>true</secure> -->

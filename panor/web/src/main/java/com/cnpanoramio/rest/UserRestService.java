@@ -4,11 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,6 +22,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Base64;
@@ -35,10 +37,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.ExceptionResponse;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.PhotoResponse;
 import com.cnpanoramio.json.UserOpenInfo;
@@ -46,12 +48,14 @@ import com.cnpanoramio.json.UserResponse;
 import com.cnpanoramio.json.UserTransfer;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
+import com.cnpanoramio.service.TravelManager;
+import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.UserUtil;
 
 @Controller
 @RequestMapping("/api/rest/user")
-public class UserRestService {
+public class UserRestService extends AbstractRestService {
 
 	private transient final Log log = LogFactory.getLog(getClass());
 
@@ -66,10 +70,12 @@ public class UserRestService {
 
 	@Autowired
 	private FileService fileService;
-
+	
 	@Autowired
-	@Qualifier("authenticationManager")
-	private AuthenticationManager authManager;
+	private TravelManager travelManager;
+	
+	@Autowired
+	private TravelService travelService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
@@ -155,15 +161,15 @@ public class UserRestService {
 	@ResponseBody
 	public UserResponse getOpenInfo(@PathVariable String userId) {
 		UserResponse reponse = new UserResponse();
-		try {
+//		try {
 			Long id = Long.parseLong(userId);
 			UserOpenInfo openInfo = userSettingsManager.getOpenInfo(id);
 			reponse.setStatus(UserResponse.Status.OK.name());
 			reponse.setOpenInfo(openInfo);
-		} catch (NumberFormatException ex) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
-			return reponse;
-		}
+//		} catch (NumberFormatException ex) {
+//			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
+//			return reponse;
+//		}
 
 		return reponse;
 	}
@@ -265,7 +271,7 @@ public class UserRestService {
 
 	@RequestMapping(value = "/{userId}/avatar", method = RequestMethod.GET, produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
 	@ResponseBody
-	public FileSystemResource avatar(@PathVariable String userId) {
+	public FileSystemResource avatar(@PathVariable String userId, HttpServletResponse response) {
 
 		Long id = Long.parseLong(userId);
 		Long avatarId = 1L;
@@ -277,27 +283,75 @@ public class UserRestService {
 		File file = fileService.readFile(FileService.TYPE_AVATAR,
 				avatarId, UserSettingsManager.AVATAR_FILE_TYPE,
 				FileService.THUMBNAIL_LEVEL_0);
-
+		
+		response.setHeader("Cache-Control","public, max-age=2629000");
+	    Calendar c = Calendar.getInstance();
+	    c.add(Calendar.MONTH, 1);
+	    response.setDateHeader("Expires", c.getTimeInMillis());
+	    
 		return new FileSystemResource(file);
 	}
-
-	@ExceptionHandler(Exception.class)
-	@ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+	
+	@RequestMapping(value = "/{userId}/tag", method = RequestMethod.GET)
 	@ResponseBody
-	public UserResponse handleException(Exception ex) {
-		log.error("Ocurr an error ", ex);
+	public UserResponse getUserTags(@PathVariable String userId) {
 		UserResponse reponse = new UserResponse();
-		if(ex instanceof NumberFormatException) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
-		}else if (ex instanceof DataAccessException) {
-			reponse.setStatus(UserResponse.Status.NO_ENTITY.name());
-		}else if (ex instanceof HttpMediaTypeNotSupportedException) {
-			reponse.setStatus(UserResponse.Status.EXCEPTION.name());
-			reponse.setInfo(ex.getMessage());
-		}else {
-			reponse.setStatus(UserResponse.Status.NO_AUTHORIZE.name());
-		}
-		
+		User user = userManager.getUser(userId);
+		UserOpenInfo openInfo = new UserOpenInfo();
+		openInfo.setId(user.getId());
+		openInfo.setTags(userSettingsManager.getUserTags(user));
+		reponse.setOpenInfo(openInfo);
+		reponse.setStatus(PhotoResponse.Status.OK.name());
 		return reponse;
 	}
+	
+	@RequestMapping(value = "/{userId}/tag/{tag}", method = RequestMethod.GET)
+	@ResponseBody
+	public UserResponse createUserTag(@PathVariable String userId, @PathVariable String tag) throws UnsupportedEncodingException {
+		UserResponse reponse = new UserResponse();
+		User me = UserUtil.getCurrentUser(userManager);
+		if(!me.getId().toString().equals(userId)) {
+			throw new AccessDeniedException("Access Denied!");
+		}
+		tag = new String(tag.getBytes("ISO-8859-1"), "UTF-8");
+		UserOpenInfo openInfo = new UserOpenInfo();
+		openInfo.setId(me.getId());
+		openInfo.setTags(userSettingsManager.createTag(me, tag));		
+		reponse.setOpenInfo(openInfo);
+		reponse.setStatus(PhotoResponse.Status.OK.name());
+		return reponse;
+	}
+	
+	@RequestMapping(value = "/{userId}/tag/{tag}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public UserResponse deleteUserTag(@PathVariable String userId, @PathVariable String tag) throws UnsupportedEncodingException {
+		UserResponse reponse = new UserResponse();
+		User me = UserUtil.getCurrentUser(userManager);
+		if(!me.getId().toString().equals(userId)) {
+			throw new AccessDeniedException("Access Denied!");
+		}
+		tag = new String(tag.getBytes("ISO-8859-1"), "UTF-8");
+		UserOpenInfo openInfo = new UserOpenInfo();
+		openInfo.setId(me.getId());
+		openInfo.setTags(userSettingsManager.deleteTag(me, tag));		
+		reponse.setOpenInfo(openInfo);
+		reponse.setStatus(PhotoResponse.Status.OK.name());
+		return reponse;
+	}
+	
+	@RequestMapping(value = "/{userId}/travel", method = RequestMethod.GET)
+	@ResponseBody
+	public UserResponse getUserTravels(@PathVariable String userId) {
+		UserResponse reponse = new UserResponse();
+		User user = userManager.getUser(userId);
+		
+		UserOpenInfo openInfo = new UserOpenInfo();
+		openInfo.setId(user.getId());
+		openInfo.setTravels(travelService.getTravels(user));		
+		reponse.setOpenInfo(openInfo);
+		reponse.setStatus(PhotoResponse.Status.OK.name());
+		return reponse;
+	}
+
+	
 }

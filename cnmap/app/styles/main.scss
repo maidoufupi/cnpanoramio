@@ -1,3 +1,4 @@
+@import 'comm.scss';
 @import 'style.scss';
 @import 'index.scss';
 @import 'modal.scss';
@@ -5,5 +6,29 @@
 @import 'PhotoDisplay.scss';
 @import 'user.scss';
 @import 'settings.scss';
+@import 'travel.scss';
+@import 'animation.scss';
+@import 'flexText.scss';
+@import 'map.scss';
+@import 'photo.scss';
 
 
+div[contentEditable] {
+  cursor: pointer;
+}
+
+div[contentEditable]:hover, div[contentEditable]:focus {
+  background-color: ghostwhite;
+}
+
+/** comment */
+.media.comment {
+  .media-body {
+    .media-heading {
+
+    }
+    p {
+      margin: 0;
+    }
+  }
+}

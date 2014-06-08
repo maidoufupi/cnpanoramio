@@ -1,0 +1,44 @@
+$information-phone: "only screen and (max-width : 800px)";
+$footer-font-size: 12px;
+$active-color: #4a87ee;
+$active-background-color: lightblue;
+$textinput-active-color: #1E90FE; // dodgerblue;
+$photo-container-background-color: #191919;
+$photo-info-frontground-color: #f5f5f5;
+$photo-info-background-color: #fff;
+$transition-time: 0.5s;
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin border-top-radius($radius) {
+  -webkit-border-top-left-radius: $radius;
+  -moz-border-top-left-radius: $radius;
+  -ms-border-top-left-radius: $radius;
+  border-top-left-radius: $radius;
+
+  -webkit-border-top-right-radius: $radius;
+  -moz-border-top-right-radius: $radius;
+  -ms-border-top-right-radius: $radius;
+  border-top-right-radius: $radius;
+}
+
+@mixin transition-linear($prop) {
+  -webkit-transition:$prop linear $transition-time;
+  -moz-transition:$prop linear $transition-time;
+  -ms-transition:$prop linear $transition-time;
+  -o-transition:$prop linear $transition-time;
+  transition:$prop linear $transition-time;
+}
+
+@mixin transition-ease-out($prop) {
+  -webkit-transition:$prop ease-out $transition-time;
+  -moz-transition:$prop ease-out $transition-time;
+  -ms-transition:$prop ease-out $transition-time;
+  -o-transition:$prop ease-out $transition-time;
+  transition:$prop ease-out $transition-time;
+}

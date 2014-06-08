@@ -31,12 +31,13 @@
         });
     }
 
-    window.cnmap.GPS = {
+    window.cnmap.GPS = window.cnmap.GPS || {};
+
         /**
          * GPS point format convert
          * @param input
          */
-        convert: function (input) {
+    window.cnmap.GPS.convert = function (input) {
             var output;
             if ((typeof input == 'string') && input.constructor == String) {
                 var res = input.search(/[0-9]+,[0-9]+,[0-9]+\.[0-9]+/);
@@ -64,7 +65,7 @@
                 output = degree + "°" + minute + "\'" + second + "\"";
             }
             return output;
-        },
+        };
         /**
          * return the distance between 2 latLng couple into meters
          * Params :
@@ -73,12 +74,12 @@
          *  Lat1, Lng1, LatLng2
          *  LatLng1, LatLng2
          **/
-        distanceInMeter: function () {
+        /*distanceInMeter: function () {
             var lat1, lat2, lng1, lng2, e, f, g, h;
-            if (arguments[0] instanceof google.maps.LatLng) {
+            if (google && google.maps && arguments[0] instanceof google.maps.LatLng) {
                 lat1 = arguments[0].lat();
                 lng1 = arguments[0].lng();
-                if (arguments[1] instanceof google.maps.LatLng) {
+                if (google && google.maps && arguments[1] instanceof google.maps.LatLng) {
                     lat2 = arguments[1].lat();
                     lng2 = arguments[1].lng();
                 } else {
@@ -88,7 +89,7 @@
             } else {
                 lat1 = arguments[0];
                 lng1 = arguments[1];
-                if (arguments[2] instanceof google.maps.LatLng) {
+                if (google && google.maps && arguments[2] instanceof google.maps.LatLng) {
                     lat2 = arguments[2].lat();
                     lng2 = arguments[2].lng();
                 } else {
@@ -101,8 +102,8 @@
             g = Math.PI * lat2 / 180;
             h = Math.PI * lng2 / 180;
             return 1000 * 6371 * Math.acos(Math.min(Math.cos(e) * Math.cos(g) * Math.cos(f) * Math.cos(h) + Math.cos(e) * Math.sin(f) * Math.cos(g) * Math.sin(h) + Math.sin(e) * Math.sin(g), 1));
-        }
-    }
+        }*/
+
 
     window.cnmap.utils.baidu = {
         geocoder: null,

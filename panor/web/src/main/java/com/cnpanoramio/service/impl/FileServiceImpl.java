@@ -193,8 +193,14 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public File readFile(String fileType, Long fileKey, String fileExt,
 			int level) {
-		String uploadDir = getFilePath(fileType, fileKey, fileExt, level);
-		return new File(uploadDir);
+
+		File file = new File(getFilePath(fileType, fileKey, fileExt, level));
+		if(file.exists() && !file.isDirectory()) {
+			return file;
+		}else {
+			return null;
+		}
+		
 	}
 
 	/**

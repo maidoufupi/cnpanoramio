@@ -14,9 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.cnpanoramio.MapVendor;
-import com.cnpanoramio.domain.PhotoPanoramio;
-import com.cnpanoramio.domain.PhotoPanoramioIndex;
 import com.cnpanoramio.domain.Point;
+import com.cnpanoramio.json.PanoramioResponse.PhotoPanoramio;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(inheritLocations = true,
@@ -57,8 +56,8 @@ public class PhotoPanoramioIndexServiceTest {
 		
 		MapVendor mVendor = MapVendor.gaode;
 		
-		List<PhotoPanoramio> photos = panoramioIndexService.getPanoramio(new Point(swLatD, swLngD), 
-				new Point(neLatD, neLngD), levelI, mVendor, widthI, heightI);
+		List<PhotoPanoramio> photos = panoramioIndexService.getPanoramio(swLatD, swLngD, 
+				neLatD, neLngD, levelI, mVendor, widthI, heightI);
 		log.info(photos.size());
 		Assert.assertTrue(photos.size() == 2);
 	}

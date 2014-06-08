@@ -4,12 +4,19 @@
 'use strict';
 
 angular.module('userPageApp', [
-        'ngResource',
         'ui.bootstrap',
         'ui.map',
-        'cnmapApp'])
-    .controller('UserCtrl', ['$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService',
-        function ($window, $location, $rootScope, $scope, UserPhoto, UserService) {
+        'ponmApp',
+        'ponmApp.services',
+        'ponmApp.directives',
+        'ponmApp.controllers',
+        'xeditable'
+    ])
+    .run(['editableOptions', function(editableOptions) {
+        editableOptions.theme = 'bs3';
+    }])
+    .controller('UserCtrl', ['$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
+        function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal) {
 
             $scope.ctx = $window.ctx;
             $scope.apirest = $window.apirest;
@@ -24,7 +31,7 @@ angular.module('userPageApp', [
 
             // 用户图片分页属性
             $scope.photo = {
-                pageSize: 20,
+                pageSize: 40,
                 totalItems: 0,
                 numPages: 0,
                 currentPage: 1,
@@ -65,11 +72,12 @@ angular.module('userPageApp', [
                         photos();
                     }
                 }
-            })
+            });
 
             function getPhotos(tag) {
                 if(tag) {
-                    UserPhoto.getByTag({userId: $scope.userId, tag: tag, pageSize: $scope.photo.pageSize, pageNo: $scope.photo.currentPage},
+                    UserPhoto.getByTag({userId: $scope.userId, tag: tag, pageSize: $scope.photo.pageSize,
+                            pageNo: $scope.photo.currentPage},
                         function(data) {
                             if(data.status == "OK") {
                                 $scope.photos = data.photos;
@@ -84,6 +92,12 @@ angular.module('userPageApp', [
                         })
                 }
             }
+
+            $scope.$watch('photos', function() {
+                angular.forEach($scope.photos, function(photo, key) {
+                    photo.backgroundColor = "grey";
+                })
+            });
 
             function getOpenInfo() {
                 UserService.getOpenInfo({'userId': $scope.userId}, function(data) {
@@ -130,6 +144,24 @@ angular.module('userPageApp', [
                 })
             }
 
+            $scope.activePhoto = function(photo) {
+                var modalInstance = $modal.open({
+                    templateUrl: '../views/photo.html',
+                    controller: 'PhotoModalCtrl',
+                    resolve: {
+                        photoId: function () {
+                            return photo.id;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.selected = selectedItem;
+                }, function () {
+//                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
             // 用户页面中的地图
             $scope.mapOptions = {
                 // map plugin config
@@ -143,7 +175,7 @@ angular.module('userPageApp', [
                 level: 3,
                 // ui map config
                 uiMapCache: false
-            }
+            };
 
             if($window.mapVendor == "qq") {
                 $window.mapVendor = "gaode";
@@ -161,4 +193,5 @@ angular.module('userPageApp', [
                 }
             });
 
-        }]);
+        }])
+;

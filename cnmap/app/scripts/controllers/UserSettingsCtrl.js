@@ -6,7 +6,7 @@
 angular.module('userSettingsApp', [
         'ngResource',
         'ui.bootstrap',
-        'cnmapApp'])
+        'ponmApp'])
     .controller('UserSettingsCtrl', ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', 'UserPhoto', 'UserService',
         function ($window, $log, $location, $rootScope, $scope, $modal, UserPhoto, UserService) {
             $scope.ctx = $window.ctx;

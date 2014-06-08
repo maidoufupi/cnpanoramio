@@ -14,34 +14,7 @@ import com.cnpanoramio.domain.UserSettings;
 
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
-public class UserResponse {
-
-	public enum Status {
-		/**
-		 * 一切正常
-		 */
-		OK,
-		/**
-		 * 图片ID格式错误
-		 */
-		ID_FORMAT_ERROR,
-		/**
-		 * 找不到对象
-		 */
-		NO_ENTITY,
-		/**
-		 * 未授权
-		 */
-		NO_AUTHORIZE,
-		/**
-		 * 出现异常
-		 */
-		EXCEPTION
-	}
-	
-	private String status;
-	
-	private String info;
+public class UserResponse extends ExceptionResponse {
 	
 	@JsonProperty("photo_info")
 	private PhotoInfo photoInfo;
@@ -248,22 +221,6 @@ public class UserResponse {
 			this.modify = modify;
 		}		
 		
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getInfo() {
-		return info;
-	}
-
-	public void setInfo(String info) {
-		this.info = info;
 	}
 
 	public Collection<PhotoProperties> getPhotos() {

@@ -21,6 +21,8 @@
 		<mapping class="com.cnpanoramio.domain.Views" />		
 		<mapping class="com.cnpanoramio.domain.Favorite" />
 		<mapping class="com.cnpanoramio.domain.Avatar" />
+		<mapping class="com.cnpanoramio.domain.Travel" />		
+		<mapping class="com.cnpanoramio.domain.TravelSpot"/>
 				
 	</session-factory>
 </hibernate-configuration>

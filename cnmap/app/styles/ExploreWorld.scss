@@ -1,3 +1,4 @@
+
 .container-explore-map {
     margin: 0;
     padding: 0;
@@ -5,7 +6,7 @@
     height: 100%;
 
   .col-main {
-    margin: 0 400px 0 0;
+    margin: 0 450px 0 0;
     height: 100%;
   }
 
@@ -13,7 +14,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 400px;
+    width: 450px;
     height: 100%;
   }
 }
@@ -45,6 +46,41 @@
     position: relative;
     padding: 22px 20px 0;
     height: 100%;
+
+  .footnote {
+    font-size: smaller;
+  }
+}
+
+/* panoramio info window */
+.panoramio-info-window {
+  margin: 3px;
+  padding: 5px;
+  .header {
+    font-style: bold;
+    border-bottom: sold;
+    border-bottom-color: #808080;
+  }
+  .body {
+
+  }
+  .media {
+    height: 40px;
+    .pull-left {
+      height: 100%;
+      .media-object {
+        height: 100%;
+      }
+    }
+    .media-body {
+      font-size: smaller;
+      .media-heading {
+        font-size: smaller;
+      }
+    }
+
+
+  }
 }
 
 #preview div {

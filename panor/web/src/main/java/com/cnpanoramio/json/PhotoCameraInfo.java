@@ -27,6 +27,9 @@ public class PhotoCameraInfo {
 	
 	// 相机型号
 	private String model;
+	// 相机品牌
+	private String make;
+	
 	// 拍摄日期
 	@JsonProperty("date_time_original")
 	private String dateTimeOriginal;
@@ -132,6 +135,12 @@ public class PhotoCameraInfo {
 	}
 	public void setFNumber(String fNumber) {
 		FNumber = fNumber;
+	}
+	public String getMake() {
+		return make;
+	}
+	public void setMake(String make) {
+		this.make = make;
 	}
 	
 	

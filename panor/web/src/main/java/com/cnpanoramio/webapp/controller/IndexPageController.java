@@ -1,7 +1,5 @@
 package com.cnpanoramio.webapp.controller;
 
-import java.util.Collection;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,11 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cnpanoramio.Constant;
-import com.cnpanoramio.domain.Photo;
-import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.service.IndexService;
-import com.cnpanoramio.service.PhotoService;
 
 /**
  * Implementation of <strong>SimpleFormController</strong> that interacts with
@@ -41,11 +35,11 @@ public class IndexPageController extends BaseFormController {
     public ModelAndView handleRequest(HttpServletRequest request,
                                       HttpServletResponse response) {
     	
-    	Collection<PhotoCameraInfo> photos = indexService.getIndexPhotos();
+//    	Collection<PhotoCameraInfo> photos = indexService.getIndexPhotos();
+//    	
+//    	request.setAttribute("photos", photos);
     	
-    	request.setAttribute("photos", photos);
-    	
-    	return new ModelAndView("index");
+    	return new ModelAndView("map");
     }
   
 }

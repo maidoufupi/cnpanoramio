@@ -1,0 +1,20 @@
+<!-- Modal -->
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+    <h4 class="modal-title" id="myModalLabel"><span>更改</span> 你的头像</h4>
+</div>
+<div class="modal-body">
+    <div id="avatar-form">
+        <input type="file" data-ng-file-select="onFileSelect($files)" >
+        <div id="img-cropper">
+            <img-cropped src='{{imageUrl}}' bind='previewUrl'></img-cropped>
+        </div>
+        <button class="btn btn-primary"
+                data-ng-click="fileUpload()">上传</button>
+        <alert data-ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="cancel()">完成</button>
+    <button class="btn btn-warning" ng-click="cancel()">取消</button>
+</div>

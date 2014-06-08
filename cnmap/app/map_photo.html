@@ -85,7 +85,8 @@
             <div class="coder_place">
                 <div id="the-address" class="original_place_name">{{file.mapVendor.address || "[解析地址]"}}</div>
             </div>
-            <label class="indoors_info"><input type="checkbox">This photo is taken indoors</label>
+            <label class="is360_info">
+                <input type="checkbox" data-ng-model="file.is360">是360°全景照片</label>
 
             <div>
                 点击地图设置拍摄地点

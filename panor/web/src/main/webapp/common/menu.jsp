@@ -6,28 +6,31 @@
 			<menu:displayMenu name="AdminMenu" />
 			<%-- <menu:displayMenu name="Logout" /> --%>
 			<li>
-				<div id="nav-search-form">
-                    <form class="navbar-form navbar-left" novalidate>
-                        <input type="text" placeholder="搜索地址" class="form-control">
-                        <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+				<div class="nav-search-form" ng-controller="SearchLocCtrl">
+                    <form class="navbar-form navbar-left" ng-submit="update(asyncSelected)" novalidate>
+                        <input type="text" ng-model="asyncSelected" placeholder="搜索地址"
+                                   typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue"
+                                   typeahead-loading="loadingLocations"
+                                   class="form-control">
+                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                     </form>
                 </div>
 			</li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-	  		<li>
+	  		<li popover="浏览地图" popover-trigger="mouseenter" popover-placement="bottom">
                 <a href="<c:url value="/map"/>" >
                     <span class="glyphicon glyphicon-plane white"></span>
                 </a>
             </li>
-            <li>
+            <li popover="图片上传" popover-trigger="mouseenter" popover-placement="bottom">
                 <a href="<c:url value='/upload'/>" >
                     <span class="glyphicon glyphicon-camera white"></span>
                 </a>
             </li>
             <c:choose>
             	<c:when test="${not empty pageContext.request.remoteUser}">
-	            	<li>
+	            	<li popover="用户主页" popover-trigger="mouseenter" popover-placement="bottom">
 		            	<a class="user" href="<c:url value='/user/${sessionScope.userId}'/>">
 		                	<span class="white">${pageContext.request.remoteUser}</span>
                         	<img class="navbar-profile-image" src="<c:url value='/api/rest/user/${sessionScope.userId}/avatar'/>" alt="${pageContext.request.remoteUser}">

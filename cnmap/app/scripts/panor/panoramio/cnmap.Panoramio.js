@@ -72,27 +72,27 @@
                 });
         };
 
-        this.getThumbnail = function (id/*PhotoId*/) {
-            return client.photos.read(id);
-        }
+//        this.getThumbnail = function (id/*PhotoId*/) {
+//            return client.photos.read(id);
+//        }
 
-        this.clearVisible = function () {
-            for (var photo in photos) {
-                photo.visible = false;
-            }
-        }
+//        this.clearVisible = function () {
+//            for (var photo in photos) {
+//                photo.visible = false;
+//            }
+//        }
 
-        this.setVisible = function (photoId, visible) {
-            if (!visible) {
-                photos[photoId].visible = false;
-            } else {
-                photos[photoId].visible = true;
-            }
-        }
+//        this.setVisible = function (photoId, visible) {
+//            if (!visible) {
+//                photos[photoId].visible = false;
+//            } else {
+//                photos[photoId].visible = true;
+//            }
+//        }
 
-        this.getVisible = function (photoId) {
-            return photos[photoId] ? photos[photoId].visible : false;
-        }
+//        this.getVisible = function (photoId) {
+//            return photos[photoId] ? photos[photoId].visible : false;
+//        }
 
         this.getLabelContent = function(photoId) {
             if(this.opts.suppressInfoWindows) {
@@ -107,12 +107,46 @@
                         + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'></a>";
                 }
             }
-        }
+        };
 
-        this.getInfoWindowContent = function(photoId) {
-            return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
-                + photoId + "/2' style='max-height: 200px; max-width: 200px;'></a>";
-        }
+        this.getInfoWindowContent = function(photo) {
+
+            var date = new Date(photo.create_date),
+                dates;
+            dates = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
+            return '<div class="panoramio-info-window">' +
+                        '<div class="header">' +
+                        photo.address +
+                        '</div>' +
+                    '<div class="body">' +
+                        '<a href="'+ this.ctx + '/photo/' + photo.photo_id +'">' +
+                            '<img src="'+ this.ctx + '/api/rest/photo/' + photo.photo_id +'/2">' +
+                        '</a>' +
+                    '</div>' +
+                    '<div class="media">' +
+                        '<a class="pull-left" href="'+ this.ctx + '/user/' + photo.user_id +'">' +
+                            '<img class="media-object" src="'+ this.ctx + '/api/rest/user/' + photo.user_id +'/avatar" alt="'
+                                +photo.username+'">' +
+                        '</a>' +
+                        '<div class="media-body">' +
+                            '<h4 class="media-heading">作者：<a href="'+ this.ctx + '/user/' + photo.user_id +'">'
+                                +photo.username+'</a></h4>' +
+                                dates +
+                        '</div>' +
+                    '</div>' +
+                    '</div>';
+
+//            return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
+//                + photoId + "/2' style='max-height: 200px; max-width: 200px;'></a>";
+        };
+
+        /**
+         * Renders the layer on the specified map. If map is set to null, the layer will be removed.
+         *
+         * @param map
+         */
+        this.setMap = function (map/*:Map*/) {
+        };
 
         /**
          * init Environment
@@ -125,7 +159,7 @@
                 //stringifyData: true
             });
             client.add('photo');
-        }
+        };
 
         /**
          * 设置用户ID
@@ -136,11 +170,11 @@
          */
         this.setUserId = function(userId) {
             this.opts.userId = userId;
-        }
+        };
 
         this.getUserId = function() {
             return this.opts.userId;
-        }
+        };
 
         /**
          * A tag used to filter the photos which are displayed.
@@ -150,11 +184,11 @@
          */
         this.setTag = function(tag) {
             this.opts.tag = tag;
-        }
+        };
 
         this.getTag = function() {
             return this.opts.tag;
-        }
+        };
 
         /**
          * 设置用户收藏标记，如果为true怎获取用户收藏的图片
@@ -163,11 +197,11 @@
          */
         this.setFavorite = function(fav) {
             this.opts.favorite = !!fav;
-        }
+        };
 
         this.getFavorite = function() {
             return this.opts.favorite;
-        }
+        };
 
         /**
          * 设置最新照片
@@ -176,11 +210,11 @@
          */
         this.setLatest = function(latest) {
             this.opts.latest = !!latest;
-        }
+        };
 
         this.getLatest = function() {
             return this.opts.latest;
-        }
+        };
 
         /**
          * 出发地图状态改变事件，使数据重新获取
@@ -188,7 +222,7 @@
          * @param event
          */
         this.trigger = function(event) {
-        }
+        };
     };
 
 //    window.cnmap.PanoramioOptions = {

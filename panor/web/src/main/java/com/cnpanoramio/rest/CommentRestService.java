@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.dao.PhotoDao;
-import com.cnpanoramio.json.Comment;
-import com.cnpanoramio.json.PhotoComments;
+import com.cnpanoramio.json.CommentResponse;
+import com.cnpanoramio.json.CommentResponse.Comment;
 import com.cnpanoramio.service.CommentService;
 
 @Controller
 @RequestMapping("/api/rest/comment")
-public class CommentRestService {
+public class CommentRestService extends AbstractRestService {
 
 	private transient final Log log = LogFactory.getLog(getClass());
 
@@ -35,47 +35,27 @@ public class CommentRestService {
 	@Autowired
 	private CommentService commentService;
 	
-	@RequestMapping(value = "/photo/{photoId}", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public Comment saveComment(@PathVariable String photoId, @RequestBody Comment comment) {
-		
-		comment.setPhotoId(Long.parseLong(photoId));
-		return commentService.save(comment);
-
+	public CommentResponse saveComment(@RequestBody Comment comment) {
+		CommentResponse response = CommentResponse.getInstance();
+		response.setComment(commentService.save(comment));
+		response.setStatus(CommentResponse.Status.OK.name());
+		return response;
 	}
 	
-	@RequestMapping(value = "/photo/{photoId}/{commentId}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/{commentId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public boolean deleteComment(@PathVariable String photoId, @PathVariable String commentId) {
+	public CommentResponse deleteComment(@PathVariable String commentId) {
+		CommentResponse response = CommentResponse.getInstance();
 		
 		Long id = Long.parseLong(commentId);
-		return commentService.delete(id);
+		if(commentService.delete(id)) {
+			response.setStatus(CommentResponse.Status.OK.name());
+		}else {
+			response.setStatus(CommentResponse.Status.EXCEPTION.name());
+		}
 		
-	}
-
-	@RequestMapping(value = "/photo/{photoId}", method = RequestMethod.GET)
-	@ResponseBody
-	public PhotoComments getCount(@PathVariable String photoId) {
-
-		Long id = 0L;
-		id = Long.parseLong(photoId);
-
-		PhotoComments pc = new PhotoComments();
-		pc.setId(id);
-		pc.setCount(commentService.getCount(id).intValue());
-
-		return pc;
-	}
-
-	@RequestMapping(value = "/photo/{photoId}/{pageSize}/{pageNo}", method = RequestMethod.GET)
-	@ResponseBody
-	public PhotoComments getComments(@PathVariable String photoId,
-			@PathVariable String pageSize, @PathVariable String pageNo) {
-		
-		Long photoIdL = Long.parseLong(photoId);
-		int pageSizeL = Integer.parseInt(pageSize);
-		int pageNoL = Integer.parseInt(pageNo);		
-		
-		return commentService.getComments(photoIdL, pageSizeL, pageNoL);
+		return response;
 	}
 }

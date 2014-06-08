@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cnpanoramio.utils.GpsConverter;
-import com.cnpanoramio.utils.GpsConverter.Point;
+import com.cnpanoramio.service.lbs.GpsConverter;
+import com.cnpanoramio.service.lbs.GpsConverter.Point;
 
 @Controller
 @RequestMapping("/api/rest/gps")

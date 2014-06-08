@@ -3,6 +3,7 @@ package com.cnpanoramio.service.impl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.domain.Photo;
-import com.cnpanoramio.json.Comment;
+import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.CommentResponse.Comment;
 import com.cnpanoramio.json.PhotoComments;
+import com.cnpanoramio.json.UserResponse.Settings;
 import com.cnpanoramio.service.CommentService;
+import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.UserUtil;
 
 @Service("commentService")
@@ -34,6 +38,8 @@ public class CommentServiceImpl implements CommentService {
 	
 	@Autowired
 	private UserManager userManager;
+	@Autowired
+	private UserSettingsManager userSettingsManager;
 	@Autowired
 	private PhotoDao photoDao;
 	@Autowired
@@ -54,8 +60,10 @@ public class CommentServiceImpl implements CommentService {
 		commentD.setPhoto(photo);
 		commentD = commentDao.save(commentD);
 		
+		Settings settings = userSettingsManager.getCurrentUserSettings();
 		comment.setId(commentD.getId());
-		comment.setUsername(me.getUsername());
+		// 昵称
+		comment.setUsername(settings.getName());
 		comment.setCreateTime(format.format(commentD.getCreateTime().getTime()));
 		comment.setUserId(commentD.getUser().getId());
 		return comment;		
@@ -73,23 +81,23 @@ public class CommentServiceImpl implements CommentService {
 		return false;
 	}
 
-	public PhotoComments getComments(Long id, int pageSize, int pageNo) {
+	public Collection<Comment> getComments(Long id, int pageSize, int pageNo) {
 		List<com.cnpanoramio.domain.Comment> comments = commentDao.getCommentPager(id, pageSize, pageNo);
-		PhotoComments pc = new PhotoComments();
-		pc.setId(id);
+		
 		List<Comment> cs = new ArrayList<Comment>();
 		for(com.cnpanoramio.domain.Comment comment : comments) {
 			Comment c1 = new Comment();
 			c1.setId(comment.getId());
 			c1.setUserId(comment.getUser().getId());
-			c1.setUsername(comment.getUser().getUsername());
+			UserSettings settings = userSettingsManager.getSettingsByUserName(comment.getUser().getUsername());
+			// 昵称
+			c1.setUsername(settings.getName());
 			c1.setCreateTime(format.format(comment.getCreateTime().getTime()));
 			c1.setContent(comment.getComment());
 			cs.add(c1);
 		}
-		pc.setComments(cs);
 		
-		return pc;
+		return cs;
 	}
 	
 	public Long getCount(Long id) {

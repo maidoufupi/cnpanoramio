@@ -2,6 +2,7 @@ package com.cnpanoramio.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,16 +26,17 @@ public class PhotoDetails {
 
 /* Origin */
 	// 拍摄时间
-	private String DateTimeOriginal;
-	private String DateTimeDigitized;
-	private String DateTime;
+	private Date DateTimeOriginal;
+	private Date DateTimeDigitized;
+	private Date DateTime;
 		
 /* Image */
-	private String pixelXDimension;
-	private String pixelYDimension;
+	@Column(nullable = true)
+	private Integer pixelXDimension;
+	@Column(nullable = true)
+	private Integer pixelYDimension;
 	private String xResolution;
 	private String yResolution;
-
 
 	private String resolutionUnit;
 
@@ -42,7 +44,9 @@ public class PhotoDetails {
     
 	
 /* Camera */
+	// 相机品牌
 	private String make;
+	// 相机型号
 	private String model;
     
 	// 曝光时间 即快门速度
@@ -96,6 +100,59 @@ public class PhotoDetails {
 	private Date GPSDateStamp;
 	private String GPSInfo;
 	
+	/*
+	 * <x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.1.0-jc003">
+		<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<rdf:Description rdf:about="" xmlns:GPano="http://ns.google.com/photos/1.0/panorama/">
+			  <GPano:CaptureSoftware>Visualization.SE.HTC</GPano:CaptureSoftware>
+			  <GPano:StitchingSoftware>Visualization.SE.HTC</GPano:StitchingSoftware>
+			  <GPano:UsePanoramaViewer>True</GPano:UsePanoramaViewer>
+			  <GPano:ProjectionType>equirectangular</GPano:ProjectionType>
+			  <GPano:CroppedAreaLeftPixels>0</GPano:CroppedAreaLeftPixels>
+			  <GPano:CroppedAreaTopPixels>0</GPano:CroppedAreaTopPixels>
+			  <GPano:CroppedAreaImageWidthPixels>4096</GPano:CroppedAreaImageWidthPixels>
+			  <GPano:CroppedAreaImageHeightPixels>2048</GPano:CroppedAreaImageHeightPixels>
+			  <GPano:FullPanoWidthPixels>4096</GPano:FullPanoWidthPixels>
+			  <GPano:FullPanoHeightPixels>2048</GPano:FullPanoHeightPixels>
+			  <GPano:NorthPosInX>0</GPano:NorthPosInX>
+			  <GPano:LargestValidInteriorRectLeft>0</GPano:LargestValidInteriorRectLeft>
+			  <GPano:LargestValidInteriorRectTop>0</GPano:LargestValidInteriorRectTop>
+			  <GPano:LargestValidInteriorRectWidth>4096</GPano:LargestValidInteriorRectWidth>
+			  <GPano:LargestValidInteriorRectHeight>2048</GPano:LargestValidInteriorRectHeight>
+			</rdf:Description>
+		</rdf:RDF>
+		</x:xmpmeta>
+	 */
+	//GPano:CaptureSoftware; //Visualization.SE.HTC
+	 private String gPanoCaptureSoftware; //
+	//GPano:StitchingSoftware; //Visualization.SE.HTC
+	 private String gPanoStitchingSoftware; //
+	//GPano:UsePanoramaViewer; //True
+	 private String gPanoUsePanoramaViewer; //
+	//GPano:ProjectionType; //equirectangular
+	 private String gPanoProjectionType; //
+	//GPano:CroppedAreaLeftPixels; //0
+	 private String gPanoCroppedAreaLeftPixels; //
+	//GPano:CroppedAreaTopPixels; //0
+	 private String gPanoCroppedAreaTopPixels; //
+	//GPano:CroppedAreaImageWidthPixels; //4096
+	 private String gPanoCroppedAreaImageWidthPixels; //
+	//GPano:CroppedAreaImageHeightPixels; //2048
+	 private String gPanoCroppedAreaImageHeightPixels; //
+	//GPano:FullPanoWidthPixels; //4096
+	 private String gPanoFullPanoWidthPixels; //
+	//GPano:FullPanoHeightPixels; //2048
+	 private String gPanoFullPanoHeightPixels; //
+	//GPano:NorthPosInX; //0
+	 private String gPanoNorthPosInX; //
+	//GPano:LargestValidInteriorRectLeft; //0
+	 private String gPanoLargestValidInteriorRectLeft; //
+	//GPano:LargestValidInteriorRectTop; //0
+	 private String gPanoLargestValidInteriorRectTop; //
+	//GPano:LargestValidInteriorRectWidth; //4096
+	 private String gPanoLargestValidInteriorRectWidth; //
+	//GPano:LargestValidInteriorRectHeight; //2048
+	 private String gPanoLargestValidInteriorRectHeight; //
 	
 	public Photo getPhoto() {
 		return photo;
@@ -111,16 +168,16 @@ public class PhotoDetails {
 		this.id = id;
 	}
 	
-	public String getPixelXDimension() {
+	public Integer getPixelXDimension() {
 		return pixelXDimension;
 	}
-	public void setPixelXDimension(String pixelXDimension) {
+	public void setPixelXDimension(Integer pixelXDimension) {
 		this.pixelXDimension = pixelXDimension;
 	}
-	public String getPixelYDimension() {
+	public Integer getPixelYDimension() {
 		return pixelYDimension;
 	}
-	public void setPixelYDimension(String pixelYDimension) {
+	public void setPixelYDimension(Integer pixelYDimension) {
 		this.pixelYDimension = pixelYDimension;
 	}
 	public String getxResolution() {
@@ -311,22 +368,23 @@ public class PhotoDetails {
 	public void setGPSDateStamp(Date gPSDateStamp) {
 		GPSDateStamp = gPSDateStamp;
 	}
-	public String getDateTimeOriginal() {
+	
+	public Date getDateTimeOriginal() {
 		return DateTimeOriginal;
 	}
-	public void setDateTimeOriginal(String dateTimeOriginal) {
+	public void setDateTimeOriginal(Date dateTimeOriginal) {
 		DateTimeOriginal = dateTimeOriginal;
 	}
-	public String getDateTimeDigitized() {
+	public Date getDateTimeDigitized() {
 		return DateTimeDigitized;
 	}
-	public void setDateTimeDigitized(String dateTimeDigitized) {
+	public void setDateTimeDigitized(Date dateTimeDigitized) {
 		DateTimeDigitized = dateTimeDigitized;
 	}
-	public String getDateTime() {
+	public Date getDateTime() {
 		return DateTime;
 	}
-	public void setDateTime(String dateTime) {
+	public void setDateTime(Date dateTime) {
 		DateTime = dateTime;
 	}
 	public String getISO() {
@@ -346,6 +404,102 @@ public class PhotoDetails {
 	}
 	public void setGPSInfo(String gPSInfo) {
 		GPSInfo = gPSInfo;
+	}
+	public String getgPanoCaptureSoftware() {
+		return gPanoCaptureSoftware;
+	}
+	public void setgPanoCaptureSoftware(String gPanoCaptureSoftware) {
+		this.gPanoCaptureSoftware = gPanoCaptureSoftware;
+	}
+	public String getgPanoStitchingSoftware() {
+		return gPanoStitchingSoftware;
+	}
+	public void setgPanoStitchingSoftware(String gPanoStitchingSoftware) {
+		this.gPanoStitchingSoftware = gPanoStitchingSoftware;
+	}
+	public String getgPanoUsePanoramaViewer() {
+		return gPanoUsePanoramaViewer;
+	}
+	public void setgPanoUsePanoramaViewer(String gPanoUsePanoramaViewer) {
+		this.gPanoUsePanoramaViewer = gPanoUsePanoramaViewer;
+	}
+	public String getgPanoProjectionType() {
+		return gPanoProjectionType;
+	}
+	public void setgPanoProjectionType(String gPanoProjectionType) {
+		this.gPanoProjectionType = gPanoProjectionType;
+	}
+	public String getgPanoCroppedAreaLeftPixels() {
+		return gPanoCroppedAreaLeftPixels;
+	}
+	public void setgPanoCroppedAreaLeftPixels(String gPanoCroppedAreaLeftPixels) {
+		this.gPanoCroppedAreaLeftPixels = gPanoCroppedAreaLeftPixels;
+	}
+	public String getgPanoCroppedAreaTopPixels() {
+		return gPanoCroppedAreaTopPixels;
+	}
+	public void setgPanoCroppedAreaTopPixels(String gPanoCroppedAreaTopPixels) {
+		this.gPanoCroppedAreaTopPixels = gPanoCroppedAreaTopPixels;
+	}
+	public String getgPanoCroppedAreaImageWidthPixels() {
+		return gPanoCroppedAreaImageWidthPixels;
+	}
+	public void setgPanoCroppedAreaImageWidthPixels(
+			String gPanoCroppedAreaImageWidthPixels) {
+		this.gPanoCroppedAreaImageWidthPixels = gPanoCroppedAreaImageWidthPixels;
+	}
+	public String getgPanoCroppedAreaImageHeightPixels() {
+		return gPanoCroppedAreaImageHeightPixels;
+	}
+	public void setgPanoCroppedAreaImageHeightPixels(
+			String gPanoCroppedAreaImageHeightPixels) {
+		this.gPanoCroppedAreaImageHeightPixels = gPanoCroppedAreaImageHeightPixels;
+	}
+	public String getgPanoFullPanoWidthPixels() {
+		return gPanoFullPanoWidthPixels;
+	}
+	public void setgPanoFullPanoWidthPixels(String gPanoFullPanoWidthPixels) {
+		this.gPanoFullPanoWidthPixels = gPanoFullPanoWidthPixels;
+	}
+	public String getgPanoFullPanoHeightPixels() {
+		return gPanoFullPanoHeightPixels;
+	}
+	public void setgPanoFullPanoHeightPixels(String gPanoFullPanoHeightPixels) {
+		this.gPanoFullPanoHeightPixels = gPanoFullPanoHeightPixels;
+	}
+	public String getgPanoNorthPosInX() {
+		return gPanoNorthPosInX;
+	}
+	public void setgPanoNorthPosInX(String gPanoNorthPosInX) {
+		this.gPanoNorthPosInX = gPanoNorthPosInX;
+	}
+	public String getgPanoLargestValidInteriorRectLeft() {
+		return gPanoLargestValidInteriorRectLeft;
+	}
+	public void setgPanoLargestValidInteriorRectLeft(
+			String gPanoLargestValidInteriorRectLeft) {
+		this.gPanoLargestValidInteriorRectLeft = gPanoLargestValidInteriorRectLeft;
+	}
+	public String getgPanoLargestValidInteriorRectTop() {
+		return gPanoLargestValidInteriorRectTop;
+	}
+	public void setgPanoLargestValidInteriorRectTop(
+			String gPanoLargestValidInteriorRectTop) {
+		this.gPanoLargestValidInteriorRectTop = gPanoLargestValidInteriorRectTop;
+	}
+	public String getgPanoLargestValidInteriorRectWidth() {
+		return gPanoLargestValidInteriorRectWidth;
+	}
+	public void setgPanoLargestValidInteriorRectWidth(
+			String gPanoLargestValidInteriorRectWidth) {
+		this.gPanoLargestValidInteriorRectWidth = gPanoLargestValidInteriorRectWidth;
+	}
+	public String getgPanoLargestValidInteriorRectHeight() {
+		return gPanoLargestValidInteriorRectHeight;
+	}
+	public void setgPanoLargestValidInteriorRectHeight(
+			String gPanoLargestValidInteriorRectHeight) {
+		this.gPanoLargestValidInteriorRectHeight = gPanoLargestValidInteriorRectHeight;
 	}	
 
 }

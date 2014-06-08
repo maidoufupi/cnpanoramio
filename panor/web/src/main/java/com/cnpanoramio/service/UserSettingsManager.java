@@ -1,11 +1,12 @@
 package com.cnpanoramio.service;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.appfuse.model.User;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.domain.Avatar;
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse.Settings;
@@ -78,5 +79,31 @@ public interface UserSettingsManager {
 	 * @return
 	 */
 	public Avatar getUserAvatar(Long userId);
+	
+	/**
+	 * 获取用户所有的tag
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<String> getUserTags(User user);
+	
+	/**
+	 * 创建用户的tag
+	 * 
+	 * @param user
+	 * @param tag
+	 * @return
+	 */
+	public List<String> createTag(User user, String tag);
+	
+	/**
+	 * 删除用户tag
+	 * 
+	 * @param user
+	 * @param tag
+	 * @return
+	 */
+	public List<String> deleteTag(User user, String tag);
 	
 }

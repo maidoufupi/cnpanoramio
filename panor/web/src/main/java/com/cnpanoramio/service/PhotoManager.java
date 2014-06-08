@@ -34,7 +34,7 @@ public interface PhotoManager {
 								  String lng,
 								  String address,
 								  MapVendor vendor,
-								  MultipartFile file);
+								  MultipartFile file) throws Exception;
 	
 	/**
 	 * Store photo
@@ -53,18 +53,6 @@ public interface PhotoManager {
 	 * @return
 	 */
 	public Photo getPhoto(Long id);
-
-	/**
-	 * 获取文件标签信息
-	 * 
-	 * @param ins
-	 * @param photo
-	 * @return
-	 * @throws ImageReadException
-	 * @throws IOException
-	 */
-	Photo fillPhotoDetail(InputStream ins, Photo photo)
-			throws ImageReadException, IOException;
 
 	/**
 	 * Load the photos for the user.
@@ -143,7 +131,7 @@ public interface PhotoManager {
 	 * @param properties
 	 * @return
 	 */
-	public boolean properties(Long photoId, PhotoProperties properties);
+	public PhotoProperties properties(Long photoId, PhotoProperties properties);
 	
 	/**
 	 * 获取图片相机信息
