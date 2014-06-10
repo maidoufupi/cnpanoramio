@@ -46,6 +46,10 @@
             ))
         };
 
+        this.clearMap = function(map) {
+
+        };
+
         this.inMapView = function(lat, lng, map) {
             map = map || this.opts.map;
             var point = new qq.maps.LatLng(lat, lng);

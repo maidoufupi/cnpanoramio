@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.json.TravelResponse;
+import com.cnpanoramio.json.TravelResponse.TravelSpot;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
-import com.cnpanoramio.utils.TravelUtil;
 import com.cnpanoramio.utils.UserUtil;
 
 @Controller
@@ -49,7 +49,47 @@ public class TravelRestService extends AbstractRestService {
 		return response;
 	}
 	
+	@RequestMapping(value = "/{travelId}", method = RequestMethod.GET)
+	@ResponseBody
+	public TravelResponse getTravel(@PathVariable String travelId) {
+		TravelResponse response = responseFactory();
+		response.setTravel(travelService.getTravel(Long.parseLong(travelId)));
+		return response;
+	}
+	
 	@RequestMapping(value = "/{travelId}", method = RequestMethod.POST)
+	@ResponseBody
+	public TravelResponse changeTravel(@PathVariable String travelId, @RequestParam("description") String description) {
+		TravelResponse response = responseFactory();
+		response.setTravel(travelService.changeTravelDesc(Long.parseLong(travelId), description));
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/spot/{spotId}", method = RequestMethod.GET)
+	@ResponseBody
+	public TravelResponse getTravelSpot(@PathVariable String travelId, @PathVariable String spotId) {
+		TravelResponse response = responseFactory();
+		response.setSpot(travelService.getSpot(Long.parseLong(spotId)));
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/spot/{spotId}", method = RequestMethod.POST)
+	@ResponseBody
+	public TravelResponse changeTravelSpot(@PathVariable String travelId, 
+			@PathVariable String spotId, 
+			@RequestParam(value="address", required=false) String address,
+			@RequestParam(value="title", required=false) String title,
+			@RequestParam(value="description", required=false) String description) {
+		TravelResponse response = responseFactory();
+		TravelSpot travelSpot = new TravelSpot();
+		travelSpot.setAddress(address);
+		travelSpot.setTitle(title);
+		travelSpot.setDescription(description);
+		response.setSpot(travelService.changeSpot(Long.parseLong(spotId), travelSpot));;
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/photo", method = RequestMethod.POST)
 	@ResponseBody
 	public TravelResponse addPhotos(@PathVariable String travelId, @RequestParam("photos") String photos) {
 		TravelResponse response = responseFactory();
@@ -66,13 +106,6 @@ public class TravelRestService extends AbstractRestService {
 		return response;
 	}
 	
-	@RequestMapping(value = "/{travelId}", method = RequestMethod.GET)
-	@ResponseBody
-	public TravelResponse getTravel(@PathVariable String travelId) {
-		TravelResponse response = responseFactory();
-		response.setTravel(travelService.getTravel(Long.parseLong(travelId)));
-		return response;
-	}
 	
 	/**
 	 * 创建范围对象的工厂方法，默认为OK状态

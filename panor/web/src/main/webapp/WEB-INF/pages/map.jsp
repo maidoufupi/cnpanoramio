@@ -12,7 +12,8 @@
 <body>
 	
     <script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/bower_components/jquery-bbq/jquery.ba-bbq.js"/>"></script> 
+    
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/three.min.js"/>"></script>
     
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
@@ -52,7 +53,7 @@
         <div id="thumbinnerarea">
             <ul id="tabs" class="nav nav-pills">
                 <li id="tab_li_1" data-ng-class="{active: tabs.map}">
-                    <a data-ng-click="setPanormaioType('map')" tab="1" href="">热门照片<span style="display:none" class="total_photos"> (2294)</span>
+                    <a data-ng-click="setPanormaioType('map')" href="">热门照片<span style="display:none" class="total_photos"> (2294)</span>
                         <img class="loading" src="images/loading-p.gif" alt="读取中" style="display: none;">
                     </a>
                 </li>

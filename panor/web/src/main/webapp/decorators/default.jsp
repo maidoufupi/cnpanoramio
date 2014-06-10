@@ -10,6 +10,7 @@
     <title><decorator:title/> | <fmt:message key="webapp.name"/></title>
 
     <link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/bower_components/angular-xeditable/dist/css/xeditable.css"/>">
     <!-- Bootstrap theme -->
     <%-- <link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap-theme.min.css"/>"> --%>
     
@@ -26,7 +27,16 @@
     <script type="text/javascript" src="<c:url value="/bower_components/angular-sanitize/angular-sanitize.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"/>"></script>
+    
+    <script type="text/javascript" src="<c:url value="/bower_components/angular-xeditable/dist/js/xeditable.js"/>"></script>
+    
     <script type="text/javascript" src="<c:url value="/bower_components/angular-ui-utils/event.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/eventie/eventie.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/eventEmitter/EventEmitter.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/imagesloaded/imagesloaded.js"/>"></script>
+    
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.mousewheel.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.panzoom.js"/>"></script>
     
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/controllers/scripts.min.js"/>"></script>

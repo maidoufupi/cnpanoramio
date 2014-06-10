@@ -2,7 +2,7 @@
     <nav class="navbar navbar-inverse photo-container-header" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+            <!--<div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -10,31 +10,31 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Brand</a>
-            </div>
+                <a class="navbar-brand" href="">Brand</a>
+            </div>-->
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="#">分享</a></li>
-                    <li><a href="#">幻灯片</a></li>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav center-block">
+                    <li><a href="">分享</a></li>
+                    <li><a href="">幻灯片</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">更多<b class="caret"></b></a>
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">更多<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
+                            <li><a href="">下载图片</a></li>
+                            <li><a href="">举报非法图片</a></li>
+                            <!--<li><a href="">Something else here</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
+                            <li><a href="">Separated link</a></li>
                             <li class="divider"></li>
-                            <li><a href="#">One more separated link</a></li>
+                            <li><a href="">One more separated link</a></li>-->
                         </ul>
                     </li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
                     <li data-ng-click="cancel()">
-                        <a href="#" class="close" aria-hidden="true">&times;</a>
+                        <a href="" class="close" aria-hidden="true">&times;</a>
                     </li>
                 </ul>
             </div>
@@ -56,12 +56,12 @@
                     <a class="flat-image-button" href=""><div class="icon-pflat"></div></a>
                 </div>
         </div>
-        <div class="buttons">
+        <!--<div class="buttons">
             <button class="zoom-in">放大</button>
             <button class="zoom-out">缩小</button>
             <input type="range" class="zoom-range">
             <button class="reset">重置</button>
-        </div>
+        </div>-->
     </div>
 
     <nav class="navbar navbar-inverse photo-container-booter" role="navigation">
@@ -70,11 +70,14 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav center-block">
-                    <li><a href="#">分享</a></li>
-                    <li><a href="#">幻灯片</a></li>
-                    <li><a href="#" class="glyphicon glyphicon-arrow-left"></a></li>
-                    <li><a href="#" class="glyphicon glyphicon-th"></a></li>
-                    <li><a href="#" class="glyphicon glyphicon-arrow-right"></a></li>
+                    <!--<li><a href="">分享</a></li>
+                    <li><a href="">幻灯片</a></li>-->
+                    <li><a href="" class="glyphicon glyphicon-arrow-left"
+                           data-ng-click="previous()"></a></li>
+                    <li><a href="" class="glyphicon glyphicon-th" data-ng-click="openTravelAlbum()"></a></li>
+                    <li><a href="" class="glyphicon glyphicon-arrow-right"
+                           data-ng-click="next()"></a></li>
+                    <li class="text-explain"><span>第 {{travel.activePhoto.sortCount}} 张（共 {{travel.totalPhoto}} 张）查看次数：{{photo.views}}</span></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -91,15 +94,27 @@
                     </a>
 
                     <div class="media-body">
-                        <h4 class="media-heading">{{userOpenInfo.username}}</h4>
+                        <h4 class="media-heading">{{userOpenInfo.name}}</h4>
                         <div>
-
+                            <span class="footnotes">{{photo.create_time | date:'yyyy年MM月dd日'}}</span>
                         </div>
                     </div>
                 </div>
                 <div class="content">
-                    <div class="title">{{photo.title}}</div>
-                    <pre class="description">{{photo.description}}</pre>
+                    <div class="title" ng-switch="photoEditable">
+                        <a ng-switch-when="true"
+                           href="" editable-text="photo.title"
+                           onbeforesave="updatePhoto(photo, 'title', $data)">{{ photo.title || '添加标题' }}</a>
+                        <h5 ng-switch-default>{{photo.title}}</h5>
+                    </div>
+                    <div class="editable" ng-switch="photoEditable">
+                        <a ng-switch-when="true"
+                           href="" editable-textarea="photo.description" e-rows="4" e-cols="40"
+                           onbeforesave="updatePhoto(photo, 'description', $data)">
+                            <pre>{{ photo.description || '添加描述' }}</pre>
+                        </a>
+                        <pre class="description photo-description"  ng-switch-default>{{ photo.description }}</pre>
+                    </div>
                 </div>
             </div>
             <div class="photo-detail">
@@ -123,7 +138,7 @@
                                 </tr>
                                 <tr>
                                     <td class="name">文件大小</td>
-                                    <td class="value">{{cameraInfo.filesize}}</td>
+                                    <td class="value">{{photo.file_size | bytes}}</td>
                                 </tr>
                                 <tr>
                                     <td class="name">相机</td>
@@ -171,31 +186,46 @@
                 </div>
             </div>
             <div class="comments">
-                <div class="media comment" ng-repeat="comment in comments">
-                    <a class="pull-left" href="{{ctx}}/user/{{comment.userId}}">
-                        <img class="media-object img-rounded"
-                             data-ng-src="{{apirest}}/user/{{comment.userId}}/avatar"
-                             width="60" height="60" alt="{{comment.username}}">
-                    </a>
-                    <div class="media-body">
-                        <h6 class="media-heading">
-                            <a href="{{ctx}}/user/{{comment.userId}}">{{comment.username}}</a>
-                        </h6>
-                        <div>{{comment.createTime | calculatetime | date:'yyyy-MM-dd'}}</div>
-                        <pre class="content">{{comment.content}}</pre>
-                        <!--<p ng-repeat="line in (comment.content | newlines) track by $index">{{line}}</p>-->
+                <div ng-repeat="comment in comments">
+                    <div ponm-comment comment="comment" user-id="userId" deleted-comment="deletedComment">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="comment">
+        <div class="comment" data-ng-show="login">
             <div >
-                <a href="#" editable-textarea="comment.content" e-rows="4"
-                   onaftersave="createComment()">
+                <a href="" editable-textarea="commentContent" e-rows="4"
+                   onbeforesave="createComment($data)">
                     <input type="text" class="form-control" placeholder="发表评论">
                     <!--<pre>{{ user.desc || 'no description' }}</pre>-->
                 </a>
             </div>
+        </div>
+    </div>
+
+    <div class="photo-travel-album" photo-travel-album>
+        <div class="travel-album-background"></div>
+        <div class="travel-album">
+            <div class="header">
+                旅行中的所有照片（{{travel.totalPhoto}}）
+                <a href="" class="close" aria-hidden="true"
+                        data-ng-click="closeTravelAlbum()">×</a>
+            </div>
+            <div class="body">
+                <a href="" class="image"
+                   data-ng-repeat="photo in travel.photos"
+                   data-ng-click="openPhoto(photo)"
+                   data-ng-class="{'thumbnail': photo.active}">
+                    <img ng-src="{{apirest}}/photo/{{photo.id}}/1" alt="...">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="photo-recommend-album" photo-recommend-album>
+        <div class="recommend-album-background"></div>
+        <div class="recommend-album">
+
         </div>
     </div>
 </div>

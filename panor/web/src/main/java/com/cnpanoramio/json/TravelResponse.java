@@ -16,6 +16,7 @@ public class TravelResponse extends ExceptionResponse {
 	private List<Travel> travels = null;
 
 	private Travel travel;
+	private TravelSpot spot;
 	
 	@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 	public static class Travel {
@@ -25,6 +26,8 @@ public class TravelResponse extends ExceptionResponse {
 		private Long id;
 		@JsonProperty("user_id")
 		private Long userId;
+		private String username;
+		
 		private List<TravelSpot> spots = new ArrayList<TravelSpot>(0);
 		private TravelSpot spot;
 		@JsonProperty("create_time")
@@ -104,6 +107,12 @@ public class TravelResponse extends ExceptionResponse {
 		}
 		public void setDescription(String description) {
 			this.description = description;
+		}
+		public String getUsername() {
+			return username;
+		}
+		public void setUsername(String username) {
+			this.username = username;
 		}
 		
 	}
@@ -219,6 +228,14 @@ public class TravelResponse extends ExceptionResponse {
 
 	public void setTravel(Travel travel) {
 		this.travel = travel;
+	}
+
+	public TravelSpot getSpot() {
+		return spot;
+	}
+
+	public void setSpot(TravelSpot spot) {
+		this.spot = spot;
 	}
 	
 }

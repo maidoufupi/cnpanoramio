@@ -6,6 +6,7 @@ import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Travel;
+import com.cnpanoramio.domain.TravelSpot;
 
 public interface TravelManager {
 	
@@ -43,4 +44,28 @@ public interface TravelManager {
 	 * @return
 	 */
 	public Photo addTravelPhoto(Long id, Photo photo);
+	
+	/**
+	 * 更改travel的描述
+	 * 
+	 * @param id
+	 * @param description
+	 * @return
+	 */
+	public Travel changeTravelDesc(Long id, String description);
+	
+	/**
+	 * 
+	 * @param id
+	 * @param spot
+	 * @return
+	 */
+	public TravelSpot changeSpot(Long id, TravelSpot spot);
+	
+	/**
+	 * 获取TravelSpot（旅游景点）
+	 * @param id
+	 * @return
+	 */
+	public TravelSpot getTravelSpot(Long id);
 }

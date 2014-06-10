@@ -25,6 +25,26 @@ public abstract class AbstractRestService {
 		return reponse;
 	}
 	
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+	@ResponseBody
+	public ExceptionResponse handleAccessDeniedException(AccessDeniedException ex) {
+		ExceptionResponse reponse = responseFactory();
+		reponse.setStatus(UserResponse.Status.NO_AUTHORIZE.name());
+		reponse.setInfo(ex.getMessage());
+		return reponse;
+	}
+	
+	@ExceptionHandler(UsernameNotFoundException.class)
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+	@ResponseBody
+	public ExceptionResponse handleUsernameNotFoundException(UsernameNotFoundException ex) {
+		ExceptionResponse reponse = responseFactory();
+		reponse.setStatus(UserResponse.Status.ACCESS_DENIED.name());
+		reponse.setInfo(ex.getMessage());
+		return reponse;
+	}
+	
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
 	@ResponseBody

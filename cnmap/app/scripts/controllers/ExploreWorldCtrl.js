@@ -3,13 +3,13 @@
  */
 'use strict';
 
-angular.module('exploreWorldApp', ['ponmApp', 'ponmApp.services', 'ui.map'])
+angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
 //    .config(['$locationProvider', function ($locationProvider) {
 //        $locationProvider.html5Mode(true)
 //                        .hashPrefix('');
 //    }])
-    .controller('ExploreWorldCtrl', ['$window', '$location', '$scope', 'UserService',
-        function ($window, $location, $scope, UserService) {
+    .controller('ExploreWorldCtrl', ['$window', '$location', '$scope', 'UserService', '$modal', 'deparam', 'param',
+    function ($window, $location, $scope, UserService, $modal, deparam, param) {
 
         $scope.ctx = $window.ctx;
         $scope.apirest = $window.apirest;
@@ -55,7 +55,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ponmApp.services', 'ui.map'])
             $window.mapVendor = "gaode";
         }
         var panoramioLayer = new cnmap.PanoramioLayer(
-            {suppressInfoWindows: true,
+            {suppressInfoWindows: false,
                 mapVendor: $window.mapVendor || "gaode"});
         panoramioLayer.initEnv($window.ctx);
         $(panoramioLayer).bind("data_changed", function (e, data) {
@@ -70,6 +70,10 @@ angular.module('exploreWorldApp', ['ponmApp', 'ponmApp.services', 'ui.map'])
                 // 更新图片
                 $scope.updatePhoto(data);
             });
+        });
+
+        jQuery(panoramioLayer).bind("data_clicked", function (e, photoId) {
+            $scope.displayPhoto(photoId);
         });
 
             /**
@@ -174,7 +178,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ponmApp.services', 'ui.map'])
                 panoramioLayer.setMap(mapObj);
                 locationHash(mapObj);
                 mapEventListener.addToolBar(mapObj);
-                //jQuery.explore(mapObj);
+                jQuery.bind("");
                 //$($window).trigger('hashchange');
 
 //                var stateObj = jQuery.parseParams($location.hash());
@@ -201,7 +205,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ponmApp.services', 'ui.map'])
                     return;
                 }
 
-                var stateObj = jQuery.deparam($location.hash());
+                var stateObj = deparam($location.hash());
 
                 if (lat && lng) {
                     hashObj['lat'] = lat;
@@ -219,7 +223,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ponmApp.services', 'ui.map'])
                         }
                         changeState = true;
 //                    angular.copy(hashObj, stateObj);
-                        $location.hash(jQuery.param(hashObj));
+                        $location.hash(param(hashObj));
 //                    jQuery.bbq.pushState(stateObj);
                         this.setState = setTimeout(function () {
                             changeState = false;
@@ -235,7 +239,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ponmApp.services', 'ui.map'])
                 if (changeState) {
                     return;
                 }
-                var stateObj = jQuery.deparam(hash);
+                var stateObj = deparam(hash);
 
                 if (stateObj.lat && stateObj.lng) {
                     if (hashObj.lat != stateObj.lat ||
@@ -278,6 +282,27 @@ angular.module('exploreWorldApp', ['ponmApp', 'ponmApp.services', 'ui.map'])
                 }
             })
         }
+
+            $scope.displayPhoto = function(photoId) {
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/photo.html',
+                    controller: 'PhotoModalCtrl',
+                    resolve: {
+                        photoId: function () {
+                            return photoId;
+                        },
+                        travelId: function() {
+                            return '';
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (selectedItem) {
+//                    $scope.selected = selectedItem;
+                }, function () {
+//                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
 
 
     }])

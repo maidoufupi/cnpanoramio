@@ -92,6 +92,10 @@
       }
     };
 
+    ITravelLayer.prototype.clearMap = function() {
+      return this.mapEventListener.clearMap(this.map);
+    };
+
     return ITravelLayer;
 
   })();

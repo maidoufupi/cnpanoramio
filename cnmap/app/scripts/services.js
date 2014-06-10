@@ -8,7 +8,15 @@ angular.module('ponmApp.services', [
     .factory('CommentService', ['$window', '$resource', function ($window, $resource) {
         return $resource($window.apirest + '/comment/:commentId',
             {commentId: "@id"},
-            {});
+            {
+                modify: {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Accept': 'application/json'
+                    }
+                }
+            });
     }])
     .factory('UserPhoto', ['$window', '$resource', function ($window, $resource) {
         return $resource($window.apirest + '/user/:userId/photos/:type/:tag/:pageSize/:pageNo',
@@ -121,7 +129,7 @@ angular.module('ponmApp.services', [
             });
     }])
     .factory('TravelService', ['$window', '$resource', function ($window, $resource) {
-        return $resource($window.apirest + '/travel/:travelId/:type',
+        return $resource($window.apirest + '/travel/:travelId/:type/:spotId',
             {'travelId': '@id'},
             {
                 create: {
@@ -141,6 +149,25 @@ angular.module('ponmApp.services', [
                 getTravel: {
                     method: 'GET',
                     headers: {
+                        'Accept': 'application/json'
+                    }
+                },
+                changeTravel: {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Accept': 'application/json'
+                    }
+                },
+                getSpot: {
+                    method: 'GET',
+                    params: {'type': 'spot'}
+                },
+                changeSpot: {
+                    method: 'POST',
+                    params: {'type': 'spot'},
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                         'Accept': 'application/json'
                     }
                 }

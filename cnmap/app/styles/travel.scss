@@ -32,22 +32,28 @@
     width: 500px;
     height: 100%;
     margin: 0;
-    padding: 10px;
+    padding: 0 10px;
     overflow-y: scroll;
     overflow-x: hidden;
 
     .page-header.travel-header {
-      position: absolute;
+      position: relative;
       top: 0;
-      height: 100px;
       width: 100%;
       z-index: 100;
-      background-color: dimgrey;
+      background-color: #ffffff;
       margin: 0;
+      padding: 10px;
+      border-radius: 5px;
+      h2 {
+        margin-top: 0;
+      }
+      .travel-desc {
+        margin: 10px;
+      }
     }
 
     .container.travel-content {
-      margin-top: 100px;
       width: 100%;
     }
   }
@@ -109,45 +115,4 @@
 
 .control-label {
   text-align: right;
-}
-
-.photo-fluid-container {
-  width: 100%;
-  a {
-    position: relative;
-  }
-  .fluid-brick {
-    position: relative;
-    height: 130px;
-    float: left;
-    border: 2px solid #ffffff;
-    padding: 0;
-//    margin: 3px;
-    background-color: #f1f1f1;
-    box-shadow: 0 2px 3px #dfdfdf;
-    @include transition-ease-out(all);
-
-    img {
-      height: 100%;
-      max-width: 100%;
-    }
-
-    .ponm-photo-footer {
-      position: absolute;
-      bottom: 0;
-      height: 50%;
-      width: 100%;
-      background-color: rgba(128, 128, 128, 0.5);
-      opacity: 0;
-      color: white;
-      @include transition-linear(opacity);
-    }
-    .ponm-photo-footer.ng-animate.show-add, .ponm-photo-footer.ng-animate.show-remove {
-      opacity: 1;
-    }
-    .ponm-photo-footer.show {
-      opacity: 1;
-    }
-  }
-
 }

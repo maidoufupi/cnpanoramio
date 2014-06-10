@@ -28,12 +28,19 @@ class TravelLayer extends window.cnmap.ITravelLayer
     new AMap.LngLat(photo.point.lng, photo.point.lat)
 
   createLabel: (photo) ->
+    that = this
     label = new AMap.Marker({
       map: @map
       position: new AMap.LngLat(photo.point.lng, photo.point.lat) ##基点位置
       offset: new AMap.Pixel(-15, -15) ##相对于基点的偏移位置
       content: @getLabelContent(photo.id)  ##自定义点标记覆盖物内容
     })
+    label.photoId = photo.id
+    if @opts.clickable
+      AMap.event.addListener(label, 'click',
+        () ->
+          jQuery(that).trigger("data_clicked", [this.photoId]))
+
     label.photoId = photo.id
     label.setMap(@map)
 
@@ -70,4 +77,4 @@ class TravelLayer extends window.cnmap.ITravelLayer
       icon: "images/marker.png"
       animation: "AMAP_ANIMATION_BOUNCE"
     }
-window.cnmap.TravelLayer = TravelLayer;
+window.cnmap.TravelLayer = TravelLayer

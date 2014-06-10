@@ -137,8 +137,8 @@
                ponm-photo>
                 <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
                 <div class="ponm-photo-footer">
+                    <p>{{photo.title}}</p>
                     <p>{{photo.point.address}}</p>
-                    <p>{{photo.description | newlines}}</p>
                 </div>
             </a>
         </div>
@@ -155,9 +155,18 @@
 
         <div class="interim-info-card">
             <h3>标签</h3>
-            <ul id="interim-tags">
-         	    <li data-ng-repeat="tag in userOpenInfo.tags">
+            <ul class="interim-tags">
+                <li data-ng-repeat="tag in userOpenInfo.tags">
                     <a href="{{ctx}}/user/{{userId}}#?tag={{tag}}">{{tag}}</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="interim-info-card">
+            <h3>旅行</h3>
+            <ul class="interim-tags">
+                <li data-ng-repeat="travel in travels">
+                    <a href="{{ctx}}/travel#?id={{travel.id}}">{{travel.title}}</a>
                 </li>
             </ul>
         </div>

@@ -47,6 +47,13 @@ class IMapEventListener
   setBounds: (map, sw, ne) ->
 
   ##
+  # 删除地图上所有的覆盖物
+  #
+  # @param map
+  #/
+  clearMap: (map) ->
+
+  ##
    # 判断gps坐标是否在地图视野内
    #
    # @param lat

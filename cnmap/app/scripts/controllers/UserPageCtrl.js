@@ -104,8 +104,15 @@ angular.module('userPageApp', [
                     if(data.status == "OK") {
                         $scope.userOpenInfo = data.open_info;
                     }
+                });
+            }
 
-                })
+            function getTravels() {
+                UserService.getTravels({userId: $scope.userId}, function(res) {
+                    if(res.status == "OK") {
+                        $scope.travels = res.open_info.travels;
+                    }
+                });
             }
 
             function photo_with_photo_id(photo_id) {
@@ -140,8 +147,10 @@ angular.module('userPageApp', [
                         $scope.photo.numPages = Math.round($scope.photo.totalItems / $scope.photo.pageSize);
                         getPhotos();
                     }
+                });
 
-                })
+                getTravels();
+
             }
 
             $scope.activePhoto = function(photo) {

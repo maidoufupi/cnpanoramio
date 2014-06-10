@@ -45,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
 	@Autowired
 	private CommentDao commentDao;
 	
-	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
 	@Override
 	public Comment save(Comment comment) {
@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
 		comment.setId(commentD.getId());
 		// 昵称
 		comment.setUsername(settings.getName());
-		comment.setCreateTime(format.format(commentD.getCreateTime().getTime()));
+		comment.setCreateTime(commentD.getCreateTime().getTime());
 		comment.setUserId(commentD.getUser().getId());
 		return comment;		
 	}
@@ -92,7 +92,7 @@ public class CommentServiceImpl implements CommentService {
 			UserSettings settings = userSettingsManager.getSettingsByUserName(comment.getUser().getUsername());
 			// 昵称
 			c1.setUsername(settings.getName());
-			c1.setCreateTime(format.format(comment.getCreateTime().getTime()));
+			c1.setCreateTime(comment.getCreateTime().getTime());
 			c1.setContent(comment.getComment());
 			cs.add(c1);
 		}
@@ -102,5 +102,28 @@ public class CommentServiceImpl implements CommentService {
 	
 	public Long getCount(Long id) {
 		return commentDao.getCommentSize(id);
+	}
+
+	@Override
+	public Comment modify(Long id, String content) {
+		com.cnpanoramio.domain.Comment comment = commentDao.get(id);
+		comment.setComment(content);
+		return convertComment(comment);
+	}
+	
+	public Comment convertComment(com.cnpanoramio.domain.Comment commentD) {
+		Comment comment = new Comment();
+		Settings settings = userSettingsManager.getCurrentUserSettings();
+		comment.setId(commentD.getId());
+		// 昵称
+		comment.setUsername(settings.getName());
+		comment.setCreateTime(commentD.getCreateTime().getTime());
+		comment.setUserId(commentD.getUser().getId());
+		comment.setContent(commentD.getComment());
+		if(null != commentD.getPhoto()) {
+			comment.setPhotoId(commentD.getPhoto().getId());
+		}
+		
+		return comment;
 	}
 }

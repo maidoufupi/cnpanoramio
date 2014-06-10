@@ -136,6 +136,34 @@ public class TravelManagerImpl implements TravelManager {
 		photo.setTravel(travel);
 		travelSpot.getPhotos().add(photo);
 		return photo;
+	}
+
+	@Override
+	public Travel changeTravelDesc(Long id, String description) {
+		Travel travel = travelDao.get(id);
+		travel.setDescription(description);
+		return travel;
+	}
+
+	@Override
+	public TravelSpot changeSpot(Long id, TravelSpot spot) {
+		TravelSpot travelSpot = travelSpotDao.get(id);
+		if(null != spot.getTitle()) {
+			travelSpot.setTitle(spot.getTitle());
+		}
+		if(null != spot.getDescription()) {
+			travelSpot.setDescription(spot.getDescription());
+		}
+		if(null != spot.getAddress()) {
+			travelSpot.setAddress(spot.getAddress());
+		}
+		
+		return travelSpot;
+	}
+
+	@Override
+	public TravelSpot getTravelSpot(Long id) {
+		return travelSpotDao.get(id);
 	}		
 
 }

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.appfuse.model.User;
+import org.appfuse.service.UserManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +17,15 @@ import com.cnpanoramio.json.TravelResponse.TravelSpot;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.utils.PhotoUtil;
+import com.cnpanoramio.utils.UserUtil;
 
 @Service
 @Transactional
 public class TravelServiceImpl implements TravelService {
 
+	@Autowired
+	private UserManager userManager;
+	
 	@Autowired
 	private TravelManager travelManager;
 	
@@ -53,6 +59,7 @@ public class TravelServiceImpl implements TravelService {
 		BeanUtils.copyProperties(travel, t, new String[]{"spots", "user", "spot"});
 		if(null != travel.getUser()) {
 			t.setUserId(travel.getUser().getId());
+			t.setUsername(travel.getUser().getName());
 		}
 		if(null != travel.getSpot()) {
 			t.setSpot(convertTravelSpot(travel.getSpot()));
@@ -71,6 +78,35 @@ public class TravelServiceImpl implements TravelService {
 			tSpot.getPhotos().add(PhotoUtil.transformProperties(photo));
 		}
 		return tSpot;
+	}
+
+	@Override
+	public TravelSpot changeSpot(Long id, TravelSpot spot) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.TravelSpot travelSpot = travelManager.getTravelSpot(id);
+		if(!travelSpot.getTravel().getUser().getId().equals(me.getId())) {
+			throw new AccessDeniedException("Travel (id=" + travelSpot.getTravel().getId() + ") is not belong to you");
+		}
+		travelSpot.setAddress(spot.getAddress());
+		travelSpot.setTitle(spot.getTitle());
+		travelSpot.setDescription(spot.getDescription());
+		travelSpot = travelManager.changeSpot(id, travelSpot);
+		return convertTravelSpot(travelSpot);
+	}
+
+	@Override
+	public Travel changeTravelDesc(Long id, String description) {
+		com.cnpanoramio.domain.Travel travel = travelManager.getTravel(id);
+		User me = UserUtil.getCurrentUser(userManager);
+		if(!travel.getUser().getId().equals(me.getId())) {
+			throw new AccessDeniedException("Travel (id=" + id + ") is not belong to you");
+		}
+		return convertTravel(travelManager.changeTravelDesc(id, description));
+	}
+
+	@Override
+	public TravelSpot getSpot(Long id) {
+		return convertTravelSpot(travelManager.getTravelSpot(id));
 	}
 
 }

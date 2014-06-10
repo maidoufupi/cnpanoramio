@@ -56,6 +56,10 @@
             ))
         };
 
+        this.clearMap = function(map) {
+            return map && map.clearMap();
+        };
+
         this.inMapView = function(lat, lng, map) {
             map = map || this.opts.map;
             var point = new AMap.LngLat(lng, lat);

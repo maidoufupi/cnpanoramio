@@ -58,13 +58,20 @@
     };
 
     TravelLayer.prototype.createLabel = function(photo) {
-      var label;
+      var label, that;
+      that = this;
       label = new AMap.Marker({
         map: this.map,
         position: new AMap.LngLat(photo.point.lng, photo.point.lat),
         offset: new AMap.Pixel(-15, -15),
         content: this.getLabelContent(photo.id)
       });
+      label.photoId = photo.id;
+      if (this.opts.clickable) {
+        AMap.event.addListener(label, 'click', function() {
+          return jQuery(that).trigger("data_clicked", [this.photoId]);
+        });
+      }
       label.photoId = photo.id;
       return label.setMap(this.map);
     };

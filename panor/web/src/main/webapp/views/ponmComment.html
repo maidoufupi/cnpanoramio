@@ -1,0 +1,54 @@
+<div class="media comment"
+     data-ng-class="{'comment-active': mouseEnter}">
+    <a class="pull-left" href="{{ctx}}/user/{{comment.userId}}">
+        <img class="media-object img-rounded"
+             data-ng-src="{{apirest}}/user/{{comment.userId}}/avatar"
+             width="60" height="60" alt="{{comment.username}}">
+    </a>
+    <div class="media-body">
+        <div class="header">
+            <h6 class="media-heading">
+                <a href="{{ctx}}/user/{{comment.userId}}">{{comment.username}}</a>
+            </h6>
+            <div>
+                <span class="footnotes">{{comment.create_time | calculatetime | date:'yyyy-MM-dd'}}</span>
+                <a href=""
+                   class="thumbs-up ponm-show-hide"
+                   ng-show="mouseEnter"
+                   tooltip="赞"
+                   tooltip-trigger="mouseenter"
+                   tooltip-placement="top"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+            </div>
+        </div>
+        <div class="action ponm-show-hide" data-ng-switch="comment.editable"
+             ng-show="mouseEnter">
+            <div data-ng-switch-when="true">
+                <a href="" data-ng-click="deleteCommment(comment)"
+                   tooltip="删除"
+                   tooltip-trigger="mouseenter"
+                   tooltip-placement="top"><span class="glyphicon glyphicon-remove-sign"></span></a>
+            </div>
+            <div data-ng-switch-default>
+                <a href=""><span class="glyphicon">回复</span></a>
+                <a href=""
+                   tooltip="举报"
+                   tooltip-trigger="mouseenter"
+                   tooltip-placement="top"><span class="glyphicon glyphicon-flag"></span></a>
+            </div>
+        </div>
+        <div data-ng-switch="comment.editable">
+            <a href=""
+               data-ng-switch-when="true"
+               editable-textarea="comment.content" e-rows="4"
+               onbeforesave="modifyComment(comment, $data)"
+               tooltip="修改"
+               tooltip-trigger="mouseenter"
+               tooltip-placement="top">
+                <pre class="content">{{comment.content}}</pre>
+            </a>
+            <pre class="content"
+                 data-ng-switch-default>{{comment.content}}</pre>
+        </div>
+
+    </div>
+</div>

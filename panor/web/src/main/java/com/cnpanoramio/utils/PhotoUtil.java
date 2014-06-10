@@ -32,7 +32,7 @@ public class PhotoUtil {
 		cameraInfo.setModel(details.getModel());
 		cameraInfo.setMake(details.getMake());
 		if(null != details.getDateTimeOriginal()) {
-			cameraInfo.setDateTimeOriginal(format.format(details.getDateTimeOriginal()));
+			cameraInfo.setDateTimeOriginal(details.getDateTimeOriginal());
 		}
 		
 		if(null != details.getExposureTime()) {
@@ -56,11 +56,13 @@ public class PhotoUtil {
 		pp.setId(photo.getId());
 		pp.setTitle(photo.getTitle());
 		pp.setDescription(photo.getDescription());
-		Date createTime = photo.getCreateDate();
-		if(null != createTime) {
-			pp.setCreateTime(format.format(createTime.getTime()));
-		}
+		pp.setCreateTime(photo.getCreateDate());
 		pp.setUserId(photo.getOwner().getId());
+		pp.setFileSize(photo.getFileSize());
+		
+		if(null != photo.getTravel()) {
+			pp.setTravelId(photo.getTravel().getId());
+		}		
 		
 		for(Tag tag : photo.getTags()) {
 			pp.getTags().add(tag.getTag());

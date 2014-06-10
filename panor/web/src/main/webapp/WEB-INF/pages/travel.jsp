@@ -5,10 +5,6 @@
 <head>
 <title><fmt:message key="menu.explore" /></title>
 <meta name="menu" content="AdminMenu" />
-
-	<script src="<c:url value="/bower_components/eventie/eventie.js"/>"></script>
-    <script src="<c:url value="/bower_components/eventEmitter/EventEmitter.js"/>"></script>
-    <script src="<c:url value="/bower_components/imagesloaded/imagesloaded.js"/>"></script>
     
 </head>
 <body>
@@ -45,21 +41,43 @@
 </script>
 
 <div id="aTravelApp" class="container travel" ng-controller="ATravelCtrl">
+    
     <div class="container left-map">
         <div class="map-container">
             <div class="map-canvas" ui-map="myMap" ui-options="mapOptions"></div>
-            <div class="map-plugins">
+<!--             <div class="map-plugins">
 
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="container right-content" ng-click="getTravel()"
          ui-event="{ scroll : 'scrollCallback($event)' }">
 
         <div class="page-header travel-header">
+            <div class="media user-info">
+                <a class="pull-left" href="{{ctx}}/user/{{travel.user_id}}">
+                    <img class="media-object img-circle" ng-src="{{apirest}}/user/{{travel.user_id || 1}}/avatar">
+                </a>
+
+                <div class="media-body">
+                    <h4 class="media-heading">{{travel.username}}</h4>
+                    <div>
+
+                    </div>
+                </div>
+            </div>
             <h2>{{travel.title}}</h2>
             <h4>{{travel.create_time | date:'yyyy-MM-dd'}}</h4>
-            <small>{{travel.description}}</small>
+            <div class="editable travel-desc">
+                <div ng-switch="travelEnedit">
+                    <a ng-switch-when="true"
+                       href="#" editable-textarea="travel.description" e-rows="4" e-cols="40"
+                       onbeforesave="updateTravel(travel, $data)">
+                        <pre>{{ travel.description || '添加描述' }}</pre>
+                    </a>
+                    <p ng-switch-default>{{travel.description}}</p>
+                </div>
+            </div>
         </div>
 
         <div class="container travel-content">
@@ -72,21 +90,38 @@
                             <div class="spot-date">
                                 <span class="spot-date-txt ">{{spot.day}}</span>
                                 <span class="spot-date-flag">DAY</span>
+                                <span class="spot-date-flag">{{spot.start_time | date:'yyyyMMdd'}}</span>
                             </div>
                         </a>
-                        <div class="info">
-                            <div contentEditable="true"
-                                 data-ng-model="travel.spots[$index].address"
-                                 data-place-holder="添加地点"
-                                 editable="true"
-                                 multiple-line="3"
-                                 title="Click to edit"></div>
-                        </div>
                         <div>
-                            {{spot.address}}
+                            <div ng-switch="travelEnedit">
+                                <a ng-switch-when="true"
+                                   href="#" editable-text="spot.title"
+                                   onbeforesave="updateSpot(travel, spot, 'title', $data)">{{ spot.title || '添加标题' }}</a>
+                                <h4 ng-switch-default>{{spot.title}}</h4>
+                            </div>
                         </div>
-                        <div>
-                            {{spot.time}}
+                        <div class="info" >
+                            <div ng-switch="travelEnedit" class="editable">
+                                <a ng-switch-when="true"
+                                   editable-select="spot.address" e-ng-options="addr as addr for (addr, point) in spot.addresses"
+                                   buttons="no"
+                                   onbeforesave="updateSpot(travel, spot, 'address', $data)">
+                                    {{ showSpotAddress(spot) }}
+                                </a>
+                                <address ng-switch-default>{{ spot.address }}</address>
+                            </div>
+                        </div>
+                        <div ng-switch="travelEnedit">
+                            <div class="editable">
+                                <a ng-switch-when="true"
+                                   href="#" editable-textarea="spot.description" e-rows="4" e-cols="40"
+                                   onbeforesave="updateSpot(travel, spot, 'description', $data)">
+                                    <pre>{{ spot.description || '添加描述' }}</pre>
+                                </a>
+                            </div>
+
+                            <pre class="description" ng-switch-default>{{ spot.description }}</pre>
                         </div>
                     </div>
 
@@ -95,13 +130,14 @@
                     <div photo-fluid-container class="photo-fluid-container">
                         <a ng-repeat="photo in spot.photos"
                            ng-click="activePhoto(photo)"
-                           class="fluid-brick"
                            href=""
+                           class="fluid-brick"
                            ponm-photo>
-                            <img class="item-img" ng-src="{{apirest}}/photo/{{photo.id}}/2">
+                            <img
+                                 ng-src="{{apirest}}/photo/{{photo.id}}/2">
                             <div class="ponm-photo-footer">
                                 <p>{{photo.point.address}}</p>
-                                <p>{{photo.description | newlines}}</p>
+                                <pre class="description">{{photo.description}}</pre>
                             </div>
                         </a>
                     </div>
@@ -109,6 +145,7 @@
             </div>
         </div>
     </div>
+    
 </div>
 </body>
 </html>

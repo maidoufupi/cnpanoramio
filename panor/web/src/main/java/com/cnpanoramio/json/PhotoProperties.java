@@ -22,7 +22,7 @@ public class PhotoProperties {
 	private String title;
 	private String description;
 	@JsonProperty("create_time")
-	private String createTime;
+	private Date createTime;
 	@JsonProperty("user_id")
 	private Long userId;
 	private Point point;
@@ -31,6 +31,10 @@ public class PhotoProperties {
 	private Integer width;
 	private Integer height;
 	private Boolean is360;
+	
+	// 旅行
+	@JsonProperty("travel_id")
+	private Long travelId;
 	
 	// tags
 	private List<String> tags = new ArrayList<String>(0);
@@ -78,11 +82,11 @@ public class PhotoProperties {
 		this.id = id;
 	}	
 	
-	public String getCreateTime() {
+	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(String createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
@@ -188,5 +192,14 @@ public class PhotoProperties {
 
 	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
+	}
+
+	public Long getTravelId() {
+		return travelId;
+	}
+
+	public void setTravelId(Long travelId) {
+		this.travelId = travelId;
 	}	
+	
 }

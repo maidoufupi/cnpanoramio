@@ -59,6 +59,9 @@ class ITravelLayer
 
       @mapEventListener.setBounds(@map, sw, ne)
 
+  clearMap: () ->
+    @mapEventListener.clearMap @map
+
 window.cnmap = window.cnmap ? {}
 
 window.cnmap.ITravelLayer = ITravelLayer

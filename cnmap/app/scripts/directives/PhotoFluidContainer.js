@@ -14,11 +14,12 @@ angular.module('ponmApp.directives')
                     var itemSelector = attrs.itemSelector || ".fluid-brick";
 
                     $($window).resize(function (e) {
+                        $log.debug("window resize");
                         calculateHeight();
                     });
 
                     function calculateHeight() {
-//                        $log.debug("calculateHeight");
+
                         var containerWidth = element.innerWidth() - 10;
 //                        $log.debug("containerWidth: " + containerWidth);
 
@@ -73,13 +74,20 @@ angular.module('ponmApp.directives')
                         }
                     };
 
-                    $timeout(function () {
-                        scope.updateFluid();
-                    }, 1000);
+//                    $timeout(function () {
+//                        $log.debug("init $timeout");
+//                        scope.updateFluid();
+
+//                    }, 1000);
 
                     scope.$watch(attrs.photoFluidContainer, function() {
-                        $timeout(function () {
+                        $log.debug("photoFluidContainer changed");
+                        if(scope.updatePromise) {
+                            $timeout.cancel(scope.updatePromise);
+                        }
+                        scope.updatePromise = $timeout(function () {
                             scope.updateFluid();
+                            scope.updatePromise = null;
                         }, 1000);
                     });
                 }

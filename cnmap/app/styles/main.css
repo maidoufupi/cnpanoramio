@@ -504,13 +504,6 @@ body {
   float: left;
   overflow: hidden; }
 
-#interim-tags li {
-  display: inline;
-  list-style-type: none; }
-
-#interim-tags li:before {
-  content: " \002022 "; }
-
 .modal-dialog {
   width: auto; }
 
@@ -1055,76 +1048,11 @@ li {
   font-size: 1.2em; }
 
 /** photo container */
-.masonry-brick {
-  position: relative;
-  max-width: 100%;
-  height: 130px;
-  float: left;
-  border: 2px solid #ffffff;
-  padding: 0;
-  margin: 3px;
-  background-color: #f1f1f1;
-  box-shadow: 0 2px 3px #dfdfdf; }
-
-/**** Transitions ****/
-.masonry,
-.masonry .masonry-brick {
-  -webkit-transition-duration: 0.7s;
-  -moz-transition-duration: 0.7s;
-  -ms-transition-duration: 0.7s;
-  -o-transition-duration: 0.7s;
-  transition-duration: 0.7s; }
-
-.masonry {
-  -webkit-transition-property: height, width;
-  -moz-transition-property: height, width;
-  -ms-transition-property: height, width;
-  -o-transition-property: height, width;
-  transition-property: height, width; }
-
-.masonry .masonry-brick {
-  -webkit-transition-property: left, right, top;
-  -moz-transition-property: left, right, top;
-  -ms-transition-property: left, right, top;
-  -o-transition-property: left, right, top;
-  transition-property: left, right, top; }
-
-.masonry-container {
-  margin-top: 8px; }
-
-.masonry-brick.w1 {
-  width: 16.66667%; }
-
-.masonry-brick.w2 {
-  width: 33.33333%; }
-
-.masonry-brick.w3 {
-  width: 50%; }
-
-.masonry-brick.w4 {
-  width: 66.66667%; }
-
-.masonry-brick.w5 {
-  width: 83.33333%; }
-
-.masonry-brick.w6 {
-  width: 100%; }
-
-.masonry-brick.h2 {
-  height: 100px; }
-
-.masonry-brick.h3 {
-  height: 160px; }
-
-.masonry-brick.h4 {
-  height: 220px; }
-
-.masonry-brick.h5 {
-  height: 280px; }
-
-.item-img {
-  height: 100%;
-  max-width: 100%; }
+.interim-info-card .interim-tags li {
+  display: inline;
+  list-style-type: none; }
+.interim-info-card .interim-tags li:before {
+  content: " \002022 "; }
 
 .thumb-overlay {
   position: absolute;
@@ -1251,19 +1179,23 @@ form#settings {
     width: 500px;
     height: 100%;
     margin: 0;
-    padding: 10px;
+    padding: 0 10px;
     overflow-y: scroll;
     overflow-x: hidden; }
     .container.travel .container.right-content .page-header.travel-header {
-      position: absolute;
+      position: relative;
       top: 0;
-      height: 100px;
       width: 100%;
       z-index: 100;
-      background-color: dimgrey;
-      margin: 0; }
+      background-color: #ffffff;
+      margin: 0;
+      padding: 10px;
+      border-radius: 5px; }
+      .container.travel .container.right-content .page-header.travel-header h2 {
+        margin-top: 0; }
+      .container.travel .container.right-content .page-header.travel-header .travel-desc {
+        margin: 10px; }
     .container.travel .container.right-content .container.travel-content {
-      margin-top: 100px;
       width: 100%; }
 
 .travel-circle-header {
@@ -1307,153 +1239,6 @@ form#settings {
 
 .control-label {
   text-align: right; }
-
-.photo-fluid-container {
-  width: 100%; }
-  .photo-fluid-container a {
-    position: relative; }
-  .photo-fluid-container .fluid-brick {
-    position: relative;
-    height: 130px;
-    float: left;
-    border: 2px solid #ffffff;
-    padding: 0;
-    background-color: #f1f1f1;
-    box-shadow: 0 2px 3px #dfdfdf;
-    -webkit-transition: all ease-out 0.5s;
-    -moz-transition: all ease-out 0.5s;
-    -ms-transition: all ease-out 0.5s;
-    -o-transition: all ease-out 0.5s;
-    transition: all ease-out 0.5s; }
-    .photo-fluid-container .fluid-brick img {
-      height: 100%;
-      max-width: 100%; }
-    .photo-fluid-container .fluid-brick .ponm-photo-footer {
-      position: absolute;
-      bottom: 0;
-      height: 50%;
-      width: 100%;
-      background-color: rgba(128, 128, 128, 0.5);
-      opacity: 0;
-      color: white;
-      -webkit-transition: opacity linear 0.5s;
-      -moz-transition: opacity linear 0.5s;
-      -ms-transition: opacity linear 0.5s;
-      -o-transition: opacity linear 0.5s;
-      transition: opacity linear 0.5s; }
-    .photo-fluid-container .fluid-brick .ponm-photo-footer.ng-animate.show-add, .photo-fluid-container .fluid-brick .ponm-photo-footer.ng-animate.show-remove {
-      opacity: 1; }
-    .photo-fluid-container .fluid-brick .ponm-photo-footer.show {
-      opacity: 1; }
-
-.ponm-photo-container {
-  position: relative;
-  max-height: 1000px;
-  margin: 0 auto; }
-  .ponm-photo-container .flat-image {
-    opacity: 0;
-    -moz-transition: opacity 1s;
-    /* Firefox 4 */
-    -webkit-transition: opacity 1s;
-    /* Safari and Chrome */
-    -o-transition: opacity 1s;
-    transition: opacity 1s;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0; }
-  .ponm-photo-container img {
-    opacity: 0;
-    -moz-transition: opacity 1s;
-    /* Firefox 4 */
-    -webkit-transition: opacity 1s;
-    /* Safari and Chrome */
-    -o-transition: opacity 1s;
-    transition: opacity 1s;
-    position: static;
-    max-width: 100%;
-    max-height: 100%; }
-  .ponm-photo-container img.ng-animate.show-add, .ponm-photo-container img.ng-animate.show-remove {
-    opacity: 1; }
-  .ponm-photo-container img.show {
-    opacity: 1; }
-  .ponm-photo-container .flat-image.ng-animate.show-add, .ponm-photo-container .flat-image.ng-animate.show-remove {
-    opacity: 1; }
-  .ponm-photo-container .flat-image.show {
-    opacity: 1; }
-  .ponm-photo-container canvas {
-    position: absolute;
-    top: 0;
-    opacity: 0; }
-  .ponm-photo-container canvas.ng-animate.show-add, .ponm-photo-container canvas.ng-animate.show-remove {
-    opacity: 1;
-    z-index: 1; }
-  .ponm-photo-container canvas.show {
-    opacity: 1;
-    z-index: 1; }
-  .ponm-photo-container .img-container {
-    position: relative;
-    width: 100%;
-    top: 0;
-    bottom: 0; }
-  .ponm-photo-container .image360 {
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0; }
-  .ponm-photo-container .icon-p360 {
-    position: absolute;
-    bottom: 0;
-    margin-left: 45%;
-    margin-right: 45%;
-    width: 65px;
-    height: 65px;
-    background: url(../images/lightbox.png) no-repeat -63px 0;
-    opacity: 0.5;
-    -moz-transition: opacity 0.5s;
-    /* Firefox 4 */
-    -webkit-transition: opacity 0.5s;
-    /* Safari and Chrome */
-    -o-transition: opacity 0.5s;
-    transition: opacity 0.5s; }
-  .ponm-photo-container .icon-pflat {
-    position: absolute;
-    bottom: 0;
-    margin-left: 45%;
-    margin-right: 45%;
-    width: 65px;
-    height: 65px;
-    background: url(../images/lightbox.png) no-repeat -63px -94px;
-    opacity: 0.5;
-    -moz-transition: opacity 0.5s;
-    /* Firefox 4 */
-    -webkit-transition: opacity 0.5s;
-    /* Safari and Chrome */
-    -o-transition: opacity 0.5s;
-    transition: opacity 0.5s; }
-  .ponm-photo-container .flat-image-button {
-    position: absolute;
-    bottom: 0;
-    opacity: 0;
-    left: 45%; }
-  .ponm-photo-container .flat-image-button.ng-animate.show-add, .ponm-photo-container .flat-image-button.ng-animate.show-remove {
-    opacity: 1;
-    z-index: 2; }
-  .ponm-photo-container .flat-image-button.show {
-    opacity: 1;
-    z-index: 2; }
-  .ponm-photo-container .p360-image {
-    width: 100%;
-    height: 100%;
-    opacity: 0; }
-  .ponm-photo-container .p360-image.ng-animate.show-add, .ponm-photo-container .p360-image.ng-animate.show-remove {
-    opacity: 1; }
-  .ponm-photo-container .p360-image.show {
-    opacity: 1; }
 
 .repeat-enter-setup, .repeat-leave-setup {
   -webkit-transition: all linear 0.3s;
@@ -1572,8 +1357,18 @@ form#settings {
     right: 320px;
     margin: 0;
     border: 0; }
-    .photo-modal-container .photo-container-booter .container-fluid {
-      background-color: #191919; }
+  .photo-modal-container .navbar .container-fluid {
+    background-color: #191919; }
+    .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse {
+      text-align: center; }
+      .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block {
+        display: inline-block;
+        float: initial; }
+        .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block .text-explain {
+          line-height: 50px;
+          margin-left: 10px; }
+          .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block .text-explain span {
+            vertical-align: middle; }
   .photo-modal-container .photo-info {
     -webkit-transition: 218ms;
     transition: 218ms;
@@ -1602,9 +1397,6 @@ form#settings {
           overflow-x: hidden;
           overflow-y: auto;
           height: auto; }
-        .photo-modal-container .photo-info .info-container .user-container .media.user-info .pull-left img.media-object {
-          height: 46px;
-          width: 46px; }
         .photo-modal-container .photo-info .info-container .user-container .content {
           margin: 10px 0; }
           .photo-modal-container .photo-info .info-container .user-container .content .description {
@@ -1612,6 +1404,10 @@ form#settings {
             margin: 0;
             border: 0;
             background-color: initial; }
+          .photo-modal-container .photo-info .info-container .user-container .content .description.photo-description {
+            color: #404040;
+            margin-top: 10px;
+            word-wrap: break-word; }
       .photo-modal-container .photo-info .info-container .photo-detail {
         background-color: whitesmoke; }
         .photo-modal-container .photo-info .info-container .photo-detail .btn-detail {
@@ -1623,37 +1419,106 @@ form#settings {
         .photo-modal-container .photo-info .info-container .photo-detail table .name {
           color: #aaa;
           text-align: left;
-          width: 45%; }
+          width: 35%; }
         .photo-modal-container .photo-info .info-container .photo-detail table .value {
           color: #404040;
           word-break: break-all; }
-      .photo-modal-container .photo-info .info-container .comments {
-        margin: 2px 0;
-        background-color: whitesmoke; }
-        .photo-modal-container .photo-info .info-container .comments .media.comment {
-          padding: 15px;
-          margin: 0; }
-          .photo-modal-container .photo-info .info-container .comments .media.comment img.media-object {
-            width: 28px;
-            height: 28px; }
-          .photo-modal-container .photo-info .info-container .comments .media.comment .content {
-            padding: 0;
-            margin: 0;
-            border: 0;
-            background-color: initial; }
-    .photo-modal-container .photo-info .comment .editable-buttons {
-      float: left; }
-    .photo-modal-container .photo-info .comment .editable-wrap.editable-textarea {
-      width: 100%; }
-      .photo-modal-container .photo-info .comment .editable-wrap.editable-textarea .editable-controls.form-group {
+    .photo-modal-container .photo-info .comment {
+      margin-bottom: 15px;
+      padding: 5px; }
+      .photo-modal-container .photo-info .comment .editable-buttons {
+        float: left; }
+      .photo-modal-container .photo-info .comment .editable-wrap.editable-textarea {
         width: 100%; }
-        .photo-modal-container .photo-info .comment .editable-wrap.editable-textarea .editable-controls.form-group .editable-input {
+        .photo-modal-container .photo-info .comment .editable-wrap.editable-textarea .editable-controls.form-group {
           width: 100%; }
+          .photo-modal-container .photo-info .comment .editable-wrap.editable-textarea .editable-controls.form-group .editable-input {
+            width: 100%; }
 
 .nav .glyphicon {
   width: 40px; }
 .nav .close {
   opacity: 0.5; }
+
+.photo-travel-album .travel-album-background {
+  position: fixed;
+  width: 100%;
+  height: 0;
+  opacity: .75;
+  background-color: #000; }
+.photo-travel-album .travel-album-background.ng-animate.show-add, .photo-travel-album .travel-album-background.ng-animate.show-remove {
+  height: 100%; }
+.photo-travel-album .travel-album-background.show {
+  height: 100%; }
+.photo-travel-album .travel-album {
+  position: fixed;
+  left: 0;
+  bottom: 44px;
+  right: 320px;
+  background-color: #000;
+  overflow: hidden;
+  height: 0;
+  -webkit-transition: height linear 0.3s;
+  -moz-transition: height linear 0.3s;
+  -ms-transition: height linear 0.3s;
+  -o-transition: height linear 0.3s;
+  transition: height linear 0.3s; }
+  .photo-travel-album .travel-album .header {
+    position: relative;
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+    height: 30px;
+    padding: 5px 0 0 40px;
+    width: 100%;
+    display: inline-block; }
+    .photo-travel-album .travel-album .header .close {
+      margin: 0 10px;
+      color: white; }
+  .photo-travel-album .travel-album .body {
+    height: 220px;
+    margin-right: 0px;
+    outline: none;
+    overflow-x: hidden;
+    overflow-y: auto; }
+    .photo-travel-album .travel-album .body .image {
+      width: 100px;
+      height: 100px;
+      float: left;
+      margin: 5px;
+      overflow: hidden; }
+.photo-travel-album .travel-album.ng-animate.show-add, .photo-travel-album .travel-album.ng-animate.show-remove {
+  height: 283px; }
+.photo-travel-album .travel-album.show {
+  height: 283px; }
+
+.photo-recommend-album .recommend-album-background {
+  position: fixed;
+  width: 100%;
+  height: 0;
+  opacity: .75;
+  background-color: #000; }
+.photo-recommend-album .recommend-album-background.ng-animate.show-add, .photo-recommend-album .recommend-album-background.ng-animate.show-remove {
+  height: 100%; }
+.photo-recommend-album .recommend-album-background.show {
+  height: 100%; }
+.photo-recommend-album .recommend-album {
+  box-shadow: 0 0 20px 1px #777;
+  background: #212121;
+  color: #fff;
+  height: 0;
+  padding: 0;
+  position: fixed;
+  width: 882px;
+  -webkit-transition: height ease-out 0.3s;
+  -moz-transition: height ease-out 0.3s;
+  -ms-transition: height ease-out 0.3s;
+  -o-transition: height ease-out 0.3s;
+  transition: height ease-out 0.3s; }
+.photo-recommend-album .recommend-album.ng-animate.show-add, .photo-recommend-album .recommend-album.ng-animate.show-remove {
+  height: 400px; }
+.photo-recommend-album .recommend-album.show {
+  height: 400px; }
 
 div[contentEditable] {
   cursor: pointer; }
@@ -1661,6 +1526,233 @@ div[contentEditable] {
 div[contentEditable]:hover, div[contentEditable]:focus {
   background-color: ghostwhite; }
 
-/** comment */
-.media.comment .media-body p {
-  margin: 0; }
+pre.description {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: initial; }
+
+/** photo fluid directive */
+.photo-fluid-container {
+  width: 100%; }
+  .photo-fluid-container a {
+    position: relative; }
+  .photo-fluid-container .fluid-brick {
+    position: relative;
+    height: 130px;
+    float: left;
+    border: 2px solid #ffffff;
+    padding: 0;
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 3px #dfdfdf;
+    -webkit-transition: all ease-out 0.3s;
+    -moz-transition: all ease-out 0.3s;
+    -ms-transition: all ease-out 0.3s;
+    -o-transition: all ease-out 0.3s;
+    transition: all ease-out 0.3s; }
+    .photo-fluid-container .fluid-brick img {
+      height: 100%;
+      max-width: 100%; }
+    .photo-fluid-container .fluid-brick .ponm-photo-footer {
+      position: absolute;
+      bottom: 0;
+      height: 50%;
+      width: 100%;
+      background-color: rgba(128, 128, 128, 0.5);
+      opacity: 0;
+      color: white;
+      -webkit-transition: opacity linear 0.3s;
+      -moz-transition: opacity linear 0.3s;
+      -ms-transition: opacity linear 0.3s;
+      -o-transition: opacity linear 0.3s;
+      transition: opacity linear 0.3s; }
+    .photo-fluid-container .fluid-brick .ponm-photo-footer.ng-animate.show-add, .photo-fluid-container .fluid-brick .ponm-photo-footer.ng-animate.show-remove {
+      opacity: 1; }
+    .photo-fluid-container .fluid-brick .ponm-photo-footer.show {
+      opacity: 1; }
+
+/** photo container directive*/
+.ponm-photo-container {
+  position: relative;
+  max-height: 1000px;
+  margin: 0 auto; }
+  .ponm-photo-container .flat-image {
+    opacity: 0;
+    -moz-transition: opacity 1s;
+    /* Firefox 4 */
+    -webkit-transition: opacity 1s;
+    /* Safari and Chrome */
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0; }
+  .ponm-photo-container img {
+    opacity: 0;
+    -moz-transition: opacity 1s;
+    /* Firefox 4 */
+    -webkit-transition: opacity 1s;
+    /* Safari and Chrome */
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+    position: static;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto; }
+  .ponm-photo-container img.ng-animate.show-add, .ponm-photo-container img.ng-animate.show-remove {
+    opacity: 1; }
+  .ponm-photo-container img.show {
+    opacity: 1; }
+  .ponm-photo-container .flat-image.ng-animate.show-add, .ponm-photo-container .flat-image.ng-animate.show-remove {
+    opacity: 1; }
+  .ponm-photo-container .flat-image.show {
+    opacity: 1; }
+  .ponm-photo-container canvas {
+    position: absolute;
+    top: 0;
+    opacity: 0; }
+  .ponm-photo-container canvas.ng-animate.show-add, .ponm-photo-container canvas.ng-animate.show-remove {
+    opacity: 1;
+    z-index: 1; }
+  .ponm-photo-container canvas.show {
+    opacity: 1;
+    z-index: 1; }
+  .ponm-photo-container .img-container {
+    position: relative;
+    width: 100%;
+    top: 0;
+    bottom: 0; }
+  .ponm-photo-container .image360 {
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0; }
+  .ponm-photo-container .icon-p360 {
+    position: absolute;
+    bottom: 0;
+    margin-left: 45%;
+    margin-right: 45%;
+    width: 65px;
+    height: 65px;
+    background: url(../images/lightbox.png) no-repeat -63px 0;
+    opacity: 0.5;
+    -moz-transition: opacity 0.5s;
+    /* Firefox 4 */
+    -webkit-transition: opacity 0.5s;
+    /* Safari and Chrome */
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s; }
+  .ponm-photo-container .icon-pflat {
+    position: absolute;
+    bottom: 0;
+    margin-left: 45%;
+    margin-right: 45%;
+    width: 65px;
+    height: 65px;
+    background: url(../images/lightbox.png) no-repeat -63px -94px;
+    opacity: 0.5;
+    -moz-transition: opacity 0.5s;
+    /* Firefox 4 */
+    -webkit-transition: opacity 0.5s;
+    /* Safari and Chrome */
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s; }
+  .ponm-photo-container .flat-image-button {
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+    left: 45%; }
+  .ponm-photo-container .flat-image-button.ng-animate.show-add, .ponm-photo-container .flat-image-button.ng-animate.show-remove {
+    opacity: 1;
+    z-index: 2; }
+  .ponm-photo-container .flat-image-button.show {
+    opacity: 1;
+    z-index: 2; }
+  .ponm-photo-container .p360-image {
+    width: 100%;
+    height: 100%;
+    opacity: 0; }
+  .ponm-photo-container .p360-image.ng-animate.show-add, .ponm-photo-container .p360-image.ng-animate.show-remove {
+    opacity: 1; }
+  .ponm-photo-container .p360-image.show {
+    opacity: 1; }
+
+/** editable css */
+.editable {
+  margin: 5px 0; }
+  .editable .editable-wrap {
+    white-space: pre-wrap; }
+  .editable pre {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: initial;
+    color: #428bca;
+    border-bottom: dashed 1px #428bca; }
+  .editable .editable-wrap.editable-textarea {
+    width: 100%; }
+    .editable .editable-wrap.editable-textarea .editable-controls.form-group {
+      width: 100%; }
+      .editable .editable-wrap.editable-textarea .editable-controls.form-group .editable-input {
+        width: 100%; }
+
+/** user thumbnail directive */
+.media.user-info .pull-left img.media-object {
+  height: 46px;
+  width: 46px; }
+
+/** footnotes */
+span.footnotes {
+  font-size: 12px;
+  color: #999;
+  display: inline;
+  margin-left: 0;
+  text-align: left; }
+
+/** comments */
+.comments {
+  margin: 2px 0;
+  background-color: whitesmoke; }
+  .comments .media.comment {
+    padding: 15px;
+    margin: 0; }
+    .comments .media.comment img.media-object {
+      width: 28px;
+      height: 28px; }
+    .comments .media.comment .media-body .header {
+      width: 130px;
+      float: left; }
+    .comments .media.comment .media-body .action {
+      float: right; }
+    .comments .media.comment .media-body .content {
+      clear: both;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      background-color: initial; }
+    .comments .media.comment .media-body .glyphicon {
+      font-size: 12px; }
+  .comments .media.comment.comment-active {
+    border-top-color: grey;
+    border-bottom-color: grey; }
+
+.ponm-show-hide.ng-hide-add, .ponm-show-hide.ng-hide-remove {
+  -webkit-transition: all linear 0.3s;
+  -moz-transition: all linear 0.3s;
+  -ms-transition: all linear 0.3s;
+  -o-transition: all linear 0.3s;
+  transition: all linear 0.3s;
+  display: block !important; }
+
+.ponm-show-hide.ng-hide-add.ng-hide-add-active,
+.ponm-show-hide.ng-hide-remove {
+  opacity: 0; }
+
+.ponm-show-hide.ng-hide-add,
+.ponm-show-hide.ng-hide-remove.ng-hide-remove-active {
+  opacity: 1; }

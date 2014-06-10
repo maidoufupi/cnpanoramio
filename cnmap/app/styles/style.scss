@@ -660,15 +660,6 @@ body {
     overflow: hidden;
 }
 
-#interim-tags li {
-    display: inline;
-    list-style-type: none;
-}
-
-#interim-tags li:before {
-    content: " \002022 ";
-}
-
 .modal-dialog {
     width: auto
 }

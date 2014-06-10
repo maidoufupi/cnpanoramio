@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cnpanoramio.dao.CommentDao;
@@ -56,6 +57,17 @@ public class CommentRestService extends AbstractRestService {
 			response.setStatus(CommentResponse.Status.EXCEPTION.name());
 		}
 		
+		return response;
+	}
+	
+	@RequestMapping(value = "/{commentId}", method = RequestMethod.POST)
+	@ResponseBody
+	public CommentResponse modifyComment(@PathVariable String commentId, @RequestParam("content") String content) {
+		
+		CommentResponse response = CommentResponse.getInstance();
+		response.setStatus(CommentResponse.Status.OK.name());
+
+		commentService.modify(Long.parseLong(commentId), content);		
 		return response;
 	}
 }

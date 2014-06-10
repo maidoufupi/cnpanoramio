@@ -32,7 +32,7 @@ public class PhotoCameraInfo {
 	
 	// 拍摄日期
 	@JsonProperty("date_time_original")
-	private String dateTimeOriginal;
+	private Date dateTimeOriginal;
 	// 曝光时间
 	@JsonProperty("exposure_time")
 	private String exposureTime;
@@ -92,10 +92,10 @@ public class PhotoCameraInfo {
 	public void setModel(String model) {
 		this.model = model;
 	}
-	public String getDateTimeOriginal() {
+	public Date getDateTimeOriginal() {
 		return dateTimeOriginal;
 	}
-	public void setDateTimeOriginal(String dateTimeOriginal) {
+	public void setDateTimeOriginal(Date dateTimeOriginal) {
 		this.dateTimeOriginal = dateTimeOriginal;
 	}
 	public String getExposureTime() {

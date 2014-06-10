@@ -40,4 +40,13 @@ public interface CommentService {
 	 * @return
 	 */
 	public Long getCount(Long id);
+	
+	/**
+	 * 修改评论内容
+	 * 
+	 * @param id
+	 * @param content
+	 * @return
+	 */
+	public Comment modify(Long id, String content);
 }

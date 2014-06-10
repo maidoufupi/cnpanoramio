@@ -19,6 +19,8 @@
 
     IMapEventListener.prototype.setBounds = function(map, sw, ne) {};
 
+    IMapEventListener.prototype.clearMap = function(map) {};
+
     IMapEventListener.prototype.inMapView = function(lat, lng, map) {};
 
     IMapEventListener.prototype.addMarker = function(map, lat, lng) {};

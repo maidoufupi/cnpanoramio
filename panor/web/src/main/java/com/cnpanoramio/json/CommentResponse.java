@@ -1,7 +1,10 @@
 package com.cnpanoramio.json;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @XmlRootElement
@@ -26,7 +29,8 @@ public class CommentResponse extends ExceptionResponse {
 		
 		private String content;
 		
-		private String createTime;
+		@JsonProperty("create_time")
+		private Date createTime;
 		
 		private Long photoId;
 
@@ -62,11 +66,11 @@ public class CommentResponse extends ExceptionResponse {
 			this.content = content;
 		}
 		
-		public String getCreateTime() {
+		public Date getCreateTime() {
 			return createTime;
 		}
 
-		public void setCreateTime(String createTime) {
+		public void setCreateTime(Date createTime) {
 			this.createTime = createTime;
 		}
 

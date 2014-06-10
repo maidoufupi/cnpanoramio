@@ -152,18 +152,15 @@
         };
 
         this.getLabelContent = function(photoId) {
-            if(this.opts.suppressInfoWindows) {
+
+            if(this.opts.phone) {
+                return "<img src='" + this.ctx + "/api/rest/photo/"
+                    + photoId + "/3' style='width: 34px; height: 34px;'>";
+            }else {
                 return "<img src='" + this.ctx + "/api/rest/photo/" + photoId
                     + "/3' style='width: 34px; height: 34px;'>";
-            }else {
-                if(this.opts.phone) {
-                    return "<img src='" + this.ctx + "/api/rest/photo/"
-                        + photoId + "/3' style='width: 34px; height: 34px;'>";
-                }else {
-                    return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
-                        + photoId + "/3' style='width: 34px; height: 34px;'></a>";
-                }
             }
+
         };
 
 //        this.getInfoWindowContent = function(photoId) {
@@ -185,7 +182,7 @@
             dates = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
             return '<div class="panoramio-info-window" style="\'width\': \'200px\',\'height\': \'200px\',\'display\': \'inline-block\'">' +
                 '<div class="header">' +
-                photo.address +
+                (photo.address || '') +
                 '</div>' +
                 '<div class="body">' +
                 '<a href="'+ this.ctx + '/photo/' + photo.photo_id +'">' +

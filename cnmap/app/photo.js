@@ -24,12 +24,15 @@ angular.module('ponmPhotoApp', [
             $scope.open = function (size) {
 
                 var modalInstance = $modal.open({
-                    templateUrl: '../views/photo.html',
+                    templateUrl: 'views/photo.html',
                     controller: 'PhotoModalCtrl',
                     size: size,
                     resolve: {
                         photoId: function () {
-                            return 1;
+                            return 120;
+                        },
+                        travelId: function() {
+                            return 11;
                         }
                     }
                 });

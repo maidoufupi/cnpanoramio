@@ -12,7 +12,6 @@
 @import 'map.scss';
 @import 'photo.scss';
 
-
 div[contentEditable] {
   cursor: pointer;
 }
@@ -21,14 +20,300 @@ div[contentEditable]:hover, div[contentEditable]:focus {
   background-color: ghostwhite;
 }
 
-/** comment */
-.media.comment {
-  .media-body {
-    .media-heading {
+pre.description {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: initial;
+}
 
+/** photo fluid directive */
+.photo-fluid-container {
+  width: 100%;
+  a {
+    position: relative;
+  }
+  .fluid-brick {
+    position: relative;
+    height: 130px;
+    float: left;
+    border: 2px solid #ffffff;
+    padding: 0;
+    //    margin: 3px;
+    background-color: #f1f1f1;
+    box-shadow: 0 2px 3px #dfdfdf;
+    @include transition-ease-out(all);
+
+    img {
+      height: 100%;
+      max-width: 100%;
     }
-    p {
-      margin: 0;
+
+    .ponm-photo-footer {
+      position: absolute;
+      bottom: 0;
+      height: 50%;
+      width: 100%;
+      background-color: rgba(128, 128, 128, 0.5);
+      opacity: 0;
+      color: white;
+      @include transition-linear(opacity);
+    }
+    .ponm-photo-footer.ng-animate.show-add, .ponm-photo-footer.ng-animate.show-remove {
+      opacity: 1;
+    }
+    .ponm-photo-footer.show {
+      opacity: 1;
     }
   }
+
+}
+
+/** photo container directive*/
+.ponm-photo-container {
+
+  position: relative;
+  max-height: 1000px;
+  margin: 0 auto;
+
+  .flat-image {
+    opacity: 0;
+    -moz-transition: opacity 1s; /* Firefox 4 */
+    -webkit-transition: opacity 1s; /* Safari and Chrome */
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  img {
+    opacity: 0;
+    -moz-transition: opacity 1s; /* Firefox 4 */
+    -webkit-transition: opacity 1s; /* Safari and Chrome */
+    -o-transition: opacity 1s;
+    transition: opacity 1s;
+
+    position: static;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+  }
+
+  img.ng-animate.show-add, img.ng-animate.show-remove {
+    opacity: 1;
+  }
+
+  img.show {
+    opacity: 1;
+  }
+
+  .flat-image.ng-animate.show-add, .flat-image.ng-animate.show-remove {
+    opacity: 1;
+  }
+
+  .flat-image.show {
+    opacity: 1;
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+  }
+
+  canvas.ng-animate.show-add, canvas.ng-animate.show-remove {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  canvas.show {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .img-container {
+    position: relative;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+  }
+
+  .image360 {
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .icon-p360 {
+    position: absolute;
+    bottom: 0;
+    margin-left: 45%;
+    margin-right: 45%;
+
+    width: 65px;
+    height: 65px;
+    background: url(../images/lightbox.png) no-repeat -63px 0;
+    opacity: 0.5;
+    -moz-transition: opacity 0.5s; /* Firefox 4 */
+    -webkit-transition: opacity 0.5s; /* Safari and Chrome */
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+  }
+
+  .icon-pflat {
+    position: absolute;
+    bottom: 0;
+    margin-left: 45%;
+    margin-right: 45%;
+
+    width: 65px;
+    height: 65px;
+    background: url(../images/lightbox.png) no-repeat -63px -94px;
+    opacity: 0.5;
+    -moz-transition: opacity 0.5s; /* Firefox 4 */
+    -webkit-transition: opacity 0.5s; /* Safari and Chrome */
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+  }
+
+  .flat-image-button {
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+    left: 45%;
+  }
+
+  .flat-image-button.ng-animate.show-add, .flat-image-button.ng-animate.show-remove {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  .flat-image-button.show {
+    opacity: 1;
+    z-index: 2;
+  }
+
+  .p360-image {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+
+  .p360-image.ng-animate.show-add, .p360-image.ng-animate.show-remove {
+    opacity: 1;
+  }
+
+  .p360-image.show {
+    opacity: 1;
+  }
+}
+
+/** editable css */
+// editable-textarea
+.editable {
+  margin: 5px 0;
+
+  .editable-wrap {
+    white-space: pre-wrap;
+  }
+  pre {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: initial;
+    color: $editable-active-color;
+    border-bottom: dashed 1px $editable-active-color;
+  }
+
+  .editable-wrap.editable-textarea {
+    width: 100%;
+    .editable-controls.form-group {
+      width: 100%;
+      .editable-input {
+        width: 100%;
+      }
+    }
+  }
+}
+
+/** user thumbnail directive */
+.media.user-info {
+  .pull-left {
+    img.media-object {
+      height: 46px;
+      width: 46px;
+    }
+  }
+}
+
+/** footnotes */
+span.footnotes {
+  font-size: 12px;
+  color: #999;
+  display: inline;
+  margin-left: 0;
+  text-align: left;
+}
+
+/** comments */
+.comments {
+  margin: 2px 0;
+  background-color: $photo-info-frontground-color;
+  .media.comment {
+    padding: 15px;
+    margin: 0;
+    img.media-object {
+      width: 28px;
+      height: 28px;
+    }
+    .media-body {
+      .header {
+        width: 130px;
+        float: left;
+        .thumbs-up {
+        }
+      }
+      .action {
+        float: right;
+      }
+      .content {
+        clear: both;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        background-color: initial;
+      }
+      .glyphicon {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .media.comment.comment-active {
+    border-top-color: grey;
+    border-bottom-color: grey;
+  }
+}
+
+.ponm-show-hide.ng-hide-add, .ponm-show-hide.ng-hide-remove {
+  @include transition-linear(all);
+  display:block!important;
+}
+
+.ponm-show-hide.ng-hide-add.ng-hide-add-active,
+.ponm-show-hide.ng-hide-remove {
+  opacity:0;
+}
+
+.ponm-show-hide.ng-hide-add,
+.ponm-show-hide.ng-hide-remove.ng-hide-remove-active {
+  opacity:1;
 }

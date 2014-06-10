@@ -235,26 +235,42 @@ angular.module('ponmApp.directives')
                     scope.$watch(function() {
                         return attrs.ponmPhotoIs360;
                     }, function(is360) {
-//                        element.empty();
-                        if(is360 && is360 != "false") {
-                            drawImage(true);
-                        }else {
-                            drawImage();
-                        }
+                       drawImage();
                     });
 
-//                    if(attrs.ponmPhotoIs360 && attrs.ponmPhotoIs360 != "false") {
-//                        drawImage(true);
-//                    }else {
-//                        drawImage();
-//                    }
+                    scope.$watch(function() {
+                        return attrs.ponmPhotoSrcL1;
+                    }, function() {
+                        drawImage();
+                    });
 
-                    function drawImage(is360) {
+//                    scope.$watch(function() {
+//                        return attrs.ponmPhotoWidth;
+//                    }, function() {
+//                        getImgWidthHeight();
+//                        setImageWidthHeight();
+//                    });
+
+                    function getImgWidthHeight() {
+                        imgWidth = attrs.ponmPhotoWidth;
+                        imgHeight = attrs.ponmPhotoHeight;
+                        imgScale = imgHeight / imgWidth;
+                    }
+
+                    function drawImage() {
+                        if (!attrs.ponmPhotoSrcL1) {
+                            return;
+                        }
+
+                        var is360 = attrs.ponmPhotoIs360 && attrs.ponmPhotoIs360 != "false";
+
                         imgContainer = element.find(".flat-image");
                         canvas = element.find(".p360-image");
 
                         if(imgContainer) {
                             imgContainer.empty();
+                            imgContainer.css("width", "initial");
+                            imgContainer.css("height", "initial");
                         }
                         if (attrs.ponmPhotoSrcL2) {
                             var image2 = new Image();
@@ -268,11 +284,11 @@ angular.module('ponmApp.directives')
                             image1 = new Image();
                             image1.onload = function () {
                                 var img = angular.element(image1);
-                                if(!imgScale) {
-                                    imgWidth = img.outerWidth();
-                                    imgHeight = img.outerHeight();
-                                    imgScale = imgHeight / imgWidth;
-                                }
+                                imgWidth = img.outerWidth();
+                                imgHeight = img.outerHeight();
+                                imgScale = imgHeight / imgWidth;
+                                $log.debug("image: "+ imgWidth + "x" + imgHeight);
+
                                 setImageWidthHeight();
                                 $animate.addClass(angular.element(this), 'show');
                                 if (image2) {
@@ -373,15 +389,15 @@ angular.module('ponmApp.directives')
                         containerWidth = element.innerWidth();
                         containerHeight = element.innerHeight();
 
-                        if(imgScale < containerHeight / containerWidth) {
-                            var width = containerWidth < imgWidth ? containerWidth : imgWidth;
-                            imgContainer.css("width", width);
-                            imgContainer.css("height", width * imgScale);
-                        }else {
-                            var height = containerHeight < imgHeight ? containerHeight : imgHeight;
-                            imgContainer.css("height", height);
-                            imgContainer.css("width", height / imgScale);
-                        }
+//                        if(imgScale < containerHeight / containerWidth) {
+//                            var width = containerWidth < imgWidth ? containerWidth : imgWidth;
+//                            imgContainer.css("width", width);
+//                            imgContainer.css("height", width * imgScale);
+//                        }else {
+//                            var height = containerHeight < imgHeight ? containerHeight : imgHeight;
+//                            imgContainer.css("height", height);
+//                            imgContainer.css("width", height / imgScale);
+//                        }
                     }
                 }
             };

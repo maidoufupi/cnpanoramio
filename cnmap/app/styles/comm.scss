@@ -3,10 +3,11 @@ $footer-font-size: 12px;
 $active-color: #4a87ee;
 $active-background-color: lightblue;
 $textinput-active-color: #1E90FE; // dodgerblue;
+$editable-active-color: #428bca;
 $photo-container-background-color: #191919;
 $photo-info-frontground-color: #f5f5f5;
 $photo-info-background-color: #fff;
-$transition-time: 0.5s;
+$transition-time: 0.3s;
 
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;

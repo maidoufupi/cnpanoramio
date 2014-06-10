@@ -95,18 +95,14 @@
 //        }
 
         this.getLabelContent = function(photoId) {
-            if(this.opts.suppressInfoWindows) {
+            if(this.opts.phone) {
+                return "<img src='" + this.ctx + "/api/rest/photo/"
+                    + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
+            }else {
                 return "<img src='" + this.ctx + "/api/rest/photo/" + photoId
                     + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
-            }else {
-                if(this.opts.phone) {
-                    return "<img src='" + this.ctx + "/api/rest/photo/"
-                        + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
-                }else {
-                    return "<a href='" + this.ctx + "/photo/" + photoId +"'><img src='" + this.ctx + "/api/rest/photo/"
-                        + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'></a>";
-                }
             }
+
         };
 
         this.getInfoWindowContent = function(photo) {
