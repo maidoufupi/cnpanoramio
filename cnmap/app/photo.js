@@ -29,10 +29,10 @@ angular.module('ponmPhotoApp', [
                     size: size,
                     resolve: {
                         photoId: function () {
-                            return 120;
+                            return 6;
                         },
                         travelId: function() {
-                            return 11;
+                            return '';
                         }
                     }
                 });

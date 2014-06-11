@@ -103,7 +103,8 @@
                         </div>
                         <div class="info" >
                             <div ng-switch="travelEnedit" class="editable">
-                                <a ng-switch-when="true"
+                                <a href=""
+                                   ng-switch-when="true"
                                    editable-select="spot.address" e-ng-options="addr as addr for (addr, point) in spot.addresses"
                                    buttons="no"
                                    onbeforesave="updateSpot(travel, spot, 'address', $data)">

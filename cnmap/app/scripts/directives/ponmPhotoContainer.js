@@ -57,6 +57,7 @@ angular.module('ponmApp.directives')
                     renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
                     renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
                     renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
+                    renderer.domElement.addEventListener( 'mouseleave', onDocumentMouseUp, false );
                     renderer.domElement.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
                     renderer.domElement.addEventListener( 'DOMMouseScroll', onDocumentMouseWheel, false);
 
@@ -215,16 +216,54 @@ angular.module('ponmApp.directives')
 
             return {
                 restrict: 'EA',
-                require: '',
+                templateUrl: "views/ponmPhotoContainer.html",
                 link: function (scope, element, attrs, ngModel) {
 
-                    var image1 = null;
+                    var image1 = null,
+                        image2 = null;
                     var imgWidth = 1,
                         imgHeight = 1;
-                    var imgContainer = null;
-                    var canvas = null;
+                    var ponmPhotoContainer = element.find(".ponm-photo-container"),
+                        imgContainer = element.find(".flat-image"),
+                        canvas = element.find(".p360-image"),
+                        clickCreateP360 = element.find(".flat-image .image-button"),
+                        clickBackFlat   = element.find(".p360-image .image-button");
 
-                    element.addClass("ponm-photo-container");
+                    // 360度全景图标
+                    clickCreateP360.on("click", function(e) {
+                        e.preventDefault();
+                        $animate.removeClass(imgContainer, 'show');
+                        $animate.addClass(canvas, "show");
+
+                        if(canvas.find("canvas").length && clickCreateP360.ponmPhotoSrcL == attrs.ponmPhotoSrcL1) {
+                            $animate.addClass(canvas, "show");
+                        }else {
+                            clickCreateP360.ponmPhotoSrcL = attrs.ponmPhotoSrcL1;
+                            canvas.find(".p360-canvas").empty();
+                            draw360(canvas.find(".p360-canvas"), attrs.ponmPhotoSrcL1, attrs.ponmPhotoWidth, attrs.ponmPhotoHeight);
+                        }
+                    });
+                    clickCreateP360.mouseenter(function(e) {
+                        clickCreateP360.find(".icon-p360").css("opacity", 1);
+                    });
+                    clickCreateP360.mouseout(function(e) {
+                        clickCreateP360.find(".icon-p360").css("opacity", 0.5);
+                    });
+
+                    // 平面图标
+                    clickBackFlat.on("click", function(e) {
+                        e.preventDefault();
+                        $log.debug("click on image360");
+                        $animate.removeClass(canvas, "show");
+                        $animate.addClass(imgContainer, 'show');
+                    });
+                    clickBackFlat.mouseenter(function(e) {
+                        clickBackFlat.find(".icon-pflat").css("opacity", 1);
+                    });
+                    clickBackFlat.mouseout(function(e) {
+                        clickBackFlat.find(".icon-pflat").css("opacity", 0.5);
+                    });
+
                     element.css("width", "100%");
                     element.css("height", "100%");
                     element.css("background-color", attrs.ponmPhotoColor);
@@ -235,7 +274,8 @@ angular.module('ponmApp.directives')
                     scope.$watch(function() {
                         return attrs.ponmPhotoIs360;
                     }, function(is360) {
-                       drawImage();
+//                       drawImage();
+//                        changeP360(is360);
                     });
 
                     scope.$watch(function() {
@@ -257,6 +297,51 @@ angular.module('ponmApp.directives')
                         imgScale = imgHeight / imgWidth;
                     }
 
+                    function changeP360(is360) {
+                        $log.debug("changeP360: " + is360);
+                        if(is360) {
+                            $animate.addClass(clickCreateP360, 'show');
+                            $animate.addClass(imgContainer, 'p360');
+                        }else {
+                            $animate.removeClass(clickCreateP360, 'show');
+                        }
+                    }
+                    var $panzoom = null;
+                    function panzoom(panzoomDom) {
+                        $panzoom = angular.element(panzoomDom).panzoom({
+                            $zoomIn: element.parent().find(".zoom-in"),
+                            $zoomOut: element.parent().find(".zoom-out"),
+                            $zoomRange: element.parent().find(".zoom-range"),
+                            $reset: element.parent().find(".reset"),
+                            transition: true
+                        });
+                        $panzoom.parent().on('mousewheel.focal', function( e ) {
+                            e.preventDefault();
+                            var delta = e.delta || e.originalEvent.wheelDelta;
+                            var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
+                            $panzoom.panzoom('zoom', zoomOut, {
+                                increment: 0.1,
+                                animate: true,
+                                focal: e
+                            });
+                        });
+                        $panzoom.on('panzoomzoom', function(e, panzoom, scale, changed) {
+                            if(scale < 1) {
+                                $panzoom.panzoom("resetZoom");
+                                $panzoom.panzoom("resetPan");
+                            }else if(Math.abs(scale - 1) < 0.05) {
+                                if(scale != 1) {
+                                    $panzoom.panzoom("resetZoom");
+                                }
+                                $panzoom.panzoom("resetPan");
+                            }
+                        });
+                    }
+
+                    function panzoomReset() {
+                        $panzoom.panzoom("reset");
+                    }
+
                     function drawImage() {
                         if (!attrs.ponmPhotoSrcL1) {
                             return;
@@ -264,22 +349,22 @@ angular.module('ponmApp.directives')
 
                         var is360 = attrs.ponmPhotoIs360 && attrs.ponmPhotoIs360 != "false";
 
-                        imgContainer = element.find(".flat-image");
-                        canvas = element.find(".p360-image");
-
                         if(imgContainer) {
-                            imgContainer.empty();
-                            imgContainer.css("width", "initial");
-                            imgContainer.css("height", "initial");
+                            imgContainer.find(".flat-canvas").empty();
+
+                            changeP360(is360);
+
+                            $animate.removeClass(canvas, "show");
+                            $animate.addClass(imgContainer, 'show');
                         }
-                        if (attrs.ponmPhotoSrcL2) {
-                            var image2 = new Image();
-                            image2.onload = function () {
-                                $animate.addClass(angular.element(this), 'show');
-                            };
-                            image2.src = attrs.ponmPhotoSrcL2;
-                            element.append(image2);
-                        }
+//                        if (attrs.ponmPhotoSrcL2) {
+//                            var image2 = new Image();
+//                            image2.onload = function () {
+//                                $animate.addClass(angular.element(this), 'show');
+//                            };
+//                            image2.src = attrs.ponmPhotoSrcL2;
+//                            element.append(image2);
+//                        }
                         if (attrs.ponmPhotoSrcL1) {
                             image1 = new Image();
                             image1.onload = function () {
@@ -301,81 +386,13 @@ angular.module('ponmApp.directives')
                                 angular.element(image1).css("top", "0");
                             }
                             image1.src = attrs.ponmPhotoSrcL1;
-                            // 360全景图标
-                            var clickCreateP360 = angular.element("<a href='#'></a>");
-                            clickCreateP360.on("click", function(e) {
-                                e.preventDefault();
-                                $animate.removeClass(imgContainer, 'show');
-                                $animate.addClass(clickBackFlat, "show");
-                                $animate.addClass(canvas, "show");
-                                if(canvas.find("canvas").length) {
-                                    $animate.addClass(canvas, "show");
-                                }else {
-                                    draw360(canvas, attrs.ponmPhotoSrcL1, attrs.ponmPhotoWidth, attrs.ponmPhotoHeight);
-                                }
-                            });
-                            clickCreateP360.mouseenter(function(e) {
-                                clickCreateP360.find(".icon-p360").css("opacity", 1);
-                            });
-                            clickCreateP360.mouseout(function(e) {
-                                clickCreateP360.find(".icon-p360").css("opacity", 0.5);
-                            });
-                            clickCreateP360.append("<div class='icon-p360'/>");
 
-                            var clickBackFlat = element.find(".flat-image-button");
-                            clickBackFlat.on("click", function(e) {
-                                e.preventDefault();
-                                $log.debug("click on image360");
-                                $animate.removeClass(canvas, "show");
-                                $animate.removeClass(clickBackFlat, "show");
-                                $animate.addClass(element.find(".flat-image"), 'show');
-                            });
-                            clickBackFlat.mouseenter(function(e) {
-                                clickBackFlat.find(".icon-pflat").css("opacity", 1);
-                            });
-                            clickBackFlat.mouseout(function(e) {
-                                clickBackFlat.find(".icon-pflat").css("opacity", 0.5);
-                            });
+//                            var panzoomDiv = angular.element("<div/>").append(image1);
+                            imgContainer.find(".flat-canvas").append(image1);
+//                            element.append(imgContainer);
 
-                            if(!imgContainer) {
-                                imgContainer = angular.element("<div class='flat-image show'></div>");
-                            }
-                            imgContainer.append(image1);
-                            if(is360) {
-                                imgContainer.append(clickCreateP360);
-                                element.append(imgContainer);
-                            }else {
-                                element.append(imgContainer);
-
-                                var $panzoom = angular.element(imgContainer).panzoom({
-                                    $zoomIn: element.parent().find(".zoom-in"),
-                                    $zoomOut: element.parent().find(".zoom-out"),
-                                    $zoomRange: element.parent().find(".zoom-range"),
-                                    $reset: element.parent().find(".reset"),
-                                    transition: true
-                                });
-                                $panzoom.parent().on('mousewheel.focal', function( e ) {
-                                    e.preventDefault();
-                                    var delta = e.delta || e.originalEvent.wheelDelta;
-                                    var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
-                                    $panzoom.panzoom('zoom', zoomOut, {
-                                        increment: 0.1,
-                                        animate: true,
-                                        focal: e
-                                    });
-                                });
-                                $panzoom.on('panzoomzoom', function(e, panzoom, scale, changed) {
-                                    if(scale < 1) {
-                                        $panzoom.panzoom("resetZoom");
-                                        $panzoom.panzoom("resetPan");
-                                    }else if(Math.abs(scale - 1) < 0.05) {
-                                        if(scale != 1) {
-                                            $panzoom.panzoom("resetZoom");
-                                        }
-                                        $panzoom.panzoom("resetPan");
-                                    }
-                                });
-                            }
+                            panzoom(image1);
+                            panzoomReset();
 
                         }
                     }
@@ -388,6 +405,8 @@ angular.module('ponmApp.directives')
 
                         containerWidth = element.innerWidth();
                         containerHeight = element.innerHeight();
+
+                        ponmPhotoContainer.css("line-height", containerHeight+"px");
 
 //                        if(imgScale < containerHeight / containerWidth) {
 //                            var width = containerWidth < imgWidth ? containerWidth : imgWidth;

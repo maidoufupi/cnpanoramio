@@ -30,6 +30,7 @@
 
     <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
+    <script type="text/javascript" src="scripts/panor/js/three.min.js"></script>
 
     <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
     <script type="text/javascript" src="scripts/controllers/scripts.min.js"></script>
@@ -119,7 +120,8 @@
                         </div>
                         <div class="info" >
                             <div ng-switch="travelEnedit" class="editable">
-                                <a ng-switch-when="true"
+                                <a href=""
+                                   ng-switch-when="true"
                                    editable-select="spot.address" e-ng-options="addr as addr for (addr, point) in spot.addresses"
                                    buttons="no"
                                    onbeforesave="updateSpot(travel, spot, 'address', $data)">

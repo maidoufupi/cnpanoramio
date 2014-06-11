@@ -87,7 +87,7 @@ public class PhotoServiceImpl implements PhotoManager {
 	private FileService fileService;
 	private UserManager userManager = null;
 
-	private SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
+//	private SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
 	private GpsConverter gpsc = new GpsConverter();
 
 	@Autowired
@@ -125,41 +125,6 @@ public class PhotoServiceImpl implements PhotoManager {
 		this.fileService = fileService;
 	}
 
-//	@Override
-//	public Photo store(String lat, String lng, String address, Attachment image)
-//			throws ImageReadException {
-//
-//		ContentDisposition content = image.getContentDisposition();
-//		String fileName = content.getParameter("filename");
-//		DataHandler dh = image.getDataHandler();
-//		InputStream ins = null;
-//		try {
-//			ins = dh.getInputStream();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		Photo photo = new Photo();
-//		photo.setName(fileName);
-//		photo.setFileType(FilenameUtils.getExtension(fileName));
-//		photo = this.save(photo, ins);
-//
-//		Double latDouble = Double.valueOf(lat);
-//		Double lngDouble = Double.valueOf(lng);
-//		Point point;
-//		if (latDouble != 0 || lngDouble != 0) {
-//			point = new Point(latDouble, lngDouble);
-//			address = address.trim();
-//			if (address != null && address != "") {
-//				point.setAddress(address);
-//			}
-//			photo.setGpsPoint(point);
-//		}
-//		// 返回json时从Photo里去掉PhotoDetials
-//		photo.setDetails(null);
-//		return photo;
-//	}
-
 	@Override
 	public Photo getPhoto(Long id) {
 		return photoDao.get(id);
@@ -179,7 +144,7 @@ public class PhotoServiceImpl implements PhotoManager {
 			int pageSize, int pageNo) {
 		List<Photo> photos = photoDao.getUserPhotos(user, pageSize, pageNo);
 		Collection<PhotoProperties> pps = new ArrayList<PhotoProperties>();
-		;
+		
 		for (Photo photo : photos) {
 			PhotoProperties pp = PhotoUtil.transformProperties(photo);
 			pps.add(pp);
@@ -362,7 +327,9 @@ public class PhotoServiceImpl implements PhotoManager {
 			photo.setFileSize(properties.getFileSize());
 		}
 		// 是否是360°全景照片
-		photo.setIs360(properties.isIs360());
+		if(null != properties.isIs360()) {
+			photo.setIs360(properties.isIs360());
+		}		
 		
 		photoDao.save(photo);
 		return getPhotoProperties(photoId, photo.getOwner().getId());

@@ -50,11 +50,11 @@
              ponm-photo-color="{{photo.color}}"
              ponm-photo-is360="{{!!photo.is360}}"
                 >
-                <div class="flat-image show">
+                <!--<div class="flat-image show">
                 </div>
                 <div class="p360-image">
                     <a class="flat-image-button" href=""><div class="icon-pflat"></div></a>
-                </div>
+                </div>-->
         </div>
         <!--<div class="buttons">
             <button class="zoom-in">放大</button>
@@ -77,7 +77,7 @@
                     <li><a href="" class="glyphicon glyphicon-th" data-ng-click="openTravelAlbum()"></a></li>
                     <li><a href="" class="glyphicon glyphicon-arrow-right"
                            data-ng-click="next()"></a></li>
-                    <li class="text-explain"><span>第 {{travel.activePhoto.sortCount}} 张（共 {{travel.totalPhoto}} 张）查看次数：{{photo.views}}</span></li>
+                    <li class="text-explain"><span>第 {{travel.activePhoto.sortCount || 1}} 张（共 {{travel.totalPhoto || 1}} 张）查看次数：{{photo.views || 0}}</span></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -207,7 +207,7 @@
         <div class="travel-album-background"></div>
         <div class="travel-album">
             <div class="header">
-                旅行中的所有照片（{{travel.totalPhoto}}）
+                旅行中的所有照片（{{travel.totalPhoto || 0}}）
                 <a href="" class="close" aria-hidden="true"
                         data-ng-click="closeTravelAlbum()">×</a>
             </div>
@@ -223,7 +223,9 @@
     </div>
 
     <div class="photo-recommend-album" photo-recommend-album>
-        <div class="recommend-album-background"></div>
+        <div class="recommend-album-background">
+
+        </div>
         <div class="recommend-album">
 
         </div>

@@ -4,7 +4,8 @@
 'use strict';
 angular.module('ponmApp.controllers')
     .controller('ChLocModalCtrl', ['$window', '$scope', '$log', '$modalInstance', 'files', 'GPSConvertService',
-        function ($window, $scope, $log, $modalInstance, files, GPSConvertService) {
+        'GeocodeService',
+        function ($window, $scope, $log, $modalInstance, files, GPSConvertService, GeocodeService) {
 
             var mapEventListener = $window.cnmap.MapEventListener.factory();
             var mapService = $window.cnmap.MapService.factory();
@@ -80,7 +81,7 @@ angular.module('ponmApp.controllers')
 
                             angular.forEach(files, function (file, key) {
                                 createMarker(file);
-                            })
+                            });
 
                             mapService.init($scope.map);
 
@@ -90,7 +91,7 @@ angular.module('ponmApp.controllers')
                         }
                     });
                 }
-            })
+            });
 
             function createMarker(file, lat, lng) {
                 // create marker
@@ -151,14 +152,33 @@ angular.module('ponmApp.controllers')
                 $scope.file.mapVendor.latPritty = cnmap.GPS.convert(lat);
                 $scope.file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
 
+                GeocodeService.regeo({lat: lat, lng: lng}, function(regeocode) {
+                    var addresses = {};
+                    var baseAddr = regeocode.addressComponent.province + regeocode.addressComponent.district
+                        + regeocode.addressComponent.city + regeocode.addressComponent.township;
+                    angular.forEach(regeocode.pois, function(poi, key) {
+                        addresses[baseAddr + poi.name] = {
+                            poiweight: poi.poiweight,
+                            location: poi.location
+                        };
+                    });
+                    $scope.file.mapVendor.addresses = addresses;
+                    if(!address) {
+                        $scope.file.mapVendor.address = regeocode.formatted_address;
+                    }
+                }, "all");
+
                 if (address) {
                     $scope.file.mapVendor.address = address;
                 } else {
-                    mapService.getAddress(lat, lng, function (res) {
-                        $scope.$apply(function () {
-                            $scope.file.mapVendor.address = res;
-                        })
-                    })
+//                    GeocodeService.regeo({lat: lat, lng: lng}, function(regeocode) {
+//                        $scope.file.mapVendor.address = regeocode.formatted_address;
+//                    });
+//                    mapService.getAddress(lat, lng, function (res) {
+//                        $scope.$apply(function () {
+//                            $scope.file.mapVendor.address = res;
+//                        })
+//                    });
 //                    cnmap.utils.gaode.getAddress(lat, lng, function (res) {
 //                        $scope.file.mapVendor.address = "";
 //                        if (res.info == "OK") {
@@ -166,7 +186,7 @@ angular.module('ponmApp.controllers')
 //                        }
 //                    })
                 }
-            }
+            };
 
             /*
              $scope.getLocation = function (address) {
@@ -207,7 +227,7 @@ angular.module('ponmApp.controllers')
             $scope.clearPlace = function () {
                 //$scope.hideMarker();
                 //delete $scope.file.mapVendor;
-            }
+            };
 
             /**
              * 激活图片
@@ -233,7 +253,7 @@ angular.module('ponmApp.controllers')
                         $scope.clearPlace();
                     }
                 }
-            }
+            };
 
             $scope.mapOptions = {
                 // map plugin config
@@ -248,38 +268,71 @@ angular.module('ponmApp.controllers')
 //            uiMapCache: false
             }
         }])
-    .controller('TypeaheadCtrl', ['$scope', '$http', function ($scope, $http) {
+    .controller('TypeaheadCtrl', ['$scope', '$http', 'GeocodeService', function ($scope, $http, GeocodeService) {
         $scope.selected = undefined;
         $scope.states = [];
         // Any function returning a promise object can be used to load values asynchronously
         $scope.getLocation = function (val) {
-            return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
+//            return GeocodeService.geo(val, function(geocodes, address) {
+//                var addresses = [];
+//                angular.forEach(geocodes, function (item) {
+//                    addresses.push(item);
+//                });
+//                return addresses;
+//            });
+            return $http.get('http://restapi.amap.com/v3/geocode/geo', {
                 params: {
                     address: val,
-                    sensor: false
+                    key: "53f7e239ddb8ea62ba552742a233ed1f"
                 }
-            }).then(function (res) {
-                    var addresses = [];
-                    angular.forEach(res.data.results, function (item) {
-                        addresses.push(item);
-                    });
-                    return addresses;
-                });
+            }).then(function(res){
+                var addresses = [];
+                if(res.status == "200") {
+                    if(res.data && res.data.info == "OK") {
+                        angular.forEach(res.data.geocodes, function(geocode, key) {
+                            if(GeocodeService.levelMap[geocode.level]) {
+                                geocode.zoom = GeocodeService.levelMap[geocode.level];
+                            }
+                            addresses.push(geocode);
+                        });
+                    }
+                }
+                return addresses;
+            });
+//            return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
+//                params: {
+//                    address: val,
+//                    sensor: false
+//                }
+//            }).then(function (res) {
+//                    var addresses = [];
+//                    angular.forEach(res.data.results, function (item) {
+//                        addresses.push(item);
+//                    });
+//                    return addresses;
+//                });
         };
 
         $scope.goLocation = function (address) {
-            var geometry = address.geometry;
-            if (geometry) {
-                $scope.mapEventListener.setCenter($scope.map, geometry.location.lat, geometry.location.lng);
-                $scope.addOrUpdateMarker($scope.file, geometry.location.lat, geometry.location.lng);
-                $scope.setPlace($scope.file,
-                    geometry.location.lat,
-                    geometry.location.lng,
-                    address.formatted_address);
+            var location = address.location;
+            if (location) {
+                location = location.split(",");
+                location = {
+                    lat: location[1],
+                    lng: location[0]
+                };
+                $scope.mapEventListener.setCenter($scope.map, location.lat, location.lng);
+//                $scope.addOrUpdateMarker($scope.file, location.lat, location.lng);
+//                $scope.setPlace($scope.file,
+//                    location.lat,
+//                    location.lng,
+//                    address.formatted_address);
 
-                $scope.mapEventListener.setBounds($scope.map,
-                    geometry.viewport.southwest,
-                    geometry.viewport.northeast);
+                $scope.mapEventListener.setZoom($scope.map, address.zoom);
+
+//                $scope.mapEventListener.setBounds($scope.map,
+//                    geometry.viewport.southwest,
+//                    geometry.viewport.northeast);
             }
         }
     }])

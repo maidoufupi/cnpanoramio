@@ -55,6 +55,10 @@
     right: 320px;
     margin: 0;
     border: 0;
+    .collapse.navbar-collapse {
+      text-align: center;
+      height: 51px !important;
+    }
   }
 
   .navbar {
@@ -189,6 +193,7 @@
     height: 0;
     opacity: .75;
     background-color: #000;
+    z-index: 100;
   }
   .travel-album-background.ng-animate.show-add, .travel-album-background.ng-animate.show-remove {
     height: 100%;
@@ -200,11 +205,12 @@
   .travel-album {
     position: fixed;
     left: 0;
-    bottom: 44px;
+    bottom: 51px;
     right: 320px;
     background-color: #000;
     overflow: hidden;
     height: 0;
+    z-index: 101;
 
     @include transition-linear(height);
 
@@ -252,6 +258,7 @@
 .photo-recommend-album {
   .recommend-album-background {
     position: fixed;
+    top: 0;
     width: 100%;
     height: 0;
     opacity: .75;
@@ -265,20 +272,24 @@
   }
 
   .recommend-album {
+    position: relative;
     box-shadow: 0 0 20px 1px #777;
     background: #212121;
     color: #fff;
     height: 0;
     padding: 0;
-    position: fixed;
     width: 882px;
+    margin: 50px auto;
+    display: none;
     @include transition-ease-out(height);
   }
 
   .recommend-album.ng-animate.show-add, .recommend-album.ng-animate.show-remove {
     height: 400px;
+    display: block;
   }
   .recommend-album.show {
     height: 400px;
+    display: block;
   }
 }

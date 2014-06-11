@@ -40,7 +40,7 @@
                     // send Blob objects via XHR requests:
 //                        disableImageResize: /Android(?!.*Chrome)|Opera/
 //                            .test(window.navigator.userAgent),
-                    maxFileSize: 5000000
+                    maxFileSize: 10000000
 //                        loadImageMaxFileSize: 10000000,
 //                        imageQuality: 2000000,
 //                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -62,9 +62,9 @@
 
         .controller('DemoFileUploadController', [
             '$scope', '$http', 'fileUpload', '$modal', '$log', 'PhotoService', '$window', 'GPSConvertService',
-            'LoginUserService', 'UserService', 'TravelService',
+            'LoginUserService', 'UserService', 'TravelService', 'GeocodeService',
             function ($scope, $http, fileUpload, $modal, $log, PhotoService, $window, GPSConvertService,
-                      LoginUserService, UserService, TravelService) {
+                      LoginUserService, UserService, TravelService, GeocodeService) {
 
                 $scope.apirest = $window.apirest;
                 $scope.ctx = $window.ctx;
@@ -96,49 +96,7 @@
                             }
                         ]
                     },
-//                    add: function (e, data) {
-//                        if (e.isDefaultPrevented()) {
-//                            return false;
-//                        }
-//                        // call default add method
-//                        fileUpload.defaults.add(e, data);
-//                        // load image's gps info
-//                        var file = data.files[0];
-//                        loadImage.parseMetaData(file, function (data) {
-//                            if (data.exif) {
-//                                var lat = data.exif.getText('GPSLatitude');
-//                                if (lat && lat != "undefined") {
-//                                    file.lat = cnmap.GPS.convert(lat);
-//                                    var latRef = data.exif.getText('GPSLatitudeRef');
-//                                    file.latRef = latRef;
-//                                }
-//
-//                                var lng = data.exif.getText('GPSLongitude');
-//                                if (lng && lng != "undefined") {
-//                                    file.lng = cnmap.GPS.convert(lng);
-//                                    var lngRef = data.exif.getText('GPSLongitudeRef');
-//                                    file.lngRef = lngRef;
-//                                }
-//
-//                                file.latPritty = cnmap.GPS.convert(file.lat);
-//                                file.lngPritty = cnmap.GPS.convert(file.lng);
-//
-//                                // 转换坐标体系
-//                                if (file.lng || file.lat) {
-//                                    GPSConvertService.convert({
-//                                        'lat': file.lat,
-//                                        'lng': file.lng
-//                                    }, function (data) {
-//                                        file.lat = data.lat;
-//                                        file.lng = data.lng;
-//                                        file.vendor = "gaode";
-//                                        file.latPritty = cnmap.GPS.convert(file.lat);
-//                                        file.lngPritty = cnmap.GPS.convert(file.lng);
-//                                    })
-//                                }
-//                            }
-//                        });
-//                    },
+
                     done: function (e, data) {
                         if (data.result.status == "OK") {
                             var photo = data.result.prop;
@@ -172,6 +130,57 @@
                     }
                 };
 
+                if(!fileUpload.defaults.autoUpload) {
+                    $scope.options.add =
+                        function (e, data) {
+                            if (e.isDefaultPrevented()) {
+                                return false;
+                            }
+                            // call default add method
+                            fileUpload.defaults.add(e, data);
+                            // load image's gps info
+                            var file = data.files[0];
+                            loadImage.parseMetaData(file, function (data) {
+                                if (data.exif) {
+                                    var lat = data.exif.getText('GPSLatitude');
+                                    if (lat && lat != "undefined") {
+                                        file.lat = cnmap.GPS.convert(lat);
+                                        var latRef = data.exif.getText('GPSLatitudeRef');
+                                        file.latRef = latRef;
+                                    }
+
+                                    var lng = data.exif.getText('GPSLongitude');
+                                    if (lng && lng != "undefined") {
+                                        file.lng = cnmap.GPS.convert(lng);
+                                        var lngRef = data.exif.getText('GPSLongitudeRef');
+                                        file.lngRef = lngRef;
+                                    }
+
+                                    file.latPritty = cnmap.GPS.convert(file.lat);
+                                    file.lngPritty = cnmap.GPS.convert(file.lng);
+
+                                    // 转换坐标体系
+                                    if (file.lng || file.lat) {
+                                        GPSConvertService.convert({
+                                            'lat': file.lat,
+                                            'lng': file.lng
+                                        }, function (data) {
+                                            file.lat = data.lat;
+                                            file.lng = data.lng;
+                                            file.vendor = "gaode";
+                                            file.latPritty = cnmap.GPS.convert(file.lat);
+                                            file.lngPritty = cnmap.GPS.convert(file.lng);
+
+                                            GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
+                                                file.address = regeocode.formatted_address;
+                                            });
+                                        })
+                                    }
+                                }
+                            });
+                        }
+                }
+
                 /**
                  * 从server返回的图片属性中抽取信息给file
                  *
@@ -187,6 +196,9 @@
                         file.vendor = photo.vendor;
                         file.latPritty = cnmap.GPS.convert(file.lat);
                         file.lngPritty = cnmap.GPS.convert(file.lng);
+                        GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
+                            file.address = regeocode.formatted_address;
+                        });
                     }
 
                 }
@@ -300,7 +312,7 @@
                         }
                     });
                     if (photos.length) {
-                        TravelService.create({travelId: $scope.travel.id},
+                        TravelService.addPhoto({travelId: $scope.travel.id},
                             jQuery.param({photos: photos.join(",")}), function (res) {
                                 if (res.status == "OK") {
                                 }

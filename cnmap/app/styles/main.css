@@ -1357,6 +1357,9 @@ form#settings {
     right: 320px;
     margin: 0;
     border: 0; }
+    .photo-modal-container .photo-container-booter .collapse.navbar-collapse {
+      text-align: center;
+      height: 51px !important; }
   .photo-modal-container .navbar .container-fluid {
     background-color: #191919; }
     .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse {
@@ -1445,7 +1448,8 @@ form#settings {
   width: 100%;
   height: 0;
   opacity: .75;
-  background-color: #000; }
+  background-color: #000;
+  z-index: 100; }
 .photo-travel-album .travel-album-background.ng-animate.show-add, .photo-travel-album .travel-album-background.ng-animate.show-remove {
   height: 100%; }
 .photo-travel-album .travel-album-background.show {
@@ -1453,11 +1457,12 @@ form#settings {
 .photo-travel-album .travel-album {
   position: fixed;
   left: 0;
-  bottom: 44px;
+  bottom: 51px;
   right: 320px;
   background-color: #000;
   overflow: hidden;
   height: 0;
+  z-index: 101;
   -webkit-transition: height linear 0.3s;
   -moz-transition: height linear 0.3s;
   -ms-transition: height linear 0.3s;
@@ -1494,6 +1499,7 @@ form#settings {
 
 .photo-recommend-album .recommend-album-background {
   position: fixed;
+  top: 0;
   width: 100%;
   height: 0;
   opacity: .75;
@@ -1503,22 +1509,26 @@ form#settings {
 .photo-recommend-album .recommend-album-background.show {
   height: 100%; }
 .photo-recommend-album .recommend-album {
+  position: relative;
   box-shadow: 0 0 20px 1px #777;
   background: #212121;
   color: #fff;
   height: 0;
   padding: 0;
-  position: fixed;
   width: 882px;
+  margin: 50px auto;
+  display: none;
   -webkit-transition: height ease-out 0.3s;
   -moz-transition: height ease-out 0.3s;
   -ms-transition: height ease-out 0.3s;
   -o-transition: height ease-out 0.3s;
   transition: height ease-out 0.3s; }
 .photo-recommend-album .recommend-album.ng-animate.show-add, .photo-recommend-album .recommend-album.ng-animate.show-remove {
-  height: 400px; }
+  height: 400px;
+  display: block; }
 .photo-recommend-album .recommend-album.show {
-  height: 400px; }
+  height: 400px;
+  display: block; }
 
 div[contentEditable] {
   cursor: pointer; }
@@ -1574,6 +1584,7 @@ pre.description {
 /** photo container directive*/
 .ponm-photo-container {
   position: relative;
+  height: 100%;
   max-height: 1000px;
   margin: 0 auto; }
   .ponm-photo-container .flat-image {
@@ -1584,12 +1595,23 @@ pre.description {
     /* Safari and Chrome */
     -o-transition: opacity 1s;
     transition: opacity 1s;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    position: absolute;
-    right: 0;
-    top: 0; }
+    height: 100%;
+    display: none; }
+    .ponm-photo-container .flat-image .flat-canvas {
+      text-align: center; }
+      .ponm-photo-container .flat-image .flat-canvas img {
+        vertical-align: middle;
+        display: inline-block !important; }
+    .ponm-photo-container .flat-image .image-button {
+      display: none; }
+    .ponm-photo-container .flat-image .image-button.ng-animate.show-add, .ponm-photo-container .flat-image .p360-image-button.ng-animate.show-remove {
+      opacity: .5;
+      display: inherit; }
+    .ponm-photo-container .flat-image .image-button.show {
+      opacity: .5;
+      display: inherit; }
+  .ponm-photo-container .flat-image.show {
+    opacity: 1; }
   .ponm-photo-container img {
     opacity: 0;
     -moz-transition: opacity 1s;
@@ -1606,20 +1628,14 @@ pre.description {
     opacity: 1; }
   .ponm-photo-container img.show {
     opacity: 1; }
-  .ponm-photo-container .flat-image.ng-animate.show-add, .ponm-photo-container .flat-image.ng-animate.show-remove {
-    opacity: 1; }
-  .ponm-photo-container .flat-image.show {
-    opacity: 1; }
   .ponm-photo-container canvas {
     position: absolute;
     top: 0;
     opacity: 0; }
   .ponm-photo-container canvas.ng-animate.show-add, .ponm-photo-container canvas.ng-animate.show-remove {
-    opacity: 1;
-    z-index: 1; }
+    opacity: 1; }
   .ponm-photo-container canvas.show {
-    opacity: 1;
-    z-index: 1; }
+    opacity: 1; }
   .ponm-photo-container .img-container {
     position: relative;
     width: 100%;
@@ -1633,10 +1649,6 @@ pre.description {
     right: 0;
     top: 0; }
   .ponm-photo-container .icon-p360 {
-    position: absolute;
-    bottom: 0;
-    margin-left: 45%;
-    margin-right: 45%;
     width: 65px;
     height: 65px;
     background: url(../images/lightbox.png) no-repeat -63px 0;
@@ -1648,10 +1660,6 @@ pre.description {
     -o-transition: opacity 0.5s;
     transition: opacity 0.5s; }
   .ponm-photo-container .icon-pflat {
-    position: absolute;
-    bottom: 0;
-    margin-left: 45%;
-    margin-right: 45%;
     width: 65px;
     height: 65px;
     background: url(../images/lightbox.png) no-repeat -63px -94px;
@@ -1662,25 +1670,25 @@ pre.description {
     /* Safari and Chrome */
     -o-transition: opacity 0.5s;
     transition: opacity 0.5s; }
-  .ponm-photo-container .flat-image-button {
+  .ponm-photo-container .image-button {
     position: absolute;
     bottom: 0;
-    opacity: 0;
-    left: 45%; }
-  .ponm-photo-container .flat-image-button.ng-animate.show-add, .ponm-photo-container .flat-image-button.ng-animate.show-remove {
-    opacity: 1;
-    z-index: 2; }
-  .ponm-photo-container .flat-image-button.show {
-    opacity: 1;
-    z-index: 2; }
+    left: 50%;
+    margin-left: -32px; }
   .ponm-photo-container .p360-image {
     width: 100%;
     height: 100%;
-    opacity: 0; }
+    opacity: 0;
+    display: none; }
+    .ponm-photo-container .p360-image .p360-canvas {
+      width: 100%;
+      height: 100%; }
   .ponm-photo-container .p360-image.ng-animate.show-add, .ponm-photo-container .p360-image.ng-animate.show-remove {
-    opacity: 1; }
+    opacity: 1;
+    display: inherit; }
   .ponm-photo-container .p360-image.show {
-    opacity: 1; }
+    opacity: 1;
+    display: inherit; }
 
 /** editable css */
 .editable {
@@ -1741,6 +1749,7 @@ span.footnotes {
     border-top-color: grey;
     border-bottom-color: grey; }
 
+/** show hide animame */
 .ponm-show-hide.ng-hide-add, .ponm-show-hide.ng-hide-remove {
   -webkit-transition: all linear 0.3s;
   -moz-transition: all linear 0.3s;

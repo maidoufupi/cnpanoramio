@@ -141,6 +141,7 @@ angular.module('ponmApp.services', [
                 },
                 addPhoto: {
                     method: 'POST',
+                    params: {'type': 'photo'},
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                         'Accept': 'application/json'

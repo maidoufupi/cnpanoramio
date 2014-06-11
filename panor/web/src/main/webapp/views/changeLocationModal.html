@@ -73,7 +73,12 @@
                         <span class="lng">{{file.mapVendor.lngPritty}} {{file.mapVendor.lngPritty && file.lngRef}}</span>
                     </div>
                     <div class="coder_place">
-                        <div id="the-address" class="original_place_name">{{file.mapVendor.address || "[解析地址]"}}</div>
+                        <a href=""
+                           editable-select="file.mapVendor.address" e-ng-options="addr as addr for (addr, point) in file.mapVendor.addresses"
+                           buttons="no">
+                            {{ file.mapVendor.address || "[解析地址]"}}
+                        </a>
+                        <!--<div id="the-address" class="original_place_name">{{file.mapVendor.address || "[解析地址]"}}</div>-->
                     </div>
                     <label class="is360_info">
                         <input type="checkbox" data-ng-model="file.mapVendor.is360">是360°全景照片</label>
