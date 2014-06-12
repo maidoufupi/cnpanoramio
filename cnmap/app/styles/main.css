@@ -504,9 +504,6 @@ body {
   float: left;
   overflow: hidden; }
 
-.modal-dialog {
-  width: auto; }
-
 #img-cropper {
   width: 800px; }
 
@@ -515,13 +512,6 @@ body {
   max-height: 500px;
   margin: 3px;
   border-radius: 6px; }
-
-.alert {
-  position: fixed;
-  left: 0;
-  top: 50px;
-  width: 100%;
-  z-index: 10000; }
 
 .fileupload-buttonbar {
   margin-right: 0; }
@@ -570,12 +560,6 @@ html, body {
 .imgLiquidFill {
   border: 5px solid white; }
 
-.modal-dialog {
-  width: auto;
-  height: 96%;
-  margin: 10px;
-  padding: 0; }
-
 .modal-content {
   height: 100%;
   background-color: #f5f6f5; }
@@ -597,164 +581,6 @@ html, body {
   height: 50px;
   text-align: right;
   padding: 9px 20px 2px; }
-
-.photo_list_and_map {
-  position: relative;
-  height: 100%; }
-
-.photo_list_panel {
-  height: 100%;
-  display: inline-block;
-  float: left;
-  vertical-align: top;
-  width: 160px;
-  max-width: 160px;
-  margin: 0 5px 5px 0;
-  zoom: 1;
-  z-index: 100; }
-  .photo_list_panel .list-group {
-    height: 100%;
-    overflow-y: auto; }
-    .photo_list_panel .list-group .list-group-item {
-      width: 80%;
-      -webkit-transition: all linear 0.3s;
-      -moz-transition: all linear 0.3s;
-      -ms-transition: all linear 0.3s;
-      -o-transition: all linear 0.3s;
-      transition: all linear 0.3s; }
-    .photo_list_panel .list-group .list-group-item.active {
-      width: 100%;
-      border-right: solid blue; }
-
-.map_photo_marker {
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
-  height: 33px;
-  width: 28px;
-  z-index: 400;
-  background-image: url(../images/photo-page.png);
-  background-position: 0px -1450px; }
-
-.map_panel {
-  position: relative;
-  overflow: hidden;
-  vertical-align: top;
-  height: 100%; }
-
-.selected_photo_editor {
-  background-color: #ececec;
-  height: 160px;
-  padding: 2px;
-  top: 0;
-  z-index: 100; }
-
-.selected_photo_editor .thumbnail {
-  float: left; }
-
-.selected_photo_editor .thumbnail img {
-  vertical-align: middle;
-  max-width: 100%;
-  max-height: 160px;
-  border: 1px solid #ccc;
-  display: block;
-  margin: 0 auto;
-  box-shadow: 1px 1px 2px #ccc;
-  -moz-box-shadow: 1px 1px 2px #ccc;
-  -webkit-box-shadow: 1px 1px 2px #ccc; }
-
-.map_panel #upload-map, .map_panel .map-photo-map {
-  position: absolute;
-  width: 100%;
-  margin: 5px 0;
-  top: 170px;
-  bottom: 0; }
-
-.map_photo_thumbnail {
-  width: 80%;
-  max-width: 60px; }
-
-.map_photo_title {
-  word-break: break-all;
-  word-wrap: break-word; }
-
-.list-group-item.map_photo_cell.active {
-  background-color: #3276b1; }
-
-#map-photo-list {
-  height: 100%;
-  position: relative;
-  top: 0;
-  bottom: 30px;
-  overflow-y: auto; }
-
-.map_photo_cell {
-  cursor: pointer;
-  padding: 5px 10px; }
-
-@media (max-width: 767px) {
-  .modal-dialog {
-    margin: 5px;
-    padding: 0; }
-
-  .modal-header {
-    padding: 5px;
-    height: auto; }
-
-  .modal-body {
-    padding: 5px;
-    position: absolute;
-    top: 33px; }
-
-  .photo_list_and_map .photo_list_panel {
-    position: static;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    margin: 0; }
-
-  #map-photo-list {
-    bottom: 0;
-    margin: 0; }
-
-  .photo_list_and_map .map_panel {
-    position: static;
-    overflow: hidden;
-    float: left;
-    vertical-align: top;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0; }
-
-  .selected_photo_editor {
-    position: static;
-    display: inline-block; }
-
-  .selected_photo_editor .thumbnail {
-    float: none;
-    margin: 0; }
-
-  .map_panel #upload-map, .map_panel .map-photo-map {
-    position: relative;
-    width: 100%;
-    margin: 0;
-    height: 100%;
-    padding: 0;
-    top: 0; }
-
-  .list-group-item {
-    padding: 5px; } }
-#map_canvas {
-  width: 100%;
-  height: 100%; }
-
-.map_panel .map-photo-map {
-  bottom: 60px; }
-
-.map-photo.modal-footer {
-  padding: 2px;
-  margin: 0; }
 
 .container-explore-map {
   margin: 0;
@@ -1312,15 +1138,13 @@ form#settings {
     height: 100px;
     background-color: white; }
 
-.modal {
+.photo-modal-fullscreen {
   overflow: hidden; }
-
-.modal-dialog {
-  height: 100%;
-  margin: 0; }
-  .modal-dialog .modal-content {
-    border: 0;
-    border-radius: 0; }
+  .photo-modal-fullscreen .modal-dialog {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: auto; }
 
 .photo-modal-container {
   background-color: #191919;
@@ -1529,6 +1353,176 @@ form#settings {
 .photo-recommend-album .recommend-album.show {
   height: 400px;
   display: block; }
+
+.map-photo-modal .modal-dialog {
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  width: auto;
+  padding: 0;
+  box-shadow: 0 0 20px 1px #777; }
+  .map-photo-modal .modal-dialog .modal-content .modal-body .map_panel.container .map-photo-map {
+    bottom: 0;
+    margin: 0; }
+
+.photo_list_and_map {
+  position: relative;
+  height: 100%; }
+
+.photo_list_panel {
+  height: 100%;
+  display: inline-block;
+  float: left;
+  vertical-align: top;
+  width: 160px;
+  max-width: 160px;
+  margin: 0 5px 5px 0;
+  zoom: 1;
+  z-index: 100; }
+  .photo_list_panel .list-group {
+    height: 100%;
+    overflow-y: auto; }
+    .photo_list_panel .list-group .list-group-item {
+      width: 80%;
+      -webkit-transition: all linear 0.3s;
+      -moz-transition: all linear 0.3s;
+      -ms-transition: all linear 0.3s;
+      -o-transition: all linear 0.3s;
+      transition: all linear 0.3s; }
+    .photo_list_panel .list-group .list-group-item.active {
+      width: 100%;
+      border-right: solid blue; }
+
+.map_photo_marker {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  height: 33px;
+  width: 28px;
+  z-index: 400;
+  background-image: url(../images/photo-page.png);
+  background-position: 0px -1450px; }
+
+.map_panel {
+  position: relative;
+  overflow: hidden;
+  vertical-align: top;
+  height: 100%; }
+
+.selected_photo_editor {
+  background-color: #ececec;
+  height: 160px;
+  padding: 2px;
+  top: 0;
+  z-index: 100; }
+
+.selected_photo_editor .thumbnail {
+  float: left; }
+
+.selected_photo_editor .thumbnail img {
+  vertical-align: middle;
+  max-width: 100%;
+  max-height: 160px;
+  border: 1px solid #ccc;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 1px 1px 2px #ccc;
+  -moz-box-shadow: 1px 1px 2px #ccc;
+  -webkit-box-shadow: 1px 1px 2px #ccc; }
+
+.map_panel #upload-map, .map_panel .map-photo-map {
+  position: absolute;
+  width: 100%;
+  margin: 5px 0;
+  top: 170px;
+  bottom: 0; }
+
+.map_photo_thumbnail {
+  width: 80%;
+  max-width: 60px; }
+
+.map_photo_title {
+  word-break: break-all;
+  word-wrap: break-word; }
+
+.list-group-item.map_photo_cell.active {
+  background-color: #3276b1; }
+
+#map-photo-list {
+  height: 100%;
+  position: relative;
+  top: 0;
+  bottom: 30px;
+  overflow-y: auto; }
+
+.map_photo_cell {
+  cursor: pointer;
+  padding: 5px 10px; }
+
+@media (max-width: 767px) {
+  .modal-dialog {
+    margin: 5px;
+    padding: 0; }
+
+  .modal-header {
+    padding: 5px; }
+
+  .modal-body {
+    padding: 5px;
+    position: absolute;
+    top: 33px; }
+
+  .photo_list_and_map .photo_list_panel {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0; }
+
+  #map-photo-list {
+    bottom: 0;
+    margin: 0; }
+
+  .photo_list_and_map .map_panel {
+    position: static;
+    overflow: hidden;
+    float: left;
+    vertical-align: top;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0; }
+
+  .selected_photo_editor {
+    position: static;
+    display: inline-block; }
+
+  .selected_photo_editor .thumbnail {
+    float: none;
+    margin: 0; }
+
+  .map_panel #upload-map, .map_panel .map-photo-map {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    padding: 0;
+    top: 0; }
+
+  .list-group-item {
+    padding: 5px; } }
+#map_canvas {
+  width: 100%;
+  height: 100%; }
+
+.map_panel .map-photo-map {
+  bottom: 60px; }
+
+.map-photo.modal-footer {
+  padding: 2px;
+  margin: 0; }
 
 div[contentEditable] {
   cursor: pointer; }
@@ -1765,3 +1759,16 @@ span.footnotes {
 .ponm-show-hide.ng-hide-add,
 .ponm-show-hide.ng-hide-remove.ng-hide-remove-active {
   opacity: 1; }
+
+/** modal */
+.modal-header .modal-title {
+  float: left; }
+
+/** alert */
+.alert {
+  position: fixed;
+  left: 50%;
+  margin-left: -100px;
+  width: 200px;
+  top: 0;
+  z-index: 10000; }

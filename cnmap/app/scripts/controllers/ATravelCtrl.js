@@ -160,6 +160,7 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
                 var modalInstance = $modal.open({
                     templateUrl: 'views/photo.html',
                     controller: 'PhotoModalCtrl',
+                    windowClass: 'photo-modal-fullscreen',
                     resolve: {
                         photoId: function () {
                             return photoId;

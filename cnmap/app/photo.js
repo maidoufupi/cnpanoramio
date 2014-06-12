@@ -26,13 +26,13 @@ angular.module('ponmPhotoApp', [
                 var modalInstance = $modal.open({
                     templateUrl: 'views/photo.html',
                     controller: 'PhotoModalCtrl',
-                    size: size,
+                    windowClass: 'photo-modal-fullscreen',
                     resolve: {
                         photoId: function () {
-                            return 6;
+                            return 105;
                         },
                         travelId: function() {
-                            return '';
+                            return 11;
                         }
                     }
                 });

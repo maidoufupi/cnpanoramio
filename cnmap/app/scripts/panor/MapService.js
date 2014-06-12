@@ -11,6 +11,8 @@
 
     IMapService.prototype.getAddress = function(lat, lng, callback) {};
 
+    IMapService.prototype.getAddrPois = function(lat, lng, callback) {};
+
     IMapService.prototype.getLocation = function(address, callback) {};
 
     return IMapService;

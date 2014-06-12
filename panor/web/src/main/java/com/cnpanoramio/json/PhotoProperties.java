@@ -45,7 +45,7 @@ public class PhotoProperties {
 	@JsonProperty("fav_count")
 	private Integer favCount;
 	
-	private boolean favorite;
+	private Boolean favorite;
 	
 	// 图片的评论总数
 	@JsonProperty("comment_count")
@@ -106,11 +106,11 @@ public class PhotoProperties {
 		this.tags = tags;
 	}
 
-	public boolean isFavorite() {
+	public Boolean isFavorite() {
 		return favorite;
 	}
 
-	public void setFavorite(boolean favorite) {
+	public void setFavorite(Boolean favorite) {
 		this.favorite = favorite;
 	}
 

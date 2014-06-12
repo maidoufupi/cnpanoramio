@@ -22,6 +22,15 @@ class IMapService
   getAddress: (lat, lng, callback) ->
 
   ##
+  # 获取gps点附近的兴趣点
+  #
+  # @param lat
+  # @param lng
+  # @param callback
+  #/
+  getAddrPois: (lat, lng, callback) ->
+
+  ##
    # 根据地址获取gps信息
    #
    # @param address

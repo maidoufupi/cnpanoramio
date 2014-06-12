@@ -54,10 +54,17 @@
                                 <input type="text"
                                        ng-model="asyncSelected"
                                        placeholder="搜索地址"
-                                       typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue"
+                                       typeahead="address as address.formattedAddress for address in getLocation($viewValue) | filter:$viewValue"
                                        typeahead-loading="loadingLocations"
                                        class="form-control"
                                         >
+<!--                                <input type="text"
+                                       ng-model="asyncSelected"
+                                       placeholder="搜索地址"
+                                       typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue"
+                                       typeahead-loading="loadingLocations"
+                                       class="form-control"
+                                        >-->
                                 <span class="input-group-btn">
                                    <button type="submit" class="btn btn-default">Go!</button>
                                  </span>

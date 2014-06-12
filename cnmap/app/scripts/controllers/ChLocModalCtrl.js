@@ -152,21 +152,19 @@ angular.module('ponmApp.controllers')
                 $scope.file.mapVendor.latPritty = cnmap.GPS.convert(lat);
                 $scope.file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
 
-                GeocodeService.regeo({lat: lat, lng: lng}, function(regeocode) {
-                    var addresses = {};
-                    var baseAddr = regeocode.addressComponent.province + regeocode.addressComponent.district
-                        + regeocode.addressComponent.city + regeocode.addressComponent.township;
-                    angular.forEach(regeocode.pois, function(poi, key) {
-                        addresses[baseAddr + poi.name] = {
-                            poiweight: poi.poiweight,
-                            location: poi.location
-                        };
-                    });
-                    $scope.file.mapVendor.addresses = addresses;
+                mapService.getAddrPois(lat, lng, function(addresses, addr) {
                     if(!address) {
-                        $scope.file.mapVendor.address = regeocode.formatted_address;
+                        $scope.file.mapVendor.address = addr;
                     }
-                }, "all");
+                    $scope.file.mapVendor.addresses = addresses;
+                });
+
+//                GeocodeService.regeoAddresses(lat, lng).then(function(res) {
+//                    if(!address) {
+//                        $scope.file.mapVendor.address = res.address;
+//                    }
+//                    $scope.file.mapVendor.addresses = res.addresses;
+//                });
 
                 if (address) {
                     $scope.file.mapVendor.address = address;
@@ -268,7 +266,8 @@ angular.module('ponmApp.controllers')
 //            uiMapCache: false
             }
         }])
-    .controller('TypeaheadCtrl', ['$scope', '$http', 'GeocodeService', function ($scope, $http, GeocodeService) {
+    .controller('TypeaheadCtrl', ['$scope', '$http', 'GeocodeService', '$q',
+    function ($scope, $http, GeocodeService, $q) {
         $scope.selected = undefined;
         $scope.states = [];
         // Any function returning a promise object can be used to load values asynchronously
@@ -280,25 +279,50 @@ angular.module('ponmApp.controllers')
 //                });
 //                return addresses;
 //            });
-            return $http.get('http://restapi.amap.com/v3/geocode/geo', {
-                params: {
-                    address: val,
-                    key: "53f7e239ddb8ea62ba552742a233ed1f"
-                }
-            }).then(function(res){
+            var d = $q.defer();
+            $scope.mapService.getLocation(val, function(res) {
+//                var addresses = [];
+//                if(res.info == "OK") {
+//                    angular.forEach(res.geocodes, function(geocode, key) {
+//                        if(GeocodeService.levelMap[geocode.level]) {
+//                            geocode.zoom = GeocodeService.levelMap[geocode.level];
+//                        }
+//                        addresses.push(geocode);
+//                    });
+//                }
+                d.resolve(res);
+            });
+            return d.promise.then(function(res) {
                 var addresses = [];
-                if(res.status == "200") {
-                    if(res.data && res.data.info == "OK") {
-                        angular.forEach(res.data.geocodes, function(geocode, key) {
-                            if(GeocodeService.levelMap[geocode.level]) {
-                                geocode.zoom = GeocodeService.levelMap[geocode.level];
-                            }
-                            addresses.push(geocode);
-                        });
-                    }
+                if(res.info == "OK") {
+                    angular.forEach(res.geocodes, function(geocode, key) {
+                        if(GeocodeService.levelMap[geocode.level]) {
+                            geocode.zoom = GeocodeService.levelMap[geocode.level];
+                        }
+                        addresses.push(geocode);
+                    });
                 }
                 return addresses;
             });
+//            return $http.get('http://restapi.amap.com/v3/geocode/geo', {
+//                params: {
+//                    address: val,
+//                    key: "53f7e239ddb8ea62ba552742a233ed1f"
+//                }
+//            }).then(function(res){
+//                var addresses = [];
+//                if(res.status == "200") {
+//                    if(res.data && res.data.info == "OK") {
+//                        angular.forEach(res.data.geocodes, function(geocode, key) {
+//                            if(GeocodeService.levelMap[geocode.level]) {
+//                                geocode.zoom = GeocodeService.levelMap[geocode.level];
+//                            }
+//                            addresses.push(geocode);
+//                        });
+//                    }
+//                }
+//                return addresses;
+//            });
 //            return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
 //                params: {
 //                    address: val,
@@ -314,13 +338,14 @@ angular.module('ponmApp.controllers')
         };
 
         $scope.goLocation = function (address) {
+
             var location = address.location;
             if (location) {
-                location = location.split(",");
-                location = {
-                    lat: location[1],
-                    lng: location[0]
-                };
+//                location = location.split(",");
+//                location = {
+//                    lat: location[1],
+//                    lng: location[0]
+//                };
                 $scope.mapEventListener.setCenter($scope.map, location.lat, location.lng);
 //                $scope.addOrUpdateMarker($scope.file, location.lat, location.lng);
 //                $scope.setPlace($scope.file,

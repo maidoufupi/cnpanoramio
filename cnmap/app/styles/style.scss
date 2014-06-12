@@ -660,10 +660,6 @@ body {
     overflow: hidden;
 }
 
-.modal-dialog {
-    width: auto
-}
-
 #img-cropper {
     width: 800px;
 }
@@ -673,14 +669,6 @@ body {
     max-height: 500px;
     margin: 3px;
     border-radius: 6px;
-}
-
-.alert {
-    position: fixed;
-    left: 0;
-    top: 50px;
-    width: 100%;
-  z-index: 10000;
 }
 
 .fileupload-buttonbar {

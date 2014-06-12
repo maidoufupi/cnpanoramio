@@ -44,7 +44,6 @@ angular.module('mapPhotoApp', ['ponmApp', 'ui.bootstrap', 'ui.map'])
                     $scope.addAlert({type: "danger", msg: "保存失败 " + data.status});
                 }
             })
-
         };
 
         $scope.cancel = function () {

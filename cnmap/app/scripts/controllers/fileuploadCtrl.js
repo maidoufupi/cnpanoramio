@@ -34,7 +34,7 @@
 //                if (isOnGitHub) {
 //                    // Demo settings:
                 angular.extend(fileUploadProvider.defaults, {
-                    autoUpload: true,
+//                    autoUpload: true,
                     // Enable image resizing, except for Android and Opera,
                     // which actually support image resizing, but fail to
                     // send Blob objects via XHR requests:
@@ -60,15 +60,17 @@
             }
         ])
 
-        .controller('DemoFileUploadController', [
-            '$scope', '$http', 'fileUpload', '$modal', '$log', 'PhotoService', '$window', 'GPSConvertService',
+        .controller('DemoFileUploadController', [ '$window',
+            '$scope', '$http', 'fileUpload', '$modal', '$log', 'PhotoService', 'GPSConvertService',
             'LoginUserService', 'UserService', 'TravelService', 'GeocodeService',
-            function ($scope, $http, fileUpload, $modal, $log, PhotoService, $window, GPSConvertService,
+            function ($window, $scope, $http, fileUpload, $modal, $log, PhotoService, GPSConvertService,
                       LoginUserService, UserService, TravelService, GeocodeService) {
 
                 $scope.apirest = $window.apirest;
                 $scope.ctx = $window.ctx;
                 $scope.userId = $window.userId;
+
+                var mapService = new $window.cnmap.MapService();
 
                 $scope.options = {
                     //url: url,
@@ -171,9 +173,13 @@
                                             file.latPritty = cnmap.GPS.convert(file.lat);
                                             file.lngPritty = cnmap.GPS.convert(file.lng);
 
-                                            GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
-                                                file.address = regeocode.formatted_address;
+                                            mapService.getAddress(file.lat, file.lng, function(res) {
+                                                file.address = res;
                                             });
+
+//                                            GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
+//                                                file.address = regeocode.formatted_address;
+//                                            });
                                         })
                                     }
                                 }
@@ -196,9 +202,14 @@
                         file.vendor = photo.vendor;
                         file.latPritty = cnmap.GPS.convert(file.lat);
                         file.lngPritty = cnmap.GPS.convert(file.lng);
-                        GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
-                            file.address = regeocode.formatted_address;
+
+                        mapService.getAddress(file.lat, file.lng, function(res) {
+                            file.address = res;
                         });
+
+//                        GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
+//                            file.address = regeocode.formatted_address;
+//                        });
                     }
 
                 }
@@ -212,6 +223,7 @@
                     var modalInstance = $modal.open({
                         templateUrl: 'views/changeLocationModal.html',
                         controller: "ChLocModalCtrl",
+                        windowClass: 'map-photo-modal',
                         resolve: {
                             'files': function () {
                                 return files;
@@ -328,6 +340,10 @@
                             file.saveTags();
                         }
                     });
+                });
+
+                $scope.$watch('photoMap', function(map) {
+                    mapService.init(map);
                 });
 
             }

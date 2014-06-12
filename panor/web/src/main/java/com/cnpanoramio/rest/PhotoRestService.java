@@ -327,7 +327,6 @@ public class PhotoRestService extends AbstractRestService {
 		try {
 			List<PhotoGps> gps = photoService.getGPSInfo(id, mVendor);
 			reponse.setGps(gps);
-			;
 			reponse.setStatus(PhotoResponse.Status.OK.name());
 		} catch (DataAccessException ex) {
 			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());

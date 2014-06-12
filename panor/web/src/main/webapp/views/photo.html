@@ -125,6 +125,24 @@
                         <table>
                             <tbody>
                                 <tr>
+                                    <td class="name">地址</td>
+                                    <td  class="value">
+                                        <a href=""
+                                           data-ng-click="openMapPhoto()"
+                                           tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top">{{photo.point.address}}</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="name">位置</td>
+                                    <td  class="value">
+                                        <a href=""
+                                           data-ng-click="openMapPhoto()"
+                                           tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
+                                           tooltip-trigger="mouseenter"
+                                           tooltip-placement="top">{{photo.point.lat | number}},{{photo.point.lng | number}}</a></td>
+                                </tr>
+                                <tr>
                                     <td class="name">拍摄日期</td>
                                     <td  class="value">{{cameraInfo.date_time_original | calculatetime | date:'yyyy-MM-dd'}}</td>
                                 </tr>
@@ -223,7 +241,9 @@
     </div>
 
     <div class="photo-recommend-album" photo-recommend-album>
-        <div class="recommend-album-background"></div>
+        <div class="recommend-album-background">
+
+        </div>
         <div class="recommend-album">
 
         </div>

@@ -11,6 +11,7 @@
 @import 'flexText.scss';
 @import 'map.scss';
 @import 'photo.scss';
+@import 'mapPhoto.scss';
 
 div[contentEditable] {
   cursor: pointer;
@@ -332,4 +333,21 @@ span.footnotes {
 .ponm-show-hide.ng-hide-add,
 .ponm-show-hide.ng-hide-remove.ng-hide-remove-active {
   opacity:1;
+}
+
+/** modal */
+.modal-header {
+  .modal-title {
+    float: left;
+  }
+}
+
+/** alert */
+.alert {
+  position: fixed;
+  left: 50%;
+  margin-left: -100px;
+  width: 200px;
+  top: 0;
+  z-index: 10000;
 }
