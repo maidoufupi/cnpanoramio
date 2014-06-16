@@ -31,6 +31,7 @@ import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
 import com.cnpanoramio.service.FileService;
+import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.UserUtil;
 
@@ -66,6 +67,9 @@ public class UserSettingsImpl implements UserSettingsManager {
 
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private TravelService travelService;
 
 	@Override
 	public UserSettings save(UserSettings userSettings) {
@@ -185,6 +189,9 @@ public class UserSettingsImpl implements UserSettingsManager {
 		// 用户全部标签 tags
 		List<String> tags = userSettingsDao.getUserTags(user);
 		openInfo.setTags(tags);
+		
+		// 用户全部旅行
+		openInfo.setTravels(travelService.getTravels(user));
 
 		return openInfo;
 	}

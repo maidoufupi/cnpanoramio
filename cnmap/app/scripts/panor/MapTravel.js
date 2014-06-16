@@ -62,14 +62,7 @@
       var ne, photo, sw, _i, _len, _ref;
       if (spot.photos[0]) {
         sw = jQuery.extend({}, spot.photos[0].point);
-      }
-      if (spot.photos[1]) {
-        if (spot.photos[1].point.lat < sw.lat || spot.photos[1].point.lng < sw.lng) {
-          ne = sw;
-          sw = jQuery.extend({}, spot.photos[1].point);
-        } else {
-          ne = jQuery.extend({}, spot.photos[1].point);
-        }
+        ne = jQuery.extend({}, spot.photos[0].point);
       }
       if (sw && ne) {
         _ref = spot.photos;

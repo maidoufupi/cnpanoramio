@@ -6,26 +6,7 @@
 <meta name="menu" content="AdminMenu" />
 </head>
 
-	<link rel="stylesheet" href="<c:url value="/bower_components/angular-xeditable/dist/css/xeditable.css"/>"/>
-	
 	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="/bower_components/angular-xeditable/dist/js/xeditable.js"/>"></script>
-
-    <%-- <script src="<c:url value="/bower_components/get-style-property/get-style-property.js"/>"></script>
-    <script src="<c:url value="/bower_components/get-size/get-size.js"/>"></script> --%>
-    <script src="<c:url value="/bower_components/eventie/eventie.js"/>"></script>
-    <%-- <script src="<c:url value="/bower_components/doc-ready/doc-ready.js"/>"></script> --%>
-    <script src="<c:url value="/bower_components/eventEmitter/EventEmitter.js"/>"></script>
-<%--     <script src="<c:url value="/bower_components/jquery-bridget/jquery.bridget.js"/>"></script>
-    <script src="<c:url value="/bower_components/matches-selector/matches-selector.js"/>"></script>
-    <script src="<c:url value="/bower_components/outlayer/item.js"/>"></script>
-    <script src="<c:url value="/bower_components/outlayer/outlayer.js"/>"></script> --%>
-    <%-- <script src="<c:url value="/bower_components/masonry/masonry.js"/>"></script> --%>
-    <script src="<c:url value="/bower_components/imagesloaded/imagesloaded.js"/>"></script>
-    <%-- <script src="<c:url value="/bower_components/angular-masonry/angular-masonry.js"/>"></script> --%>
-    
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.mousewheel.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.panzoom.js"/>"></script>
     
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
@@ -122,7 +103,14 @@
             <div style="clear: both;"></div>
         </div>
         <div class="paginator-wrapper" data-ng-show="photo.totalItems > 0">
-            <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
+            <pagination items-per-page="photo.pageSize"
+                        total-items="photo.totalItems"
+                        ng-model="photo.currentPage"
+                        max-size="photo.maxSize"
+                        class="pagination-sm"
+                        boundary-links="true"
+                        rotate="false"
+                        num-pages="photo.numPages"></pagination>
         </div>
 
         <div photo-fluid-container="photos"
@@ -131,20 +119,33 @@
              fluid-line-max-height="200"
              fluid-line-min-height="100">
             <a ng-repeat="photo in photos"
+               repeat-complete="updateFluid"
                ng-click="activePhoto(photo)"
                href=""
-               class="fluid-brick"
-               ponm-photo>
+               class="fluid-brick ponm-photo"
+               ponm-photo
+                    >
                 <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
-                <div class="ponm-photo-footer">
-                    <p>{{photo.title}}</p>
+                <div class="action ponm-photo-footer">
                     <p>{{photo.point.address}}</p>
+                    <pre class="description">{{photo.description}}</pre>
+                </div>
+                <div ng-show="editable"
+                     class="action ponm-photo-remove">
+                    <span class="glyphicon glyphicon-remove"></span>
                 </div>
             </a>
         </div>
         
         <div class="paginator-wrapper" data-ng-show="photo.totalItems > 0">
-            <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
+            <pagination items-per-page="photo.pageSize"
+                        total-items="photo.totalItems"
+                        ng-model="photo.currentPage"
+                        max-size="photo.maxSize"
+                        class="pagination-sm"
+                        boundary-links="true"
+                        rotate="false"
+                        num-pages="photo.numPages"></pagination>
         </div>
     </div>
     <div class="info-col">

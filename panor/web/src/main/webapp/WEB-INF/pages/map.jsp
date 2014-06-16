@@ -77,7 +77,8 @@
 
             <div id="preview">
                 <div class="preview_thumb_area" ng-repeat="photo in photos" id="pid{{photo.photoId}}" style="height: 112px;">
-                    <a href="photo/{{photo.photo_id}}">
+                    <a href=""
+                       data-ng-click="displayPhoto(photo.photo_id)">
                         <img title=""
                              id="r{{photo.photo_id}}"
                              ng-src="{{apirest}}/photo/{{photo.photo_id}}/2">

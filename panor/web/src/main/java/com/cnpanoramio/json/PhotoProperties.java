@@ -35,6 +35,8 @@ public class PhotoProperties {
 	// 旅行
 	@JsonProperty("travel_id")
 	private Long travelId;
+	@JsonProperty("travel_name")
+	private String travelName;
 	
 	// tags
 	private List<String> tags = new ArrayList<String>(0);
@@ -105,8 +107,8 @@ public class PhotoProperties {
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
-
-	public Boolean isFavorite() {
+	
+	public Boolean getFavorite() {
 		return favorite;
 	}
 
@@ -200,6 +202,14 @@ public class PhotoProperties {
 
 	public void setTravelId(Long travelId) {
 		this.travelId = travelId;
+	}
+
+	public String getTravelName() {
+		return travelName;
+	}
+
+	public void setTravelName(String travelName) {
+		this.travelName = travelName;
 	}	
 	
 }

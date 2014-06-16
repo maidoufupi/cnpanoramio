@@ -20,16 +20,15 @@
     <script type="text/javascript" src="ponmPhotoFluidContainer.js"></script>
     <script type="text/javascript" src="../scripts/services/deparam.js"></script>
     <script type="text/javascript">
-//                window.ctx = "http://115.28.21.165";
-        window.ctx = "http://127.0.0.1:8080/panor-web";
+                window.ctx = "http://115.28.21.165";
+//        window.ctx = "http://127.0.0.1:8080/panor-web";
         window.apirest = window.ctx + "/api/rest";
     </script>
 </head>
 <body data-ng-app="ponmApp.test">
     <div class="container" data-ng-controller="photoFluidContainerCtrl">
         <div data-ng-repeat="spot in travel.spots">
-            <div photo-fluid-container
-                 photos="spot.photos"
+            <div photo-fluid-container="spot.photos"
                  item-selector=".fluid-brick"
                  class="photo-fluid-container"
                  ponm-hover="{enter: enterHover, leave: leaveHover}"
@@ -38,13 +37,16 @@
                 <a ng-repeat="photo in spot.photos"
                    ng-click="activePhoto(photo)"
                    href=""
-                   class="fluid-brick"
-                   ponm-photo
+                   class="fluid-brick ponm-photo"
+                   ponm-photo="photo"
                         >
                     <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
-                    <div class="ponm-photo-footer">
+                    <div class="action ponm-photo-footer">
                         <p>{{photo.point.address}}</p>
                         <p>{{photo.description | newlines}}</p>
+                    </div>
+                    <div ng-if="travelEnedit" class="action ponm-photo-remove">
+                        <span class="glyphicon glyphicon-remove"></span>
                     </div>
                 </a>
             </div>

@@ -13,19 +13,20 @@
 @import 'photo.scss';
 @import 'mapPhoto.scss';
 
-div[contentEditable] {
-  cursor: pointer;
-}
-
-div[contentEditable]:hover, div[contentEditable]:focus {
-  background-color: ghostwhite;
-}
-
+/** editable */
 pre.description {
   margin: 0;
   padding: 0;
   border: 0;
   background-color: initial;
+}
+
+pre.description.hover {
+  background-color: $editable-hover-color;
+}
+
+.editable-input.hover {
+  background-color: $editable-hover-color;
 }
 
 /** photo fluid directive */
@@ -50,23 +51,47 @@ pre.description {
       max-width: 100%;
     }
 
+  }
+
+  .ponm-photo {
+
     .ponm-photo-footer {
       position: absolute;
       bottom: 0;
       height: 50%;
       width: 100%;
       background-color: rgba(128, 128, 128, 0.5);
-      opacity: 0;
       color: white;
+      overflow: hidden;
+    }
+
+    .ponm-photo-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      color: white;
+      .glyphicon {
+        font-size: 12px;
+      }
+    }
+
+    .ponm-photo-remove:hover {
+      color: red;
+    }
+
+    .action {
+      opacity: 0;
       @include transition-linear(opacity);
     }
-    .ponm-photo-footer.ng-animate.show-add, .ponm-photo-footer.ng-animate.show-remove {
+
+    .action.ng-animate.ponm-show-add, .action.ng-animate.ponm-show-remove {
       opacity: 1;
     }
-    .ponm-photo-footer.show {
+    .action.ponm-show {
       opacity: 1;
     }
   }
+
 
 }
 
@@ -109,11 +134,6 @@ pre.description {
       display: inherit;
     }
   }
-
-//  .flat-image.ng-animate.show-add, .flat-image.ng-animate.show-remove {
-//    opacity: 1;
-//    display: inherit;
-//  }
 
   .flat-image.show {
     opacity: 1;
@@ -194,20 +214,10 @@ pre.description {
 
   .image-button {
     position: absolute;
-    bottom: 0;
+    bottom: 10px;
     left: 50%;
     margin-left: -32px;
   }
-
-//  .flat-image-button.ng-animate.show-add, .flat-image-button.ng-animate.show-remove {
-//    opacity: 1;
-//    z-index: 2;
-//  }
-//
-//  .flat-image-button.show {
-//    opacity: 1;
-//    z-index: 2;
-//  }
 
   .p360-image {
     width: 100%;
@@ -239,7 +249,11 @@ pre.description {
 
   .editable-wrap {
     white-space: pre-wrap;
+    .editable-buttons {
+      margin-top: 5px;
+    }
   }
+
   pre {
     margin: 0;
     padding: 0;
@@ -259,6 +273,7 @@ pre.description {
     }
   }
 }
+
 
 /** user thumbnail directive */
 .media.user-info {

@@ -391,7 +391,7 @@ angular.module('ponmApp.directives')
                             imgContainer.find(".flat-canvas").append(image1);
 //                            element.append(imgContainer);
 
-                            panzoom(image1);
+                            panzoom(imgContainer.find(".flat-canvas"));
                             panzoomReset();
 
                         }

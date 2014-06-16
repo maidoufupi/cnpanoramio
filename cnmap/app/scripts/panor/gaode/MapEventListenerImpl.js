@@ -83,13 +83,14 @@
 
         this.activeMarker = function(marker) {
             if(marker) {
+                marker.setzIndex(2);
                 marker.setIcon("images/marker.png");
             }
-
         };
 
         this.deactiveMarker = function(marker){
             if(marker) {
+                marker.setzIndex(1);
                 marker.setIcon("");
             }
         };

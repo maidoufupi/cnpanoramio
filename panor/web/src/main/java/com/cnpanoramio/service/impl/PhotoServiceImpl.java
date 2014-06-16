@@ -2,51 +2,24 @@ package com.cnpanoramio.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.activation.DataHandler;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-
 import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.Imaging;
-import org.apache.commons.imaging.common.IImageMetadata;
-import org.apache.commons.imaging.common.IImageMetadata.IImageMetadataItem;
-import org.apache.commons.imaging.common.RationalNumber;
-import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
-import org.apache.commons.imaging.formats.tiff.TiffField;
-import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
-import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
-import org.apache.commons.imaging.formats.tiff.constants.GpsTagConstants;
-import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
-import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
-import org.apache.http.impl.cookie.DateParseException;
-import org.apache.http.impl.cookie.DateUtils;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -71,7 +44,6 @@ import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
-import com.cnpanoramio.service.PhotoService;
 import com.cnpanoramio.service.imaging.ImageInfoExtractor;
 import com.cnpanoramio.service.lbs.GpsConverter;
 import com.cnpanoramio.utils.PhotoUtil;
@@ -169,8 +141,10 @@ public class PhotoServiceImpl implements PhotoManager {
 	}
 
 	@Override
-	public Photo save(Photo photo, InputStream ins) throws ImageReadException {
+	public Photo save(Photo photo, MultipartFile file) throws ImageReadException, IOException {
 
+		InputStream ins = file.getInputStream();
+		
 		photo.setFileType(FilenameUtils.getExtension(photo.getName()));
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -256,33 +230,6 @@ public class PhotoServiceImpl implements PhotoManager {
 		}
 
 	}
-
-//	@Override
-//	public Response read(Long id, int level) {
-//		Photo photo = photoDao.get(id);
-//
-//		File file = fileService.readFile(FileService.TYPE_IMAGE, photo.getId(),
-//				photo.getFileType(), level);
-//
-//		// ResponseBuilder response = Response.ok((Object) file);
-//		ResponseBuilder responseBuilder = null;
-//		FileInputStream finputs = null;
-//		Response response = null;
-//		try {
-//			finputs = new FileInputStream(file);
-//			responseBuilder = Response.ok().entity(finputs);
-//			responseBuilder.header("Content-Disposition",
-//					"attachment; filename=" + getName(photo));
-//			response = responseBuilder.build();
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return response;
-//	}
 
 	@Override
 	public int getPhotoCount(User user) {
@@ -370,13 +317,13 @@ public class PhotoServiceImpl implements PhotoManager {
 	@Override
 	public PhotoProperties upload(String lat, String lng, String address,
 			MapVendor vendor, MultipartFile file) throws Exception {
-		InputStream ins;
+//		InputStream ins;
 		Photo photo = new Photo();
 
 		photo.setName(file.getOriginalFilename());
 
-		ins = file.getInputStream();
-		photo = this.save(photo, ins);
+//		ins = file.getInputStream();
+		photo = this.save(photo, file);
 	
 		updatePhotoGps(photo, lat, lng, address, vendor);
 		PhotoDetails detail = photo.getDetails();

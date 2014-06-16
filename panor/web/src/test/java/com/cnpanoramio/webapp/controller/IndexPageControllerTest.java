@@ -17,7 +17,8 @@ public class IndexPageControllerTest extends BaseControllerTestCase {
 	 
 	 @Test
 	    public void testHandleRequest() throws Exception {
-	        ModelAndView mav = c.handleRequest(null, null);
+	        ModelAndView mav = null;
+//	        		c.handleRequest(null, null);
 	        Map m = mav.getModel();
 	        assertNotNull(m.get(Constants.USER_LIST));
 	        assertEquals("admin/userList", mav.getViewName());

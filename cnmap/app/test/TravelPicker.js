@@ -5,17 +5,15 @@
 angular.module('travelPickerApp', [
     'ngResource',
     'ui.bootstrap',
-    'ponmApp',
-    'ponmApp.services',
-    'ponmApp.directives'
+    'ponmApp'
 ])
     .config(function () {
     })
     .run(['$log', function($log) {
         $log.info("test app runing");
     }])
-    .controller('TravelPickerCtrl', ['$scope', '$http', '$log',
-        function($scope, $http, $log) {
+    .controller('TravelPickerCtrl', ['$scope', '$http', '$log', '$timeout',
+        function($scope, $http, $log, $timeout) {
 
             $scope.travels = ["无锡之旅",
                 "南京行",
@@ -23,18 +21,21 @@ angular.module('travelPickerApp', [
 
             $scope.$watch('atravel2', function(newValue) {
                 $log.debug("a travel 2: " + newValue);
-            })
+            });
 
-            $scope.loadTravelData = function() {
+            $scope.loadTravelData = function(callback) {
                 $log.debug("load data");
-                return $scope.travels;
-            }
+                $timeout(function() {
+                    callback.apply(null, [$scope.travels]);
+                }, 2000);
+                return "";
+            };
 
             $scope.newTravelData = function(newObj) {
                 $log.debug("new data: " + newObj);
                 $scope.travels.push(newObj);
                 return $scope.travels ;
-            }
+            };
 
             $scope.items = [{
                 id: 1,

@@ -55,27 +55,30 @@
 
         <div class="page-header travel-header">
             <div class="media user-info">
-                <a class="pull-left" href="{{ctx}}/user/{{travel.user_id}}">
+                <a class="pull-left" href="{{ctx}}/user#?id={{travel.user_id}}">
                     <img class="media-object img-circle" ng-src="{{apirest}}/user/{{travel.user_id || 1}}/avatar">
                 </a>
 
                 <div class="media-body">
                     <h4 class="media-heading">{{travel.username}}</h4>
                     <div>
-
+                        <div class="title">{{travel.title}}</div>
+                        <span class="footnotes">{{' - ' + (travel.time_start | date:'yyyy-MM-dd')}}</span>
                     </div>
                 </div>
             </div>
-            <h2>{{travel.title}}</h2>
-            <h4>{{travel.create_time | date:'yyyy-MM-dd'}}</h4>
-            <div class="editable travel-desc">
+
+            <div class="travel-desc">
                 <div ng-switch="travelEnedit">
                     <a ng-switch-when="true"
-                       href="#" editable-textarea="travel.description" e-rows="4" e-cols="40"
+                       href="#"
+                       class="editable"
+                       editable-textarea="travel.description" e-rows="4" e-cols="40"
                        onbeforesave="updateTravel(travel, $data)">
-                        <pre>{{ travel.description || '添加描述' }}</pre>
+                        <pre class="description">{{ travel.description || '添加描述' }}</pre>
                     </a>
-                    <p ng-switch-default>{{travel.description}}</p>
+                    <pre class="description"
+                         ng-switch-default>{{travel.description}}</pre>
                 </div>
             </div>
         </div>
@@ -90,7 +93,7 @@
                             <div class="spot-date">
                                 <span class="spot-date-txt ">{{spot.day}}</span>
                                 <span class="spot-date-flag">DAY</span>
-                                <span class="spot-date-flag">{{spot.start_time | date:'yyyyMMdd'}}</span>
+                                <span class="spot-date-flag">{{spot.time_start | date:'yyyyMMdd'}}</span>
                             </div>
                         </a>
                         <div>
@@ -128,17 +131,22 @@
 
                 </div>
                 <div class="panel-body">
-                    <div photo-fluid-container class="photo-fluid-container">
+                    <div photo-fluid-container
+                         class="photo-fluid-container">
                         <a ng-repeat="photo in spot.photos"
                            ng-click="activePhoto(photo)"
                            href=""
-                           class="fluid-brick"
-                           ponm-photo>
-                            <img
-                                 ng-src="{{apirest}}/photo/{{photo.id}}/2">
-                            <div class="ponm-photo-footer">
+                           class="fluid-brick ponm-photo"
+                           ponm-photo="photo"
+                                >
+                            <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
+                            <div class="action ponm-photo-footer">
                                 <p>{{photo.point.address}}</p>
                                 <pre class="description">{{photo.description}}</pre>
+                            </div>
+                            <div ng-show="travelEnedit"
+                                 class="action ponm-photo-remove">
+                                <span class="glyphicon glyphicon-remove"></span>
                             </div>
                         </a>
                     </div>

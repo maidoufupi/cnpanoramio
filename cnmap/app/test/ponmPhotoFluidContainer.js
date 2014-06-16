@@ -38,6 +38,20 @@ angular.module('ponmApp.test', ['ponmApp.directives', 'ponmApp.services'])
             }
             $scope.leaveHover = function(e) {
                 $log.debug("leaveHover");
-            }
+            };
+
+            $scope.$on('photoDeleteEvent', function(event, data) {
+                $log.debug("photo delete event: photoId = " + data);
+
+                angular.forEach($scope.travel.spots, function (spot, key) {
+                    angular.forEach(spot.photos, function (photo, key) {
+                        if (photo.id == data) {
+                            delete spot.photos.splice(key, 1);
+                        }
+                    });
+                });
+
+                $scope.$broadcast('ponmPhotoFluidResize');
+            });
         }])
 ;

@@ -77,7 +77,7 @@ public class PhotoUploadController extends BaseFormController {
 		Photo photo = new Photo();
 		photo.setName(file.getOriginalFilename());
 		try {
-		   photo = photoService.save(photo, file.getInputStream());
+//		   photo = photoService.save(photo, file.getInputStream());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

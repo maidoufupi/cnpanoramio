@@ -78,12 +78,14 @@
 
         this.activeMarker = function(marker) {
             if(marker) {
+                marker.setZIndex(2);
                 marker.setIcon("images/marker.png");
             }
         };
 
         this.deactiveMarker = function(marker){
             if(marker) {
+                marker.setZIndex(1);
                 marker.setIcon("");
             }
         };

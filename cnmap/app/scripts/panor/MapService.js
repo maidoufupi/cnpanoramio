@@ -15,6 +15,8 @@
 
     IMapService.prototype.getLocation = function(address, callback) {};
 
+    IMapService.prototype.getLocPois = function(address, callback) {};
+
     return IMapService;
 
   })();

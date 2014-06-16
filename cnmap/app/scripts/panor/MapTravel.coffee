@@ -39,12 +39,13 @@ class ITravelLayer
   activeSpot: (spot) ->
     if spot.photos[0]
       sw = jQuery.extend {}, spot.photos[0].point
-    if spot.photos[1]
-      if spot.photos[1].point.lat < sw.lat or spot.photos[1].point.lng < sw.lng
-        ne = sw
-        sw = jQuery.extend {}, spot.photos[1].point
-      else
-        ne = jQuery.extend {}, spot.photos[1].point
+      ne = jQuery.extend {}, spot.photos[0].point
+#    if spot.photos[1]
+#      if spot.photos[1].point.lat < sw.lat or spot.photos[1].point.lng < sw.lng
+#        ne = sw
+#        sw = jQuery.extend {}, spot.photos[1].point
+#      else
+#        ne = jQuery.extend {}, spot.photos[1].point
 
     if sw and ne
       for photo in spot.photos

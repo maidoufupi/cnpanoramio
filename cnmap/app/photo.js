@@ -29,7 +29,7 @@ angular.module('ponmPhotoApp', [
                     windowClass: 'photo-modal-fullscreen',
                     resolve: {
                         photoId: function () {
-                            return 105;
+                            return 134;
                         },
                         travelId: function() {
                             return 11;

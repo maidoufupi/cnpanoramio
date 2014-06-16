@@ -3,6 +3,9 @@ package com.cnpanoramio.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.appfuse.model.User;
+import org.springframework.security.access.AccessDeniedException;
+
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
@@ -13,7 +16,7 @@ import com.cnpanoramio.json.PhotoProperties;
 
 public class PhotoUtil {
 
-	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh.mm.ss");
+//	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh.mm.ss");
 	
 	public synchronized static PhotoCameraInfo transformCameraInfo(Photo photo) {
 		PhotoCameraInfo cameraInfo = new PhotoCameraInfo();
@@ -36,7 +39,7 @@ public class PhotoUtil {
 		}
 		
 		if(null != details.getExposureTime()) {
-			cameraInfo.setExposureTime(details.getExposureTime()*10000 + "/10000 s");
+			cameraInfo.setExposureTime(details.getExposureTime());
 		}
 		cameraInfo.setFocalLength(details.getFocalLength() == null ? "" : details.getFocalLength() + " mm");
 		cameraInfo.setFNumber(details.getFNumber() == null ? "" : "f/" + details.getFNumber());
@@ -60,8 +63,10 @@ public class PhotoUtil {
 		pp.setUserId(photo.getOwner().getId());
 		pp.setFileSize(photo.getFileSize());
 		
+		// 旅行
 		if(null != photo.getTravel()) {
 			pp.setTravelId(photo.getTravel().getId());
+			pp.setTravelName(photo.getTravel().getTitle());
 		}		
 		
 		for(Tag tag : photo.getTags()) {
@@ -102,4 +107,10 @@ public class PhotoUtil {
 		}
 		return mVendor;
     }
+	
+	public static void checkMyPhoto(Photo photo, User me) {
+		if (!photo.getOwner().equals(me)) {
+			throw new AccessDeniedException("Access Denied! Photo Id: "	+ photo.getId());
+		}
+	}
 }

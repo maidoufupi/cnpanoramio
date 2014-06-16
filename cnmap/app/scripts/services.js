@@ -129,7 +129,7 @@ angular.module('ponmApp.services', [
             });
     }])
     .factory('TravelService', ['$window', '$resource', function ($window, $resource) {
-        return $resource($window.apirest + '/travel/:travelId/:type/:spotId',
+        return $resource($window.apirest + '/travel/:travelId/:type/:typeId',
             {'travelId': '@id'},
             {
                 create: {
@@ -169,6 +169,13 @@ angular.module('ponmApp.services', [
                     params: {'type': 'spot'},
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Accept': 'application/json'
+                    }
+                },
+                deletePhoto: {
+                    method: 'DELETE',
+                    params: {'type': 'photo'},
+                    headers: {
                         'Accept': 'application/json'
                     }
                 }

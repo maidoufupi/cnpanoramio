@@ -6,9 +6,9 @@
 
 angular.module('ponmApp.controllers')
     .controller('PhotoModalCtrl', ['$window', '$scope', '$log', '$modalInstance', 'photoId', 'travelId', 'PhotoService',
-        'CommentService', 'UserService', 'TravelService', '$q', '$modal',
+        'CommentService', 'UserService', 'TravelService', '$q', '$modal', '$filter', 'param',
         function ($window, $scope, $log, $modalInstance, photoId, travelId, PhotoService, CommentService, UserService,
-                  TravelService, $q, $modal) {
+                  TravelService, $q, $modal, $filter, param) {
 
             $scope.ctx = $window.ctx;
             $scope.apirest = $window.apirest;
@@ -186,6 +186,34 @@ angular.module('ponmApp.controllers')
                     }
                 });
                 return d.promise;
+            };
+
+            $scope.addTravel = function(data) {
+                var d = $q.defer();
+                TravelService.addPhoto({travelId: data},
+                    param({photos: $scope.photoId}), function (res) {
+                        if (res.status == "OK") {
+                            d.resolve();
+                        }else { // {status: "error", msg: "Username should be `awesome`!"}
+                            d.resolve(res.info);
+                        }
+                    }, function (error) {
+                        if (error.data) {
+                            d.reject(error.data.info);
+                        } else {
+                            d.reject('Server error!');
+                        }
+                    });
+                return d.promise;
+            };
+
+            $scope.showTravel = function() {
+                var selected = [];
+                if($scope.userOpenInfo) {
+                    selected = $filter('filter')($scope.userOpenInfo.travels, {id: $scope.photo.travel_id});
+                }
+
+                return ($scope.photo.travel_id && selected.length) ? selected[0].title : '添加到旅行';
             };
 
             $scope.cancel = function () {
@@ -460,16 +488,24 @@ angular.module('ponmApp.controllers')
                 $scope.file.mapVendor.latPritty = cnmap.GPS.convert(lat);
                 $scope.file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
 
-                GeocodeService.regeoAddresses(lat, lng).then(function(res) {
-                    if(!address) {
-                        $scope.file.mapVendor.address = res.address;
-                    }
-                    $scope.file.mapVendor.addresses = res.addresses;
-                });
+//                GeocodeService.regeoAddresses(lat, lng).then(function(res) {
+//                    if(!address) {
+//                        $scope.file.mapVendor.address = res.address;
+//                    }
+//                    $scope.file.mapVendor.addresses = res.addresses;
+//                });
 
                 if (address) {
                     $scope.file.mapVendor.address = address;
                 }
+
+                // 加载gps地点可选的地址列表
+                mapService.getAddrPois(lat, lng, function(addresses, addr) {
+                    if(!address) {
+                        $scope.file.mapVendor.address = addr;
+                    }
+                    $scope.file.mapVendor.addresses = addresses;
+                });
             };
 
 

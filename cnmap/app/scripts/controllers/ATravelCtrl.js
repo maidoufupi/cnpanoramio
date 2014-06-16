@@ -37,7 +37,7 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
                         getTravel(searchObject.id);
                     }
                 }else {
-                    $location.search({id: $scope.travelId || '0'});
+//                    $location.search({id: $scope.travelId || '0'});
                 }
             });
 
@@ -108,9 +108,13 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
 
             $scope.updateSpot = function(travel, spot, type, $data) {
                 var d = $q.defer();
-                var params = {};
+                var params = {
+                    title: spot.title,
+                    description: spot.description,
+                    address: spot.address
+                };
                 params[type] = $data;
-                TravelService.changeSpot({travelId: travel.id, spotId: spot.id}, param(params), function(res) {
+                TravelService.changeSpot({travelId: travel.id, typeId: spot.id}, param(params), function(res) {
                     res = res || {};
                     if(res.status === 'OK') { // {status: "OK"}
                         d.resolve()
@@ -130,6 +134,29 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
             $scope.showSpotAddress = function(spot) {
                return spot.address || "添加地址";
             };
+
+            $scope.$on('photoDeleteEvent', function(e, data) {
+                $log.debug("photo delete event: photoId = " + data);
+                e.preventDefault();
+                e.stopPropagation();
+
+                // remove travel photo on server
+                TravelService.deletePhoto({travelId: $scope.travel.id, typeId: data}, function(res) {
+                    if(res.status == "OK") {
+                        angular.forEach($scope.travel.spots, function (spot, key) {
+                            angular.forEach(spot.photos, function (photo, key) {
+                                if (photo.id == data) {
+                                    delete spot.photos.splice(key, 1);
+                                }
+                            });
+                        });
+
+                        $scope.$broadcast('ponmPhotoFluidResize');
+                    }
+                });
+
+
+            });
 
             $scope.mapOptions = {
                 // map plugin config

@@ -82,11 +82,8 @@ public class TravelServiceImpl implements TravelService {
 
 	@Override
 	public TravelSpot changeSpot(Long id, TravelSpot spot) {
-		User me = UserUtil.getCurrentUser(userManager);
-		com.cnpanoramio.domain.TravelSpot travelSpot = travelManager.getTravelSpot(id);
-		if(!travelSpot.getTravel().getUser().getId().equals(me.getId())) {
-			throw new AccessDeniedException("Travel (id=" + travelSpot.getTravel().getId() + ") is not belong to you");
-		}
+		
+		com.cnpanoramio.domain.TravelSpot travelSpot = new com.cnpanoramio.domain.TravelSpot();
 		travelSpot.setAddress(spot.getAddress());
 		travelSpot.setTitle(spot.getTitle());
 		travelSpot.setDescription(spot.getDescription());
@@ -107,6 +104,16 @@ public class TravelServiceImpl implements TravelService {
 	@Override
 	public TravelSpot getSpot(Long id) {
 		return convertTravelSpot(travelManager.getTravelSpot(id));
+	}
+
+	@Override
+	public Travel addTravelPhotos(Long id, List<Long> photos) {
+		return convertTravel(travelManager.addTravelPhotos(id, photos));
+	}
+
+	@Override
+	public Travel removeTravelPhotos(Long id, List<Long> photos) {
+		return convertTravel(travelManager.removeTravelPhotos(id, photos));
 	}
 
 }

@@ -35,7 +35,7 @@ public class PhotoCameraInfo {
 	private Date dateTimeOriginal;
 	// 曝光时间
 	@JsonProperty("exposure_time")
-	private String exposureTime;
+	private Double exposureTime;
 	// 焦距
 	@JsonProperty("focal_length")
 	private String focalLength;
@@ -98,10 +98,10 @@ public class PhotoCameraInfo {
 	public void setDateTimeOriginal(Date dateTimeOriginal) {
 		this.dateTimeOriginal = dateTimeOriginal;
 	}
-	public String getExposureTime() {
+	public Double getExposureTime() {
 		return exposureTime;
 	}
-	public void setExposureTime(String exposureTime) {
+	public void setExposureTime(Double exposureTime) {
 		this.exposureTime = exposureTime;
 	}
 	public String getFocalLength() {

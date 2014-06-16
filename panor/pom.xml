@@ -89,6 +89,16 @@
 
 	<repositories>
 		<repository>
+			<id>apache.snapshots</id>
+			<url>http://repository.apache.org/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<!-- <repository>
 			<id>appfuse-snapshots</id>
 			<url>http://oss.sonatype.org/content/repositories/appfuse-snapshots</url>
 			<releases>
@@ -97,11 +107,7 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
-		<repository>
-			<id>apache.snapshots</id>
-			<url>http://repository.apache.org/snapshots/</url>
-		</repository>
+		</repository>	 -->
 
 		<repository>
 			<id>people.apache.snapshots</id>
@@ -483,9 +489,9 @@
 		<jdbc.username>root</jdbc.username>
 		<jdbc.password>root</jdbc.password>
 
-		<!-- <db.name>db775f7wf1lr50gp</db.name>
+		<!-- <db.name>ponmdb</db.name>
 		<jdbc.url>jdbc:mysql://panoramio.mysql.rds.aliyuncs.com/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
-		<jdbc.username>db775f7wf1lr50gp</jdbc.username>
+		<jdbc.username>anypossible</jdbc.username>
 		<jdbc.password>String0int</jdbc.password> -->
 
 		<contextpath-name>/</contextpath-name>

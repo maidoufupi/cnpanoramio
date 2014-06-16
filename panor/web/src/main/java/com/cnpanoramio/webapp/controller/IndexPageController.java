@@ -32,14 +32,15 @@ public class IndexPageController extends BaseFormController {
     private ServletContext sCtx;
 	
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView handleRequest(HttpServletRequest request,
+    public String handleRequest(HttpServletRequest request,
                                       HttpServletResponse response) {
     	
 //    	Collection<PhotoCameraInfo> photos = indexService.getIndexPhotos();
 //    	
 //    	request.setAttribute("photos", photos);
+    	return "redirect:/map";
     	
-    	return new ModelAndView("map");
+//    	return new ModelAndView("map");
     }
   
 }

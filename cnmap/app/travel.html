@@ -33,10 +33,10 @@
     <script type="text/javascript" src="scripts/panor/js/three.min.js"></script>
 
     <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
-    <script type="text/javascript" src="scripts/controllers/scripts.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.controllers.min.js"></script>
     <script type="text/javascript" src="scripts/controllers/ATravelCtrl.js"></script>
     <script type="text/javascript" src="scripts/controllers/PhotoModalCtrl.js"></script>
-    <script type="text/javascript" src="scripts/directives/scripts.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.directives.min.js"></script>
 
     <script type="text/javascript" src="scripts/panor/scripts.min.js"></script>
     <!--<script type="text/javascript" src="scripts/panor/MapTravel.js"></script>-->
@@ -45,13 +45,14 @@
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
     <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
     <script type="text/javascript" src="scripts/panor/gaode/MapEventListenerImpl.js"></script>
+    <script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>
     <script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>
 
     <script type="text/javascript">
 //        window.ctx = "http://115.28.21.165";
         window.ctx = "http://127.0.0.1:8080/panor-web";
         window.apirest = window.ctx + "/api/rest";
-        window.userId = 3;
+        window.userId = 1;
     </script>
 </head>
 <body>
@@ -69,19 +70,19 @@
 
         <div class="page-header travel-header">
             <div class="media user-info">
-                <a class="pull-left" href="{{ctx}}/user/{{travel.user_id}}">
+                <a class="pull-left" href="{{ctx}}/user#?id={{travel.user_id}}">
                     <img class="media-object img-circle" ng-src="{{apirest}}/user/{{travel.user_id || 1}}/avatar">
                 </a>
 
                 <div class="media-body">
                     <h4 class="media-heading">{{travel.username}}</h4>
                     <div>
-
+                        <div class="title">{{travel.title}}</div>
+                        <span class="footnotes">{{' - ' + (travel.time_start | date:'yyyy-MM-dd')}}</span>
                     </div>
                 </div>
             </div>
-            <h2>{{travel.title}}</h2>
-            <h4>{{travel.create_time | date:'yyyy-MM-dd'}}</h4>
+
             <div class="travel-desc">
                 <div ng-switch="travelEnedit">
                     <a ng-switch-when="true"
@@ -107,7 +108,7 @@
                             <div class="spot-date">
                                 <span class="spot-date-txt ">{{spot.day}}</span>
                                 <span class="spot-date-flag">DAY</span>
-                                <span class="spot-date-flag">{{spot.start_time | date:'yyyyMMdd'}}</span>
+                                <span class="spot-date-flag">{{spot.time_start | date:'yyyyMMdd'}}</span>
                             </div>
                         </a>
                         <div>
@@ -145,17 +146,22 @@
 
                 </div>
                 <div class="panel-body">
-                    <div photo-fluid-container class="photo-fluid-container">
+                    <div photo-fluid-container
+                         class="photo-fluid-container">
                         <a ng-repeat="photo in spot.photos"
                            ng-click="activePhoto(photo)"
                            href=""
-                           class="fluid-brick"
-                           ponm-photo>
-                            <img
-                                 ng-src="{{apirest}}/photo/{{photo.id}}/2">
-                            <div class="ponm-photo-footer">
+                           class="fluid-brick ponm-photo"
+                           ponm-photo="photo"
+                                >
+                            <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
+                            <div class="action ponm-photo-footer">
                                 <p>{{photo.point.address}}</p>
                                 <pre class="description">{{photo.description}}</pre>
+                            </div>
+                            <div ng-show="travelEnedit"
+                                 class="action ponm-photo-remove">
+                                <span class="glyphicon glyphicon-remove"></span>
                             </div>
                         </a>
                     </div>

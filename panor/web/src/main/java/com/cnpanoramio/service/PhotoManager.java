@@ -37,14 +37,13 @@ public interface PhotoManager {
 								  MultipartFile file) throws Exception;
 	
 	/**
-	 * Store photo
 	 * 
-	 * @param ins
+	 * @param photo
+	 * @param file
 	 * @return
-	 * @throws IOException
 	 * @throws ImageReadException
 	 */
-	public Photo save(Photo photo, InputStream ins) throws ImageReadException;
+	public Photo save(Photo photo, MultipartFile file) throws ImageReadException, IOException;
 
 	/**
 	 * 根据ID获取图片

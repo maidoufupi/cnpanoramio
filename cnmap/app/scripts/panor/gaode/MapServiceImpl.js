@@ -17,6 +17,22 @@
 
     $window.cnmap.MapService = function(map) {
 
+        var levelMap = {
+            "国家": 3,
+            "省": 7,
+            "市": 9,
+            "区县": 11,
+            "乡镇": 13,
+            "村庄": 16,
+            "热点商圈": 16,
+            "小区": 18,
+            "兴趣点": 18,
+            "门牌号": 19,
+            "道路": 17,
+            "道路交叉路口": 18,
+            "公交站台、地铁站": 18
+        };
+
         this.map = map || this.map;
 
         var geocoder;
@@ -109,6 +125,34 @@
                 geocoder.getLocation(address);
             }
         };
+
+        this.getLocPois = function (address, callback) {
+            if (!geocoder) {
+                this.init(function() {
+                    ga();
+                });
+            }else {
+                ga();
+            }
+            function ga() {
+                AMap.event.addListenerOnce(geocoder, "complete", function(res) {
+                    var addresses = [];
+                    if(res.info == "OK") {
+                        angular.forEach(res.geocodes, function(geocode, key) {
+                            addresses.push({
+                                address: geocode.formattedAddress,
+                                location: geocode.location,
+                                similarity: 1,
+                                zoom: levelMap[geocode.level] || 4
+                            });
+                        });
+                    }
+                    callback.apply(undefined, [addresses]);
+                });
+                geocoder.getLocation(address);
+            }
+        };
+
     };
 
     $window.cnmap.MapService.prototype = $window.cnmap.IMapService;

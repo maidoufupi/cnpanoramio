@@ -1,8 +1,9 @@
 package com.cnpanoramio.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +33,7 @@ public class TravelSpot {
 	private Travel travel;
 	
 	@OneToMany
-	private List<Photo> photos = new ArrayList<Photo>(0);
+	private Set<Photo> photos = new HashSet<Photo>(0);
 	
 	@Column(name="create_time")
 	private Date createTime;
@@ -77,11 +78,11 @@ public class TravelSpot {
 		this.travel = travel;
 	}
 
-	public List<Photo> getPhotos() {
+	public Set<Photo> getPhotos() {
 		return photos;
 	}
 
-	public void setPhotos(List<Photo> photos) {
+	public void setPhotos(Set<Photo> photos) {
 		this.photos = photos;
 	}
 

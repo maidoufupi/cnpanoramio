@@ -348,7 +348,7 @@ module.exports = function (grunt) {
                  '<%= yeoman.app %>/scripts/services/deparam.js',
                  '<%= yeoman.app %>/scripts/services/GeocodeService.js'
              ],
-           '<%= yeoman.app %>/scripts/directives/scripts.min.js': [
+           '<%= yeoman.app %>/scripts/ponmApp.directives.min.js': [
                '<%= yeoman.app %>/scripts/directives/filters.js',
                '<%= yeoman.app %>/scripts/directives/FlexText.js',
                '<%= yeoman.app %>/scripts/directives/ponmPhotoContainer.js',
@@ -371,7 +371,7 @@ module.exports = function (grunt) {
                '<%= yeoman.app %>/scripts/panor/qq/Map*.js',
                '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.qq.js'
              ],
-           '<%= yeoman.app %>/scripts/controllers/scripts.min.js': [
+           '<%= yeoman.app %>/scripts/ponmApp.controllers.min.js': [
                  '<%= yeoman.app %>/scripts/controllers/*Ctrl.js'
              ]
          }

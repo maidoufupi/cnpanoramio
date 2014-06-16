@@ -40,9 +40,11 @@
     <script src="bower_components/angular-masonry/angular-masonry.js"></script>
 
     <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
-    <script type="text/javascript" src="scripts/controllers/scripts.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.controllers.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.directives.min.js"></script>
     <script type="text/javascript" src="scripts/directives/PhotoFluidContainer.js"></script>
     <script type="text/javascript" src="scripts/controllers/UserPageCtrl.js"></script>
+    <script type="text/javascript" src="scripts/controllers/PhotoModalCtrl.js"></script>
 
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
             type="text/javascript"></script>
@@ -52,7 +54,8 @@
 
     <script type="text/javascript">
         window.ctx = "http://127.0.0.1:8080/panor-web";
-        window.apirest = "http://127.0.0.1:8080/panor-web/api/rest"
+        window.apirest = "http://127.0.0.1:8080/panor-web/api/rest";
+        window.userId = 1;
     </script>
 </head>
 <body>
@@ -124,7 +127,14 @@
             <div style="clear: both;"></div>
         </div>
         <div class="paginator-wrapper" data-ng-show="photo.totalItems > 0">
-            <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
+            <pagination items-per-page="photo.pageSize"
+                        total-items="photo.totalItems"
+                        ng-model="photo.currentPage"
+                        max-size="photo.maxSize"
+                        class="pagination-sm"
+                        boundary-links="true"
+                        rotate="false"
+                        num-pages="photo.numPages"></pagination>
         </div>
 
 <!--        <div>
@@ -141,16 +151,19 @@
              fluid-line-max-height="200"
              fluid-line-min-height="100">
             <a ng-repeat="photo in photos"
-               repeat-complete="updateFluid"
                ng-click="activePhoto(photo)"
                href=""
-               class="fluid-brick"
+               class="fluid-brick ponm-photo"
                ponm-photo
                     >
                 <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
-                <div class="ponm-photo-footer">
-                    <p>{{photo.title}}</p>
+                <div class="action ponm-photo-footer">
                     <p>{{photo.point.address}}</p>
+                    <pre class="description">{{photo.description}}</pre>
+                </div>
+                <div ng-show="editable"
+                     class="action ponm-photo-remove">
+                    <span class="glyphicon glyphicon-remove"></span>
                 </div>
             </a>
         </div>
@@ -187,7 +200,14 @@
         </div>-->
 
         <div class="paginator-wrapper" data-ng-show="photo.totalItems > 0">
-            <pagination items-per-page="photo.pageSize" total-items="photo.totalItems" page="photo.currentPage" max-size="photo.maxSize" class="pagination-sm" boundary-links="true" rotate="false" num-pages="photo.numPages"></pagination>
+            <pagination items-per-page="photo.pageSize"
+                        total-items="photo.totalItems"
+                        ng-model="photo.currentPage"
+                        max-size="photo.maxSize"
+                        class="pagination-sm"
+                        boundary-links="true"
+                        rotate="false"
+                        num-pages="photo.numPages"></pagination>
         </div>
     </div>
     <div class="info-col">

@@ -49,7 +49,15 @@
         margin-top: 0;
       }
       .travel-desc {
-        margin: 10px;
+        margin: 10px 0;
+      }
+
+      .media.user-info {
+        .media-body {
+          .title {
+            display: inline-block;
+          }
+        }
       }
     }
 
@@ -72,19 +80,18 @@
     background-color: orange;
     text-align: center;
     border-radius: 2px;
-    padding: 10px 0 0;
+    padding: 0;
 
     .spot-date-txt {
-      height: 45px;
-      line-height: 45px;
-      font-size: 50px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 40px;
       display: block;
       font-family: "Gulim";
     }
 
     .spot-date-flag {
       display: block;
-      margin-top: 2px;
       font-weight: bold;
     }
   }

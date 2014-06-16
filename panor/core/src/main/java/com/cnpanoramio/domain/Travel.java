@@ -1,9 +1,10 @@
 package com.cnpanoramio.domain;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,7 +46,7 @@ public class Travel {
 	private UserSettings user;
 	
 	@OneToMany
-	private List<TravelSpot> spots = new ArrayList<TravelSpot>(0);
+	private Set<TravelSpot> spots = new HashSet<TravelSpot>(0);
 	
 	// 默认的spot
 	@OneToOne
@@ -89,11 +90,11 @@ public class Travel {
 		this.user = user;
 	}
 
-	public List<TravelSpot> getSpots() {
+	public Set<TravelSpot> getSpots() {
 		return spots;
 	}
 
-	public void setSpots(List<TravelSpot> spots) {
+	public void setSpots(Set<TravelSpot> spots) {
 		this.spots = spots;
 	}
 

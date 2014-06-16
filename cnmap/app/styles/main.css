@@ -454,11 +454,13 @@ body {
 .table.table-striped.files tr td.info-tag {
   width: 50px; }
 .table.table-striped.files tr td.link-tag {
-  background-color: #6DCE6D;
+  background-color: #ed9c28;
   border-radius: 4px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   width: 20px; }
+.table.table-striped.files tr td.link-tag.photo-upload-ok {
+  background-color: #6DCE6D; }
 
 .bootstrap-tagsinput {
   padding: 1px;
@@ -1020,7 +1022,9 @@ form#settings {
       .container.travel .container.right-content .page-header.travel-header h2 {
         margin-top: 0; }
       .container.travel .container.right-content .page-header.travel-header .travel-desc {
-        margin: 10px; }
+        margin: 10px 0; }
+      .container.travel .container.right-content .page-header.travel-header .media.user-info .media-body .title {
+        display: inline-block; }
     .container.travel .container.right-content .container.travel-content {
       width: 100%; }
 
@@ -1037,16 +1041,15 @@ form#settings {
     background-color: orange;
     text-align: center;
     border-radius: 2px;
-    padding: 10px 0 0; }
+    padding: 0; }
     .travel-circle-header .spot-date .spot-date-txt {
-      height: 45px;
-      line-height: 45px;
-      font-size: 50px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 40px;
       display: block;
       font-family: "Gulim"; }
     .travel-circle-header .spot-date .spot-date-flag {
       display: block;
-      margin-top: 2px;
       font-weight: bold; }
   .travel-circle-header .info {
     margin: 5px 0; }
@@ -1354,18 +1357,23 @@ form#settings {
   height: 400px;
   display: block; }
 
-.map-photo-modal .modal-dialog {
-  position: absolute;
-  top: 20px;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  width: auto;
-  padding: 0;
-  box-shadow: 0 0 20px 1px #777; }
-  .map-photo-modal .modal-dialog .modal-content .modal-body .map_panel.container .map-photo-map {
-    bottom: 0;
-    margin: 0; }
+.map-photo-modal {
+  overflow-y: hidden; }
+  .map-photo-modal .modal-dialog {
+    position: absolute;
+    top: 20px;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    padding: 0;
+    box-shadow: 0 0 20px 1px #777; }
+    .map-photo-modal .modal-dialog .modal-content {
+      border-radius: initial;
+      border: initial; }
+      .map-photo-modal .modal-dialog .modal-content .modal-body .map_panel.container .map-photo-map {
+        bottom: 0;
+        margin: 0; }
 
 .photo_list_and_map {
   position: relative;
@@ -1524,17 +1532,18 @@ form#settings {
   padding: 2px;
   margin: 0; }
 
-div[contentEditable] {
-  cursor: pointer; }
-
-div[contentEditable]:hover, div[contentEditable]:focus {
-  background-color: ghostwhite; }
-
+/** editable */
 pre.description {
   margin: 0;
   padding: 0;
   border: 0;
   background-color: initial; }
+
+pre.description.hover {
+  background-color: white; }
+
+.editable-input.hover {
+  background-color: white; }
 
 /** photo fluid directive */
 .photo-fluid-container {
@@ -1557,23 +1566,34 @@ pre.description {
     .photo-fluid-container .fluid-brick img {
       height: 100%;
       max-width: 100%; }
-    .photo-fluid-container .fluid-brick .ponm-photo-footer {
-      position: absolute;
-      bottom: 0;
-      height: 50%;
-      width: 100%;
-      background-color: rgba(128, 128, 128, 0.5);
-      opacity: 0;
-      color: white;
-      -webkit-transition: opacity linear 0.3s;
-      -moz-transition: opacity linear 0.3s;
-      -ms-transition: opacity linear 0.3s;
-      -o-transition: opacity linear 0.3s;
-      transition: opacity linear 0.3s; }
-    .photo-fluid-container .fluid-brick .ponm-photo-footer.ng-animate.show-add, .photo-fluid-container .fluid-brick .ponm-photo-footer.ng-animate.show-remove {
-      opacity: 1; }
-    .photo-fluid-container .fluid-brick .ponm-photo-footer.show {
-      opacity: 1; }
+  .photo-fluid-container .ponm-photo .ponm-photo-footer {
+    position: absolute;
+    bottom: 0;
+    height: 50%;
+    width: 100%;
+    background-color: rgba(128, 128, 128, 0.5);
+    color: white;
+    overflow: hidden; }
+  .photo-fluid-container .ponm-photo .ponm-photo-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: white; }
+    .photo-fluid-container .ponm-photo .ponm-photo-remove .glyphicon {
+      font-size: 12px; }
+  .photo-fluid-container .ponm-photo .ponm-photo-remove:hover {
+    color: red; }
+  .photo-fluid-container .ponm-photo .action {
+    opacity: 0;
+    -webkit-transition: opacity linear 0.3s;
+    -moz-transition: opacity linear 0.3s;
+    -ms-transition: opacity linear 0.3s;
+    -o-transition: opacity linear 0.3s;
+    transition: opacity linear 0.3s; }
+  .photo-fluid-container .ponm-photo .action.ng-animate.ponm-show-add, .photo-fluid-container .ponm-photo .action.ng-animate.ponm-show-remove {
+    opacity: 1; }
+  .photo-fluid-container .ponm-photo .action.ponm-show {
+    opacity: 1; }
 
 /** photo container directive*/
 .ponm-photo-container {
@@ -1666,7 +1686,7 @@ pre.description {
     transition: opacity 0.5s; }
   .ponm-photo-container .image-button {
     position: absolute;
-    bottom: 0;
+    bottom: 10px;
     left: 50%;
     margin-left: -32px; }
   .ponm-photo-container .p360-image {
@@ -1689,6 +1709,8 @@ pre.description {
   margin: 5px 0; }
   .editable .editable-wrap {
     white-space: pre-wrap; }
+    .editable .editable-wrap .editable-buttons {
+      margin-top: 5px; }
   .editable pre {
     margin: 0;
     padding: 0;

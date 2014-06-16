@@ -152,6 +152,11 @@ angular.module('ponmApp.controllers')
                 $scope.file.mapVendor.latPritty = cnmap.GPS.convert(lat);
                 $scope.file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
 
+                if (address) {
+                    $scope.file.mapVendor.address = address;
+                }
+
+                // 加载gps地点可选的地址列表
                 mapService.getAddrPois(lat, lng, function(addresses, addr) {
                     if(!address) {
                         $scope.file.mapVendor.address = addr;
@@ -166,9 +171,9 @@ angular.module('ponmApp.controllers')
 //                    $scope.file.mapVendor.addresses = res.addresses;
 //                });
 
-                if (address) {
-                    $scope.file.mapVendor.address = address;
-                } else {
+//                if (address) {
+//                    $scope.file.mapVendor.address = address;
+//                } else {
 //                    GeocodeService.regeo({lat: lat, lng: lng}, function(regeocode) {
 //                        $scope.file.mapVendor.address = regeocode.formatted_address;
 //                    });
@@ -183,7 +188,7 @@ angular.module('ponmApp.controllers')
 //
 //                        }
 //                    })
-                }
+//                }
             };
 
             /*
@@ -280,29 +285,11 @@ angular.module('ponmApp.controllers')
 //                return addresses;
 //            });
             var d = $q.defer();
-            $scope.mapService.getLocation(val, function(res) {
-//                var addresses = [];
-//                if(res.info == "OK") {
-//                    angular.forEach(res.geocodes, function(geocode, key) {
-//                        if(GeocodeService.levelMap[geocode.level]) {
-//                            geocode.zoom = GeocodeService.levelMap[geocode.level];
-//                        }
-//                        addresses.push(geocode);
-//                    });
-//                }
+            $scope.mapService.getLocPois(val, function(res) {
                 d.resolve(res);
             });
             return d.promise.then(function(res) {
-                var addresses = [];
-                if(res.info == "OK") {
-                    angular.forEach(res.geocodes, function(geocode, key) {
-                        if(GeocodeService.levelMap[geocode.level]) {
-                            geocode.zoom = GeocodeService.levelMap[geocode.level];
-                        }
-                        addresses.push(geocode);
-                    });
-                }
-                return addresses;
+                return res;
             });
 //            return $http.get('http://restapi.amap.com/v3/geocode/geo', {
 //                params: {

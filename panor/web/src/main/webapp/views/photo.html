@@ -85,11 +85,11 @@
         <!-- /.container-fluid -->
     </nav>
 
-    <div class="D5a photo-info">
+    <div class="photo-info">
         <div class="info-container">
             <div class="user-container">
                 <div class="media user-info">
-                    <a class="pull-left" href="{{ctx}}/user/{{photo.user_id}}">
+                    <a class="pull-left" href="{{ctx}}/user#?id={{photo.user_id}}">
                         <img class="media-object img-circle" ng-src="{{apirest}}/user/{{photo.user_id || 1}}/avatar">
                     </a>
 
@@ -101,6 +101,19 @@
                     </div>
                 </div>
                 <div class="content">
+                    <div ng-if="!photoEditable && photo.travel_id">
+                        旅行：<a data-ng-href="{{ctx}}/travel#?id={{photo.travel_id}}">{{photo.travel_name}}</a>
+                    </div>
+                    <div ng-if="photoEditable">
+                        旅行：
+                        <a href=""
+                           editable-select="photo.travel_id"
+                           e-ng-options="travel.id as travel.title for travel in userOpenInfo.travels"
+                           buttons="no"
+                           onbeforesave="addTravel($data)">
+                            {{ showTravel() }}
+                        </a>
+                    </div>
                     <div class="title" ng-switch="photoEditable">
                         <a ng-switch-when="true"
                            href="" editable-text="photo.title"
@@ -211,7 +224,7 @@
             </div>
         </div>
         <div class="comment" data-ng-show="login">
-            <div >
+            <div class="editable">
                 <a href="" editable-textarea="commentContent" e-rows="4"
                    onbeforesave="createComment($data)">
                     <input type="text" class="form-control" placeholder="发表评论">

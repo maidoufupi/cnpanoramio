@@ -16,7 +16,7 @@ angular.module('contentEditableApp', [
         function($scope, $http, $log) {
             $scope.name = "image.jpg";
 
-            $scope.$watch('description', function(newValue) {
+            $scope.$watch('description2', function(newValue) {
                 $log.debug(newValue);
             })
 

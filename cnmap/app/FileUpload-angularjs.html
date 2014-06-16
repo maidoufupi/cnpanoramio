@@ -78,15 +78,15 @@
     <script type="text/javascript" src="scripts/panor/MapEventListener.js"></script>
     <script type="text/javascript" src="scripts/panor/MapService.js"></script>
 
-    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
+    <!--<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
     <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
     <script type="text/javascript" src="scripts/panor/gaode/MapEventListenerImpl.js"></script>
-    <script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>
+    <script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>-->
 
-    <!--<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57&libraries=drawing"></script>
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57&libraries=drawing"></script>
     <script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
     <script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>
-    <script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>-->
+    <script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>
 
 </head>
 <body>
@@ -163,17 +163,21 @@
                 </td>
                 <td>
                     <div data-ng-controller="TitleEditorCtrl">
-                        <p>
-                            <div contentEditable
+                        <div>
+                            <div class="editable-input"
+                                 data-ng-class="{'hover': mouseEnter}"
+                                 contentEditable
                                  ng-model="title"
                                  data-place-holder="{{file.name}}"></div>
-                        </p>
-                        <p>
-                            <div contentEditable
+                        </div>
+                        <div>
+                            <pre class="description"
+                                 data-ng-class="{'hover': mouseEnter}"
+                                 contentEditable
                                  ng-model="description"
                                  data-place-holder="添加描述"
-                                 multiple-line="4"></div>
-                        </p>
+                                 multiple-line="4">{{description}}</pre>
+                        </div>
                     </div>
                     <item-picker ng-model="file.tags"
                                  load-data="loadTagData"
@@ -215,7 +219,10 @@
                 </td>
                 <td class="link-tag" data-ng-class="{'photo-upload-ok': file.photoId}">
                     <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-ok': file.photoId}"></span>
-                    <a href="{{ctx}}/photo/{{file.photoId}}">
+                    <a ng-href="{{ctx}}/map##lat={{file.lat}}&lng={{file.lng}}&zoom=18&userid={{userId}}"
+                       tooltip="在地图中查看"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top">
                         <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-globe': file.photoId}"></span>
                     </a>
                 </td>

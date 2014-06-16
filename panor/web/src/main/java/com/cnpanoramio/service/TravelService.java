@@ -36,6 +36,24 @@ public interface TravelService {
 	public List<Travel> createMyTravel(User user, String travel);
 	
 	/**
+	 * 往旅行中批量添加图片
+	 * 
+	 * @param id
+	 * @param photos
+	 * @return
+	 */
+	public Travel addTravelPhotos(Long id, List<Long> photos);
+	
+	/**
+	 * 删除旅行的图片
+	 * 
+	 * @param id
+	 * @param photos
+	 * @return
+	 */
+	public Travel removeTravelPhotos(Long id, List<Long> photos);
+	
+	/**
 	 * 更改travel描述
 	 * 
 	 * @param id

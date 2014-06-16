@@ -134,17 +134,21 @@
                 </td>
                 <td>
                     <div data-ng-controller="TitleEditorCtrl">
-                        <p>
-                            <div contentEditable
+                        <div>
+                            <div class="editable-input"
+                                 data-ng-class="{'hover': mouseEnter}"
+                                 contentEditable
                                  ng-model="title"
                                  data-place-holder="{{file.name}}"></div>
-                        </p>
-                        <p>
-                            <div contentEditable
+                        </div>
+                        <div>
+                            <pre class="description"
+                                 data-ng-class="{'hover': mouseEnter}"
+                                 contentEditable
                                  ng-model="description"
                                  data-place-holder="添加描述"
-                                 multiple-line="4"></div>
-                        </p>
+                                 multiple-line="4">{{description}}</pre>
+                        </div>
                     </div>
                     <item-picker ng-model="file.tags"
                                  load-data="loadTagData"
@@ -186,7 +190,10 @@
                 </td>
                 <td class="link-tag" data-ng-class="{'photo-upload-ok': file.photoId}">
                     <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-ok': file.photoId}"></span>
-                    <a href="{{ctx}}/photo/{{file.photoId}}">
+                    <a ng-href="{{ctx}}/map##lat={{file.lat}}&lng={{file.lng}}&zoom=18&userid={{userId}}"
+                       tooltip="在地图中查看"
+                       tooltip-trigger="mouseenter"
+                       tooltip-placement="top">
                         <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-globe': file.photoId}"></span>
                     </a>
                 </td>
@@ -203,6 +210,7 @@
                 <span>完成</span>
             </a>
         </div>
+        <div ui-map="photoMap" ui-options="mapOptions"></div>
     </form>
 
     <br>

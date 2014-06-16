@@ -245,7 +245,7 @@ public class UserRestService extends AbstractRestService {
 				String imageDataBytes = completeImageData
 						.substring(completeImageData.indexOf(",") + 1);
 
-				InputStream ins = new ByteArrayInputStream(
+				ByteArrayInputStream ins = new ByteArrayInputStream(
 						Base64.decode(imageDataBytes.getBytes()));
 
 				Avatar avatar = userSettingsManager.saveAvatar(me, ins);

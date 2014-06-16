@@ -5,6 +5,8 @@
          editable="false"></div>
     <div class="dropdown-menu">
         <div class="dropdown-body">
+            <span ng-show="loadingItems"
+                  class="glyphicon glyphicon-refresh">加载中...</span>
             <span class="label label-selectable"
                   ng-class="{'label-default': item.$active, 'label-primary': !item.$active}"
                   ng-repeat="item in items"

@@ -30,13 +30,10 @@ public class FileServiceImpl implements FileService {
 	private String parentPath;
 	
 	public boolean saveFile(String fileType, Long fileKey, String fileExt, InputStream ins) {
-//		String key;
 		String uploadDir;
 		FileOutputStream fos;
 		String parent = getParentPath();
 		
-//		key = getPhotoKey(fileKey, fileExt, THUMBNAIL_LEVEL_0);
-//		uploadDir = parent + "/" + fileType + "/" + key;
 		uploadDir = getFilePath(fileType, fileKey, fileExt, THUMBNAIL_LEVEL_0);
 		try {
 			fos = FileUtils.openOutputStream(new File(uploadDir));

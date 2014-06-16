@@ -1,5 +1,8 @@
 package com.cnpanoramio.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
@@ -93,16 +96,27 @@ public class TravelRestService extends AbstractRestService {
 	@ResponseBody
 	public TravelResponse addPhotos(@PathVariable String travelId, @RequestParam("photos") String photos) {
 		TravelResponse response = responseFactory();
-		User me = UserUtil.getCurrentUser(userManager);
 		String[] ps = photos.split(",");
+		List<Long> photoIds = new ArrayList<Long>();
 		for(String id : ps) {
-			Photo photo = photoManager.getPhoto(Long.parseLong(id));
-			if(photo.getOwner().equals(me)) {
-				travelManager.addTravelPhoto(Long.parseLong(travelId), photo);
-			}else {
-				throw new AccessDeniedException("Access Denied! Photo Id: " + photo.getId());
-			}
+			photoIds.add(Long.parseLong(id));
 		}
+		
+		response.setTravel(travelService.addTravelPhotos(Long.parseLong(travelId), photoIds));
+			
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/photo/{photoId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public TravelResponse removePhotos(@PathVariable String travelId, @PathVariable String photoId) {
+		TravelResponse response = responseFactory();
+		
+		List<Long> photoIds = new ArrayList<Long>();
+		photoIds.add(Long.parseLong(photoId));
+		
+		response.setTravel(travelService.removeTravelPhotos(Long.parseLong(travelId), photoIds));
+		
 		return response;
 	}
 	

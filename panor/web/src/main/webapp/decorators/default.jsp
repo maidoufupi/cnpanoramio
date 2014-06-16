@@ -37,10 +37,11 @@
     
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.mousewheel.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.panzoom.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/three.min.js"/>"></script>
     
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/controllers/scripts.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/directives/scripts.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ponmApp.controllers.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/ponmApp.directives.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/scripts.min.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>

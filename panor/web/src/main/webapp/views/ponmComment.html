@@ -1,6 +1,6 @@
 <div class="media comment"
      data-ng-class="{'comment-active': mouseEnter}">
-    <a class="pull-left" href="{{ctx}}/user/{{comment.userId}}">
+    <a class="pull-left" href="{{ctx}}/user#?id={{comment.userId}}">
         <img class="media-object img-rounded"
              data-ng-src="{{apirest}}/user/{{comment.userId}}/avatar"
              width="60" height="60" alt="{{comment.username}}">
@@ -8,7 +8,7 @@
     <div class="media-body">
         <div class="header">
             <h6 class="media-heading">
-                <a href="{{ctx}}/user/{{comment.userId}}">{{comment.username}}</a>
+                <a href="{{ctx}}/user#?id={{comment.userId}}">{{comment.username}}</a>
             </h6>
             <div>
                 <span class="footnotes">{{comment.create_time | calculatetime | date:'yyyy-MM-dd'}}</span>

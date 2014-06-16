@@ -9,7 +9,8 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
 //                        .hashPrefix('');
 //    }])
     .controller('ExploreWorldCtrl', ['$window', '$location', '$scope', 'UserService', '$modal', 'deparam', 'param',
-    function ($window, $location, $scope, UserService, $modal, deparam, param) {
+        '$timeout',
+    function ($window, $location, $scope, UserService, $modal, deparam, param, $timeout) {
 
         $scope.ctx = $window.ctx;
         $scope.apirest = $window.apirest;
@@ -178,15 +179,6 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
                 panoramioLayer.setMap(mapObj);
                 locationHash(mapObj);
                 mapEventListener.addToolBar(mapObj);
-                jQuery.bind("");
-                //$($window).trigger('hashchange');
-
-//                var stateObj = jQuery.parseParams($location.hash());
-//
-//                $window.cnmap.setCenter(stateObj.lat, stateObj.lng, mapObj);
-//                if (stateObj.zoom) {
-//                    $window.cnmap.setZoom(stateObj.zoom, mapObj);
-//                }
             }
         });
 
@@ -201,36 +193,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
         function locationHash(map) {
 
             mapEventListener.addLocationHashListener(map, function(lat ,lng, zoom) {
-                if (changeState) {
-                    return;
-                }
-
-                var stateObj = deparam($location.hash());
-
-                if (lat && lng) {
-                    hashObj['lat'] = lat;
-                    hashObj['lng'] = lng;
-                    hashObj['zoom'] = zoom;
-                    if (hashObj.lat != stateObj.lat ||
-                        hashObj.lng != stateObj.lng ||
-                        hashObj.zoom != stateObj.zoom ||
-                        hashObj.latest != stateObj.latest ||
-                        hashObj.userid != stateObj.userid ||
-                        hashObj.favorite != stateObj.favorite
-                        ) {
-                        if (this.setState) {
-                            clearTimeout(this.setState);
-                        }
-                        changeState = true;
-//                    angular.copy(hashObj, stateObj);
-                        $location.hash(param(hashObj));
-//                    jQuery.bbq.pushState(stateObj);
-                        this.setState = setTimeout(function () {
-                            changeState = false;
-                        }, 500);
-
-                    }
-                }
+                updateState(lat ,lng, zoom);
             });
 
             $scope.$watch(function () {
@@ -245,22 +208,21 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
                     if (hashObj.lat != stateObj.lat ||
                         hashObj.lng != stateObj.lng ||
                         hashObj.zoom != stateObj.zoom) {
-                        if (this.setState) {
-                            clearTimeout(this.setState);
+                        if ($scope.setState) {
+                            $timeout.cancel($scope.setState);
                         }
                         changeState = true;
-//                        angular.copy(stateObj, hashObj);
                         mapEventListener.setCenter(map, stateObj.lat, stateObj.lng);
                         if (stateObj.zoom) {
                             mapEventListener.setZoom(map, stateObj.zoom);
                         }
-                        this.setState = setTimeout(function () {
+                        $scope.setState = $timeout(function () {
                             changeState = false;
                         }, 500);
 
                         if(stateObj.bounds) {
                             var boundPoints = stateObj.bounds.split(",");
-                            if(boundPoints.lenght = 4) {
+                            if(4 == boundPoints.lenght) {
                                 mapEventListener.setBounds(map, {lat: boundPoints[0], lng: boundPoints[1]},
                                     {lat: boundPoints[2], lng:boundPoints[3]});
                             }
@@ -280,30 +242,71 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
                         }
                     }
                 }
+
+                if(stateObj.photoid) {
+                    $scope.displayPhoto(stateObj.photoid);
+                }
             })
         }
 
-            $scope.displayPhoto = function(photoId) {
-                var modalInstance = $modal.open({
-                    templateUrl: 'views/photo.html',
-                    controller: 'PhotoModalCtrl',
-                    windowClass: 'photo-modal-fullscreen',
-                    resolve: {
-                        photoId: function () {
-                            return photoId;
-                        },
-                        travelId: function() {
-                            return '';
-                        }
-                    }
-                });
+        function updateState(lat ,lng, zoom) {
+            if (changeState) {
+                return;
+            }
 
-                modalInstance.result.then(function (selectedItem) {
+            var stateObj = deparam($location.hash());
+
+            if (lat && lng && zoom) {
+                hashObj['lat'] = lat;
+                hashObj['lng'] = lng;
+                hashObj['zoom'] = zoom;
+            }
+            if (hashObj.lat != stateObj.lat ||
+                hashObj.lng != stateObj.lng ||
+                hashObj.zoom != stateObj.zoom ||
+                hashObj.latest != stateObj.latest ||
+                hashObj.userid != stateObj.userid ||
+                hashObj.favorite != stateObj.favorite ||
+                hashObj.photoid != stateObj.photoid
+                ) {
+                if ($scope.setState) {
+                    $timeout.cancel($scope.setState);
+                }
+                changeState = true;
+                $location.hash(param(hashObj));
+                $scope.setState = $timeout(function () {
+                    changeState = false;
+                }, 500);
+            }
+
+        }
+
+        $scope.displayPhoto = function(photoId) {
+            hashObj.photoid = photoId;
+            updateState();
+            var modalInstance = $modal.open({
+                templateUrl: 'views/photo.html',
+                controller: 'PhotoModalCtrl',
+                windowClass: 'photo-modal-fullscreen',
+                resolve: {
+                    photoId: function () {
+                        return photoId;
+                    },
+                    travelId: function() {
+                        return '';
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                delete hashObj.photoid;
+                updateState();
 //                    $scope.selected = selectedItem;
-                }, function () {
-//                    $log.info('Modal dismissed at: ' + new Date());
-                });
-            };
+            }, function () {
+                delete hashObj.photoid;
+                updateState();
+            });
+        };
 
 
     }])

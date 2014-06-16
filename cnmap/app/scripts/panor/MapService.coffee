@@ -38,5 +38,13 @@ class IMapService
    #/
   getLocation:  (address, callback) ->
 
+  ##
+  # 根据地址获取gps信息(pois信息)
+  #
+  # @param address
+  # @param callback
+  #/
+  getLocPois:   (address, callback) ->
+
 window.cnmap = window.cnmap || {}
 window.cnmap.IMapService = IMapService

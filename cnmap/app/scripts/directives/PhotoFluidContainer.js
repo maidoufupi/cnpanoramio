@@ -18,6 +18,18 @@ angular.module('ponmApp.directives')
                         calculateHeight();
                     });
 
+                    scope.$on('ponmPhotoFluidResize', function (e) {
+                        $log.debug("ponmPhotoFluidResize");
+                        if(scope.updatePromise) {
+                            $timeout.cancel(scope.updatePromise);
+                        }
+                        scope.updatePromise = $timeout(function () {
+                            scope.updateFluid();
+                            scope.updatePromise = null;
+                        }, 500);
+
+                    });
+
                     function calculateHeight() {
 
                         var containerWidth = element.innerWidth() - 10;
@@ -74,12 +86,6 @@ angular.module('ponmApp.directives')
                         }
                     };
 
-//                    $timeout(function () {
-//                        $log.debug("init $timeout");
-//                        scope.updateFluid();
-
-//                    }, 1000);
-
                     scope.$watch(attrs.photoFluidContainer, function() {
                         $log.debug("photoFluidContainer changed");
                         if(scope.updatePromise) {
@@ -97,14 +103,22 @@ angular.module('ponmApp.directives')
         function ($window, $parse, $animate, $log) {
             return {
                 restrict: 'A',
-//            require: '',
                 link: function (scope, element, attrs, ngModel) {
-                    var photoFooter = element.find(".ponm-photo-footer");
+                    var photoAction = element.find(".action");
                     element.on('mouseenter', function (e) {
-                        $animate.addClass(photoFooter, "show");
+                        var photoAction = element.find(".action");
+                        $animate.addClass(photoAction, "ponm-show");
                     });
                     element.on('mouseleave', function (e) {
-                        $animate.removeClass(photoFooter, "show");
+                        var photoAction = element.find(".action");
+                        $animate.removeClass(photoAction, "ponm-show");
+                    });
+
+                    var photoRemoveButton = element.find(".action.ponm-photo-remove");
+                    photoRemoveButton.on("click", function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        scope.$emit('photoDeleteEvent', scope.photo.id);
                     });
                 }
             };

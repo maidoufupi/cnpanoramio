@@ -3,9 +3,6 @@ package com.cnpanoramio.service;
 import java.io.File;
 import java.io.InputStream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public interface FileService {
 	
 	public static final String TYPE_IMAGE = "image";
@@ -19,17 +16,7 @@ public interface FileService {
 	public static final int THUMBNAIL_PIX_LEVEL_1 = 900;
 	public static final int THUMBNAIL_PIX_LEVEL_2 = 240;
 	public static final int THUMBNAIL_PIX_LEVEL_3 = 33;
-	
-	/**
-     * 上传文件
-     * 
-     * @param fileType
-     * @param fileName
-     * @param file
-     * @return String
-     */
-//    public String uploadFile(String fileType, String fileName, File file);
-    
+	    
     /**
      * 保存文件
      * 

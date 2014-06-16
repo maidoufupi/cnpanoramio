@@ -8,15 +8,20 @@ angular.module('ponmApp.directives', [
     .directive('contenteditable', ['$parse', function ($parse) {
         return {
             require: 'ngModel',
+            scope: {
+                ngModel: "@"
+            },
             link: function (scope, elm, attrs, ctrl) {
 
                 elm.placeholder = attrs.placeHolder;
 
-                // view -> model
+                elm.css("cursor", "pointer");
+
+                    // view -> model
                 elm.on('blur', function () {
 
                     if(attrs.multipleLine) {
-                        elm.css("height", '1.5em');
+//                        elm.css("height", '1.5em');
                         elm.css("overflow", 'hidden');
                         scope.$apply(function () {
                             if (elm.placeholder != elm.html()) {
@@ -24,9 +29,18 @@ angular.module('ponmApp.directives', [
                                 var contents = elm.contents();
                                 angular.forEach(contents, function(content, key) {
                                     if(content instanceof String) {
-                                        htmlValue = htmlValue + "\n\r" + content;
+                                        if(htmlValue) {
+                                            htmlValue += "\n";
+                                        }
+                                        htmlValue = htmlValue + content;
                                     }else {
-                                        htmlValue = htmlValue + "\n\r" + angular.element(content).text();
+                                        if(content.textContent != "") {
+                                            if(htmlValue) {
+                                                htmlValue += "\n";
+                                            }
+                                            htmlValue = htmlValue + content.textContent;
+                                        }
+//                                        htmlValue = htmlValue + angular.element(content).text();
                                     }
                                 });
                                 ctrl.$setViewValue(htmlValue);
@@ -50,7 +64,7 @@ angular.module('ponmApp.directives', [
                         }
                     });
                     if(attrs.multipleLine) {
-                        elm.css("height", (attrs.multipleLine || 4) + 'em');
+//                        elm.css("height", (attrs.multipleLine || 4) + 'em');
                     }
                 });
 
@@ -74,7 +88,7 @@ angular.module('ponmApp.directives', [
                 function removePlaceHolder() {
                     elm.css('color', '');
                     // 针对firefox如果div无内容则height为0的bug
-                    elm.css('height', elm.height());
+//                    elm.css('height', elm.height());
                     elm.html("")
                 }
 
@@ -98,9 +112,20 @@ angular.module('ponmApp.directives', [
                             event.preventDefault();
                             event.stopPropagation();
                         }
-
                     })
                 }
+
+                elm.on("mouseenter", function(e) {
+                    ctrl.$render();
+                    scope.$apply(function() {
+                        scope.mouseEnter = true;
+                    });
+                });
+                elm.on("mouseleave", function(e) {
+                    scope.$apply(function() {
+                        scope.mouseEnter = false;
+                    });
+                });
 
             }
         };
@@ -116,7 +141,7 @@ angular.module('ponmApp.directives', [
                     newData: "&",
                     itemValueName: "@"
                 },
-                templateUrl: 'views/travelPickerView.html',
+                templateUrl: 'views/tagPickerView.html',
                 link: function(scope, element, attrs, ngModel) {
 
                     scope.itemValueName = scope.itemValueName || "value";
@@ -138,9 +163,11 @@ angular.module('ponmApp.directives', [
                         if(scope.loadData) {
                             var loadDataRef;
                             if(loadDataRef = scope.loadData()) {
+                                scope.loadingItems = true;
                                 items = loadDataRef(function(res) {
                                     items = res;
                                     convertItems();
+                                    scope.loadingItems = false;
                                 });
                                 convertItems();
                             }else {
@@ -153,6 +180,9 @@ angular.module('ponmApp.directives', [
 
                     function convertItems() {
                         scope.items = [];
+                        if(angular.isArray(items) && items.length) {
+                            scope.loadingItems = false;
+                        }
                         angular.forEach(items, function(item, key) {
                             if(angular.isObject(item)) {
                                 scope.items.push({
@@ -187,7 +217,7 @@ angular.module('ponmApp.directives', [
                                     selectedItems.push(items[item.$key]);
                                     itemValues.push(item.value);
                                 }
-                            })
+                            });
                             scope.item = itemValues.join(attrs.multipleSelect || ",");
 
                         }else {

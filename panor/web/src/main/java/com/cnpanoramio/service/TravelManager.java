@@ -43,7 +43,25 @@ public interface TravelManager {
 	 * @param photo
 	 * @return
 	 */
-	public Photo addTravelPhoto(Long id, Photo photo);
+	public Photo addTravelPhoto(Travel travel, Photo photo);
+	
+	/**
+	 * 从旅行中删除图片
+	 * 
+	 * @param id
+	 * @param photos
+	 * @return
+	 */
+	public Travel removeTravelPhotos(Long id, List<Long> photos);
+	
+	/**
+	 * 往旅行中批量添加图片
+	 * 
+	 * @param id
+	 * @param photos
+	 * @return
+	 */
+	public Travel addTravelPhotos(Long id, List<Long> photos);
 	
 	/**
 	 * 更改travel的描述

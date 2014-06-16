@@ -1,4 +1,5 @@
 .map-photo-modal {
+  overflow-y: hidden;
   .modal-dialog {
     position: absolute;
     top: 20px;
@@ -9,6 +10,8 @@
     padding: 0;
     box-shadow: 0 0 20px 1px #777;
     .modal-content {
+      border-radius: initial;
+      border: initial;
       .modal-header {
 //        color: white;
       }

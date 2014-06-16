@@ -7,9 +7,6 @@ angular.module('userPageApp', [
         'ui.bootstrap',
         'ui.map',
         'ponmApp',
-        'ponmApp.services',
-        'ponmApp.directives',
-        'ponmApp.controllers',
         'xeditable'
     ])
     .run(['editableOptions', function(editableOptions) {
@@ -21,13 +18,13 @@ angular.module('userPageApp', [
             $scope.ctx = $window.ctx;
             $scope.apirest = $window.apirest;
 
-            var url = $location.absUrl();
-            var userm = url.match(/\/user\/[0-9]+/g);
-            if(userm) {
-                $scope.userId = userm[0].match(/[0-9]+/g)[0];
-            }else {
-                $scope.userId = 3;
-            }
+//            var url = $location.absUrl();
+//            var userm = url.match(/\/user\/[0-9]+/g);
+//            if(userm) {
+//                $scope.userId = userm[0].match(/[0-9]+/g)[0];
+//            }else {
+//                $scope.userId = 3;
+//            }
 
             // 用户图片分页属性
             $scope.photo = {
@@ -41,12 +38,19 @@ angular.module('userPageApp', [
 
             $scope.tag = '';
 
+            $scope.editable = false;
+
             $scope.$watch('photo.currentPage', function() {
                 getPhotos($scope.tag);
             });
 
             var searchPart = $location.search();
             if(searchPart) {
+                if(searchPart.id) {
+                    if(searchPart.id != $scope.userId) {
+                        $scope.userId = searchPart.id;
+                    }
+                }
                 if(searchPart.with_photo_id) {
                     photo_with_photo_id(searchPart.with_photo_id);
                     getOpenInfo();
@@ -63,6 +67,11 @@ angular.module('userPageApp', [
                 return $location.search();
             }, function (searchPart) {
                 if(searchPart) {
+                    if(searchPart.id) {
+                        if(searchPart.id != $scope.userId) {
+                            $scope.userId = searchPart.id;
+                        }
+                    }
                     if(searchPart.with_photo_id) {
                         photo_with_photo_id(searchPart.with_photo_id);
                     }else if (searchPart.tag){
@@ -103,6 +112,7 @@ angular.module('userPageApp', [
                 UserService.getOpenInfo({'userId': $scope.userId}, function(data) {
                     if(data.status == "OK") {
                         $scope.userOpenInfo = data.open_info;
+                        $scope.editable = ($scope.userOpenInfo.id == $scope.userId);
                     }
                 });
             }
@@ -155,11 +165,15 @@ angular.module('userPageApp', [
 
             $scope.activePhoto = function(photo) {
                 var modalInstance = $modal.open({
-                    templateUrl: '../views/photo.html',
+                    templateUrl: 'views/photo.html',
                     controller: 'PhotoModalCtrl',
+                    windowClass: 'photo-modal-fullscreen',
                     resolve: {
                         photoId: function () {
                             return photo.id;
+                        },
+                        travelId: function() {
+                            return '';
                         }
                     }
                 });

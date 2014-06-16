@@ -1,6 +1,5 @@
 package com.cnpanoramio.service.impl.ali;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,11 +7,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.geometry.Positions;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -32,8 +26,6 @@ public class FileServiceImpl implements FileService {
 
 	private transient final Log log = LogFactory.getLog(FileService.class);
 	
-	private final static String BUCKET_IMAGE = "panor-image";
-	
 	@Autowired
 	private Environment env;
 	
@@ -46,6 +38,9 @@ public class FileServiceImpl implements FileService {
 	@Value(value = "${aliyun.oss.endpoint}")
 	private String endpoint;
 	
+	@Value(value = "${aliyun.oss.bucket}")
+	private String bucket;
+	
 	private OSSClient client;
 
 	@Override
@@ -54,7 +49,7 @@ public class FileServiceImpl implements FileService {
 		String uploadDir;
 		FileOutputStream fos;
 		if (fileType == TYPE_IMAGE) {
-			saveImage(fileKey, ins);
+			saveImage(fileKey+"."+fileExt, ins);
 		}else {
 			key = getPhotoKey(fileKey, 0);
 			try {
@@ -75,7 +70,7 @@ public class FileServiceImpl implements FileService {
 		return id + "-th" + level;
 	}
 
-	private void saveImage(Long id, InputStream inputStream) {
+	private void saveImage(String key, InputStream inputStream) {
 		BufferedInputStream bins = new BufferedInputStream(inputStream);
 				  
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -89,7 +84,7 @@ public class FileServiceImpl implements FileService {
 			IOUtils.copy(bins, baos);
 			content = baos.toByteArray();
 			ins = new ByteArrayInputStream(content);
-			saveOSSObject(BUCKET_IMAGE, getPhotoKey(id, THUMBNAIL_LEVEL_0), ins, content.length);
+			saveOSSObject(bucket, key, ins, content.length);
 			content = null;
 			ins.close();
 			baos.reset();			
@@ -98,65 +93,65 @@ public class FileServiceImpl implements FileService {
 			e1.printStackTrace();
 		}
 
-		// THUMBNAIL_LEVEL_1
-		try {
-			bins.reset();
-			BufferedImage originalImage = ImageIO.read(bins);
-			BufferedImage thumbnail = Thumbnails.of(originalImage)
-					.size(THUMBNAIL_PIX_LEVEL_1, THUMBNAIL_PIX_LEVEL_1)
-					.asBufferedImage();
-
-			ImageIO.write(thumbnail, "jpg", baos);
-			content = baos.toByteArray();
-			ins = new ByteArrayInputStream(content);
-			saveOSSObject(BUCKET_IMAGE, getPhotoKey(id, THUMBNAIL_LEVEL_1), ins, content.length);
-			content = null;
-			ins.close();
-			baos.reset();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// THUMBNAIL_LEVEL_2
-		try {
-			bins.reset();
-			BufferedImage originalImage = ImageIO.read(bins);
-			BufferedImage thumbnail = Thumbnails.of(originalImage)
-					.size(THUMBNAIL_PIX_LEVEL_2, THUMBNAIL_PIX_LEVEL_2)
-					.asBufferedImage();
-			ImageIO.write(thumbnail, "jpg", baos);
-			content = baos.toByteArray();
-			ins = new ByteArrayInputStream(content);
-			saveOSSObject(BUCKET_IMAGE, getPhotoKey(id, THUMBNAIL_LEVEL_2), ins, content.length);
-			content = null;
-			ins.close();
-			baos.reset();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		// THUMBNAIL_LEVEL_3
-		try {
-			bins.reset();
-			BufferedImage originalImage = ImageIO.read(bins);
-			BufferedImage thumbnail = Thumbnails.of(originalImage)
-					.size(THUMBNAIL_PIX_LEVEL_3, THUMBNAIL_PIX_LEVEL_3)
-					.crop(Positions.CENTER)
-					.asBufferedImage();
-			
-			ImageIO.write(thumbnail, "jpg", baos);
-			content = baos.toByteArray();
-			ins = new ByteArrayInputStream(content);
-			saveOSSObject(BUCKET_IMAGE, getPhotoKey(id, THUMBNAIL_LEVEL_3), ins, content.length);
-			content = null;
-			ins.close();
-			baos.reset();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		// THUMBNAIL_LEVEL_1
+//		try {
+//			bins.reset();
+//			BufferedImage originalImage = ImageIO.read(bins);
+//			BufferedImage thumbnail = Thumbnails.of(originalImage)
+//					.size(THUMBNAIL_PIX_LEVEL_1, THUMBNAIL_PIX_LEVEL_1)
+//					.asBufferedImage();
+//
+//			ImageIO.write(thumbnail, "jpg", baos);
+//			content = baos.toByteArray();
+//			ins = new ByteArrayInputStream(content);
+//			saveOSSObject(BUCKET_IMAGE, getPhotoKey(id, THUMBNAIL_LEVEL_1), ins, content.length);
+//			content = null;
+//			ins.close();
+//			baos.reset();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		// THUMBNAIL_LEVEL_2
+//		try {
+//			bins.reset();
+//			BufferedImage originalImage = ImageIO.read(bins);
+//			BufferedImage thumbnail = Thumbnails.of(originalImage)
+//					.size(THUMBNAIL_PIX_LEVEL_2, THUMBNAIL_PIX_LEVEL_2)
+//					.asBufferedImage();
+//			ImageIO.write(thumbnail, "jpg", baos);
+//			content = baos.toByteArray();
+//			ins = new ByteArrayInputStream(content);
+//			saveOSSObject(BUCKET_IMAGE, getPhotoKey(id, THUMBNAIL_LEVEL_2), ins, content.length);
+//			content = null;
+//			ins.close();
+//			baos.reset();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		// THUMBNAIL_LEVEL_3
+//		try {
+//			bins.reset();
+//			BufferedImage originalImage = ImageIO.read(bins);
+//			BufferedImage thumbnail = Thumbnails.of(originalImage)
+//					.size(THUMBNAIL_PIX_LEVEL_3, THUMBNAIL_PIX_LEVEL_3)
+//					.crop(Positions.CENTER)
+//					.asBufferedImage();
+//			
+//			ImageIO.write(thumbnail, "jpg", baos);
+//			content = baos.toByteArray();
+//			ins = new ByteArrayInputStream(content);
+//			saveOSSObject(BUCKET_IMAGE, getPhotoKey(id, THUMBNAIL_LEVEL_3), ins, content.length);
+//			content = null;
+//			ins.close();
+//			baos.reset();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
@@ -183,24 +178,31 @@ public class FileServiceImpl implements FileService {
 		return null;
 	}
 	
-	private void saveOSSObject(String bucketName, String key, InputStream ins, int length ) {
+	private void saveOSSObject(String bucketName, String key, InputStream ins, long length ) {
 		
         // 初始化一个OSSClient
 		if(null == client) {
 			log.info(endpoint);
 			log.info(accessKeyId);
 			log.info(accessKeySecret);
-			client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+			if(null == endpoint || "".equals(endpoint)) {
+				client = new OSSClient(accessKeyId, accessKeySecret);
+			}else {
+				client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+			}			
 		}
 
         // 创建上传Object的Metadata
         ObjectMetadata meta = new ObjectMetadata();
-
+        
         // 必须设置ContentLength
         meta.setContentLength(length);
 		
         // 上传Object.
         PutObjectResult result = client.putObject(bucketName, key, ins, meta);
+        
+     // 打印ETag
+        System.out.println(result.getETag());
 	}
 
 	public String getAccessKeyId() {
@@ -225,6 +227,15 @@ public class FileServiceImpl implements FileService {
 
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
+	}	
+	
+
+	public String getBucket() {
+		return bucket;
+	}
+
+	public void setBucket(String bucket) {
+		this.bucket = bucket;
 	}
 
 	@Override
@@ -233,7 +244,4 @@ public class FileServiceImpl implements FileService {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
-
 }
