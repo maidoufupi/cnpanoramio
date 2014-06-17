@@ -1,30 +1,27 @@
 package com.cnpanoramio.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.cxf.ws.addressing.wsdl.Anonymous;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.CommentDao;
+import com.cnpanoramio.dao.LikeDao;
 import com.cnpanoramio.dao.PhotoDao;
+import com.cnpanoramio.domain.Favorite;
+import com.cnpanoramio.domain.Like;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.CommentResponse.Comment;
-import com.cnpanoramio.json.PhotoComments;
 import com.cnpanoramio.json.UserResponse.Settings;
 import com.cnpanoramio.service.CommentService;
 import com.cnpanoramio.service.UserSettingsManager;
@@ -44,8 +41,8 @@ public class CommentServiceImpl implements CommentService {
 	private PhotoDao photoDao;
 	@Autowired
 	private CommentDao commentDao;
-	
-//	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	@Autowired
+	private LikeDao likeDao;
 	
 	@Override
 	public Comment save(Comment comment) {
@@ -59,6 +56,7 @@ public class CommentServiceImpl implements CommentService {
 		Photo photo = photoDao.get(comment.getPhotoId());
 		commentD.setPhoto(photo);
 		commentD = commentDao.save(commentD);
+		photo.getComments().add(commentD);
 		
 		Settings settings = userSettingsManager.getCurrentUserSettings();
 		comment.setId(commentD.getId());
@@ -74,6 +72,7 @@ public class CommentServiceImpl implements CommentService {
 		User me = UserUtil.getCurrentUser(userManager);
 		com.cnpanoramio.domain.Comment commentD = commentDao.get(id);
 		if(commentD.getUser().getId() == me.getId()) {
+			commentD.getPhoto().getComments().remove(commentD);
 			commentDao.remove(commentD);
 			return true;
 		}
@@ -81,19 +80,18 @@ public class CommentServiceImpl implements CommentService {
 		return false;
 	}
 
-	public Collection<Comment> getComments(Long id, int pageSize, int pageNo) {
+	public Collection<Comment> getComments(Long id, int pageSize, int pageNo, User user) {
 		List<com.cnpanoramio.domain.Comment> comments = commentDao.getCommentPager(id, pageSize, pageNo);
 		
 		List<Comment> cs = new ArrayList<Comment>();
 		for(com.cnpanoramio.domain.Comment comment : comments) {
-			Comment c1 = new Comment();
-			c1.setId(comment.getId());
-			c1.setUserId(comment.getUser().getId());
-			UserSettings settings = userSettingsManager.getSettingsByUserName(comment.getUser().getUsername());
-			// 昵称
-			c1.setUsername(settings.getName());
-			c1.setCreateTime(comment.getCreateTime().getTime());
-			c1.setContent(comment.getComment());
+			Comment c1 = convertComment(comment);
+			if(null != user) {
+				Like like = likeDao.getComment(comment, user);
+				if(null != like) {
+					c1.setLike(true);
+				}
+			}
 			cs.add(c1);
 		}
 		
@@ -113,7 +111,7 @@ public class CommentServiceImpl implements CommentService {
 	
 	public Comment convertComment(com.cnpanoramio.domain.Comment commentD) {
 		Comment comment = new Comment();
-		Settings settings = userSettingsManager.getCurrentUserSettings();
+		UserSettings settings = userSettingsManager.get(commentD.getUser().getId());
 		comment.setId(commentD.getId());
 		// 昵称
 		comment.setUsername(settings.getName());
@@ -123,6 +121,8 @@ public class CommentServiceImpl implements CommentService {
 		if(null != commentD.getPhoto()) {
 			comment.setPhotoId(commentD.getPhoto().getId());
 		}
+		
+		comment.setLikeCount(commentD.getLikes().size());
 		
 		return comment;
 	}

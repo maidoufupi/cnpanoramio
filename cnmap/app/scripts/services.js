@@ -6,7 +6,7 @@
 angular.module('ponmApp.services', [
     'ngResource'])
     .factory('CommentService', ['$window', '$resource', function ($window, $resource) {
-        return $resource($window.apirest + '/comment/:commentId',
+        return $resource($window.apirest + '/comment/:commentId/:type',
             {commentId: "@id"},
             {
                 modify: {
@@ -15,6 +15,14 @@ angular.module('ponmApp.services', [
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                         'Accept': 'application/json'
                     }
+                },
+                like: {
+                    method: 'GET',
+                    params: {'type': 'like'}
+                },
+                unLike: {
+                    method: 'DELETE',
+                    params: {'type': 'like'}
                 }
             });
     }])
@@ -102,6 +110,14 @@ angular.module('ponmApp.services', [
                 ,getComments: {
                     method: 'GET',
                     params: {'type': 'comment'}
+                },
+                like: {
+                    method: 'GET',
+                    params: {'type': 'like'}
+                },
+                unLike: {
+                    method: 'DELETE',
+                    params: {'type': 'like'}
                 }
             });
     }])
@@ -178,6 +194,14 @@ angular.module('ponmApp.services', [
                     headers: {
                         'Accept': 'application/json'
                     }
+                },
+                like: {
+                    method: 'GET',
+                    params: {'type': 'like'}
+                },
+                unLike: {
+                    method: 'DELETE',
+                    params: {'type': 'like'}
                 }
             });
     }])

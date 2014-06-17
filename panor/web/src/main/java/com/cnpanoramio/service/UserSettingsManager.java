@@ -39,6 +39,14 @@ public interface UserSettingsManager {
 	public Settings getCurrentUserSettings();
 	
 	/**
+	 * 获取用户设置
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public UserSettings get(Long id);
+	
+	/**
 	 * 通过用户名查找详细设置
 	 * 
 	 * @param userName

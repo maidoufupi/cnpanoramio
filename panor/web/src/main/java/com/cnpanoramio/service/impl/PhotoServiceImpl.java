@@ -20,6 +20,7 @@ import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -28,10 +29,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.dao.FavoriteDao;
+import com.cnpanoramio.dao.LikeDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.PhotoGpsDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Favorite;
+import com.cnpanoramio.domain.Like;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.PhotoGps;
@@ -73,7 +76,10 @@ public class PhotoServiceImpl implements PhotoManager {
 	
 	@Autowired
 	private CommentDao commentDao = null;
-
+	
+	@Autowired
+	private LikeDao likeDao = null;
+	
 	@Autowired
 	public void setUserManager(UserManager userManager) {
 		this.userManager = userManager;
@@ -279,7 +285,7 @@ public class PhotoServiceImpl implements PhotoManager {
 		}		
 		
 		photoDao.save(photo);
-		return getPhotoProperties(photoId, photo.getOwner().getId());
+		return getPhotoProperties(photoId, photo.getOwner());
 	}
 
 	@Override
@@ -299,18 +305,21 @@ public class PhotoServiceImpl implements PhotoManager {
 	}
 
 	@Override
-	public PhotoProperties getPhotoProperties(Long id, Long userId) {
-		PhotoProperties prop = PhotoUtil.transformProperties(getPhoto(id));
-		// 如果用户ID不为空，则返回此图片是否被他收藏
-		if (null != userId) {
-			Favorite f = favoriteDao.get(id, userId);
+	public PhotoProperties getPhotoProperties(Long id, User user) {
+		
+		Photo photo = getPhoto(id);
+		PhotoProperties prop = PhotoUtil.transformProperties(photo);
+		// 返回此图片是否被他 收藏 赞
+		if(null != user) {
+			Like like = likeDao.getPhoto(photo, user);
+			if(null != like) {
+				prop.setLike(true);
+			}
+			Favorite f = favoriteDao.get(id, user.getId());
 			if (null != f) {
 				prop.setFavorite(true);
 			}
 		}
-		// 图片的评论总数
-		Long count = commentDao.getCommentSize(id);
-		prop.setCommentCount(count.intValue());
 		return prop;
 	}
 

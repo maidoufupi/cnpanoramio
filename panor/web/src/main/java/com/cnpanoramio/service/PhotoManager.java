@@ -154,7 +154,7 @@ public interface PhotoManager {
 	 * @param id
 	 * @return
 	 */
-	public PhotoProperties getPhotoProperties(Long id, Long userId);
+	public PhotoProperties getPhotoProperties(Long id, User User);
 	
 	/**
 	 * 为图片添加tag

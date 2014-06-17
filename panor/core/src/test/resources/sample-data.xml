@@ -215,41 +215,41 @@
         <column>id</column>
         <column>photo_id</column>
         <column>user_id</column>
-        <column>createTime</column>
+        <column>create_time</column>
         <column>comment</column>
         <row>
             <value description="id">1</value>
             <value description="photo_id">5</value>
             <value description="user_id">2</value>
-            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="create_time">2014-01-01 01:01:01</value>
             <value description="comment">comment content 1</value>
         </row>
         <row>
             <value description="id">2</value>
             <value description="photo_id">5</value>
             <value description="user_id">2</value>
-            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="create_time">2014-01-01 01:01:01</value>
             <value description="comment">comment content 2</value>
         </row>
         <row>
             <value description="id">3</value>
             <value description="photo_id">3</value>
             <value description="user_id">1</value>
-            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="create_time">2014-01-01 01:01:01</value>
             <value description="comment">comment content 3</value>
         </row>
         <row>
             <value description="id">4</value>
             <value description="photo_id">1</value>
             <value description="user_id">2</value>
-            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="create_time">2014-01-01 01:01:01</value>
             <value description="comment">comment content 4</value>
         </row>
         <row>
             <value description="id">5</value>
             <value description="photo_id">2</value>
             <value description="user_id">2</value>
-            <value description="createTime">2014-01-01 01:01:01</value>
+            <value description="create_time">2014-01-01 01:01:01</value>
             <value description="comment">comment content 5</value>
         </row>
     </table>

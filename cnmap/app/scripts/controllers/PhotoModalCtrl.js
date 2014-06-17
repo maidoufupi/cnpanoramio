@@ -126,12 +126,13 @@ angular.module('ponmApp.controllers')
             $scope.createComment = function (content) {
                 var d = $q.defer();
                 if (content) {
-                    CommentService.save({photoId: $scope.photoId, content: content}, function (res) {
+                    CommentService.save({photo_id: $scope.photoId, content: content}, function (res) {
                         res = res || {};
                         if (res.status == "OK") {
                             $scope.comment.count = $scope.comment.count + 1;
                             $scope.comments.push(res.comment);
 //                            $scope.comments.splice(0, 0, res.comment);
+                            $scope.photo.comment_count += 1;
                             d.resolve(false);
                         } else {
                             d.resolve(res.info);
@@ -143,6 +144,8 @@ angular.module('ponmApp.controllers')
                             d.reject('Server error!');
                         }
                     })
+                }else {
+                    d.resolve(false);
                 }
                 return d.promise;
             };
@@ -152,13 +155,14 @@ angular.module('ponmApp.controllers')
              *
              * @param commentId
              */
-            $scope.deletedComment = function (commentId) {
-                angular.forEach($scope.comments, function (comment, key) {
-                    if (comment.id == commentId) {
-                        delete $scope.comments.splice(key, 1);
-                    }
-                });
-            };
+//            $scope.deletedComment = function (commentId) {
+//                angular.forEach($scope.comments, function (comment, key) {
+//                    if (comment.id == commentId) {
+//                        delete $scope.comments.splice(key, 1);
+//                        $scope.photo.comment_count -= 1;
+//                    }
+//                });
+//            };
 
             /**
              * 更新图片属性
@@ -214,6 +218,63 @@ angular.module('ponmApp.controllers')
                 }
 
                 return ($scope.photo.travel_id && selected.length) ? selected[0].title : '添加到旅行';
+            };
+
+            /**
+             * 根据id删除评论, 当删除评论后调用此方法
+             */
+            $scope.$on('deletedCommentEvent', function(e, id) {
+                e.preventDefault();
+                e.stopPropagation();
+                angular.forEach($scope.comments, function (comment, key) {
+                    if (comment.id == id) {
+                        delete $scope.comments.splice(key, 1);
+                        $scope.photo.comment_count -= 1;
+                    }
+                });
+            });
+
+            /**
+             * 回复评论人的事件响应
+             */
+            $scope.$on('replyCommentEvent', function(e, user) {
+                e.preventDefault();
+                e.stopPropagation();
+                $scope.comment.placeholder = "回复 " + user.name;
+                $scope.commentContent = "@" + user.name + " ";
+            });
+
+            $scope.cancelComment = function() {
+                $scope.comment.placeholder = "";
+                $scope.commentContent = "";
+            };
+
+            $scope.like = function() {
+                if($scope.photo.like) {
+                    PhotoService.unLike({photoId: $scope.photoId}, function (res) {
+                        res = res || {};
+                        if (res.status === 'OK') { // {status: "OK"}
+                            $scope.photo.like = false;
+                            $scope.photo.like_count -= 1;
+                        }
+                    }, function (error) {
+                        if (error.data) {
+                        } else {
+                        }
+                    });
+                }else {
+                    PhotoService.like({photoId: $scope.photoId}, function (res) {
+                        res = res || {};
+                        if (res.status === 'OK') { // {status: "OK"}
+                            $scope.photo.like = true;
+                            $scope.photo.like_count += 1;
+                        }
+                    }, function (error) {
+                        if (error.data) {
+                        } else {
+                        }
+                    });
+                }
             };
 
             $scope.cancel = function () {

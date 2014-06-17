@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cnpanoramio.Constant;
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoGps;
@@ -42,6 +43,7 @@ import com.cnpanoramio.json.PhotoResponse;
 import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.CommentService;
 import com.cnpanoramio.service.FileService;
+import com.cnpanoramio.service.LikeManager;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.ViewsManager;
 import com.cnpanoramio.utils.PhotoUtil;
@@ -67,6 +69,9 @@ public class PhotoRestService extends AbstractRestService {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private LikeManager likeManager;
 	
 	@Override
 	protected PhotoResponse responseFactory() {
@@ -171,16 +176,16 @@ public class PhotoRestService extends AbstractRestService {
 	@ResponseBody
 	public PhotoResponse cameraInfo(@PathVariable String photoId) {
 
-		Long id = null;
-		id = Long.parseLong(photoId);
+		Long id = Long.parseLong(photoId);
 		PhotoResponse reponse = new PhotoResponse();
-		try {
-			PhotoCameraInfo camerainfo = photoService.getCameraInfo(id);
-			reponse.setStatus(PhotoResponse.Status.OK.name());
-			reponse.setCamerainfo(camerainfo);
-		} catch (DataAccessException ex) {
-			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
-		}
+
+		PhotoCameraInfo camerainfo = photoService.getCameraInfo(id);
+		
+		// 图片被查看
+		viewsManager.view(id, Constant.C_APP_MAIN);
+		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setCamerainfo(camerainfo);
+
 		return reponse;
 	}
 
@@ -245,17 +250,16 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 		PhotoResponse reponse = responseFactory();
 		
-		Long userId = null;
+		User me = null;
 		
 		// 如果查看图片的是登录用户，则查询图片相对于此用户的信息
 		try {
-			User me = UserUtil.getCurrentUser(userManager);
-			userId = me.getId();
+			me = UserUtil.getCurrentUser(userManager);
 		} catch (UsernameNotFoundException ex) {
 		}
 		
 //		try {
-			PhotoProperties prop = photoService.getPhotoProperties(id, userId);
+			PhotoProperties prop = photoService.getPhotoProperties(id, me);
 
 			// 设置图片总访问量
 			prop.setViews(viewsManager.getViewsCount(id));
@@ -336,13 +340,36 @@ public class PhotoRestService extends AbstractRestService {
 	
 	@RequestMapping(value = "/{photoId}/comment/{pageSize}/{pageNo}", method = RequestMethod.GET)
 	@ResponseBody
-	public PhotoResponse getGPSInfo(@PathVariable String photoId, @PathVariable String pageSize, 
+	public PhotoResponse getComments(@PathVariable String photoId, @PathVariable String pageSize, 
 			@PathVariable String pageNo) {
 		PhotoResponse reponse = PhotoResponse.getInstance();
 		Long photoIdL = Long.parseLong(photoId);
 		Integer pageSizeI = Integer.parseInt(pageSize);
 		Integer pageNoI = Integer.parseInt(pageNo);
-		reponse.setComments(commentService.getComments(photoIdL, pageSizeI, pageNoI));
+		
+		User me = null;
+		try {
+			me = UserUtil.getCurrentUser(userManager);
+		} catch (UsernameNotFoundException ex) {
+		}
+		
+		reponse.setComments(commentService.getComments(photoIdL, pageSizeI, pageNoI, me));
+		return reponse;
+	}
+	
+	@RequestMapping(value = "/{photoId}/like", method = RequestMethod.GET)
+	@ResponseBody
+	public PhotoResponse likePhoto(@PathVariable String photoId) {
+		PhotoResponse reponse = PhotoResponse.getInstance();
+		likeManager.likePhoto(Long.parseLong(photoId));
+		return reponse;
+	}
+	
+	@RequestMapping(value = "/{photoId}/like", method = RequestMethod.DELETE)
+	@ResponseBody
+	public PhotoResponse unLikePhoto(@PathVariable String photoId) {
+		PhotoResponse reponse = PhotoResponse.getInstance();
+		likeManager.likePhoto(Long.parseLong(photoId));
 		return reponse;
 	}
 

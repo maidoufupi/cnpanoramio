@@ -21,7 +21,7 @@ public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long> implement
 	@Override
 	public List<Comment> getComments(Long photoId) {
 		Query photoListQuery = getSession().createQuery("select c from Comment as c left join c.photo as p "
-				+ "where p.id = :photoid order by createTime desc");
+				+ "where p.id = :photoid order by create_time desc");
 		
 		photoListQuery.setParameter("photoid", photoId);
 		List<Comment> res = photoListQuery.list();
@@ -31,7 +31,7 @@ public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long> implement
 	@Override
 	public List<Comment> getCommentPager(Long photoId, int pageSize, int pageNo) {
 		Query query = getSession().createQuery("select c from Comment as c left join c.photo as p "
-				+ "where p.id = :photoid order by createTime desc");
+				+ "where p.id = :photoid order by create_time desc");
 		
 		query.setParameter("photoid", photoId);
 		query.setFirstResult((pageNo - 1) * pageSize);  

@@ -1253,6 +1253,13 @@ form#settings {
         .photo-modal-container .photo-info .info-container .photo-detail table .value {
           color: #404040;
           word-break: break-all; }
+      .photo-modal-container .photo-info .info-container .communication {
+        margin-top: 2px;
+        background-color: whitesmoke; }
+        .photo-modal-container .photo-info .info-container .communication .status {
+          padding: 10px; }
+          .photo-modal-container .photo-info .info-container .communication .status .glyphicon {
+            font-size: 12px; }
     .photo-modal-container .photo-info .comment {
       margin-bottom: 15px;
       padding: 5px; }
@@ -1751,6 +1758,8 @@ span.footnotes {
     .comments .media.comment .media-body .header {
       width: 130px;
       float: left; }
+      .comments .media.comment .media-body .header .thumbs-up.like {
+        color: #ce352c; }
     .comments .media.comment .media-body .action {
       float: right; }
     .comments .media.comment .media-body .content {

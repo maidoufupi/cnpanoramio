@@ -149,6 +149,9 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
                                     delete spot.photos.splice(key, 1);
                                 }
                             });
+                            if(!spot.photos.length) {
+                                delete $scope.travel.spots.splice(key, 1);
+                            }
                         });
 
                         $scope.$broadcast('ponmPhotoFluidResize');

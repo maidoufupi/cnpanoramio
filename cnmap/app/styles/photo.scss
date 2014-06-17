@@ -151,6 +151,17 @@
           }
         }
       }
+
+      .communication {
+        margin-top: 2px;
+        background-color: whitesmoke;
+        .status {
+          padding: 10px;
+          .glyphicon {
+            font-size: 12px;
+          }
+        }
+      }
     }
 
     .comment {

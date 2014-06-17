@@ -16,7 +16,7 @@
 	<name>Photo on map Modular Application - Core</name>
 
 	<build>
-		<!-- <plugins>
+		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>hibernate3-maven-plugin</artifactId>
@@ -84,7 +84,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>			
-		</plugins> -->
+		</plugins>
 		
 		<testResources>
 			<testResource>

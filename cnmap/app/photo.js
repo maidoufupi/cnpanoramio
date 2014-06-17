@@ -29,10 +29,10 @@ angular.module('ponmPhotoApp', [
                     windowClass: 'photo-modal-fullscreen',
                     resolve: {
                         photoId: function () {
-                            return 134;
+                            return 6;
                         },
                         travelId: function() {
-                            return 11;
+                            return 1;
                         }
                     }
                 });

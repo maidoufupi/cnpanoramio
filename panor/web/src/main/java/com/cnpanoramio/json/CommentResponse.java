@@ -23,6 +23,7 @@ public class CommentResponse extends ExceptionResponse {
 
 		private Long id;
 		
+		@JsonProperty("user_id")
 		private Long userId;
 		
 		private String username;
@@ -32,7 +33,13 @@ public class CommentResponse extends ExceptionResponse {
 		@JsonProperty("create_time")
 		private Date createTime;
 		
+		@JsonProperty("photo_id")
 		private Long photoId;
+		
+		private Boolean like;
+		
+		@JsonProperty("like_count")
+		private Integer likeCount;
 
 		public Long getId() {
 			return id;
@@ -80,20 +87,30 @@ public class CommentResponse extends ExceptionResponse {
 
 		public void setPhotoId(Long photoId) {
 			this.photoId = photoId;
+		}
+
+		public Boolean getLike() {
+			return like;
+		}
+
+		public void setLike(Boolean like) {
+			this.like = like;
+		}
+
+		public Integer getLikeCount() {
+			return likeCount;
+		}
+
+		public void setLikeCount(Integer likeCount) {
+			this.likeCount = likeCount;
 		}	
 	}
-
-
 
 	public Comment getComment() {
 		return comment;
 	}
 
-
-
 	public void setComment(Comment comment) {
 		this.comment = comment;
 	}
-	
-	
 }

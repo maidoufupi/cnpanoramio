@@ -31,7 +31,7 @@
             <c:choose>
             	<c:when test="${not empty pageContext.request.remoteUser}">
 	            	<li popover="用户主页" popover-trigger="mouseenter" popover-placement="bottom">
-		            	<a class="user" href="<c:url value='/user/${sessionScope.userId}'/>">
+		            	<a class="user" href="<c:url value='/user#?id=${sessionScope.userId}'/>">
 		                	<span class="white">${pageContext.request.remoteUser}</span>
                         	<img class="navbar-profile-image" src="<c:url value='/api/rest/user/${sessionScope.userId}/avatar'/>" alt="${pageContext.request.remoteUser}">
 		                </a>

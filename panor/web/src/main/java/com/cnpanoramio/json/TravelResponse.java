@@ -41,6 +41,10 @@ public class TravelResponse extends ExceptionResponse {
 		private String address;
 		private String title;
 		private String description;
+		
+		@JsonProperty("like_count")
+		private Integer likeCount;
+		
 		public Long getId() {
 			return id;
 		}
@@ -113,6 +117,12 @@ public class TravelResponse extends ExceptionResponse {
 		}
 		public void setUsername(String username) {
 			this.username = username;
+		}
+		public Integer getLikeCount() {
+			return likeCount;
+		}
+		public void setLikeCount(Integer likeCount) {
+			this.likeCount = likeCount;
 		}
 		
 	}

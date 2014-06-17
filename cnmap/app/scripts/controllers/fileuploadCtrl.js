@@ -34,13 +34,13 @@
 //                if (isOnGitHub) {
 //                    // Demo settings:
                 angular.extend(fileUploadProvider.defaults, {
-//                    autoUpload: true,
+                    autoUpload: true,
                     // Enable image resizing, except for Android and Opera,
                     // which actually support image resizing, but fail to
                     // send Blob objects via XHR requests:
 //                        disableImageResize: /Android(?!.*Chrome)|Opera/
 //                            .test(window.navigator.userAgent),
-                    maxFileSize: 10000000
+                    maxFileSize: 6000000
 //                        loadImageMaxFileSize: 10000000,
 //                        imageQuality: 2000000,
 //                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -205,6 +205,7 @@
 
                         mapService.getAddress(file.lat, file.lng, function(res) {
                             file.address = res;
+                            file.saveProperties && file.saveProperties();
                         });
 
 //                        GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {

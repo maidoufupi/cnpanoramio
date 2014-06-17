@@ -72,8 +72,13 @@ public class PhotoUtil {
 		for(Tag tag : photo.getTags()) {
 			pp.getTags().add(tag.getTag());
 		}
-		
+		// 收藏
 		pp.setFavCount(photo.getFavorites().size());
+		// 赞
+		pp.setLikeCount(photo.getLikes().size());
+		// 评论
+		pp.setCommentCount(photo.getComments().size());
+		
 		pp.setPoint(photo.getGpsPoint());
 		// 目前默认高德供应商坐标
 		pp.setVendor(MapVendor.gaode.name());

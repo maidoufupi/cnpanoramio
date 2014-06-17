@@ -95,6 +95,12 @@ public class Photo {
 	@Column(name = "is360")
 	private Boolean is360;
 	
+	@OneToMany
+	private Set<Like> likes = new HashSet<Like>(0);
+	
+	@OneToMany
+	private Set<Comment> comments = new HashSet<Comment>(0);
+	
 	public final Long getId() {
 		return id;
 	}
@@ -295,6 +301,22 @@ public class Photo {
 
 	public void setIs360(Boolean is360) {
 		this.is360 = is360;
+	}
+
+	public Set<Like> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<Like> likes) {
+		this.likes = likes;
+	}
+
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
 	}
 	
 }

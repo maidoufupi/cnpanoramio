@@ -49,10 +49,11 @@
     <script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>
 
     <script type="text/javascript">
-//        window.ctx = "http://115.28.21.165";
-        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.ctx = "http://115.28.21.165";
+//        window.ctx = "http://127.0.0.1:8080/panor-web";
         window.apirest = window.ctx + "/api/rest";
         window.userId = 1;
+        window.login = 1;
     </script>
 </head>
 <body>
@@ -78,7 +79,7 @@
                     <h4 class="media-heading">{{travel.username}}</h4>
                     <div>
                         <div class="title">{{travel.title}}</div>
-                        <span class="footnotes">{{' - ' + (travel.time_start | date:'yyyy-MM-dd')}}</span>
+                        <span class="footnotes">{{'  ' + (travel.time_start | date:'yyyy/MM/dd') + ' - ' + (travel.time_end | date:'yyyy/MM/dd') }}</span>
                     </div>
                 </div>
             </div>
@@ -108,7 +109,7 @@
                             <div class="spot-date">
                                 <span class="spot-date-txt ">{{spot.day}}</span>
                                 <span class="spot-date-flag">DAY</span>
-                                <span class="spot-date-flag">{{spot.time_start | date:'yyyyMMdd'}}</span>
+                                <span class="spot-date-flag">{{spot.time_start | date:'yyyy/MM/dd'}}</span>
                             </div>
                         </a>
                         <div>

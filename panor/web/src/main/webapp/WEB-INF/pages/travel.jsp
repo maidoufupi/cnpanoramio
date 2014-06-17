@@ -63,7 +63,7 @@
                     <h4 class="media-heading">{{travel.username}}</h4>
                     <div>
                         <div class="title">{{travel.title}}</div>
-                        <span class="footnotes">{{' - ' + (travel.time_start | date:'yyyy-MM-dd')}}</span>
+                        <span class="footnotes">{{'  ' + (travel.time_start | date:'yyyy/MM/dd') + ' - ' + (travel.time_end | date:'yyyy/MM/dd') }}</span>
                     </div>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                             <div class="spot-date">
                                 <span class="spot-date-txt ">{{spot.day}}</span>
                                 <span class="spot-date-flag">DAY</span>
-                                <span class="spot-date-flag">{{spot.time_start | date:'yyyyMMdd'}}</span>
+                                <span class="spot-date-flag">{{spot.time_start | date:'yyyy/MM/dd'}}</span>
                             </div>
                         </a>
                         <div>

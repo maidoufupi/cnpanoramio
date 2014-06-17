@@ -73,6 +73,9 @@ public class Travel {
 	
 	@Column(name="description")
 	private String description;
+	
+	@OneToMany
+	private Set<Like> likes = new HashSet<Like>(0);
 
 	public Long getId() {
 		return id;
@@ -160,6 +163,14 @@ public class Travel {
 
 	public void setSpot(TravelSpot spot) {
 		this.spot = spot;
+	}
+
+	public Set<Like> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<Like> likes) {
+		this.likes = likes;
 	}
 		
 }

@@ -44,8 +44,14 @@ public class PhotoProperties {
 	// views
 	private Integer views;
 	
+	// likes
+	@JsonProperty("like_count")
+	private Integer likeCount;
+	
 	@JsonProperty("fav_count")
 	private Integer favCount;
+	
+	private Boolean like;
 	
 	private Boolean favorite;
 	
@@ -210,6 +216,22 @@ public class PhotoProperties {
 
 	public void setTravelName(String travelName) {
 		this.travelName = travelName;
+	}
+
+	public Integer getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public Boolean getLike() {
+		return like;
+	}
+
+	public void setLike(Boolean like) {
+		this.like = like;
 	}	
 	
 }

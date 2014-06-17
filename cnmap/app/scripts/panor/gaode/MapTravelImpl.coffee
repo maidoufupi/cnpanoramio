@@ -12,6 +12,8 @@ class TravelLayer extends window.cnmap.ITravelLayer
         if !spotMinDate or spotMinDate > spot.spotDate
           spotMinDate = spot.spotDate
 
+      @travel.time_start = spotMinDate
+
       for spot in @travel.spots
         ## 计算此景点是第几天游览
         spot.day = Math.round((spot.spotDate - spotMinDate) / (1000 * 60 * 60 * 24)) + 1
@@ -23,6 +25,9 @@ class TravelLayer extends window.cnmap.ITravelLayer
           path: point
           strokeStyle: 'dashed'
         }
+      @travel.spots.sort((a,b) -> return a.day-b.day)
+      if @travel.spots.length
+        @travel.time_end = @travel.spots[@travel.spots.length-1].time_start
 
   createPoint: (photo) ->
     new AMap.LngLat(photo.point.lng, photo.point.lat)

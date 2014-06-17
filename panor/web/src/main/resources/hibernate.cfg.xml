@@ -23,6 +23,7 @@
 		<mapping class="com.cnpanoramio.domain.Avatar" />
 		<mapping class="com.cnpanoramio.domain.Travel" />		
 		<mapping class="com.cnpanoramio.domain.TravelSpot"/>
+		<mapping class="com.cnpanoramio.domain.Like" />
 				
 	</session-factory>
 </hibernate-configuration>

@@ -30,6 +30,7 @@ import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
+import com.cnpanoramio.json.UserResponse.Settings;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.service.UserSettingsManager;
@@ -238,6 +239,8 @@ public class UserSettingsImpl implements UserSettingsManager {
 		if(null == settings) {
 			settings = new UserSettings();
 			settings.setUser(user);
+			// 默认用户名
+			settings.setName(user.getUsername());
 			userSettingsDao.save(settings);
 		}
 		return settings;
@@ -270,6 +273,13 @@ public class UserSettingsImpl implements UserSettingsManager {
 			list.add(t.getTag());
 		}
 		return list;
+	}
+
+
+
+	@Override
+	public UserSettings get(Long id) {
+		return userSettingsDao.get(id);
 	}
 
 }

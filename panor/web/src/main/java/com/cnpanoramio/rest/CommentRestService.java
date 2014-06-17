@@ -17,6 +17,7 @@ import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.json.CommentResponse;
 import com.cnpanoramio.json.CommentResponse.Comment;
 import com.cnpanoramio.service.CommentService;
+import com.cnpanoramio.service.LikeManager;
 
 @Controller
 @RequestMapping("/api/rest/comment")
@@ -35,6 +36,9 @@ public class CommentRestService extends AbstractRestService {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private LikeManager likeManager;
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
@@ -68,6 +72,30 @@ public class CommentRestService extends AbstractRestService {
 		response.setStatus(CommentResponse.Status.OK.name());
 
 		commentService.modify(Long.parseLong(commentId), content);		
+		return response;
+	}
+	
+	@RequestMapping(value = "/{commentId}/like", method = RequestMethod.GET)
+	@ResponseBody
+	public CommentResponse likeComment(@PathVariable String commentId) {
+		
+		CommentResponse response = CommentResponse.getInstance();
+		response.setStatus(CommentResponse.Status.OK.name());
+
+		likeManager.likeComment(Long.parseLong(commentId));
+		
+		return response;
+	}
+	
+	@RequestMapping(value = "/{commentId}/like", method = RequestMethod.DELETE)
+	@ResponseBody
+	public CommentResponse unLikeComment(@PathVariable String commentId) {
+		
+		CommentResponse response = CommentResponse.getInstance();
+		response.setStatus(CommentResponse.Status.OK.name());
+		
+		likeManager.likeComment(Long.parseLong(commentId));
+		
 		return response;
 	}
 }

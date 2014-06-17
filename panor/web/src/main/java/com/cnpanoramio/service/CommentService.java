@@ -2,6 +2,8 @@ package com.cnpanoramio.service;
 
 import java.util.Collection;
 
+import org.appfuse.model.User;
+
 import com.cnpanoramio.json.CommentResponse.Comment;
 import com.cnpanoramio.json.PhotoComments;
 
@@ -31,7 +33,7 @@ public interface CommentService {
 	 * @param pageNo
 	 * @return
 	 */
-	public Collection<Comment> getComments(Long id, int pageSize, int pageNo);
+	public Collection<Comment> getComments(Long id, int pageSize, int pageNo, User user);
 	
 	/**
 	 * 获取图片评论总数
@@ -49,4 +51,5 @@ public interface CommentService {
 	 * @return
 	 */
 	public Comment modify(Long id, String content);
+	
 }

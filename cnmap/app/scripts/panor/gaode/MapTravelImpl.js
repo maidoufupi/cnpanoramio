@@ -12,7 +12,7 @@
     }
 
     TravelLayer.prototype.initMap = function(map) {
-      var photo, point, spot, spotMinDate, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _results;
+      var photo, point, spot, spotMinDate, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
       if (map) {
         this.map = map;
       }
@@ -27,8 +27,8 @@
             spotMinDate = spot.spotDate;
           }
         }
+        this.travel.time_start = spotMinDate;
         _ref1 = this.travel.spots;
-        _results = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           spot = _ref1[_j];
           spot.day = Math.round((spot.spotDate - spotMinDate) / (1000 * 60 * 60 * 24)) + 1;
@@ -43,13 +43,18 @@
             photo = _ref3[_l];
             point.push(this.createPoint(photo));
           }
-          _results.push(new AMap.Polyline({
+          new AMap.Polyline({
             map: this.map,
             path: point,
             strokeStyle: 'dashed'
-          }));
+          });
         }
-        return _results;
+        this.travel.spots.sort(function(a, b) {
+          return a.day - b.day;
+        });
+        if (this.travel.spots.length) {
+          return this.travel.time_end = this.travel.spots[this.travel.spots.length - 1].time_start;
+        }
       }
     };
 

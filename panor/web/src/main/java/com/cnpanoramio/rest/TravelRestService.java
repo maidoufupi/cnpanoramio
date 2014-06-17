@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.json.TravelResponse;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
+import com.cnpanoramio.service.LikeManager;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
@@ -40,6 +41,9 @@ public class TravelRestService extends AbstractRestService {
 	
 	@Autowired
 	private PhotoManager photoManager;
+	
+	@Autowired
+	private LikeManager likeManager;
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
@@ -116,6 +120,26 @@ public class TravelRestService extends AbstractRestService {
 		photoIds.add(Long.parseLong(photoId));
 		
 		response.setTravel(travelService.removeTravelPhotos(Long.parseLong(travelId), photoIds));
+		
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/like", method = RequestMethod.GET)
+	@ResponseBody
+	public TravelResponse likeTravel(@PathVariable String travelId) {
+		TravelResponse response = responseFactory();
+		
+		likeManager.likeTravel(Long.parseLong(travelId));
+		
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/like", method = RequestMethod.DELETE)
+	@ResponseBody
+	public TravelResponse unLikeTravel(@PathVariable String travelId) {
+		TravelResponse response = responseFactory();
+		
+		likeManager.likeTravel(Long.parseLong(travelId));
 		
 		return response;
 	}
