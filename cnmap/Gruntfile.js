@@ -354,7 +354,8 @@ module.exports = function (grunt) {
                '<%= yeoman.app %>/scripts/directives/ponmPhotoContainer.js',
                '<%= yeoman.app %>/scripts/directives/PhotoFluidContainer.js',
                '<%= yeoman.app %>/scripts/directives/ponmComment.js',
-               '<%= yeoman.app %>/scripts/directives/repeatComplete.js'
+               '<%= yeoman.app %>/scripts/directives/repeatComplete.js',
+               '<%= yeoman.app %>/scripts/directives/bdShare.js'
                ],
            '<%= yeoman.app %>/scripts/panor/scripts.min.js': [
                '<%= yeoman.app %>/scripts/panor/MapUtils.js',

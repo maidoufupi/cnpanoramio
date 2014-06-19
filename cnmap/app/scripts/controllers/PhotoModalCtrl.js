@@ -6,9 +6,9 @@
 
 angular.module('ponmApp.controllers')
     .controller('PhotoModalCtrl', ['$window', '$scope', '$log', '$modalInstance', 'photoId', 'travelId', 'PhotoService',
-        'CommentService', 'UserService', 'TravelService', '$q', '$modal', '$filter', 'param',
+        'CommentService', 'UserService', 'TravelService', '$q', '$modal', '$filter', 'param', '$location',
         function ($window, $scope, $log, $modalInstance, photoId, travelId, PhotoService, CommentService, UserService,
-                  TravelService, $q, $modal, $filter, param) {
+                  TravelService, $q, $modal, $filter, param, $location) {
 
             $scope.ctx = $window.ctx;
             $scope.apirest = $window.apirest;
@@ -369,6 +369,9 @@ angular.module('ponmApp.controllers')
                 }, function () {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
+            };
+
+            $scope.share = function() {
             };
         }])
     .directive("photoTravelAlbum",

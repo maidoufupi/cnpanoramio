@@ -27,11 +27,12 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
                 $scope.displayPhoto(photoId);
             });
 
+            var stateObject = {};
             $scope.$watch(function () {
                 return $location.search();
             }, function (searchObject) {
-                $log.debug(searchObject);
-                if(searchObject.id) {
+                if(searchObject.id && searchObject.id != stateObject.id) {
+                    stateObject.id = searchObject.id;
                     if(searchObject.id != $scope.travelId) {
                         $scope.travelId = searchObject.id;
                         getTravel(searchObject.id);
@@ -39,7 +40,15 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
                 }else {
 //                    $location.search({id: $scope.travelId || '0'});
                 }
+                if(searchObject.photoid && searchObject.photoid != stateObject.photoid) {
+                    stateObject.photoid = searchObject.photoid;
+                    $scope.displayPhoto(searchObject.photoid);
+                }
             });
+
+            function updateState() {
+                $location.search(param(stateObject));
+            }
 
             $scope.activePhoto = function(photo) {
                 if($scope.photo && $scope.photo.id == photo.id) {
@@ -157,8 +166,6 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
                         $scope.$broadcast('ponmPhotoFluidResize');
                     }
                 });
-
-
             });
 
             $scope.mapOptions = {
@@ -187,6 +194,8 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
             };
 
             $scope.displayPhoto = function(photoId) {
+                stateObject.photoid = photoId;
+                updateState();
                 var modalInstance = $modal.open({
                     templateUrl: 'views/photo.html',
                     controller: 'PhotoModalCtrl',
@@ -196,15 +205,17 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
                             return photoId;
                         },
                         travelId: function() {
-                            return $scope.travel.id;
+                            return $scope.travel && $scope.travel.id || '';
                         }
                     }
                 });
 
                 modalInstance.result.then(function (selectedItem) {
-//                    $scope.selected = selectedItem;
+                    delete stateObject.photoid;
+                    updateState();
                 }, function () {
-//                    $log.info('Modal dismissed at: ' + new Date());
+                    delete stateObject.photoid;
+                    updateState();
                 });
             };
         }])

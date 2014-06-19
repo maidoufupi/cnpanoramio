@@ -203,6 +203,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
                     return;
                 }
                 var stateObj = deparam(hash);
+                splitPoundSign(stateObj, "photoid");
 
                 if (stateObj.lat && stateObj.lng) {
                     if (hashObj.lat != stateObj.lat ||
@@ -255,6 +256,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
             }
 
             var stateObj = deparam($location.hash());
+            splitPoundSign(stateObj, "photoid");
 
             if (lat && lng && zoom) {
                 hashObj['lat'] = lat;
@@ -279,6 +281,17 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
                 }, 500);
             }
 
+        }
+
+        /**
+         * 去掉可能有的非法#号
+         * @param value
+         */
+        function splitPoundSign(object, propName) {
+            if(object[propName]) {
+                var values = object[propName].split("#");
+                object[propName] = values[0];
+            }
         }
 
         $scope.displayPhoto = function(photoId) {

@@ -52,8 +52,8 @@
         <fieldset class="control-group${(not empty status.errorMessage) ? ' error' : ''}">
         </spring:bind>
             <appfuse:label styleClass="control-label" key="user.username"/>
-            <div class="controls">
-                <form:input path="username" id="username"/>
+            <div>
+                <form:input path="username" id="username" class="form-control"/>
                 <form:errors path="username" cssClass="help-inline"/>
             </div>
         </fieldset>
@@ -63,7 +63,7 @@
         </spring:bind>
             <appfuse:label styleClass="control-label" key="user.password"/>
             <div class="controls">
-                <form:password path="password" id="password" showPassword="true"/>
+                <form:password path="password" id="password" showPassword="true" class="form-control"/>
                 <form:errors path="password" cssClass="help-inline"/>
             </div>
         </fieldset>
@@ -72,7 +72,7 @@
         </spring:bind>
             <appfuse:label styleClass="control-label" key="user.confirmPassword"/>
             <div class="controls">
-                <form:password path="confirmPassword" id="confirmPassword" showPassword="true"/>
+                <form:password path="confirmPassword" id="confirmPassword" showPassword="true" class="form-control"/>
                 <form:errors path="confirmPassword" cssClass="help-inline"/>
             </div>
         </fieldset>
@@ -82,7 +82,7 @@
         </spring:bind>
             <appfuse:label styleClass="control-label" key="user.passwordHint"/>
             <div class="controls">
-                <form:input path="passwordHint" id="passwordHint"/>
+                <form:input path="passwordHint" id="passwordHint" class="form-control"/>
                 <form:errors path="passwordHint" cssClass="help-inline"/>
             </div>
         </fieldset>
@@ -91,7 +91,7 @@
         </spring:bind>
             <appfuse:label styleClass="control-label" key="user.firstName"/>
             <div class="controls">
-                <form:input path="firstName" id="firstName" maxlength="50"/>
+                <form:input path="firstName" id="firstName" maxlength="50" class="form-control"/>
                 <form:errors path="firstName" cssClass="help-inline"/>
             </div>
         </fieldset>
@@ -100,7 +100,7 @@
         </spring:bind>
             <appfuse:label styleClass="control-label" key="user.lastName"/>
             <div class="controls">
-                <form:input path="lastName" id="lastName" maxlength="50"/>
+                <form:input path="lastName" id="lastName" maxlength="50" class="form-control"/>
                 <form:errors path="lastName" cssClass="help-inline"/>
             </div>
         </fieldset>
@@ -109,20 +109,20 @@
         </spring:bind>
             <appfuse:label styleClass="control-label" key="user.email"/>
             <div class="controls">
-                <form:input path="email" id="email"/>
+                <form:input path="email" id="email" class="form-control"/>
                 <form:errors path="email" cssClass="help-inline"/>
             </div>
         </fieldset>
         <fieldset class="control-group">
             <appfuse:label styleClass="control-label" key="user.phoneNumber"/>
             <div class="controls">
-                <form:input path="phoneNumber" id="phoneNumber"/>
+                <form:input path="phoneNumber" id="phoneNumber" class="form-control"/>
             </div>
         </fieldset>
         <fieldset class="control-group">
             <appfuse:label styleClass="control-label" key="user.website"/>
             <div class="controls">
-                <form:input path="website" id="website"/>
+                <form:input path="website" id="website" class="form-control"/>
             </div>
         </fieldset>
         <fieldset>
@@ -133,25 +133,25 @@
                 <fieldset class="control-group">
                     <appfuse:label styleClass="control-label" key="user.address.address"/>
                     <div class="controls">
-                        <form:input path="address.address" id="address.address"/>
+                        <form:input path="address.address" id="address.address" class="form-control"/>
                     </div>
                 </fieldset>
                 <fieldset class="control-group">
                     <appfuse:label styleClass="control-label" key="user.address.city"/>
                     <div class="controls">
-                        <form:input path="address.city" id="address.city"/>
+                        <form:input path="address.city" id="address.city" class="form-control"/>
                     </div>
                 </fieldset>
                 <fieldset class="control-group">
                     <appfuse:label styleClass="control-label" key="user.address.province"/>
                     <div class="controls">
-                        <form:input path="address.province" id="address.province"/>
+                        <form:input path="address.province" id="address.province" class="form-control"/>
                     </div>
                 </fieldset>
                 <fieldset class="control-group">
                     <appfuse:label styleClass="control-label" key="user.address.postalCode"/>
                     <div class="controls">
-                        <form:input path="address.postalCode" id="address.postalCode"/>
+                        <form:input path="address.postalCode" id="address.postalCode" class="form-control"/>
                     </div>
                 </fieldset>
                 <fieldset class="control-group">

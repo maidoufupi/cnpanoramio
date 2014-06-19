@@ -29,7 +29,7 @@ import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name = "photo")
-public class Photo {
+public class Photo implements Comparable<Photo> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -317,6 +317,11 @@ public class Photo {
 
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
+	}
+
+	@Override
+	public int compareTo(Photo obj) {
+		return this.getRating() - obj.getRating();
 	}
 	
 }

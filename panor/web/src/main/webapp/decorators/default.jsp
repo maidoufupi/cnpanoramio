@@ -45,6 +45,7 @@
     <script type="text/javascript" src="<c:url value="/scripts/panor/scripts.min.js"/>"></script>
 
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
+    
     <script>
 	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径
 	    window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录
@@ -52,6 +53,32 @@
 	    window.apirest = ctx + "/api/rest";
 	    window.mapVendor = '<c:out value="${sessionScope.mapVendor}"/>' || "gaode";
     </script>
+    
+    <c:choose>
+	  <c:when test='${sessionScope.mapVendor eq "baidu"}'>
+	    <script type="text/javascript" src="<c:url value="/scripts/panor/script.baidu.min.js"/>"></script>
+	    <script type="text/javascript"
+	            src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
+	  </c:when>
+	  <c:when test='${sessionScope.mapVendor eq "qq"}'>
+	    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
+	    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
+	    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
+	  </c:when>
+	  <c:when test='${sessionScope.mapVendor eq "gaode"}'>
+	    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+	    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+	    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
+	  </c:when>
+	  <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
+	  
+	  </c:when>
+	  <c:otherwise>
+	    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+	    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
+	    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
+	  </c:otherwise>
+	</c:choose>
 </head>
 <body <decorator:getProperty property="body.id" writeEntireProperty="true"/><decorator:getProperty property="body.class" writeEntireProperty="true"/>>
     <c:set var="currentMenu" scope="request"><decorator:getProperty property="meta.menu"/></c:set>
@@ -97,5 +124,7 @@
         </span>
     </div>
 <%= (request.getAttribute("scripts") != null) ?  request.getAttribute("scripts") : "" %>
+
+<script id="bdshell_js" type="text/javascript"></script>
 </body>
 </html>

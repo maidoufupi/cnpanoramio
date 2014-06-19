@@ -1,12 +1,15 @@
 package com.cnpanoramio.dao.impl.hibernate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.MapVendor;
@@ -24,34 +27,13 @@ public class PhotoPanoramioIndexDaoImpl extends
 		implements PhotoPanoramioIndexDao {
 
 	private Double conMeasure = 40D;
-	private Integer minPix = 34;
+	private Integer bigPix = 34;
+	private Integer miniPix = 10;
 
 	public PhotoPanoramioIndexDaoImpl() {
 		super(PhotoPanoramioIndex.class);
 		// TODO Auto-generated constructor stub
 	}
-
-	// @Override
-	// public List<PhotoPanoramio> getPhotoPanoramio(Point sw, Point ne,
-	// int level, MapVendor mVendor, int width, int height) {
-	//
-	// Query query = getSession().createSQLQuery(
-	// "CALL getPhotoPanoramioIndex(:swLat, :swLng, :neLat, :neLng, :level, :vendor, :width, :height, :latest)")
-	// .addEntity(PhotoPanoramio.class)
-	// .setParameter("swLat", sw.getLat())
-	// .setParameter("swLng", sw.getLng())
-	// .setParameter("neLat", ne.getLat())
-	// .setParameter("neLng", ne.getLng())
-	// .setParameter("level", level)
-	// .setParameter("vendor", mVendor.name())
-	// .setParameter("width", width)
-	// .setParameter("height", height)
-	// .setParameter("latest", false);
-	//
-	// List result = query.list();
-	//
-	// return result;
-	// }
 
 	@Override
 	public List<Photo> getPhotoPanoramio(Double swLat,
@@ -90,7 +72,32 @@ public class PhotoPanoramioIndexDaoImpl extends
 		return filterPanoramioIndex(criteria.list(), widthRate, heightRate);
 
 	}
-
+	
+	public List<PhotoPanoramioIndex> getPhotoPanoramioIndexList(int level, Double west, Double south, Double measure) {
+		Criteria criteria = getSession().createCriteria(PhotoPanoramioIndex.class)
+				.add(Restrictions.eq("pk.level", level+1))
+				.add(Restrictions.ge("pk.south", south))
+				.add(Restrictions.lt("pk.south", south+measure))
+				.add(Restrictions.ge("pk.west", west))
+				.add(Restrictions.lt("pk.west", west+measure))
+				.addOrder(Order.desc("photoRating"));
+				;
+		List<PhotoPanoramioIndex> ppiList = criteria.list();
+		return ppiList;
+	}
+	
+	public List<Photo> getPhotoList(int level, Double west, Double south, Double measure) {
+		Criteria criteria = getSession()
+				.createCriteria(Photo.class, "photo")
+				.add(Restrictions.ge("gpsPoint.lat", south))
+				.add(Restrictions.lt("gpsPoint.lat", south+measure))
+				.add(Restrictions.ge("gpsPoint.lng", west))
+				.add(Restrictions.lt("gpsPoint.lng", west+measure))
+				;
+		List<Photo> photos = criteria.list();
+		return photos;
+	}
+	
 	@Override
 	public boolean updatePhotoPanoramioIndex() {
 		Query query = getSession().createSQLQuery(
@@ -153,8 +160,8 @@ public class PhotoPanoramioIndexDaoImpl extends
 		for(Photo photo : photos) {
 			allow = true;
 			for(Photo p : phs) {
-				if(Math.abs((photo.getGpsPoint().getLat() - p.getGpsPoint().getLat()) * heightRate) < minPix
-						&& Math.abs((photo.getGpsPoint().getLng() - p.getGpsPoint().getLng()) * widthRate) < minPix) {
+				if(Math.abs((photo.getGpsPoint().getLat() - p.getGpsPoint().getLat()) * heightRate) < bigPix
+						&& Math.abs((photo.getGpsPoint().getLng() - p.getGpsPoint().getLng()) * widthRate) < bigPix) {
 					allow = false;
 					break;
 				}
@@ -205,14 +212,38 @@ public class PhotoPanoramioIndexDaoImpl extends
 		lNorth = neLat - (neLat % lMeasure);
 		lEast = neLng - (neLng % lMeasure);
 
+		log.info("getLatestPanoramio level = " + level);
+		log.info("getLatestPanoramio lNorth = " + lNorth);
+		log.info("getLatestPanoramio lSouth = " + lSouth);
+		log.info("getLatestPanoramio lEast = " + lEast);
+		log.info("getLatestPanoramio lWest = " + lWest);
+		
+		Criteria criteria1 = getSession().createCriteria(PhotoPanoramioIndex.class)
+				.add(Restrictions.eq("pk.level", level))
+				.add(Restrictions.le("pk.south", lNorth))
+				.add(Restrictions.ge("pk.south", lSouth));
+
+		if (lEast > lWest) {
+			criteria1.add(Restrictions.le("pk.west", lEast))
+					.add(Restrictions.ge("pk.west", lWest));
+		} else {
+			criteria1.add(Restrictions.or(Restrictions.and(
+					Restrictions.ge("pk.west", lWest),
+					Restrictions.le("pk.west", 180D)), Restrictions.and(
+					Restrictions.ge("pk.west", -180D),
+					Restrictions.le("pk.west", lEast))));
+		}
+		List list1 = criteria1.list();
+		log.info("getIndexPanoramio size = " + list1.size());
+		
 		Criteria criteria = getSession().createCriteria(PhotoLatestIndex.class)
 				.add(Restrictions.eq("pk.level", level))
 				.add(Restrictions.le("pk.south", lNorth))
 				.add(Restrictions.ge("pk.south", lSouth));
 
 		if (lEast > lWest) {
-			criteria.add(Restrictions.le("pk.west", lEast)).add(
-					Restrictions.ge("pk.west", lWest));
+			criteria.add(Restrictions.le("pk.west", lEast))
+					.add(Restrictions.ge("pk.west", lWest));
 		} else {
 			criteria.add(Restrictions.or(Restrictions.and(
 					Restrictions.ge("pk.west", lWest),
@@ -220,7 +251,9 @@ public class PhotoPanoramioIndexDaoImpl extends
 					Restrictions.ge("pk.west", -180D),
 					Restrictions.le("pk.west", lEast))));
 		}
-		return filterLatestIndex(criteria.list(), widthRate, heightRate);
+		List list = criteria.list();
+		log.info("getLatestPanoramio size = " + list.size());
+		return filterLatestIndex(list, widthRate, heightRate);
 	}
 
 	@Override
@@ -228,6 +261,13 @@ public class PhotoPanoramioIndexDaoImpl extends
 		Query query = getSession().createSQLQuery(
 				"CALL updatePhotoLatestIndex()");
 		query.executeUpdate();
+		return true;
+	}
+
+	@Override
+	public boolean clearPhotoIndex() {
+		Query deleteQuery = getSession().createQuery("delete PhotoPanoramioIndex");
+		deleteQuery.executeUpdate();
 		return true;
 	}
 }

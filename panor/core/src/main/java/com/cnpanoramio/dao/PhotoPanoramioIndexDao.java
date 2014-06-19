@@ -36,6 +36,12 @@ public interface PhotoPanoramioIndexDao extends
 	 * @return
 	 */
 	public boolean updatePhotoPanoramioIndex();
+		
+	public boolean clearPhotoIndex();
+	
+	public List<PhotoPanoramioIndex> getPhotoPanoramioIndexList(int level, Double west, Double south, Double measure);
+	
+	public List<Photo> getPhotoList(int level, Double west, Double south, Double measure);
 
 	/**
 	 * 获取用户自己的图片

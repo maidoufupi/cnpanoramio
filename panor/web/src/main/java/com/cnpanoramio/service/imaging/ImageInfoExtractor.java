@@ -1,5 +1,6 @@
 package com.cnpanoramio.service.imaging;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -128,18 +129,6 @@ public class ImageInfoExtractor {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-
-//		try {
-//			Dimension size = parser.getImageSize(bsIns.getAll());
-//
-//			log.debug(size);
-//		} catch (ImageReadException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
 		try {
 			extraExifInfo(parser);
@@ -150,6 +139,21 @@ public class ImageInfoExtractor {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		PhotoDetails detail = photo.getDetails();
+		if(null == detail.getPixelXDimension()) {
+			try {
+				Dimension size = parser.getImageSize(bsIns.getAll());
+				detail.setPixelXDimension((int)Math.round(size.getWidth()));
+				detail.setPixelYDimension((int)Math.round(size.getHeight()));
+			} catch (ImageReadException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}		
 
 		try {
 			extraXmpInfo(parser);

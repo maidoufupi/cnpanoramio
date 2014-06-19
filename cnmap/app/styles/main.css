@@ -1,3 +1,19 @@
+.icon-refresh-animate {
+  animation-name: rotateThis;
+  animation-duration: .5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; }
+
+@keyframes rotateThis {
+  from {
+    transform: scale(1) rotate(0deg); }
+
+  to {
+    transform: scale(1) rotate(360deg); } }
+
+body {
+  overflow-x: hidden; }
+
 body > .navbar .brand {
   color: #000000;
   font-weight: bold;
@@ -890,6 +906,75 @@ li {
   background: rgba(88, 88, 59, 0.24);
   width: 100%; }
 
+/** login page **********************/
+.login-container {
+  height: 100%;
+  background-color: #1abc9c; }
+  .login-container .login-form {
+    max-width: 750px;
+    width: 450px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px; }
+    .login-container .login-form .form-header {
+      padding: 20px 0;
+      text-align: center; }
+      .login-container .login-form .form-header .fa-user {
+        font-size: 50px;
+        color: #ffffff;
+        border-radius: 50%;
+        border: 3px solid #E7E7E7;
+        padding: 15px 20px;
+        background: #f6f8f9;
+        background: -moz-linear-gradient(-45deg, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+        background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #f6f8f9), color-stop(50%, #e5ebee), color-stop(51%, #d7dee3), color-stop(100%, #f5f7f9));
+        background: -webkit-linear-gradient(-45deg, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+        background: -o-linear-gradient(-45deg, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+        background: -ms-linear-gradient(-45deg, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+        background: linear-gradient(135deg, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f8f9', endColorstr='#f5f7f9', GradientType=1); }
+    .login-container .login-form .form-main {
+      background-color: #505050;
+      padding: 40px 50px; }
+      .login-container .login-form .form-main .form-group {
+        margin-bottom: 15px; }
+        .login-container .login-form .form-main .form-group input[type="text"], .login-container .login-form .form-main .form-group input[type="password"] {
+          background-color: #404040;
+          padding-left: 20px;
+          border-radius: 0;
+          border: none;
+          margin-bottom: 10px;
+          color: #cccccc;
+          height: 43px; }
+        .login-container .login-form .form-main .form-group input.ng-invalid {
+          border: 1px solid red; }
+        .login-container .login-form .form-main .form-group input.ng-invalid-required {
+          border: 1px solid red; }
+        .login-container .login-form .form-main .form-group input.ng-valid {
+          border: 1px solid green; }
+      .login-container .login-form .form-main .signin:hover {
+        background-color: #ff6610; }
+      .login-container .login-form .form-main .signin {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #428bca;
+        border-radius: 0;
+        color: #ffffff;
+        -webkit-transition: background-color 300ms linear;
+        -moz-transition: background-color 300ms linear;
+        -o-transition: background-color 300ms linear;
+        -ms-transition: background-color 300ms linear;
+        transition: background-color 300ms linear; }
+    .login-container .login-form .form-footer {
+      background-color: #404040;
+      padding: 20px 50px; }
+      .login-container .login-form .form-footer a:hover {
+        text-decoration: none; }
+      .login-container .login-form .form-footer a {
+        color: #999999;
+        font-size: 10pt; }
+
 .panel.panel-primary {
   margin-left: 30px;
   margin-right: 20px; }
@@ -1607,15 +1692,24 @@ pre.description.hover {
   position: relative;
   height: 100%;
   max-height: 1000px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  text-align: center; }
+  .ponm-photo-container .loading {
+    position: absolute;
+    margin: auto;
+    display: inline-block;
+    line-height: initial;
+    top: 50%;
+    margin-top: -10px; }
+  .ponm-photo-container .loading.ponm-hide {
+    display: none; }
   .ponm-photo-container .flat-image {
     opacity: 0;
-    -moz-transition: opacity 1s;
-    /* Firefox 4 */
-    -webkit-transition: opacity 1s;
-    /* Safari and Chrome */
-    -o-transition: opacity 1s;
-    transition: opacity 1s;
+    -webkit-transition: opacity linear 0.3s;
+    -moz-transition: opacity linear 0.3s;
+    -ms-transition: opacity linear 0.3s;
+    -o-transition: opacity linear 0.3s;
+    transition: opacity linear 0.3s;
     height: 100%;
     display: none; }
     .ponm-photo-container .flat-image .flat-canvas {
@@ -1625,37 +1719,26 @@ pre.description.hover {
         display: inline-block !important; }
     .ponm-photo-container .flat-image .image-button {
       display: none; }
-    .ponm-photo-container .flat-image .image-button.ng-animate.show-add, .ponm-photo-container .flat-image .p360-image-button.ng-animate.show-remove {
+    .ponm-photo-container .flat-image .image-button.ng-animate.ponm-show-add, .ponm-photo-container .flat-image .p360-image-button.ng-animate.ponm-show-remove {
       opacity: .5;
       display: inherit; }
-    .ponm-photo-container .flat-image .image-button.show {
+    .ponm-photo-container .flat-image .image-button.ponm-show {
       opacity: .5;
       display: inherit; }
-  .ponm-photo-container .flat-image.show {
-    opacity: 1; }
+  .ponm-photo-container .flat-image.ponm-show {
+    opacity: 1;
+    display: block; }
   .ponm-photo-container img {
-    opacity: 0;
-    -moz-transition: opacity 1s;
-    /* Firefox 4 */
-    -webkit-transition: opacity 1s;
-    /* Safari and Chrome */
-    -o-transition: opacity 1s;
-    transition: opacity 1s;
     position: static;
     max-width: 100%;
     max-height: 100%;
     margin: auto; }
-  .ponm-photo-container img.ng-animate.show-add, .ponm-photo-container img.ng-animate.show-remove {
-    opacity: 1; }
-  .ponm-photo-container img.show {
-    opacity: 1; }
   .ponm-photo-container canvas {
     position: absolute;
-    top: 0;
-    opacity: 0; }
-  .ponm-photo-container canvas.ng-animate.show-add, .ponm-photo-container canvas.ng-animate.show-remove {
+    top: 0; }
+  .ponm-photo-container canvas.ng-animate.ponm-show-add, .ponm-photo-container canvas.ng-animate.ponm-show-remove {
     opacity: 1; }
-  .ponm-photo-container canvas.show {
+  .ponm-photo-container canvas.ponm-show {
     opacity: 1; }
   .ponm-photo-container .img-container {
     position: relative;
@@ -1703,11 +1786,12 @@ pre.description.hover {
     display: none; }
     .ponm-photo-container .p360-image .p360-canvas {
       width: 100%;
-      height: 100%; }
-  .ponm-photo-container .p360-image.ng-animate.show-add, .ponm-photo-container .p360-image.ng-animate.show-remove {
+      height: 100%;
+      text-align: initial; }
+  .ponm-photo-container .p360-image.ng-animate.ponm-show-add, .ponm-photo-container .p360-image.ng-animate.ponm-show-remove {
     opacity: 1;
     display: inherit; }
-  .ponm-photo-container .p360-image.show {
+  .ponm-photo-container .p360-image.ponm-show {
     opacity: 1;
     display: inherit; }
 
@@ -1803,3 +1887,26 @@ span.footnotes {
   width: 200px;
   top: 0;
   z-index: 10000; }
+
+/** baidu share */
+.bd-share {
+  padding: 5px;
+  width: 25px;
+  z-index: 1111;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background-color: black;
+  opacity: .5;
+  -webkit-transition: all linear 0.3s;
+  -moz-transition: all linear 0.3s;
+  -ms-transition: all linear 0.3s;
+  -o-transition: all linear 0.3s;
+  transition: all linear 0.3s; }
+
+.bd-share.active {
+  padding: 10px;
+  right: 10px;
+  width: 440px;
+  opacity: 1;
+  background-color: white; }

@@ -32,7 +32,7 @@ angular.module('ponmPhotoApp', [
                             return 6;
                         },
                         travelId: function() {
-                            return 1;
+                            return 2;
                         }
                     }
                 });

@@ -26,6 +26,9 @@ public class PhotoPanoramioIndex {
 	@Column(name = "photo_rating")
 	private Integer photoRating;
 	
+	@Column(name = "big_photo")
+	private Boolean bigPhoto;
+	
 	public PhotoPanoramioIndexPK getPk() {
 		return pk;
 	}
@@ -56,6 +59,14 @@ public class PhotoPanoramioIndex {
 
 	public void setPhotoRating(Integer photoRating) {
 		this.photoRating = photoRating;
+	}
+
+	public Boolean getBigPhoto() {
+		return bigPhoto;
+	}
+
+	public void setBigPhoto(Boolean bigPhoto) {
+		this.bigPhoto = bigPhoto;
 	}
 	
 	

@@ -35,6 +35,7 @@
     <script type="text/javascript" src="scripts/directives/filters.js"></script>
     <script type="text/javascript" src="scripts/directives/ponmPhotoContainer.js"></script>
     <script type="text/javascript" src="scripts/directives/ponmComment.js"></script>
+    <script type="text/javascript" src="scripts/directives/bdShare.js"></script>
     <script type="text/javascript" src="scripts/controllers/PhotoModalCtrl.js"></script>
     <script type="text/javascript" src="photo.js"></script>
 
@@ -46,12 +47,14 @@
     <link rel="stylesheet" href="styles/main.css">
     <script type="text/javascript">
         window.login = true;
-        window.ctx = "http://127.0.0.1:8080/panor-web";
-//        window.ctx = "http://115.28.21.165";
+//        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.ctx = "http://115.28.21.165";
         window.apirest = window.ctx + "/api/rest";
         window.userId = 1;
 
     </script>
+
+
 </head>
 <body ng-app="ponmPhotoApp" data-ng-controller="PhotoMCtrl">
 <pre>

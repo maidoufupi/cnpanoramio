@@ -12,9 +12,7 @@
 <body>
 	
     <script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
-    
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/three.min.js"/>"></script>
-    
+        
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="<c:url value="/scripts/panor/script.baidu.min.js"/>"></script>
@@ -89,6 +87,19 @@
                 <li class="previous" ng-hide="photoStart"><a href ng-click="prePhoto()">&larr; Older</a></li>
                 <li class="next" ng-hide="photoEnd"><a href ng-click="nextPhoto()">Newer &rarr;</a></li>
             </ul>
+        </div>
+    </div>
+    
+    <!-- 一键分享组件 -->
+    <div bd-share class="bd-share"
+            data-ng-class="{'active': mouseEnter}">
+        <div class="bdsharebuttonbox">
+            <a href="" class="bds_more" data-cmd="more">分享到：</a>
+            <a href="" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+            <a href="" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+            <a href="" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+            <a href="" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+            <a href="" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
         </div>
     </div>
 </div>

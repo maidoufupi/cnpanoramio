@@ -91,8 +91,6 @@ pre.description.hover {
       opacity: 1;
     }
   }
-
-
 }
 
 /** photo container directive*/
@@ -102,14 +100,23 @@ pre.description.hover {
   height: 100%;
   max-height: 1000px;
   margin: 0 auto;
+  text-align: center;
+
+  .loading {
+    position: absolute;
+    margin: auto;
+    display: inline-block;
+    line-height: initial;
+    top: 50%;
+    margin-top: -10px;
+  }
+  .loading.ponm-hide {
+    display: none;
+  }
 
   .flat-image {
     opacity: 0;
-    -moz-transition: opacity 1s; /* Firefox 4 */
-    -webkit-transition: opacity 1s; /* Safari and Chrome */
-    -o-transition: opacity 1s;
-    transition: opacity 1s;
-
+    @include transition-linear(opacity);
     height: 100%;
     display: none;
 
@@ -119,32 +126,32 @@ pre.description.hover {
         vertical-align: middle;
         display: inline-block !important;
       }
-
     }
 
     .image-button {
       display: none;
     }
-    .image-button.ng-animate.show-add, .p360-image-button.ng-animate.show-remove {
+    .image-button.ng-animate.ponm-show-add, .p360-image-button.ng-animate.ponm-show-remove {
       opacity: .5;
       display: inherit;
     }
-    .image-button.show {
+    .image-button.ponm-show {
       opacity: .5;
       display: inherit;
     }
   }
 
-  .flat-image.show {
+  .flat-image.ponm-show {
     opacity: 1;
+    display: block
   }
 
   img {
-    opacity: 0;
-    -moz-transition: opacity 1s; /* Firefox 4 */
-    -webkit-transition: opacity 1s; /* Safari and Chrome */
-    -o-transition: opacity 1s;
-    transition: opacity 1s;
+//    opacity: 0;
+//    -moz-transition: opacity 1s; /* Firefox 4 */
+//    -webkit-transition: opacity 1s; /* Safari and Chrome */
+//    -o-transition: opacity 1s;
+//    transition: opacity 1s;
 
     position: static;
     max-width: 100%;
@@ -152,25 +159,23 @@ pre.description.hover {
     margin: auto;
   }
 
-  img.ng-animate.show-add, img.ng-animate.show-remove {
-    opacity: 1;
-  }
-
-  img.show {
-    opacity: 1;
-  }
+//  img.ng-animate.show-add, img.ng-animate.show-remove {
+//    opacity: 1;
+//  }
+//
+//  img.show {
+//    opacity: 1;
+//  }
 
   canvas {
     position: absolute;
     top: 0;
-    opacity: 0;
+//    opacity: 0;
   }
-
-  canvas.ng-animate.show-add, canvas.ng-animate.show-remove {
+  canvas.ng-animate.ponm-show-add, canvas.ng-animate.ponm-show-remove {
     opacity: 1;
   }
-
-  canvas.show {
+  canvas.ponm-show {
     opacity: 1;
   }
 
@@ -228,15 +233,14 @@ pre.description.hover {
     .p360-canvas {
       width: 100%;
       height: 100%;
+      text-align: initial;
     }
   }
-
-  .p360-image.ng-animate.show-add, .p360-image.ng-animate.show-remove {
+  .p360-image.ng-animate.ponm-show-add, .p360-image.ng-animate.ponm-show-remove {
     opacity: 1;
     display: inherit;
   }
-
-  .p360-image.show {
+  .p360-image.ponm-show {
     opacity: 1;
     display: inherit;
   }
@@ -368,4 +372,24 @@ span.footnotes {
   width: 200px;
   top: 0;
   z-index: 10000;
+}
+
+/** baidu share */
+.bd-share {
+  padding: 5px;
+  width: 25px;
+  z-index: 1111;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background-color: black;
+  opacity: .5;
+  @include transition-linear(all);
+}
+.bd-share.active {
+   padding: 10px;
+   right: 10px;
+   width: 440px;
+   opacity: 1;
+  background-color: white;
 }
