@@ -69,7 +69,7 @@
         map: this.map,
         position: new AMap.LngLat(photo.point.lng, photo.point.lat),
         offset: new AMap.Pixel(-15, -15),
-        content: this.getLabelContent(photo.id)
+        content: this.getLabelContent(photo.oss_key)
       });
       label.photoId = photo.id;
       if (this.opts.clickable) {

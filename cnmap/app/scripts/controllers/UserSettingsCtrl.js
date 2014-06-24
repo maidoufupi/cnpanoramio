@@ -7,9 +7,12 @@ angular.module('userSettingsApp', [
         'ngResource',
         'ui.bootstrap',
         'ponmApp'])
-    .controller('UserSettingsCtrl', ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', 'UserPhoto', 'UserService',
-        function ($window, $log, $location, $rootScope, $scope, $modal, UserPhoto, UserService) {
+    .controller('UserSettingsCtrl', ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', 'UserPhoto',
+        'UserService', 'ponmCtxConfig',
+        function ($window, $log, $location, $rootScope, $scope, $modal, UserPhoto,
+                  UserService, ponmCtxConfig) {
             $scope.ctx = $window.ctx;
+            $scope.staticCtx = ponmCtxConfig.staticCtx;
             $scope.apirest = $window.apirest;
             $scope.avatar = $scope.userId = $window.userId;
 
@@ -19,6 +22,7 @@ angular.module('userSettingsApp', [
                 var modalInstance = $modal.open({
                     templateUrl: 'views/changeUserAvatar.html',
                     controller: "ChUserAvatarCtrl",
+                    windowClass: 'map-photo-modal',
                     resolve: {
                     }
                 });

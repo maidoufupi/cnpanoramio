@@ -126,7 +126,7 @@
                                             map: map,
                                             position: new AMap.LngLat(photos[b].lng, photos[b].lat), //基点位置
                                             offset: new AMap.Pixel(0, 0), //相对于基点的偏移位置
-                                            content: that.getLabelContent(b)  //自定义点标记覆盖物内容
+                                            content: that.getLabelContent(photos[b].oss_key)  //自定义点标记覆盖物内容
                                         });
                                         label.photoId = b;
                                         if(that.opts.clickable) {

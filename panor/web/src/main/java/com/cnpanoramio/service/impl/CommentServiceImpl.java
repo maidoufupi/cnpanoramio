@@ -64,6 +64,7 @@ public class CommentServiceImpl implements CommentService {
 		comment.setUsername(settings.getName());
 		comment.setCreateTime(commentD.getCreateTime().getTime());
 		comment.setUserId(commentD.getUser().getId());
+		comment.setUserAvatar(settings.getUserAvatar());
 		return comment;		
 	}
 	
@@ -113,6 +114,12 @@ public class CommentServiceImpl implements CommentService {
 		Comment comment = new Comment();
 		UserSettings settings = userSettingsManager.get(commentD.getUser().getId());
 		comment.setId(commentD.getId());
+		if(null != settings.getAvatar()) {
+			comment.setUserAvatar(settings.getAvatar().getId());
+		}else {
+			comment.setUserAvatar(1L);
+		}
+		
 		// 昵称
 		comment.setUsername(settings.getName());
 		comment.setCreateTime(commentD.getCreateTime().getTime());

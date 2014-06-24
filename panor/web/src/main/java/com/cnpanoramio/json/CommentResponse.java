@@ -26,6 +26,9 @@ public class CommentResponse extends ExceptionResponse {
 		@JsonProperty("user_id")
 		private Long userId;
 		
+		@JsonProperty("user_avatar")
+		private Long userAvatar;
+		
 		private String username;
 		
 		private String content;
@@ -103,7 +106,17 @@ public class CommentResponse extends ExceptionResponse {
 
 		public void setLikeCount(Integer likeCount) {
 			this.likeCount = likeCount;
-		}	
+		}
+
+		public Long getUserAvatar() {
+			return userAvatar;
+		}
+
+		public void setUserAvatar(Long userAvatar) {
+			this.userAvatar = userAvatar;
+		}
+		
+		
 	}
 
 	public Comment getComment() {

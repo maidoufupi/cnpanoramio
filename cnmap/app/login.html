@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css">
     <link rel="stylesheet" href="styles/main.css">
 
-    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/jquery.rest/dist/jquery.rest.min.js"></script>
 
     <!-- angularjs -->
@@ -19,14 +19,15 @@
     <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
     <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script type="text/javascript" src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
     <script type="text/javascript" src="bower_components/eventie/eventie.js"></script>
     <script type="text/javascript" src="bower_components/eventEmitter/EventEmitter.js"></script>
     <script type="text/javascript" src="bower_components/imagesloaded/imagesloaded.js"></script>
-    <script type="text/javascript" src="bower_components/angular-ui-utils/event.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-utils/ui-utils.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-backstretch/jquery.backstretch.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-waypoints/waypoints.js"></script>
 
     <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
@@ -35,6 +36,7 @@
     <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
     <script type="text/javascript" src="scripts/ponmApp.controllers.min.js"></script>
     <script type="text/javascript" src="scripts/ponmApp.directives.min.js"></script>
+    <script type="text/javascript" src="scripts/directives/backstretch.js"></script>
     <script type="text/javascript" src="scripts/controllers/LoginCtrl.js"></script>
 
     <script type="text/javascript" src="scripts/panor/scripts.min.js"></script>
@@ -56,8 +58,9 @@
     </script>
 </head>
 <body>
-<div class="container" style="">
-<div class="login-container" ng-app="ponmApp.login" ng-controller="LoginCtrl">
+<div class="container" ng-app="ponmApp.login" ng-controller="LoginCtrl"
+     backstretch background-url="images/login-background.jpg">
+<div class="login-container">
     <div class="login-form">
     <div class="animated bounceIn">
         <div class="form-header">
@@ -65,22 +68,28 @@
         </div>
         <!--  -->
         <div class="form-main">
-            <form method="post" action="http://127.0.0.1:8080/panor-web/j_security_check" name="form"
+            <form method="post"
+                  action="http://127.0.0.1:8080/panor-web/j_security_check"
+                  name="userForm"
                   novalidate>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="用户名"
+                    <input type="text" class="form-control" placeholder="用户名/邮箱"
                            name="j_username"
-                           ng-model="credentials.username" required>
+                           ng-model="credentials.username"
+                           required>
                     <input type="password" class="form-control" placeholder="密码"
                            name="j_password"
-                           ng-model="credentials.password" required>
+                           ng-model="credentials.password"
+                           required>
                 </div>
-                <button type="submit" class="btn btn-block signin" data-ng-click="login($event, credentials)">登录</button>
+                <button type="submit" class="btn btn-block signin"
+                        data-ng-click="login($event, userForm.$valid, credentials)"
+                        ng-disabled="userForm.$invalid">登录</button>
             </form>
         </div>
         <div class="form-footer">
             <div class="row">
-                <div class="col-xs-7">
+                <div class="col-xs-7 ">
                     <i class="glyphicon glyphicon-lock"></i>
                     <a href="" data-ng-click="passwordHint()">忘记密码?</a>
                 </div>

@@ -5,7 +5,7 @@
 		<ul class="nav navbar-nav">
 			<menu:displayMenu name="AdminMenu" />
 			<%-- <menu:displayMenu name="Logout" /> --%>
-			<li>
+			<!-- <li>
 				<div class="nav-search-form" ng-controller="SearchLocCtrl">
                     <form class="navbar-form navbar-left" ng-submit="update(asyncSelected)" novalidate>
                         <input type="text" ng-model="asyncSelected" placeholder="搜索地址"
@@ -15,7 +15,7 @@
                             <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                     </form>
                 </div>
-			</li>
+			</li> -->
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 	  		<li popover="浏览地图" popover-trigger="mouseenter" popover-placement="bottom">
@@ -33,7 +33,7 @@
 	            	<li popover="用户主页" popover-trigger="mouseenter" popover-placement="bottom">
 		            	<a class="user" href="<c:url value='/user#?id=${sessionScope.userId}'/>">
 		                	<span class="white">${pageContext.request.remoteUser}</span>
-                        	<img class="navbar-profile-image" src="<c:url value='/api/rest/user/${sessionScope.userId}/avatar'/>" alt="${pageContext.request.remoteUser}">
+                        	<img class="navbar-profile-image" src="<c:url value='http://static.photoshows.cn/avatar${sessionScope.avatar}.png'/>" alt="${pageContext.request.remoteUser}">
 		                </a>
         		    </li>
   				</c:when>

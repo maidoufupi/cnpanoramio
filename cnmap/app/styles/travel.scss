@@ -33,7 +33,7 @@
     height: 100%;
     margin: 0;
     padding: 0 10px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 
     .page-header.travel-header {
@@ -42,7 +42,7 @@
       width: 100%;
       z-index: 100;
       background-color: #ffffff;
-      margin: 0;
+      margin: 10px 0;
       padding: 10px;
       border-radius: 5px;
       h2 {
@@ -63,6 +63,13 @@
 
     .container.travel-content {
       width: 100%;
+      .panel.panel-default {
+        margin-bottom: 10px;
+      }
+      .panel.panel-default.active {
+        border: 0;
+        box-shadow: 0 0 20px 1px #777;
+      }
     }
   }
 }

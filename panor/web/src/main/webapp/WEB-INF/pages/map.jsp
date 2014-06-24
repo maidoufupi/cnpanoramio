@@ -13,31 +13,6 @@
 	
     <script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
         
-<c:choose>
-  <c:when test='${sessionScope.mapVendor eq "baidu"}'>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/script.baidu.min.js"/>"></script>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
-  </c:when>
-  <c:when test='${sessionScope.mapVendor eq "qq"}'>
-    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
-    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
-  </c:when>
-  <c:when test='${sessionScope.mapVendor eq "gaode"}'>
-    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
-  </c:when>
-  <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
-  
-  </c:when>
-  <c:otherwise>
-    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
-  </c:otherwise>
-</c:choose>
 <script>
 	$(document).ready(function () {
 			angular.bootstrap(document.getElementById("exploreWorld"), ['exploreWorldApp']);
@@ -45,7 +20,15 @@
 </script>
 <div id="exploreWorld" class="container-explore-map" ng-controller="ExploreWorldCtrl">
     <div class="col-main">
-        <div id="map-canvas" ui-map="myMap" ui-options="mapOptions"></div>
+        <div class="map-container">
+            <div id="map-canvas" ui-map="myMap" ui-options="mapOptions"></div>
+            <div class="map-controls"
+                 ponm-map-controls
+                 ponm-map="myMap"
+                 ponm-map-service="mapService"
+                 ponm-map-event-listener="mapEventListener">
+            </div>
+        </div>
     </div>
     <div class="col-info" >
         <div id="thumbinnerarea">
@@ -79,7 +62,7 @@
                        data-ng-click="displayPhoto(photo.photo_id)">
                         <img title=""
                              id="r{{photo.photo_id}}"
-                             ng-src="{{apirest}}/photo/{{photo.photo_id}}/2">
+                             ng-src="{{staticCtx}}/{{photo.oss_key}}@!album-thumbnail">
                     </a>
                 </div>
             </div>
@@ -91,16 +74,9 @@
     </div>
     
     <!-- 一键分享组件 -->
-    <div bd-share class="bd-share"
+    <div bd-share 
+    	 class="bd-share"
             data-ng-class="{'active': mouseEnter}">
-        <div class="bdsharebuttonbox">
-            <a href="" class="bds_more" data-cmd="more">分享到：</a>
-            <a href="" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-            <a href="" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-            <a href="" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-            <a href="" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-            <a href="" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-        </div>
     </div>
 </div>
 

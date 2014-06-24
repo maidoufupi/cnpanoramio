@@ -7,7 +7,7 @@
       var _ref;
       this.opts = opts;
       if (this.opts) {
-        _ref = this.opts, this.ctx = _ref.ctx, this.map = _ref.map, this.travel = _ref.travel;
+        _ref = this.opts, this.ctx = _ref.ctx, this.staticCtx = _ref.staticCtx, this.map = _ref.map, this.travel = _ref.travel;
       }
       this.mapEventListener = window.cnmap.MapEventListener.factory();
       this.marker = this.createMarker();
@@ -41,8 +41,8 @@
 
     ITravelLayer.prototype.createLabel = function(photo) {};
 
-    ITravelLayer.prototype.getLabelContent = function(photoId) {
-      return "<img src='" + this.ctx + "/api/rest/photo/" + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
+    ITravelLayer.prototype.getLabelContent = function(photoOssKey) {
+      return "<img src='" + this.staticCtx + "/" + photoOssKey + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
     };
 
     ITravelLayer.prototype.activePhoto = function(photo) {
@@ -58,16 +58,28 @@
 
     ITravelLayer.prototype.createMarker = function() {};
 
-    ITravelLayer.prototype.activeSpot = function(spot) {
-      var ne, photo, sw, _i, _len, _ref;
+    ITravelLayer.prototype.activeSpot = function(spotid) {
+      var ispot, ne, photo, spot, sw, _i, _j, _len, _len1, _ref, _ref1;
+      if (!angular.isObject(spotid)) {
+        _ref = this.travel.spots;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          ispot = _ref[_i];
+          if (parseInt(ispot.id, 10) === parseInt(spotid, 10)) {
+            spot = ispot;
+            break;
+          }
+        }
+      } else {
+        spot = spotid;
+      }
       if (spot.photos[0]) {
         sw = jQuery.extend({}, spot.photos[0].point);
         ne = jQuery.extend({}, spot.photos[0].point);
       }
       if (sw && ne) {
-        _ref = spot.photos;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          photo = _ref[_i];
+        _ref1 = spot.photos;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          photo = _ref1[_j];
           if (photo.point.lat < sw.lat) {
             sw.lat = photo.point.lat;
           }

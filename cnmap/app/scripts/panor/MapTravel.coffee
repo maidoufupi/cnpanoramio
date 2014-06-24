@@ -1,7 +1,7 @@
 
 class ITravelLayer
   constructor: (@opts) ->
-    {@ctx, @map, @travel} = @opts if @opts
+    {@ctx, @staticCtx, @map, @travel} = @opts if @opts
     @mapEventListener = window.cnmap.MapEventListener.factory()
     @marker = @createMarker()
 
@@ -20,8 +20,8 @@ class ITravelLayer
 
   createLabel: (photo) ->
 
-  getLabelContent: (photoId) ->
-    "<img src='#{@ctx}/api/rest/photo/#{photoId}/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
+  getLabelContent: (photoOssKey) ->
+    "<img src='#{@staticCtx}/#{photoOssKey}@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
 
 
   activePhoto: (photo) ->
@@ -36,16 +36,18 @@ class ITravelLayer
 
   createMarker: () ->
 
-  activeSpot: (spot) ->
+  activeSpot: (spotid) ->
+    if not angular.isObject spotid
+      for ispot in @travel.spots
+        if parseInt(ispot.id, 10) == parseInt(spotid, 10)
+          spot = ispot
+          break
+    else
+      spot = spotid
+
     if spot.photos[0]
       sw = jQuery.extend {}, spot.photos[0].point
       ne = jQuery.extend {}, spot.photos[0].point
-#    if spot.photos[1]
-#      if spot.photos[1].point.lat < sw.lat or spot.photos[1].point.lng < sw.lng
-#        ne = sw
-#        sw = jQuery.extend {}, spot.photos[1].point
-#      else
-#        ne = jQuery.extend {}, spot.photos[1].point
 
     if sw and ne
       for photo in spot.photos

@@ -23,8 +23,12 @@ public class PhotoProperties {
 	private String description;
 	@JsonProperty("create_time")
 	private Date createTime;
+	
 	@JsonProperty("user_id")
 	private Long userId;
+	@JsonProperty("user_avatar")
+	private String userAvatar;
+	
 	private Point point;
 	// 地图供应商
 	private String vendor;
@@ -51,20 +55,27 @@ public class PhotoProperties {
 	@JsonProperty("fav_count")
 	private Integer favCount;
 	
+	// 登录用户的行为
 	private Boolean like;
-	
 	private Boolean favorite;
 	
 	// 图片的评论总数
 	@JsonProperty("comment_count")
 	private Integer commentCount;
 	
+	// 文件大小
 	@JsonProperty("file_size")
 	private Integer fileSize;
+	// 文件名
+	@JsonProperty("file_name")
+	private String fileName;
 	
 	// 拍摄日期
 	@JsonProperty("date_time")
 	private Date dateTime;
+	
+	@JsonProperty("oss_key")
+	private String ossKey;
 	
 	public String getTitle() {
 		return title;
@@ -232,6 +243,30 @@ public class PhotoProperties {
 
 	public void setLike(Boolean like) {
 		this.like = like;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getOssKey() {
+		return ossKey;
+	}
+
+	public void setOssKey(String ossKey) {
+		this.ossKey = ossKey;
+	}
+
+	public String getUserAvatar() {
+		return userAvatar;
+	}
+
+	public void setUserAvatar(String userAvatar) {
+		this.userAvatar = userAvatar;
 	}	
 	
 }

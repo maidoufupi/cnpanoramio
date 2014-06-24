@@ -122,7 +122,7 @@
                             }else{
                                 var label = new qq.maps.Label();
                                 label.photoId = b;
-                                label.setContent(that.getLabelContent(b));  //自定义点标记覆盖物内容);
+                                label.setContent(that.getLabelContent(photos[b].oss_key));  //自定义点标记覆盖物内容);
                                 label.setMap(map);
                                 label.setPosition(new qq.maps.LatLng(photos[b].lat, photos[b].lng));
                                 if(that.opts.clickable) {
@@ -151,14 +151,14 @@
             }
         };
 
-        this.getLabelContent = function(photoId) {
+        this.getLabelContent = function(photoOssKey) {
 
             if(this.opts.phone) {
-                return "<img src='" + this.ctx + "/api/rest/photo/"
-                    + photoId + "/3' style='width: 34px; height: 34px;'>";
+                return "<img src='" + this.staticCtx + "/"
+                    + photoOssKey + "@!panor-lg' style='width: 34px; height: 34px;'>";
             }else {
-                return "<img src='" + this.ctx + "/api/rest/photo/" + photoId
-                    + "/3' style='width: 34px; height: 34px;'>";
+                return "<img src='" + this.staticCtx + "/" + photoOssKey
+                    + "@!panor-lg' style='width: 34px; height: 34px;'>";
             }
 
         };

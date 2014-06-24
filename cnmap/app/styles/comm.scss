@@ -47,13 +47,36 @@ $transition-time: 0.3s;
 }
 
 .icon-refresh-animate {
+  -webkit-animation-name: rotateThis;
   animation-name: rotateThis;
+  -webkit-animation-duration: .5s;
   animation-duration: .5s;
+  -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
   animation-timing-function: linear;
 }
 
+@-webkit-keyframes rotateThis {
+  from {
+    -webkit-transform: scale(1) rotate(0deg);
+    transform: scale(1) rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: scale(1) rotate(360deg);
+    transform: scale(1) rotate(360deg);
+  }
+}
+
 @keyframes rotateThis {
-  from { transform: scale( 1 ) rotate( 0deg );   }
-  to   { transform: scale( 1 ) rotate( 360deg ); }
+  from {
+    -webkit-transform: scale(1) rotate(0deg);
+    transform: scale(1) rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: scale(1) rotate(360deg);
+    transform: scale(1) rotate(360deg);
+  }
 }

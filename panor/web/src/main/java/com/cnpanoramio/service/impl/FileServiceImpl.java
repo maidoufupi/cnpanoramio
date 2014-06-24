@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 
 import com.cnpanoramio.service.FileService;
 
-@Service
+
 public class FileServiceImpl implements FileService {
 
 	private transient final Log log = LogFactory.getLog(FileService.class);
@@ -189,9 +189,9 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public File readFile(String fileType, Long fileKey, String fileExt,
-			int level) {
+			String level) {
 
-		File file = new File(getFilePath(fileType, fileKey, fileExt, level));
+		File file = new File(getFilePath(fileType, fileKey, fileExt, Integer.parseInt(level)));
 		if(file.exists() && !file.isDirectory()) {
 			return file;
 		}else {
@@ -224,6 +224,13 @@ public class FileServiceImpl implements FileService {
 	public void saveThumbnails(String fileType, Long fileKey, String fileExt,
 			InputStream ins) {
 		saveImage(fileKey, fileExt, ins);
+	}
+
+	@Override
+	public InputStream readAsInputStream(String fileType, Long fileKey,
+			String fileExt, String ext) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

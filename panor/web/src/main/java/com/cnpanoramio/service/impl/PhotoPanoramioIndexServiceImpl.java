@@ -130,6 +130,8 @@ public class PhotoPanoramioIndexServiceImpl implements
 		pp.setUserId(photo.getOwner().getId());
 		UserSettings user = userDao.get(pp.getUserId());
 		pp.setUsername(user.getName());
+		
+		pp.setOssKey(photo.getId() + "." + photo.getFileType());
 
 		return pp;
 	}

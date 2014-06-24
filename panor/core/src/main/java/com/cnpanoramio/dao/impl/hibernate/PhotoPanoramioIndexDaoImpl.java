@@ -1,7 +1,6 @@
 package com.cnpanoramio.dao.impl.hibernate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
@@ -9,17 +8,14 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.dao.PhotoPanoramioIndexDao;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoLatestIndex;
-import com.cnpanoramio.domain.PhotoPanoramio;
 import com.cnpanoramio.domain.PhotoPanoramioIndex;
 import com.cnpanoramio.domain.PhotoPanoramioIndexPK;
-import com.cnpanoramio.domain.Point;
 
 @Repository("photoPanoramioIndexDao")
 public class PhotoPanoramioIndexDaoImpl extends
@@ -28,7 +24,7 @@ public class PhotoPanoramioIndexDaoImpl extends
 
 	private Double conMeasure = 40D;
 	private Integer bigPix = 34;
-	private Integer miniPix = 10;
+//	private Integer miniPix = 10;
 
 	public PhotoPanoramioIndexDaoImpl() {
 		super(PhotoPanoramioIndex.class);
@@ -218,23 +214,23 @@ public class PhotoPanoramioIndexDaoImpl extends
 		log.info("getLatestPanoramio lEast = " + lEast);
 		log.info("getLatestPanoramio lWest = " + lWest);
 		
-		Criteria criteria1 = getSession().createCriteria(PhotoPanoramioIndex.class)
-				.add(Restrictions.eq("pk.level", level))
-				.add(Restrictions.le("pk.south", lNorth))
-				.add(Restrictions.ge("pk.south", lSouth));
-
-		if (lEast > lWest) {
-			criteria1.add(Restrictions.le("pk.west", lEast))
-					.add(Restrictions.ge("pk.west", lWest));
-		} else {
-			criteria1.add(Restrictions.or(Restrictions.and(
-					Restrictions.ge("pk.west", lWest),
-					Restrictions.le("pk.west", 180D)), Restrictions.and(
-					Restrictions.ge("pk.west", -180D),
-					Restrictions.le("pk.west", lEast))));
-		}
-		List list1 = criteria1.list();
-		log.info("getIndexPanoramio size = " + list1.size());
+//		Criteria criteria1 = getSession().createCriteria(PhotoPanoramioIndex.class)
+//				.add(Restrictions.eq("pk.level", level))
+//				.add(Restrictions.le("pk.south", lNorth))
+//				.add(Restrictions.ge("pk.south", lSouth));
+//
+//		if (lEast > lWest) {
+//			criteria1.add(Restrictions.le("pk.west", lEast))
+//					.add(Restrictions.ge("pk.west", lWest));
+//		} else {
+//			criteria1.add(Restrictions.or(Restrictions.and(
+//					Restrictions.ge("pk.west", lWest),
+//					Restrictions.le("pk.west", 180D)), Restrictions.and(
+//					Restrictions.ge("pk.west", -180D),
+//					Restrictions.le("pk.west", lEast))));
+//		}
+//		List list1 = criteria1.list();
+//		log.info("getIndexPanoramio size = " + list1.size());
 		
 		Criteria criteria = getSession().createCriteria(PhotoLatestIndex.class)
 				.add(Restrictions.eq("pk.level", level))

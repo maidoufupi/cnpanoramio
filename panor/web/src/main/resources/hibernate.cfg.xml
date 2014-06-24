@@ -17,7 +17,8 @@
 		<mapping class="com.cnpanoramio.domain.IndexPhoto" />		
 		<mapping class="com.cnpanoramio.domain.PhotoGps" />		
 		<mapping class="com.cnpanoramio.domain.PhotoPanoramio" />		
-		<mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex" />		
+		<mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex" />
+		<mapping class="com.cnpanoramio.domain.PhotoLatestIndex" />		
 		<mapping class="com.cnpanoramio.domain.Views" />		
 		<mapping class="com.cnpanoramio.domain.Favorite" />
 		<mapping class="com.cnpanoramio.domain.Avatar" />

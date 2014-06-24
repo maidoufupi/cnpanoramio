@@ -20,9 +20,13 @@
     "jquery.cookie": "1.4.0",
     "imgLiquid": "0.9.944",
 
-      "angular-ui-mapgaode": "1.0.1",
-      "angular-ui-map-qq": "1.0.0",
-      "bootstrap-tagsinput": "0.3.9"
+    "angular-ui-mapgaode": "1.0.1",
+    "angular-ui-map-qq": "1.0.0",
+    "bootstrap-tagsinput": "0.3.9",
+    "jquery-backstretch": "2.0.4",
+    "jquery-waypoints": "2.0.5",
+    "angular-ui-utils": "bower"
+
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",

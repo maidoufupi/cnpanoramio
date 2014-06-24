@@ -6,14 +6,15 @@
 <meta name="menu" content="Login" />
 </head>
 
-<body>
+<body >
 
 <script>
 	$(document).ready(function () {
 			angular.bootstrap(document.getElementById("ponmAppLogin"), ['ponmApp.login']);
 	})
 </script>
-<div id="ponmAppLogin" class="login-container" ng-controller="LoginCtrl">
+<div id="ponmAppLogin" class="login-container" ng-controller="LoginCtrl"
+	backstretch background-url="images/login-background.jpg">
     <div class="login-form">
     <div class="animated bounceIn">
         <div class="form-header">
@@ -21,17 +22,22 @@
         </div>
         <!--  -->
         <div class="form-main">
-            <form method="post" action="/panor-web/j_security_check" name="form"
+            <form method="post" action="/panor-web/j_security_check" 
+            	  name="userForm"
                   novalidate>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="用户名"
+                    <input type="text" class="form-control" placeholder="用户名/邮箱"
                            name="j_username"
-                           ng-model="credentials.username" required>
+                           ng-model="credentials.username"
+                           required>
                     <input type="password" class="form-control" placeholder="密码"
                            name="j_password"
-                           ng-model="credentials.password" required>
+                           ng-model="credentials.password"
+                           required>
                 </div>
-                <button type="submit" class="btn btn-block signin" data-ng-click="login($event, credentials)">登录</button>
+                <button type="submit" class="btn btn-block signin"
+                        data-ng-click="login($event, userForm.$valid, credentials)"
+                        ng-disabled="userForm.$invalid">登录</button>
             </form>
         </div>
         <div class="form-footer">

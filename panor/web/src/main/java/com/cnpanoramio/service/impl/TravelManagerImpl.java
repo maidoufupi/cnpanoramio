@@ -106,7 +106,7 @@ public class TravelManagerImpl implements TravelManager {
 		PhotoDetails detail = photo.getDetails();
 		Date photoDate = null;
 		if (null != detail) {
-			photoDate = detail.getDateTime();
+			photoDate = detail.getDateTimeOriginal();
 			if (null != photoDate) {
 				String tDate = dateFormat.format(photoDate);
 				for (TravelSpot spot : travel.getSpots()) {

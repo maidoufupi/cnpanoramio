@@ -7,10 +7,12 @@
 angular.module('ponmApp.controllers')
     .controller('PhotoModalCtrl', ['$window', '$scope', '$log', '$modalInstance', 'photoId', 'travelId', 'PhotoService',
         'CommentService', 'UserService', 'TravelService', '$q', '$modal', '$filter', 'param', '$location',
+        'ponmCtxConfig',
         function ($window, $scope, $log, $modalInstance, photoId, travelId, PhotoService, CommentService, UserService,
-                  TravelService, $q, $modal, $filter, param, $location) {
+                  TravelService, $q, $modal, $filter, param, $location, ponmCtxConfig) {
 
             $scope.ctx = $window.ctx;
+            $scope.staticCtx = ponmCtxConfig.staticCtx;
             $scope.apirest = $window.apirest;
             $scope.photoId = photoId;
             $scope.userId = $window.userId;
@@ -117,6 +119,17 @@ angular.module('ponmApp.controllers')
             if (travelId) {
                 getTravel(travelId);
             }
+
+            $scope.getPhotoSrc = function(photo) {
+                if(!photo) {
+                    return "";
+                }
+                if(photo.is360) {
+                    return $scope.apirest + "/photo/" + photo.id + "/oss";
+                }else {
+                    return $scope.staticCtx + '/' + photo.oss_key + '@!photo-preview-lg';
+                }
+            };
 
             /**
              * 创建评论
@@ -427,9 +440,11 @@ angular.module('ponmApp.controllers')
         });
     }])
     .controller('MapPhotoCtrl2', ['$window', '$log', '$timeout', '$scope', '$modalInstance', 'PhotoService',
-        'GeocodeService', 'photoId',
-        function ($window, $log, $timeout, $scope, $modalInstance, PhotoService, GeocodeService, photoId) {
+        'GeocodeService', 'photoId', 'ponmCtxConfig',
+        function ($window, $log, $timeout, $scope, $modalInstance, PhotoService, GeocodeService, photoId,
+                  ponmCtxConfig) {
             $scope.ctx = $window.ctx;
+            $scope.staticCtx = ponmCtxConfig.staticCtx;
             $scope.apirest = $window.apirest;
             $scope.userId = $window.userId;
 
@@ -484,6 +499,7 @@ angular.module('ponmApp.controllers')
 
                 PhotoService.getPhoto({photoId: $scope.photoId}, function(data) {
                     if (data.status == 'OK') {
+                        $scope.photo = data.prop;
                         $scope.file.is360 = data.prop.is360;
                     }
                 });

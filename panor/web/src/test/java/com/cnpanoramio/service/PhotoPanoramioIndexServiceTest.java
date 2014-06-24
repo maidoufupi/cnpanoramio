@@ -61,6 +61,25 @@ public class PhotoPanoramioIndexServiceTest {
 		log.info(photos.size());
 		Assert.assertTrue(photos.size() == 2);
 	}
+	
+	@Test
+	public void testGetPhotoLatestIndex() {
+
+		Double swLatD = Double.parseDouble("20");
+		Double swLngD = Double.parseDouble("110");
+		Double neLatD = Double.parseDouble("40");
+		Double neLngD = Double.parseDouble("133");
+		int levelI = Integer.parseInt("2");
+		int widthI = Integer.parseInt("100");
+		int heightI = Integer.parseInt("100");
+		
+		MapVendor mVendor = MapVendor.gaode;
+		
+		List<PhotoPanoramio> photos = panoramioIndexService.getLatestPanoramio(swLatD, swLngD, 
+				neLatD, neLngD, levelI, mVendor, widthI, heightI);
+		log.info(photos.size());
+		Assert.assertTrue(photos.size() == 2);
+	}
 
 	@Test
 	public void testPhotoPanorUpdate(){

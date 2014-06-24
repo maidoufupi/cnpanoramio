@@ -9,16 +9,22 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
 //                        .hashPrefix('');
 //    }])
     .controller('ExploreWorldCtrl', ['$window', '$location', '$scope', 'UserService', '$modal', 'deparam', 'param',
-        '$timeout',
-    function ($window, $location, $scope, UserService, $modal, deparam, param, $timeout) {
+        '$timeout', 'ponmCtxConfig',
+    function ($window, $location, $scope, UserService, $modal, deparam, param, $timeout, ponmCtxConfig) {
 
         $scope.ctx = $window.ctx;
+        $scope.staticCtx = ponmCtxConfig.staticCtx;
         $scope.apirest = $window.apirest;
         $scope.login = $window.login;
         $scope.userId = $window.userId;
 
-            // 设置侧边栏显示的用户
-            $scope.user = {};
+        var mapEventListener = $window.cnmap.MapEventListener.factory();
+        $scope.mapEventListener = mapEventListener;
+        $scope.mapService = $window.cnmap.MapService.factory();
+
+
+        // 设置侧边栏显示的用户
+        $scope.user = {};
         if($scope.login && $scope.userId) {
             $scope.user = {
                 id: $scope.userId,
@@ -58,7 +64,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
         var panoramioLayer = new cnmap.PanoramioLayer(
             {suppressInfoWindows: false,
                 mapVendor: $window.mapVendor || "gaode"});
-        panoramioLayer.initEnv($window.ctx);
+        panoramioLayer.initEnv($window.ctx, $scope.staticCtx );
         $(panoramioLayer).bind("data_changed", function (e, data) {
             $scope.$apply(function (scope) {
                 // 计算可显示图片行数
@@ -170,8 +176,6 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
             }
         }
 
-        var mapEventListener = $window.cnmap.MapEventListener.factory();
-
         $scope.$watch('myMap', function () {
             if (!$scope.map) {
                 $scope.map = $scope.myMap;
@@ -179,6 +183,7 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
                 panoramioLayer.setMap(mapObj);
                 locationHash(mapObj);
                 mapEventListener.addToolBar(mapObj);
+                $scope.mapService.init($scope.map);
             }
         });
 
@@ -204,6 +209,9 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
                 }
                 var stateObj = deparam(hash);
                 splitPoundSign(stateObj, "photoid");
+                splitPoundSign(stateObj, "zoom");
+                splitPoundSign(stateObj, "lat");
+                splitPoundSign(stateObj, "lng");
 
                 if (stateObj.lat && stateObj.lng) {
                     if (hashObj.lat != stateObj.lat ||

@@ -20,6 +20,9 @@ public class UserOpenInfo {
 	// 系统用户名
 	private String username;
 	
+//	@JsonProperty("user_avatar")
+//	private String userAvatar;
+	
 	// 昵称
 	private String name;
 	
@@ -113,6 +116,14 @@ public class UserOpenInfo {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}	
+	}
+
+//	public String getUserAvatar() {
+//		return userAvatar;
+//	}
+//
+//	public void setUserAvatar(String userAvatar) {
+//		this.userAvatar = userAvatar;
+//	}	
 	
 }

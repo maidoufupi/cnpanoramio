@@ -30,7 +30,7 @@
 				您的<span>设置</span>页面
 			</h1>
 
-			<alert data-ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+			<alert data-ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
 			<form id="settings" method="post" data-ng-submit="submit()" action="">
 
@@ -60,7 +60,7 @@
 								<td>
 									<div id="current-picture">
 										<img id="avatar_picture" class="img-rounded"
-                                             data-ng-src="{{apirest}}/user/{{avatar}}/avatar"
+                                             ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png"
                                              alt="您的头像">
                                         <a href="" data-ng-click="changeAvatar()" id="change_avatar">更改头像</a>
 									</div>

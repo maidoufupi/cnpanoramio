@@ -44,7 +44,9 @@ public interface FileService {
      * @param fileName
      * @return
      */
-    public File readFile(String fileType, Long fileKey, String fileExt, int level);
+    public File readFile(String fileType, Long fileKey, String fileExt, String ext);
+    
+    public InputStream readAsInputStream(String fileType, Long fileKey, String fileExt, String ext);
     
     /**
      * 删除文件

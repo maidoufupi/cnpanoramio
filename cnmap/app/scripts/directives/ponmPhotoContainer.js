@@ -50,21 +50,35 @@ angular.module('ponmApp.directives')
                     || (self.maxSize &&
                         (self.maxSize < self.exif['full_width'] || self.maxSize < self.exif['full_height'])))) {
                     if(this.image instanceof Image) {
+                        this.image.crossOrigin = "http://www.photoshows.cn"; //"Anonymous";
                         self.start3D( resize(this.image) );
                     }else {
                         var img = new Image();
+                        img.crossOrigin = "Anonymous";
                         img.onload = function(){
                             self.start3D( resize(img) );
                         };
                         img.src = this.image;
                     }
                 }else {
-                    var img = new Image();
-                    img.onload = function(){
-                        self.start3D( this );
-                    };
-                    img.src = this.image;
+                    if(this.image instanceof Image) {
+                        this.image.crossOrigin = "Anonymous"; //"Anonymous";
+                        self.start3D( resize(this.image) );
+                    }else{
+
+                        var imageLoader = new THREE.ImageLoader();
+                        imageLoader.setCrossOrigin("Anonymous");
+                        imageLoader.load(this.image, function(img) {
+                            self.start3D( resize(img) );
+                        });
+//                        var img = new Image();
+//                        img.crossOrigin = "http://static.photoshows.cn";
+//                        img.onload = function(){
+//                            self.start3D( resize(img) );
+//                        };
+//                        img.src = this.image;
 //                    self.start3D( this.image );
+                    }
                 }
 
                 function resize(img) {
@@ -672,17 +686,29 @@ angular.module('ponmApp.directives')
                     var containerWidth = element.innerWidth(),
                         containerHeight = element.innerHeight();
 
-                    scope.$watch(function() {
-                        return attrs.ponmPhotoIs360;
-                    }, function(is360) {
-//                       drawImage();
-                        changeP360(is360);
+//                    scope.$watch(function() {
+//                        return attrs.ponmPhotoIs360;
+//                    }, function(is360) {
+////                       drawImage();
+//                        changeP360(is360);
+//                    });
+
+                    attrs.$observe('ponmPhotoIs360', function ( data ) {
+                        if ( angular.isDefined( data ) ) {
+                            changeP360(data);
+                        }
                     });
 
-                    scope.$watch(function() {
-                        return attrs.ponmPhotoSrcL1;
-                    }, function() {
-                        drawImage();
+//                    scope.$watch(function() {
+//                        return attrs.ponmPhotoSrcL1;
+//                    }, function() {
+//                        drawImage();
+//                    });
+
+                    attrs.$observe('ponmPhotoSrcL1', function ( data ) {
+                        if ( angular.isDefined( data ) ) {
+                            drawImage();
+                        }
                     });
 
                     function getImgWidthHeight() {

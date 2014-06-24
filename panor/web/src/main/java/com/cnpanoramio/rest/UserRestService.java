@@ -282,7 +282,7 @@ public class UserRestService extends AbstractRestService {
 		}
 		File file = fileService.readFile(FileService.TYPE_AVATAR,
 				avatarId, UserSettingsManager.AVATAR_FILE_TYPE,
-				FileService.THUMBNAIL_LEVEL_0);
+				String.valueOf(FileService.THUMBNAIL_LEVEL_0));
 		
 		response.setHeader("Cache-Control","public, max-age=2629000");
 	    Calendar c = Calendar.getInstance();

@@ -13,9 +13,11 @@ angular.module('userPageApp', [
         editableOptions.theme = 'bs3';
     }])
     .controller('UserCtrl', ['$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
-        function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal) {
+        'ponmCtxConfig',
+        function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal, ponmCtxConfig) {
 
             $scope.ctx = $window.ctx;
+            $scope.staticCtx = ponmCtxConfig.staticCtx;
             $scope.apirest = $window.apirest;
 
 //            var url = $location.absUrl();
@@ -206,7 +208,7 @@ angular.module('userPageApp', [
             var panoramioLayer = new cnmap.PanoramioLayer({
                                             suppressInfoWindows: false,
                                             mapVendor: $window.mapVendor || "gaode"});
-            panoramioLayer.initEnv($window.ctx);
+            panoramioLayer.initEnv($window.ctx, $scope.staticCtx);
             panoramioLayer.setUserId($scope.userId);
             $scope.$watch('minimap', function () {
                 if (!$scope.map) {

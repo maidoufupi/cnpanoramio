@@ -95,10 +95,10 @@ public class Photo implements Comparable<Photo> {
 	@Column(name = "is360")
 	private Boolean is360;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<Like> likes = new HashSet<Like>(0);
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<Comment> comments = new HashSet<Comment>(0);
 	
 	public final Long getId() {

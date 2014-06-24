@@ -21,7 +21,7 @@
 /** login page **********************/
 .login-container {
   height: 100%;
-  background-color: #1abc9c;
+//  background-color: #1abc9c;
 //  background-image: url('../images/login-background.jpg');
   .login-form {
 
@@ -53,12 +53,14 @@
   }
 
   .form-main {
-    background-color: #505050;
+//    background-color: #505050;
+    background-color: rgba(80, 80, 80, .5);
     padding: 40px 50px;
     .form-group {
       margin-bottom: 15px;
       input[type="text"], input[type="password"] {
-        background-color: #404040;
+//        background-color: #404040;
+        background-color: rgba(64, 64, 64, .5);
         padding-left: 20px;
         border-radius: 0;
         border: none;
@@ -67,10 +69,10 @@
         height: 43px;
       }
 
-      input.ng-invalid {
+      input.ng-dirty.ng-invalid {
         border: 1px solid red;
       }
-      input.ng-invalid-required {
+      input.ng-dirty.ng-invalid-required {
         border: 1px solid red;
       }
       input.ng-valid {
@@ -98,7 +100,8 @@
   }
 
   .form-footer {
-    background-color: #404040;
+//    background-color: #404040;
+    background-color: rgba(80, 80, 80, .5);
     padding: 20px 50px;
     a:hover {
       text-decoration: none;

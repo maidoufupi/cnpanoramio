@@ -69,6 +69,9 @@ public class UserResponse extends ExceptionResponse {
 		@JsonProperty("user_id") 
 	    private Long userId;
 		
+		@JsonProperty("user_avatar") 
+		private Long userAvatar;
+		
 		// 地图供应商
 		@JsonProperty("map_vendor")
 		private MapVendor mapVendor;
@@ -219,6 +222,14 @@ public class UserResponse extends ExceptionResponse {
 
 		public void setModify(Boolean modify) {
 			this.modify = modify;
+		}
+
+		public Long getUserAvatar() {
+			return userAvatar;
+		}
+
+		public void setUserAvatar(Long userAvatar) {
+			this.userAvatar = userAvatar;
 		}		
 		
 	}

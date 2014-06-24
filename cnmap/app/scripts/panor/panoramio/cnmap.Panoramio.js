@@ -94,13 +94,13 @@
 //            return photos[photoId] ? photos[photoId].visible : false;
 //        }
 
-        this.getLabelContent = function(photoId) {
+        this.getLabelContent = function(photoOssKey) {
             if(this.opts.phone) {
-                return "<img src='" + this.ctx + "/api/rest/photo/"
-                    + photoId + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
+                return "<img src='" + this.staticCtx + "/"
+                    + photoOssKey + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
             }else {
-                return "<img src='" + this.ctx + "/api/rest/photo/" + photoId
-                    + "/3' style='border: 2px solid white; width: 34px; height: 34px;'>";
+                return "<img src='" + this.staticCtx + "/" + photoOssKey
+                    + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
             }
 
         };
@@ -147,7 +147,7 @@
         /**
          * init Environment
          */
-        this.initEnv = function(ctx) {
+        this.initEnv = function(ctx, staticCtx) {
             this.ctx = ctx;
             var url = ctx + '/api/rest/panoramio/';
             jQuery.support.cors = true;
@@ -155,6 +155,8 @@
                 //stringifyData: true
             });
             client.add('photo');
+
+            this.staticCtx = staticCtx || "";
         };
 
         /**

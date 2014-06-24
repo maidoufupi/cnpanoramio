@@ -1,0 +1,23 @@
+<div class="searchbox searchbox-shadow ">
+    <form ng-submit="goLocation(asyncSelected)">
+        <!--<input class="form-control"
+               ng-model="customSelected" placeholder="Custom template"
+               typeahead="state as state.name for state in statesWithFlags | filter:{name:$viewValue}"
+               typeahead-template-url="customTemplate.html">-->
+        <input type="text"
+               ng-model="asyncSelected"
+               placeholder="搜索地址"
+               typeahead="address as address.address for address in getLocation($viewValue) | filter:$viewValue"
+               typeahead-loading="loadingLocations"
+               class="form-control"
+                >
+        <button type="submit" class="searchbutton glyphicon glyphicon-search"></button>
+    </form>
+</div>
+
+<script type="text/ng-template" id="customTemplate.html">
+    <a>
+        <img ng-src="http://upload.wikimedia.org/wikipedia/commons/thumb/{{match.model.flag}}" width="16">
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+    </a>
+</script>

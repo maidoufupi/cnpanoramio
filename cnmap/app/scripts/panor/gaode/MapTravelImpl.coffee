@@ -38,7 +38,7 @@ class TravelLayer extends window.cnmap.ITravelLayer
       map: @map
       position: new AMap.LngLat(photo.point.lng, photo.point.lat) ##基点位置
       offset: new AMap.Pixel(-15, -15) ##相对于基点的偏移位置
-      content: @getLabelContent(photo.id)  ##自定义点标记覆盖物内容
+      content: @getLabelContent(photo.oss_key)  ##自定义点标记覆盖物内容
     })
     label.photoId = photo.id
     if @opts.clickable

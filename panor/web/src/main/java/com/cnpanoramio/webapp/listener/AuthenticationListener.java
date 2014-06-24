@@ -41,6 +41,12 @@ public class AuthenticationListener implements ApplicationListener<Authenticatio
         	log.debug(username + ": " + us.getMapVendor());
         	httpSession.setAttribute("mapVendor", us.getMapVendor());
         	httpSession.setAttribute("userId", us.getUser().getId());
+        	if(null != us.getAvatar()) {
+        		httpSession.setAttribute("avatar", us.getAvatar().getId());
+        	}else {
+        		httpSession.setAttribute("avatar", "1");
+        	}       	
+        	
         }
     	
 	}

@@ -211,5 +211,10 @@ angular.module('ponmApp.services', [
                 return $rootScope.user.id;
             };
         }])
+    .factory('ponmCtxConfig', ['$window', '$resource', function ($window, $resource) {
+        return {
+            staticCtx: "http://static.photoshows.cn"
+        }
+    }])
 
 ;

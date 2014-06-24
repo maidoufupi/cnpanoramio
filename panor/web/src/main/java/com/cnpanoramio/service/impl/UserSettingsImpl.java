@@ -168,7 +168,7 @@ public class UserSettingsImpl implements UserSettingsManager {
 			openInfo.setAvatar(setting.getAvatar().getId());
 		} else {
 			// 默认头像
-			openInfo.setAvatar(0L);
+			openInfo.setAvatar(1L);
 		}
 
 		// 系统用户名

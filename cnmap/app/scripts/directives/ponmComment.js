@@ -4,8 +4,8 @@
 'use strict';
 
 angular.module('ponmApp.directives')
-    .directive('ponmComment', ['$window', '$animate', '$log', 'CommentService', 'param', '$q',
-        function ($window, $animate, $log, CommentService, param, $q) {
+    .directive('ponmComment', ['$window', '$animate', '$log', 'CommentService', 'param', '$q', 'ponmCtxConfig',
+        function ($window, $animate, $log, CommentService, param, $q, ponmCtxConfig) {
 
             return {
                 restrict: 'A',
@@ -16,7 +16,10 @@ angular.module('ponmApp.directives')
                 templateUrl: "views/ponmComment.html",
                 link: function (scope, element, attrs) {
 
+                    scope.ctx = $window.ctx;
                     scope.apirest = $window.apirest;
+                    scope.staticCtx = ponmCtxConfig.staticCtx;
+
                     // 设置comment是否是本人的评论
                     scope.comment.editable = (scope.comment.user_id == scope.userId);
 

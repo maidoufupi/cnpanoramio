@@ -8,7 +8,7 @@ angular.module('ponmApp.directives')
         function ($window, $animate, $log, param, $q, $sce, $timeout) {
             return {
                 restrict: 'A',
-//                templateUrl: "views/bdShare.html",
+                templateUrl: "views/bdShare.html",
                 link: function (scope, element, attrs) {
 
                     $window._bd_share_config = {
@@ -21,11 +21,12 @@ angular.module('ponmApp.directives')
                             "bdStyle": "1",
                             "bdSize": "16"},
                         "share": {
-                            "bdSize": 16},
-                        "image": {
-                            "viewList": ["qzone", "tsina", "tqq", "renren", "weixin"],
-                            "viewText": "分享到：",
-                            "viewSize": "16"}
+                            "bdSize": 16}
+//                        ,
+//                        "image": {
+//                            "viewList": ["qzone", "tsina", "tqq", "renren", "weixin"],
+//                            "viewText": "分享到：",
+//                            "viewSize": "16"}
 //                        ,
 //                        "slide":{
 //                            "type":"slide",
@@ -33,6 +34,13 @@ angular.module('ponmApp.directives')
 //                            "bdPos":"right",
 //                            "bdTop":"100"}
                     };
+                    if(attrs.bdImage && attrs.bdImage!="false") {
+                        $window._bd_share_config.image = {
+                            "viewList": ["qzone", "tsina", "tqq", "renren", "weixin"],
+                            "viewText": "分享到：",
+                            "viewSize": "16"
+                        }
+                    }
                     scope.scriptSrc = "http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion="+~(-new Date()/36e5);
 
                     document.getElementById("bdshell_js").src = scope.scriptSrc;

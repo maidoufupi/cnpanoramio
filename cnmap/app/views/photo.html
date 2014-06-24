@@ -44,7 +44,7 @@
     </nav>
     <div class="photo-container-body">
         <div ponm-photo-container
-             ponm-photo-src-l1="{{apirest}}/photo/{{photoId}}/{{(!photo.is360 && 1) || 1}}"
+             ponm-photo-src-l1="{{getPhotoSrc(photo)}}"
              ponm-photo-width="{{photo.width}}"
              ponm-photo-height="{{photo.height}}"
              ponm-photo-color="{{photo.color}}"
@@ -89,8 +89,8 @@
         <div class="info-container">
             <div class="user-container">
                 <div class="media user-info">
-                    <a class="pull-left" href="{{ctx}}/user#?id={{photo.user_id}}">
-                        <img class="media-object img-circle" ng-src="{{apirest}}/user/{{photo.user_id || 1}}/avatar">
+                    <a class="pull-left" href="{{ctx}}/user#?id={{userOpenInfo.id}}">
+                        <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png">
                     </a>
 
                     <div class="media-body">
@@ -268,7 +268,7 @@
                    data-ng-repeat="photo in travel.photos"
                    data-ng-click="openPhoto(photo)"
                    data-ng-class="{'thumbnail': photo.active}">
-                    <img ng-src="{{apirest}}/photo/{{photo.id}}/2" alt="{{photo.title}}">
+                    <img ng-src="{{staticCtx}}/{{photo.oss_key}}@!album-thumbnail" alt="{{photo.title}}">
                 </a>
             </div>
         </div>

@@ -43,7 +43,8 @@
 
         <div id="user-page_main-header">
             <div class="user-page_main-header_card">
-                <img ng-src="{{apirest}}/user/{{userId}}/avatar" width="120" height="120" alt="" class="user_page-profile_img">
+                <img ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png" 
+                	 width="120" height="120" alt="" class="user_page-profile_img">
 
                 <div id="user_profile_info">
                     <div class="user-page_profile_info user-page_main-lede">
@@ -119,13 +120,12 @@
              fluid-line-max-height="200"
              fluid-line-min-height="100">
             <a ng-repeat="photo in photos"
-               repeat-complete="updateFluid"
                ng-click="activePhoto(photo)"
                href=""
                class="fluid-brick ponm-photo"
                ponm-photo
                     >
-                <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
+                <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}">
                 <div class="action ponm-photo-footer">
                     <p>{{photo.point.address}}</p>
                     <pre class="description">{{photo.description}}</pre>

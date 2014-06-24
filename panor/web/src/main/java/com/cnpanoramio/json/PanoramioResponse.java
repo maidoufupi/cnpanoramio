@@ -37,6 +37,10 @@ public class PanoramioResponse extends ExceptionResponse {
 		@JsonProperty("user_id")
 		private Long userId;
 		private String username;
+		
+		@JsonProperty("oss_key")
+		private String ossKey;
+		
 		public Long getPhotoId() {
 			return photoId;
 		}
@@ -96,6 +100,12 @@ public class PanoramioResponse extends ExceptionResponse {
 		}
 		public void setUsername(String username) {
 			this.username = username;
+		}
+		public String getOssKey() {
+			return ossKey;
+		}
+		public void setOssKey(String ossKey) {
+			this.ossKey = ossKey;
 		}
 		
 	}

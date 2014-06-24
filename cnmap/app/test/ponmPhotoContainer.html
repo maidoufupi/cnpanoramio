@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../styles/main.css">
 
-    <script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
     <!--<script type="text/javascript" src="../bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>-->
     <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.js"></script>
@@ -34,11 +34,14 @@
 </head>
 <body ng-app="ponmApp.directives">
 <div class="container">
+    <!-- ponm-photo-width="7168"
+             ponm-photo-height="3581" -->
+    <!-- http://static.photoshows.cn/2.jpg@!photo-360" -->
     <div class="img-container">
         <div ponm-photo-container
-             ponm-photo-src-l1="images/PANO_20140520_212711.jpg"
-             ponm-photo-width="7168"
-             ponm-photo-height="3581"
+             ponm-photo-src-l1="http://127.0.0.1:8080/panor-web/api/rest/photo/1/oss"
+             ponm-photo-width="4000"
+             ponm-photo-height="2000"
              ponm-photo-color="#887348"
              ponm-photo-is360="true"
                 >

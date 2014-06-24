@@ -3,11 +3,13 @@ package com.cnpanoramio.rest;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
@@ -188,6 +190,37 @@ public class PhotoRestService extends AbstractRestService {
 
 		return reponse;
 	}
+	
+	@RequestMapping(value = "/{photoId}/oss", method = RequestMethod.GET, produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
+	@ResponseBody
+	public void getOssPhoto(@PathVariable String photoId, HttpServletResponse response) 
+			throws IOException {
+
+		Long id = Long.parseLong(photoId);
+		Photo photo = null;
+		try {
+			photo = photoService.getPhoto(id);
+		} catch (DataAccessException ex) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
+		InputStream is = fileService.readAsInputStream(FileService.TYPE_IMAGE, id, photo.getFileType(), "");
+		
+		if(null != is) {
+			IOUtils.copy(is, response.getOutputStream());
+		    response.flushBuffer();
+		      
+			// 设置http请求的缓存，让浏览器缓存此图片(一个月期限)
+			response.setHeader("Cache-Control","public, max-age=2629000");
+		    Calendar c = Calendar.getInstance();
+		    c.add(Calendar.MONTH, 1);
+		    response.setDateHeader("Expires", c.getTimeInMillis());
+		}else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+//			response.sendError(404);
+		}
+	}
 
 	@RequestMapping(value = "/{photoId}/{level}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
 	@ResponseBody
@@ -202,11 +235,11 @@ public class PhotoRestService extends AbstractRestService {
 			return null;
 		}
 		
-		File file = fileService.readFile(FileService.TYPE_IMAGE, id, photo.getFileType(), level);
+		File file = fileService.readFile(FileService.TYPE_IMAGE, id, photo.getFileType(), String.valueOf(level));
 		
 		// 找不到
 		if(null == file && 0 != level) {
-			file = fileService.readFile(FileService.TYPE_IMAGE, id, photo.getFileType(), 0);
+			file = fileService.readFile(FileService.TYPE_IMAGE, id, photo.getFileType(), "0");
 		}
 		if(null != file) {
 			// 设置http请求的缓存，让浏览器缓存此图片(一个月期限)

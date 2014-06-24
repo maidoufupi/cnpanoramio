@@ -2,14 +2,7 @@
  * Created by any on 2014/6/7.
  */
 angular.module('ponmPhotoApp', [
-    'ngCookies',
-    'ngResource',
-    'ngSanitize',
-    'ngRoute',
     'ponmApp',
-    'ponmApp.services',
-    'ponmApp.controllers',
-    'ponmApp.directives',
     'ui.bootstrap',
     'xeditable'
 ]).run(function(editableOptions) {
@@ -29,10 +22,10 @@ angular.module('ponmPhotoApp', [
                     windowClass: 'photo-modal-fullscreen',
                     resolve: {
                         photoId: function () {
-                            return 6;
+                            return 1;
                         },
                         travelId: function() {
-                            return 2;
+                            return 1;
                         }
                     }
                 });

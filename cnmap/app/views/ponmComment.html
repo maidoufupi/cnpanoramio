@@ -2,7 +2,7 @@
      data-ng-class="{'comment-active': mouseEnter}">
     <a class="pull-left" href="{{ctx}}/user#?id={{comment.user_id}}">
         <img class="media-object img-rounded"
-             data-ng-src="{{apirest}}/user/{{comment.user_id}}/avatar"
+             ng-src="{{staticCtx}}/avatar{{comment.user_avatar || 1}}.png"
              width="60" height="60" alt="{{comment.username}}">
     </a>
     <div class="media-body">

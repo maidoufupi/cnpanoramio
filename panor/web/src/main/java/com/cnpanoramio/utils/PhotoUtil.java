@@ -62,6 +62,9 @@ public class PhotoUtil {
 		pp.setCreateTime(photo.getCreateDate());
 		pp.setUserId(photo.getOwner().getId());
 		pp.setFileSize(photo.getFileSize());
+		pp.setFileName(photo.getName());
+		
+		pp.setOssKey(photo.getId() + "." + photo.getFileType());
 		
 		// 旅行
 		if(null != photo.getTravel()) {
@@ -88,7 +91,7 @@ public class PhotoUtil {
 		if(null != details) {
 			pp.setWidth(details.getPixelXDimension());
 			pp.setHeight(details.getPixelYDimension());
-			pp.setDateTime(details.getDateTime());
+			pp.setDateTime(details.getDateTimeOriginal());
 		}
 		return pp;
 	}

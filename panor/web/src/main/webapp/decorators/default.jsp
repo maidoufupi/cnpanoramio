@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ include file="/common/taglibs.jsp"%>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta http-equiv="Cache-Control" content="no-cache"/>
     <meta http-equiv="Pragma" content="no-cache"/>
@@ -38,6 +38,9 @@
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.mousewheel.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.panzoom.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/three.min.js"/>"></script>
+    
+    <script type="text/javascript" src="<c:url value="/bower_components/jquery-backstretch/jquery.backstretch.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/bower_components/jquery-waypoints/waypoints.js"/>"></script>
     
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.controllers.min.js"/>"></script>

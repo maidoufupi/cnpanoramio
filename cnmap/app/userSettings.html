@@ -9,8 +9,7 @@
 
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap-theme.css"/>
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css"/>
-    <link rel="stylesheet" href="styles/style.css"/>
-    <link rel="stylesheet" href="styles/settings.css"/>
+    <link rel="stylesheet" href="styles/main.css"/>
     <link rel="stylesheet" href="bower_components/Jcrop/css/jquery.Jcrop.css"/>
 
     <script type="text/javascript">
@@ -19,7 +18,7 @@
 //        window.apirest = "http://115.28.21.165/api/rest"
     </script>
 
-    <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="bower_components/jquery.rest/dist/jquery.rest.min.js"></script>
 
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
@@ -32,7 +31,7 @@
     <script type="text/javascript" src="bower_components/Jcrop/js/jquery.color.js"></script>
 
     <!-- The main application script -->
-    <script src="scripts/services/main.js"></script>
+    <script src="scripts/ponmApp.min.js"></script>
     <script src="scripts/controllers/UserSettingsCtrl.js"></script>
     <script src="scripts/controllers/ChUserAvatarCtrl.js"></script>
 
@@ -46,7 +45,7 @@
 				您的<span>设置</span>页面
 			</h1>
 
-            <alert data-ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+            <alert data-ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
 			<form id="settings" method="post" data-ng-submit="submit()" action="">
 
@@ -76,7 +75,7 @@
 								<td>
 									<div id="current-picture">
 										<img id="avatar_picture" class="img-rounded"
-                                             data-ng-src="{{apirest}}/user/{{avatar}}/avatar"
+                                             ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png"
                                              alt="您的头像">
                                         <a href="" data-ng-click="changeAvatar()" id="change_avatar">更改头像</a>
 									</div>

@@ -10,7 +10,7 @@
     <div id="selected-photo-editor" class="selected_photo_editor">
         <div class="properties">
             <div id="loc-preview" class="thumbnail">
-                <img class="preview" data-ng-src="{{apirest}}/photo/{{photoId}}/2">
+                <img class="preview" data-ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-loc'}}">
             </div>
             <form id="geocoder_form" class="form" ng-controller="TypeaheadCtrl" ng-submit="goLocation(asyncSelected)">
                 <div class="col-12">

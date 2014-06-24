@@ -3,22 +3,26 @@
  */
 
 'use strict';
-angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
-    'xeditable'])
+angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap', 'xeditable'])
     .run(['editableOptions', function(editableOptions) {
         editableOptions.theme = 'bs3';
     }])
-    .controller('ATravelCtrl', ['$window', '$scope', '$log', '$http', '$location', 'TravelService', '$modal', '$q',
-        'param',
-        function ($window, $scope, $log, $http, $location, TravelService, $modal, $q, param) {
+    .controller('ATravelCtrl', ['$window', '$scope', '$log', '$http', '$location', 'TravelService',
+        'UserService', '$modal', '$q', 'param', 'ponmCtxConfig',
+        function ($window, $scope, $log, $http, $location, TravelService, UserService, $modal, $q, param,
+                  ponmCtxConfig) {
             $scope.ctx = $window.ctx;
+            $scope.staticCtx = ponmCtxConfig.staticCtx;
             $scope.apirest = $window.apirest;
             $scope.userId = $window.userId;
 
             var mapEventListener = $window.cnmap.MapEventListener.factory();
+            $scope.mapEventListener = mapEventListener;
+            $scope.mapService = $window.cnmap.MapService.factory();
 
             var travelLayer = new $window.cnmap.TravelLayer({
                 ctx: $scope.ctx,
+                staticCtx: ponmCtxConfig.staticCtx,
                 travel: $scope.travel,
                 clickable: true
             });
@@ -60,6 +64,23 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
             };
 
             $scope.activeSpot = function(spot) {
+                var spotId = 0;
+                if(angular.isObject(spot)) {
+                    spotId = spot.id;
+                }else {
+                    spotId = spot;
+                }
+                if($scope.activedSpot && $scope.activedSpot.id == spotId) {
+                    return;
+                }
+                angular.forEach($scope.travel.spots, function(spot, key) {
+                    if(spot.id == spotId) {
+                        spot.active = true;
+                        $scope.activedSpot = spot;
+                    }else {
+                        spot.active = false;
+                    }
+                });
                 travelLayer.activeSpot(spot);
             };
 
@@ -92,6 +113,13 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
                         if($scope.travel.spots[0]) {
                             $scope.activeSpot($scope.travel.spots[0]);
                         }
+
+                        // 获取图片的用户信息
+                        UserService.getOpenInfo({'userId': $scope.travel.user_id}, function (data) {
+                            if (data.status == "OK") {
+                                $scope.userOpenInfo = data.open_info;
+                            }
+                        });
                     }
                 });
             }
@@ -182,16 +210,20 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap',
 //            zoomControl: false
             };
 
-            $scope.$watch('myMap', function () {
+            $scope.$watch('myMap', function (map) {
+//                $scope.map = map;
                 var mapObj = $scope.myMap;
+                $scope.mapService.init(mapObj);
                 mapEventListener.addToolBar(mapObj);
                 travelLayer.setMap(mapObj);
             });
 
             //
-            $scope.scrollCallback = function(e, spot) {
-//                $log.debug("scrollCallback: " + spot);
-            };
+            $scope.$on('waypointEvent', function(e, id) {
+//                $log.debug("waypointSpot: " + id);
+//                $log.debug("waypointSpot: " + angular.isObject(id));
+//                $scope.activeSpot(id);
+            });
 
             $scope.displayPhoto = function(photoId) {
                 stateObject.photoid = photoId;
