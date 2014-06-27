@@ -79,6 +79,15 @@ pre.description.hover {
       color: red;
     }
 
+    .ponm-photo-option {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      .btn.dropdown-toggle {
+        margin: 0;
+      }
+    }
+
     .action {
       opacity: 0;
       @include transition-linear(opacity);
@@ -91,6 +100,10 @@ pre.description.hover {
       opacity: 1;
     }
   }
+}
+
+.icon-action-danger:hover {
+  color: red;
 }
 
 /** photo container directive*/
@@ -355,6 +368,10 @@ span.footnotes {
 .ponm-show-hide.ng-hide-add,
 .ponm-show-hide.ng-hide-remove.ng-hide-remove-active {
   opacity:1;
+}
+
+.ponm-show {
+  opacity:1 !important;
 }
 
 /** modal */

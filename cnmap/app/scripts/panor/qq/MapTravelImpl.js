@@ -12,35 +12,27 @@
     }
 
     TravelLayer.prototype.initMap = function(map) {
-      var photo, point, spot, spotMinDate, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _results;
+      var photo, point, spot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
       if (map) {
         this.map = map;
       }
       this.mapEventListener.setMap(this.marker, this.map);
+      this.calcSpotTime();
       point = [];
       if (this.travel) {
         _ref = this.travel.spots;
+        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           spot = _ref[_i];
-          spot.spotDate = new Date(spot.time_start);
-          if (!spotMinDate || spotMinDate > spot.spotDate) {
-            spotMinDate = spot.spotDate;
-          }
-        }
-        _ref1 = this.travel.spots;
-        _results = [];
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          spot = _ref1[_j];
-          spot.day = Math.round((spot.spotDate - spotMinDate) / (1000 * 60 * 60 * 24)) + 1;
-          _ref2 = spot.photos;
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            photo = _ref2[_k];
+          _ref1 = spot.photos;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            photo = _ref1[_j];
             this.createLabel(photo);
           }
           point = [];
-          _ref3 = spot.photos;
-          for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-            photo = _ref3[_l];
+          _ref2 = spot.photos;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            photo = _ref2[_k];
             point.push(this.createPoint(photo));
           }
           _results.push(new AMap.Polyline({

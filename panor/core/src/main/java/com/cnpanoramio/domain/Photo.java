@@ -44,7 +44,7 @@ public class Photo implements Comparable<Photo> {
 	private String filePath;
 
 	@Column(name = "file_size")
-	private Integer fileSize;
+	private Long fileSize;
 
 	@Embedded
 	private Point gpsPoint;
@@ -88,9 +88,13 @@ public class Photo implements Comparable<Photo> {
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Tag> tags = new HashSet<Tag>(0);
 	
-	@ManyToOne
-	@JoinColumn(name = "travel_id")
-	private Travel travel;
+//	@ManyToOne
+//	@JoinColumn(name = "travel_id")
+//	private Travel travel;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "travel_spot_id")
+	private TravelSpot travelSpot;
 	
 	@Column(name = "is360")
 	private Boolean is360;
@@ -133,11 +137,11 @@ public class Photo implements Comparable<Photo> {
 		this.filePath = filePath;
 	}
 
-	public Integer getFileSize() {
+	public Long getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(Integer fileSize) {
+	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
 	}
 
@@ -287,13 +291,13 @@ public class Photo implements Comparable<Photo> {
 		}
 	}
 
-	public Travel getTravel() {
-		return travel;
-	}
-
-	public void setTravel(Travel travel) {
-		this.travel = travel;
-	}
+//	public Travel getTravel() {
+//		return travel;
+//	}
+//
+//	public void setTravel(Travel travel) {
+//		this.travel = travel;
+//	}
 
 	public Boolean isIs360() {
 		return is360;
@@ -322,6 +326,39 @@ public class Photo implements Comparable<Photo> {
 	@Override
 	public int compareTo(Photo obj) {
 		return this.getRating() - obj.getRating();
+	}
+
+	public TravelSpot getTravelSpot() {
+		return travelSpot;
+	}
+
+	public void setTravelSpot(TravelSpot travelSpot) {
+		this.travelSpot = travelSpot;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Photo other = (Photo) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 	
 }

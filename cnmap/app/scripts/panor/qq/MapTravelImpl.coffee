@@ -4,17 +4,19 @@ class TravelLayer extends window.cnmap.ITravelLayer
     @map = map if map
     @mapEventListener.setMap @marker, @map
 
+    @calcSpotTime()
+
     point = []
     if @travel
       ## 计算出游览景点开始时间的最小值, 为后面计算第几天
-      for spot in @travel.spots
-        spot.spotDate = new Date spot.time_start
-        if !spotMinDate or spotMinDate > spot.spotDate
-          spotMinDate = spot.spotDate
+#      for spot in @travel.spots
+#        spot.spotDate = new Date spot.time_start
+#        if !spotMinDate or spotMinDate > spot.spotDate
+#          spotMinDate = spot.spotDate
 
       for spot in @travel.spots
         ## 计算此景点是第几天游览
-        spot.day = Math.round((spot.spotDate - spotMinDate) / (1000 * 60 * 60 * 24)) + 1
+#        spot.day = Math.round((spot.spotDate - spotMinDate) / (1000 * 60 * 60 * 24)) + 1
         @createLabel photo for photo in spot.photos
         point = []
         point.push @createPoint photo for photo in spot.photos

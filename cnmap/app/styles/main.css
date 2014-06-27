@@ -1126,11 +1126,17 @@ form#settings {
         display: inline-block; }
     .container.travel .container.right-content .container.travel-content {
       width: 100%; }
-      .container.travel .container.right-content .container.travel-content .panel.panel-default {
+      .container.travel .container.right-content .container.travel-content .panel.panel-default.travel-spot {
+        position: relative;
         margin-bottom: 10px; }
+        .container.travel .container.right-content .container.travel-content .panel.panel-default.travel-spot .action.spot-remove {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          right: 0; }
       .container.travel .container.right-content .container.travel-content .panel.panel-default.active {
         border: 0;
-        box-shadow: 0 0 20px 1px #777; }
+        box-shadow: 0 0 10px 1px #777; }
 
 .travel-circle-header {
   position: relative;
@@ -1146,6 +1152,8 @@ form#settings {
     text-align: center;
     border-radius: 2px;
     padding: 0; }
+    .travel-circle-header .spot-date > a:hover {
+      text-decoration: none; }
     .travel-circle-header .spot-date .spot-date-txt {
       height: 40px;
       line-height: 40px;
@@ -1173,6 +1181,10 @@ form#settings {
 .control-label {
   text-align: right; }
 
+/** date picker */
+.ponm-datepicker .dropdown-menu {
+  padding: 0; }
+
 .repeat-enter-setup, .repeat-leave-setup {
   -webkit-transition: all linear 0.3s;
   -moz-transition: all linear 0.3s;
@@ -1195,6 +1207,36 @@ form#settings {
 .repeat-leave-setup.repeat-leave-start {
   opacity: 0;
   line-height: 0; }
+
+.animate-enter,
+.animate-leave {
+  -webkit-transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  -moz-transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  -ms-transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  -o-transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  transition: 400ms cubic-bezier(0.25, 0.1, 0.25, 1) all;
+  position: relative;
+  display: block; }
+
+.animate-leave.animate-leave-active,
+.animate-enter {
+  -webkit-transform: scaleY(0.5);
+  -moz-transform: scaleY(0.5);
+  -ms-transform: scaleY(0.5);
+  -o-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+  height: 0px;
+  opacity: 0; }
+
+.animate-enter.animate-enter-active,
+.animate-leave {
+  -webkit-transform: scaleY(1);
+  -moz-transform: scaleY(1);
+  -ms-transform: scaleY(1);
+  -o-transform: scaleY(1);
+  transform: scaleY(1);
+  height: 30px;
+  opacity: 1; }
 
 .flex-text-wrap {
   position: relative;
@@ -1238,11 +1280,14 @@ form#settings {
 .map-container {
   position: relative;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  /** amap style change */ }
   .map-container .map-controls {
     position: absolute;
     top: 0;
     left: 0; }
+  .map-container .amap-maptype-title {
+    width: 100%; }
 
 /** map controls */
 .searchbox, .searchbox-shadow {
@@ -1296,10 +1341,6 @@ form#settings {
   .searchbox .dropdown-menu {
     width: 100%;
     border-radius: 0; }
-
-/** amap style change */
-.amap-maptype-title {
-  width: 100%; }
 
 .photo-modal-fullscreen {
   overflow: hidden; }
@@ -1413,6 +1454,8 @@ form#settings {
         .photo-modal-container .photo-info .info-container .photo-detail table .value {
           color: #404040;
           word-break: break-all; }
+        .photo-modal-container .photo-info .info-container .photo-detail table .datepicker .dropdown-menu {
+          left: 2px !important; }
       .photo-modal-container .photo-info .info-container .communication {
         margin-top: 2px;
         background-color: whitesmoke; }
@@ -1750,6 +1793,12 @@ pre.description.hover {
       font-size: 12px; }
   .photo-fluid-container .ponm-photo .ponm-photo-remove:hover {
     color: red; }
+  .photo-fluid-container .ponm-photo .ponm-photo-option {
+    position: absolute;
+    top: 2px;
+    left: 2px; }
+    .photo-fluid-container .ponm-photo .ponm-photo-option .btn.dropdown-toggle {
+      margin: 0; }
   .photo-fluid-container .ponm-photo .action {
     opacity: 0;
     -webkit-transition: opacity linear 0.3s;
@@ -1761,6 +1810,9 @@ pre.description.hover {
     opacity: 1; }
   .photo-fluid-container .ponm-photo .action.ponm-show {
     opacity: 1; }
+
+.icon-action-danger:hover {
+  color: red; }
 
 /** photo container directive*/
 .ponm-photo-container {
@@ -1949,6 +2001,9 @@ span.footnotes {
 .ponm-show-hide.ng-hide-add,
 .ponm-show-hide.ng-hide-remove.ng-hide-remove-active {
   opacity: 1; }
+
+.ponm-show {
+  opacity: 1 !important; }
 
 /** modal */
 .modal-header .modal-title {

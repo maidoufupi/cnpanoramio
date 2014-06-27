@@ -149,6 +149,12 @@
             color: #404040;
             word-break: break-all;
           }
+
+          .datepicker {
+            .dropdown-menu {
+              left: 2px !important;
+            }
+          }
         }
       }
 

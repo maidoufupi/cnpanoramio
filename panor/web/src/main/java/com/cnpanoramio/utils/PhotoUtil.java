@@ -67,9 +67,9 @@ public class PhotoUtil {
 		pp.setOssKey(photo.getId() + "." + photo.getFileType());
 		
 		// 旅行
-		if(null != photo.getTravel()) {
-			pp.setTravelId(photo.getTravel().getId());
-			pp.setTravelName(photo.getTravel().getTitle());
+		if(null != photo.getTravelSpot()) {
+			pp.setTravelId(photo.getTravelSpot().getTravel().getId());
+			pp.setTravelName(photo.getTravelSpot().getTravel().getTitle());
 		}		
 		
 		for(Tag tag : photo.getTags()) {

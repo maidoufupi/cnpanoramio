@@ -63,12 +63,20 @@
 
     .container.travel-content {
       width: 100%;
-      .panel.panel-default {
+      .panel.panel-default.travel-spot {
+        position: relative;
         margin-bottom: 10px;
+
+        .action.spot-remove {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
       }
       .panel.panel-default.active {
         border: 0;
-        box-shadow: 0 0 20px 1px #777;
+        box-shadow: 0 0 10px 1px #777;
       }
     }
   }
@@ -89,6 +97,9 @@
     border-radius: 2px;
     padding: 0;
 
+    >a:hover {
+      text-decoration: none;
+    }
     .spot-date-txt {
       height: 40px;
       line-height: 40px;
@@ -129,4 +140,11 @@
 
 .control-label {
   text-align: right;
+}
+
+/** date picker */
+.ponm-datepicker {
+  .dropdown-menu {
+    padding: 0;
+  }
 }

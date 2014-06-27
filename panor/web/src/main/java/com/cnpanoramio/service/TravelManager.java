@@ -86,4 +86,29 @@ public interface TravelManager {
 	 * @return
 	 */
 	public TravelSpot getTravelSpot(Long id);
+	
+	/**
+	 * 创建景点
+	 * 
+	 * @param travelSpot
+	 * @return
+	 */
+	public TravelSpot createTravelSpot(Long id, TravelSpot travelSpot);
+	
+	/**
+	 * 往景点中批量添加图片
+	 * 
+	 * @param id
+	 * @param photos
+	 * @return
+	 */
+	public Travel addSpotPhotos(Long id, List<Long> photos);
+	
+	/**
+	 * 删除景点
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Travel deleteSpot(Long id);
 }

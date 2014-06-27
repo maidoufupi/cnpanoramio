@@ -153,11 +153,12 @@
                                            data-ng-click="openMapPhoto()"
                                            tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
                                            tooltip-trigger="mouseenter"
-                                           tooltip-placement="top">{{photo.point.lat | number}},{{photo.point.lng | number}}</a></td>
+                                           tooltip-placement="top">{{(photo.point.lat && (photo.point.lat | number) + ',') || '添加位置'}}{{photo.point.lng | number}}</a></td>
                                 </tr>
                                 <tr>
                                     <td class="name">拍摄日期</td>
-                                    <td  class="value">{{cameraInfo.date_time_original | calculatetime | date:'yyyy-MM-dd'}}</td>
+                                    <td  class="value">
+                                        {{cameraInfo.date_time_original | calculatetime | date:'yyyy-MM-dd'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="name">尺寸</td>
@@ -165,7 +166,7 @@
                                 </tr>
                                 <tr>
                                     <td class="name">文件名</td>
-                                    <td class="value">{{cameraInfo.filename}}</td>
+                                    <td class="value">{{photo.file_name}}</td>
                                 </tr>
                                 <tr>
                                     <td class="name">文件大小</td>

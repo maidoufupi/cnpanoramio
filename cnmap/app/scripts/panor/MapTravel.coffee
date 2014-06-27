@@ -7,6 +7,32 @@ class ITravelLayer
 
   initMap: () ->
 
+  ## 计算spot的时间
+  calcSpotTime: () ->
+    if @travel
+      ## 计算出游览景点开始时间的最小值, 为后面计算第几天
+      for spot in @travel.spots
+        if spot.time_start
+          spot.spotDate = new Date spot.time_start
+        if spot.spotDate
+          if !spotMinDate or spotMinDate > spot.spotDate
+            spotMinDate = spot.spotDate
+
+      # travel的开始时间
+      @travel.time_start = spotMinDate
+
+      for spot in @travel.spots
+        ## 计算此景点是第几天游览
+        if spot.spotDate
+          spot.day = Math.ceil((spot.spotDate - spotMinDate) / (1000 * 60 * 60 * 24)) + 1
+
+      # 按时间先后排序spot
+      @travel.spots.sort((a,b) -> return a.day-b.day)
+
+      # travel的结束时间
+      if @travel.spots.length
+        @travel.time_end = @travel.spots[@travel.spots.length-1].time_start
+
   setMap: (map) ->
     if map
       @map = map

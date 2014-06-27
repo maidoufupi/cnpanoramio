@@ -4,19 +4,11 @@ class TravelLayer extends window.cnmap.ITravelLayer
     @map = map if map
     @mapEventListener.setMap @marker, @map
 
+    @calcSpotTime()
+
     point = []
     if @travel
-      ## 计算出游览景点开始时间的最小值, 为后面计算第几天
       for spot in @travel.spots
-        spot.spotDate = new Date spot.time_start
-        if !spotMinDate or spotMinDate > spot.spotDate
-          spotMinDate = spot.spotDate
-
-      @travel.time_start = spotMinDate
-
-      for spot in @travel.spots
-        ## 计算此景点是第几天游览
-        spot.day = Math.round((spot.spotDate - spotMinDate) / (1000 * 60 * 60 * 24)) + 1
         @createLabel photo for photo in spot.photos
         point = []
         point.push @createPoint photo for photo in spot.photos
@@ -25,9 +17,6 @@ class TravelLayer extends window.cnmap.ITravelLayer
           path: point
           strokeStyle: 'dashed'
         }
-      @travel.spots.sort((a,b) -> return a.day-b.day)
-      if @travel.spots.length
-        @travel.time_end = @travel.spots[@travel.spots.length-1].time_start
 
   createPoint: (photo) ->
     new AMap.LngLat(photo.point.lng, photo.point.lat)
@@ -77,9 +66,10 @@ class TravelLayer extends window.cnmap.ITravelLayer
       }
 
   createMarker: () ->
-    new AMap.Marker {
-      map: @map
-      icon: "images/marker.png"
-      animation: "AMAP_ANIMATION_BOUNCE"
-    }
+    if window.AMap
+      new AMap.Marker {
+        map: @map
+        icon: "images/marker.png"
+        animation: "AMAP_ANIMATION_BOUNCE"
+      }
 window.cnmap.TravelLayer = TravelLayer

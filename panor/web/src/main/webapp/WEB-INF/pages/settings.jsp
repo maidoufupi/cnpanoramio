@@ -13,8 +13,6 @@
 </head>
 
 <body id="generic">
-
-	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/Jcrop/js/jquery.Jcrop.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/Jcrop/js/jquery.color.js"/>"></script>
 

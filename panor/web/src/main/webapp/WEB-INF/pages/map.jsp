@@ -6,12 +6,8 @@
 <title><fmt:message key="menu.explore" /></title>
 <meta name="menu" content="AdminMenu" />
 
-    <!-- Custom styles for this template -->
-    <%-- <link href="<c:url value="/styles/ExploreWorld.css"/>" rel="stylesheet"> --%>
 </head>
 <body>
-	
-    <script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
         
 <script>
 	$(document).ready(function () {

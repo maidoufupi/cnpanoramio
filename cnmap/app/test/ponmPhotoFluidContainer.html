@@ -7,21 +7,29 @@
     <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../styles/main.css">
 
-    <script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
-    <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="../bower_components/angular-resource/angular-resource.js"></script>
-    <script type="text/javascript" src="../bower_components/eventEmitter/EventEmitter.js"></script>
-    <script type="text/javascript" src="../bower_components/eventie/eventie.js"></script>
-    <script type="text/javascript" src="../bower_components/imagesloaded/imagesloaded.js"></script>
+    <script type="text/javascript" src="../scripts/ponmApp.vendor.min.js"></script>
+
     <script type="text/javascript" src="../scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="../scripts/ponmApp.directives.min.js"></script>
+    <script type="text/javascript" src="../scripts/ponmApp.controllers.min.js"></script>
     <script type="text/javascript" src="../scripts/directives/filters.js"></script>
     <script type="text/javascript" src="../scripts/directives/PhotoFluidContainer.js"></script>
     <script type="text/javascript" src="../scripts/directives/repeatComplete.js"></script>
     <script type="text/javascript" src="ponmPhotoFluidContainer.js"></script>
     <script type="text/javascript" src="../scripts/services/deparam.js"></script>
+    <script type="text/javascript" src="../scripts/panor/scripts.min.js"></script>
+
+    <!-- Map vendor -->
+    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="../bower_components/angular-ui-mapgaode/ui-map.js"></script>
+    <script type="text/javascript" src="../scripts/panor/gaode/MapEventListenerImpl.js"></script>
+    <script type="text/javascript" src="../scripts/panor/MapTravel.js"></script>
+    <script type="text/javascript" src="../scripts/panor/gaode/MapServiceImpl.js"></script>
+    <script type="text/javascript" src="../scripts/panor/gaode/MapTravelImpl.js"></script>
+
     <script type="text/javascript">
-                window.ctx = "http://115.28.21.165";
-//        window.ctx = "http://127.0.0.1:8080/panor-web";
+//                window.ctx = "http://115.28.21.165";
+        window.ctx = "http://127.0.0.1:8080/panor-web";
         window.apirest = window.ctx + "/api/rest";
     </script>
 </head>
@@ -31,24 +39,41 @@
             <div photo-fluid-container="spot.photos"
                  item-selector=".fluid-brick"
                  class="photo-fluid-container"
-                 ponm-hover="{enter: enterHover, leave: leaveHover}"
                  fluid-line-max-height="200"
                  fluid-line-min-height="100">
-                <a ng-repeat="photo in spot.photos"
-                   ng-click="activePhoto(photo)"
-                   href=""
-                   class="fluid-brick ponm-photo"
-                   ponm-photo="photo"
-                        >
-                    <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
-                    <div class="action ponm-photo-footer">
-                        <p>{{photo.point.address}}</p>
-                        <p>{{photo.description | newlines}}</p>
-                    </div>
-                    <div ng-if="travelEnedit" class="action ponm-photo-remove">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </div>
-                </a>
+                <div ng-repeat="photo in spot.photos"
+                     class="fluid-brick ponm-photo"
+                     ponm-photo="photo"
+                     data-ng-controller="spotCtrl">
+                    <a ng-click="activePhoto(photo)"
+                            href=""
+                            style="display: block"
+                            >
+                        <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}">
+                        <div class="action ponm-photo-footer">
+                            <p>{{photo.point.address}}</p>
+                            <p>{{photo.description | newlines}}</p>
+                        </div>
+                        <div ng-if="travelEnedit" class="action ponm-photo-remove">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </div>
+                        <div data-ng-if="travelEnedit" class="action ponm-photo-option">
+                            <!-- Single button -->
+                            <div class="btn-group" dropdown is-open="isopen">
+                                <button type="button" class="btn dropdown-toggle" ng-disabled="disabled">
+                                    action <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="">创建新景点</a></li>
+                                    <li><a href="">移动到</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">从旅行中删除</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
             </div>
         </div>
 

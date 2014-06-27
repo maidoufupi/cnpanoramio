@@ -6,7 +6,6 @@
     <meta name="menu" content="AdminMenu"/>
 </head>
 
-<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value='/bower_components/jquery-bs-alerts/build/jquery.bsAlerts.min.js'/>"></script>
 
     <script type="text/javascript">

@@ -31,41 +31,20 @@
     display: none;
 }
 </style>
-<%-- 	<link rel="stylesheet" href="<c:url value="/styles/style.css"/>">
-    <link rel="stylesheet" href="<c:url value="/styles/modal.css"/>"> --%>
+
 </head>
 <body>
     <%-- <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"/>"></script>
     <script src="<c:url value="/bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"/>"></script> --%>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.canvas.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/blueimp-file-upload.min.js"/>"></script>
         
-<c:choose>
-  <c:when test='${sessionScope.mapVendor eq "baidu"}'>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
-    <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.baidu.js"/>"></script>
-  </c:when>
-  <c:when test='${sessionScope.mapVendor eq "qq"}'>
-  	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
-	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
-  </c:when>
-  <c:when test='${sessionScope.mapVendor eq "gaode"}'>
-  	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
-  </c:when>
-  <c:otherwise>
-  	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-  	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
-   </c:otherwise>
-</c:choose>
 <script>
 	$(document).ready(function () {
 			angular.bootstrap(document.getElementById("fileupload"), ['fileuploadApp']);
 	})
 </script>
+
 <div class="container">
     <h1>上传图片</h1>
     <h2 class="lead">到地图上</h2>
@@ -226,31 +205,6 @@
         </div>
     </div>
 </div>
-
-<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"/>"></script>
-<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="<c:url value="/bower_components/blueimp-load-image/js/load-image.min.js"/>"></script>
-<!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script src="<c:url value="/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"/>"></script>
-<!-- blueimp Gallery script -->
-<script src="<c:url value="/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min.js"/>"></script>
-<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js"/>"></script>
-<!-- The basic File Upload plugin -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload.js"/>"></script>
-<!-- The File Upload processing plugin -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"/>"></script>
-<!-- The File Upload image preview & resize plugin -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"/>"></script>
-<!-- The File Upload audio preview plugin -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-audio.js"/>"></script>
-<!-- The File Upload video preview plugin -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-video.js"/>"></script>
-<!-- The File Upload validation plugin -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js"/>"></script>
-<!-- The File Upload Angular JS module -->
-<script src="<c:url value="/bower_components/blueimp-file-upload/js/jquery.fileupload-angular.js"/>"></script>
 
 </body>
 </html>

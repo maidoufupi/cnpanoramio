@@ -23,6 +23,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
+import org.appfuse.service.RoleManager;
+import org.appfuse.service.UserManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +51,10 @@ public class PhotoServiceTest {
 	
 	protected transient final Log log = LogFactory.getLog(getClass());
 
+	@Autowired
+	private RoleManager roleManager;
+	@Autowired
+	private UserManager userManager;
 	@Autowired
 	private PhotoManager photoService;
 

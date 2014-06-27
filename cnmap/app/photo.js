@@ -22,7 +22,7 @@ angular.module('ponmPhotoApp', [
                     windowClass: 'photo-modal-fullscreen',
                     resolve: {
                         photoId: function () {
-                            return 1;
+                            return 25;
                         },
                         travelId: function() {
                             return 1;

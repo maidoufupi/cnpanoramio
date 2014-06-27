@@ -6,31 +6,6 @@
 <meta name="menu" content="AdminMenu" />
 </head>
 
-	<script type="text/javascript" src="<c:url value="/bower_components/jquery.rest/dist/jquery.rest.min.js"/>"></script>
-    
-<c:choose>
-  <c:when test='${sessionScope.mapVendor eq "baidu"}'>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
-    <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/panor/js/modal/cnmap.Modal.baidu.js"/>"></script>
-	
-  </c:when>
-  <c:when test='${sessionScope.mapVendor eq "qq"}'>
-  	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0"></script>
-	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
-  </c:when>
-  <c:when test='${sessionScope.mapVendor eq "gaode"}'>
-  	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
-  </c:when>
-  <c:otherwise>
-  	<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
-  	<script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
-   </c:otherwise>
-</c:choose>
 <script>
 	$(document).ready(function () {
 			angular.bootstrap(document.getElementById("userPageApp"), ['userPageApp']);
@@ -59,7 +34,7 @@
                         <div class="user_header-best-or-all">
                             <a class="user-page-best-enabled" href="{{ctx}}/map##userid={{userId}}&favorite=true">在地图上查看收藏的照片</a>
                         </div>
-                        <a href="{{ctx}}/map/##userid={{userId}}">
+                        <a href="{{ctx}}/map##userid={{userId}}">
                             <img id="user_header-icon"
                                  ng-src="{{ctx}}/images/marker.png"
                                  height="16" alt="">
@@ -123,7 +98,7 @@
                ng-click="activePhoto(photo)"
                href=""
                class="fluid-brick ponm-photo"
-               ponm-photo
+               ponm-hover
                     >
                 <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}">
                 <div class="action ponm-photo-footer">

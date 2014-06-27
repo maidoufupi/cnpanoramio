@@ -50,11 +50,11 @@ angular.module('ponmApp.directives')
                     || (self.maxSize &&
                         (self.maxSize < self.exif['full_width'] || self.maxSize < self.exif['full_height'])))) {
                     if(this.image instanceof Image) {
-                        this.image.crossOrigin = "http://www.photoshows.cn"; //"Anonymous";
+//                        this.image.crossOrigin = "anonymous"; //"Anonymous";
                         self.start3D( resize(this.image) );
                     }else {
                         var img = new Image();
-                        img.crossOrigin = "Anonymous";
+                        img.crossOrigin = "anonymous";
                         img.onload = function(){
                             self.start3D( resize(img) );
                         };
@@ -62,22 +62,15 @@ angular.module('ponmApp.directives')
                     }
                 }else {
                     if(this.image instanceof Image) {
-                        this.image.crossOrigin = "Anonymous"; //"Anonymous";
+//                        this.image.crossOrigin = "anonymous"; //"Anonymous";
                         self.start3D( resize(this.image) );
                     }else{
-
-                        var imageLoader = new THREE.ImageLoader();
-                        imageLoader.setCrossOrigin("Anonymous");
-                        imageLoader.load(this.image, function(img) {
-                            self.start3D( resize(img) );
-                        });
-//                        var img = new Image();
-//                        img.crossOrigin = "http://static.photoshows.cn";
-//                        img.onload = function(){
-//                            self.start3D( resize(img) );
-//                        };
-//                        img.src = this.image;
-//                    self.start3D( this.image );
+                        var img = new Image();
+                        img.crossOrigin = "anonymous";
+                        img.onload = function(){
+                            self.start3D( img );
+                        };
+                        img.src = this.image;
                     }
                 }
 
@@ -345,6 +338,7 @@ angular.module('ponmApp.directives')
                     setTimeout(function(){ self.render(); }, 100);
                 }else {
                     texture.needsUpdate = true;
+                    THREE.ImageUtils.crossOrigin = "anonymous";
                     material.map = THREE.ImageUtils.loadTexture( path );
                     setTimeout(function(){ self.render(); }, 100);
 //                    var image = new Image();
@@ -639,7 +633,7 @@ angular.module('ponmApp.directives')
                             clickCreateP360.ponmPhotoSrcL = attrs.ponmPhotoSrcL1;
                             canvas.find(".p360-canvas").empty();
                             $animate.removeClass(loading, "ponm-hide");
-                            photosphere = new Photosphere(attrs.ponmPhotoSrcL1)
+                            photosphere = new Photosphere(attrs.ponmPhotoSrcP360)
                                 .setEXIF({
                                     "full_width" : attrs.ponmPhotoWidth,
                                     "full_height" : attrs.ponmPhotoHeight,
@@ -686,24 +680,11 @@ angular.module('ponmApp.directives')
                     var containerWidth = element.innerWidth(),
                         containerHeight = element.innerHeight();
 
-//                    scope.$watch(function() {
-//                        return attrs.ponmPhotoIs360;
-//                    }, function(is360) {
-////                       drawImage();
-//                        changeP360(is360);
-//                    });
-
                     attrs.$observe('ponmPhotoIs360', function ( data ) {
                         if ( angular.isDefined( data ) ) {
                             changeP360(data);
                         }
                     });
-
-//                    scope.$watch(function() {
-//                        return attrs.ponmPhotoSrcL1;
-//                    }, function() {
-//                        drawImage();
-//                    });
 
                     attrs.$observe('ponmPhotoSrcL1', function ( data ) {
                         if ( angular.isDefined( data ) ) {

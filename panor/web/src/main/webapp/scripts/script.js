@@ -1,3 +1,6 @@
+window.staticCtx = "http://test.photoshows.cn";
+//window.staticCtx = "http://static.photoshows.cn";
+
 //$("document").ready(function() {
 //	$(window).on('resize', windowresize);
 //    $(window).on('load', windowresize);

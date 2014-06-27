@@ -11,6 +11,11 @@
     left: 0;
   }
 
+  /** amap style change */
+  .amap-maptype-title {
+    width: 100%;
+  }
+
 //  .map-plugins {
 //    position: absolute;
 //    top: 100px;
@@ -89,7 +94,3 @@
   }
 }
 
-/** amap style change */
-.amap-maptype-title {
-  width: 100%;
-}

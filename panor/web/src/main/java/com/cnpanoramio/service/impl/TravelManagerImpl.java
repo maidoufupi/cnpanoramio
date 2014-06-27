@@ -16,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.TravelDao;
 import com.cnpanoramio.dao.TravelSpotDao;
 import com.cnpanoramio.dao.UserSettingsDao;
@@ -41,6 +42,8 @@ public class TravelManagerImpl implements TravelManager {
 	private TravelDao travelDao;
 	@Autowired
 	private TravelSpotDao travelSpotDao;
+	@Autowired
+	private PhotoDao photoDao;
 
 	@Autowired
 	private UserSettingsDao userSettingsDao;
@@ -93,15 +96,14 @@ public class TravelManagerImpl implements TravelManager {
 	public Photo addTravelPhoto(Travel travel, Photo photo) {
 
 		// 先删除photo原有travel信息
-		Travel photoTravel = photo.getTravel();
-		if (null != photoTravel) {
-			// 如果photo已经在travel里则直接返回
-			if (photoTravel.getId().equals(travel.getId())) {
+		if(null != photo.getTravelSpot()) {
+			if(photo.getTravelSpot().getTravel().equals(travel)) {
 				return photo;
+			}else {
+				photo.getTravelSpot().getPhotos().remove(photo);
 			}
-			removePhoto(photoTravel, photo);
 		}
-
+		
 		TravelSpot travelSpot = null;
 		PhotoDetails detail = photo.getDetails();
 		Date photoDate = null;
@@ -118,23 +120,34 @@ public class TravelManagerImpl implements TravelManager {
 				}
 			}
 		}
+		
+		if(null == travelSpot) {
+			// 如果没有拍摄日期，则添加到同一个没有日期的spot
+			for (TravelSpot spot : travel.getSpots()) {
+				if (null == spot.getTimeStart()) {
+					travelSpot = spot;
+					break;
+				}
+			}
+		}
 
+		// 如果既没有匹配日期的spot，有没有无日期的spot，则创建一个spot
 		if (null == travelSpot) {
 			travelSpot = new TravelSpot();
 			travelSpot.setTimeStart(photoDate);
-			
+
 			// 保存实体
 			travelSpot.setTravel(travel);
-			
+
 			travelSpot = travelSpotDao.save(travelSpot);
 
 			// 相互设置
 			travel.getSpots().add(travelSpot);
 		}
-		
+
 		travelSpot.getPhotos().add(photo);
-		photo.setTravel(travel);
-		
+		photo.setTravelSpot(travelSpot);
+
 		return photo;
 	}
 
@@ -152,7 +165,7 @@ public class TravelManagerImpl implements TravelManager {
 		User me = UserUtil.getCurrentUser(userManager);
 		TravelSpot travelSpot = travelSpotDao.get(id);
 		checkMyTravel(travelSpot.getTravel(), me);
-		
+
 		if (null != spot.getTitle()) {
 			travelSpot.setTitle(spot.getTitle());
 		}
@@ -161,6 +174,9 @@ public class TravelManagerImpl implements TravelManager {
 		}
 		if (null != spot.getAddress()) {
 			travelSpot.setAddress(spot.getAddress());
+		}
+		if (null != spot.getTimeStart()) {
+			travelSpot.setTimeStart(spot.getTimeStart());
 		}
 
 		return travelSpot;
@@ -192,7 +208,7 @@ public class TravelManagerImpl implements TravelManager {
 		User me = UserUtil.getCurrentUser(userManager);
 		Travel travel = travelDao.get(id);
 		checkMyTravel(travel, me);
-		
+
 		Photo photo = null;
 		for (Long photoId : photos) {
 			photo = photoManager.getPhoto(photoId);
@@ -201,7 +217,7 @@ public class TravelManagerImpl implements TravelManager {
 		}
 		return travel;
 	}
-	
+
 	/**
 	 * 相互删除photo原有travel信息
 	 * 
@@ -209,27 +225,96 @@ public class TravelManagerImpl implements TravelManager {
 	 * @param photo
 	 */
 	private void removePhoto(Travel travel, Photo photo) {
-		Travel photoTravel = photo.getTravel();
-		if (null != photoTravel && photoTravel.getId().equals(travel.getId())) {
-			photo.setTravel(null);
-		}
-		if (null != travel.getSpots()) {
-			for (TravelSpot tspot : travel.getSpots()) {
-				tspot.getPhotos().remove(photo);
-				if(tspot.getPhotos().size() == 0) {
-					travel.getSpots().remove(tspot);
-				}
+		if(null !=photo.getTravelSpot() ) {
+			Travel photoTravel = photo.getTravelSpot().getTravel();
+			if (photoTravel.getId().equals(travel.getId())) {
+				photo.getTravelSpot().getPhotos().remove(photo);
+				photo.setTravelSpot(null);
 			}
 		}
+		
 	}
 	
 	private void checkMyTravel(Travel travel, User me) {
-		
+
 		if (!travel.getUser().getId().equals(me.getId())) {
 			throw new AccessDeniedException("Travel (id=" + travel.getId()
 					+ ") is not belong to you");
 		}
 	}
-	
-	
+
+	@Override
+	public TravelSpot createTravelSpot(Long id, TravelSpot spot) {
+		User me = UserUtil.getCurrentUser(userManager);
+		Travel travel = travelDao.get(id);
+		checkMyTravel(travel, me);
+
+		TravelSpot travelSpot = new TravelSpot();
+		travelSpot.setTimeStart(spot.getTimeStart());
+		travelSpot.setAddress(spot.getAddress());
+		travelSpot.setTitle(spot.getTitle());
+		travelSpot.setDescription(spot.getDescription());
+
+		// 保存实体
+		travelSpot.setTravel(travel);
+		travelSpot = travelSpotDao.save(travelSpot);
+
+		// 相互设置
+		travel.getSpots().add(travelSpot);
+
+		return travelSpot;
+	}
+
+	@Override
+	public Travel addSpotPhotos(Long id, List<Long> photos) {
+		User me = UserUtil.getCurrentUser(userManager);
+		TravelSpot spot = travelSpotDao.get(id);
+		checkMyTravel(spot.getTravel(), me);
+
+		Photo photo = null;
+		for(Long photoId : photos) {
+			photo = photoManager.getPhoto(photoId);
+//			PhotoUtil.checkMyPhoto(photo, me);
+			addSpotPhoto(spot, photo);
+		}
+		return spot.getTravel();
+	}
+
+	private boolean addSpotPhoto(TravelSpot spot, Photo photo) {
+		if(null != photo.getTravelSpot()) {
+			if(spot.equals(photo.getTravelSpot())) {
+				return true;
+			}else {
+//				log.debug("spot id: " + photo.getTravelSpot().getId());
+				photo.getTravelSpot().getPhotos().remove(photo);
+				photoDao.save(photo);
+//				log.debug("add spot photo: " + photo.getId());
+//				for(Photo p : photo.getTravelSpot().getPhotos()) {
+//					log.debug("spot photo: " + p.getId());
+//				}
+			}
+		}
+		photo.setTravelSpot(spot);
+		spot.getPhotos().add(photo);
+		return true;
+	}
+
+	@Override
+	public Travel deleteSpot(Long id) {
+		User me = UserUtil.getCurrentUser(userManager);
+		TravelSpot spot = travelSpotDao.get(id);
+		checkMyTravel(spot.getTravel(), me);
+		
+		Travel travel = spot.getTravel();
+		// 从travel中移除
+		travel.getSpots().remove(spot);
+		// 从旗下photo中移除
+		for(Photo photo : spot.getPhotos()) {
+			photo.setTravelSpot(null);
+		}
+		// 然后删除
+		travelSpotDao.remove(spot);
+		return travel;
+	}
+
 }

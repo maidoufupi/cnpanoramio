@@ -53,14 +53,14 @@ angular.module('ponmApp.controllers')
                 var res = [];
                 angular.forEach(files, function (file, key) {
                     if (file.mapVendor) {
-                        file.address = file.mapVendor.address;
+                        file.address = file.mapVendor.address || file.address;
                         file.is360 = file.mapVendor.is360;
 //                        if (file.lat != file.mapVendor.lat
 //                            || file.lng != file.mapVendor.lng) {
                             file.lat = file.mapVendor.lat;
                             file.lng = file.mapVendor.lng;
-                            file.latPritty = file.mapVendor.latPritty;
-                            file.lngPritty = file.mapVendor.lngPritty;
+                            file.latPritty = file.mapVendor.latPritty || file.latPritty;
+                            file.lngPritty = file.mapVendor.lngPritty || file.lngPritty;
                             file.vendor = 'gaode';
 //                        }
                         res.push(file);
@@ -190,42 +190,6 @@ angular.module('ponmApp.controllers')
 //                    })
 //                }
             };
-
-            /*
-             $scope.getLocation = function (address) {
-             // 将地址解析结果显示在地图上,并调整地图视野
-             cnmap.utils.gaode.getLocation(address, function (res) {
-             if (res.info == "OK") {
-             var latlng = res.geocodes[0].location;
-             $scope.map.setCenter(latlng);
-             switch (res.geocodes[0].level) {
-             case '省':
-             $scope.map.setZoom(6);
-             break;
-             case '市':
-             $scope.map.setZoom(8);
-             break;
-             case '区县':
-             $scope.map.setZoom(11);
-             break;
-             case '乡镇':
-             $scope.map.setZoom(12);
-             break;
-             case '村庄':
-             $scope.map.setZoom(13);
-             break;
-             case '道路':
-             $scope.map.setZoom(14);
-             break;
-             case '兴趣点':
-             $scope.map.setZoom(15);
-             }
-
-             addOrUpdateMarker($scope.file, lnglat);
-             }
-             })
-             }
-             */
 
             $scope.clearPlace = function () {
                 //$scope.hideMarker();

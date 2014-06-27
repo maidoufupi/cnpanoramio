@@ -15,6 +15,38 @@
 
     ITravelLayer.prototype.initMap = function() {};
 
+    ITravelLayer.prototype.calcSpotTime = function() {
+      var spot, spotMinDate, _i, _j, _len, _len1, _ref, _ref1;
+      if (this.travel) {
+        _ref = this.travel.spots;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          spot = _ref[_i];
+          if (spot.time_start) {
+            spot.spotDate = new Date(spot.time_start);
+          }
+          if (spot.spotDate) {
+            if (!spotMinDate || spotMinDate > spot.spotDate) {
+              spotMinDate = spot.spotDate;
+            }
+          }
+        }
+        this.travel.time_start = spotMinDate;
+        _ref1 = this.travel.spots;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          spot = _ref1[_j];
+          if (spot.spotDate) {
+            spot.day = Math.ceil((spot.spotDate - spotMinDate) / (1000 * 60 * 60 * 24)) + 1;
+          }
+        }
+        this.travel.spots.sort(function(a, b) {
+          return a.day - b.day;
+        });
+        if (this.travel.spots.length) {
+          return this.travel.time_end = this.travel.spots[this.travel.spots.length - 1].time_start;
+        }
+      }
+    };
+
     ITravelLayer.prototype.setMap = function(map) {
       if (map) {
         this.map = map;

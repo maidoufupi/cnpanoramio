@@ -378,6 +378,46 @@ module.exports = function (grunt) {
            '<%= yeoman.app %>/scripts/ponmApp.controllers.min.js': [
                  '<%= yeoman.app %>/scripts/controllers/*Ctrl.js'
              ]
+//             ,
+//           '<%= yeoman.app %>/scripts/blueimp-file-upload.min.js': [
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image.min.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-process.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-image.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-audio.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-video.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-angular.js'
+//             ],
+//             '<%= yeoman.app %>/scripts/ponmApp.vendor.min.js': [
+//                 '<%= yeoman.app %>/bower_components/jquery/dist/jquery.min.js',
+//                 '<%= yeoman.app %>/bower_components/jquery.rest/dist/jquery.rest.min.js',
+//                 '<%= yeoman.app %>/bower_components/sass-bootstrap/dist/js/bootstrap.min.js',
+//
+//                 '<%= yeoman.app %>/bower_components/angular/angular.min.js',
+//                 '<%= yeoman.app %>/bower_components/angular-route/angular-route.min.js',
+//                 '<%= yeoman.app %>/bower_components/angular-resource/angular-resource.min.js',
+//                 '<%= yeoman.app %>/bower_components/angular-cookies/angular-cookies.min.js',
+//                 '<%= yeoman.app %>/bower_components/angular-sanitize/angular-sanitize.min.js',
+//
+//                 '<%= yeoman.app %>/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+//                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/js/xeditable.min.js',
+//                 '<%= yeoman.app %>/bower_components/angular-ui-utils/ui-utils.min.js',
+//
+//                 '<%= yeoman.app %>/bower_components/eventie/eventie.js',
+//                 '<%= yeoman.app %>/bower_components/eventEmitter/EventEmitter.min.js',
+//                 '<%= yeoman.app %>/bower_components/imagesloaded/imagesloaded.js',
+//                 '<%= yeoman.app %>/bower_components/jquery-backstretch/jquery.backstretch.min.js',
+//                 '<%= yeoman.app %>/bower_components/jquery-waypoints/waypoints.min.js',
+//
+//                 '<%= yeoman.app %>/scripts/panor/js/jquery.mousewheel.js',
+//                 '<%= yeoman.app %>/scripts/panor/js/jquery.panzoom.js',
+//                 '<%= yeoman.app %>/scripts/panor/js/three.min.js'
+//             ]
          }
        }
     },

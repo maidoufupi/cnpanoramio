@@ -87,6 +87,7 @@ public class TravelServiceImpl implements TravelService {
 		travelSpot.setAddress(spot.getAddress());
 		travelSpot.setTitle(spot.getTitle());
 		travelSpot.setDescription(spot.getDescription());
+		travelSpot.setTimeStart(spot.getTimeStart());
 		travelSpot = travelManager.changeSpot(id, travelSpot);
 		return convertTravelSpot(travelSpot);
 	}
@@ -114,6 +115,26 @@ public class TravelServiceImpl implements TravelService {
 	@Override
 	public Travel removeTravelPhotos(Long id, List<Long> photos) {
 		return convertTravel(travelManager.removeTravelPhotos(id, photos));
+	}
+
+	@Override
+	public TravelSpot createTravelSpot(Long id, TravelSpot spot) {
+		com.cnpanoramio.domain.TravelSpot travelSpot = new com.cnpanoramio.domain.TravelSpot();
+		travelSpot.setAddress(spot.getAddress());
+		travelSpot.setTitle(spot.getTitle());
+		travelSpot.setDescription(spot.getDescription());
+		travelSpot.setTimeStart(spot.getTimeStart());
+		return convertTravelSpot(travelManager.createTravelSpot(id, travelSpot));
+	}
+
+	@Override
+	public Travel addSpotPhotos(Long id, List<Long> photos) {
+		return convertTravel(travelManager.addSpotPhotos(id, photos));
+	}
+
+	@Override
+	public Travel deleteSpot(Long id) {
+		return convertTravel(travelManager.deleteSpot(id));
 	}
 
 }

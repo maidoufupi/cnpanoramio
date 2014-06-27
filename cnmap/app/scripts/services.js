@@ -145,7 +145,7 @@ angular.module('ponmApp.services', [
             });
     }])
     .factory('TravelService', ['$window', '$resource', function ($window, $resource) {
-        return $resource($window.apirest + '/travel/:travelId/:type/:typeId',
+        return $resource($window.apirest + '/travel/:travelId/:type/:typeId/:action',
             {'travelId': '@id'},
             {
                 create: {
@@ -188,6 +188,29 @@ angular.module('ponmApp.services', [
                         'Accept': 'application/json'
                     }
                 },
+                createSpot: {
+                    method: 'POST',
+                    params: {
+                        'type': 'spot'
+                    }
+                },
+                addSpotPhoto: {
+                    method: 'POST',
+                    params: {
+                        'type': 'spot',
+                        'action': 'photo'
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Accept': 'application/json'
+                    }
+                },
+                deleteSpot: {
+                    method: 'DELETE',
+                    params: {
+                        'type': 'spot'
+                    }
+                },
                 deletePhoto: {
                     method: 'DELETE',
                     params: {'type': 'photo'},
@@ -213,8 +236,8 @@ angular.module('ponmApp.services', [
         }])
     .factory('ponmCtxConfig', ['$window', '$resource', function ($window, $resource) {
         return {
-            staticCtx: "http://static.photoshows.cn"
+            staticCtx: $window.staticCtx || "http://static.photoshows.cn",
+            corsproxyCtx: "http://www.corsproxy.com/static.photoshows.cn"
         }
     }])
-
 ;

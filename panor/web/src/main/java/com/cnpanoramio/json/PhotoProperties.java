@@ -65,7 +65,7 @@ public class PhotoProperties {
 	
 	// 文件大小
 	@JsonProperty("file_size")
-	private Integer fileSize;
+	private Long fileSize;
 	// 文件名
 	@JsonProperty("file_name")
 	private String fileName;
@@ -181,11 +181,11 @@ public class PhotoProperties {
 		this.favCount = favCount;
 	}
 
-	public Integer getFileSize() {
+	public Long getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(Integer fileSize) {
+	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
 	}
 

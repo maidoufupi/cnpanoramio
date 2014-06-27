@@ -276,9 +276,9 @@ public class PhotoServiceImpl implements PhotoManager {
 						PhotoUtil.getMapVendor(properties.getVendor()));
 			}
 		}
-		if(null != properties.getFileSize()) {
-			photo.setFileSize(properties.getFileSize());
-		}
+//		if(null != properties.getFileSize()) {
+//			photo.setFileSize(properties.getFileSize());
+//		}
 		// 是否是360°全景照片
 		if(null != properties.isIs360()) {
 			photo.setIs360(properties.isIs360());
@@ -326,15 +326,18 @@ public class PhotoServiceImpl implements PhotoManager {
 	@Override
 	public PhotoProperties upload(String lat, String lng, String address,
 			MapVendor vendor, MultipartFile file) throws Exception {
-//		InputStream ins;
+
 		Photo photo = new Photo();
 
+		// 文件名
 		photo.setName(file.getOriginalFilename());
+		// 文件大小
+		photo.setFileSize(file.getSize());
 
-//		ins = file.getInputStream();
 		photo = this.save(photo, file);
 	
 		updatePhotoGps(photo, lat, lng, address, vendor);
+		
 		PhotoDetails detail = photo.getDetails();
 		if(null != detail) {
 			if(null != detail.getgPanoUsePanoramaViewer()) {

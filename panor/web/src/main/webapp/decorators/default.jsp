@@ -17,9 +17,11 @@
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/main.min.css'/>" />
     <decorator:head/>
 
-    <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.min.js'/>"></script>
+    <%-- <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/sass-bootstrap/dist/js/bootstrap.min.js'/>"></script>
+    
     <script type="text/javascript" src="<c:url value='/bower_components/jquery.cookie/jquery.cookie.js'/>"></script>
+    
     <script type="text/javascript" src="<c:url value="/bower_components/angular/angular.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-route/angular-route.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-resource/angular-resource.min.js"/>"></script>
@@ -37,11 +39,13 @@
     
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.mousewheel.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/panor/js/jquery.panzoom.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/three.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/js/three.min.js"/>"></script> 
     
     <script type="text/javascript" src="<c:url value="/bower_components/jquery-backstretch/jquery.backstretch.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/jquery-waypoints/waypoints.js"/>"></script>
+    --%>
     
+    <script type="text/javascript" src="<c:url value="/scripts/ponmApp.vendor.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.controllers.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.directives.min.js"/>"></script>

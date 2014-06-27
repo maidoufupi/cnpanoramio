@@ -26,6 +26,7 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap', 'xeditable'])
                 travel: $scope.travel,
                 clickable: true
             });
+            $scope.travelLayer = travelLayer;
 
             jQuery(travelLayer).bind("data_clicked", function (e, photoId) {
                 $scope.displayPhoto(photoId);
@@ -71,6 +72,7 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap', 'xeditable'])
                     spotId = spot;
                 }
                 if($scope.activedSpot && $scope.activedSpot.id == spotId) {
+                    travelLayer.activeSpot(spot);
                     return;
                 }
                 angular.forEach($scope.travel.spots, function(spot, key) {
@@ -87,29 +89,8 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap', 'xeditable'])
             function getTravel(travelId) {
                 TravelService.getTravel({travelId: travelId}, function(res) {
                     if(res.status == "OK") {
-                        $scope.travel = res.travel;
+                        $scope.setTravel(res.travel);
 
-                        // 设置此travel是否可以被登录者编辑
-                        $scope.travelEnedit = ($scope.userId == $scope.travel.user_id);
-
-                        if(!angular.isArray($scope.travel.spots)) {
-                            $scope.travel.spots = [];
-                        }
-                        if($scope.travel.spot) {
-                            $scope.travel.spots.push($scope.travel.spot);
-                        }
-
-                        angular.forEach($scope.travel.spots, function(spot, key) {
-                            spot.addresses = {};
-                            angular.forEach(spot.photos, function(photo, key) {
-                                if(photo.point.address) {
-                                    spot.addresses[photo.point.address] = photo.point;
-                                }
-                            });
-                        });
-                        travelLayer.clearMap();
-                        travelLayer.setTravel($scope.travel);
-                        travelLayer.initMap();
                         if($scope.travel.spots[0]) {
                             $scope.activeSpot($scope.travel.spots[0]);
                         }
@@ -124,34 +105,35 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap', 'xeditable'])
                 });
             }
 
+            $scope.setTravel = function(travel) {
+                $scope.travel = travel;
+
+                // 设置此travel是否可以被登录者编辑
+                $scope.travelEnedit = ($scope.userId == $scope.travel.user_id);
+
+                if(!angular.isArray($scope.travel.spots)) {
+                    $scope.travel.spots = [];
+                }
+                if($scope.travel.spot) {
+                    $scope.travel.spots.push($scope.travel.spot);
+                }
+
+                angular.forEach($scope.travel.spots, function(spot, key) {
+                    spot.addresses = {};
+                    angular.forEach(spot.photos, function(photo, key) {
+                        if(photo.point.address) {
+                            spot.addresses[photo.point.address] = photo.point;
+                        }
+                    });
+                });
+                travelLayer.clearMap();
+                travelLayer.setTravel($scope.travel);
+                travelLayer.initMap();
+            };
+
             $scope.updateTravel = function(travel, $data) {
                 var d = $q.defer();
                 TravelService.changeTravel({travelId: travel.id}, param({description: $data}), function(res) {
-                    res = res || {};
-                    if(res.status === 'OK') { // {status: "OK"}
-                        d.resolve()
-                    } else { // {status: "error", msg: "Username should be `awesome`!"}
-                        d.resolve(res.info);
-                    }
-                }, function(error) {
-                    if(error.data) {
-                        d.reject(error.data.info);
-                    }else {
-                        d.reject('Server error!');
-                    }
-                });
-                return d.promise;
-            };
-
-            $scope.updateSpot = function(travel, spot, type, $data) {
-                var d = $q.defer();
-                var params = {
-                    title: spot.title,
-                    description: spot.description,
-                    address: spot.address
-                };
-                params[type] = $data;
-                TravelService.changeSpot({travelId: travel.id, typeId: spot.id}, param(params), function(res) {
                     res = res || {};
                     if(res.status === 'OK') { // {status: "OK"}
                         d.resolve()
@@ -186,6 +168,7 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap', 'xeditable'])
                                     delete spot.photos.splice(key, 1);
                                 }
                             });
+
                             if(!spot.photos.length) {
                                 delete $scope.travel.spots.splice(key, 1);
                             }
@@ -245,10 +228,93 @@ angular.module('aTravelApp', ['ponmApp', 'ui.map', 'ui.bootstrap', 'xeditable'])
                 modalInstance.result.then(function (selectedItem) {
                     delete stateObject.photoid;
                     updateState();
+                    getTravel($scope.travelId);
                 }, function () {
                     delete stateObject.photoid;
                     updateState();
+                    getTravel($scope.travelId);
                 });
             };
+
+            $scope.dateOptions = {
+                formatYear: 'yy',
+                startingDay: 1
+            };
+
+            var today = new Date();
+            // Disable weekend selection
+            $scope.datepickerDisabled = function(date, mode) {
+                return ( mode === 'day' && ( date > today ) );
+            };
         }])
+    .controller('spotCtrl', ['$scope', '$log', '$filter', '$q', 'TravelService', 'param',
+    function($scope, $log, $filter, $q, TravelService, param) {
+//        $scope.timeStart = $scope.spot.time_start;
+        $scope.$watch('spot.timeStart', function(timeStart) {
+            if(timeStart) {
+                var promise = $scope.updateSpot($scope.spot, "time_start", $filter('date')(timeStart, "yyyy/MM/dd"));
+                promise.then(function() {
+                    $scope.spot.time_start = timeStart;
+                    $scope.travelLayer.calcSpotTime();
+                }, function() {
+//                    $scope.travelLayer.calcSpotTime();
+                });
+            }
+        });
+
+        $scope.updateSpot = function(spot, type, $data) {
+            var d = $q.defer();
+            var params = {
+                title: spot.title,
+                description: spot.description,
+                address: spot.address
+            };
+            params[type] = $data;
+            TravelService.changeSpot({travelId: spot.travel_id, typeId: spot.id}, param(params), function(res) {
+                res = res || {};
+                if(res.status === 'OK') { // {status: "OK"}
+                    d.resolve()
+                } else { // {status: "error", msg: "Username should be `awesome`!"}
+                    d.resolve(res.info);
+                }
+            }, function(error) {
+                if(error.data) {
+                    d.reject(error.data.info);
+                }else {
+                    d.reject('Server error!');
+                }
+            });
+            return d.promise;
+        };
+
+        $scope.createSpot = function(photo) {
+            TravelService.createSpot({travelId: $scope.spot.travel_id}, param({}), function(res) {
+                if(res.status == "OK") {
+                    $scope.addSpotPhoto(photo, res.spot);
+                }
+            });
+        };
+
+        $scope.addSpotPhoto = function(photo, spot) {
+            var photos = {photos: photo.id};
+            TravelService.addSpotPhoto({travelId: spot.travel_id, typeId: spot.id},
+                param(photos), function(res) {
+                    if(res.status == "OK") {
+                        $scope.setTravel(res.travel);
+                    }
+                });
+        };
+
+        $scope.removePhoto = function(photo) {
+            $scope.$emit('photoDeleteEvent', photo.id);
+        };
+
+        $scope.deleteSpot = function(spot) {
+            TravelService.deleteSpot({travelId: spot.travel_id, typeId: spot.id}, function(res) {
+                if(res.status == "OK") {
+                    $scope.setTravel(res.travel);
+                }
+            });
+        }
+    }])
 ;

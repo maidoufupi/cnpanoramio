@@ -1,6 +1,7 @@
 package com.cnpanoramio.rest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -8,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,6 +74,25 @@ public class TravelRestService extends AbstractRestService {
 		return response;
 	}
 	
+	@RequestMapping(value = "/{travelId}/spot", method = RequestMethod.POST)
+	@ResponseBody
+	public TravelResponse createSpot(@PathVariable String travelId, 
+			@RequestParam(value="address", required=false) String address,
+			@RequestParam(value="title", required=false) String title,
+			@RequestParam(value="description", required=false) String description,
+			@RequestParam(value="time_start", required=false) @DateTimeFormat(pattern = "yyyy/MM/dd") Date timeStart) {
+		TravelResponse response = responseFactory();
+		
+		TravelSpot travelSpot = new TravelSpot();
+		travelSpot.setAddress(address);
+		travelSpot.setTitle(title);
+		travelSpot.setDescription(description);
+		travelSpot.setTimeStart(timeStart);
+		
+		response.setSpot(travelService.createTravelSpot(Long.parseLong(travelId), travelSpot));
+		return response;
+	}
+	
 	@RequestMapping(value = "/{travelId}/spot/{spotId}", method = RequestMethod.GET)
 	@ResponseBody
 	public TravelResponse getTravelSpot(@PathVariable String travelId, @PathVariable String spotId) {
@@ -86,13 +107,42 @@ public class TravelRestService extends AbstractRestService {
 			@PathVariable String spotId, 
 			@RequestParam(value="address", required=false) String address,
 			@RequestParam(value="title", required=false) String title,
-			@RequestParam(value="description", required=false) String description) {
+			@RequestParam(value="description", required=false) String description,
+			@RequestParam(value="time_start", required=false) @DateTimeFormat(pattern = "yyyy/MM/dd") Date timeStart) {
+		
+		log.debug("spot attrs update " + address + title + description + timeStart);
+		
 		TravelResponse response = responseFactory();
 		TravelSpot travelSpot = new TravelSpot();
 		travelSpot.setAddress(address);
 		travelSpot.setTitle(title);
 		travelSpot.setDescription(description);
+		travelSpot.setTimeStart(timeStart);
 		response.setSpot(travelService.changeSpot(Long.parseLong(spotId), travelSpot));;
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/spot/{spotId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public TravelResponse deleteTravelSpot(@PathVariable String travelId, @PathVariable String spotId) {
+		TravelResponse response = responseFactory();
+		response.setTravel(travelService.deleteSpot(Long.parseLong(spotId)));
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/spot/{spotId}/photo", method = RequestMethod.POST)
+	@ResponseBody
+	public TravelResponse addSpotPhotos(@PathVariable String travelId, 
+			@PathVariable String spotId, 
+			@RequestParam("photos") String photos) {
+		
+		TravelResponse response = responseFactory();
+		String[] ps = photos.split(",");
+		List<Long> photoIds = new ArrayList<Long>();
+		for(String id : ps) {
+			photoIds.add(Long.parseLong(id));
+		}
+		response.setTravel(travelService.addSpotPhotos(Long.parseLong(spotId), photoIds));;
 		return response;
 	}
 	

@@ -2,11 +2,14 @@
  * Created by any on 2014/6/6.
  */
 'use strict';
-angular.module('ponmApp.test', ['ponmApp.directives', 'ponmApp.services'])
+angular.module('ponmApp.test', ['ponmApp', 'ui.bootstrap'])
     .controller('photoFluidContainerCtrl', ['$scope', '$http', '$log', 'TravelService', 'deparam', '$location',
-        function($scope, $http, $log, TravelService, deparam, $location) {
+        'ponmCtxConfig',
+        function($scope, $http, $log, TravelService, deparam, $location, ponmCtxConfig) {
 
             $scope.apirest = window.apirest;
+            $scope.staticCtx = ponmCtxConfig.staticCtx;
+            $scope.travelEnedit = true;
 
 //            getTravel(11);
             $scope.$watch(function () {
@@ -53,5 +56,11 @@ angular.module('ponmApp.test', ['ponmApp.directives', 'ponmApp.services'])
 
                 $scope.$broadcast('ponmPhotoFluidResize');
             });
+        }])
+
+    .controller('spotCtrl', ['$scope', '$http', '$log', 'TravelService', 'deparam', '$location',
+        'ponmCtxConfig',
+        function($scope, $http, $log, TravelService, deparam, $location, ponmCtxConfig) {
+
         }])
 ;

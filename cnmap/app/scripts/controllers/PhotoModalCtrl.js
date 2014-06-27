@@ -13,6 +13,7 @@ angular.module('ponmApp.controllers')
 
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
+            $scope.corsproxyCtx = ponmCtxConfig.corsproxyCtx;
             $scope.apirest = $window.apirest;
             $scope.photoId = photoId;
             $scope.userId = $window.userId;
@@ -36,7 +37,7 @@ angular.module('ponmApp.controllers')
 
                 // 获取图片各种信息
                 PhotoService.getPhoto({photoId: $scope.photoId}, function (data) {
-                    $log.debug(data);
+//                    $log.debug(data);
                     if (data.status == 'OK') {
                         $scope.photo = data.prop;
                         // 设置此photo是否可以被登录者编辑
@@ -69,15 +70,19 @@ angular.module('ponmApp.controllers')
                     }
                 });
 
+                getCameraInfo(photoId);
+
+                getComments(photoId);
+            };
+
+            function getCameraInfo(photoId) {
                 PhotoService.getCameraInfo({photoId: photoId}, function (data) {
                     if (data.status == "OK") {
                         $scope.cameraInfo = data.camera_info;
                     }
-                    $log.debug($scope.cameraInfo);
+//                    $log.debug($scope.cameraInfo);
                 });
-
-                getComments(photoId);
-            };
+            }
 
             /**
              * 获取详细评论(分页)
@@ -124,11 +129,25 @@ angular.module('ponmApp.controllers')
                 if(!photo) {
                     return "";
                 }
-                if(photo.is360) {
-                    return $scope.apirest + "/photo/" + photo.id + "/oss";
-                }else {
-                    return $scope.staticCtx + '/' + photo.oss_key + '@!photo-preview-lg';
+                var extension = "@";
+                if(photo.width > 2000 || photo.height > 2000) {
+                    extension = extension + "0e_2000w_2000h";
                 }
+                if(photo.file_size > 1024*1024*4) {
+                    extension = extension + "_50Q";
+                }else if(photo.file_size > 1024*1024*2) {
+                    extension = extension + "_80Q";
+                }else if(photo.file_size > 1024*1024) {
+                    extension = extension + "_90Q";
+                }
+                extension = extension + ".jpg";
+                return $scope.staticCtx + '/' + photo.oss_key + extension;
+
+//                if(photo.is360) {
+//                    return $scope.apirest + "/photo/" + photo.id + "/oss";
+//                }else {
+//                    return $scope.staticCtx + '/' + photo.oss_key + '@!photo-preview-lg';
+//                }
             };
 
             /**
@@ -290,6 +309,15 @@ angular.module('ponmApp.controllers')
                 }
             };
 
+//            $scope.$watch('cameraInfo.date_time_original', function(photoCameraTime) {
+//                $scope.photoCameraTime = photoCameraTime;
+//            });
+//            $scope.$watch('photoCameraTime', function(photoCameraTime) {
+//                if($scope.photoCameraTime != $scope.cameraInfo.date_time_original) {
+//
+//                }
+//            });
+
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel');
             };
@@ -379,8 +407,10 @@ angular.module('ponmApp.controllers')
 
                 modalInstance.result.then(function (selectedItem) {
                     $scope.selected = selectedItem;
+                    $scope.setPhotoId($scope.photoId);
                 }, function () {
                     $log.info('Modal dismissed at: ' + new Date());
+                    $scope.setPhotoId($scope.photoId);
                 });
             };
 
