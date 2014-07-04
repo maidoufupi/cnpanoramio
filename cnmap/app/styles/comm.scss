@@ -10,6 +10,7 @@ $photo-info-frontground-color: #f5f5f5;
 $photo-info-background-color: #fff;
 $editable-hover-color: #fff;
 $transition-time: 0.3s;
+$header-bar-height: 55px;
 
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;
@@ -31,19 +32,19 @@ $transition-time: 0.3s;
 }
 
 @mixin transition-linear($prop) {
-  -webkit-transition:$prop linear $transition-time;
-  -moz-transition:$prop linear $transition-time;
-  -ms-transition:$prop linear $transition-time;
-  -o-transition:$prop linear $transition-time;
-  transition:$prop linear $transition-time;
+  -webkit-transition: $prop linear $transition-time;
+  -moz-transition: $prop linear $transition-time;
+  -ms-transition: $prop linear $transition-time;
+  -o-transition: $prop linear $transition-time;
+  transition: $prop linear $transition-time;
 }
 
 @mixin transition-ease-out($prop) {
-  -webkit-transition:$prop ease-out $transition-time;
-  -moz-transition:$prop ease-out $transition-time;
-  -ms-transition:$prop ease-out $transition-time;
-  -o-transition:$prop ease-out $transition-time;
-  transition:$prop ease-out $transition-time;
+  -webkit-transition: $prop ease-out $transition-time;
+  -moz-transition: $prop ease-out $transition-time;
+  -ms-transition: $prop ease-out $transition-time;
+  -o-transition: $prop ease-out $transition-time;
+  transition: $prop ease-out $transition-time;
 }
 
 .icon-refresh-animate {
@@ -78,5 +79,39 @@ $transition-time: 0.3s;
   to {
     -webkit-transform: scale(1) rotate(360deg);
     transform: scale(1) rotate(360deg);
+  }
+}
+
+@-webkit-keyframes ttPhotosSelectionOverlayCheckmarkSelectedTransition {
+  0% {
+    opacity: .3;
+    -webkit-transform: scale(.7)
+  }
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1.1)
+  }
+  70% {
+    -webkit-transform: scale(.9)
+  }
+  to {
+    -webkit-transform: scale(1)
+  }
+}
+
+@keyframes ttPhotosSelectionOverlayCheckmarkSelectedTransition {
+  0% {
+    opacity: .3;
+    -webkit-transform: scale(.7)
+  }
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1.1)
+  }
+  70% {
+    -webkit-transform: scale(.9)
+  }
+  to {
+    -webkit-transform: scale(1)
   }
 }

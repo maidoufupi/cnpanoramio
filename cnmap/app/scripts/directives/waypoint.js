@@ -7,16 +7,27 @@ angular.module('ponmApp.directives')
     .directive('waypoint', function () {
         return {
             restrict: 'A',
-            link: function (scope, element, attr) {
+            link: function (scope, element, attrs) {
                 setTimeout( function() {
-                    $( element ).waypoint(function() {
-                        scope.$emit('waypointEvent', attr.waypoint);
+                    $( element ).waypoint(function(direction) {
+                        scope.$emit('waypointEvent', direction, attrs.waypoint);
                     }, {
                         context: '.waypoint-scrollable',
-                        continuous: false,
-                        offset: "10%"
+                        continuous: true,
+                        offset: attrs.waypointOffset || "10%"
                     });
-                }, 2000);
+                }, 1000);
+
+                attrs.$observe('waypointRefresh', function ( data ) {
+                    $.waypoints('refresh');
+                });
+                attrs.$observe('waypointEnable', function ( data ) {
+                    if(data && data == "true") {
+                        $( element ).waypoint('enable');
+                    }else {
+                        $( element ).waypoint('disable');
+                    }
+                });
             }
         }
     });

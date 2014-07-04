@@ -14,8 +14,13 @@ angular.module('ponmApp.directives')
                     var itemSelector = attrs.itemSelector || ".fluid-brick";
 
                     $($window).resize(function (e) {
-                        $log.debug("window resize");
-                        calculateHeight();
+                        if(scope.updatePromise) {
+                            $timeout.cancel(scope.updatePromise);
+                        }
+                        scope.updatePromise = $timeout(function () {
+                            scope.updateFluid();
+                            scope.updatePromise = null;
+                        }, 500);
                     });
 
                     scope.$on('ponmPhotoFluidResize', function (e) {
@@ -32,16 +37,59 @@ angular.module('ponmApp.directives')
 
                     function calculateHeight() {
 
-                        var containerWidth = element.innerWidth() - 10;
-//                        $log.debug("containerWidth: " + containerWidth);
+                        var containerWidth = element.innerWidth(),
+                            lingItemMargin = attrs.fluidLineItemMargin || 0;
+                        $log.debug("lingItemMargin: " + lingItemMargin);
 
                         var items = element.find(itemSelector);
+                        minimizationAlgorithm(items, containerWidth, lingItemMargin);
+                    }
+
+                    function setWidthHeight(items, height) {
+                        if (height > maxHeight) {
+                            height = maxHeight;
+                        }
+                        var border = Number(attrs.fluidLineBorder);
+                        var itemMargin = Number(attrs.fluidLineItemMargin);
+                        height -= 4*itemMargin;
+                        height = Math.round(height);
+                        angular.forEach(items, function (item, key) {
+                            var img = item.find("img");
+                            item.css("height", height + "px");
+                            img.css("height", (height - 2*border) + "px");
+                        });
+                    }
+
+                    scope.updateFluid = function() {
+                        $log.debug("updateFluid");
+                        if ($window.imagesLoaded) {
+//                            $log.debug(element.find(itemSelector).length);
+                            var imgLoad = $window.imagesLoaded && $window.imagesLoaded(element);
+                            // bind with .on()
+                            imgLoad.on('always', function (e) {
+                                calculateHeight();
+                            });
+                        }
+                    };
+
+                    scope.$watch(attrs.photoFluidContainer, function() {
+                        $log.debug("photoFluidContainer changed");
+                        if(scope.updatePromise) {
+                            $timeout.cancel(scope.updatePromise);
+                        }
+                        scope.updatePromise = $timeout(function () {
+                            scope.updateFluid();
+                            scope.updatePromise = null;
+                        }, 1000);
+                    });
+
+                    function maximumAlgorithm(items, containerWidth, lingItemMargin) {
                         var itemLine = [],
                             itemLineWidth = 0;
                         angular.forEach(items, function (item, key) {
                             item = angular.element(item);
-                            var itemWidth = item.outerWidth(),
-                                itemHeight = item.outerHeight();
+                            var itemWidth = item.outerWidth() + 2*lingItemMargin,
+                                itemHeight = item.outerHeight() + 2*lingItemMargin;
 //                            $log.debug("itemWidth: " + itemWidth + "itemHeight: " + itemHeight);
                             var itemLineWidthTemp = itemLineWidth + itemWidth * minHeight / itemHeight;
                             if (itemLineWidthTemp > containerWidth) {
@@ -60,42 +108,27 @@ angular.module('ponmApp.directives')
                         }
                     }
 
-                    function setWidthHeight(items, height) {
-//                        $log.debug("setWidthHeight: " + items.length);
-//                        $log.debug("height: " + height);
-                        if (height > maxHeight) {
-                            height = maxHeight;
-                        }
+                    function minimizationAlgorithm(items, containerWidth, lingItemMargin) {
+                        var itemLine = [],
+                            itemLineWidth = 0;
                         angular.forEach(items, function (item, key) {
-                            var img = item.find("img");
-                            item.css("height", height + "px");
-                            img.css("height", (height - 4) + "px");
+                            item = angular.element(item);
+                            var itemWidth = item.outerWidth() + 2*lingItemMargin,
+                                itemHeight = item.outerHeight() + 2*lingItemMargin;
+//                            $log.debug("itemWidth: " + itemWidth + "itemHeight: " + itemHeight);
+                            itemLine.push(item);
+                            itemLineWidth = itemLineWidth + (itemWidth / itemHeight) * maxHeight;
+                            if (itemLineWidth >= containerWidth) {
+//                                $log.debug("itemLineWidth: " + itemLineWidth);
+                                setWidthHeight(itemLine, containerWidth * (maxHeight / itemLineWidth));
+                                itemLine = [];
+                                itemLineWidth = 0;
+                            }
                         });
+                        if (itemLine.length) {
+                            setWidthHeight(itemLine, (containerWidth / itemLineWidth) * maxHeight);
+                        }
                     }
-
-                    scope.updateFluid = function() {
-                        $log.debug("updateFluid");
-                        if ($window.imagesLoaded) {
-//                            $log.debug(element.find(itemSelector).length);
-                            var imgLoad = $window.imagesLoaded && $window.imagesLoaded(element);
-                            // bind with .on()
-                            imgLoad.on('always', function (e) {
-                                $log.debug("imagesLoaded");
-                                calculateHeight();
-                            });
-                        }
-                    };
-
-                    scope.$watch(attrs.photoFluidContainer, function() {
-                        $log.debug("photoFluidContainer changed");
-                        if(scope.updatePromise) {
-                            $timeout.cancel(scope.updatePromise);
-                        }
-                        scope.updatePromise = $timeout(function () {
-                            scope.updateFluid();
-                            scope.updatePromise = null;
-                        }, 1000);
-                    });
                 }
             };
         }])

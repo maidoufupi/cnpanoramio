@@ -1,0 +1,16 @@
+<div class="photo-travels">
+    <div data-ng-repeat="travel in travels"
+            class="travel">
+        <a ng-href="#/{{$stateParams.userId}}/albums/{{travel.id}}"
+           ng-click="">
+            <div class="thumbnail">
+                <img data-src="holder.js/300x300" alt="...">
+                <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>{{travel.title}}</p>
+                    <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

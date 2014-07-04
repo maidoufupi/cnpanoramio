@@ -1,0 +1,44 @@
+<div class="modal-header">
+    <h3 class="modal-title">将 {{photos.length}} 张图片{{displayText.ok}}到...</h3>
+    <button type="button" class="close" aria-hidden="true"
+            data-ng-click="cancel()">&times;</button>
+</div>
+<div class="modal-body">
+    <div class="album-selection">
+        <div class="album new"
+             ng-click="select(newTravel)"
+             ng-class="{'travel-selected': newTravel.selected}">
+            <input type="text" class="name"
+                   placeholder="新建相册名称"
+                   data-ng-model="newTravel.name"
+                   data-ng-click="$event.preventDefault();$event.stopPropagation();"
+                   ng-change="selectNewTravel(newTravel.name)">
+        </div>
+        <div ng-repeat="travel in travels">
+            <div class="travel album"
+                 ng-class="{'travel-selected': travel.selected}"
+                 ng-click="select(travel)"
+                 ponm-hover>
+                <div class="thumbnail">
+                    <img data-src="holder.js/300x300" alt="...">
+                    <div class="caption">
+                        <h3>Thumbnail label</h3>
+                        <p>{{travel.title}}</p>
+                        <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                    </div>
+                </div>
+                <div class="action-select"
+                     ng-class="{'action': !travel.selected, 'ponm-show': travel.selected}">
+                    <div class="icon-photo-select"
+                         ng-class="{'icon-photo-selected': travel.selected}"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()"
+            data-ng-disabled="!selectedTravel.selected">{{displayText.ok}}</button>
+    <button class="btn btn-warning" ng-click="cancel()">取消</button>
+</div>

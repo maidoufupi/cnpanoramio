@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <script type="text/javascript" src="../scripts/ponmApp.vendor.min.js"></script>
+
+    <script type="text/javascript" src="../scripts/ponmApp.min.js"></script>
+    <!--<script type="text/javascript" src="../scripts/ponmApp.directives.min.js"></script>-->
+    <script type="text/javascript" src="../scripts/ponmApp.controllers.min.js"></script>
+    <script type="text/javascript" src="../scripts/directives/ponmRectMultiSelect.js"></script>
+    <script type="text/javascript" src="../scripts/services/deparam.js"></script>
+    <script type="text/javascript" src="../scripts/panor/scripts.min.js"></script>
+
+    <!-- Map vendor -->
+    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
+    <script type="text/javascript" src="../bower_components/angular-ui-mapgaode/ui-map.js"></script>
+    <script type="text/javascript" src="../scripts/panor/gaode/MapEventListenerImpl.js"></script>
+    <script type="text/javascript" src="../scripts/panor/MapTravel.js"></script>
+    <script type="text/javascript" src="../scripts/panor/gaode/MapServiceImpl.js"></script>
+    <script type="text/javascript" src="../scripts/panor/gaode/MapTravelImpl.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin:0px;
+        }
+
+        .square {
+            width: 80px;
+            height: 80px;
+            background-color: #fec72c;
+            margin: 15px;
+            float: left;
+        }
+
+        #ball {
+            width: 80px;
+            height: 80px;
+            border-radius: 100%;
+            background-color: #aaff8a;
+            left: 250px;
+            top: 122px;
+        }
+
+        .elements.active {
+            border: 3px;
+            border-style: solid;
+            border-color: black;
+        }
+
+        html {
+            background-image: linear-gradient(to bottom, #5588cc 0%, #3162a3 100%);
+        }
+
+        body {
+            background-size: 50px 50px;
+        }
+    </style>
+    <script type="text/javascript">
+        //                window.ctx = "http://115.28.21.165";
+        //        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.ctx = "http://www.photoshows.cn";
+        window.apirest = window.ctx + "/api/rest";
+
+        angular.module('ponmApp.test', ['ponmApp', 'ui.bootstrap'])
+                .controller('ponmAppCtrl', ['$scope', '$http', '$log', 'deparam', 'ponmCtxConfig',
+                    function($scope, $http, $log, deparam, ponmCtxConfig) {
+
+                        $scope.apirest = window.apirest;
+                        $scope.staticCtx = ponmCtxConfig.staticCtx;
+
+                        $scope.photos = [{id:1, name: "photo 1"}, {id:2, name: "photo 2"},
+                            {id:1, name: "photo 1"}, {id:2, name: "photo 2"},
+                            {id:1, name: "photo 1"}, {id:2, name: "photo 2"}]
+                    }])
+                .controller('ponmAppPhotoCtrl', ['$scope', '$http', '$log', 'deparam', 'ponmCtxConfig',
+                    function($scope, $http, $log, deparam, ponmCtxConfig) {
+
+                        $scope.apirest = window.apirest;
+                        $scope.staticCtx = ponmCtxConfig.staticCtx;
+
+                    }]);
+
+    </script>
+</head>
+<body data-ng-app="ponmApp.test" data-ng-controller="ponmAppCtrl">
+
+<div ponm-rect-multi-select=".square"
+     ponm-selector="photo.selected"
+        >
+
+    <div class="elements square"
+            data-ng-repeat="photo in photos"
+
+            data-ng-class="{'active': photo.selected}"></div>
+
+    <div id="ball" class="elements"></div>
+</div>
+
+</body>
+</html>

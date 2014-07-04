@@ -10,7 +10,7 @@
     <script type="text/javascript" src="../scripts/ponmApp.vendor.min.js"></script>
 
     <script type="text/javascript" src="../scripts/ponmApp.min.js"></script>
-    <script type="text/javascript" src="../scripts/ponmApp.directives.min.js"></script>
+    <!--<script type="text/javascript" src="../scripts/ponmApp.directives.min.js"></script>-->
     <script type="text/javascript" src="../scripts/ponmApp.controllers.min.js"></script>
     <script type="text/javascript" src="../scripts/directives/filters.js"></script>
     <script type="text/javascript" src="../scripts/directives/PhotoFluidContainer.js"></script>
@@ -29,49 +29,54 @@
 
     <script type="text/javascript">
 //                window.ctx = "http://115.28.21.165";
-        window.ctx = "http://127.0.0.1:8080/panor-web";
+//        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.ctx = "http://www.photoshows.cn";
         window.apirest = window.ctx + "/api/rest";
     </script>
 </head>
 <body data-ng-app="ponmApp.test">
     <div class="container" data-ng-controller="photoFluidContainerCtrl">
         <div data-ng-repeat="spot in travel.spots">
+            <div style="clear: both;"></div>
             <div photo-fluid-container="spot.photos"
                  item-selector=".fluid-brick"
                  class="photo-fluid-container"
+                 fluid-line-border="2"
+                 fluid-line-item-margin="0"
                  fluid-line-max-height="200"
                  fluid-line-min-height="100">
                 <div ng-repeat="photo in spot.photos"
                      class="fluid-brick ponm-photo"
-                     ponm-photo="photo"
+                     ponm-hover
                      data-ng-controller="spotCtrl">
                     <a ng-click="activePhoto(photo)"
                             href=""
                             style="display: block"
                             >
                         <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}">
-                        <div class="action ponm-photo-footer">
-                            <p>{{photo.point.address}}</p>
-                            <p>{{photo.description | newlines}}</p>
-                        </div>
-                        <div ng-if="travelEnedit" class="action ponm-photo-remove">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </div>
-                        <div data-ng-if="travelEnedit" class="action ponm-photo-option">
-                            <!-- Single button -->
-                            <div class="btn-group" dropdown is-open="isopen">
-                                <button type="button" class="btn dropdown-toggle" ng-disabled="disabled">
-                                    action <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="">创建新景点</a></li>
-                                    <li><a href="">移动到</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">从旅行中删除</a></li>
-                                </ul>
-                            </div>
-                        </div>
+
                     </a>
+                    <div class="action ponm-photo-footer">
+                        <p>{{photo.point.address}}</p>
+                        <p>{{photo.description | newlines}}</p>
+                    </div>
+                    <div ng-if="travelEnedit" class="action ponm-photo-remove">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </div>
+                    <div data-ng-if="travelEnedit" class="action ponm-photo-option">
+                        <!-- Single button -->
+                        <div class="btn-group" dropdown is-open="isopen">
+                            <button type="button" class="btn dropdown-toggle" ng-disabled="disabled">
+                                action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="">创建新景点</a></li>
+                                <li><a href="">移动到</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">从旅行中删除</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
             </div>

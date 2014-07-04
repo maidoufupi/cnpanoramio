@@ -1,0 +1,45 @@
+*[ponm-rect-multi-select] .ghost-select {
+  /*display: none;*/
+  z-index: 9000;
+  position: absolute !important;
+  cursor: default !important; }
+*[ponm-rect-multi-select] .square {
+  width: 80px;
+  height: 80px;
+  background-color: #fec72c;
+  margin: 15px;
+  float: left; }
+*[ponm-rect-multi-select] #ball {
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  background-color: #aaff8a;
+  left: 250px;
+  top: 122px; }
+*[ponm-rect-multi-select] #big-ghost {
+  background-color: rgba(239, 28, 190, 0.6);
+  border: 1px solid #aaf81a;
+  position: absolute;
+  opacity: 0; }
+*[ponm-rect-multi-select] .ghost-select > div {
+  position: absolute;
+  left: 0px !important;
+  top: 2px !important; }
+*[ponm-rect-multi-select] .ghost-active {
+  display: block !important; }
+*[ponm-rect-multi-select] .ghost-select > span {
+  /*border: 1px solid #b20e8c;*/
+  width: 100%;
+  height: 100%;
+  float: left;
+  -webkit-box-shadow: black 0 0 10px;
+  box-shadow: black 0 0 10px;
+  filter: alpha(opacity=40);
+  opacity: .4;
+  background-color: #8bf;
+  position: absolute;
+  z-index: 8; }
+*[ponm-rect-multi-select] #grid {
+  width: 100%;
+  height: 100%;
+  position: absolute; }

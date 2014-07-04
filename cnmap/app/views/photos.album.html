@@ -1,0 +1,39 @@
+<div class="photo-travel"
+     ponm-rect-multi-select=".photo"
+     ponm-rect-moveselect="true"
+     ponm-rect-selector="rectSelected"
+        >
+    <div>{{travel.title}}</div>
+    <div data-ng-repeat="spot in travel.spots"
+         style="clear: both;">
+        <div>{{spot.title}}</div>
+        <div><pre>{{spot.description}}</pre></div>
+        <div photo-fluid-container
+             fluid-line-border="0"
+             fluid-line-item-margin="1"
+             item-selector=".ponm-photo"
+             class="photo-fluid-container photo-container">
+            <div ng-repeat="photo in spot.photos"
+                 ng-controller="PhotosPhotoCtrl"
+                 class="fluid-brick ponm-photo photo"
+                 ponm-hover>
+                <a ng-click="activePhoto(photo)"
+                   href="">
+                    <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                         ng-class="{'selectable': selectable&&!photo.actionSelected,
+                        'selected': photo.actionSelected}">
+                </a>
+
+                <div class="action-select"
+                     ng-class="{'action': !selectable, 'ponm-show': selectable}"
+                     ng-click="selectPhoto($event, photo, spot.photos)">
+                    <span class="icon-photo-select"
+                          ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
+                </div>
+                <div ng-if="photo.is360">
+                    <div class="icon-photo-p360"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
