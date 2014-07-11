@@ -308,9 +308,8 @@
 
 /** photos page */
 .container-photos {
-  position: absolute;
-  width: 100%;
-  top: $header-bar-height;
+  width: 80%;
+  margin: 0 auto;
   @include transition-linear(top);
 }
 

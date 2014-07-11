@@ -13,6 +13,7 @@ import org.appfuse.dao.UserDao;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,15 +24,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cnpanoramio.dao.AvatarDao;
 import com.cnpanoramio.dao.FavoriteDao;
 import com.cnpanoramio.dao.PhotoDao;
+import com.cnpanoramio.dao.RecycleDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.dao.ViewsDao;
 import com.cnpanoramio.domain.Avatar;
+import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
 import com.cnpanoramio.json.UserResponse.Settings;
 import com.cnpanoramio.service.FileService;
+import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.UserUtil;
@@ -71,6 +75,12 @@ public class UserSettingsImpl implements UserSettingsManager {
 	
 	@Autowired
 	private TravelService travelService;
+	
+	@Autowired
+	private PhotoManager photoService;
+	
+	@Autowired
+	private RecycleDao recycleDao;
 
 	@Override
 	public UserSettings save(UserSettings userSettings) {
@@ -275,11 +285,56 @@ public class UserSettingsImpl implements UserSettingsManager {
 		return list;
 	}
 
-
-
 	@Override
 	public UserSettings get(Long id) {
 		return userSettingsDao.get(id);
 	}
+	
+	@Override
+	public List<Recycle> getRecycleBin(Long id) {
+		return recycleDao.getUserRecycle(id);		
+	}
 
+	@Override
+	public void emptyRecycleBin(Long id) {
+		
+		UserSettings settings = userSettingsDao.get(id);
+		for(Recycle recycle : settings.getRecycle()) {
+			if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
+				try {
+					photoService.removePhoto(recycle.getRecyId());
+					settings.getRecycle().remove(recycle);
+				}catch(DataAccessException ex) {
+				}				
+			}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
+				try {
+					travelService.removeTravel(recycle.getRecyId());
+					settings.getRecycle().remove(recycle);
+				}catch(DataAccessException ex) {
+				}
+			}
+		}
+		
+	}
+
+	@Override
+	public void cancelRecycle(Long userId, Long id) {
+		UserSettings settings = userSettingsDao.get(userId);
+		Recycle recycle = recycleDao.get(id);
+		if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
+			try {
+				photoService.cancelDelete(recycle.getRecyId());
+				settings.getRecycle().remove(recycle);
+			}catch(DataAccessException ex) {
+			}				
+		}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
+			try {
+				travelService.cancelDeleteTravel(recycle.getRecyId());
+				settings.getRecycle().remove(recycle);
+			}catch(DataAccessException ex) {
+			}	
+		}
+		
+	}
+	
 }

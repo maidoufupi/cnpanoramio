@@ -25,6 +25,7 @@
 		<mapping class="com.cnpanoramio.domain.Travel" />		
 		<mapping class="com.cnpanoramio.domain.TravelSpot"/>
 		<mapping class="com.cnpanoramio.domain.Like" />
+		<mapping class="com.cnpanoramio.domain.Recycle" />
 				
 	</session-factory>
 </hibernate-configuration>

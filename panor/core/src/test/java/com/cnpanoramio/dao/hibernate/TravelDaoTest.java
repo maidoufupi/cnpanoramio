@@ -1,5 +1,7 @@
 package com.cnpanoramio.dao.hibernate;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
@@ -13,7 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cnpanoramio.dao.PhotoGpsDao;
 import com.cnpanoramio.dao.TravelDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Travel;
@@ -26,7 +27,7 @@ import com.cnpanoramio.domain.UserSettings;
 @Transactional
 public class TravelDaoTest {
 
-protected transient final Log log = LogFactory.getLog(getClass());
+	protected transient final Log log = LogFactory.getLog(getClass());
 	
 	@Autowired
 	private TravelDao travelDao;
@@ -56,5 +57,12 @@ protected transient final Log log = LogFactory.getLog(getClass());
 		Travel travel = travelDao.getByName(userId, "上海");
 		log.info(travel.getTitle());
 		Assert.assertNotNull(travel);
+	}
+	
+	@Test
+	public void testSearch() {
+		String q = "无锡";
+		List<Travel> travels = travelDao.search(q);
+		Assert.assertEquals(1, travels.size());
 	}
 }

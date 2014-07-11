@@ -20,18 +20,19 @@
     <script type="text/javascript" src="scripts/controllers/PhotoModalCtrl.js"></script>
     <script type="text/javascript" src="scripts/directives/ponmRectMultiSelect.js"></script>
 
-    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
-            type="text/javascript"></script>
+    <!--<script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"
+            type="text/javascript"></script>-->
 
     <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
     <script type="text/javascript" src="scripts/panor/scripts.min.js"></script>
     <script type="text/javascript" src="scripts/panor/scripts.gaode.min.js"></script>
 
     <script type="text/javascript">
-//        window.ctx = "http://127.0.0.1:8080/panor-web";
-        window.ctx = "http://www.photoshows.cn";
+        window.ctx = "http://127.0.0.1:8080/panor-web";
+//        window.ctx = "http://www.photoshows.cn";
         window.apirest = window.ctx + "/api/rest";
-        window.userId = 3;
+        window.staticCtx = "http://test.photoshows.cn";
+        window.userId = 1;
     </script>
 </head>
 <body>
@@ -94,6 +95,6 @@
         <i>Some content will load here!</i>
     </ui-view>
 </div>
-
+<div class="loader">Loading...</div>
 </body>
 </html>

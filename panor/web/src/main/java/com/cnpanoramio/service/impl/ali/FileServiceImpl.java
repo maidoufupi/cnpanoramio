@@ -88,16 +88,10 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public boolean deleteFile(String fileType, Long id, String fileName) {
+	public boolean deleteFile(String fileType, Long fileKey, String fileExt) {
 
-		if (null == fileName) {
-			return false;
-		} else {
-			fileName.trim();
-			if ("" == fileName)
-				return false;
-		}
-		return false;
+		deleteOSSObject(bucket, fileKey + "." + fileExt);
+		return true;
 	}
 
 	@Override
@@ -157,6 +151,25 @@ public class FileServiceImpl implements FileService {
 		// 获取Object的输入流
 		InputStream objectContent = object.getObjectContent();
 		return objectContent;
+	}
+	
+	private void deleteOSSObject(String bucketName, String key) {
+
+		// 初始化一个OSSClient
+		if (null == client) {
+			log.info(endpoint);
+			log.info(accessKeyId);
+			log.info(accessKeySecret);
+			if (null == endpoint || "".equals(endpoint)) {
+				client = new OSSClient(accessKeyId, accessKeySecret);
+			} else {
+				client = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+			}
+		}
+
+		// 删除Object.
+		client.deleteObject(bucketName, key);
+
 	}
 
 	public String getAccessKeyId() {

@@ -6,6 +6,7 @@ import java.util.List;
 import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Avatar;
+import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.UserOpenInfo;
@@ -114,4 +115,24 @@ public interface UserSettingsManager {
 	 */
 	public List<String> deleteTag(User user, String tag);
 	
+	/**
+	 * 获取用户的回收站全部内容
+	 * 
+	 * @param id 用户id
+	 */
+	public List<Recycle> getRecycleBin(Long id);
+	
+	/**
+	 * 清空用户的回收站
+	 * 
+	 * @param id 用户id
+	 */
+	public void emptyRecycleBin(Long id);
+	
+	/**
+	 * 撤销删除操作
+	 * 
+	 * @param id 删除记录的id
+	 */
+	public void cancelRecycle(Long userId, Long id);
 }

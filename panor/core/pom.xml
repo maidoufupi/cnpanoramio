@@ -16,7 +16,7 @@
 	<name>Photo on map Modular Application - Core</name>
 
 	<build>
-		<!-- <plugins>
+		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>hibernate3-maven-plugin</artifactId>
@@ -24,7 +24,8 @@
 				<configuration>
 					<components>
 						<component>
-							<name>hbm2ddl</name>
+					<!-- 		<name>hbm2ddl</name> -->
+							<name>hbm2sql</name>
 							<implementation>annotationconfiguration</implementation>
 						</component>
 					</components>
@@ -39,7 +40,8 @@
 					<execution>
 						<phase>process-test-resources</phase>
 						<goals>
-							<goal>hbm2ddl</goal>
+							<!-- <goal>hbm2ddl</goal> -->
+							<goal>hbm2sql</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -84,7 +86,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>			
-		</plugins> -->
+		</plugins>
 		
 		<testResources>
 			<testResource>

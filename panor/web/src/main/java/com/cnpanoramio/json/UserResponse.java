@@ -1,15 +1,20 @@
 package com.cnpanoramio.json;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.cnpanoramio.MapVendor;
+import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.UserSettings;
 
 @XmlRootElement
@@ -25,6 +30,8 @@ public class UserResponse extends ExceptionResponse {
 	private UserOpenInfo openInfo;
 	
 	private Settings settings;
+	
+	private List<Recycle> recycles;
 	
 	public static class PhotoInfo {
 		
@@ -233,6 +240,65 @@ public class UserResponse extends ExceptionResponse {
 		}		
 		
 	}
+	
+	public static class Recycle {
+		
+		private Long id;
+		
+		@JsonProperty("user_id")
+		private Long userId;
+		
+		@JsonProperty("create_time")
+		private Date createTime;
+		
+		@JsonProperty("recy_type")
+		private String recyType;
+		
+		@JsonProperty("recy_id")
+		private Long recyId;
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public Long getUserId() {
+			return userId;
+		}
+
+		public void setUserId(Long userId) {
+			this.userId = userId;
+		}
+
+		public Date getCreateTime() {
+			return createTime;
+		}
+
+		public void setCreateTime(Date createTime) {
+			this.createTime = createTime;
+		}
+
+		public String getRecyType() {
+			return recyType;
+		}
+
+		public void setRecyType(String recyType) {
+			this.recyType = recyType;
+		}
+
+		public Long getRecyId() {
+			return recyId;
+		}
+
+		public void setRecyId(Long recyId) {
+			this.recyId = recyId;
+		}
+		
+		
+	}
 
 	public Collection<PhotoProperties> getPhotos() {
 		return photos;
@@ -264,6 +330,14 @@ public class UserResponse extends ExceptionResponse {
 
 	public void setSettings(Settings settings) {
 		this.settings = settings;
+	}
+
+	public List<Recycle> getRecycles() {
+		return recycles;
+	}
+
+	public void setRecycles(List<Recycle> recycles) {
+		this.recycles = recycles;
 	}
 
 	

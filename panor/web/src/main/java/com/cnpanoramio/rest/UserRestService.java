@@ -2,7 +2,6 @@ package com.cnpanoramio.rest;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Collection;
@@ -17,30 +16,22 @@ import org.appfuse.model.LabelValue;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.dao.DataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.UserSettings;
-import com.cnpanoramio.json.ExceptionResponse;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.PhotoResponse;
 import com.cnpanoramio.json.UserOpenInfo;
@@ -51,6 +42,7 @@ import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.service.UserSettingsManager;
+import com.cnpanoramio.service.UserSettingsService;
 import com.cnpanoramio.utils.UserUtil;
 
 @Controller
@@ -64,6 +56,9 @@ public class UserRestService extends AbstractRestService {
 
 	@Autowired
 	private UserSettingsManager userSettingsManager;
+	
+	@Autowired
+	private UserSettingsService userSettingsService;
 
 	@Autowired
 	private PhotoManager photoService;
@@ -353,5 +348,36 @@ public class UserRestService extends AbstractRestService {
 		return reponse;
 	}
 
+	@RequestMapping(value = "/{userId}/recycle", method = RequestMethod.DELETE)
+	@ResponseBody
+	public UserResponse emptyRecycleBin(@PathVariable String userId) {
+		UserResponse reponse = new UserResponse();
+
+		userSettingsManager.emptyRecycleBin(Long.parseLong(userId));
+		
+		reponse.setStatus(PhotoResponse.Status.OK.name());
+		return reponse;
+	}
 	
+	@RequestMapping(value = "/{userId}/recycle", method = RequestMethod.GET)
+	@ResponseBody
+	public UserResponse getRecycleBin(@PathVariable String userId) {
+		UserResponse reponse = new UserResponse();
+		
+		reponse.setRecycles(userSettingsService.getRecycleBin(Long.parseLong(userId)));
+		
+		reponse.setStatus(PhotoResponse.Status.OK.name());
+		return reponse;
+	}
+	
+	@RequestMapping(value = "/{userId}/recycle/{recycleId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public UserResponse cancelRecycle(@PathVariable String userId, @PathVariable String recycleId) {
+		UserResponse reponse = new UserResponse();
+
+		userSettingsManager.emptyRecycleBin(Long.parseLong(userId));
+		
+		reponse.setStatus(PhotoResponse.Status.OK.name());
+		return reponse;
+	}
 }

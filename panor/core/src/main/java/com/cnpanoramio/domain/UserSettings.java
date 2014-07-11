@@ -116,7 +116,11 @@ public class UserSettings {
 	@JoinTable(name="user_following")
 	private Set<User> following = new HashSet<User>(0);
 	
-
+	// recycle
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+	@JoinTable(name="user_recycle")
+	private Set<Recycle> recycle = new HashSet<Recycle>(0);
+	
 	public User getUser() {
 		return user;
 	}
@@ -268,7 +272,16 @@ public class UserSettings {
 
 	public void setFollowing(Set<User> following) {
 		this.following = following;
-	}	
+	}		
+
+	public Set<Recycle> getRecycle() {
+		return recycle;
+	}
+
+	@SuppressWarnings("unused")
+	private void setRecycle(Set<Recycle> recycle) {
+		this.recycle = recycle;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

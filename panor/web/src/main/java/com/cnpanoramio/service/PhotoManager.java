@@ -149,6 +149,22 @@ public interface PhotoManager {
 	public PhotoProperties delete(Long id);
 	
 	/**
+	 * 撤销删除图片
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public PhotoProperties cancelDelete(Long id);
+	
+	/**
+	 * 实际删除图片
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public void removePhoto(Long id);
+	
+	/**
 	 * 获取图片属性信息
 	 * 
 	 * @param id

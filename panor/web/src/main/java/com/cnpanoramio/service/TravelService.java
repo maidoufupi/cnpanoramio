@@ -103,4 +103,25 @@ public interface TravelService {
 	 * @return
 	 */
 	public Travel deleteSpot(Long id);
+	
+	/**
+	 * 删除旅行
+	 * 
+	 * @param id
+	 */
+	public void deleteTravel(Long id);
+	
+	/**
+	 * 实际删除旅行
+	 * 
+	 * @param id
+	 */
+	public void removeTravel(Long id);
+	
+	/**
+	 * 撤销删除
+	 * 
+	 * @param id
+	 */
+	public void cancelDeleteTravel(Long id);
 }

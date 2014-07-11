@@ -137,4 +137,19 @@ public class TravelServiceImpl implements TravelService {
 		return convertTravel(travelManager.deleteSpot(id));
 	}
 
+	@Override
+	public void deleteTravel(Long id) {
+		travelManager.deleteTravel(id);
+	}
+
+	@Override
+	public void removeTravel(Long id) {
+		travelManager.removeTravel(id);		
+	}
+
+	@Override
+	public void cancelDeleteTravel(Long id) {
+		travelManager.cancelDeleteTravel(id);		
+	}
+
 }

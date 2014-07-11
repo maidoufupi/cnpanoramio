@@ -32,6 +32,7 @@ import com.cnpanoramio.dao.FavoriteDao;
 import com.cnpanoramio.dao.LikeDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.PhotoGpsDao;
+import com.cnpanoramio.dao.RecycleDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Favorite;
 import com.cnpanoramio.domain.Like;
@@ -40,6 +41,7 @@ import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.PhotoGps.PhotoGpsPK;
 import com.cnpanoramio.domain.Point;
+import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoCameraInfo;
@@ -79,6 +81,9 @@ public class PhotoServiceImpl implements PhotoManager {
 	
 	@Autowired
 	private LikeDao likeDao = null;
+	
+	@Autowired
+	private RecycleDao recycleDao = null;
 	
 	@Autowired
 	public void setUserManager(UserManager userManager) {
@@ -176,16 +181,6 @@ public class PhotoServiceImpl implements PhotoManager {
 		
 		User user = UserUtil.getCurrentUser(userManager);
 
-//		Object principal = SecurityContextHolder.getContext()
-//				.getAuthentication().getPrincipal();
-//		String username;
-//		if (principal instanceof UserDetails) {
-//			username = ((UserDetails) principal).getUsername();
-//		} else {
-//			username = principal.toString();
-//		}
-//
-//		User user = userManager.getUserByUsername(username);
 		// 先、保存photo table record
 		photo.setOwner(user);
 		photo = photoDao.save(photo);
@@ -299,8 +294,24 @@ public class PhotoServiceImpl implements PhotoManager {
 
 	@Override
 	public PhotoProperties delete(Long id) {
-		PhotoProperties pp = PhotoUtil.transformProperties(photoDao.get(id));
-		photoDao.remove(id);
+		User me = UserUtil.getCurrentUser(userManager);
+		UserSettings settings = userSettingsDao.get(me.getId());
+		Photo photo = photoDao.get(id);
+		photo.setDeleted(true);
+		Recycle recycle = new Recycle();
+		recycle.setUser(settings);
+		recycle.setCreateTime(new Date());
+		recycle.setRecyType(Recycle.CON_TYPE_PHOTO);
+		recycle.setRecyId(photo.getId());
+		recycle = recycleDao.save(recycle);
+		settings.getRecycle().add(recycle);
+		
+		// 删除对应旅行
+		photo.getTravelSpot().getPhotos().remove(photo);
+		photo.setTravelSpot(null);		
+		
+		PhotoProperties pp = PhotoUtil.transformProperties(photo);
+				
 		return pp;
 	}
 
@@ -622,6 +633,26 @@ public class PhotoServiceImpl implements PhotoManager {
 			throw new AccessDeniedException("Access Denied! Photo Id: "
 					+ photo.getId());
 		}
+	}
+
+	@Override
+	public PhotoProperties cancelDelete(Long id) {
+		Photo photo = photoDao.get(id);
+		checkIsMyPhoto(photo);
+		photo.setDeleted(false);
+						
+		PhotoProperties pp = PhotoUtil.transformProperties(photo);
+				
+		return pp;
+	}
+
+	@Override
+	public void removePhoto(Long id) {
+		Photo photo = this.getPhoto(id);
+		// 删除oss图片文件
+		fileService.deleteFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType());
+		// 删除数据库记录
+		photoDao.remove(id);
 	}
 
 }

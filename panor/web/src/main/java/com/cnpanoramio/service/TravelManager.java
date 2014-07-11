@@ -3,12 +3,13 @@ package com.cnpanoramio.service;
 import java.util.List;
 
 import org.appfuse.model.User;
+import org.appfuse.service.GenericManager;
 
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Travel;
 import com.cnpanoramio.domain.TravelSpot;
 
-public interface TravelManager {
+public interface TravelManager extends GenericManager<Travel, Long> {
 	
 	/**
 	 * 获取用户的某个travel
@@ -111,4 +112,25 @@ public interface TravelManager {
 	 * @return
 	 */
 	public Travel deleteSpot(Long id);
+	
+	/**
+	 * 删除旅行
+	 * 
+	 * @param id
+	 */
+	public void deleteTravel(Long id);
+	
+	/**
+	 * 实际删除旅行
+	 * 
+	 * @param id
+	 */
+	public void removeTravel(Long id);
+	
+	/**
+	 * 撤销删除
+	 * 
+	 * @param id
+	 */
+	public void cancelDeleteTravel(Long id);
 }

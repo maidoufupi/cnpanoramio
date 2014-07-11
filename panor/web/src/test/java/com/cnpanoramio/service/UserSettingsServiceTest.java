@@ -38,7 +38,6 @@ public class UserSettingsServiceTest {
 	
 	@Before
 	public void preMethodSetup() {
-		
 	}
 
 	@After

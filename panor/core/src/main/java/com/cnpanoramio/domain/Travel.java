@@ -6,8 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,9 +21,13 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
 @Entity
 @Table(name = "travel")
+@Indexed
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Travel {
@@ -39,13 +45,14 @@ public class Travel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@DocumentId
 	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private UserSettings user;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval = true)
 	private Set<TravelSpot> spots = new HashSet<TravelSpot>(0);
 	
 	// 默认的spot
@@ -66,13 +73,19 @@ public class Travel {
 	private Date timeEnd;
 	
 	@Column(name="address")
+	@Field
 	private String address;
 	
 	@Column(name="title")
+	@Field
 	private String title;
 	
 	@Column(name="description")
+	@Field
 	private String description;
+	
+	@Column(name="deleted")
+	private Boolean deleted;
 	
 	@OneToMany
 	private Set<Like> likes = new HashSet<Like>(0);
@@ -97,7 +110,8 @@ public class Travel {
 		return spots;
 	}
 
-	public void setSpots(Set<TravelSpot> spots) {
+	@SuppressWarnings("unused")
+	private void setSpots(Set<TravelSpot> spots) {
 		this.spots = spots;
 	}
 
@@ -171,6 +185,14 @@ public class Travel {
 
 	public void setLikes(Set<Like> likes) {
 		this.likes = likes;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 		
 }

@@ -74,6 +74,14 @@ public class TravelRestService extends AbstractRestService {
 		return response;
 	}
 	
+	@RequestMapping(value = "/{travelId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public TravelResponse deleteTravel(@PathVariable String travelId) {
+		TravelResponse response = responseFactory();
+		travelService.deleteTravel(Long.parseLong(travelId));
+		return response;
+	}
+	
 	@RequestMapping(value = "/{travelId}/spot", method = RequestMethod.POST)
 	@ResponseBody
 	public TravelResponse createSpot(@PathVariable String travelId, 

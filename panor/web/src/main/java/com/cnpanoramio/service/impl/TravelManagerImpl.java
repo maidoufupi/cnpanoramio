@@ -2,7 +2,6 @@ package com.cnpanoramio.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
+import org.appfuse.service.impl.GenericManagerImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -32,13 +32,12 @@ import com.cnpanoramio.utils.UserUtil;
 
 @Service
 @Transactional
-public class TravelManagerImpl implements TravelManager {
+public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implements TravelManager {
 
 	protected transient final Log log = LogFactory.getLog(getClass());
 
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
-	@Autowired
 	private TravelDao travelDao;
 	@Autowired
 	private TravelSpotDao travelSpotDao;
@@ -54,11 +53,21 @@ public class TravelManagerImpl implements TravelManager {
 	@Autowired
 	private UserManager userManager = null;
 
+	public TravelDao getTravelDao() {
+		return travelDao;
+	}
+
+	@Autowired
+	public void setTravelDao(TravelDao travelDao) {
+		this.travelDao = travelDao;
+		this.dao = travelDao;
+	}
+
 	@Override
 	public Travel getTravel(Long travelId) {
 		return travelDao.get(travelId);
 	}
-
+	
 	@Override
 	public List<Travel> getTravels(User user) {
 		UserSettings settings = userSettingsDao.get(user.getId());
@@ -315,6 +324,41 @@ public class TravelManagerImpl implements TravelManager {
 		// 然后删除
 		travelSpotDao.remove(spot);
 		return travel;
+	}
+
+	@Override
+	public void deleteTravel(Long id) {
+		User me = UserUtil.getCurrentUser(userManager);
+		Travel travel = travelDao.get(id);
+		checkMyTravel(travel, me);
+
+		travel.setDeleted(true);
+		
+	}
+
+	@Override
+	public void removeTravel(Long id) {
+		User me = UserUtil.getCurrentUser(userManager);
+		Travel travel = travelDao.get(id);
+		checkMyTravel(travel, me);
+
+		for (TravelSpot spot : travel.getSpots()) {
+			for (Photo photo : spot.getPhotos()) {
+				// 删除图片
+				photoManager.removePhoto(photo.getId());
+			}
+		}
+		// 删除旅行
+		travelDao.remove(travel);
+	}
+
+	@Override
+	public void cancelDeleteTravel(Long id) {
+		User me = UserUtil.getCurrentUser(userManager);
+		Travel travel = travelDao.get(id);
+		checkMyTravel(travel, me);
+
+		travel.setDeleted(false);
 	}
 
 }

@@ -22,6 +22,7 @@ import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 
@@ -137,7 +138,23 @@ public class UserSettingsDaoTest {
 			log.info(tag);
 		}
 	}
-
+	
+	@Test
+	public void testEmptyRecycle() {
+		Recycle recycle = new Recycle();
+		UserSettings setting = userSettingsDao.get(1L);
+		setting.getRecycle().add(recycle);
+		Assert.assertEquals(1, setting.getRecycle().size());
+		setting.getRecycle().clear();
+		Assert.assertEquals(0, setting.getRecycle().size());
+	}
+	
+	@Test
+	public void testSearch() {
+		List<User> users = userDao.search("user");
+		Assert.assertEquals(1, users.size());
+	}
+	
 	public UserDao getUserDao() {
 		return userDao;
 	}

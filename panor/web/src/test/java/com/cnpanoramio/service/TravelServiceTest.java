@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.imaging.ImageReadException;
+import junit.framework.Assert;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.Constants;
@@ -48,6 +49,8 @@ public class TravelServiceTest {
 	private UserManager userManager;
 	@Autowired
 	private TravelService travelService;
+	@Autowired
+	private TravelManager travelManager;
 	
 	private User user;
 	
@@ -87,5 +90,26 @@ public class TravelServiceTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testSearch() {
+		com.cnpanoramio.domain.Travel tra = new com.cnpanoramio.domain.Travel();
+		tra.setAddress("江苏省常州镇");
+		tra.setTitle("江苏省常州");
+		travelManager.save(tra);
+		
+		tra = new com.cnpanoramio.domain.Travel();
+		tra.setAddress("江苏无锡");
+		tra.setTitle("江苏");
+		travelManager.save(tra);
+		
+		List<com.cnpanoramio.domain.Travel> travels = travelManager.search("江苏省", Travel.class);
+		
+		for(com.cnpanoramio.domain.Travel travel : travels) {
+			log.info(travel.getTitle());
+			log.info(travel.getAddress());
+		}
+		Assert.assertEquals(2, travels.size());
 	}
 }
