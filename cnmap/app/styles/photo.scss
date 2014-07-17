@@ -1,3 +1,5 @@
+/****************************************************************************************/
+/** photo modal page ********************************************************************/
 .photo-modal-fullscreen {
   overflow: hidden;
   .modal-dialog {
@@ -305,12 +307,17 @@
     display: block;
   }
 }
+/** photo modal page ********************************************************************/
+/****************************************************************************************/
 
-/** photos page */
+/****************************************************************************************/
+/** photos page *************************************************************************/
 .container-photos {
-  width: 80%;
-  margin: 0 auto;
+//  width: 80%;
   @include transition-linear(top);
+  margin: 10px 100px;
+  transition: top linear 0.3s;
+  position: relative;
 }
 
 .container-photos.expand {
@@ -393,6 +400,7 @@
   right: 0;
 }
 
+// photos
 .photo-container {
   .photo {
     float: left;
@@ -424,35 +432,70 @@
   }
 }
 
+// photos all
 .photo-container.photo-all {
   .photo {
     width: 200px;
     height: 200px;
+    display: inline-block;
+    float: initial;
   }
 }
 
+// photos travel
 .photo-travel {
-  .photo-container {
-    .photo {
-      border: 0;
-      box-shadow: initial;
-      background-color: initial;
-      img {
-        width: initial;
-        height: 100%;
+  >.header {
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+  }
+  .spot {
+    clear: both;
+    padding: 10px;
+    @include transition-linear(all);
+  }
+  .spot.active {
+    background-color: white;
+  }
+
+  .spot {
+    .header {
+      .item {
+        margin: 5px;
       }
     }
   }
 }
 
+.photo-container {
+  .photo.fluid-brick {
+    border: 0;
+    box-shadow: initial;
+    background-color: initial;
+    display: inline-block;
+    float: initial;
+    img {
+      width: initial;
+      height: 100%;
+    }
+  }
+}
+
+// photos travels
 .photo-travels {
   .travel {
     width: 200px;
     float: left;
     margin: 10px;
+    cursor: pointer;
+    a:hover {
+      text-decoration: initial;
+    }
   }
 }
 
+// photos move modal
 .album-selection {
   width: 100%;
   height: 100%;
@@ -500,3 +543,40 @@
     background-color: $active-color;
   }
 }
+
+// photo trash
+.photo-trash-container {
+  .photo-trash {
+    padding: 20px 10px;
+    margin: 10px ;
+    @include container-activable(initial, $body-bg, $body-bg);
+  }
+}
+
+// alerts
+.alerts {
+  background-color: #fefce0;
+  color: #737373;
+  height: 45px;
+  line-height: 45px;
+  margin-bottom: 22px;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%;
+}
+
+span.clickable {
+  margin: 0 10px;
+  color: #427fed;
+  cursor: pointer;
+}
+span.clickable:hover {
+  text-decoration: underline;
+}
+
+// selection pane
+.select-pane {
+  position: relative;
+}
+/** photos page *************************************************************************/
+/****************************************************************************************/

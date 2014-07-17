@@ -408,9 +408,6 @@ body {
   .info-col {
     width: 260px; } }
 @media all and (min-width: 1200px) {
-  .container {
-    width: 1180px; }
-
   .photo-col {
     width: 860px;
     margin: 20px 17px 0 0;
@@ -786,9 +783,6 @@ body {
   .info-col {
     width: 260px; } }
 @media all and (min-width: 1200px) {
-  .container {
-    width: 1180px; }
-
   .photo-col {
     width: 860px;
     margin: 20px 17px 0 0;
@@ -1376,6 +1370,8 @@ form#settings {
     width: 100%;
     border-radius: 0; }
 
+/****************************************************************************************/
+/** photo modal page ********************************************************************/
 .photo-modal-fullscreen {
   overflow: hidden; }
   .photo-modal-fullscreen .modal-dialog {
@@ -1601,15 +1597,19 @@ form#settings {
   height: 400px;
   display: block; }
 
-/** photos page */
+/** photo modal page ********************************************************************/
+/****************************************************************************************/
+/****************************************************************************************/
+/** photos page *************************************************************************/
 .container-photos {
-  width: 80%;
-  margin: 0 auto;
   -webkit-transition: top linear 0.3s;
   -moz-transition: top linear 0.3s;
   -ms-transition: top linear 0.3s;
   -o-transition: top linear 0.3s;
-  transition: top linear 0.3s; }
+  transition: top linear 0.3s;
+  margin: 10px 100px;
+  transition: top linear 0.3s;
+  position: relative; }
 
 .container-photos.expand {
   position: absolute;
@@ -1693,20 +1693,45 @@ form#settings {
 
 .photo-container.photo-all .photo {
   width: 200px;
-  height: 200px; }
+  height: 200px;
+  display: inline-block;
+  float: initial; }
 
-.photo-travel .photo-container .photo {
+.photo-travel > .header {
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px; }
+.photo-travel .spot {
+  clear: both;
+  padding: 10px;
+  -webkit-transition: all linear 0.3s;
+  -moz-transition: all linear 0.3s;
+  -ms-transition: all linear 0.3s;
+  -o-transition: all linear 0.3s;
+  transition: all linear 0.3s; }
+.photo-travel .spot.active {
+  background-color: white; }
+.photo-travel .spot .header .item {
+  margin: 5px; }
+
+.photo-container .photo.fluid-brick {
   border: 0;
   box-shadow: initial;
-  background-color: initial; }
-  .photo-travel .photo-container .photo img {
+  background-color: initial;
+  display: inline-block;
+  float: initial; }
+  .photo-container .photo.fluid-brick img {
     width: initial;
     height: 100%; }
 
 .photo-travels .travel {
   width: 200px;
   float: left;
-  margin: 10px; }
+  margin: 10px;
+  cursor: pointer; }
+  .photo-travels .travel a:hover {
+    text-decoration: initial; }
 
 .album-selection {
   width: 100%;
@@ -1748,6 +1773,45 @@ form#settings {
   .album-selection .album.new.travel-selected {
     background-color: #4a87ee; }
 
+.photo-trash-container .photo-trash {
+  padding: 20px 10px;
+  margin: 10px;
+  color: initial;
+  background-color: #ececec;
+  border-color: #ececec;
+  -webkit-transition: all linear 0.3s;
+  -moz-transition: all linear 0.3s;
+  -ms-transition: all linear 0.3s;
+  -o-transition: all linear 0.3s;
+  transition: all linear 0.3s; }
+  .photo-trash-container .photo-trash:hover, .photo-trash-container .photo-trash:focus, .photo-trash-container .photo-trash:active, .photo-trash-container .photo-trash.active {
+    color: initial;
+    background-color: #f9f9f9;
+    border-color: #cdcdcd; }
+
+.alerts {
+  background-color: #fefce0;
+  color: #737373;
+  height: 45px;
+  line-height: 45px;
+  margin-bottom: 22px;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%; }
+
+span.clickable {
+  margin: 0 10px;
+  color: #427fed;
+  cursor: pointer; }
+
+span.clickable:hover {
+  text-decoration: underline; }
+
+.select-pane {
+  position: relative; }
+
+/** photos page *************************************************************************/
+/****************************************************************************************/
 .map-photo-modal {
   overflow-y: hidden; }
   .map-photo-modal .modal-dialog {
@@ -1961,7 +2025,7 @@ form#settings {
   height: 1em;
   border-radius: 50%;
   position: relative;
-  text-indent: -9999em;
+  text-indent: -0.5em;
   -webkit-animation: load5 1.1s infinite ease;
   animation: load5 1.1s infinite ease; }
 
@@ -2098,11 +2162,10 @@ pre.description.hover {
   text-align: center; }
   .ponm-photo-container .loading {
     position: absolute;
-    margin: auto;
+    margin: -70px auto 0 auto;
     display: inline-block;
     line-height: initial;
-    top: 50%;
-    margin-top: -10px; }
+    top: 50%; }
   .ponm-photo-container .loading.ponm-hide {
     display: none; }
   .ponm-photo-container .flat-image {
@@ -2328,7 +2391,8 @@ span.footnotes {
   .navbar-second .navbar {
     border-radius: 0;
     border: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.57); }
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
+    margin-bottom: 0; }
   .navbar-second .navbar-right {
     margin-right: 15px; }
   .navbar-second .navbar.navbar-default .nav.navbar-nav.navbar-default > li > a {

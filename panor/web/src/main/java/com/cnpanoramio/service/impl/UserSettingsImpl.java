@@ -186,7 +186,7 @@ public class UserSettingsImpl implements UserSettingsManager {
 		openInfo.setUsername(user.getUsername());
 
 		// 拥有照片数
-		int count = photoDao.getPhotoCount(user);
+		Long count = photoDao.getPhotoCount(user);
 		openInfo.setPhotoCount(count);
 
 		// 总多少次被查看
@@ -300,19 +300,7 @@ public class UserSettingsImpl implements UserSettingsManager {
 		
 		UserSettings settings = userSettingsDao.get(id);
 		for(Recycle recycle : settings.getRecycle()) {
-			if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
-				try {
-					photoService.removePhoto(recycle.getRecyId());
-					settings.getRecycle().remove(recycle);
-				}catch(DataAccessException ex) {
-				}				
-			}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
-				try {
-					travelService.removeTravel(recycle.getRecyId());
-					settings.getRecycle().remove(recycle);
-				}catch(DataAccessException ex) {
-				}
-			}
+			removeRecycle(settings, recycle);
 		}
 		
 	}
@@ -335,6 +323,36 @@ public class UserSettingsImpl implements UserSettingsManager {
 			}	
 		}
 		
+	}
+
+	@Override
+	public void removeRecycle(Long userId, Long id) {
+		UserSettings settings = userSettingsDao.get(userId);
+		Recycle recycle = recycleDao.get(id);
+		
+		removeRecycle(settings, recycle);
+	}
+	
+	/**
+	 * 永久删除垃圾箱记录
+	 * 
+	 * @param settings
+	 * @param recycle
+	 */
+	private void removeRecycle(UserSettings settings, Recycle recycle) {
+		if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
+			try {
+				photoService.removePhoto(recycle.getRecyId());
+				settings.getRecycle().remove(recycle);
+			}catch(DataAccessException ex) {
+			}				
+		}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
+			try {
+				travelService.removeTravel(recycle.getRecyId());
+				settings.getRecycle().remove(recycle);
+			}catch(DataAccessException ex) {
+			}
+		}
 	}
 	
 }

@@ -346,7 +346,8 @@ module.exports = function (grunt) {
                  '<%= yeoman.app %>/scripts/directives.js',
                  '<%= yeoman.app %>/scripts/services.js',
                  '<%= yeoman.app %>/scripts/services/deparam.js',
-                 '<%= yeoman.app %>/scripts/services/GeocodeService.js'
+                 '<%= yeoman.app %>/scripts/services/GeocodeService.js',
+                 '<%= yeoman.app %>/scripts/services/travel.js'
              ],
            '<%= yeoman.app %>/scripts/ponmApp.directives.min.js': [
                '<%= yeoman.app %>/scripts/directives/filters.js',
@@ -358,7 +359,8 @@ module.exports = function (grunt) {
                '<%= yeoman.app %>/scripts/directives/bdShare.js',
                '<%= yeoman.app %>/scripts/directives/backstretch.js',
                '<%= yeoman.app %>/scripts/directives/waypoint.js',
-               '<%= yeoman.app %>/scripts/directives/ponmMapControls.js'
+               '<%= yeoman.app %>/scripts/directives/ponmMapControls.js',
+               '<%= yeoman.app %>/scripts/directives/ponmRectMultiSelect.js'
                ],
            '<%= yeoman.app %>/scripts/panor/scripts.min.js': [
                '<%= yeoman.app %>/scripts/panor/MapUtils.js',
@@ -392,7 +394,8 @@ module.exports = function (grunt) {
 //               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-video.js',
 //               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js',
 //               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-angular.js'
-//             ],
+//             ]
+//             ,
 //             '<%= yeoman.app %>/scripts/ponmApp.vendor.min.js': [
 //                 '<%= yeoman.app %>/bower_components/jquery/dist/jquery.min.js',
 //                 '<%= yeoman.app %>/bower_components/jquery.rest/dist/jquery.rest.min.js',
@@ -407,6 +410,7 @@ module.exports = function (grunt) {
 //                 '<%= yeoman.app %>/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
 //                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/js/xeditable.min.js',
 //                 '<%= yeoman.app %>/bower_components/angular-ui-utils/ui-utils.min.js',
+//                 '<%= yeoman.app %>/bower_components/angular-ui-router/release/angular-ui-router.js',
 //
 //                 '<%= yeoman.app %>/bower_components/eventie/eventie.js',
 //                 '<%= yeoman.app %>/bower_components/eventEmitter/EventEmitter.min.js',

@@ -28,6 +28,8 @@ public class TravelResponse extends ExceptionResponse {
 		private Long userId;
 		private String username;
 		
+		private UserOpenInfo user;
+		
 		private List<TravelSpot> spots = new ArrayList<TravelSpot>(0);
 		private TravelSpot spot;
 		@JsonProperty("create_time")
@@ -44,6 +46,14 @@ public class TravelResponse extends ExceptionResponse {
 		
 		@JsonProperty("like_count")
 		private Integer likeCount;
+		
+		// 相册封面图片
+		@JsonProperty("album_cover")
+		private String albumCover;
+		
+		// 图片数量
+		@JsonProperty("photo_size")
+		private Integer photoSize;
 		
 		public Long getId() {
 			return id;
@@ -123,6 +133,24 @@ public class TravelResponse extends ExceptionResponse {
 		}
 		public void setLikeCount(Integer likeCount) {
 			this.likeCount = likeCount;
+		}
+		public String getAlbumCover() {
+			return albumCover;
+		}
+		public void setAlbumCover(String albumCover) {
+			this.albumCover = albumCover;
+		}
+		public UserOpenInfo getUser() {
+			return user;
+		}
+		public void setUser(UserOpenInfo user) {
+			this.user = user;
+		}
+		public Integer getPhotoSize() {
+			return photoSize;
+		}
+		public void setPhotoSize(Integer photoSize) {
+			this.photoSize = photoSize;
 		}
 		
 	}

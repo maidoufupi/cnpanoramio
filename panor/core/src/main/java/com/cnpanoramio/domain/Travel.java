@@ -3,7 +3,6 @@ package com.cnpanoramio.domain;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -89,6 +88,11 @@ public class Travel {
 	
 	@OneToMany
 	private Set<Like> likes = new HashSet<Like>(0);
+	
+	// 相册封面图片
+	@ManyToOne
+	@JoinColumn(name="album_cover")
+	private Photo albumCover;
 
 	public Long getId() {
 		return id;
@@ -193,6 +197,14 @@ public class Travel {
 
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public Photo getAlbumCover() {
+		return albumCover;
+	}
+
+	public void setAlbumCover(Photo albumCover) {
+		this.albumCover = albumCover;
 	}
 		
 }

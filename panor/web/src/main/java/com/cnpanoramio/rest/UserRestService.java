@@ -98,7 +98,7 @@ public class UserRestService extends AbstractRestService {
 	@ResponseBody
 	public UserResponse getSettings() {
 		UserResponse reponse = new UserResponse();
-		User me = UserUtil.getCurrentUser(userManager);
+//		User me = UserUtil.getCurrentUser(userManager);
 		UserResponse.Settings settings = userSettingsManager.getCurrentUserSettings();
 		reponse.setStatus(UserResponse.Status.OK.name());
 		reponse.setSettings(settings);
@@ -141,8 +141,7 @@ public class UserRestService extends AbstractRestService {
 			Collection<PhotoProperties> pps = photoService
 					.getUserPhotosWithPhoto(user, photoIdL);
 			reponse.setStatus(UserResponse.Status.OK.name());
-			reponse.setPhotoInfo(new UserResponse.PhotoInfo(photoService
-					.getPhotoCount(user), num));
+			reponse.setPhotoInfo(new UserResponse.PhotoInfo(photoService.getPhotoCount(user), num));
 			reponse.setPhotos(pps);
 		} catch (NumberFormatException ex) {
 			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
@@ -183,7 +182,7 @@ public class UserRestService extends AbstractRestService {
 			// Collection<PhotoProperties> pps =
 			// photoService.getUserPhotosByTag(userIdL, tag);
 			reponse.setStatus(UserResponse.Status.OK.name());
-			reponse.setPhotoInfo(new UserResponse.PhotoInfo(count.intValue()));
+			reponse.setPhotoInfo(new UserResponse.PhotoInfo(count));
 			// reponse.setPhotos(pps);
 		} catch (NumberFormatException ex) {
 			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
@@ -372,10 +371,20 @@ public class UserRestService extends AbstractRestService {
 	
 	@RequestMapping(value = "/{userId}/recycle/{recycleId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public UserResponse cancelRecycle(@PathVariable String userId, @PathVariable String recycleId) {
+	public UserResponse removeRecycle(@PathVariable String userId, @PathVariable String recycleId) {
 		UserResponse reponse = new UserResponse();
 
-		userSettingsManager.emptyRecycleBin(Long.parseLong(userId));
+		userSettingsManager.removeRecycle(Long.parseLong(userId), Long.parseLong(recycleId));
+		
+		reponse.setStatus(PhotoResponse.Status.OK.name());
+		return reponse;
+	}
+	@RequestMapping(value = "/{userId}/recycle/{recycleId}/cancel", method = RequestMethod.GET)
+	@ResponseBody
+	public UserResponse cancelRecycle(@PathVariable String userId, @PathVariable String recycleId) {
+		UserResponse reponse = new UserResponse();
+		
+		userSettingsManager.cancelRecycle(Long.parseLong(userId), Long.parseLong(recycleId));
 		
 		reponse.setStatus(PhotoResponse.Status.OK.name());
 		return reponse;

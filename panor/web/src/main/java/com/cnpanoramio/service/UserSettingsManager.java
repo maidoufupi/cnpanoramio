@@ -135,4 +135,11 @@ public interface UserSettingsManager {
 	 * @param id 删除记录的id
 	 */
 	public void cancelRecycle(Long userId, Long id);
+	
+	/**
+	 * 永久删除操作
+	 * 
+	 * @param id 删除记录的id
+	 */
+	public void removeRecycle(Long userId, Long id);
 }

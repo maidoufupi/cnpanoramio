@@ -64,7 +64,6 @@ public class PhotoServiceImpl implements PhotoManager {
 	private FileService fileService;
 	private UserManager userManager = null;
 
-//	private SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
 	private GpsConverter gpsc = new GpsConverter();
 
 	@Autowired
@@ -233,12 +232,12 @@ public class PhotoServiceImpl implements PhotoManager {
 	}
 
 	@Override
-	public int getPhotoCount(User user) {
+	public Long getPhotoCount(User user) {
 		return photoDao.getPhotoCount(user);
 	}
 
 	@Override
-	public boolean markBest(Long photoId, Long userId, boolean best) {
+	public Boolean markBest(Long photoId, Long userId, boolean best) {
 		Photo photo = photoDao.get(photoId);
 		if (best) {
 			Favorite f = new Favorite(userId);
@@ -308,7 +307,7 @@ public class PhotoServiceImpl implements PhotoManager {
 		
 		// 删除对应旅行
 		photo.getTravelSpot().getPhotos().remove(photo);
-		photo.setTravelSpot(null);		
+//		photo.setTravelSpot(null);		
 		
 		PhotoProperties pp = PhotoUtil.transformProperties(photo);
 				
@@ -640,6 +639,9 @@ public class PhotoServiceImpl implements PhotoManager {
 		Photo photo = photoDao.get(id);
 		checkIsMyPhoto(photo);
 		photo.setDeleted(false);
+		if(null != photo.getTravelSpot()) {
+			photo.getTravelSpot().getPhotos().add(photo);
+		}		
 						
 		PhotoProperties pp = PhotoUtil.transformProperties(photo);
 				
@@ -652,7 +654,7 @@ public class PhotoServiceImpl implements PhotoManager {
 		// 删除oss图片文件
 		fileService.deleteFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType());
 		// 删除数据库记录
-		photoDao.remove(id);
+//		photoDao.remove(id);
 	}
 
 }

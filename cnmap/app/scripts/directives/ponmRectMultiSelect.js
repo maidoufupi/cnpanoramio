@@ -94,7 +94,7 @@ angular.module('ponmApp.directives')
 
                 });
 //                element.bind("mouseup", selectElements);
-                element.bind("mousemove", openSelector);
+                $(document).bind("mousemove", openSelector);
                 $(document).bind("mouseup", function(e) {
                     if(!mousedown) {
                         return;

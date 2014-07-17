@@ -88,20 +88,9 @@ public class PhotoRestService extends AbstractRestService {
 
 		PhotoResponse reponse = new PhotoResponse();
 
-		Long id = null;
-		User me;
-		try {
-			me = UserUtil.getCurrentUser(userManager);
-		} catch (UsernameNotFoundException ex) {
-			reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
-			return reponse;
-		}
-		try {
-			id = Long.parseLong(photoId);
-		} catch (NumberFormatException ex) {
-			reponse.setStatus(PhotoResponse.Status.ID_FORMAT_ERROR.name());
-			return reponse;
-		}
+		User me = UserUtil.getCurrentUser(userManager);
+		Long id = Long.parseLong(photoId);
+
 		try {
 			photoService.markBest(id, me.getId(), true);
 			reponse.setStatus(PhotoResponse.Status.OK.name());
@@ -115,21 +104,8 @@ public class PhotoRestService extends AbstractRestService {
 	@ResponseBody
 	public PhotoResponse removeFvorite(@PathVariable String photoId) {
 		PhotoResponse reponse = new PhotoResponse();
-		Long id = null;
-
-		User me;
-		try {
-			me = UserUtil.getCurrentUser(userManager);
-		} catch (UsernameNotFoundException ex) {
-			reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
-			return reponse;
-		}
-		try {
-			id = Long.parseLong(photoId);
-		} catch (NumberFormatException ex) {
-			reponse.setStatus(PhotoResponse.Status.ID_FORMAT_ERROR.name());
-			return reponse;
-		}
+		User me = UserUtil.getCurrentUser(userManager);
+		Long id = Long.parseLong(photoId);
 		try {
 			photoService.markBest(id, me.getId(), false);
 			reponse.setStatus(PhotoResponse.Status.OK.name());

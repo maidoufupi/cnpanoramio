@@ -41,6 +41,7 @@
     <mvc:view-controller path="/mainMenu" view-name="mainMenu"/>
     <mvc:view-controller path="/travel" view-name="travel"/>
     <mvc:view-controller path="/user" view-name="user"/>
+    <mvc:view-controller path="/photos" view-name="photos"/>
 
     <!-- View Resolver for JSPs -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">

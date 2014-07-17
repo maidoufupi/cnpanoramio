@@ -42,7 +42,7 @@ angular.module('ponmApp.services', [
             });
     }])
     .factory('UserService', ['$window', '$resource', function ($window, $resource) {
-        return $resource($window.apirest + '/user/:userId/:type/:value',
+        return $resource($window.apirest + '/user/:userId/:type/:value/:action',
             {'userId': "@id"}, {
                 getMe: {
                     method: 'GET'
@@ -70,6 +70,22 @@ angular.module('ponmApp.services', [
                 createTag: {
                     method: 'GET',
                     params: {'type': 'tag'}
+                },
+                getRecycleBin: {
+                    method: 'GET',
+                    params: {'type': 'recycle'}
+                },
+                emptyRecycleBin: {
+                    method: 'DELETE',
+                    params: {'type': 'recycle'}
+                },
+                removeRecycle: {
+                    method: 'DELETE',
+                    params: {'type': 'recycle'}
+                },
+                cancelRecycle: {
+                    method: 'GET',
+                    params: {'type': 'recycle', action: 'cancel'}
                 }
             });
     }])
@@ -253,7 +269,7 @@ angular.module('ponmApp.services', [
     .factory('ponmCtxConfig', ['$window', '$resource', function ($window, $resource) {
         return {
             staticCtx: $window.staticCtx || "http://static.photoshows.cn",
-            corsproxyCtx: "http://www.corsproxy.com/static.photoshows.cn",
+            corsproxyCtx: $window.corsproxyCtx || "http://www.corsproxy.com/static.photoshows.cn",
             userId: $window.userId
         }
     }])

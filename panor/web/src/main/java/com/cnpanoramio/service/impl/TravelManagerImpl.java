@@ -71,7 +71,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 	@Override
 	public List<Travel> getTravels(User user) {
 		UserSettings settings = userSettingsDao.get(user.getId());
-		return convertTravels(settings.getTravels());
+		return settings.getTravels();
 	}
 
 	@Override
@@ -121,8 +121,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 			if (null != photoDate) {
 				String tDate = dateFormat.format(photoDate);
 				for (TravelSpot spot : travel.getSpots()) {
-					if (dateFormat.format(spot.getTimeStart())
-							.equalsIgnoreCase(tDate)) {
+					if (null != spot.getTimeStart() && dateFormat.format(spot.getTimeStart()).equalsIgnoreCase(tDate)) {
 						travelSpot = spot;
 						break;
 					}
@@ -283,7 +282,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		Photo photo = null;
 		for(Long photoId : photos) {
 			photo = photoManager.getPhoto(photoId);
-//			PhotoUtil.checkMyPhoto(photo, me);
+			PhotoUtil.checkMyPhoto(photo, me);
 			addSpotPhoto(spot, photo);
 		}
 		return spot.getTravel();
@@ -294,13 +293,8 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 			if(spot.equals(photo.getTravelSpot())) {
 				return true;
 			}else {
-//				log.debug("spot id: " + photo.getTravelSpot().getId());
 				photo.getTravelSpot().getPhotos().remove(photo);
 				photoDao.save(photo);
-//				log.debug("add spot photo: " + photo.getId());
-//				for(Photo p : photo.getTravelSpot().getPhotos()) {
-//					log.debug("spot photo: " + p.getId());
-//				}
 			}
 		}
 		photo.setTravelSpot(spot);

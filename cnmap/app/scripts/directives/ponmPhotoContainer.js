@@ -395,214 +395,7 @@ angular.module('ponmApp.directives')
                     callback();
                 });
             };
-/**
-            var draw360 = function(container, imageSrc, width, height) {
-                var camera, scene, renderer;
 
-                var onPointerDownPointerX,
-                    onPointerDownPointerY,
-                    onPointerDownLon,
-                    onPointerDownLat;
-
-                var texture_placeholder,
-                    isUserInteracting = false,
-                    isAutoWheel = true,
-                    onMouseDownMouseX = 0, onMouseDownMouseY = 0,
-                    lon = 0, onMouseDownLon = 0,
-                    lat = 0, onMouseDownLat = 0,
-                    phi = 0, theta = 0;
-
-                init();
-                animate();
-
-                function init() {
-
-                    var mesh;
-
-                    camera = new THREE.PerspectiveCamera( 75, 2, 1, 1100 );
-                    camera.target = new THREE.Vector3( 0, 0, 0 );
-
-                    scene = new THREE.Scene();
-
-                    var geometry = new THREE.SphereGeometry( 500, 60, 40 );
-                    geometry.applyMatrix( new THREE.Matrix4().makeScale( -1, 1, 1 ) );
-
-                    var material = new THREE.MeshBasicMaterial( {
-                        map: THREE.ImageUtils.loadTexture( imageSrc )
-                    } );
-
-                    mesh = new THREE.Mesh( geometry, material );
-
-                    scene.add( mesh );
-
-                    renderer = new THREE.WebGLRenderer();
-                    renderer.setSize( container.innerWidth(), container.innerHeight());
-
-//                    $animate.removeClass(container.find(".flat-image"), 'show');
-                    container.append( renderer.domElement );
-                    $animate.addClass(angular.element(renderer.domElement), 'show');
-//                    $animate.addClass(container.find(".flat-image-button"), 'show');
-
-                    renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
-                    renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
-                    renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
-                    renderer.domElement.addEventListener( 'mouseleave', onDocumentMouseUp, false );
-                    renderer.domElement.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
-                    renderer.domElement.addEventListener( 'DOMMouseScroll', onDocumentMouseWheel, false);
-
-                    //
-                    renderer.domElement.addEventListener( 'click', function ( event ) {
-
-                        event.preventDefault();
-                        isAutoWheel = !isAutoWheel;
-
-                    }, false );
-
-                    renderer.domElement.addEventListener( 'dragover', function ( event ) {
-
-                        event.preventDefault();
-                        event.dataTransfer.dropEffect = 'copy';
-
-                    }, false );
-
-                    renderer.domElement.addEventListener( 'dragenter', function ( event ) {
-
-                        document.body.style.opacity = 0.5;
-
-                    }, false );
-
-                    renderer.domElement.addEventListener( 'dragleave', function ( event ) {
-
-                        document.body.style.opacity = 1;
-
-                    }, false );
-
-                    renderer.domElement.addEventListener( 'drop', function ( event ) {
-
-                        event.preventDefault();
-
-                        var reader = new FileReader();
-                        reader.addEventListener( 'load', function ( event ) {
-
-                            material.map.image.src = event.target.result;
-                            material.map.needsUpdate = true;
-
-                        }, false );
-                        reader.readAsDataURL( event.dataTransfer.files[ 0 ] );
-
-                        document.body.style.opacity = 1;
-
-                    }, false );
-
-                    //
-                    window.addEventListener( 'resize', onWindowResize, false );
-
-                }
-
-                function onWindowResize() {
-
-//                    camera.aspect = width / height;
-                    camera.updateProjectionMatrix();
-
-                    renderer.setSize( container.innerWidth(), container.innerHeight());
-
-                }
-
-                function onDocumentMouseDown( event ) {
-
-                    event.preventDefault();
-
-                    isUserInteracting = true;
-
-                    onPointerDownPointerX = event.clientX;
-                    onPointerDownPointerY = event.clientY;
-
-                    onPointerDownLon = lon;
-                    onPointerDownLat = lat;
-
-                }
-
-                function onDocumentMouseMove( event ) {
-
-                    if ( isUserInteracting === true ) {
-
-                        lon = ( onPointerDownPointerX - event.clientX ) * 0.1 + onPointerDownLon;
-                        lat = ( event.clientY - onPointerDownPointerY ) * 0.1 + onPointerDownLat;
-
-                    }
-                }
-
-                function onDocumentMouseUp( event ) {
-                    isUserInteracting = false;
-                }
-
-                function onDocumentMouseWheel( event ) {
-
-                    event.preventDefault();
-
-                    var fov = camera.fov;
-                    // WebKit
-                    if ( event.wheelDeltaY ) {
-
-                        fov -= event.wheelDeltaY * 0.05;
-
-                        // Opera / Explorer 9
-                    } else if ( event.wheelDelta ) {
-
-                        fov -= event.wheelDelta * 0.05;
-
-                        // Firefox
-                    } else if ( event.detail ) {
-
-                        fov += event.detail * 1.0;
-
-                    }
-
-                    if(fov > 10 && fov < 150) {
-                        camera.fov = fov;
-                    }
-                    $log.debug("camera.fov " + camera.fov);
-                    camera.updateProjectionMatrix();
-
-                }
-
-                function animate() {
-
-                    requestAnimationFrame( animate );
-                    update();
-
-                }
-
-                function update() {
-
-                    if ( isUserInteracting === false && isAutoWheel ) {
-
-                        lon += 0.1;
-
-                    }
-
-                    lat = Math.max( - 85, Math.min( 85, lat ) );
-                    phi = THREE.Math.degToRad( 90 - lat );
-                    theta = THREE.Math.degToRad( lon );
-
-                    camera.target.x = 500 * Math.sin( phi ) * Math.cos( theta );
-                    camera.target.y = 500 * Math.cos( phi );
-                    camera.target.z = 500 * Math.sin( phi ) * Math.sin( theta );
-
-                    camera.lookAt( camera.target );
-
-
-                     // distortion
-//                     camera.position.copy( camera.target ).negate();
-
-
-//                    renderer.render( scene, camera );
-//
-//                }
-//
-//                return renderer.domElement;
-//            };
-*/
             return {
                 restrict: 'EA',
                 templateUrl: "views/ponmPhotoContainer.html",
@@ -623,32 +416,9 @@ angular.module('ponmApp.directives')
                     // 360度全景图标
                     clickCreateP360.on("click", function(e) {
                         e.preventDefault();
-                        hide(imgContainer);
-                        show(canvas);
-
-                        if(canvas.find("canvas").length && clickCreateP360.ponmPhotoSrcL == attrs.ponmPhotoSrcL1) {
-                            show(canvas);
-                            photosphere.restart();
-                        }else {
-                            clickCreateP360.ponmPhotoSrcL = attrs.ponmPhotoSrcL1;
-                            canvas.find(".p360-canvas").empty();
-                            $animate.removeClass(loading, "ponm-hide");
-                            photosphere = new Photosphere(attrs.ponmPhotoSrcP360)
-                                .setEXIF({
-                                    "full_width" : attrs.ponmPhotoWidth,
-                                    "full_height" : attrs.ponmPhotoHeight,
-                                    "crop_width" : attrs.ponmPhotoWidth,
-                                    "crop_height" : attrs.ponmPhotoHeight,
-                                    "x" : 0,
-                                    "y" : 0
-                                });
-                            photosphere.loadPhotosphere(canvas.find(".p360-canvas"))
-                                .then(function() {
-                                    $animate.addClass(loading, "ponm-hide");
-                                });
-
-                        }
+                        createP360();
                     });
+
                     clickCreateP360.mouseenter(function(e) {
                         clickCreateP360.find(".icon-p360").css("opacity", 1);
                     });
@@ -659,9 +429,6 @@ angular.module('ponmApp.directives')
                     // 平面图标
                     clickBackFlat.on("click", function(e) {
                         e.preventDefault();
-                        $log.debug("click on image360");
-//                        $animate.removeClass(canvas, "show");
-//                        $animate.addClass(imgContainer, 'ponm-show');
                         hide(canvas);
                         show(imgContainer);
                         photosphere.stop();
@@ -773,7 +540,6 @@ angular.module('ponmApp.directives')
                                 imgWidth = img.outerWidth();
                                 imgHeight = img.outerHeight();
                                 imgScale = imgHeight / imgWidth;
-//                                $log.debug("image: "+ imgWidth + "x" + imgHeight);
 
                                 setImageWidthHeight();
                                 show(imgContainer);
@@ -786,7 +552,11 @@ angular.module('ponmApp.directives')
                                 angular.element(image1).css("position", "absolute");
                                 angular.element(image1).css("top", "0");
                             }
-                            image1.src = attrs.ponmPhotoSrcL1;
+                            if(is360) {
+                                image1.src = attrs.ponmPhotoSrcP360;
+                            }else {
+                                image1.src = attrs.ponmPhotoSrcL1;
+                            }
 
                             imgContainer.find(".flat-canvas").append(image1);
 
@@ -816,6 +586,34 @@ angular.module('ponmApp.directives')
 
                     function hide(element) {
                         $animate.removeClass(element, "ponm-show");
+                    }
+
+                    function createP360() {
+                        hide(imgContainer);
+                        show(canvas);
+
+                        if(canvas.find("canvas").length && clickCreateP360.ponmPhotoSrcL == attrs.ponmPhotoSrcL1) {
+                            show(canvas);
+                            photosphere.restart();
+                        }else {
+                            clickCreateP360.ponmPhotoSrcL = attrs.ponmPhotoSrcL1;
+                            canvas.find(".p360-canvas").empty();
+                            $animate.removeClass(loading, "ponm-hide");
+
+                            photosphere = new Photosphere(attrs.ponmPhotoSrcP360)
+                                .setEXIF({
+                                    "full_width" : attrs.ponmPhotoWidth,
+                                    "full_height" : attrs.ponmPhotoHeight,
+                                    "crop_width" : attrs.ponmPhotoWidth,
+                                    "crop_height" : attrs.ponmPhotoHeight,
+                                    "x" : 0,
+                                    "y" : 0
+                                });
+                            photosphere.loadPhotosphere(canvas.find(".p360-canvas"))
+                                .then(function() {
+                                    $animate.addClass(loading, "ponm-hide");
+                                });
+                        }
                     }
                 }
             };

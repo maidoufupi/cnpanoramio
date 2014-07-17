@@ -1,3 +1,6 @@
+@import '_variables.scss';
+@import '_mixins.scss';
+
 @import 'comm.scss';
 @import 'style.scss';
 @import 'index.scss';
@@ -118,12 +121,12 @@ pre.description.hover {
 
   .loading {
     position: absolute;
-    margin: auto;
+    margin: -70px auto 0 auto;
     display: inline-block;
     line-height: initial;
     top: 50%;
-    margin-top: -10px;
   }
+
   .loading.ponm-hide {
     display: none;
   }
@@ -172,14 +175,6 @@ pre.description.hover {
     max-height: 100%;
     margin: auto;
   }
-
-//  img.ng-animate.show-add, img.ng-animate.show-remove {
-//    opacity: 1;
-//  }
-//
-//  img.show {
-//    opacity: 1;
-//  }
 
   canvas {
     position: absolute;
@@ -421,6 +416,7 @@ span.footnotes {
     border-radius: 0;
     border: 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
+    margin-bottom: 0;
   }
 
   .navbar-right {

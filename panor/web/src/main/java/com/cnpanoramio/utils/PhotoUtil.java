@@ -1,8 +1,5 @@
 package com.cnpanoramio.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.appfuse.model.User;
 import org.springframework.security.access.AccessDeniedException;
 
@@ -64,7 +61,7 @@ public class PhotoUtil {
 		pp.setFileSize(photo.getFileSize());
 		pp.setFileName(photo.getName());
 		
-		pp.setOssKey(photo.getId() + "." + photo.getFileType());
+		pp.setOssKey(getPhotoOssKey(photo));
 		
 		// 旅行
 		if(null != photo.getTravelSpot()) {
@@ -120,5 +117,9 @@ public class PhotoUtil {
 		if (!photo.getOwner().equals(me)) {
 			throw new AccessDeniedException("Access Denied! Photo Id: "	+ photo.getId());
 		}
+	}
+	
+	public static String getPhotoOssKey(Photo photo) {
+		return photo.getId() + "." + photo.getFileType();
 	}
 }

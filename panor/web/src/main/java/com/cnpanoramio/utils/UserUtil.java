@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
 
 public class UserUtil {
@@ -61,5 +62,13 @@ public class UserUtil {
 		settings.setPrivateMessages(userSettings.getPrivateMessages());
 		settings.setUrlName(userSettings.getUrlName());
 		return settings;
+	}
+	
+	public synchronized static UserOpenInfo getSimpleOpenInfo(UserSettings userSettings) {
+		UserOpenInfo openInfo = new UserOpenInfo();
+		openInfo.setId(userSettings.getId());
+		openInfo.setName(userSettings.getName());
+		openInfo.setAvatar(userSettings.getAvatar().getId());
+		return openInfo;
 	}
 }

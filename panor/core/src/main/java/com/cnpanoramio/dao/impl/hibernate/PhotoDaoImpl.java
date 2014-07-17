@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
 import org.appfuse.model.User;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.PhotoDao;
-import com.cnpanoramio.domain.Comment;
 import com.cnpanoramio.domain.Photo;
 
 @Repository("photoDao")
@@ -22,11 +24,10 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Photo> getUserPhotos(User user) {
-		Query photoListQuery = getSession().createQuery("from Photo p where owner = :owner order by createDate desc");
-				
-		photoListQuery.setParameter("owner", user);
-
-		return photoListQuery.list();
+		return getSession().createCriteria(Photo.class)
+			.add(Restrictions.eq("owner", user))
+			.add(Restrictions.eq("deleted", false))
+			.addOrder(Order.desc("createDate")).list();
 	}
 	
 	public Photo savePhoto(Photo photo) {
@@ -47,23 +48,26 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 	@Override
 	public List<Photo> getUserPhotos(User user, int pageSize, int pageNo) {
 		// 按最新到最旧排列图片
-		Query query = getSession().createQuery("from Photo where owner = :owner order by createDate desc");
-		
-		query.setParameter("owner", user);
-		query.setFirstResult((pageNo - 1) * pageSize);  
-        query.setMaxResults(pageSize);  
+        Criteria criteria = getSession().createCriteria(Photo.class)
+			.add(Restrictions.eq("owner", user))
+			.add(Restrictions.eq("deleted", false))
+			.addOrder(Order.desc("createDate"));
+        criteria.setFirstResult((pageNo - 1) * pageSize).setMaxResults(pageSize);
   
-		List<Photo> res = query.list();
-		return res;
+		return criteria.list();
 	}
 
 	@Override
-	public int getPhotoCount(User user) {
-		Query query = getSession().createQuery("select count(*) from Photo where owner = :owner");
+	public Long getPhotoCount(User user) {
+		Criteria criteria = getSession().createCriteria(Photo.class)
+				.add(Restrictions.eq("owner", user))
+				.add(Restrictions.eq("deleted", false));
+		return (Long)criteria.setProjection(Projections.rowCount()).uniqueResult();
+//		Query query = getSession().createQuery("select count(*) from Photo where owner = :owner");
+//		
+//		query.setParameter("owner", user);
 		
-		query.setParameter("owner", user);
-		
-		return ((Long)query.list().get(0)).intValue();
+//		return ((Long)query.list().get(0)).intValue();
 	}
 
 	@Override
@@ -76,7 +80,8 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 
 	@Override
 	public Long getUserPhotoCountBytag(User user, String tag) {
-		Query query = getSession().createQuery("select count(distinct p.id) from Photo as p inner join p.tags as t where p.owner = :owner and t.tag = :tag");
+		
+		Query query = getSession().createQuery("select count(distinct p.id) from Photo as p inner join p.tags as t where p.owner = :owner and p.deleted = false and t.tag = :tag");
 		
 		query.setParameter("owner", user);
 		query.setParameter("tag", tag);
@@ -86,7 +91,7 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 
 	@Override
 	public List<Photo> getUserPhotosByTag(User user, String tag) {
-		Query query = getSession().createQuery("select distinct p from Photo as p inner join p.tags as t where p.owner = :owner and t.tag = :tag");
+		Query query = getSession().createQuery("select distinct p from Photo as p inner join p.tags as t where p.owner = :owner and p.deleted = false and t.tag = :tag");
 		
 		query.setParameter("owner", user);
 		query.setParameter("tag", tag);
@@ -97,7 +102,7 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 	@Override
 	public List<Photo> getUserPhotoPageByTag(User user, String tag,
 			int pageSize, int pageNo) {
-		Query query = getSession().createQuery("select distinct p from Photo as p inner join p.tags as t where p.owner = :owner and t.tag = :tag");
+		Query query = getSession().createQuery("select distinct p from Photo as p inner join p.tags as t where p.owner = :owner and p.deleted = false and t.tag = :tag");
 		
 		query.setParameter("owner", user);
 		query.setParameter("tag", tag);

@@ -1,0 +1,46 @@
+
+<div class="photo-trash-container">
+    <div ng-repeat="travel in travels"
+         class="photo-trash"
+         ui-event="{ mouseenter : 'mouseenter=true', mouseleave: 'mouseenter=false' }"
+         ng-class="{'active':mouseenter}">
+        <div class="media user-info">
+            <a class="pull-left">
+                <img class="media-object img-circle"
+                     ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png">
+            </a>
+
+            <div class="media-body">
+                <h4 class="media-heading">{{travel.name}}</h4>
+            </div>
+        </div>
+
+        <div photo-fluid-container
+             fluid-line-border="0"
+             fluid-line-item-margin="1"
+             item-selector=".ponm-photo"
+             class="photo-fluid-container photo-container">
+            <div ng-repeat="photo in travel.photos"
+                 ng-controller="PhotosPhotoCtrl"
+                 class="fluid-brick ponm-photo photo"
+                 ponm-hover>
+                <a ng-click="activePhoto(photo)"
+                   href="">
+                    <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                         ng-class="{'selectable': selectable&&!photo.actionSelected,
+                            'selected': photo.actionSelected}">
+                </a>
+
+                <div class="action-select"
+                     ng-class="{'action': !selectable, 'ponm-show': selectable}"
+                     ng-click="selectPhoto($event, photo, spot.photos)">
+                        <span class="icon-photo-select"
+                              ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
+                </div>
+                <div ng-if="photo.is360">
+                    <div class="icon-photo-p360"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

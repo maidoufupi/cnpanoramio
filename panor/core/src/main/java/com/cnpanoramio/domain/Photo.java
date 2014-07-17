@@ -63,10 +63,10 @@ public class Photo implements Comparable<Photo> {
 	private String description;
 
 	@Column(nullable = true)
-	private boolean deleted;
+	private Boolean deleted;
 
 	@Column(name = "mark_best")
-	private boolean markBest;
+	private Boolean markBest;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<PhotoGps> gps;
@@ -193,19 +193,19 @@ public class Photo implements Comparable<Photo> {
 		this.description = description;
 	}
 
-	public boolean isDeleted() {
+	public Boolean isDeleted() {
 		return deleted;
 	}
 
-	public void setDeleted(boolean deleted) {
+	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
 
-	public boolean isMarkBest() {
+	public Boolean isMarkBest() {
 		return markBest;
 	}
 
-	public void setMarkBest(boolean markBest) {
+	public void setMarkBest(Boolean markBest) {
 		this.markBest = markBest;
 	}
 
@@ -290,14 +290,6 @@ public class Photo implements Comparable<Photo> {
 			}
 		}
 	}
-
-//	public Travel getTravel() {
-//		return travel;
-//	}
-//
-//	public void setTravel(Travel travel) {
-//		this.travel = travel;
-//	}
 
 	public Boolean isIs360() {
 		return is360;

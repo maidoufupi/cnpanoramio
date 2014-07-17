@@ -161,7 +161,7 @@ angular.module('ponmApp.directives')
             return {
                 restrict: 'A',
                 link: function (scope, element, attrs, ngModel) {
-                    var photoAction = element.find("> .action");
+
                     element.on('mouseenter', function (e) {
                         var photoAction = element.find("> .action");
                         $animate.addClass(photoAction, "ponm-show");

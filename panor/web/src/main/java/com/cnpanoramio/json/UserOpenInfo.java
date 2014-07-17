@@ -19,26 +19,24 @@ public class UserOpenInfo {
 	
 	// 系统用户名
 	private String username;
-	
-//	@JsonProperty("user_avatar")
-//	private String userAvatar;
-	
+		
 	// 昵称
 	private String name;
 	
+	// 头像
 	private Long avatar;
 	
 	// 拥有的图片总数
 	@JsonProperty("photo_count")
-	private int photoCount;
+	private Long photoCount;
 	
 	// 其图片被查看总数
 	@JsonProperty("photo_views")
-	private int photoViews;
+	private Integer photoViews;
 
 	// 其图片被加星总数
 	@JsonProperty("photo_favorites")
-	private int photoFavorites;
+	private Integer photoFavorites;
 	
 	// 其所有标签
 	private List<String> tags = new ArrayList<String>(0);
@@ -70,27 +68,27 @@ public class UserOpenInfo {
 		this.avatar = avatar;
 	}
 
-	public int getPhotoCount() {
+	public Long getPhotoCount() {
 		return photoCount;
 	}
 
-	public void setPhotoCount(int photoCount) {
+	public void setPhotoCount(Long photoCount) {
 		this.photoCount = photoCount;
 	}
 
-	public int getPhotoViews() {
+	public Integer getPhotoViews() {
 		return photoViews;
 	}
 
-	public void setPhotoViews(int photoViews) {
+	public void setPhotoViews(Integer photoViews) {
 		this.photoViews = photoViews;
 	}
 
-	public int getPhotoFavorites() {
+	public Integer getPhotoFavorites() {
 		return photoFavorites;
 	}
 
-	public void setPhotoFavorites(int photoFavorites) {
+	public void setPhotoFavorites(Integer photoFavorites) {
 		this.photoFavorites = photoFavorites;
 	}
 
@@ -116,14 +114,5 @@ public class UserOpenInfo {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-//	public String getUserAvatar() {
-//		return userAvatar;
-//	}
-//
-//	public void setUserAvatar(String userAvatar) {
-//		this.userAvatar = userAvatar;
-//	}	
-	
+	}	
 }

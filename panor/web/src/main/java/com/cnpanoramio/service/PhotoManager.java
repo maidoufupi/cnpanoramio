@@ -86,7 +86,7 @@ public interface PhotoManager {
 	 * 
 	 * @return The photos count for the user.
 	 */
-	public int getPhotoCount(User user);
+	public Long getPhotoCount(User user);
 	
 	/**
 	 * 获取用户图片在用户全部图片中的位置（按时间由大到小排序）
@@ -121,7 +121,7 @@ public interface PhotoManager {
 	 * @param best
 	 * @return
 	 */
-	public boolean markBest(Long photoId, Long userId, boolean best);
+	public Boolean markBest(Long photoId, Long userId, boolean best);
 	
 	/**
 	 * 设置图片属性信息

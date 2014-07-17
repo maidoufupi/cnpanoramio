@@ -37,7 +37,11 @@ public class TravelServiceImpl implements TravelService {
 	@Override
 	public List<Travel> getTravels(User user) {
 		List<com.cnpanoramio.domain.Travel> travels = travelManager.getTravels(user);
-		return convertTravels(travels);
+		List<Travel> ts = convertTravels(travels);
+		for(Travel travel : ts) {
+			travel.setSpots(null);
+		}
+		return ts;
 	}
 
 	@Override
@@ -56,10 +60,11 @@ public class TravelServiceImpl implements TravelService {
 
 	public static Travel convertTravel(com.cnpanoramio.domain.Travel travel) {
 		Travel t = new Travel();
-		BeanUtils.copyProperties(travel, t, new String[]{"spots", "user", "spot"});
+		BeanUtils.copyProperties(travel, t, new String[]{"spots", "user", "spot", "albumCover"});
 		if(null != travel.getUser()) {
 			t.setUserId(travel.getUser().getId());
 			t.setUsername(travel.getUser().getName());
+			t.setUser(UserUtil.getSimpleOpenInfo(travel.getUser()));
 		}
 		if(null != travel.getSpot()) {
 			t.setSpot(convertTravelSpot(travel.getSpot()));
@@ -67,6 +72,15 @@ public class TravelServiceImpl implements TravelService {
 		for(com.cnpanoramio.domain.TravelSpot travelSpot : travel.getSpots()) {
 			t.getSpots().add(convertTravelSpot(travelSpot));
 		}
+		if(null != travel.getAlbumCover()) {
+			t.setAlbumCover(PhotoUtil.getPhotoOssKey(travel.getAlbumCover()));
+		}
+		// photo size
+		Integer photoSize = 0;
+		for(com.cnpanoramio.domain.TravelSpot spot : travel.getSpots()) {
+			photoSize += spot.getPhotos().size();
+		}
+		t.setPhotoSize(photoSize);
 		return t;
 	}
 	

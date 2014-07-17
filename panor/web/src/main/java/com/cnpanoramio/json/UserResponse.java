@@ -14,6 +14,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.cnpanoramio.MapVendor;
+import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.UserSettings;
 
@@ -39,26 +40,26 @@ public class UserResponse extends ExceptionResponse {
 			super();
 		}
 		
-		public PhotoInfo(int photoCount) {
+		public PhotoInfo(Long photoCount) {
 			this.photoCount = photoCount;
 		}
 		
-		public PhotoInfo(int photoCount, int photoNum) {
+		public PhotoInfo(Long photoCount, int photoNum) {
 			this.photoCount = photoCount;
 			this.photoNum = photoNum;
 		}
 		
 		@JsonProperty("photo_count")
-		private int photoCount;
+		private Long photoCount;
 		
 		@JsonProperty("photo_num")
 		private int photoNum;
 		
-		public int getPhotoCount() {
+		public Long getPhotoCount() {
 			return photoCount;
 		}
 
-		public void setPhotoCount(int photoCount) {
+		public void setPhotoCount(Long photoCount) {
 			this.photoCount = photoCount;
 		}
 
@@ -256,7 +257,9 @@ public class UserResponse extends ExceptionResponse {
 		
 		@JsonProperty("recy_id")
 		private Long recyId;
-
+		
+		private PhotoProperties photo;
+		
 		public Long getId() {
 			return id;
 		}
@@ -296,7 +299,14 @@ public class UserResponse extends ExceptionResponse {
 		public void setRecyId(Long recyId) {
 			this.recyId = recyId;
 		}
-		
+
+		public PhotoProperties getPhoto() {
+			return photo;
+		}
+
+		public void setPhoto(PhotoProperties photo) {
+			this.photo = photo;
+		}	
 		
 	}
 

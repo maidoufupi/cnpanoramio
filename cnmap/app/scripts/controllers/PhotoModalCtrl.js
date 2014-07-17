@@ -142,12 +142,6 @@ angular.module('ponmApp.controllers')
                 }
                 extension = extension + ".jpg";
                 return $scope.staticCtx + '/' + photo.oss_key + extension;
-
-//                if(photo.is360) {
-//                    return $scope.apirest + "/photo/" + photo.id + "/oss";
-//                }else {
-//                    return $scope.staticCtx + '/' + photo.oss_key + '@!photo-preview-lg';
-//                }
             };
 
             /**

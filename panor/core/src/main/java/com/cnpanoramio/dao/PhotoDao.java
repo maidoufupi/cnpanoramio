@@ -33,7 +33,7 @@ public interface PhotoDao extends GenericDao<Photo, Long>{
 	 * @param user
 	 * @return
 	 */
-	public int getPhotoCount(User user);
+	public Long getPhotoCount(User user);
 	
 	/**
 	 * 获取用户某个tag的图片总数
