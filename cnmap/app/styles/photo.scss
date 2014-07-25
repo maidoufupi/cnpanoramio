@@ -453,10 +453,7 @@
   .spot {
     clear: both;
     padding: 10px;
-    @include transition-linear(all);
-  }
-  .spot.active {
-    background-color: white;
+    @include activable(initial, $body-bg, $body-bg);
   }
 
   .spot {
@@ -549,7 +546,7 @@
   .photo-trash {
     padding: 20px 10px;
     margin: 10px ;
-    @include container-activable(initial, $body-bg, $body-bg);
+    @include activable(initial, $body-bg, $body-bg);
   }
 }
 

@@ -112,5 +112,30 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 		return query.list();
 	}
 
+	@Override
+	public List<Photo> getUserPhotosBounds(User user, int pageSize, int pageNo,
+			Double swLat, Double swLng, Double neLat, Double neLng) {
+		// 按最新到最旧排列图片
+        Criteria criteria = getSession().createCriteria(Photo.class)
+			.add(Restrictions.eq("owner", user))
+			.add(Restrictions.between("gpsPoint.lat", swLat, neLat))
+			.add(Restrictions.eq("deleted", false))
+			.addOrder(Order.desc("createDate"));
+        
+        if (neLng > swLng) {
+        	criteria.add(Restrictions.between("gpsPoint.lng", swLng, neLng));
+		} else {
+			criteria.add(Restrictions.or(
+					Restrictions.between("gpsPoint.lng", -180D, neLng), 
+					Restrictions.between("gpsPoint.lng", swLng, 180D)));
+		}
+        
+        criteria
+        	.setFirstResult((pageNo - 1) * pageSize)
+        	.setMaxResults(pageSize);
+  
+		return criteria.list();
+	}
+
 	
 }

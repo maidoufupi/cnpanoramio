@@ -31,7 +31,10 @@
         this.preZoom = 0;
         this.preBounds = null;
 
-        this.opts = $.extend( {clickable: true}, opts);
+        this.opts = $.extend(
+            {clickable: true,
+             auto: true},
+            opts);
 
         if (this.opts.map) {
             this.setMap(this.opts.map);
@@ -77,27 +80,24 @@
 
             var that = this;
             function getBoundsThumbnails() {
+                $(that).trigger("map_changed", [that.getBounds(), that.getLevel(), that.getSize()]);
+
+                if(!that.opts.auto) {
+                    return;
+                }
+
                 var bounds = map.getBounds();
                 var size = map.getSize();
-                var thumbs = that.getBoundsThumbnails({
-                        ne: {
-                            lat: bounds.getNorthEast().lat,
-                            lng: bounds.getNorthEast().lng
-                        },
-                        sw: {
-                            lat: bounds.getSouthWest().lat,
-                            lng: bounds.getSouthWest().lng
-                        }
-                    },
-                    map.getZoom(),
-                    {width: size.getWidth(),
-                     height: size.getHeight()},
+                var thumbs = that.getBoundsThumbnails(
+                    that.getBounds(),
+                    that.getLevel(),
+                    that.getSize(),
                     function(thumbs) {
                         var photoIds = [];
                         var photos = {};
                         for (var i in thumbs) {
-                            photoIds.push(thumbs[i].photo_id);
-                            photos[thumbs[i].photo_id] = thumbs[i];
+                            photoIds.push(thumbs[i].id);
+                            photos[thumbs[i].id] = thumbs[i];
                         }
                         cnmap.utils.compareArray(
                             thumbPhotoIds,
@@ -118,45 +118,71 @@
                                 }
 
                                 if(b) {
-                                    thumbPhotoIds.push(b);
-                                    if(labels[b]) {
-                                        labels[b].setMap(map);
-                                    }else{
-                                        var label = new AMap.Marker({
-                                            map: map,
-                                            position: new AMap.LngLat(photos[b].lng, photos[b].lat), //基点位置
-                                            offset: new AMap.Pixel(0, 0), //相对于基点的偏移位置
-                                            content: that.getLabelContent(photos[b].oss_key)  //自定义点标记覆盖物内容
-                                        });
-                                        label.photoId = b;
-                                        if(that.opts.clickable) {
-                                            AMap.event.addListener(
-                                                label,
-                                                'click',
-                                                function () {
-                                                    if (opts.suppressInfoWindows) {
-                                                        if (infoWindow.getIsOpen()) {
-                                                            infoWindow.close();
-                                                        } else {
-                                                            infoWindow.setContent(that.getInfoWindowContent(photos[this.photoId]));
-                                                            infoWindow.open(map, this.getPosition());
-                                                        }
-                                                    }else {
-                                                        $(that).trigger("data_clicked", [this.photoId]);
-                                                    }
-                                                });
-                                        }
-                                        labels[b] = label;
-                                        label.setMap(map);  //在地图上添加点
-                                    }
-
+                                    that.createMarker(photos[b]);
                                 }
                             }
-                        )
+                        );
                     // trigger data_changed event
                     $(that).trigger("data_changed", [thumbs]);
                 })
             }
+        };
+
+        /**
+         * 创建图片图标
+         *
+         * @param photo
+         */
+        this.createMarker = function(photo) {
+            var map = this.opts.map;
+            var that = this;
+            thumbPhotoIds.push(photo.id);
+            if(labels[photo.id]) {
+                labels[photo.id].setMap(map);
+            }else {
+                var label = new AMap.Marker({
+                    map: map,
+                    position: new AMap.LngLat(photo.point.lng, photo.point.lat), //基点位置
+                    offset: new AMap.Pixel(0, 0), //相对于基点的偏移位置
+                    content: that.getLabelContent(photo.oss_key)  //自定义点标记覆盖物内容
+                });
+                label.photoId = photo.id;
+                if (that.opts.clickable) {
+                    AMap.event.addListener(
+                        label,
+                        'click',
+                        function () {
+                            if (opts.suppressInfoWindows) {
+                                if (infoWindow.getIsOpen()) {
+                                    infoWindow.close();
+                                } else {
+                                    infoWindow.setContent(that.getInfoWindowContent(photos[this.photoId]));
+                                    infoWindow.open(map, this.getPosition());
+                                }
+                            } else {
+                                $(that).trigger("data_clicked", [this.photoId]);
+                            }
+                        });
+                }
+                labels[photo.id] = label;
+                label.setMap(map);  //在地图上添加点
+            }
+        };
+
+        /**
+         * 由外部调用创建图片的图标
+         *
+         * @param photos
+         */
+        this.createPhotosMarker = function(photos) {
+            this.clearMap();
+            // 清除缓存
+            labels = [];
+            thumbPhotoIds = [];
+            var that = this;
+            jQuery.each(photos, function (key, photo) {
+                that.createMarker(photo);
+            });
         };
 
         this.setOptions = function (options/*:PanoramioLayerOptions*/) { //	None
@@ -164,7 +190,9 @@
         };
 
         this.trigger = function(event) {
-            AMap.event.trigger(this.opts.map, "moveend");
+            if(this.opts.map) {
+                AMap.event.trigger(this.opts.map, "moveend");
+            }
         };
 
 //        function open() {
@@ -175,6 +203,40 @@
 
         this.center_changed = function () {
 //            infoWindows = [];
+        };
+
+        this.getBounds = function() {
+            var bounds = this.opts.map.getBounds();
+            return {
+                ne: {
+                    lat: bounds.getNorthEast().lat,
+                    lng: bounds.getNorthEast().lng
+                },
+                sw: {
+                    lat: bounds.getSouthWest().lat,
+                    lng: bounds.getSouthWest().lng
+                }
+            };
+        };
+
+        this.getLevel = function() {
+            return this.opts.map.getZoom();
+        };
+
+        this.getSize = function() {
+            var size = this.opts.map.getSize();
+            return {
+                width: size.getWidth(),
+                height: size.getHeight()
+            };
+        };
+
+        this.clearMap = function() {
+            this.opts.map.clearMap();
+        };
+
+        this.setAuto = function(auto) {
+            this.opts.auto = auto;
         };
     };
 

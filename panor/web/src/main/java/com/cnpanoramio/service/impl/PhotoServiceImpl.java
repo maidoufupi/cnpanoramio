@@ -656,5 +656,4 @@ public class PhotoServiceImpl implements PhotoManager {
 		// 删除数据库记录
 //		photoDao.remove(id);
 	}
-
 }

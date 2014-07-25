@@ -2,7 +2,6 @@ package com.cnpanoramio.domain;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -17,6 +16,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 @Entity
 @Table(name = "travel_spot")
@@ -26,10 +28,12 @@ public class TravelSpot {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@DocumentId
 	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name="travel_id")
+	@IndexedEmbedded
 	private Travel travel;
 	
 	@OneToMany
@@ -48,12 +52,15 @@ public class TravelSpot {
 	private Date timeEnd;
 	
 	@Column(name="address")
+	@Field
 	private String address;
 	
 	@Column(name="title")
+	@Field
 	private String title;
 	
 	@Column(name="description")
+	@Field
 	private String description;
 	
 	@Column(name="center_lat")

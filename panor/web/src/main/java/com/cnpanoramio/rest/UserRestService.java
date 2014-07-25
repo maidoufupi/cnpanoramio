@@ -108,23 +108,38 @@ public class UserRestService extends AbstractRestService {
 	@RequestMapping(value = "/{userId}/photos/{pageSize}/{pageNo}", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse getPhotos(@PathVariable String userId,
-			@PathVariable String pageSize, @PathVariable String pageNo) {
+								  @PathVariable String pageSize, 
+								  @PathVariable String pageNo,
+								  @RequestParam(value = "swlat", required = false) String swLat,
+								  @RequestParam(value = "swlng", required = false) String swLng,
+								  @RequestParam(value = "nelat", required = false) String neLat,
+								  @RequestParam(value = "nelng", required = false) String neLng) {
 
 		UserResponse reponse = new UserResponse();
+		
+		Double swLatD = Double.parseDouble(swLat);
+		Double swLngD = Double.parseDouble(swLng);
+		Double neLatD = Double.parseDouble(neLat);
+		Double neLngD = Double.parseDouble(neLng);
+		
+		int pageSizeI = Integer.valueOf(pageSize).intValue();
+		int pageNoI = Integer.valueOf(pageNo).intValue();
 
-		try {
-			int pageSizeI, pageNoI;
-			pageSizeI = Integer.valueOf(pageSize).intValue();
-			pageNoI = Integer.valueOf(pageNo).intValue();
-
-			Collection<PhotoProperties> photos = photoService.getPhotosForUser(
+		Collection<PhotoProperties> photos = null;
+		
+		if(null != swLatD &&
+		   null != swLngD &&
+		   null != neLatD &&
+		   null != neLngD) {
+			photos = userSettingsManager.getPhotosForUserBounds(userId, pageSizeI, pageNoI, swLatD, swLngD, neLatD, neLngD);
+		}else {
+			photos = photoService.getPhotosForUser(
 					userId, pageSizeI, pageNoI);
-			reponse.setStatus(UserResponse.Status.OK.name());
-			reponse.setPhotos(photos);
-		} catch (NumberFormatException ex) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
-			return reponse;
 		}
+		
+		reponse.setStatus(UserResponse.Status.OK.name());
+		reponse.setPhotos(photos);
+
 		return reponse;
 	}
 

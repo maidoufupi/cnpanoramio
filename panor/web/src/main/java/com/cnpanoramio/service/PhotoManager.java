@@ -80,7 +80,7 @@ public interface PhotoManager {
 	 * @return The photos for the user.
 	 */
 	public Collection<PhotoProperties> getPhotosForUser(String id, int pageSize, int pageNo);
-
+	
 	/**
 	 * Get the photos count for the user.
 	 * 

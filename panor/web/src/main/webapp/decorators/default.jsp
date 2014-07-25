@@ -112,7 +112,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container waypoint-scrollable">
     	
         <%@ include file="/common/messages.jsp" %>
         <div class="row">

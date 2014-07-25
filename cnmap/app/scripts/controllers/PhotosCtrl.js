@@ -129,10 +129,10 @@ angular.module('photosApp', [
         editableOptions.theme = 'bs3';
     }])
     .controller('PhotosCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams', 'safeApply',
-        function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, safeApply) {
+    [        '$window', '$location', '$rootScope', '$scope', 'PhotoService', 'UserService', '$modal',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', 'safeApply', 'jsUtils',
+        function ($window, $location, $rootScope, $scope, PhotoService, UserService, $modal,
+                  ponmCtxConfig, $log, $state, $stateParams, safeApply, jsUtils) {
 
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -203,11 +203,7 @@ angular.module('photosApp', [
                     $scope.selectable = true;
                     $scope.selectedPhotos.push(photo);
                 } else {
-                    angular.forEach($scope.selectedPhotos, function (value, key) {
-                        if (value.id == photo.id) {
-                            delete $scope.selectedPhotos.splice(key, 1);
-                        }
-                    });
+                    jsUtils.Array.removeItem($scope.selectedPhotos, "id", photo.id);
                     if ($scope.selectedPhotos.length == 0) {
                         $scope.selectable = false;
                     }
@@ -235,13 +231,31 @@ angular.module('photosApp', [
 
                 modalInstance.result.then(function (selectedItem) {
                     $log.debug("move photos success");
-                    $scope.$broadcast("photosActionDone", {});
+                    removeSelectedPhotos();
                 }, function () {
                     $log.debug("move photos fail");
                     $log.info('Modal dismissed at: ' + new Date());
 //                    $scope.setPhotoId($scope.photoId);
                 });
             };
+
+            $scope.deletePhoto = function() {
+                angular.forEach($scope.selectedPhotos, function(photo, key) {
+                    PhotoService.delete({photoId: photo.id}, function(res) {
+                        if(res.status == "OK") {
+                            $scope.selectPhoto(null, photo);
+                            $scope.$broadcast("removePhotoDo", photo.id);
+                        }
+                    })
+                });
+            };
+
+            function removeSelectedPhotos() {
+                angular.forEach($scope.selectedPhotos, function(photo, key) {
+                    $scope.selectPhoto(null, photo);
+                    $scope.$broadcast("removePhotoDo", photo.id);
+                });
+            }
 
             $scope.cancelRecycle = function() {
                 $scope.$broadcast("cancelRecycleDo", {});
@@ -266,9 +280,9 @@ angular.module('photosApp', [
         }])
     .controller('PhotosAllCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils',
         function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams) {
+                  ponmCtxConfig, $log, $state, $stateParams, jsUtils) {
 
             // 用户图片分页属性
             $scope.photo = {
@@ -326,8 +340,8 @@ angular.module('photosApp', [
                 }
             });
 
-            $scope.$on('photosActionDone', function (e) {
-
+            $scope.$on('removePhotoDo', function (e, photoId) {
+                jsUtils.Array.removeItem($scope.photos, "id", photoId);
             });
 
         }])
@@ -352,9 +366,9 @@ angular.module('photosApp', [
         }])
     .controller('PhotosAlbumCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modal',
-                 'ponmCtxConfig', '$log', '$state', '$stateParams', 'Travel',
+                 'ponmCtxConfig', '$log', '$state', '$stateParams', 'Travel', 'jsUtils',
         function ($window, $location, $rootScope, $scope, TravelService, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, Travel) {
+                  ponmCtxConfig, $log, $state, $stateParams, Travel, jsUtils) {
 
             $scope.travelId = $stateParams.travelId;
 
@@ -386,15 +400,17 @@ angular.module('photosApp', [
                 });
             };
 
-            $scope.$on('photosActionDone', function (e) {
-
+            $scope.$on('removePhotoDo', function (e, photoId) {
+                angular.forEach($scope.travel.spots, function(spot, key) {
+                    jsUtils.Array.removeItem(spot.photos, "id", photoId);
+                });
             });
         }])
     .controller('PhotosTrashCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils',
         function ($window, $location, $rootScope, $scope, TravelService, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams) {
+                  ponmCtxConfig, $log, $state, $stateParams, jsUtils) {
 
             $scope.travels = {};
             UserService.getRecycleBin({userId: $scope.userId}, function(res) {
@@ -446,14 +462,11 @@ angular.module('photosApp', [
             });
 
             function removePhoto(photo) {
+                $scope.selectPhoto(null, photo);
                 angular.forEach($scope.travels, function(travel, key) {
-                    angular.forEach(travel.photos, function(pho, key) {
-                        if(photo.id == pho.id) {
-                            delete travel.photos.splice(key, 1);
-                        }
-                    });
+                    jsUtils.Array.removeItem(travel.photos, "id", photo.id);
                     if(travel.photos.length == 0) {
-                        delete $scope.travels.splice(key, 1);
+                        delete $scope.travels[key];
                     }
                 });
             }
@@ -493,6 +506,95 @@ angular.module('photosApp', [
 
         }])
     .controller('PhotosMoveCtrl',
+    [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modalInstance',
+        'ponmCtxConfig', '$log', '$q', 'param', 'operateType', 'photos',
+        function ($window, $location, $rootScope, $scope, TravelService, UserService, $modalInstance,
+                  ponmCtxConfig, $log, $q, param, operateType, photos) {
+
+            $scope.ctx = $window.ctx;
+            $scope.staticCtx = ponmCtxConfig.staticCtx;
+            $scope.apirest = $window.apirest;
+
+            $scope.photos = photos;
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+
+            UserService.getTravels({userId: ponmCtxConfig.userId}, function (res) {
+                if (res.status == "OK") {
+                    $scope.travels = res.open_info.travels;
+                }
+            });
+
+            $scope.newTravel = {};
+            $scope.selectedTravel = {};
+            $scope.select = function (travel, selected) {
+                if (selected != undefined) {
+                    travel.selected = selected;
+                } else {
+                    travel.selected = !travel.selected;
+                }
+
+                if ($scope.selectedTravel != travel) {
+                    $scope.selectedTravel.selected = false;
+                    $scope.selectedTravel = travel;
+                }
+            };
+            $scope.selectNewTravel = function (name) {
+                if (name) {
+                    $scope.select($scope.newTravel, true);
+                } else {
+                    $scope.select($scope.newTravel, false);
+                }
+            };
+
+            $scope.ok = function () {
+                addPhotosToTravel($scope.photos, $scope.selectedTravel).then(function () {
+                    $modalInstance.close();
+                }, function (reason) {
+
+                });
+            };
+
+            function addPhotosToTravel(photos, travel) {
+                var photoIds = [];
+                angular.forEach(photos, function (photo, key) {
+                    photoIds.push(photo.id);
+                });
+
+                var deferred = $q.defer();
+                if (photoIds.length > 0) {
+                    TravelService.addPhoto({travelId: travel.id}, param({photos: photoIds.join(",")}), function (res) {
+                        if (res.status == "OK") {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject(res.info);
+                        }
+                    });
+                } else {
+                    deferred.resolve();
+                }
+
+                return deferred.promise;
+            }
+
+            // 显示文本
+            if (operateType == "move") {
+                $scope.displayText = {
+                    ok: "移动",
+                    title1: "将",
+                    title2: "张图片移动到..."
+                };
+            } else {
+                $scope.displayText = {
+                    ok: "移动",
+                    title1: "将",
+                    title2: "张图片到..."
+                };
+            }
+        }])
+    .controller('PhotosTravelMoveCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modalInstance',
         'ponmCtxConfig', '$log', '$q', 'param', 'operateType', 'photos',
         function ($window, $location, $rootScope, $scope, TravelService, UserService, $modalInstance,

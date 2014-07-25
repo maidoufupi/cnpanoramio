@@ -36,11 +36,31 @@ public interface PhotoPanoramioIndexDao extends
 	 * @return
 	 */
 	public boolean updatePhotoPanoramioIndex();
-		
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean clearPhotoIndex();
 	
+	/**
+	 * 
+	 * @param level
+	 * @param west
+	 * @param south
+	 * @param measure
+	 * @return
+	 */
 	public List<PhotoPanoramioIndex> getPhotoPanoramioIndexList(int level, Double west, Double south, Double measure);
 	
+	/**
+	 * 
+	 * @param level
+	 * @param west
+	 * @param south
+	 * @param measure
+	 * @return
+	 */
 	public List<Photo> getPhotoList(int level, Double west, Double south, Double measure);
 
 	/**
@@ -103,4 +123,7 @@ public interface PhotoPanoramioIndexDao extends
 	public List<Photo> getLatestPanoramio(Double swLat, Double swLng,
 			Double neLat, Double neLng, int level, MapVendor vendor, int width,
 			int height);
+	
+	public List<Photo> search(Double swLat,
+			Double swLng, Double neLat, Double neLng, int level, int width, int height, String term, String type);
 }

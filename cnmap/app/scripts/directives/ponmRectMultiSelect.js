@@ -77,9 +77,9 @@ angular.module('ponmApp.directives')
 
                 element.bind('mousedown', function (e) {
 
-                    if(!(ghostSelectGrid[0] == e.target)) {
-                        return;
-                    }
+//                    if(!(ghostSelectGrid[0] == e.target)) {
+//                        return;
+//                    }
                     bigGhost.removeClass("ponm-show");
                     ghostSelect.addClass("ponm-show");
                     ghostSelect.css({

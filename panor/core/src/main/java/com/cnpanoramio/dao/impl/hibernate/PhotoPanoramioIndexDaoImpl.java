@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
+import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.MapVendor;
@@ -99,6 +103,7 @@ public class PhotoPanoramioIndexDaoImpl extends
 		Query query = getSession().createSQLQuery(
 				"CALL updatePhotoPanoramioIndex()");
 		query.executeUpdate();
+		
 		return true;
 	}
 
@@ -169,29 +174,6 @@ public class PhotoPanoramioIndexDaoImpl extends
 		return phs;
 	}
 
-//	@Override
-//	public List<PhotoPanoramio> getUserFavPanoramio(Double swLat, Double swLng,
-//			Double neLat, Double neLng, int level, MapVendor vendor, int width,
-//			int height, Long userId) {
-//		
-//		Double heightRate = height / (neLat - swLat),
-//				widthRate = width / (neLng - swLng);
-//			
-//		Criteria criteria = getSession()
-//				.createCriteria(Photo.class)
-//				.add(Restrictions.ge("gpsPoint.lat", swLat))
-//				.add(Restrictions.le("gpsPoint.lat", neLat))
-//				.add(Restrictions.eq("owner.id", userId));
-//		if(swLng < neLng) {
-//			criteria.add(Restrictions.gt("gpsPoint.lng", swLng))
-//					.add(Restrictions.lt("gpsPoint.lng", neLng));
-//		}else {
-//			criteria.add(Restrictions.or(
-//					Restrictions.and(Restrictions.ge("gpsPoint.lng", swLng), Restrictions.le("gpsPoint.lng", 180D)), 
-//					Restrictions.and(Restrictions.ge("gpsPoint.lng", -180D), Restrictions.le("gpsPoint.lng", neLng))));
-//		}
-//	}
-
 	@Override
 	public List<Photo> getLatestPanoramio(Double swLat,
 			Double swLng, Double neLat, Double neLng, int level,
@@ -208,30 +190,12 @@ public class PhotoPanoramioIndexDaoImpl extends
 		lNorth = neLat - (neLat % lMeasure);
 		lEast = neLng - (neLng % lMeasure);
 
-		log.info("getLatestPanoramio level = " + level);
-		log.info("getLatestPanoramio lNorth = " + lNorth);
-		log.info("getLatestPanoramio lSouth = " + lSouth);
-		log.info("getLatestPanoramio lEast = " + lEast);
-		log.info("getLatestPanoramio lWest = " + lWest);
-		
-//		Criteria criteria1 = getSession().createCriteria(PhotoPanoramioIndex.class)
-//				.add(Restrictions.eq("pk.level", level))
-//				.add(Restrictions.le("pk.south", lNorth))
-//				.add(Restrictions.ge("pk.south", lSouth));
-//
-//		if (lEast > lWest) {
-//			criteria1.add(Restrictions.le("pk.west", lEast))
-//					.add(Restrictions.ge("pk.west", lWest));
-//		} else {
-//			criteria1.add(Restrictions.or(Restrictions.and(
-//					Restrictions.ge("pk.west", lWest),
-//					Restrictions.le("pk.west", 180D)), Restrictions.and(
-//					Restrictions.ge("pk.west", -180D),
-//					Restrictions.le("pk.west", lEast))));
-//		}
-//		List list1 = criteria1.list();
-//		log.info("getIndexPanoramio size = " + list1.size());
-		
+//		log.info("getLatestPanoramio level = " + level);
+//		log.info("getLatestPanoramio lNorth = " + lNorth);
+//		log.info("getLatestPanoramio lSouth = " + lSouth);
+//		log.info("getLatestPanoramio lEast = " + lEast);
+//		log.info("getLatestPanoramio lWest = " + lWest);
+			
 		Criteria criteria = getSession().createCriteria(PhotoLatestIndex.class)
 				.add(Restrictions.eq("pk.level", level))
 				.add(Restrictions.le("pk.south", lNorth))
@@ -254,6 +218,9 @@ public class PhotoPanoramioIndexDaoImpl extends
 
 	@Override
 	public boolean updatePhotoLatestIndex() {
+		
+//		createIndexer();
+		
 		Query query = getSession().createSQLQuery(
 				"CALL updatePhotoLatestIndex()");
 		query.executeUpdate();
@@ -266,4 +233,130 @@ public class PhotoPanoramioIndexDaoImpl extends
 		deleteQuery.executeUpdate();
 		return true;
 	}
+	
+	private void createIndexer() {
+		FullTextSession fullTextSession = Search.getFullTextSession(getSession());
+		try {
+			fullTextSession.createIndexer(PhotoPanoramioIndex.class)
+			.batchSizeToLoadObjects( 25 )
+			 .cacheMode( CacheMode.NORMAL )
+			 .threadsToLoadObjects( 5 )
+			 .idFetchSize( 150 )
+			 .threadsForSubsequentFetching( 20 ).startAndWait();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public List<Photo> search(Double swLat,
+			Double swLng, Double neLat, Double neLng, int level, int width, int height, String term, String type) {
+		
+		String termStr = term.trim();
+		termStr = termStr.replace(" ", "%");
+		termStr = "%" + termStr + "%";
+		
+		log.info("search dao [" + swLat + ", " + swLng + ", " + neLat
+				+ ", " + neLng + ", " + level  + ", "
+				+ width + ", " + height + ", " + term + ", " + type + "]");
+				
+		Double lSouth, lWest, lNorth, lEast;
+		
+		Double lMeasure;
+		lMeasure = conMeasure / Math.pow(2D, level);
+		lSouth = swLat - (swLat % lMeasure);
+		lWest = swLng - (swLng % lMeasure);
+		lNorth = neLat - (neLat % lMeasure);
+		lEast = neLng - (neLng % lMeasure);
+		
+		Criteria criteria = getSession().createCriteria(PhotoPanoramioIndex.class, "photoIndex")
+				.add(Restrictions.eq("pk.level", level))
+				.add(Restrictions.le("pk.south", lNorth))
+				.add(Restrictions.ge("pk.south", lSouth));
+		if (lEast > lWest) {
+			criteria.add(Restrictions.le("pk.west", lEast))
+					.add(Restrictions.ge("pk.west", lWest));
+		} else {
+			criteria.add(Restrictions.or(Restrictions.and(
+					Restrictions.ge("pk.west", lWest),
+					Restrictions.le("pk.west", 180D)), Restrictions.and(
+					Restrictions.ge("pk.west", -180D),
+					Restrictions.le("pk.west", lEast))));
+		}
+
+		Criterion photoName = null;
+		Criterion photoTitle = null;
+		Criterion photoDesc = null;
+		Criterion travelSpotTitle = null;
+		Criterion travelSpotDesc = null;
+		Criterion travelSpotAddress = null;
+		Criterion travelTitle = null;
+		Criterion travelDesc = null;
+		Criterion travelAddress = null;
+		
+		if(null == type || type.equalsIgnoreCase("") || type.equalsIgnoreCase("all") || type.equalsIgnoreCase("photo")) {
+			criteria.createAlias("photoIndex.photo", "photo");
+			photoName = Restrictions.ilike("photo.name", termStr);
+			photoTitle = Restrictions.ilike("photo.title", termStr);
+			photoDesc = Restrictions.ilike("photo.description", termStr);
+		}
+		if(null == type || type.equalsIgnoreCase("") || type.equalsIgnoreCase("all") || type.equalsIgnoreCase("travel")){
+			criteria.createAlias("photoIndex.photo.travelSpot", "travelSpot")
+				.createAlias("travelSpot.travel", "travel");
+			
+			travelSpotTitle = Restrictions.ilike("travelSpot.title", termStr);
+			travelSpotDesc = Restrictions.ilike("travelSpot.description", termStr);
+			travelSpotAddress = Restrictions.ilike("travelSpot.address", termStr);
+			travelTitle = Restrictions.ilike("travel.title", termStr);
+			travelDesc = Restrictions.ilike("travel.description", termStr);
+			travelAddress = Restrictions.ilike("travel.address", termStr);
+		}
+		if(null == type || type.equalsIgnoreCase("") || type.equalsIgnoreCase("all")) {
+			criteria.add(Restrictions.or(photoName, photoTitle, photoDesc, travelSpotTitle, travelSpotDesc, travelSpotAddress,
+					travelTitle, travelDesc, travelAddress));
+		}else if(type.equalsIgnoreCase("photo")) {
+			criteria.add(Restrictions.or(photoName, photoTitle, photoDesc));
+		}else if(type.equalsIgnoreCase("travel")) {
+			criteria.add(Restrictions.or(travelSpotTitle, travelSpotDesc, travelSpotAddress,
+					travelTitle, travelDesc, travelAddress));
+		}		
+		
+		List<PhotoPanoramioIndex> photoIndexs = criteria.list();
+        
+		log.info("search res size: " + photoIndexs.size() );
+	    Double heightRate = height / (neLat - swLat),
+					widthRate = width / (neLng - swLng);
+	    return filterPanoramioIndex(photoIndexs, widthRate, heightRate);
+	}
+	
+//	public List<Photo> search(Double swLat,
+//			Double swLng, Double neLat, Double neLng, int level, int width, int height, String term) {
+//		FullTextSession fullTextSession = Search.getFullTextSession(getSession());
+//        final QueryBuilder mythQB = fullTextSession.getSearchFactory()
+//        	    .buildQueryBuilder().forEntity( PhotoPanoramioIndex.class ).get();
+//        
+//        org.apache.lucene.search.Query luceneQuery = mythQB
+//        		.bool()
+//        			.must(mythQB.keyword().onField("pk.level").matching(String.valueOf(level)).createQuery())
+//        			.must(mythQB.range().onField("pk.south").from(swLat).to(neLat).createQuery())
+//        			.must(mythQB.range().onField("pk.west").from(swLng).to(neLng).createQuery())
+//        			.should(mythQB.keyword()
+//        					.onFields("photo.name",
+//        							  "photo.title",
+//        							  "photo.description",
+//        							  "photo.travelSpot.title",
+//        							  "photo.travelSpot.description",
+//        							  "photo.travelSpot.address",
+//        							  "photo.travelSpot.travel.title",
+//        							  "photo.travelSpot.travel.description",
+//        							  "photo.travelSpot.travel.address"
+//        							  ).matching(term).createQuery())
+//        			.createQuery();
+//        org.hibernate.Query fullTextQuery = fullTextSession.createFullTextQuery( luceneQuery, PhotoPanoramioIndex.class );
+//        List<PhotoPanoramioIndex> photoIndexs = fullTextQuery.list();
+//        
+//        Double heightRate = height / (neLat - swLat),
+//				widthRate = width / (neLng - swLng);
+//        return filterPanoramioIndex(photoIndexs, widthRate, heightRate);
+//	}
 }

@@ -4,12 +4,17 @@
 'use strict';
 
 angular.module('ponmApp.directives')
-    .directive('waypoint', function () {
+    .directive('waypoint', ['$log', function ($log) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
+
+                $log.debug("waypoint...");
+
                 setTimeout( function() {
+                    $log.debug("set waypoint");
                     $( element ).waypoint(function(direction) {
+                        $log.debug("waypoint - waypointEvent");
                         scope.$emit('waypointEvent', direction, attrs.waypoint);
                     }, {
                         context: '.waypoint-scrollable',
@@ -30,4 +35,4 @@ angular.module('ponmApp.directives')
                 });
             }
         }
-    });
+    }]);

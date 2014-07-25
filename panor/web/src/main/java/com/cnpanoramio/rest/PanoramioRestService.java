@@ -1,5 +1,6 @@
 package com.cnpanoramio.rest;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -13,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cnpanoramio.MapVendor;
-import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.json.PanoramioResponse;
-import com.cnpanoramio.json.PanoramioResponse.PhotoPanoramio;
+import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.service.PhotoPanoramioIndexService;
 import com.cnpanoramio.utils.PhotoUtil;
 
@@ -56,7 +56,7 @@ public class PanoramioRestService extends AbstractRestService {
 		int heightI = Integer.parseInt(height);
 		MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
 
-		List<PhotoPanoramio> pps = null;
+		List<PhotoProperties> pps = null;
 		Long userIdL = null;
 		log.debug("getPanoramio [" + swLatD + ", " + swLngD + ", " + neLatD
 				+ ", " + neLngD + ", " + levelI + ", " + mVendor + ", "
@@ -100,7 +100,6 @@ public class PanoramioRestService extends AbstractRestService {
 		PanoramioResponse response = new PanoramioResponse();
 		response.setStatus(PanoramioResponse.Status.OK.name());
 		panorIndexService.updatePanoramioIndex();
-		panorIndexService.updatePhotoLatestIndex();
 		return response;
 	}
 
@@ -111,6 +110,48 @@ public class PanoramioRestService extends AbstractRestService {
 		PanoramioResponse response = new PanoramioResponse();
 		response.setStatus(PanoramioResponse.Status.OK.name());
 		panorIndexService.updatePhotoLatestIndex();
+		return response;
+	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@ResponseBody
+	public PanoramioResponse search(
+			@RequestParam("swlat") String swLat,
+			@RequestParam("swlng") String swLng,
+			@RequestParam("nelat") String neLat,
+			@RequestParam("nelng") String neLng,
+			@RequestParam("level") String level,
+			@RequestParam("width") String width,
+			@RequestParam("height") String height,
+			@RequestParam("term") String term,
+			@RequestParam(value="type", required = false) String type,
+			@RequestParam(value="vendor", required = false) String vendor) {
+		
+		PanoramioResponse response = new PanoramioResponse();
+		
+		Double swLatD = Double.parseDouble(swLat);
+		Double swLngD = Double.parseDouble(swLng);
+		Double neLatD = Double.parseDouble(neLat);
+		Double neLngD = Double.parseDouble(neLng);
+		int levelI = Integer.parseInt(level);
+		int widthI = Integer.parseInt(width);
+		int heightI = Integer.parseInt(height);
+		MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
+		
+		try {
+			term = new String(term.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		log.debug("search [" + swLatD + ", " + swLngD + ", " + neLatD
+				+ ", " + neLngD + ", " + levelI + ", " + mVendor + ", "
+				+ widthI + ", " + heightI + ", " + term + ", " + type + "]");
+		
+		List<PhotoProperties> pps = panorIndexService.search(swLatD, swLngD, neLatD, neLngD, levelI, widthI, heightI, term, type);
+		response.setStatus(PanoramioResponse.Status.OK.name());
+		response.setPhotos(pps);
 		return response;
 	}
 }

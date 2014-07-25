@@ -1,5 +1,8 @@
 package com.cnpanoramio.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.appfuse.model.User;
 import org.springframework.security.access.AccessDeniedException;
 
@@ -29,6 +32,9 @@ public class PhotoUtil {
 		cameraInfo.setUserName(photo.getOwner().getUsername());
 
 		PhotoDetails details = photo.getDetails();
+		if(null == details) {
+			details = new PhotoDetails();
+		}
 		cameraInfo.setModel(details.getModel());
 		cameraInfo.setMake(details.getMake());
 		if(null != details.getDateTimeOriginal()) {
@@ -49,6 +55,14 @@ public class PhotoUtil {
 		cameraInfo.setFlash(details.getFlash());
 
 		return cameraInfo;
+	}
+	
+	public synchronized static List<PhotoProperties> transformPhotos(List<Photo> photos) {
+		List<PhotoProperties> pps = new ArrayList<PhotoProperties>();
+		for (Photo photo : photos) {
+			pps.add(PhotoUtil.transformProperties(photo));
+		}
+		return pps;
 	}
 	
 	public synchronized static PhotoProperties transformProperties(Photo photo) {
@@ -95,21 +109,25 @@ public class PhotoUtil {
 	
 	public synchronized static MapVendor getMapVendor(String vendor) {
     	MapVendor mVendor;
-		if (vendor.equalsIgnoreCase("gaode")) {
-			mVendor = MapVendor.gaode;
-		} else if (vendor.equalsIgnoreCase("qq")) {
-			mVendor = MapVendor.qq;
-		} else if (vendor.equalsIgnoreCase("baidu")) {
-			mVendor = MapVendor.baidu;
-		} else if (vendor.equalsIgnoreCase("ali")) {
-			mVendor = MapVendor.ali;
-		} else if (vendor.equalsIgnoreCase("sogou")) {
-			mVendor = MapVendor.sogou;
-		} else if (vendor.equalsIgnoreCase("mapbar")) {
-			mVendor = MapVendor.mapbar;
-		} else {
-			mVendor = MapVendor.gps;
-		}
+    	if(null == vendor) {
+    		mVendor = MapVendor.gps;
+    	}else {
+    		if (vendor.equalsIgnoreCase("gaode")) {
+    			mVendor = MapVendor.gaode;
+    		} else if (vendor.equalsIgnoreCase("qq")) {
+    			mVendor = MapVendor.qq;
+    		} else if (vendor.equalsIgnoreCase("baidu")) {
+    			mVendor = MapVendor.baidu;
+    		} else if (vendor.equalsIgnoreCase("ali")) {
+    			mVendor = MapVendor.ali;
+    		} else if (vendor.equalsIgnoreCase("sogou")) {
+    			mVendor = MapVendor.sogou;
+    		} else if (vendor.equalsIgnoreCase("mapbar")) {
+    			mVendor = MapVendor.mapbar;
+    		}else {
+    			mVendor = MapVendor.gps;
+    		}
+    	}
 		return mVendor;
     }
 	

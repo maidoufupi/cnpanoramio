@@ -38,6 +38,13 @@ angular.module('ponmApp.services', [
                     params: {
                         'type': 'tag'
                     }
+                },
+                getBounds: {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Accept': 'application/json'
+                    }
                 }
             });
     }])
@@ -244,6 +251,34 @@ angular.module('ponmApp.services', [
                 }
             });
     }])
+    .factory('PanoramioService', ['$window', '$resource', function ($window, $resource) {
+        return $resource($window.apirest + '/panoramio/:action',
+            {'id': '@id'},
+            {
+                getLatest: {
+                    method: 'GET',
+                    params: {
+                        action: 'photo',
+                        latest: true
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Accept': 'application/json'
+                    }
+                },
+                search: {
+                    method: 'GET',
+                    params: {
+                        action: 'search',
+                        type: 'all'
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Accept': 'application/json'
+                    }
+                }
+            });
+    }])
     .service('LoginUserService', ['$window', '$resource', '$rootScope',
         function ($window, $resource, $rootScope) {
             this.getUserId = function() {
@@ -268,8 +303,10 @@ angular.module('ponmApp.services', [
     }])
     .factory('ponmCtxConfig', ['$window', '$resource', function ($window, $resource) {
         return {
+            ctx: $window.ctx,
             staticCtx: $window.staticCtx || "http://static.photoshows.cn",
             corsproxyCtx: $window.corsproxyCtx || "http://www.corsproxy.com/static.photoshows.cn",
+            apirest: $window.apirest,
             userId: $window.userId
         }
     }])

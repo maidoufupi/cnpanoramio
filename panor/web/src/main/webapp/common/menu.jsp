@@ -1,12 +1,12 @@
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
 <menu:useMenuDisplayer name="Velocity" config="navbarMenu.vm" permissions="rolesAdapter">
-	<div id="ponm-navbar" class="collapse navbar-collapse" ng-app="ponm.Navbar">
+	<div id="ponm-navbar" class="collapse navbar-collapse" ng-app="ponm.Navbar" ng-controller="SearchLocCtrl">
 		<ul class="nav navbar-nav">
 			<menu:displayMenu name="AdminMenu" />
 			<%-- <menu:displayMenu name="Logout" /> --%>
 			<!-- <li>
-				<div class="nav-search-form" ng-controller="SearchLocCtrl">
+				<div class="nav-search-form" >
                     <form class="navbar-form navbar-left" ng-submit="update(asyncSelected)" novalidate>
                         <input type="text" ng-model="asyncSelected" placeholder="搜索地址"
                                    typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue"
@@ -33,7 +33,7 @@
 	            	<li popover="用户主页" popover-trigger="mouseenter" popover-placement="bottom">
 		            	<a class="user" href="<c:url value='/user#?id=${sessionScope.userId}'/>">
 		                	<span class="white">${pageContext.request.remoteUser}</span>
-                        	<img class="navbar-profile-image" src="<c:url value='http://static.photoshows.cn/avatar${sessionScope.avatar}.png'/>" alt="${pageContext.request.remoteUser}">
+                        	<img class="navbar-profile-image" ng-src="{{staticCtx}}/avatar<c:out value='${sessionScope.avatar}'/>.png" alt="${pageContext.request.remoteUser}">
 		                </a>
         		    </li>
   				</c:when>

@@ -221,6 +221,33 @@
          */
         this.trigger = function(event) {
         };
+
+        /**
+         * 创建图片图标
+         *
+         * @param photo
+         */
+        this.createMarker= function(photo){};
+
+        /**
+         * 由外部调用创建图片的图标
+         *
+         * @param photos
+         */
+        this.createPhotosMarker = function(photos) {};
+
+        this.getBounds = function() {
+        };
+
+        this.getLevel = function() {
+        };
+
+        this.getSize = function() {
+        };
+
+        this.clearMap = function() {};
+
+        this.setAuto = function() {};
     };
 
 //    window.cnmap.PanoramioOptions = {

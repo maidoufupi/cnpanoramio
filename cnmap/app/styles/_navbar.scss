@@ -1,0 +1,17 @@
+//
+// Navbars
+// --------------------------------------------------
+
+.navbar-second {
+  .navbar {
+    .nav {
+      > li {
+        > a {
+          padding: 15px 0;
+          margin: 0 15px;
+          background-color: initial !important;
+        }
+      }
+    }
+  }
+}

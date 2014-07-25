@@ -110,6 +110,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 				return photo;
 			}else {
 				photo.getTravelSpot().getPhotos().remove(photo);
+				photoDao.save(photo);
 			}
 		}
 		

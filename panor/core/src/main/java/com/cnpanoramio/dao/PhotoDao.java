@@ -28,6 +28,21 @@ public interface PhotoDao extends GenericDao<Photo, Long>{
 	public List<Photo> getUserPhotos(User user, int pageSize, int pageNo);
 	
 	/**
+	 * 获取用户指定区域内的全部图片
+	 * 
+	 * @param user
+	 * @param pageSize
+	 * @param pageNo
+	 * @param swLat
+	 * @param swLng
+	 * @param neLat
+	 * @param neLng
+	 * @return
+	 */
+	public List<Photo> getUserPhotosBounds(User user, int pageSize, int pageNo,
+			Double swLat, Double swLng, Double neLat, Double neLng);
+	
+	/**
 	 * 获取用户拥有照片总数
 	 * 
 	 * @param user

@@ -1,0 +1,20 @@
+//
+// Navs
+// --------------------------------------------------
+
+.nav.nav-tray {
+  > li {
+    > a {
+      border-bottom-width: 2px;
+      border-bottom-style: solid;
+      border-bottom-color: transparent;
+      @include transition-linear(border-bottom-color);
+    }
+  }
+
+  >li.active, >li:hover {
+      > a {
+        border-bottom-color: $nav-item-active-color;
+      }
+    }
+}

@@ -28,16 +28,18 @@ import com.cnpanoramio.dao.RecycleDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.dao.ViewsDao;
 import com.cnpanoramio.domain.Avatar;
+import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
-import com.cnpanoramio.json.UserResponse.Settings;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.service.UserSettingsManager;
+import com.cnpanoramio.utils.PhotoUtil;
 import com.cnpanoramio.utils.UserUtil;
 
 @Service
@@ -353,6 +355,17 @@ public class UserSettingsImpl implements UserSettingsManager {
 			}catch(DataAccessException ex) {
 			}
 		}
+	}
+
+	@Override
+	public List<PhotoProperties> getPhotosForUserBounds(String id,
+			int pageSize, int pageNo, Double swLat, Double swLng, Double neLat,
+			Double neLng) {
+		User user = userManager.getUser(id);
+		
+		List<Photo> photos = photoDao.getUserPhotosBounds(user, pageSize, pageNo, swLat, swLng, neLat, neLng);
+		
+		return PhotoUtil.transformPhotos(photos);
 	}
 	
 }

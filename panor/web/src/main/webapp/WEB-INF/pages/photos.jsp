@@ -13,7 +13,7 @@
 	})
 </script>
 
-<div class="container waypoint-scrollable"
+<div class=""
      id="photosApp">
     <ui-view>
         <i>Some content will load here!</i>

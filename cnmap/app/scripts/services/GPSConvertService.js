@@ -2,7 +2,7 @@
  * Created by any on 14-3-12.
  */
 'use strict';
-
+/**
 angular.module('map.AMap', ['ngRoute', 'ngResource', 'ui.bootstrap'])
 //    .constant('mapObj', window.mapAMap)
 //    .config(['mapObj', function(mapObj) {
@@ -256,3 +256,4 @@ angular.module('map.AMap', ['ngRoute', 'ngResource', 'ui.bootstrap'])
 
         }
     }]);
+ */

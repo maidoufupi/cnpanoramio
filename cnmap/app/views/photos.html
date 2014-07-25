@@ -1,5 +1,4 @@
-<div class=""
-        >
+<div class="">
 
     <div class="navbar-second"
          ng-class="{'navbar-fixed-top': navbarFixedTop}">
@@ -55,8 +54,10 @@
                     <li ng-if="navbarType == 'trash'">
                         <a href="" ng-click="removeRecycle()">永久删除</a></li>
 
-                    <li ng-if="navbarType == 'move'"><a href="" ng-click="openMovePhoto()">移动</a></li>
-                    <li ng-if="navbarType == 'move'"><a href="">删除</a></li>
+                    <li ng-if="navbarType == 'move'">
+                        <a href="" ng-click="openMovePhoto()">移动</a></li>
+                    <li ng-if="navbarType == 'move'">
+                        <a href="" ng-click="deletePhoto()">删除</a></li>
                     <!--<li ng-if="navbarType == 'move'"
                         class="dropdown">
                         <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>

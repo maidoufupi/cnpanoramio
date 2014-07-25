@@ -1,11 +1,14 @@
 /**
  * Created by any on 14-3-21.
  */
-angular.module('ponm.Navbar', ['ngResource', 'ui.bootstrap'])
-    .controller('SearchLocCtrl', ['$window', '$scope', '$log', '$http',
-        function ($window, $scope, $log, $http) {
+angular.module('ponm.Navbar', ['ngResource', 'ui.bootstrap', 'ponmApp'])
+    .controller('SearchLocCtrl',
+    ['$window', '$scope', '$log', '$http', 'ponmCtxConfig',
+    function ($window, $scope, $log, $http, ponmCtxConfig) {
 
-            $scope.ctx = $window.ctx;
+        $scope.ctx = ponmCtxConfig.ctx;
+        $scope.staticCtx = ponmCtxConfig.staticCtx;
+        $scope.apirest = ponmCtxConfig.apirest;
 
         $scope.getLocation = function(val) {
 

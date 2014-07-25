@@ -1,11 +1,8 @@
 package com.cnpanoramio.domain;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -25,7 +22,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.appfuse.model.User;
-import org.hibernate.annotations.Cascade;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 
 @Entity
 @Table(name = "photo")
@@ -33,16 +33,21 @@ public class Photo implements Comparable<Photo> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@DocumentId
 	private Long id;
 
+	@Column(name = "name")
 	private String name;
 
+	@Field
 	@Column(name = "file_type")
 	private String fileType;
 
+	@Field
 	@Column(name = "file_path")
 	private String filePath;
 
+	@Field
 	@Column(name = "file_size")
 	private Long fileSize;
 
@@ -59,7 +64,10 @@ public class Photo implements Comparable<Photo> {
 	@JoinColumn(name = "owner_id")
 	private User owner;
 
+	@Column
 	private String title;
+	
+	@Column
 	private String description;
 
 	@Column(nullable = true)
@@ -73,6 +81,7 @@ public class Photo implements Comparable<Photo> {
 
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "photo")
 	@PrimaryKeyJoinColumn
+	@IndexedEmbedded
 	private PhotoDetails details;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -86,16 +95,15 @@ public class Photo implements Comparable<Photo> {
 	private Integer Rating;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@IndexedEmbedded
 	private Set<Tag> tags = new HashSet<Tag>(0);
-	
-//	@ManyToOne
-//	@JoinColumn(name = "travel_id")
-//	private Travel travel;
-	
+		
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "travel_spot_id")
+	@IndexedEmbedded
 	private TravelSpot travelSpot;
 	
+	@Field
 	@Column(name = "is360")
 	private Boolean is360;
 	

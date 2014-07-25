@@ -91,20 +91,20 @@ angular.module('ponmApp.directives')
                             var itemWidth = item.outerWidth() + 2*lingItemMargin,
                                 itemHeight = item.outerHeight() + 2*lingItemMargin;
 //                            $log.debug("itemWidth: " + itemWidth + "itemHeight: " + itemHeight);
-                            var itemLineWidthTemp = itemLineWidth + itemWidth * minHeight / itemHeight;
+                            var itemLineWidthTemp = itemLineWidth + Math.round(itemWidth * minHeight / itemHeight);
                             if (itemLineWidthTemp > containerWidth) {
 //                                $log.debug("itemLineWidth: " + itemLineWidth);
-                                setWidthHeight(itemLine, containerWidth / itemLineWidth * minHeight);
+                                setWidthHeight(itemLine, Math.round(containerWidth / itemLineWidth * minHeight));
                                 itemLine = [item];
-                                itemLineWidth = minHeight * itemWidth / itemHeight;
+                                itemLineWidth = Math.round(minHeight * itemWidth / itemHeight);
                             } else {
                                 itemLine.push(item);
                                 itemLineWidth = itemLineWidthTemp;
                             }
                         });
                         if (itemLine.length) {
-                            $log.debug("itemLineWidth: " + itemLineWidth);
-                            setWidthHeight(itemLine, containerWidth / itemLineWidth * minHeight);
+//                            $log.debug("itemLineWidth: " + itemLineWidth);
+                            setWidthHeight(itemLine, Math.round(containerWidth / itemLineWidth * minHeight));
                         }
                     }
 
@@ -117,45 +117,21 @@ angular.module('ponmApp.directives')
                                 itemHeight = item.outerHeight() + 2*lingItemMargin;
 //                            $log.debug("itemWidth: " + itemWidth + "itemHeight: " + itemHeight);
                             itemLine.push(item);
-                            itemLineWidth = itemLineWidth + (itemWidth / itemHeight) * maxHeight;
+                            itemLineWidth = itemLineWidth + Math.round((itemWidth / itemHeight) * maxHeight);
                             if (itemLineWidth >= containerWidth) {
 //                                $log.debug("itemLineWidth: " + itemLineWidth);
-                                setWidthHeight(itemLine, containerWidth * (maxHeight / itemLineWidth));
+                                setWidthHeight(itemLine, Math.round(containerWidth * (maxHeight / itemLineWidth)));
                                 itemLine = [];
                                 itemLineWidth = 0;
                             }
                         });
                         if (itemLine.length) {
-                            setWidthHeight(itemLine, (containerWidth / itemLineWidth) * maxHeight);
+                            setWidthHeight(itemLine, Math.round((containerWidth / itemLineWidth) * maxHeight));
                         }
                     }
                 }
             };
         }])
-//    .directive('ponmPhoto', ['$window', '$parse', '$animate', '$log',
-//        function ($window, $parse, $animate, $log) {
-//            return {
-//                restrict: 'A',
-//                link: function (scope, element, attrs, ngModel) {
-//                    var photoAction = element.find(".action");
-//                    element.on('mouseenter', function (e) {
-//                        var photoAction = element.find(".action");
-//                        $animate.addClass(photoAction, "ponm-show");
-//                    });
-//                    element.on('mouseleave', function (e) {
-//                        var photoAction = element.find(".action");
-//                        $animate.removeClass(photoAction, "ponm-show");
-//                    });
-//
-//                    var photoRemoveButton = element.find(".action.ponm-photo-remove");
-//                    photoRemoveButton.on("click", function(e) {
-//                        e.preventDefault();
-//                        e.stopPropagation();
-//                        scope.$emit('photoDeleteEvent', scope.photo.id);
-//                    });
-//                }
-//            };
-//        }])
     .directive('ponmHover', ['$window', '$parse', '$animate', '$log',
         function ($window, $parse, $animate, $log) {
             return {

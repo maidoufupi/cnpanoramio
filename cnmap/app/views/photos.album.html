@@ -10,9 +10,7 @@
     </div>
 
     <div data-ng-repeat="spot in travel.spots"
-         class="spot"
-         ui-event="{ mouseenter : 'mouseenter=true', mouseleave: 'mouseenter=false' }"
-         ng-class="{'active':mouseenter}">
+         class="spot">
         <div class="header">
             <h4>第 {{spot.day || '某'}} 天 - {{spot.title}}</h4>
             <div class="item"><span class="footnotes">{{spot.photos.length + " "}}张照片{{"  .  "}}{{spot.time_start | calculatetime | date:'yyyy/MM/dd'}}

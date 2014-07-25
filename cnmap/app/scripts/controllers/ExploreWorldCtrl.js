@@ -288,7 +288,6 @@ angular.module('exploreWorldApp', ['ponmApp', 'ui.map', 'ui.bootstrap'])
                     changeState = false;
                 }, 500);
             }
-
         }
 
         /**

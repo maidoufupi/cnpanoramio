@@ -13,10 +13,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "photo_panoramio_index")
 public class PhotoPanoramioIndex {
 
-	@EmbeddedId
+	@EmbeddedId 
 	private PhotoPanoramioIndexPK pk;
 	
-	@ManyToOne()
+	@ManyToOne
 	@JoinColumn(name = "photo_id")
 	private Photo photo;
 	

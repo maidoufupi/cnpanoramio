@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.hibernate.search.annotations.Field;
+
 @Embeddable
 public class PhotoPanoramioIndexPK implements Serializable {
 	
@@ -12,7 +14,7 @@ public class PhotoPanoramioIndexPK implements Serializable {
 		super();
 	}
 	
-	public PhotoPanoramioIndexPK(int level, Double south, Double west) {
+	public PhotoPanoramioIndexPK(Integer level, Double south, Double west) {
 		super();
 		this.level = level;
 		this.south = south;
@@ -25,9 +27,13 @@ public class PhotoPanoramioIndexPK implements Serializable {
 	private static final long serialVersionUID = -3374178340582472091L;
 
 	@Column(name="level", length = 2)
-	private int level;
+	@Field
+	private Integer level;
 	
+	@Field
 	private Double south;
+	
+	@Field
 	private Double west;
 	
 	@Override
@@ -47,10 +53,10 @@ public class PhotoPanoramioIndexPK implements Serializable {
 		return super.hashCode();
 	}
 	
-	public int getLevel() {
+	public Integer getLevel() {
 		return level;
 	}
-	public void setLevel(int level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
 	public Double getSouth() {

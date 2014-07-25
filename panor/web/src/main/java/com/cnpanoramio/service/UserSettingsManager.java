@@ -1,6 +1,7 @@
 package com.cnpanoramio.service;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 
 import org.appfuse.model.User;
@@ -9,6 +10,7 @@ import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse.Settings;
 
@@ -142,4 +144,19 @@ public interface UserSettingsManager {
 	 * @param id 删除记录的id
 	 */
 	public void removeRecycle(Long userId, Long id);
+	
+	/**
+	 * 获取用户指定区域内的全部图片
+	 * 
+	 * @param id
+	 * @param pageSize
+	 * @param pageNo
+	 * @param swLat
+	 * @param swLng
+	 * @param neLat
+	 * @param neLng
+	 * @return
+	 */
+	public List<PhotoProperties> getPhotosForUserBounds(String id, int pageSize, int pageNo,
+			Double swLat, Double swLng, Double neLat, Double neLng);
 }
