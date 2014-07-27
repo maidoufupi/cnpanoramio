@@ -34,7 +34,7 @@
 //                if (isOnGitHub) {
 //                    // Demo settings:
                 angular.extend(fileUploadProvider.defaults, {
-                    autoUpload: true,
+                    autoUpload: false,
                     // Enable image resizing, except for Android and Opera,
                     // which actually support image resizing, but fail to
                     // send Blob objects via XHR requests:

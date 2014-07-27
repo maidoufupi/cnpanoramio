@@ -60,16 +60,18 @@
                 params.tag = this.opts.tag;
             }
 
+            var that = this;
             client.photo.read(params).done(function (data) {
-                if(data.status == "OK") {
+                if(data.status == "OK" && that.opts.auto) {
                     for (var i in data.photos) {
                         if (!photos[data.photos[i].photoId]) {
                             photos[data.photos[i].photoId] = data.photos[i];
                         }
                     }
                     callback.apply(null, [data.photos]);
-                }
-                });
+                }}
+            );
+
         };
 
 //        this.getThumbnail = function (id/*PhotoId*/) {

@@ -117,20 +117,21 @@ public class UserRestService extends AbstractRestService {
 
 		UserResponse reponse = new UserResponse();
 		
-		Double swLatD = Double.parseDouble(swLat);
-		Double swLngD = Double.parseDouble(swLng);
-		Double neLatD = Double.parseDouble(neLat);
-		Double neLngD = Double.parseDouble(neLng);
-		
 		int pageSizeI = Integer.valueOf(pageSize).intValue();
 		int pageNoI = Integer.valueOf(pageNo).intValue();
 
 		Collection<PhotoProperties> photos = null;
 		
-		if(null != swLatD &&
-		   null != swLngD &&
-		   null != neLatD &&
-		   null != neLngD) {
+		if(null != swLat &&
+		   null != swLng &&
+		   null != neLat &&
+		   null != neLng) {
+			
+			Double swLatD = Double.parseDouble(swLat);
+			Double swLngD = Double.parseDouble(swLng);
+			Double neLatD = Double.parseDouble(neLat);
+			Double neLngD = Double.parseDouble(neLng);
+			
 			photos = userSettingsManager.getPhotosForUserBounds(userId, pageSizeI, pageNoI, swLatD, swLngD, neLatD, neLngD);
 		}else {
 			photos = photoService.getPhotosForUser(

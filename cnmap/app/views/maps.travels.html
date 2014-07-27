@@ -1,0 +1,27 @@
+<div>
+    <div ng-repeat="travel in travels">
+        <div style="display: inline-block; cursor: pointer;"
+             ng-click="goTravel(travel)">
+            <div style="margin-right: 1px; float: left; position: relative;">
+                <div style="position: absolute; top: 0; left: 0; right: 0; padding: 10px;">
+                    header
+                </div>
+                <div style="">
+                    <img ng-src="{{staticCtx}}/{{travel.photos[0].oss_key}}@1e_161w_161h_1c.jpg">
+                </div>
+                <a href="#/travel/{{travel.id}}" style="position: absolute; bottom: 10px; left: 10px; padding: 10px;">lianjie</a>
+            </div>
+            <div style="display: inline-block; width: 53px;">
+                <div style="width: 53px; height: 53px; display: inline-block; margin-bottom: 1px;">
+                    <img ng-src="{{staticCtx}}/{{travel.photos[1].oss_key}}@1e_53w_53h_1c.jpg">
+                </div>
+                <div style="width: 53px; height: 53px; display: inline-block; margin-bottom: 1px;">
+                    <img ng-src="{{staticCtx}}/{{travel.photos[2].oss_key}}@1e_53w_53h_1c.jpg">
+                </div>
+                <div style="width: 53px; height: 53px; display: inline-block; margin-bottom: 0;">
+                    <img ng-src="{{staticCtx}}/{{travel.photos[3].oss_key}}@1e_53w_53h_1c.jpg">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

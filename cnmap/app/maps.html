@@ -7,9 +7,13 @@
 
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css"/>
+    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css">
     <link rel="stylesheet" href="styles/main.css"/>
 
+    <script type="text/javascript" src="scripts/panor/js/jquery.canvas.js"></script>
+
     <script type="text/javascript" src="scripts/ponmApp.vendor.min.js"></script>
+    <script type="text/javascript" src="scripts/blueimp-file-upload.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
     <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
@@ -17,6 +21,7 @@
     <script type="text/javascript" src="scripts/ponmApp.directives.min.js"></script>
     <script type="text/javascript" src="scripts/directives/PhotoFluidContainer.js"></script>
     <script type="text/javascript" src="scripts/controllers/MapsCtrl.js"></script>
+    <script type="text/javascript" src="scripts/controllers/fileuploadCtrl.js"></script>
     <script type="text/javascript" src="scripts/controllers/PhotoModalCtrl.js"></script>
     <script type="text/javascript" src="scripts/directives/ponmRectMultiSelect.js"></script>
 
@@ -33,7 +38,7 @@
 //        window.ctx = "http://www.photoshows.cn";
         window.apirest = window.ctx + "/api/rest";
         window.staticCtx = "http://test.photoshows.cn";
-        window.userId = 1;
+        window.userId = 2;
     </script>
 </head>
 <body>

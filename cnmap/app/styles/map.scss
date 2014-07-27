@@ -36,10 +36,12 @@
       top: 0;
       bottom: 0;
       right: 0;
-      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
+      overflow-y: auto;
       @include transition-linear(all);
 
       .photo-container {
+        padding: 10px;
         .photo {
           width: 100px;
           height: 100px;
@@ -143,8 +145,7 @@
   -moz-box-sizing: border-box;
   height: 32px;
   outline: none;
-  //  padding: 0 7px;
-  width: 400px;
+  width: 300px;
   vertical-align: top;
 
   input {
@@ -159,7 +160,7 @@
     border: 0;
     border-radius: 0 2px 2px 0;
     height: 32px;
-    left: 400px;
+    left: 300px;
     position: absolute;
     text-align: center;
     top: 0;

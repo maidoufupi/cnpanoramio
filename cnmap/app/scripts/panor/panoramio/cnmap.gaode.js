@@ -175,10 +175,8 @@
          * @param photos
          */
         this.createPhotosMarker = function(photos) {
-            this.clearMap();
             // 清除缓存
-            labels = [];
-            thumbPhotoIds = [];
+            this.clearMap();
             var that = this;
             jQuery.each(photos, function (key, photo) {
                 that.createMarker(photo);
@@ -232,7 +230,9 @@
         };
 
         this.clearMap = function() {
-            this.opts.map.clearMap();
+            labels = [];
+            thumbPhotoIds = [];
+            this.opts.map && this.opts.map.clearMap();
         };
 
         this.setAuto = function(auto) {
