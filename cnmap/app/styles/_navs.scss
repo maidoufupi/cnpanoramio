@@ -18,3 +18,14 @@
       }
     }
 }
+
+.nav-list {
+  border-left: 3px solid transparent;
+//  @include transition-linear(border-left);
+}
+.nav-list:hover {
+  border-left: 3px solid #4dd0e1;
+}
+.nav-list.active {
+  border-left: 3px solid #00bcd4;
+}

@@ -579,30 +579,6 @@ body {
     border-radius: 4px;
 }
 
-/** upload photo **********************************************************/
-
-.table.table-striped.files {
-  tr {
-    td.info-tag {
-      width: 50px;
-    }
-    td.link-tag {
-      background-color: #ed9c28;
-      border-radius: 4px;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      width: 20px;
-    }
-    td.link-tag.photo-upload-ok {
-      background-color: #6DCE6D;
-    }
-  }
-}
-
-.fileupload-footer {
-
-}
-
 .bootstrap-tagsinput {
     padding: 1px;
     margin: 0;

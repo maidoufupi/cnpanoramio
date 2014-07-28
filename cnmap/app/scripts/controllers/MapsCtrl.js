@@ -4,6 +4,7 @@
 'use strict';
 
 angular.module('mapsApp', [
+//    'ngAnimate',
     'ui.bootstrap',
     'ui.map',
     'ui.router',
@@ -204,8 +205,8 @@ angular.module('mapsApp', [
                 }
             );
 
-            $scope.contentLayouts = ['left-full', 'left-fixed', 'right-full', 'right-fixed'];
-            $scope.contentLayout = 3;
+            $scope.contentLayouts = ['right-fixed', 'left-fixed', 'right-full', 'left-full'];
+            $scope.contentLayout = 0;
             $scope.changeContentLayout = function() {
                 $scope.contentLayout = ($scope.contentLayout + 1) % 4;
             };
@@ -861,8 +862,6 @@ angular.module('mapsApp', [
 
             $scope.selectable = false;
 
-            $scope.setPanormaioType('user');
-
             // 用户图片分页属性
             $scope.photo = {
                 pageSize: 40,
@@ -883,6 +882,9 @@ angular.module('mapsApp', [
                         }
                     })
             });
+
+            // 要在bind map_changed event 之后，才能有初始化图片的动作
+            $scope.setPanormaioType('user');
 
             $scope.$on("$destroy", function() {
                 delete $scope.hashObj.userid;
@@ -934,5 +936,131 @@ angular.module('mapsApp', [
 
             $scope.setPanormaioType('manual');
 
+            var mapEventListener = $scope.mapEventListener;
+            var mapService = $scope.mapService;
+
+            /* 此Ctrl中的所有file即photo object */
+
+            var photos = {};
+            $scope.$on("photoAdd", function(e, photo) {
+                $log.debug(photo.id);
+                photos[photo.id] = photos[photo.id] || photo;
+                photo = photos[photo.id];
+                addOrUpdateMarker(photo, photo.point.lat, photo.point.lng);
+            });
+            $scope.$on("photoDelete", function(e, photo) {
+
+            });
+            $scope.$on("photoActive", function(e, photo) {
+                $log.debug("active: " + photo.id);
+                photo = photos[photo.id];
+                $scope.activePhoto(photo);
+            });
+
+            function addOrUpdateMarker(photo, lat, lng) {
+                photo.mapVendor = photo.mapVendor || {};
+                if (!photo.mapVendor.marker) {
+                    createMarker(photo, lat, lng);
+//                    mapEventListener.activeMarker(photo.mapVendor.marker);
+//                    $scope.activePhoto(photo);
+                    $scope.setPlace(photo, lat, lng);
+                }else {
+                    mapEventListener.setPosition(photo.mapVendor.marker, lat, lng);
+                    mapEventListener.setMap(photo.mapVendor.marker, $scope.map);
+                }
+            }
+
+            function createMarker(file, lat, lng) {
+                // create marker
+                file.mapVendor = file.mapVendor || {};
+                if(lat && lng) {
+                    file.mapVendor.lat = lat;
+                    file.mapVendor.lng = lng;
+                }else {
+                    if(!file.lat && !file.lng) {
+                        return;
+                    }else {
+                        file.mapVendor.lat = file.lat;
+                        file.mapVendor.lng = file.lng;
+                    }
+                }
+
+                file.mapVendor.marker = mapEventListener.createDraggableMarker(
+                    $scope.map, file.mapVendor.lat, file.mapVendor.lng
+                );
+                file.mapVendor.marker.photo_file = file;
+//                mapEventListener.setPosition(file.mapVendor.marker, file.lat, file.lng);
+                mapEventListener.setMap(file.mapVendor.marker, $scope.map);
+                mapEventListener.addMarkerActiveListener(file.mapVendor.marker, function () {
+                    $scope.activePhoto(this.photo_file);
+                });
+
+                mapEventListener.addDragendListener(file.mapVendor.marker, function (lat, lng) {
+                    $scope.setPlace(this.photo_file, lat, lng);
+                })
+
+            }
+
+            function addMapClickEvent(map) {
+                mapEventListener.addMapClickListener(map, function (lat, lng) {
+                    addOrUpdateMarker($scope.file, lat, lng);
+                    $scope.setPlace($scope.file, lat, lng);
+                })
+            }
+
+            /**
+             * 激活图片
+             *
+             * @param file
+             */
+            $scope.activePhoto = function (file) {
+                if($scope.file) {
+                    $scope.file.active = false;
+                    if ($scope.file.mapVendor) {
+                        mapEventListener.deactiveMarker($scope.file.mapVendor.marker);
+                    }
+                }
+
+                $scope.file = file;
+                $scope.file.active = true;
+                if ($scope.file.mapVendor) {
+                    if ($scope.file.mapVendor.lat) {
+                        mapEventListener.activeMarker($scope.file.mapVendor.marker);
+                        if(!mapEventListener
+                            .inMapView($scope.file.mapVendor.lat, $scope.file.mapVendor.lng, $scope.map)) {
+                            mapEventListener.setCenter($scope.map, $scope.file.mapVendor.lat, $scope.file.mapVendor.lng);
+                        }
+//                        $scope.setPlace($scope.file, $scope.file.mapVendor.lat, $scope.file.mapVendor.lng);
+                    } else {
+                        $scope.clearPlace();
+                    }
+                }
+
+                $scope.$broadcast("photoReverseActive", file);
+            };
+
+            $scope.setPlace = function (file, lat, lng, address) { // 此参数为非gps坐标
+
+                file.mapVendor.lat = lat;
+                file.mapVendor.lng = lng;
+                file.mapVendor.latPritty = cnmap.GPS.convert(lat);
+                file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
+
+                if (address) {
+                    file.mapVendor.address = address;
+                }
+
+                $log.debug("setPlace for photo: " + file.id);
+
+                // 加载gps地点可选的地址列表
+                mapService.getAddrPois(lat, lng, function(addresses, addr) {
+                    if(!address) {
+                        file.mapVendor.address = addr;
+                    }
+                    file.mapVendor.addresses = addresses;
+                    $log.debug("getAddrPois for photo: " + file.id);
+                    $scope.$broadcast("photoReverseAddress", file);
+                });
+            };
         }])
 ;

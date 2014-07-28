@@ -139,11 +139,12 @@ angular.module('ponmApp.directives')
                 link: function (scope, element, attrs, ngModel) {
 
                     element.on('mouseenter', function (e) {
-                        var photoAction = element.find("> .action");
+                        var photoAction = element.find(attrs.ponmHover);
                         $animate.addClass(photoAction, "ponm-show");
                     });
+
                     element.on('mouseleave', function (e) {
-                        var photoAction = element.find("> .action");
+                        var photoAction = element.find(attrs.ponmHover);
                         $animate.removeClass(photoAction, "ponm-show");
                     });
                 }

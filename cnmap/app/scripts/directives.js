@@ -144,13 +144,15 @@ angular.module('ponmApp.directives', [
                 templateUrl: 'views/tagPickerView.html',
                 link: function(scope, element, attrs, ngModel) {
 
+                    var dataType = "String";
+
                     scope.itemValueName = scope.itemValueName || "value";
 
-                    var items = null,
-                        selectedItems = [];
+                    var items = null;
+                    scope.selectedItems = [];
 
                     var inputE = element.find('div.dropdown-toggle');
-                    inputE.on('focus', function() {
+                    inputE.on('focus click', function() {
                         if(!items) {
                             loadDataF();
                             scope.$apply(function() {
@@ -185,12 +187,14 @@ angular.module('ponmApp.directives', [
                         }
                         angular.forEach(items, function(item, key) {
                             if(angular.isObject(item)) {
+                                dataType = "Object";
                                 scope.items.push({
                                     value: item[scope.itemValueName],
-//                                        $isObject: true,
+                                    id: item.id,
                                     $key: key
                                 })
-                            }else {
+                            }else if(angular.isString(item)) {
+                                dataType = "String";
                                 scope.items.push({
                                     value: item,
                                     $key: key
@@ -206,34 +210,37 @@ angular.module('ponmApp.directives', [
                     });
 
                     scope.setItem = function(item) {
+                        var viewValue = [];
                         // 多选
                         if(scope.multipleSelect) {
-                            selectedItems = [];
-                            var itemValues = [];
+                            scope.selectedItems = [];
+//                            var itemValues = [];
                             item.$active = !item.$active;
-                            scope.item = "";
+
                             angular.forEach(scope.items, function(item, key) {
                                 if(item.$active) {
-                                    selectedItems.push(items[item.$key]);
-                                    itemValues.push(item.value);
+                                    scope.selectedItems.push(item);
+                                    viewValue.push(items[item.$key]);
+//                                    itemValues.push(item.value);
                                 }
                             });
-                            scope.item = itemValues.join(attrs.multipleSelect || ",");
+//                            scope.item = itemValues.join(attrs.multipleSelect || ",");
 
                         }else {
                             // 单选
                             if(item.$active) {
                                 return;
                             }
-                            scope.item = item.value;
+//                            scope.item = item.value;
                             angular.forEach(scope.items, function(item, key) {
                                 item.$active = false;
                             });
                             item.$active = true;
-                            selectedItems = items[item.$key];
+                            scope.selectedItems = [item];
+                            viewValue.push(items[item.$key]);
                         }
                         scope.originalItemValue = scope.item;
-                        ngModel.$setViewValue(selectedItems);
+                        ngModel.$setViewValue(viewValue);
                     };
 
                     scope.clearItems = function() {
@@ -242,13 +249,13 @@ angular.module('ponmApp.directives', [
                         scope.items = null;
                     };
 
-                    scope.$watch('item', function(newItem) {
-                        if(newItem != scope.originalItemValue) {
-                            angular.forEach(scope.items, function(item, key) {
-                                item.$active = false;
-                            })
-                        }
-                    });
+//                    scope.$watch('item', function(newItem) {
+//                        if(newItem != scope.originalItemValue) {
+//                            angular.forEach(scope.items, function(item, key) {
+//                                item.$active = false;
+//                            })
+//                        }
+//                    });
 
                     /**
                      * 创建新值

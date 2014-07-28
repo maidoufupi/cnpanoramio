@@ -2,7 +2,7 @@
     <div ng-repeat="photo in photos"
          ng-controller="PhotosPhotoCtrl"
          class="photo"
-         ponm-hover>
+         ponm-hover=">.action">
         <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_200w_200h_1c.jpg"
              ng-class="{'selectable': selectable&&!photo.actionSelected,
                         'selected': photo.actionSelected}">

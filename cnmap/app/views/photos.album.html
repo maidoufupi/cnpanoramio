@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div data-ng-repeat="spot in travel.spots"
+    <div ng-repeat="spot in travel.spots"
          class="spot">
         <div class="header">
             <h4>第 {{spot.day || '某'}} 天 - {{spot.title}}</h4>
@@ -26,7 +26,7 @@
             <div ng-repeat="photo in spot.photos"
                  ng-controller="PhotosPhotoCtrl"
                  class="fluid-brick ponm-photo photo"
-                 ponm-hover>
+                 ponm-hover=">.action">
                 <a ng-click="activePhoto(photo)"
                    href="">
                     <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"

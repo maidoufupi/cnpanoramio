@@ -1,0 +1,39 @@
+.photo-upload {
+  .table.files {
+    .photo {
+      .preview {
+        cursor: pointer;
+      }
+
+      .action {
+        opacity: 0;
+      }
+    }
+
+    //////
+    .photo.ng-enter {
+      -webkit-animation: enter_sequence 500ms ease-out; /* Safari/Chrome */
+      animation: enter_sequence 500ms ease-out; /* IE10+ and Future Browsers */
+    }
+
+    .photo.ng-leave {
+      -webkit-animation: leave_sequence 500ms ease-in; /* Safari/Chrome */
+      animation: leave_sequence 500ms ease-in; /* IE10+ and Future Browsers */
+    }
+  }
+}
+
+.table.table-striped.files {
+  tr {
+    td.info-tag {
+      width: 50px;
+    }
+    td.link-tag {
+      //      background-color: #ed9c28;
+      //      width: 20px;
+    }
+    td.link-tag.photo-upload-ok {
+//      background-color: #6DCE6D;
+    }
+  }
+}

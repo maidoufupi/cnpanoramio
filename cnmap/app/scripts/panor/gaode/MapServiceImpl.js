@@ -78,6 +78,7 @@
             }
         };
 
+        var addrPoiss = [];
         this.getAddrPois = function(lat, lng, callback) {
             var point = new AMap.LngLat(lng, lat);
             if (!geocoder) {
@@ -88,23 +89,43 @@
                 ga();
             }
             function ga() {
-                AMap.event.addListenerOnce(geocoder, "complete", function(res) {
-                    if (res.info == "OK") {
-                        var regeocode = res.regeocode;
-                        var addresses = {};
-                        var baseAddr = regeocode.addressComponent.province + regeocode.addressComponent.district
-                            + regeocode.addressComponent.city + regeocode.addressComponent.township;
+                if(addrPoiss.length) {
+                    addrPoiss.push({
+                        point: point,
+                        callback: callback
+                    });
+                }else {
+                    addrPoiss.push({
+                        point: point,
+                        callback: callback
+                    });
+                    process();
+                }
+            }
 
-                        angular.forEach(regeocode.pois, function(poi, key) {
-                            addresses[baseAddr + poi.name] = {
-                                poiweight: poi.poiweight,
-                                location: poi.location
-                            };
-                        });
-                        callback.apply(undefined, [addresses, regeocode.formattedAddress]);
-                    }
-                });
-                geocoder.getAddress(point);
+            function process() {
+                if(addrPoiss.length) {
+                    var addrpois = addrPoiss[0];
+                    AMap.event.addListenerOnce(geocoder, "complete", function(res) {
+                        if (res.info == "OK") {
+                            var regeocode = res.regeocode;
+                            var addresses = {};
+                            var baseAddr = regeocode.addressComponent.province + regeocode.addressComponent.district
+                                + regeocode.addressComponent.city + regeocode.addressComponent.township;
+
+                            angular.forEach(regeocode.pois, function(poi, key) {
+                                addresses[baseAddr + poi.name] = {
+                                    poiweight: poi.poiweight,
+                                    location: poi.location
+                                };
+                            });
+                            addrpois.callback.apply(undefined, [addresses, regeocode.formattedAddress]);
+                        }
+                        delete addrPoiss.splice(0, 1);
+                        process();
+                    });
+                    geocoder.getAddress(addrpois.point);
+                }
             }
         };
 

@@ -11,14 +11,14 @@
                         <a href="#/recent">最新</a></li>
                     <li ng-class="{'active': stateStatus.travels}">
                         <a href="#/travels">旅行</a></li>
-                    <li ng-class="{'active': stateStatus.upload}">
-                        <a href="#/upload">上传</a></li>
                     <li ng-if="stateStatus.travel"
                         ng-class="{'active': stateStatus.travel}">
                         <a href="#/travel">旅行<span class="footnote">{{stateStatus.name}}</span></a></li>
                     <li ng-if="user.login"
                         ng-class="{'active': stateStatus.user}">
                         <a href="#/user">{{user.name}}<span class="footnote">的照片</span></a></li>
+                    <li ng-class="{'active': stateStatus.upload}">
+                        <a href="#/upload">上传</a></li>
                     <li>
                         <a>搜索{{searchValObject.typeDesc+": "+searchValObject.val}}</a></li>
 

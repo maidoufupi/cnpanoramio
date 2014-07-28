@@ -121,6 +121,15 @@ public class PhotoDaoTest {
 		}
 //		Assert.assertEquals(10, photos.size());
 	}
+	@Test
+	public void testGetUserPhotosBounds() {
+		User user = userDao.get(userId);
+		List<Photo> photos = photoDao.getUserPhotosBounds(user, 40, 1, 24.387127D, 115.708008D, 37.160317D, 123.156738D);
+		
+		for(Photo photo : photos) {
+			log.info("All : " + photo.getId());
+		}
+	}
 
 	@Test
 	public void testAddPhotoTags() {
