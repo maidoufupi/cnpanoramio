@@ -10,14 +10,9 @@
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap.css">
     <!-- Bootstrap theme styles -->
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap-theme.css">
-    <link rel="stylesheet" href="styles/style.css">
-    <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="bower_components/sass-bootstrap/dist/js/bootstrap.js"></script>
-    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="bower_components/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
-    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
-    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <link rel="stylesheet" href="styles/main.css">
+    <script type="text/javascript" src="scripts/ponmApp.vendor.min.js"></script>
+
     <!--<script type="text/javascript" src="scripts/controllers/GeoSearchCtrl.js"></script>-->
     <script type="text/javascript" src="scripts/controllers/NavbarCtrl.js"></script>
     <script type="text/javascript">
@@ -36,7 +31,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/panor-web/"><img src="img/logo.png" class="navbar-logo"></a>
+            <a class="navbar-brand" href="/panor-web/"><img src="images/logo.png" class="navbar-logo"></a>
         </div>
 
         <div class="collapse navbar-collapse">
@@ -57,12 +52,12 @@
 
                 <li id="exploreWorld" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="游览地图"
                     >
-                    <a href="/map" >
+                    <a href="/maps.html" >
                         <span class="glyphicon glyphicon-plane white"></span>
                     </a>
                 </li>
                 <li popover="图片上传" popover-trigger="mouseenter" popover-placement="bottom">
-                    <a href="/photoUpload" >
+                    <a href="/maps.html#/upload" >
                         <span class="glyphicon glyphicon-camera white"></span>
                     </a>
                 </li>

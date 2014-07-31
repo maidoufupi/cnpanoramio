@@ -1,0 +1,12 @@
+<a ng-repeat="photo in photos"
+   ng-click="activePhoto(photo)"
+   href=""
+   class="fluid-brick"
+   ponm-photo
+        >
+    <img ng-src="{{apirest}}/photo/{{photo.id}}/2">
+    <div class="ponm-photo-footer">
+        <p>{{photo.point.address}}</p>
+        <p>{{photo.description | newlines}}</p>
+    </div>
+</a>

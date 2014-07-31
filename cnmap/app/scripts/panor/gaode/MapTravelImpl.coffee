@@ -2,7 +2,7 @@ class TravelLayer extends window.cnmap.ITravelLayer
 
   initMap: (map) ->
     @map = map if map
-    @mapEventListener.setMap @marker, @map
+#    @mapEventListener.setMap @marker, @map
 
     @calcSpotTime()
 
@@ -66,10 +66,10 @@ class TravelLayer extends window.cnmap.ITravelLayer
       }
 
   createMarker: () ->
-    if window.AMap
-      new AMap.Marker {
-        map: @map
-        icon: "images/marker.png"
-        animation: "AMAP_ANIMATION_BOUNCE"
-      }
+#    if window.AMap
+#      new AMap.Marker {
+#        map: @map
+#        icon: "images/marker.png"
+#        animation: "AMAP_ANIMATION_BOUNCE"
+#      }
 window.cnmap.TravelLayer = TravelLayer

@@ -15,6 +15,7 @@
   >li.active, >li:hover {
       > a {
         border-bottom-color: $nav-item-active-color;
+        text-shadow: 0 0 10px #00bcd4;
       }
     }
 }

@@ -1,20 +1,20 @@
-<div class=""
-        >
+<div class="photos"
+     >
 
     <div class="navbar-second"
-         ng-class="{'navbar-fixed-top': navbarFixedTop}">
+         waypoint-sticky="{'stuckClass': 'navbar-fixed-top', 'offset': '-1'}">
         <nav class="navbar navbar-default"
              role="navigation">
             <div class="container">
-                <ul class="nav navbar-nav navbar-default">
-                    <li><a href="#/yourphotos/all"
-                           ng-class="{'active': $state.current.url == '/all'}">所有照片</a></li>
-                    <li><a href="#/yourphotos/albums"
-                           ng-class="{'active': $state.current.url == '/albums'}">相册</a></li>
-                    <li><a href="#/yourphotos/recent"
-                           ng-class="{'active': $state.current.url == '/recent'}">最近添加</a></li>
-                    <li><a href="#/yourphotos/trash"
-                           ng-class="{'active': $state.current.url == '/trash'}">回收站</a></li>
+                <ul class="nav navbar-nav nav-tray">
+                    <li ng-class="{'active': $state.current.name == 'photos.all'}">
+                        <a href="#/yourphotos/all">所有照片</a></li>
+                    <li ng-class="{'active': $state.current.name == 'photos.albums'}">
+                        <a href="#/yourphotos/albums">相册</a></li>
+                    <li ng-class="{'active': $state.current.name == 'photos.recent'}">
+                        <a href="#/yourphotos/recent">最近添加</a></li>
+                    <li ng-class="{'active': $state.current.name == 'photos.trash'}">
+                        <a href="#/yourphotos/trash">回收站</a></li>
                     <!--<li class="dropdown">
                         <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -84,10 +84,7 @@
          ponm-rect-multi-select=".photo"
          ponm-rect-moveselect="true"
          ponm-rect-selector="rectSelected">
-        <div class="container-photos"
-             waypoint="navbar"
-             waypoint-offset="-1"
-                >
+        <div class="container-photos">
 
             <div ui-view>
                 <i>Some content will load here!</i>

@@ -52,25 +52,25 @@
                 AMap.event.addListener(
                     map,
                     'complete',
-                    getBoundsThumbnails
+                    mapChangedListener
                 );
 
                 AMap.event.addListener(
                     map,
                     'zoomend',
-                    function () {
+                    function (evt) {
                         if (map.getZoom() != this.preZoom) {
                             this.preZoom = map.getZoom();
 //                            map.clearMap();
 //                            panoramio.clearVisible();
-                            getBoundsThumbnails();
+                            mapChangedListener(evt);
                         }
                     });
 
                 AMap.event.addListener(
                     map,
                     'moveend',
-                    getBoundsThumbnails
+                    mapChangedListener
                 );
             } else {
                 opts.map;
@@ -78,8 +78,20 @@
                 clearVisible();
             }
 
+            var getDataTimeoutHander;
+            function mapChangedListener(e) {
+                console.log(e);
+                if(getDataTimeoutHander) {
+                    clearTimeout(getDataTimeoutHander);
+                }
+                getDataTimeoutHander = setTimeout(function(){
+                    getBoundsThumbnails();
+                }, 500);
+            }
+
             var that = this;
-            function getBoundsThumbnails() {
+            function getBoundsThumbnails(e) {
+
                 $(that).trigger("map_changed", [that.getBounds(), that.getLevel(), that.getSize()]);
 
                 if(!that.opts.auto) {

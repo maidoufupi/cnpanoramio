@@ -1,11 +1,9 @@
 <div class="dropdown dropdown-picker">
     <div class="dropdown-toggle"
          ng-model="item"
-         data-place-holder="添加"
-         editable="false"
          style="cursor: pointer;">
         <a href=""
-           ng-hide="selectedItems.length">添加标签</a>
+           ng-hide="selectedItems.length">{{placeHolder}}</a>
         <span class="label label-info label-clickable" style="margin: 0 1px;"
               ng-repeat="item in selectedItems">{{item.value}}</span>
     </div>

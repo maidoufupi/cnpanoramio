@@ -2,10 +2,15 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/app/scripts/panor/MapService.js" />
         <item url="file://$PROJECT_DIR$/app/scripts/panor/MapUtils.js" />
-        <item url="file://$PROJECT_DIR$/app/scripts/panor/MapTravel.js" />
         <item url="file://$PROJECT_DIR$/app/scripts/panor/baidu/MapServiceImpl.js" />
+        <item url="file://$PROJECT_DIR$/app/bower_components/ngInfiniteScroll/Gruntfile.js" />
+        <item url="file://$PROJECT_DIR$/app/scripts/directives/infinite-scroll.js" />
+        <item url="file://$PROJECT_DIR$/app/bower_components/ngInfiniteScroll/src/infinite-scroll.js" />
+        <item url="file://$PROJECT_DIR$/app/scripts/panor/MapService.js" />
+        <item url="file://$PROJECT_DIR$/app/bower_components/ngInfiniteScroll/test/test_infinite_scroll_throttling.js" />
+        <item url="file://$PROJECT_DIR$/app/bower_components/ngInfiniteScroll/test/test_infinite_scroll.js" />
+        <item url="file://$PROJECT_DIR$/app/scripts/panor/MapTravel.js" />
         <item url="file://$PROJECT_DIR$/app/scripts/panor/baidu/MapEventListenerImpl.js" />
         <item url="file://$PROJECT_DIR$/app/scripts/panor/qq/MapTravelImpl.js" />
         <item url="file://$PROJECT_DIR$/app/scripts/panor/gaode/MapTravelImpl.js" />
@@ -13,10 +18,15 @@
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/scripts/panor/MapService.js" />
       <root url="file://$PROJECT_DIR$/app/scripts/panor/MapUtils.js" />
-      <root url="file://$PROJECT_DIR$/app/scripts/panor/MapTravel.js" />
       <root url="file://$PROJECT_DIR$/app/scripts/panor/baidu/MapServiceImpl.js" />
+      <root url="file://$PROJECT_DIR$/app/scripts/directives/infinite-scroll.js" />
+      <root url="file://$PROJECT_DIR$/app/bower_components/ngInfiniteScroll/Gruntfile.js" />
+      <root url="file://$PROJECT_DIR$/app/bower_components/ngInfiniteScroll/src/infinite-scroll.js" />
+      <root url="file://$PROJECT_DIR$/app/scripts/panor/MapService.js" />
+      <root url="file://$PROJECT_DIR$/app/bower_components/ngInfiniteScroll/test/test_infinite_scroll_throttling.js" />
+      <root url="file://$PROJECT_DIR$/app/bower_components/ngInfiniteScroll/test/test_infinite_scroll.js" />
+      <root url="file://$PROJECT_DIR$/app/scripts/panor/MapTravel.js" />
       <root url="file://$PROJECT_DIR$/app/scripts/panor/qq/MapTravelImpl.js" />
       <root url="file://$PROJECT_DIR$/app/scripts/panor/baidu/MapEventListenerImpl.js" />
       <root url="file://$PROJECT_DIR$/app/scripts/panor/MapEventListener.js" />

@@ -10,7 +10,6 @@
         _ref = this.opts, this.ctx = _ref.ctx, this.staticCtx = _ref.staticCtx, this.map = _ref.map, this.travel = _ref.travel;
       }
       this.mapEventListener = window.cnmap.MapEventListener.factory();
-      this.marker = this.createMarker();
     }
 
     ITravelLayer.prototype.initMap = function() {};
@@ -79,11 +78,9 @@
 
     ITravelLayer.prototype.activePhoto = function(photo) {
       if (!this.mapEventListener.inMapView(photo.point.lat, photo.point.lng, this.map)) {
-        this.mapEventListener.setPosition(this.marker, photo.point.lat, photo.point.lng);
         this.mapEventListener.setCenter(this.map, photo.point.lat, photo.point.lng);
         return this.mapEventListener.setZoom(this.map, 18);
       } else {
-        this.mapEventListener.setPosition(this.marker, photo.point.lat, photo.point.lng);
         return this.mapEventListener.setCenter(this.map, photo.point.lat, photo.point.lng);
       }
     };

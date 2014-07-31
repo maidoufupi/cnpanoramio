@@ -1,0 +1,32 @@
+<div infinite-scroll="loadMorePhotos()"
+     infinite-scroll-distance="1"
+     infinite-scroll-parent="true"
+     infinite-scroll-disabled="loadMoreDisabled"
+     infinite-scroll-immediate-check="false"
+     class="maps-user">
+    <div class="header"
+         waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-1'}">
+        <span>此区域共 {{photos.length}} 张图片</span>
+    </div>
+    <div class="photo-wall photo-fluid-container"
+         photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}">
+        <div ng-repeat="photo in photos"
+             class="photo"
+             ponm-hover>
+            <a href=""
+               ng-click="displayPhoto(photo.id)">
+                <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_100w_100h.jpg">
+
+    <!--        <div class="action-select"
+                 ng-class="{'action': !selectable, 'ponm-show': selectable}"
+                 ng-click="selectPhoto($event, photo)">
+                <span class="icon-photo-select"
+                      ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
+            </div>-->
+                <div ng-if="photo.is360">
+                    <div class="icon-photo-p360"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

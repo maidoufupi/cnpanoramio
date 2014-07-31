@@ -21,13 +21,15 @@ angular.module('fileuploadApp', [
 //                if (isOnGitHub) {
 //                    // Demo settings:
             angular.extend(fileUploadProvider.defaults, {
-                autoUpload: false,
+//                autoUpload: false,
+                autoUpload: true,
+
                 // Enable image resizing, except for Android and Opera,
                 // which actually support image resizing, but fail to
                 // send Blob objects via XHR requests:
 //                        disableImageResize: /Android(?!.*Chrome)|Opera/
 //                            .test(window.navigator.userAgent),
-                maxFileSize: 6000000
+                maxFileSize: 10000000
 //                        loadImageMaxFileSize: 10000000,
 //                        imageQuality: 2000000,
 //                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
@@ -49,9 +51,9 @@ angular.module('fileuploadApp', [
 
     .controller('DemoFileUploadController', [ '$window',
         '$scope', '$http', 'fileUpload', '$modal', '$log', 'PhotoService', 'GPSConvertService',
-        'LoginUserService', 'UserService', 'TravelService', 'jsUtils',
+        'LoginUserService', 'UserService', 'TravelService', 'jsUtils', 'safeApply',
         function ($window, $scope, $http, fileUpload, $modal, $log, PhotoService, GPSConvertService,
-                  LoginUserService, UserService, TravelService, jsUtils) {
+                  LoginUserService, UserService, TravelService, jsUtils, safeApply) {
 
             $scope.apirest = $window.apirest;
             $scope.ctx = $window.ctx;
@@ -121,7 +123,37 @@ angular.module('fileuploadApp', [
                 }
             };
 
+            /**
+             * 从server返回的图片属性中抽取信息给file
+             *
+             * @param file
+             * @param photo
+             */
+            function extractProps(file, photo) {
+                file.photoId = photo.id;
+                file.is360 = photo.is360;
+                if(photo.point) {
+                    file.lat = photo.point.lat;
+                    file.lng = photo.point.lng;
+                    file.vendor = photo.vendor;
+                    file.latPritty = cnmap.GPS.convert(file.lat);
+                    file.lngPritty = cnmap.GPS.convert(file.lng);
+
+//                        mapService.getAddress(file.lat, file.lng, function(res) {
+//                            file.address = res;
+//                            file.saveProperties && file.saveProperties();
+//                        });
+
+//                        GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
+//                            file.address = regeocode.formatted_address;
+//                        });
+                }
+
+                $scope.$emit('photoAdd', photo);
+            }
+
             if(!fileUpload.defaults.autoUpload) {
+                // TODO DEBUG
                 $scope.options.add =
                     function (e, data) {
                         if (e.isDefaultPrevented()) {
@@ -169,54 +201,40 @@ angular.module('fileuploadApp', [
 //                                            GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
 //                                                file.address = regeocode.formatted_address;
 //                                            });
-                                    });
 
-                                    // DEBUG
-                                    $scope.photoCount = $scope.photoCount || 0;
-                                    $scope.photoCount += 1;
-                                    file.photoId = $scope.photoCount;
-                                    $scope.$emit('photoAdd', {id: $scope.photoCount, point: {lat: file.lat, lng: file.lng}});
+                                        // TODO DEBUG
+                                        $scope.$emit('photoAdd', {id: file.photoId, point: {lat: file.lat, lng: file.lng}});
+                                    });
                                 }
                             }
                         });
+
+                        // TODO DEBUG
+                        $scope.photoCount = $scope.photoCount || 0;
+                        $scope.photoCount += 1;
+                        file.photoId = $scope.photoCount;
+                        $scope.$emit('photoAdd', {id: $scope.photoCount});
                     }
             }
 
-            /**
-             * 从server返回的图片属性中抽取信息给file
-             *
-             * @param file
-             * @param photo
-             */
-            function extractProps(file, photo) {
-                file.photoId = photo.id;
-                file.is360 = photo.is360;
-                if(photo.point) {
-                    file.lat = photo.point.lat;
-                    file.lng = photo.point.lng;
-                    file.vendor = photo.vendor;
-                    file.latPritty = cnmap.GPS.convert(file.lat);
-                    file.lngPritty = cnmap.GPS.convert(file.lng);
-
-//                        mapService.getAddress(file.lat, file.lng, function(res) {
-//                            file.address = res;
-//                            file.saveProperties && file.saveProperties();
-//                        });
-
-//                        GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
-//                            file.address = regeocode.formatted_address;
-//                        });
-                }
+            function convertPritty(file) {
+                file.latPritty = cnmap.GPS.convert(file.lat);
+                file.lngPritty = cnmap.GPS.convert(file.lng);
             }
 
             $scope.$on("photoReverseAddress", function(e, photo) {
                 $log.debug("photoReverseAddress : " + photo.id);
                 angular.forEach($scope.queue, function(file, key) {
                     if(file.photoId == photo.id) {
-                        file.mapVendor = photo.mapVendor;
-                        file.address = photo.mapVendor.address;
-                        $log.debug(file);
-                        $log.debug(photo);
+                        safeApply($scope, function() {
+                            file.mapVendor = photo.mapVendor;
+                            file.address = photo.mapVendor.address;
+                            file.lat = photo.mapVendor.lat;
+                            file.lng = photo.mapVendor.lng;
+                            convertPritty(file);
+
+                            file.saveProperties();
+                        });
                     }
                 });
             });
@@ -241,7 +259,7 @@ angular.module('fileuploadApp', [
                 modalInstance.result.then(function (selectedItem) {
                     angular.forEach(selectedItem, function (file, key) {
                         file.saveProperties();
-                    })
+                    });
                 }, function () {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
@@ -292,14 +310,14 @@ angular.module('fileuploadApp', [
 
             // 当travel值有变化时，更新所有photo到新的travel上
             $scope.$watch('travel', function (newTravel) {
-                updateTravelPhotos();
+                updateTravelPhotos(newTravel);
             });
 
             /**
              * 更新photo所属的travel
              */
-            function updateTravelPhotos() {
-                if (!$scope.travel) {
+            function updateTravelPhotos(travel) {
+                if (!travel) {
                     return;
                 }
                 var photos = [];
@@ -310,7 +328,7 @@ angular.module('fileuploadApp', [
                     }
                 });
                 if (photos.length) {
-                    TravelService.addPhoto({travelId: $scope.travel.id},
+                    TravelService.addPhoto({travelId: travel.id},
                         jsUtils.param({photos: photos.join(",")}), function (res) {
                             if (res.status == "OK") {
                             }
@@ -328,15 +346,23 @@ angular.module('fileuploadApp', [
                 });
             });
 
-            $scope.$watch('photoMap', function(map) {
-                mapService.init(map);
-            });
+//            $scope.cancelUpload = function() {
+//                angular.forEach($scope.queue, function (file, key) {
+//                    if (!file.photoId) {
+//                        $scope.$emit('photoDelete', {id: file.photoId});
+//                    }
+//                });
+//            }
+
+//            $scope.$watch('photoMap', function(map) {
+//                mapService.init(map);
+//            });
 
         }
     ])
     .controller('PhotoUploadRowCtrl', [
-        '$scope', '$http', '$q', '$log', 'PhotoService',
-        function ($scope, $http, $q, $log, PhotoService) {
+        '$scope', '$http', '$q', '$log', 'PhotoService', 'jsUtils',
+        function ($scope, $http, $q, $log, PhotoService, jsUtils) {
 
             $scope.activePhoto = function(file) {
                 $scope.$emit('photoActive', {id: file.photoId});
@@ -366,10 +392,6 @@ angular.module('fileuploadApp', [
                 }
             });
 
-            $scope.toggleIs360 = function() {
-                $scope.file.is360 = !$scope.file.is360;
-            };
-
             $scope.saveProperties = function(type, data) {
                 var d = $q.defer();
                 if($scope.file.photoId) {
@@ -390,7 +412,8 @@ angular.module('fileuploadApp', [
                         photoProps[type] = data;
                     }
 
-                    PhotoService.updateProperties(photoProps, function (res) {
+                    PhotoService.updateProperties({photoId: $scope.file.photoId}, photoProps,
+                        function (res) {
                         if (res.status == "OK") {
                             d.resolve()
                         }else {
@@ -418,6 +441,12 @@ angular.module('fileuploadApp', [
             var file = $scope.file,
                 state;
 
+            file.tags = [];
+
+            $scope.indoor = {
+                tag: "室内"
+            };
+
             file.saveProperties = function () {
                 if (this.photoId) {
                     var _this = this;
@@ -441,56 +470,73 @@ angular.module('fileuploadApp', [
             };
 
             file.saveTags = function () {
-                var _this = this;
-                if (_this.photoId && _this.tags) {
-                    var tags = [];
-                    tags = tags.concat(_this.tags || []).concat($scope.tags || []);
 
-                    if (tags.length) {
-                        PhotoService.tag({photoId: _this.photoId}, tags, function (data) {
-                            if (data) {
-                                $log.debug("tags update successful");
-                            }
-                        })
-                    }
+                var _this = this;
+                var tags = [];
+
+                if(!_this.photoId) {
+                    return;
                 }
+
+                if($scope.indoor.is) {
+                    tags.push($scope.indoor.tag);
+                }
+                tags = tags.concat(_this.tags || []).concat($scope.tags || []);
+
+//                if (tags.length) {
+                    PhotoService.tag({photoId: _this.photoId}, tags, function (data) {
+                        if (data) {
+                            $log.debug("tags update successful");
+                        }
+                    });
+//                }
+
             };
 
-            $scope.$watch('title', function (title) {
-                $scope.file.title = $scope.title;
-                file.saveProperties();
-            });
-
-            $scope.$watch('description', function (title) {
-                $scope.file.description = $scope.description;
-                file.saveProperties();
-            });
+//            $scope.$watch('title', function (title) {
+//                $scope.file.title = $scope.title;
+//                file.saveProperties();
+//            });
+//
+//            $scope.$watch('description', function (title) {
+//                $scope.file.description = $scope.description;
+//                file.saveProperties();
+//            });
 
             $scope.$watch('file.tags', function (newTags) {
                 file.saveTags();
             });
+
+            $scope.$watch('file.is360', function (newTags) {
+                file.saveProperties();
+            });
+
+            $scope.$watch('indoor.is', function (indoor) {
+                file.saveTags();
+            });
+
         }])
 
     .controller('FileDestroyController', [
-        '$scope', '$http', 'PhotoService',
-        function ($scope, $http, PhotoService) {
+        '$scope', '$log', 'PhotoService',
+        function ($scope, $log, PhotoService) {
             var file = $scope.file,
                 state;
 
             file.$state = function () {
                 return state;
             };
+
             file.$destroy = function () {
                 if(file.photoId) {
                     state = 'pending';
                     PhotoService.delete({photoId: file.photoId}, function (data) {
                         if (data) {
                             state = 'resolved';
-
                         } else {
                             state = 'rejected';
                         }
-                    })
+                    });
                 }
 
                 $scope.clear(file);
@@ -504,7 +550,24 @@ angular.module('fileuploadApp', [
             if (!file.$cancel && !file._index) {
                 file.$cancel = function () {
                     $scope.clear(file);
+                    $log.debug("delete upload photo: " + file.name);
                 };
+            }
+
+            /**
+             * 删除上传的图片
+             *
+             * @param file
+             */
+            $scope.delete = function(file) {
+                $log.debug("delete upload photo: " + file.name);
+
+                if(file.photoId) {
+                    file.$destroy();
+                }else {
+                    file.$cancel();
+                }
+                $scope.$emit('photoDelete', {id: file.photoId});
             }
         }
     ])

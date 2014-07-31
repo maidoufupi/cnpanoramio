@@ -27,7 +27,8 @@
     "jquery-backstretch": "2.0.4",
     "jquery-waypoints": "2.0.5",
     "angular-ui-utils": "bower",
-    "angular-ui-router": "0.2.10"
+    "angular-ui-router": "0.2.10",
+    "ngInfiniteScroll": "1.1.2"
 
   },
   "devDependencies": {

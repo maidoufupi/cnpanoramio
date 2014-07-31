@@ -16,7 +16,6 @@
       if (map) {
         this.map = map;
       }
-      this.mapEventListener.setMap(this.marker, this.map);
       this.calcSpotTime();
       point = [];
       if (this.travel) {
@@ -111,15 +110,7 @@
       });
     };
 
-    TravelLayer.prototype.createMarker = function() {
-      if (window.AMap) {
-        return new AMap.Marker({
-          map: this.map,
-          icon: "images/marker.png",
-          animation: "AMAP_ANIMATION_BOUNCE"
-        });
-      }
-    };
+    TravelLayer.prototype.createMarker = function() {};
 
     return TravelLayer;
 

@@ -1,6 +1,7 @@
 package com.cnpanoramio.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.appfuse.model.User;
@@ -72,15 +73,31 @@ public class TravelServiceImpl implements TravelService {
 		for(com.cnpanoramio.domain.TravelSpot travelSpot : travel.getSpots()) {
 			t.getSpots().add(convertTravelSpot(travelSpot));
 		}
+		
+		// set album cover photo
 		if(null != travel.getAlbumCover()) {
 			t.setAlbumCover(PhotoUtil.getPhotoOssKey(travel.getAlbumCover()));
+		}else {
+			Iterator<com.cnpanoramio.domain.TravelSpot> iter = travel.getSpots().iterator();
+			if(iter.hasNext()) {
+				com.cnpanoramio.domain.TravelSpot spot = iter.next();
+				Iterator<Photo> iterPhotos = spot.getPhotos().iterator();
+				if(iterPhotos.hasNext()) {
+					Photo photo = iterPhotos.next();
+					t.setAlbumCover(PhotoUtil.getPhotoOssKey(photo));					
+				}
+				
+			}
+					
 		}
+		
 		// photo size
 		Integer photoSize = 0;
 		for(com.cnpanoramio.domain.TravelSpot spot : travel.getSpots()) {
 			photoSize += spot.getPhotos().size();
 		}
 		t.setPhotoSize(photoSize);
+		
 		return t;
 	}
 	

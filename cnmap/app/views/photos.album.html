@@ -18,20 +18,20 @@
             <div class="item"><pre class="description"><span class="footnotes">{{spot.description}}</span></pre></div>
         </div>
 
-        <div photo-fluid-container
-             fluid-line-border="0"
-             fluid-line-item-margin="1"
-             item-selector=".ponm-photo"
-             class="photo-fluid-container photo-container">
+        <div photo-fluid-container="{'size': 'maxi', 'itemSelector': '.photo', itemMargin: 1}"
+             class="photo-wall photo-selectable-container">
             <div ng-repeat="photo in spot.photos"
                  ng-controller="PhotosPhotoCtrl"
-                 class="fluid-brick ponm-photo photo"
+                 class="photo"
                  ponm-hover=">.action">
-                <a ng-click="activePhoto(photo)"
+                <a ng-click="displayPhoto(photo.id)"
                    href="">
                     <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
                          ng-class="{'selectable': selectable&&!photo.actionSelected,
                         'selected': photo.actionSelected}">
+                    <div ng-if="photo.is360">
+                        <div class="icon-photo-p360"></div>
+                    </div>
                 </a>
 
                 <div class="action-select"
@@ -40,9 +40,7 @@
                     <span class="icon-photo-select"
                           ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
                 </div>
-                <div ng-if="photo.is360">
-                    <div class="icon-photo-p360"></div>
-                </div>
+
             </div>
         </div>
 

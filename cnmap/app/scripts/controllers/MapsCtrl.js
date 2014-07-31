@@ -105,8 +105,8 @@ angular.module('mapsApp', [
                     controller: "MapsRecentCtrl"
                 })
                 .state('maps.user', {
-                    url: '/user',
-                    templateUrl: 'views/maps.popular.html',
+                    url: '/user/:userId',
+                    templateUrl: 'views/maps.user.html',
                     resolve: {
                     },
                     controller: "MapsUserCtrl"
@@ -134,9 +134,11 @@ angular.module('mapsApp', [
     }])
     .controller('MapsCtrl',
     [        '$window', '$location', '$rootScope', '$scope', '$q', 'PhotoService', 'UserService', 'PanoramioService',
-        '$modal', 'ponmCtxConfig', '$log', '$state', '$stateParams', '$timeout', 'safeApply', 'jsUtils',
+                '$modal', 'ponmCtxConfig', '$log', '$state', '$stateParams', '$timeout', 'safeApply', 'jsUtils',
+                'HashStateManager',
         function ($window, $location, $rootScope, $scope, $q, PhotoService, UserService, PanoramioService,
-                  $modal, ponmCtxConfig, $log, $state, $stateParams, $timeout, safeApply, jsUtils) {
+                  $modal, ponmCtxConfig, $log, $state, $stateParams, $timeout, safeApply, jsUtils,
+                  HashStateManager) {
 
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -162,22 +164,24 @@ angular.module('mapsApp', [
 
             $scope.navbarFixedTop = false;
 
+            $scope.hashStateManager = new HashStateManager($scope, $location);
+
             $log.debug($state);
 
-            $scope.$on('waypointEvent', function (e, direction, elmId) {
-                $log.debug("waypointSpot: " + direction + " = " + elmId);
-                if (elmId == "navbar") {
-                    if (direction == "down") {
-                        safeApply($scope, function () {
-                            $scope.navbarFixedTop = true;
-                        });
-                    } else {
-                        safeApply($scope, function () {
-                            $scope.navbarFixedTop = false;
-                        });
-                    }
-                }
-            });
+//            $scope.$on('waypointEvent', function (e, direction, elmId) {
+//                $log.debug("waypointSpot: " + direction + " = " + elmId);
+//                if (elmId == "navbar") {
+//                    if (direction == "down") {
+//                        safeApply($scope, function () {
+//                            $scope.navbarFixedTop = true;
+//                        });
+//                    } else {
+//                        safeApply($scope, function () {
+//                            $scope.navbarFixedTop = false;
+//                        });
+//                    }
+//                }
+//            });
 
             $scope.stateStatus = {
                 popular: $state.current.url == '/popular',
@@ -185,7 +189,7 @@ angular.module('mapsApp', [
                 travel: $state.current.name == 'maps.travel',
                 upload: $state.current.name == 'maps.upload',
                 camera: $state.current.url == '/camera',
-                user: $state.current.url == '/user',
+                user: $state.current.name == 'maps.user',
                 travels: $state.current.url == '/travels'
             };
 
@@ -197,7 +201,7 @@ angular.module('mapsApp', [
                         travel: toState.name == 'maps.travel',
                         upload: toState.name == 'maps.upload',
                         camera: toState.url == '/camera',
-                        user: toState.url == '/user',
+                        user: toState.name == 'maps.user',
                         travels: toState.url == '/travels'
                     };
 
@@ -250,7 +254,9 @@ angular.module('mapsApp', [
             $(panoramioLayer).bind("data_changed", function (e, data) {
                 if(!$scope.stateStatus.user) {
                     $scope.$apply(function (scope) {
-                        $scope.photos = data;
+                        $scope.photos = jsUtils.Array.mergeRightist($scope.photos || [], data, "id");
+//                        $scope.photos = data;
+                        $scope.$broadcast("ponmPhotoFluidResize", {});
                     });
                 }
             });
@@ -271,8 +277,8 @@ angular.module('mapsApp', [
             });
 
             $scope.displayPhoto = function(photoId) {
-                hashObj.photoid = photoId;
-                updateState();
+                $scope.hashStateManager.set("photoid", photoId);
+
                 var modalInstance = $modal.open({
                     templateUrl: 'views/photo.html',
                     controller: 'PhotoModalCtrl',
@@ -288,12 +294,9 @@ angular.module('mapsApp', [
                 });
 
                 modalInstance.result.then(function (selectedItem) {
-                    delete hashObj.photoid;
-                    updateState();
-//                    $scope.selected = selectedItem;
+                    $scope.hashStateManager.set("photoid", "");
                 }, function () {
-                    delete hashObj.photoid;
-                    updateState();
+                    $scope.hashStateManager.set("photoid", "");
                 });
             };
 
@@ -324,15 +327,16 @@ angular.module('mapsApp', [
                 panoramioLayer.setFavorite(false);
                 panoramioLayer.setUserId('');
                 panoramioLayer.setLatest(false);
-                delete hashObj.userid;
-                delete hashObj.recent;
-                delete hashObj.favorite;
+//                delete hashObj.userid;
+//                delete hashObj.recent;
+//                delete hashObj.favorite;
                 panoramioLayer.setAuto(true);
                 switch (type) {
                     case "user":
                         panoramioLayer.setFavorite(false);
                         panoramioLayer.setUserId($scope.user.id);
-                        hashObj.userid = $scope.user.id;
+//                        hashObj.userid = $scope.user.id;
+//                        $scope.hashStateManager.set("userid", $scope.user.id);
                         break;
                     case "popular":
                         panoramioLayer.setUserId(undefined);
@@ -342,9 +346,9 @@ angular.module('mapsApp', [
                         break;
                     case "favorite":
                         panoramioLayer.setFavorite(true);
-                        hashObj.favorite = true;
+//                        hashObj.favorite = true;
                         panoramioLayer.setUserId($scope.user.id);
-                        hashObj.userid = $scope.user.id;
+//                        hashObj.userid = $scope.user.id;
                         break;
                     case "manual":
                         panoramioLayer.setAuto(false);
@@ -357,119 +361,75 @@ angular.module('mapsApp', [
                 panoramioLayer.trigger("changed")
             };
 
-            /**
-             *  change the url hash params
-             * ***********************************************************************************/
-            var hashObj = {}; //jQuery.deparam($location.hash());
-            $scope.hashObj = hashObj;
             // changeState状态标志，记录上次动作不超过0.5秒，不能进行state更改的触发
             // 高德地图有setCenter后取getCenter不完全一致问题
             var changeState = false;
 
             function locationHash(map) {
 
-                $scope.mapEventListener.addLocationHashListener(map, function(lat ,lng, zoom) {
-                    updateState(lat ,lng, zoom);
+                $scope.mapEventListener.addLocationHashListener(map,
+                    function(lat ,lng, zoom) {
+                        $log.debug("locationHashListener");
+                        if (changeState) {
+                            return;
+                        }
+
+                        if ($scope.setState) {
+                            $timeout.cancel($scope.setState);
+                        }
+                        changeState = true;
+                        $scope.hashStateManager.set({
+                            lat: lat,
+                            lng: lng,
+                            zoom: zoom
+                        });
+                        $scope.setState = $timeout(function () {
+                            changeState = false;
+                        }, 500);
+
                 });
 
-                $scope.$watch(function () {
-                    return $location.hash();
-                }, function (hash) {
-                    if (changeState) {
-                        return;
-                    }
-                    var stateObj = jsUtils.deparam(hash);
-                    splitPoundSign(stateObj, "photoid");
-                    splitPoundSign(stateObj, "zoom");
-                    splitPoundSign(stateObj, "lat");
-                    splitPoundSign(stateObj, "lng");
+                $scope.hashStateManager.bindingWatch("lat lng zoom bounds", function(lat, lng, zoom, bounds) {
 
-                    if (stateObj.lat && stateObj.lng) {
-                        if (hashObj.lat != stateObj.lat ||
-                            hashObj.lng != stateObj.lng ||
-                            hashObj.zoom != stateObj.zoom) {
-                            if ($scope.setState) {
-                                $timeout.cancel($scope.setState);
-                            }
-                            changeState = true;
-                            $scope.mapEventListener.setCenter(map, stateObj.lat, stateObj.lng);
-                            if (stateObj.zoom) {
-                                $scope.mapEventListener.setZoom(map, stateObj.zoom);
-                            }
-                            $scope.setState = $timeout(function () {
-                                changeState = false;
-                            }, 500);
-
-                            if(stateObj.bounds) {
-                                var boundPoints = stateObj.bounds.split(",");
-                                if(4 == boundPoints.lenght) {
-                                    $scope.mapEventListener.setBounds(map, {lat: boundPoints[0], lng: boundPoints[1]},
-                                        {lat: boundPoints[2], lng:boundPoints[3]});
-                                }
-
-                            }
-                        }
-                    }
-
-                    if(stateObj.search != hashObj.search) {
-                        $scope.setSearch(stateObj.search);
-//                        $scope.$broadcast("searchChanged", stateObj.search);
-                    }
-
-                    angular.copy(stateObj, hashObj);
-
-                    if(stateObj.userid) {
-                        if(stateObj.favorite) {
-                            $scope.setPanormaioType("favorite", stateObj.userid);
-                        }else {
-                            $scope.setPanormaioType("user", stateObj.userid);
-                        }
-                    }
-
-                    if(stateObj.photoid) {
-                        $scope.displayPhoto(stateObj.photoid);
-                    }
-
-//                    if(stateObj.search) {
-//                        var url = $state.current.url;
-//                        url = url.replace("/", "");
-//                        $scope.search(stateObj.search, url);
-//                    }
-                })
-            }
-
-            function updateState(lat ,lng, zoom) {
-                if (changeState) {
-                    return;
-                }
-
-                var stateObj = jsUtils.deparam($location.hash());
-                splitPoundSign(stateObj, "photoid");
-
-                if (lat && lng && zoom) {
-                    hashObj['lat'] = lat;
-                    hashObj['lng'] = lng;
-                    hashObj['zoom'] = zoom;
-                }
-                if (hashObj.lat != stateObj.lat ||
-                    hashObj.lng != stateObj.lng ||
-                    hashObj.zoom != stateObj.zoom ||
-                    hashObj.latest != stateObj.latest ||
-                    hashObj.userid != stateObj.userid ||
-                    hashObj.favorite != stateObj.favorite ||
-                    hashObj.photoid != stateObj.photoid
-                    ) {
+                    $log.debug("watch lat lng zoom");
                     if ($scope.setState) {
                         $timeout.cancel($scope.setState);
                     }
                     changeState = true;
-                    $location.hash(jsUtils.param(hashObj));
+                    if(zoom && lat && lng) {
+                        $log.debug("setZoomAndCenter");
+                        $scope.mapEventListener.setZoomAndCenter(map, zoom, lat, lng);
+                    }else {
+                        if(lat && lng) {
+                            $log.debug("setCenter");
+                            $scope.mapEventListener.setCenter(map, lat, lng);
+                        }
+                        if (zoom) {
+                            $log.debug("setZoom");
+                            $scope.mapEventListener.setZoom(map, zoom);
+                        }
+                    }
+
                     $scope.setState = $timeout(function () {
                         changeState = false;
                     }, 500);
-                }
+
+                    if(bounds) {
+                        var boundPoints = bounds.split(",");
+                        if(4 == boundPoints.lenght) {
+                            $scope.mapEventListener.setBounds(map, {lat: boundPoints[0], lng: boundPoints[1]},
+                                {lat: boundPoints[2], lng:boundPoints[3]});
+                        }
+
+                    }
+                });
             }
-            $scope.updateState = updateState;
+
+            $scope.hashStateManager.watch("photoid", function(photoId) {
+                if(photoId) {
+                    $scope.displayPhoto(photoId);
+                }
+            });
 
             /**
              * 去掉可能有的非法#号
@@ -514,20 +474,18 @@ angular.module('mapsApp', [
                 $scope.searchValObject = {
                     val: search
                 };
-                hashObj.search = search;
-                updateState();
-//                if(!$scope.stateStatus.popular && !$scope.stateStatus.recent) {
-//                    $state.go("maps.popular");
-//                }
+                $scope.hashStateManager.set("search", search);
+
                 $scope.$broadcast("searchChanged", search);
             };
 
             $scope.clearSearch = function() {
                 panoramioLayer.setAuto(true);
                 $scope.searchValObject = "";
-                delete hashObj.search;
-                updateState();
+                $scope.hashStateManager.set("search", "");
             };
+
+            $scope.loadMoreDisabled = true;
 
 //            PanoramioService.getLatest({swlat:23, swlng:120, nelat:30, nelng:130, level:3, width:500, height:500, vendor:'gaode'},
 //                function(res) {
@@ -639,7 +597,7 @@ angular.module('mapsApp', [
 
             $scope.panoramioLayer.setAuto(false);
 
-            $scope.setPanormaioType('travel');
+//            $scope.setPanormaioType('travel');
 
             function getTravel(travelId) {
                 TravelService.getTravel({travelId: travelId}, function(res) {
@@ -722,8 +680,6 @@ angular.module('mapsApp', [
 
             $scope.$on("$destroy", function() {
                 clearTravelLayer();
-                delete $scope.hashObj.travelid;
-                $scope.updateState();
             });
 
             $scope.activePhoto = function(photo) {
@@ -781,10 +737,10 @@ angular.module('mapsApp', [
             }
         }])
     .controller('MapsTravelSpotCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils',
-        function ($window, $location, $rootScope, $scope, TravelService, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, jsUtils) {
+    [        '$window', '$location', '$rootScope', '$scope', '$q', 'TravelService', 'UserService', '$modal',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', '$filter', 'jsUtils',
+        function ($window, $location, $rootScope, $scope, $q, TravelService, UserService, $modal,
+                  ponmCtxConfig, $log, $state, $stateParams, $filter, jsUtils) {
 
             $scope.$watch('spot.timeStart', function(timeStart) {
                 if(timeStart) {
@@ -806,25 +762,27 @@ angular.module('mapsApp', [
                     address: spot.address
                 };
                 params[type] = $data;
-                TravelService.changeSpot({travelId: spot.travel_id, typeId: spot.id}, param(params), function(res) {
-                    res = res || {};
-                    if(res.status === 'OK') { // {status: "OK"}
-                        d.resolve()
-                    } else { // {status: "error", msg: "Username should be `awesome`!"}
-                        d.resolve(res.info);
-                    }
-                }, function(error) {
-                    if(error.data) {
-                        d.reject(error.data.info);
-                    }else {
-                        d.reject('Server error!');
-                    }
-                });
+                TravelService.changeSpot({travelId: spot.travel_id, typeId: spot.id},
+                    jsUtils.param(params),
+                    function(res) {
+                        res = res || {};
+                        if(res.status === 'OK') { // {status: "OK"}
+                            d.resolve()
+                        } else { // {status: "error", msg: "Username should be `awesome`!"}
+                            d.resolve(res.info);
+                        }
+                    }, function(error) {
+                        if(error.data) {
+                            d.reject(error.data.info);
+                        }else {
+                            d.reject('Server error!');
+                        }
+                    });
                 return d.promise;
             };
 
             $scope.createSpot = function(photo) {
-                TravelService.createSpot({travelId: $scope.spot.travel_id}, param({}), function(res) {
+                TravelService.createSpot({travelId: $scope.spot.travel_id}, jsUtils.param({}), function(res) {
                     if(res.status == "OK") {
                         $scope.addSpotPhoto(photo, res.spot);
                     }
@@ -834,7 +792,7 @@ angular.module('mapsApp', [
             $scope.addSpotPhoto = function(photo, spot) {
                 var photos = {photos: photo.id};
                 TravelService.addSpotPhoto({travelId: spot.travel_id, typeId: spot.id},
-                    param(photos), function(res) {
+                    jsUtils.param(photos), function(res) {
                         if(res.status == "OK") {
                             $scope.setTravel(res.travel);
                         }
@@ -856,40 +814,91 @@ angular.module('mapsApp', [
         }])
     .controller('MapsUserCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils',
         function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams) {
+                  ponmCtxConfig, $log, $state, $stateParams, jsUtils) {
 
             $scope.selectable = false;
 
+            $scope.userId = $stateParams.userId;
+
             // 用户图片分页属性
             $scope.photo = {
-                pageSize: 40,
+                pageSize: 20,
                 currentPage: 1,
                 maxSize: 10
             };
 
-            $($scope.panoramioLayer).bind("map_changed", function (e, bounds, level, size) {
-                $log.debug(bounds);
-                $log.debug(level);
-                $log.debug(size);
+            $scope.photos = [];
+            $scope.loadMoreDisabled = false;
+            $scope.loadBusy = false;
 
-                UserPhoto.get({userId: $scope.user.id, pageSize: $scope.photo.pageSize, pageNo: $scope.photo.currentPage,
-                        swlat:bounds.sw.lat, swlng:bounds.sw.lng, nelat:bounds.ne.lat, nelng:bounds.ne.lng},
+            function loadUserPhotos() {
+                if($scope.loadBusy) {
+                    return;
+                }
+                $scope.loadBusy = true;
+                UserPhoto.get({userId: $scope.userId,
+                        pageSize: $scope.photo.pageSize,
+                        pageNo: $scope.photo.currentPage,
+                        swlat:$scope.bounds.sw.lat, swlng:$scope.bounds.sw.lng,
+                        nelat:$scope.bounds.ne.lat, nelng:$scope.bounds.ne.lng},
                     function(data) {
                         if(data.status == "OK") {
-                            $scope.photos = data.photos;
+//                            $scope.photos = data.photos;
+                            if(data.photos.length < $scope.photo.pageSize) {
+                                $scope.loadMoreDisabled = true;
+                            }
+                            if($scope.photo.currentPage === 1) {
+                                $scope.photos = jsUtils.Array.mergeRightist($scope.photos || [], data.photos, "id");
+                            }else {
+                                $scope.photos = jsUtils.Array.append($scope.photos || [], data.photos, "id");
+                            }
+                            $scope.photo.currentPage++;
+                            $scope.$broadcast("ponmPhotoFluidResize", {});
+                            $scope.loadBusy = false;
                         }
-                    })
+                    });
+
+
+            }
+
+            $($scope.panoramioLayer).bind("map_changed", function (e, bounds, level, size) {
+//                $log.debug(e);
+//                $log.debug(bounds);
+                $log.debug(level);
+//                $log.debug(size);
+                $scope.bounds = bounds;
+                $scope.level = level;
+                $scope.size = size;
+                $scope.photo.currentPage = 1;
+                $scope.loadMoreDisabled = false;
+                loadUserPhotos();
             });
 
             // 要在bind map_changed event 之后，才能有初始化图片的动作
-            $scope.setPanormaioType('user');
+            $scope.setPanormaioType('user', $scope.userId);
 
             $scope.$on("$destroy", function() {
-                delete $scope.hashObj.userid;
-                $scope.updateState();
+                $($scope.panoramioLayer).unbind("map_changed");
             });
+
+            $scope.loadMorePhotos = function() {
+                loadUserPhotos();
+            };
+
+//            $scope.$on("loadMorePhotos", function() {
+//                $log.debug("loadMorePhotos");
+////                for(var i= 0;i<$scope.photo.pageSize;i++ ) {
+////                    $scope.photos.push({
+////                        id:$scope.photo.currentPage*i
+////                    });
+////                }
+////                $scope.photo.currentPage++;
+//
+//
+//
+//            });
         }])
     .controller('MapsTravelsCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', 'TravelService', '$modal',
@@ -944,35 +953,63 @@ angular.module('mapsApp', [
             var photos = {};
             $scope.$on("photoAdd", function(e, photo) {
                 $log.debug(photo.id);
+                photo.mapVendor = photo.mapVendor || {};
                 photos[photo.id] = photos[photo.id] || photo;
                 photo = photos[photo.id];
-                addOrUpdateMarker(photo, photo.point.lat, photo.point.lng);
-            });
-            $scope.$on("photoDelete", function(e, photo) {
+
+                if(photo.point) {
+                    addOrUpdateMarker(photo, photo.point.lat, photo.point.lng);
+                }
 
             });
+
+            $scope.$on("photoDelete", function(e, photo) {
+                $log.debug("photo delete: " + photo.id);
+                photo = photos[photo.id];
+                if(photo) {
+                    if(photo.mapVendor.marker) {
+                        mapEventListener.removeMarker(photo.mapVendor.marker);
+                    }
+                    delete photos[photo.id];
+                }
+            });
+
             $scope.$on("photoActive", function(e, photo) {
                 $log.debug("active: " + photo.id);
                 photo = photos[photo.id];
-                $scope.activePhoto(photo);
+                if(photo) {
+                    $scope.activePhoto(photo);
+                }
+            });
+
+            if($scope.map) {
+                addMapClickEvent($scope.map);
+            }
+            $scope.$on("mapChanged", function(e, map) {
+                addMapClickEvent($scope.map);
+            });
+
+            $scope.$on("$destroy", function() {
+                mapEventListener.clearMap();
             });
 
             function addOrUpdateMarker(photo, lat, lng) {
-                photo.mapVendor = photo.mapVendor || {};
+//                photo.mapVendor = photo.mapVendor || {};
                 if (!photo.mapVendor.marker) {
                     createMarker(photo, lat, lng);
 //                    mapEventListener.activeMarker(photo.mapVendor.marker);
 //                    $scope.activePhoto(photo);
-                    $scope.setPlace(photo, lat, lng);
                 }else {
                     mapEventListener.setPosition(photo.mapVendor.marker, lat, lng);
                     mapEventListener.setMap(photo.mapVendor.marker, $scope.map);
                 }
+
+                $scope.setPlace(photo, lat, lng);
             }
 
             function createMarker(file, lat, lng) {
                 // create marker
-                file.mapVendor = file.mapVendor || {};
+//                file.mapVendor = file.mapVendor || {};
                 if(lat && lng) {
                     file.mapVendor.lat = lat;
                     file.mapVendor.lng = lng;
@@ -1003,9 +1040,12 @@ angular.module('mapsApp', [
 
             function addMapClickEvent(map) {
                 mapEventListener.addMapClickListener(map, function (lat, lng) {
-                    addOrUpdateMarker($scope.file, lat, lng);
-                    $scope.setPlace($scope.file, lat, lng);
-                })
+                    if($scope.file) {
+                        addOrUpdateMarker($scope.file, lat, lng);
+                        mapEventListener.activeMarker($scope.file.mapVendor.marker);
+//                        $scope.setPlace($scope.file, lat, lng);
+                    }
+                });
             }
 
             /**
@@ -1032,7 +1072,7 @@ angular.module('mapsApp', [
                         }
 //                        $scope.setPlace($scope.file, $scope.file.mapVendor.lat, $scope.file.mapVendor.lng);
                     } else {
-                        $scope.clearPlace();
+//                        $scope.clearPlace();
                     }
                 }
 

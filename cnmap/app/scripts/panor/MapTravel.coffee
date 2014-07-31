@@ -3,7 +3,7 @@ class ITravelLayer
   constructor: (@opts) ->
     {@ctx, @staticCtx, @map, @travel} = @opts if @opts
     @mapEventListener = window.cnmap.MapEventListener.factory()
-    @marker = @createMarker()
+#    @marker = @createMarker()
 
   initMap: () ->
 
@@ -53,11 +53,11 @@ class ITravelLayer
   activePhoto: (photo) ->
 
     if not @mapEventListener.inMapView(photo.point.lat, photo.point.lng, @map)
-      @mapEventListener.setPosition(@marker, photo.point.lat, photo.point.lng)
+#      @mapEventListener.setPosition(@marker, photo.point.lat, photo.point.lng)
       @mapEventListener.setCenter(@map, photo.point.lat, photo.point.lng)
       @mapEventListener.setZoom(@map, 18)
     else
-      @mapEventListener.setPosition(@marker, photo.point.lat, photo.point.lng)
+#      @mapEventListener.setPosition(@marker, photo.point.lat, photo.point.lng)
       @mapEventListener.setCenter(@map, photo.point.lat, photo.point.lng)
 
   createMarker: () ->

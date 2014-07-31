@@ -21,7 +21,7 @@
             <div ng-repeat="photo in travel.photos"
                  ng-controller="PhotosPhotoCtrl"
                  class="fluid-brick ponm-photo photo"
-                 ponm-hover>
+                 ponm-hover=">.action">
                 <a ng-click="activePhoto(photo)"
                    href="">
                     <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"

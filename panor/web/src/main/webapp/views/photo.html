@@ -19,8 +19,9 @@
                     <!--<li><a href="">分享</a></li>-->
                     <li><a href="">幻灯片</a></li>
                     <li class="dropdown">
-                        <a href="" class="dropdown-toggle" data-toggle="dropdown">更多<b class="caret"></b></a>
+                        <a href="" class="dropdown-toggle">更多<b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                            <li><a href="">设为旅行相册封面</a></li>
                             <li><a href="">下载图片</a></li>
                             <li><a href="">举报非法图片</a></li>
                             <!--<li><a href="">Something else here</a></li>
@@ -33,8 +34,10 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li data-ng-click="cancel()">
-                        <a href="" class="close" aria-hidden="true">&times;</a>
+                    <li ng-click="cancel()"
+                        class="cancel">
+                        <div class="photos-lightbox-close"></div>
+                        <!--<a href="" class="close" aria-hidden="true">&times;</a>-->
                     </li>
                 </ul>
             </div>
@@ -42,11 +45,14 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
+
     <div class="photo-container-body">
+        <!-- ponm-photo-src-p360="{{apirest}}/photo/{{photo.id}}/oss" -->
         <div ponm-photo-container
              ponm-photo-src-l1="{{getPhotoSrc(photo)}}"
-             ponm-photo-width="{{photo.width}}"
-             ponm-photo-height="{{photo.height}}"
+             ponm-photo-src-p360="{{corsproxyCtx}}/{{photo.oss_key}}@0e_2000w_1000h.jpg"
+             ponm-photo-width="{{2000}}"
+             ponm-photo-height="{{1000}}"
              ponm-photo-color="{{photo.color}}"
              ponm-photo-is360="{{!!photo.is360}}"
                 >

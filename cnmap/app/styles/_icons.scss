@@ -1,0 +1,54 @@
+/** icons */
+.action-select {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  opacity: 0;
+}
+.action.ponm-show {
+  opacity: 1;
+}
+
+.icon-photo-select {
+  opacity: .55;
+  background: no-repeat url(../images/photos-action.png) -42px -50px;
+  background-clip: content-box;
+  cursor: pointer;
+  height: 24px;
+  left: 0;
+  //  padding: 9px;
+  position: absolute;
+  top: 0;
+  width: 24px;
+}
+.icon-photo-select.icon-photo-selected {
+  -webkit-animation: ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1;
+  animation: ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1;
+  filter: alpha(opacity=100);
+  opacity: 1;
+  background: no-repeat url(../images/photos-action.png) -109px -50px;
+  background-clip: content-box;
+}
+
+.icon-photo-p360 {
+  background: no-repeat url(../images/photos-action.png) -89px -124px;
+  height: 40px;
+  left: 50%;
+  margin-left: -20px;
+  margin-top: -20px;
+  position: absolute;
+  top: 50%;
+  width: 40px;
+}
+
+.photos-lightbox-close {
+  background: no-repeat url(../images/lightbox.png) -57px -338px;
+  bottom: 0;
+  height: 16px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 16px;
+}

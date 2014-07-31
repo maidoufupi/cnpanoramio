@@ -38,6 +38,14 @@ class IMapEventListener
   setZoom: (map, zoom) ->
 
   ##
+    # 设置地图的缩放级别
+    #
+    # @param map
+    # @param zoom
+    #/
+  setZoomAndCenter: (map, zoom, lat, lng) ->
+
+  ##
    # 设置地图边界
    #
    # @param map
@@ -109,6 +117,14 @@ class IMapEventListener
    # @param callback (lat, lng)
    #/
   addDragendListener: (marker, callback) ->
+
+  ##
+  # 从地图上移除marker
+  #
+  # @param marker
+  # @param callback (lat, lng)
+  #/
+  removeMarker: (marker) ->
 
   ##
    # 为地图添加点击监听

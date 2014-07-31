@@ -1,11 +1,17 @@
-<div class="photo-container photo-all">
+<div class="photo-wall photo-wall-fixed-size photo-selectable-container photo-all"
+     infinite-scroll='getUserPhotos()'
+     infinite-scroll-distance='1'
+     infinite-scroll-parent="true">
     <div ng-repeat="photo in photos"
          ng-controller="PhotosPhotoCtrl"
          class="photo"
-         ponm-hover>
-        <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_200w_200h_1c.jpg"
-             ng-class="{'selectable': selectable&&!photo.actionSelected,
+         ponm-hover=">.action">
+        <a href=""
+           ng-click="displayPhoto(photo.id)">
+            <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_200w_200h_1c.jpg"
+                 ng-class="{'selectable': selectable&&!photo.actionSelected,
                         'selected': photo.actionSelected}">
+        </a>
         <div class="action-select"
              ng-class="{'action': !selectable, 'ponm-show': selectable}"
              ng-click="selectPhoto($event, photo)">
@@ -18,9 +24,6 @@
     </div>
     <div ng-show="photo.currentPage <= photo.numPages"
          class="btn btn-default load-more"
-         waypoint="loadMore"
-         waypoint-offset="bottom-in-view"
-         waypoint-refresh="{{photoLoading}}"
-         waypoint-enable="{{photo.currentPage <= photo.numPages}}"
+         ng-click="getUserPhotos()"
             >{{photoLoading?'loading...':'加载更多'}}</div>
 </div>

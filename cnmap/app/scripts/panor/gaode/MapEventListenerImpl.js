@@ -49,6 +49,12 @@
             map.setZoom(zoom);
         };
 
+
+        this.setZoomAndCenter = function(map, zoom, lat, lng) {
+            var point = new AMap.LngLat(lng, lat);
+            map.setZoomAndCenter(zoom, point);
+        };
+
         this.setBounds = function(map, southwest, northeast){
             map.setBounds(new AMap.Bounds(
                 new AMap.LngLat(southwest.lng, southwest.lat),
@@ -69,7 +75,8 @@
         this.addMarker = function(map, lat, lng) {
             return new AMap.Marker({
                 map: map,
-                position: new AMap.LngLat(lng, lat)
+                position: new AMap.LngLat(lng, lat),
+                topWhenMouseOver: true
             });
         };
 
@@ -77,7 +84,9 @@
             return new AMap.Marker({
                 draggable: true,
                 map: map,
-                position: new AMap.LngLat(lng, lat)
+                position: new AMap.LngLat(lng, lat),
+                topWhenClick: true,
+                topWhenMouseOver: true
             });
         };
 
@@ -109,6 +118,10 @@
                 callback.apply(marker, [event.lnglat.lat, event.lnglat.lng]);
             });
         };
+
+        this.removeMarker = function(marker) {
+            marker.setMap(null);
+        }
 
         this.addMapClickListener = function(map, callback) {
             AMap.event.addListener(map, "click", function (event) {

@@ -1,0 +1,65 @@
+.photo-wall {
+  .photo {
+    position: relative;
+    display: inline-block;
+    margin: 1px;
+    @include transition-linear(all);
+    img {
+//      display: none;
+//      height: 100px;
+      @include transition-linear(all);
+    }
+  }
+
+  .photo.ng-enter {
+    @include animation(enter_sequence 300ms ease-out);
+  }
+
+  .photo.ng-leave {
+    @include animation(leave_sequence 300ms ease-out);
+  }
+}
+
+.photo-wall.photo-wall-fixed-size {
+  .photo {
+    
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+// photo selectable container
+.photo-selectable-container {
+  width: 100%;
+  display: inline-block;
+  .photo {
+    float: left;
+    position: relative;
+    margin: 1px;
+    img {
+      -webkit-transition: all 218ms ease-in-out;
+      transition: all 218ms ease-in-out;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      border: 0 solid transparent;
+      //      width: 100%;
+      //      height: 100%;
+    }
+    img.selectable {
+      -webkit-transition: all 218ms ease-in-out;
+      transition: all 218ms ease-in-out;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      border: 5px solid transparent;
+    }
+    img.selected {
+      -webkit-transition: all 218ms ease-in-out;
+      transition: all 218ms ease-in-out;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      border: 5px solid $active-color;
+    }
+  }
+}

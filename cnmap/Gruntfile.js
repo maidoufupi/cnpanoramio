@@ -358,7 +358,8 @@ module.exports = function (grunt) {
                '<%= yeoman.app %>/scripts/directives/backstretch.js',
                '<%= yeoman.app %>/scripts/directives/waypoint.js',
                '<%= yeoman.app %>/scripts/directives/ponmMapControls.js',
-               '<%= yeoman.app %>/scripts/directives/ponmRectMultiSelect.js'
+               '<%= yeoman.app %>/scripts/directives/ponmRectMultiSelect.js',
+               '<%= yeoman.app %>/scripts/directives/infinite-scroll.js'
                ],
            '<%= yeoman.app %>/scripts/panor/scripts.min.js': [
                '<%= yeoman.app %>/scripts/panor/MapUtils.js',
@@ -404,6 +405,7 @@ module.exports = function (grunt) {
 //                 '<%= yeoman.app %>/bower_components/angular-resource/angular-resource.min.js',
 //                 '<%= yeoman.app %>/bower_components/angular-cookies/angular-cookies.min.js',
 //                 '<%= yeoman.app %>/bower_components/angular-sanitize/angular-sanitize.min.js',
+//                 '<%= yeoman.app %>/bower_components/angular-animate/angular-animate.min.js',
 //
 //                 '<%= yeoman.app %>/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
 //                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/js/xeditable.min.js',

@@ -130,9 +130,9 @@ angular.module('photosApp', [
     }])
     .controller('PhotosCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'PhotoService', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams', 'safeApply', 'jsUtils',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', 'safeApply', 'jsUtils', 'HashStateManager',
         function ($window, $location, $rootScope, $scope, PhotoService, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, safeApply, jsUtils) {
+                  ponmCtxConfig, $log, $state, $stateParams, safeApply, jsUtils, HashStateManager) {
 
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -144,27 +144,17 @@ angular.module('photosApp', [
 
             $scope.navbarFixedTop = false;
 
-            $log.debug($state);
+            $scope.hashStateManager = new HashStateManager($scope, $location);
 
-            $scope.$on('waypointEvent', function (e, direction, elmId) {
-                $log.debug("waypointSpot: " + direction + " = " + elmId);
-                if (elmId == "navbar") {
-                    if (direction == "down") {
-                        safeApply($scope, function () {
-                            $scope.navbarFixedTop = true;
-                        });
-                    } else {
-                        safeApply($scope, function () {
-                            $scope.navbarFixedTop = false;
-                        });
-                    }
-                }
-            });
+            $log.debug($state);
 
             $scope.userId = $state.params.userId;
             if ($scope.userId == "yourphotos") {
                 $scope.userId = $window.userId;
             }
+
+            $scope.hashStateManager.set("userid", $scope.userId);
+
             // 获取图片的用户信息
             UserService.getOpenInfo({userId: $scope.userId}, function (res) {
                 if (res.status == "OK") {
@@ -214,6 +204,38 @@ angular.module('photosApp', [
                 $scope.waypointRefresh = waypointRefresh;
                 $scope.photoLoading = waypointRefresh;
             };
+
+//            var hashObj = {};
+//            var updateState = function(){};
+            $scope.displayPhoto = function(photoId) {
+                $scope.hashStateManager.set("photoid", photoId);
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/photo.html',
+                    controller: 'PhotoModalCtrl',
+                    windowClass: 'photo-modal-fullscreen',
+                    resolve: {
+                        photoId: function () {
+                            return photoId;
+                        },
+                        travelId: function() {
+                            return '';
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.hashStateManager.set("photoid", "");
+                }, function () {
+                    $scope.hashStateManager.set("photoid", "");
+                });
+            };
+
+            $scope.hashStateManager.watch("photoid", function(photoId) {
+                if(photoId) {
+                    $scope.displayPhoto(photoId);
+                }
+            });
 
             $scope.openMovePhoto = function () {
 
@@ -279,14 +301,14 @@ angular.module('photosApp', [
 
         }])
     .controller('PhotosAllCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
+    [        '$window', '$location', '$rootScope', '$scope', '$q', '$timeout', 'UserPhoto', 'UserService', '$modal',
         'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils',
-        function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
+        function ($window, $location, $rootScope, $scope, $q, $timeout, UserPhoto, UserService, $modal,
                   ponmCtxConfig, $log, $state, $stateParams, jsUtils) {
 
             // 用户图片分页属性
             $scope.photo = {
-                pageSize: 10,
+                pageSize: 2,
                 totalItems: 0,
                 numPages: 2,
                 currentPage: 1,
@@ -307,24 +329,34 @@ angular.module('photosApp', [
 
             $scope.photos = [];
             function getUserPhotos() {
+                var d = $q.defer();
+
                 if ($scope.photo.currentPage > $scope.photo.numPages) {
-                    return;
+                    $timeout(function() {
+                        d.resolve();
+                    }, 500);
+                    return d.promise;
                 }
 
-                $scope.setWaypointRefresh(true);
+                $log.debug("load more photos");
+//                $scope.setWaypointRefresh(true);
 
                 UserPhoto.get({userId: $scope.userId, pageSize: $scope.photo.pageSize, pageNo: $scope.photo.currentPage},
                     function (data) {
-                        $scope.setWaypointRefresh(false);
+//                        $scope.setWaypointRefresh(false);
                         if (data.status == "OK") {
                             $scope.photos = $scope.photos.concat(data.photos);
                         }
+                        d.resolve();
                     }, function (error) {
                         $scope.photoLoading = false;
                     });
                 $scope.photo.currentPage += 1;
+
+                return d.promise;
             }
 
+            $scope.getUserPhotos = getUserPhotos;
             getUserPhotos();
 
             $scope.$on('waypointEvent', function (e, direction, elmId) {

@@ -17,6 +17,8 @@
 
     IMapEventListener.prototype.setZoom = function(map, zoom) {};
 
+    IMapEventListener.prototype.setZoomAndCenter = function(map, zoom, lat, lng) {};
+
     IMapEventListener.prototype.setBounds = function(map, sw, ne) {};
 
     IMapEventListener.prototype.clearMap = function(map) {};
@@ -34,6 +36,8 @@
     IMapEventListener.prototype.addMarkerActiveListener = function(marker, callback) {};
 
     IMapEventListener.prototype.addDragendListener = function(marker, callback) {};
+
+    IMapEventListener.prototype.removeMarker = function(marker) {};
 
     IMapEventListener.prototype.addMapClickListener = function(map, callback) {};
 

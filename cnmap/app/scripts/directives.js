@@ -147,6 +147,7 @@ angular.module('ponmApp.directives', [
                     var dataType = "String";
 
                     scope.itemValueName = scope.itemValueName || "value";
+                    scope.placeHolder = attrs.placeHolder || "添加";
 
                     var items = null;
                     scope.selectedItems = [];
@@ -237,7 +238,7 @@ angular.module('ponmApp.directives', [
                             });
                             item.$active = true;
                             scope.selectedItems = [item];
-                            viewValue.push(items[item.$key]);
+                            viewValue = items[item.$key];
                         }
                         scope.originalItemValue = scope.item;
                         ngModel.$setViewValue(viewValue);

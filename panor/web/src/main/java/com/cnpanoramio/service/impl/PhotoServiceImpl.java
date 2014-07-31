@@ -306,9 +306,10 @@ public class PhotoServiceImpl implements PhotoManager {
 		settings.getRecycle().add(recycle);
 		
 		// 删除对应旅行
-		photo.getTravelSpot().getPhotos().remove(photo);
-//		photo.setTravelSpot(null);		
-		
+		if(null != photo.getTravelSpot()) {
+			photo.getTravelSpot().getPhotos().remove(photo);
+		}
+				
 		PhotoProperties pp = PhotoUtil.transformProperties(photo);
 				
 		return pp;

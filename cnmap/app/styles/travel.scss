@@ -2,62 +2,40 @@
   width: 100%;
   height: 100%;
 
-//  .container.left-map {
-//    position: relative;
-//    height: 100%;
-//    margin: 0 500px 0 0;
-//    width: initial;
-//
-//    .map-container {
-//      position: absolute;
-//      top: 0;
-//      left: 0;
-//      bottom: 0;
-//      right: 0;
-//    }
-//
-//    .toggle-button {
-//      position: absolute;
-//      right: 0;
-//      width: 10px;
-//      height: 100%;
-//      background-color: #808080;
-//    }
-//  }
-//
-//  .container.right-content {
-//    position: absolute;
-//    right: 0;
-//    top: 0;
-//    width: 500px;
-//    height: 100%;
-//    margin: 0;
-//    padding: 0 10px;
-//    overflow-x: hidden;
-//  }
-
-  .page-header.travel-header {
-    position: relative;
-    top: 0;
+  .travel-header {
     width: 100%;
     z-index: 100;
     background-color: #00bcd4;
-    margin: 0;
+//    margin: 0;
     padding: 50px 10px 10px;
     color: white;
     font-family: $headings-font-family;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    @include transition-linear(all);
     h2 {
       margin-top: 0;
     }
     .travel-desc {
+      @include transition-linear(all);
       margin: 10px 0;
     }
 
     .media.user-info {
       .media-heading {
         font-family: $headings-font-family;
+        @include transition-linear(all);
+      }
+      .pull-left {
+        img.media-object {
+          @include transition-linear(all);
+        }
       }
       .media-body {
+        @include transition-linear(all);
+        .media-heading {
+          @include transition-linear(all);
+        }
+
         .title {
           display: inline-block;
         }
@@ -68,10 +46,32 @@
     }
   }
 
-  .page-header.travel-header.peekaboo-active {
+  .travel-header.navbar-third {
     padding: 10px;
+
+    .media.user-info {
+      line-height: 30px;
+      .media-body {
+        .media-heading {
+          display: inline;
+          vertical-align: middle;
+          margin: 0 5px;
+        }
+        .media-footer {
+          display: inline;
+        }
+      }
+      .pull-left img.media-object {
+        height: 30px;
+        width: 30px;
+        display: inline-block;
+      }
+    }
+
     .travel-desc {
+      opacity: 0;
       margin: 0;
+      display: none;
     }
   }
 
@@ -93,6 +93,53 @@
       }
       .panel-body {
         padding: 5px;
+        /* 旅行相册中的图片 */
+        .photo {
+          .ponm-photo-footer {
+            position: absolute;
+            bottom: 0;
+            height: 50%;
+            width: 100%;
+            background-color: rgba(128, 128, 128, 0.5);
+            color: white;
+            overflow: hidden;
+          }
+
+          .ponm-photo-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            color: white;
+            .glyphicon {
+              font-size: 12px;
+            }
+          }
+
+          .ponm-photo-remove:hover {
+            color: red;
+          }
+
+          .ponm-photo-option {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            .btn.dropdown-toggle {
+              margin: 0;
+            }
+          }
+
+          .action {
+            opacity: 0;
+            @include transition-linear(opacity);
+          }
+
+          .action.ng-animate.ponm-show-add, .action.ng-animate.ponm-show-remove {
+            opacity: 1;
+          }
+          .action.ponm-show {
+            opacity: 1;
+          }
+        }
       }
     }
     .panel.panel-default.active {
@@ -112,7 +159,7 @@
     display: inline-block;
     width: 80px;
     height: 80px;
-    background-color: orange;
+//    background-color: orange;
     text-align: center;
     border-radius: 2px;
     padding: 0;
@@ -139,24 +186,6 @@
   }
 }
 
-.label.label-selectable {
-  cursor: pointer;
-  margin: 2px;
-  float: left;
-
-}
-
-.dropdown.dropdown-picker {
-  display: block;
-  .dropdown-menu {
-//    max-width: 320px;
-    padding: 2px;
-    .dropdown-body {
-//      max-width: 300px;
-      display: inline-block;
-    }
-  }
-}
 
 .control-label {
   text-align: right;
