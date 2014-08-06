@@ -8,7 +8,7 @@ angular.module('mapsApp', [
     'ui.bootstrap',
     'ui.map',
     'ui.router',
-    'ponmApp',
+//    'ponmApp',
     'xeditable',
     'fileuploadApp'
 ])
@@ -20,10 +20,11 @@ angular.module('mapsApp', [
 
                 // The `when` method says if the url is ever the 1st param, then redirect to the 2nd param
                 // Here we are just setting up some convenience urls.
-                .when('/', '/popular')
+                .when('/maps', '/maps/popular')
 
                 // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
-                .otherwise('/popular');
+//                .otherwise('/popular')
+                ;
             //////////////////////////
             // State Configurations //
             //////////////////////////
@@ -41,7 +42,7 @@ angular.module('mapsApp', [
                     abstract: true,
 
                     // This abstract state will prepend '/contacts' onto the urls of all its children.
-                    url: '',
+                    url: '/maps',
 
                     // Example of loading a template from a file. This is also a top level state,
                     // so this template file will be loaded and then inserted into the ui-view
@@ -58,6 +59,10 @@ angular.module('mapsApp', [
                         'alerts@maps': {
                             templateUrl: 'views/photos.alerts.html',
                             controller: 'PhotosAlertsCtrl'
+                        },
+                        'navbar': {
+                            templateUrl: 'views/ponm.navbar.html',
+                            controller: 'NavbarCtrl'
                         }
                     },
 
@@ -939,11 +944,17 @@ angular.module('mapsApp', [
         }])
     .controller('MapsPhotoUploadCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', 'TravelService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', 'AuthService',
         function ($window, $location, $rootScope, $scope, UserPhoto, UserService, TravelService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams) {
+                  ponmCtxConfig, $log, $state, $stateParams, AuthService) {
 
             $scope.setPanormaioType('manual');
+
+            AuthService.checkLogin().then(function(){
+
+            }, function(){
+                $state.go("login", {});
+            });
 
             var mapEventListener = $scope.mapEventListener;
             var mapService = $scope.mapService;

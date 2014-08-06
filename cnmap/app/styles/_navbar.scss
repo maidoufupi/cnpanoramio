@@ -2,14 +2,14 @@
 // Navbars
 // --------------------------------------------------
 
-
 .navbar-second {
   .navbar {
     .nav {
       > li {
+        padding: 0 15px;
         > a {
           padding: 15px 0;
-          margin: 0 15px;
+
           background-color: initial !important;
         }
       }
@@ -98,8 +98,8 @@
 /** second navbar */
 .navbar-second {
   width: 100%;
-  top: $header-bar-height;
-  @include transition-linear(all);
+  z-index: 1029;
+//  @include transition-linear(all);
   .navbar {
     border-radius: 0;
     border: 0;
@@ -112,8 +112,15 @@
   }
 }
 
-.navbar-second.navbar-fixed-top {
-  top: 0;
+.navbar-second-top {
+  .navbar-second {
+    position: fixed;
+    z-index: 1031;
+    top: 0;
+  }
+  .container-photos {
+    margin-top: 61px;
+  }
 }
 
 .ponm-navbar-fixed-top {
@@ -134,20 +141,22 @@
   width: auto;
 }
 
-.navbar.navbar-fixed-top span {
-  color: #7e7e7e;
-}
+//.navbar.navbar-fixed-top span {
+//  color: #7e7e7e;
+//}
 
-.navbar.navbar-fixed-top a:hover {
-  color: #fff;
-}
+//.navbar.navbar-fixed-top a:hover {
+//  color: #fff;
+//}
 
-.white, .white a {
-  color: #7e7e7e;
-}
+.nav {
+  .white {
+    color: #7e7e7e;
+  }
 
-.nav.navbar-nav .white:hover, .white a:hover {
-  color: #fff;
+  .white:hover {
+    color: #fff;
+  }
 }
 
 .nav.navbar-nav a.user {

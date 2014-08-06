@@ -1,0 +1,73 @@
+<div class="navbar navbar-fixed-top navbar-inverse"
+     role="navigation" >
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/panor-web/"><img src="images/logo.png" class="navbar-logo"></a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+                <!--<li class="active white"><a href="/panor-web/login">登录</a></li>-->
+                <!--<li>
+                    <div id="nav-search-form" >
+                        <form class="navbar-form navbar-left" ng-submit="update(asyncSelected)" novalidate>
+                            <input type="text" ng-model="asyncSelected" placeholder="搜索地址"
+                                   typeahead="address as address.formatted_address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control">
+                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                        </form>
+                    </div>
+                </li>-->
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+
+                <li popover="地图" popover-trigger="mouseenter" popover-placement="bottom"
+                    class="white">
+                    <a href="#/maps" >
+                        <span>浏览地图</span>
+                        <span class="glyphicon glyphicon-plane"></span>
+                    </a>
+                </li>
+                <li popover="图片" popover-trigger="mouseenter" popover-placement="bottom"
+                    ng-show="ponmCtxConfig.login"
+                    class="white">
+                    <a href="#/photos/{{ponmCtxConfig.userId}}" >
+                        <span>我的图片</span>
+                        <span class="glyphicon glyphicon-picture"></span>
+                    </a>
+                </li>
+                <li ng-switch on="!!ponmCtxConfig.userId"
+                    class="white">
+                    <a href="#/photos/{{ponmCtxConfig.userId}}/all"
+                       ng-switch-when="true">
+                        <span>{{ponmCtxConfig.name}}</span>
+                        <span class="glyphicon glyphicon-user"></span>
+                    </a>
+                    <a href="#/login" class="active white"
+                       ng-switch-default>
+                        <span>登录</span>
+                        <span class="glyphicon glyphicon-user"></span>
+                    </a>
+                </li>
+                <li class="btn-group">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-th-list white"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#/settings"><span class="glyphicon glyphicon-cog"></span>用户设置</a></li>
+                        <li><a href="{{ponmCtxConfig.ctx}}/logout">
+                        	<span class="glyphicon glyphicon-log-out"></span>注销</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+</div>

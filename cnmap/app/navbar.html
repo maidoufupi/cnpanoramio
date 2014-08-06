@@ -11,7 +11,12 @@
     <!-- Bootstrap theme styles -->
     <link rel="stylesheet" href="bower_components/sass-bootstrap/dist/css/bootstrap-theme.css">
     <link rel="stylesheet" href="styles/main.css">
+
     <script type="text/javascript" src="scripts/ponmApp.vendor.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.directives.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.controllers.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
 
     <!--<script type="text/javascript" src="scripts/controllers/GeoSearchCtrl.js"></script>-->
     <script type="text/javascript" src="scripts/controllers/NavbarCtrl.js"></script>
@@ -21,8 +26,9 @@
         })
     </script>
 </head>
-<body>
-<div class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-ng-app="ponm.Navbar" data-ng-app="ponm.NavbarCtrl">
+<body >
+<div class="navbar navbar-fixed-top navbar-inverse"
+     role="navigation" >
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -82,6 +88,23 @@
 
     </div>
 </div>
+
+<div ng-app="ponmApp"
+     class="waypoint-scrollable"
+     style="margin-top: 60px;
+            overflow-y: auto;
+            position: absolute;
+            width: 100%;
+            height: 80%;">
+    <div waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-1'}"
+         style="height: 10px; width: 100%;background-color: #20b2aa;">
+
+    </div>
+    <div style="width: 100%; height: 2000px;background-color: greenyellow;margin: 55px;">
+
+    </div>
+</div>
+
 
 <div id="footer">
         <span class="left">Version 1.0-SNAPSHOT

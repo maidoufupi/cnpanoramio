@@ -17,7 +17,7 @@ public class ExceptionResponse {
 		this.status = status.name();
 	}
 	
-	public enum Status {
+	public static enum Status {
 		/**
 		 * 一切正常
 		 */

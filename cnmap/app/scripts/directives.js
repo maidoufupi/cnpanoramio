@@ -5,289 +5,207 @@
 
 angular.module('ponmApp.directives', [
     'ngResource'])
-    .directive('contenteditable', ['$parse', function ($parse) {
+    .directive('passwordMatch', [function () {
         return {
             require: 'ngModel',
-            scope: {
-                ngModel: "@"
-            },
-            link: function (scope, elm, attrs, ctrl) {
-
-                elm.placeholder = attrs.placeHolder;
-
-                elm.css("cursor", "pointer");
-
-                    // view -> model
-                elm.on('blur', function () {
-
-                    if(attrs.multipleLine) {
-//                        elm.css("height", '1.5em');
-                        elm.css("overflow", 'hidden');
-                        scope.$apply(function () {
-                            if (elm.placeholder != elm.html()) {
-                                var htmlValue = "";
-                                var contents = elm.contents();
-                                angular.forEach(contents, function(content, key) {
-                                    if(content instanceof String) {
-                                        if(htmlValue) {
-                                            htmlValue += "\n";
-                                        }
-                                        htmlValue = htmlValue + content;
-                                    }else {
-                                        if(content.textContent != "") {
-                                            if(htmlValue) {
-                                                htmlValue += "\n";
-                                            }
-                                            htmlValue = htmlValue + content.textContent;
-                                        }
-//                                        htmlValue = htmlValue + angular.element(content).text();
-                                    }
-                                });
-                                ctrl.$setViewValue(htmlValue);
-                            }
-                            ctrl.$render();
-                        });
-                    }else {
-                        scope.$apply(function () {
-                            if (elm.placeholder != elm.html()) {
-                                ctrl.$setViewValue(elm.html());
-                            }
-                            ctrl.$render();
-                        });
-                    }
+            link: function (scope, elem , attrs, ctrl) {
+                ctrl.$parsers.unshift(function(viewValue) {
+                    //get the value of the other password
+                    var e2 = scope.$eval(attrs.passwordMatch);
+                    //set the form control to valid if both
+                    //passwords are the same, else invalid
+                    ctrl.$setValidity("unique", viewValue == e2);
+                    return viewValue;
                 });
 
-                elm.on('focus', function () {
-                    scope.$apply(function () {
-                        if (elm.placeholder == elm.html()) {
-                            removePlaceHolder();
-                        }
-                    });
-                    if(attrs.multipleLine) {
-//                        elm.css("height", (attrs.multipleLine || 4) + 'em');
-                    }
-                });
-
-                // model -> view
-                ctrl.$render = function () {
-                    if (ctrl.$viewValue) {
-                        elm.html(ctrl.$viewValue);
-                    } else {
-                        addPlaceHolder();
-                    }
-                };
-
-                // render init value
-                ctrl.$render();
-
-                function addPlaceHolder() {
-                    elm.css('color', 'grey');
-                    elm.html(elm.placeholder);
-                }
-
-                function removePlaceHolder() {
-                    elm.css('color', '');
-                    // 针对firefox如果div无内容则height为0的bug
-//                    elm.css('height', elm.height());
-                    elm.html("")
-                }
-
-                if (attrs.editable && !scope.$eval(attrs.editable)) {
-                    elm.on('input', function (event) {
-                        elm.html(ctrl.$viewValue);
-                        event.preventDefault();
-                        event.stopPropagation();
-                    });
-                    elm.on('keypress keydown keyup onchange', function (event) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    });
-                }
-
-                if(attrs.multipleLine) {
-
-                }else {
-                    elm.on('keypress', function (event) {
-                        if (event.keyCode == 13) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                    })
-                }
-
-                elm.on("mouseenter", function(e) {
-                    ctrl.$render();
-                    scope.$apply(function() {
-                        scope.mouseEnter = true;
-                    });
-                });
-                elm.on("mouseleave", function(e) {
-                    scope.$apply(function() {
-                        scope.mouseEnter = false;
-                    });
-                });
-
+                scope.$watch(attrs.passwordMatch, function(e2) {
+                    var e1 = ctrl.$viewValue;
+                    ctrl.$setValidity("unique", e1 == e2);
+                })
             }
         };
     }])
-    .directive('itemPicker', ['$parse', '$log',
-        function($parse, $log) {
+    .directive('passwordStrength', [function () {
+        return {
+            replace: false,
+            restrict: 'A',
+            link: function (scope, elem, attrs) {
+
+                var strength = {
+                    colors: ['#F00', '#F90', '#FF0', '#9F0', '#0F0'],
+                    mesureStrength: function (p) {
+
+                        var _force = 0;
+                        var _regex = /[$-/:-?{-~!"^_`\[\]]/g;
+
+                        var _lowerLetters = /[a-z]+/.test(p);
+                        var _upperLetters = /[A-Z]+/.test(p);
+                        var _numbers = /[0-9]+/.test(p);
+                        var _symbols = _regex.test(p);
+
+                        var _flags = [_lowerLetters, _upperLetters, _numbers, _symbols];
+                        var _passedMatches = $.grep(_flags, function (el) { return el === true; }).length;
+
+                        _force += 2 * p.length + ((p.length >= 10) ? 1 : 0);
+                        _force += _passedMatches * 10;
+
+                        // penality (short password)
+                        _force = (p.length <= 6) ? Math.min(_force, 10) : _force;
+
+                        // penality (poor variety of characters)
+                        _force = (_passedMatches == 1) ? Math.min(_force, 10) : _force;
+                        _force = (_passedMatches == 2) ? Math.min(_force, 20) : _force;
+                        _force = (_passedMatches == 3) ? Math.min(_force, 40) : _force;
+
+                        return _force;
+
+                    },
+                    getColor: function (s) {
+
+                        var idx = 0;
+                        if (s <= 10) { idx = 0; }
+                        else if (s <= 20) { idx = 1; }
+                        else if (s <= 30) { idx = 2; }
+                        else if (s <= 40) { idx = 3; }
+                        else { idx = 4; }
+
+                        return { idx: idx + 1, col: this.colors[idx] };
+
+                    }
+                };
+
+                scope.$watch(attrs.passwordStrength, function (password) {
+                    if (!password) {
+                        elem.css({ "display": "none"  });
+                    } else {
+                        var c = strength.getColor(strength.mesureStrength(password));
+                        elem.css({ "display": "inline" });
+                        elem.children('li')
+                            .css({ "background": "#DDD" });
+                        for(var i=0;i < c.idx; i++) {
+                            angular.element(elem.children('li')[i])
+                                .css({ "background": c.col });
+                        }
+
+                    }
+                });
+
+            },
+            template: '<li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li>'
+        };
+    }])
+    .directive( 'ngRemoteValidate',
+    [ '$http', '$timeout', '$q', '$log',
+        function( $http, $timeout, $q, $log ) {
+
+            var directiveId = 'ngRemoteValidate';
 
             return {
-                restrict: 'EA',
+                restrict: 'A',
                 require: 'ngModel',
-                scope: {
-                    loadData: "&",
-                    newData: "&",
-                    itemValueName: "@"
-                },
-                templateUrl: 'views/tagPickerView.html',
-                link: function(scope, element, attrs, ngModel) {
+                link: function( scope, el, attrs, ngModel ) {
+                    var cache = {},
+                        handleChange,
+                        setValidation,
+                        addToCache,
+                        request,
+                        shouldProcess,
+                        options = {
+                            ngRemoteThrottle: 400,
+                            ngRemoteMethod: 'POST'
+                        };
 
-                    var dataType = "String";
+                    angular.extend( options, attrs );
 
-                    scope.itemValueName = scope.itemValueName || "value";
-                    scope.placeHolder = attrs.placeHolder || "添加";
-
-                    var items = null;
-                    scope.selectedItems = [];
-
-                    var inputE = element.find('div.dropdown-toggle');
-                    inputE.on('focus click', function() {
-                        if(!items) {
-                            loadDataF();
-                            scope.$apply(function() {
-                                return scope.items;
-                            })
-                        }
-                    });
-
-                    function loadDataF() {
-                        if(scope.loadData) {
-                            var loadDataRef;
-                            if(loadDataRef = scope.loadData()) {
-                                scope.loadingItems = true;
-                                items = loadDataRef(function(res) {
-                                    items = res;
-                                    convertItems();
-                                    scope.loadingItems = false;
-                                });
-                                convertItems();
-                            }else {
-                                $log.error("load-data function " + attrs.loadData + " is not defined!")
-                            }
-                        }else {
-                            $log.error("load-data attribute is not defined!");
-                        }
+                    if( options.ngRemoteValidate.charAt( 0 ) === '[' ) {
+                        options.urls = eval( options.ngRemoteValidate );
+                    } else {
+                        options.urls = [ options.ngRemoteValidate ];
                     }
 
-                    function convertItems() {
-                        scope.items = [];
-                        if(angular.isArray(items) && items.length) {
-                            scope.loadingItems = false;
-                        }
-                        angular.forEach(items, function(item, key) {
-                            if(angular.isObject(item)) {
-                                dataType = "Object";
-                                scope.items.push({
-                                    value: item[scope.itemValueName],
-                                    id: item.id,
-                                    $key: key
-                                })
-                            }else if(angular.isString(item)) {
-                                dataType = "String";
-                                scope.items.push({
-                                    value: item,
-                                    $key: key
-                                })
-                            }
-
-                        })
-                    }
-
-                    angular.element('.dropdown-menu').on('click', function(event) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    });
-
-                    scope.setItem = function(item) {
-                        var viewValue = [];
-                        // 多选
-                        if(scope.multipleSelect) {
-                            scope.selectedItems = [];
-//                            var itemValues = [];
-                            item.$active = !item.$active;
-
-                            angular.forEach(scope.items, function(item, key) {
-                                if(item.$active) {
-                                    scope.selectedItems.push(item);
-                                    viewValue.push(items[item.$key]);
-//                                    itemValues.push(item.value);
-                                }
-                            });
-//                            scope.item = itemValues.join(attrs.multipleSelect || ",");
-
-                        }else {
-                            // 单选
-                            if(item.$active) {
-                                return;
-                            }
-//                            scope.item = item.value;
-                            angular.forEach(scope.items, function(item, key) {
-                                item.$active = false;
-                            });
-                            item.$active = true;
-                            scope.selectedItems = [item];
-                            viewValue = items[item.$key];
-                        }
-                        scope.originalItemValue = scope.item;
-                        ngModel.$setViewValue(viewValue);
+                    addToCache = function( response ) {
+                        var value = response[ 0 ].data.value;
+                        if ( cache[ value ] ) return cache[ value ];
+                        cache[ value ] = response;
                     };
 
-                    scope.clearItems = function() {
-                        scope.originalItemValue = "";
-                        scope.item = "";
-                        scope.items = null;
-                    };
-
-//                    scope.$watch('item', function(newItem) {
-//                        if(newItem != scope.originalItemValue) {
-//                            angular.forEach(scope.items, function(item, key) {
-//                                item.$active = false;
-//                            })
-//                        }
-//                    });
-
-                    /**
-                     * 创建新值
-                     *
-                     * @param value
-                     * @returns {boolean}
-                     */
-                    scope.createData = function(value) {
-                        if(value) {
-                            if(scope.newData) {
-                                if(items = scope.newData()(value, function(res) {
-                                    items = res;
-                                    scope.newItem = '';
-                                    convertItems();
-                                })) {
-                                    scope.newItem = '';
-                                    scope.clearItems();
-                                    convertItems();
-                                }
+                    shouldProcess = function( value ) {
+                        var otherRulesInValid = false;
+                        for ( var p in ngModel.$error ) {
+                            if ( ngModel.$error[ p ] && p != directiveId ) {
+                                otherRulesInValid = true;
+                                break;
                             }
                         }
-
+                        return !( ngModel.$pristine || otherRulesInValid );
                     };
 
-                    //是否允许多选
-                    if(attrs.multipleSelect === undefined || attrs.multipleSelect === "false") {
-                        scope.multipleSelect = false;
-                    }else {
-                        scope.multipleSelect = true;
-                    }
+                    setValidation = function( response, skipCache ) {
+                        var i = 0,
+                            l = response.length,
+                            isValid = true;
+                        for( ; i < l; i++ ) {
+                            if( !response[ i ].data.isValid ) {
+                                isValid = false;
+                                break;
+                            }
+                        }
+                        if( !skipCache ) {
+                            addToCache( response );
+                        }
+                        ngModel.$setValidity( directiveId, isValid );
+                        el.removeClass( 'ng-processing' );
+                        ngModel.$processing = false;
+                    };
+
+                    handleChange = function( value ) {
+                        if( typeof value === 'undefined' ) return;
+
+                        if ( !shouldProcess( value ) ) {
+                            return setValidation( [ { data: { isValid: true, value: value } } ], true );
+                        }
+
+                        if ( cache[ value ] ) {
+                            return setValidation( cache[ value ], true );
+                        }
+
+                        if ( request ) {
+                            $timeout.cancel( request );
+                        }
+
+                        request = $timeout( function( ) {
+                            el.addClass( 'ng-processing' );
+                            ngModel.$processing = true;
+                            var calls = [],
+                                i = 0,
+                                l = options.urls.length,
+                                toValidate = { value: value },
+                                httpOpts = { method: options.ngRemoteMethod };
+
+                            if(options.ngRemoteMethod == 'POST'){
+                                httpOpts.data = toValidate;
+                            } else {
+                                httpOpts.params = toValidate;
+                            }
+
+                            for( ; i < l; i++ ) {
+
+                                httpOpts.url =  options.urls[ i ];
+                                calls.push( $http( httpOpts ) );
+                            }
+                            $q.all( calls ).then(setValidation);
+
+                        }, options.ngRemoteThrottle );
+                        return true;
+                    };
+
+                    scope.$watch( function( ) {
+                        return ngModel.$viewValue;
+                    }, handleChange );
                 }
-            }
-        }])
+            };
+
+    }] )
+
+
 ;

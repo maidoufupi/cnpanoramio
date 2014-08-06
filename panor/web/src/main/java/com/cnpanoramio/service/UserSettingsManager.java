@@ -1,14 +1,12 @@
 package com.cnpanoramio.service;
 
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.List;
 
 import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.Recycle;
-import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
@@ -159,4 +157,12 @@ public interface UserSettingsManager {
 	 */
 	public List<PhotoProperties> getPhotosForUserBounds(String id, int pageSize, int pageNo,
 			Double swLat, Double swLng, Double neLat, Double neLng);
+	
+	/**
+	 * 注册新用户
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public User signup(User user);
 }

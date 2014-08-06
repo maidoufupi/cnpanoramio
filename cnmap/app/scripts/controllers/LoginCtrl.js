@@ -3,16 +3,56 @@
  */
 'use strict';
 
-angular.module('ponmApp.login', ['ponmApp'])
-    .controller('LoginCtrl', ['$window', '$scope', '$log', '$q', 'param', '$location', '$cookieStore',
-        function ($window, $scope, $log, $q, param, $location, $cookieStore) {
+angular.module('ponmApp.controllers')
+    .config([   '$stateProvider', '$urlRouterProvider',
+        function ($stateProvider, $urlRouterProvider) {
+            $stateProvider
+                // state: login
+                .state('login', {
+                    url: '/login',
+                    views: {
+                        '': { templateUrl: 'views/ponm.login.html',
+                            controller: 'LoginCtrl'},
 
-            $scope.ctx = $window.ctx;
+                        'navbar': {
+                            templateUrl: 'views/ponm.navbar.html',
+                            controller: 'NavbarCtrl'
+                        }
+                    },
+                    resolve: {
+                    }
+                })
+                // state: signup
+                .state('signup', {
+                    url: '/signup',
+                    views: {
+                        '': { templateUrl: 'views/ponm.signup.html',
+                            controller: 'SignupCtrl'},
+
+                        'navbar': {
+                            templateUrl: 'views/ponm.navbar.html',
+                            controller: 'NavbarCtrl'
+                        }
+                    },
+                    resolve: {
+                    }
+                })
+        }])
+    .controller('LoginCtrl',
+    ['$window', '$scope', '$log', '$q', 'jsUtils', '$location', '$state', 'AuthService',
+        'ponmCtxConfig',
+        function ($window, $scope, $log, $q, jsUtils, $location, $state, AuthService,
+                  ponmCtxConfig) {
+
+            $scope.ponmCtxConfig = ponmCtxConfig;
+
+            AuthService.checkLogin().then(function() {
+                $state.go("maps.popular", {travelId: travel.id});
+            });
 
             $scope.credentials = {};
 
             $scope.login = function(e, user) {
-//                $log.debug(user);
                 if(!$scope.credentials.username) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -23,6 +63,13 @@ angular.module('ponmApp.login', ['ponmApp'])
                     e.stopPropagation();
                     $scope.userForm.j_password.$dirty = true;
                 }
+//                AuthService.login($scope.credentials).then(function() {
+//                    $scope.ok();
+//                },function(error) {
+//                    if(error === 1) {
+//                        $log.debug("username or password error");
+//                    }
+//                });
             };
 
             $scope.passwordHint = function() {
@@ -34,6 +81,26 @@ angular.module('ponmApp.login', ['ponmApp'])
                     $location.$$absUrl=ctx+"/passwordHint?username=" + $scope.credentials.username;
                 }
             };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+            $scope.ok = function () {
+                $modalInstance.close();
+            };
+
+        }])
+    .controller('SignupCtrl',
+    ['$window', '$scope', '$log', '$q', 'jsUtils', '$location', '$cookieStore', 'AuthService',
+        'ponmCtxConfig',
+        function ($window, $scope, $log, $q, jsUtils, $location, $cookieStore, AuthService,
+                  ponmCtxConfig) {
+
+            $scope.user = {};
+
+            $scope.$watch('user', function(passwordConfirm) {
+                $log.debug(passwordConfirm);
+            });
 
         }])
 ;

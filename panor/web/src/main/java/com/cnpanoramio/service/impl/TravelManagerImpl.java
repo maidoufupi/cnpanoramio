@@ -75,7 +75,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 	}
 
 	@Override
-	public List<Travel> createMyTravel(User user, String travel) {
+	public Travel createMyTravel(User user, String travel) {
 		UserSettings settings = userSettingsDao.get(user.getId());
 		// 如果名称已经存在，则不创建
 		Travel tra = travelDao.getByName(user.getId(), travel);
@@ -87,7 +87,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 			tra.setUser(settings);
 			settings.getTravels().add(tra);
 		}
-		return settings.getTravels();
+		return tra;
 	}
 
 	private List<Travel> convertTravels(List<Travel> travels) {

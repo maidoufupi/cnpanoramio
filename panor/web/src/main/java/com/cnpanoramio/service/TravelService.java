@@ -33,7 +33,7 @@ public interface TravelService {
 	 * @param travel
 	 * @return
 	 */
-	public List<Travel> createMyTravel(User user, String travel);
+	public Travel createMyTravel(User user, String travel);
 	
 	/**
 	 * 往旅行中批量添加图片

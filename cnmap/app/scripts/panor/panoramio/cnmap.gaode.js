@@ -26,7 +26,7 @@
 
         var labels = [];
         var thumbPhotoIds = [];
-        var infoWindow = new AMap.InfoWindow({isCustom: false, closeWhenClickMap: true});
+        var infoWindow = null;
 
         this.preZoom = 0;
         this.preBounds = null;
@@ -48,6 +48,8 @@
         this.setMap = function (map/*:Map*/) { //	None
             if (map) {
                 this.opts.map = map;
+
+                infoWindow = new AMap.InfoWindow({isCustom: false, closeWhenClickMap: true});
 
                 AMap.event.addListener(
                     map,

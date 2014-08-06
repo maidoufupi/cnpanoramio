@@ -4,8 +4,8 @@
 'use strict';
 
 angular.module('ponmApp.directives')
-    .directive('ponmComment', ['$window', '$animate', '$log', 'CommentService', 'param', '$q', 'ponmCtxConfig',
-        function ($window, $animate, $log, CommentService, param, $q, ponmCtxConfig) {
+    .directive('ponmComment', ['$window', '$animate', '$log', 'CommentService', 'jsUtils', '$q', 'ponmCtxConfig',
+        function ($window, $animate, $log, CommentService, jsUtils, $q, ponmCtxConfig) {
 
             return {
                 restrict: 'A',
@@ -83,7 +83,7 @@ angular.module('ponmApp.directives')
                     scope.modifyComment = function(comment, content) {
                         var d = $q.defer();
                         if(content) {
-                            CommentService.modify({commentId: comment.id}, param({content: content}),
+                            CommentService.modify({commentId: comment.id}, jsUtils.param({content: content}),
                                 function(res) {
                                     if(res.status == "OK") {
                                         d.resolve();

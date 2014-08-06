@@ -1,4 +1,4 @@
-<div class="container photo-upload" style="">
+<div class="photo-upload">
 
     <!-- The file upload form used as target for the file upload widget -->
     <div id="fileupload" action="http://127.0.0.1:8080/panor-web/api/rest/photo/upload"
@@ -8,7 +8,7 @@
           ng-class="{'fileupload-processing': processing() || loadingFiles}"
             >
         <div class="container-fluid header"
-             waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-1'}">
+             waypoint-sticky="{'stuckClass': 'navbar-third', 'context': '.waypoint-scrollable', 'offset': '-1'}">
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
             <div class="col col-sm-6">

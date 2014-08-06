@@ -278,7 +278,7 @@ angular.module('fileuploadApp', [
             // 用户创建travel
             $scope.newTravelData = function (newObj, callback) {
                 $log.debug("new data: " + newObj);
-                TravelService.create({}, jQuery.param({travel: newObj}), function (res) {
+                TravelService.create({}, jsUtils.param({travel: newObj}), function (res) {
                     if (res.status == "OK") {
                         callback && callback.apply(undefined, [res.travels]);
                     }

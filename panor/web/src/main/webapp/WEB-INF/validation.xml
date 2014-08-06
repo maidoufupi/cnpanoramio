@@ -44,18 +44,18 @@
             <field property="confirmPassword" depends="required">
                 <arg key="user.confirmPassword"/>
             </field>
-            <field property="firstName" depends="required">
+            <!-- <field property="firstName" depends="required">
                 <arg key="user.firstName"/>
             </field>
             <field property="lastName" depends="required">
                 <arg key="user.lastName"/>
-            </field>
+            </field> -->
             <field property="email" depends="required,email">
                 <arg key="user.email"/>
             </field>
-            <field property="passwordHint" depends="required">
+            <!-- <field property="passwordHint" depends="required">
                 <arg key="user.passwordHint"/>
-            </field>
+            </field> -->
         </form>
     </formset>
 </form-validation>

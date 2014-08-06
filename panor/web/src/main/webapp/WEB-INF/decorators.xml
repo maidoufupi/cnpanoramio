@@ -5,6 +5,7 @@
         <pattern>/struts/*</pattern>
         <pattern>/resources/*</pattern>
         <pattern>/views/*.html*</pattern>
+        <pattern>/index.jsp</pattern>
     </excludes> 
     <decorator name="default" page="default.jsp">
         <pattern>/*</pattern>

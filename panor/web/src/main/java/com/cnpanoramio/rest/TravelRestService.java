@@ -53,7 +53,7 @@ public class TravelRestService extends AbstractRestService {
 		TravelResponse response = new TravelResponse();
 		
 		User me = UserUtil.getCurrentUser(userManager);
-		response.setTravels(travelService.createMyTravel(me, travel));
+		response.setTravel(travelService.createMyTravel(me, travel));
 		response.setStatus(TravelResponse.Status.OK.name());
 		return response;
 	}

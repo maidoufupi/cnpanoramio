@@ -4,13 +4,15 @@ angular.module('ponmApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    'ngRoute',
+    'xeditable',
+    'ui.router',
+    'ui.bootstrap',
     'ponmApp.services',
     'ponmApp.directives',
     'ponmApp.controllers'
   ])
-  .config(['$routeProvider', '$logProvider', '$sceDelegateProvider',
-  function ($routeProvider, $logProvider, $sceDelegateProvider) {
+  .config(['$logProvider', '$sceDelegateProvider',
+  function ($logProvider, $sceDelegateProvider) {
         // enable log debug level
         $logProvider.debugEnabled = true;
 

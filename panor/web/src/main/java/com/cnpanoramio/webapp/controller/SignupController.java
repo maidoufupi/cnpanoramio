@@ -36,7 +36,7 @@ import java.util.Locale;
 @RequestMapping("/signup*")
 public class SignupController extends BaseFormController {
 	
-	private Long avatarId = 1L;
+//	private Long avatarId = 1L;
 	
     private RoleManager roleManager;
     
@@ -49,8 +49,8 @@ public class SignupController extends BaseFormController {
     }
 
     public SignupController() {
-        setCancelView("redirect:login");
-        setSuccessView("redirect:mainMenu");
+        setCancelView("redirect:/#/login");
+        setSuccessView("redirect:/#/maps/popular");
     }
 
     @ModelAttribute
@@ -70,11 +70,18 @@ public class SignupController extends BaseFormController {
             validator.validate(user, errors);
 
             if (errors.hasErrors()) {
-                return "signup";
+                return "redirect:/#/signup";
             }
         }
 
         Locale locale = request.getLocale();
+        
+        if(null == user.getFirstName()) {
+        	user.setFirstName("");
+        }
+        if(null == user.getLastName()) {
+        	user.setLastName("");
+        }
         
         user.setEnabled(true);
 
@@ -84,10 +91,6 @@ public class SignupController extends BaseFormController {
         // 用户默认详细设置
         UserSettings userSettings = new UserSettings();
         
-        // 设置默认头像
-//        Avatar avatar = userSettingsService.getAvatar(avatarId);
-//        userSettings.setAvatar(avatar);
-
         try {
             user = this.getUserManager().saveUser(user);
             userSettingsService.create(user);
@@ -102,7 +105,7 @@ public class SignupController extends BaseFormController {
 
             // redisplay the unencrypted passwords
             user.setPassword(user.getConfirmPassword());
-            return "signup";
+            return "redirect:/#/signup";
         }
 
         saveMessage(request, getText("user.registered", user.getUsername(), locale));

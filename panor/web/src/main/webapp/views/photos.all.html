@@ -1,7 +1,7 @@
 <div class="photo-wall photo-wall-fixed-size photo-selectable-container photo-all"
      infinite-scroll='getUserPhotos()'
      infinite-scroll-distance='1'
-     infinite-scroll-parent="true">
+     ><!-- infinite-scroll-parent="" -->
     <div ng-repeat="photo in photos"
          ng-controller="PhotosPhotoCtrl"
          class="photo"

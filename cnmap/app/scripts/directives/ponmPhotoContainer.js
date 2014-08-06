@@ -558,9 +558,14 @@ angular.module('ponmApp.directives')
                                 image1.src = attrs.ponmPhotoSrcL1;
                             }
 
-                            imgContainer.find(".flat-canvas").append(image1);
+                            var flatImage = imgContainer.find(".flat-canvas");
+                            flatImage.append(image1);
+                            flatImage.on("dblclick", function(e) {
+                                panzoomReset();
+                            });
 
                             panzoom(imgContainer.find(".flat-canvas"));
+
                             panzoomReset();
 
                         }

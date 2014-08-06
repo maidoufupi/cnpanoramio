@@ -9,7 +9,7 @@
   }
 
   .searchbox {
-    left: 30px;
+//    left: 30px;
     vertical-align: middle;
     display: inline-block;
     input {
@@ -19,7 +19,7 @@
 
   .content {
     position: absolute;
-    top: 52px;
+    top: 50px;
     bottom: 0;
     width: 100%;
 
@@ -236,13 +236,17 @@
 .maps-user {
   .header {
     padding: 30px 20px;
-    @include box-shadow(0 0 10px rgba(0, 0, 0, 0.3));
     @include transition-linear(all);
   }
   .header.navbar-third {
     margin: 0;
     padding: 15px 5px;
     background-color: rgba(255, 255, 255, .9);
+    @include box-shadow(0 0 10px rgba(0, 0, 0, 0.3));
     z-index: 1001;
   }
+}
+
+.maps-travel {
+
 }

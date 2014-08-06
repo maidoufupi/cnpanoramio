@@ -46,9 +46,9 @@ public class TravelServiceImpl implements TravelService {
 	}
 
 	@Override
-	public List<Travel> createMyTravel(User user, String travel) {
-		List<com.cnpanoramio.domain.Travel> travels = travelManager.createMyTravel(user, travel);
-		return convertTravels(travels);
+	public Travel createMyTravel(User user, String travel) {
+		com.cnpanoramio.domain.Travel tra = travelManager.createMyTravel(user, travel);
+		return convertTravel(tra);
 	}
 	
 	public static List<Travel> convertTravels(List<com.cnpanoramio.domain.Travel> travels) {

@@ -21,8 +21,8 @@ import com.cnpanoramio.service.IndexService;
  *
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
-@Controller
-@RequestMapping("/")
+//@Controller
+//@RequestMapping("/")
 public class IndexPageController extends BaseFormController {
 	
 	@Autowired

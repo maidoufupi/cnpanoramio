@@ -10,8 +10,8 @@
              ng-class="{'travel-selected': newTravel.selected}">
             <input type="text" class="name"
                    placeholder="新建相册名称"
-                   data-ng-model="newTravel.name"
-                   data-ng-click="$event.preventDefault();$event.stopPropagation();"
+                   ng-model="newTravel.name"
+                   ng-click="$event.preventDefault();$event.stopPropagation();"
                    ng-change="selectNewTravel(newTravel.name)">
         </div>
         <div ng-repeat="travel in travels">

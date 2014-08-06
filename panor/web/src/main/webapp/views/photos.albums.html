@@ -1,7 +1,7 @@
 <div class="photo-travels">
     <div ng-repeat="travel in travels"
          class="travel">
-        <a ng-href="#/{{$stateParams.userId}}/albums/{{travel.id}}">
+        <a ng-href="#/photos/{{$stateParams.userId}}/albums/{{travel.id}}">
             <div class="thumbnail">
                 <img ng-src="{{staticCtx}}/{{travel.album_cover}}@1e_200w_200h_1c.jpg" alt="">
                 <div class="caption">

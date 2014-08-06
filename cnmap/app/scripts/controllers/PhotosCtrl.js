@@ -10,6 +10,7 @@ angular.module('photosApp', [
     'ponmApp',
     'xeditable'
 ])
+//angular.module('photosApp')
     .config([   '$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
 
@@ -18,10 +19,12 @@ angular.module('photosApp', [
 
                 // The `when` method says if the url is ever the 1st param, then redirect to the 2nd param
                 // Here we are just setting up some convenience urls.
-                .when('/', '/yourphotos/all')
+                .when('/photos/:userId', '/photos/:userId/all')
 
                 // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
-                .otherwise('/yourphotos/all');
+//                .otherwise('/yourphotos/all')
+                ;
+
             //////////////////////////
             // State Configurations //
             //////////////////////////
@@ -57,7 +60,7 @@ angular.module('photosApp', [
                     abstract: true,
 
                     // This abstract state will prepend '/contacts' onto the urls of all its children.
-                    url: '/:userId',
+                    url: '/photos/:userId',
 
                     // Example of loading a template from a file. This is also a top level state,
                     // so this template file will be loaded and then inserted into the ui-view
@@ -74,6 +77,10 @@ angular.module('photosApp', [
                         'alerts@photos': {
                             templateUrl: 'views/photos.alerts.html',
                             controller: 'PhotosAlertsCtrl'
+                        },
+                        'navbar': {
+                            templateUrl: 'views/ponm.navbar.html',
+                            controller: 'NavbarCtrl'
                         }
                     },
 
@@ -123,7 +130,7 @@ angular.module('photosApp', [
                     },
                     controller: "PhotosTrashCtrl"
                 })
-
+            ;
         }])
     .run(['editableOptions', function (editableOptions) {
         editableOptions.theme = 'bs3';
@@ -150,10 +157,10 @@ angular.module('photosApp', [
 
             $scope.userId = $state.params.userId;
             if ($scope.userId == "yourphotos") {
-                $scope.userId = $window.userId;
+                $scope.userId = ponmCtxConfig.userId;
             }
 
-            $scope.hashStateManager.set("userid", $scope.userId);
+//            $scope.hashStateManager.set("userid", $scope.userId);
 
             // 获取图片的用户信息
             UserService.getOpenInfo({userId: $scope.userId}, function (res) {
@@ -242,7 +249,7 @@ angular.module('photosApp', [
                 var modalInstance = $modal.open({
                     templateUrl: 'views/photos.move.html',
                     controller: 'PhotosMoveCtrl',
-                    windowClass: 'map-photo-modal',
+                    windowClass: 'move-photo-modal',
                     resolve: {
                         photos: function () {
                             return $scope.selectedPhotos;
@@ -273,7 +280,8 @@ angular.module('photosApp', [
             };
 
             function removeSelectedPhotos() {
-                angular.forEach($scope.selectedPhotos, function(photo, key) {
+                var photos = angular.copy($scope.selectedPhotos);
+                angular.forEach(photos, function(photo, key) {
                     $scope.selectPhoto(null, photo);
                     $scope.$broadcast("removePhotoDo", photo.id);
                 });
@@ -308,7 +316,7 @@ angular.module('photosApp', [
 
             // 用户图片分页属性
             $scope.photo = {
-                pageSize: 2,
+                pageSize: 10,
                 totalItems: 0,
                 numPages: 2,
                 currentPage: 1,
@@ -539,9 +547,9 @@ angular.module('photosApp', [
         }])
     .controller('PhotosMoveCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modalInstance',
-        'ponmCtxConfig', '$log', '$q', 'param', 'operateType', 'photos',
+        'ponmCtxConfig', '$log', '$q', 'jsUtils', 'operateType', 'photos',
         function ($window, $location, $rootScope, $scope, TravelService, UserService, $modalInstance,
-                  ponmCtxConfig, $log, $q, param, operateType, photos) {
+                  ponmCtxConfig, $log, $q, jsUtils, operateType, photos) {
 
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -582,12 +590,34 @@ angular.module('photosApp', [
             };
 
             $scope.ok = function () {
-                addPhotosToTravel($scope.photos, $scope.selectedTravel).then(function () {
-                    $modalInstance.close();
-                }, function (reason) {
+                if($scope.newTravel.selected) {
+                    createTravel($scope.selectedTravel.name, $scope.photos).then(function () {
+                        $modalInstance.close();
+                    }, function (reason) {
 
-                });
+                    });
+                }else {
+                    addPhotosToTravel($scope.photos, $scope.selectedTravel).then(function () {
+                        $modalInstance.close();
+                    }, function (reason) {
+
+                    });
+                }
+
             };
+
+            function createTravel(name, photos) {
+                var deferred = $q.defer();
+                TravelService.create({}, jsUtils.param({travel: name}), function (res) {
+                    if (res.status == "OK") {
+                        addPhotosToTravel($scope.photos, res.travel)
+                            .then(function() {
+                                deferred.resolve();
+                            });
+                    }
+                });
+                return deferred.promise;
+            }
 
             function addPhotosToTravel(photos, travel) {
                 var photoIds = [];
@@ -597,12 +627,14 @@ angular.module('photosApp', [
 
                 var deferred = $q.defer();
                 if (photoIds.length > 0) {
-                    TravelService.addPhoto({travelId: travel.id}, param({photos: photoIds.join(",")}), function (res) {
-                        if (res.status == "OK") {
-                            deferred.resolve();
-                        } else {
-                            deferred.reject(res.info);
-                        }
+                    TravelService.addPhoto({travelId: travel.id},
+                        jsUtils.param({photos: photoIds.join(",")}),
+                        function (res) {
+                            if (res.status == "OK") {
+                                deferred.resolve();
+                            } else {
+                                deferred.reject(res.info);
+                            }
                     });
                 } else {
                     deferred.resolve();
@@ -628,9 +660,9 @@ angular.module('photosApp', [
         }])
     .controller('PhotosTravelMoveCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modalInstance',
-        'ponmCtxConfig', '$log', '$q', 'param', 'operateType', 'photos',
+        'ponmCtxConfig', '$log', '$q', 'jsUtils', 'operateType', 'photos',
         function ($window, $location, $rootScope, $scope, TravelService, UserService, $modalInstance,
-                  ponmCtxConfig, $log, $q, param, operateType, photos) {
+                  ponmCtxConfig, $log, $q, jsUtils, operateType, photos) {
 
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -686,7 +718,7 @@ angular.module('photosApp', [
 
                 var deferred = $q.defer();
                 if (photoIds.length > 0) {
-                    TravelService.addPhoto({travelId: travel.id}, param({photos: photoIds.join(",")}), function (res) {
+                    TravelService.addPhoto({travelId: travel.id}, jsUtils.param({photos: photoIds.join(",")}), function (res) {
                         if (res.status == "OK") {
                             deferred.resolve();
                         } else {

@@ -5,16 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.appfuse.Constants;
 import org.appfuse.dao.UserDao;
 import org.appfuse.model.User;
+import org.appfuse.service.RoleManager;
+import org.appfuse.service.UserExistsException;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.ObjectRetrievalFailureException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -83,6 +88,9 @@ public class UserSettingsImpl implements UserSettingsManager {
 	
 	@Autowired
 	private RecycleDao recycleDao;
+	
+	@Autowired
+	private RoleManager roleManager;
 
 	@Override
 	public UserSettings save(UserSettings userSettings) {
@@ -245,7 +253,6 @@ public class UserSettingsImpl implements UserSettingsManager {
 		try {
 			settings = userSettingsDao.get(user.getId());
 		}catch(ObjectRetrievalFailureException ex) {
-			
 		}
 		
 		if(null == settings) {
@@ -367,5 +374,34 @@ public class UserSettingsImpl implements UserSettingsManager {
 		
 		return PhotoUtil.transformPhotos(photos);
 	}
-	
+
+
+	@Override
+	public User signup(User user) {
+		user.setEnabled(true);
+
+        // Set the default user role on this new user
+        user.addRole(roleManager.getRole(Constants.USER_ROLE));
+        
+        // 用户默认详细设置
+        UserSettings userSettings = new UserSettings();
+        
+        try {
+            user = this.getUserManager().saveUser(user);
+            this.create(user);
+        } catch (AccessDeniedException ade) {
+            // thrown by UserSecurityAdvice configured in aop:advisor userManagerSecurity
+            log.warn(ade.getMessage());
+            return null; 
+        } catch (UserExistsException e) {
+            // redisplay the unencrypted passwords
+            user.setPassword(user.getConfirmPassword());
+//            return "signup";
+        }
+
+//        saveMessage(request, getText("user.registered", user.getUsername(), locale));
+//        request.getSession().setAttribute(Constants.REGISTERED, Boolean.TRUE);
+		return null;
+	}
+		
 }

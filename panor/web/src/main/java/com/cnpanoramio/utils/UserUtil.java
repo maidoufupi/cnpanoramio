@@ -68,7 +68,10 @@ public class UserUtil {
 		UserOpenInfo openInfo = new UserOpenInfo();
 		openInfo.setId(userSettings.getId());
 		openInfo.setName(userSettings.getName());
-		openInfo.setAvatar(userSettings.getAvatar().getId());
+		if(null != userSettings.getAvatar()) {
+			openInfo.setAvatar(userSettings.getAvatar().getId());
+		}
+		
 		return openInfo;
 	}
 }

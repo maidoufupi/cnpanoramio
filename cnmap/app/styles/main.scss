@@ -4,9 +4,9 @@
 @import 'comm.scss';
 @import 'style.scss';
 @import 'index.scss';
-@import 'modal.scss';
-@import 'ExploreWorld.scss';
-@import 'PhotoDisplay.scss';
+//@import 'modal.scss';
+//@import 'ExploreWorld.scss';
+//@import 'PhotoDisplay.scss';
 @import 'user.scss';
 @import 'settings.scss';
 @import 'travel.scss';
@@ -20,7 +20,12 @@
 @import '_navs.scss';
 @import '_icons.scss';
 @import '_wall.scss';
+@import '_modal.scss';
 @import 'photo-upload.scss';
+
+body {
+  background-color: #ececec;
+}
 
 /** editable */
 pre.description {

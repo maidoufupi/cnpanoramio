@@ -42,8 +42,7 @@ angular.module('ponmApp.directives')
 
         defaults = {
             stuckClass: 'stuck',
-            direction: 'down right',
-            context: '.waypoint-scrollable'
+            direction: 'down right'
         };
 
         return {

@@ -35,7 +35,7 @@ public interface TravelManager extends GenericManager<Travel, Long> {
 	 * @param travel
 	 * @return
 	 */
-	public List<Travel> createMyTravel(User user, String travel);
+	public Travel createMyTravel(User user, String travel);
 	
 	/**
 	 * 向travel中添加photo

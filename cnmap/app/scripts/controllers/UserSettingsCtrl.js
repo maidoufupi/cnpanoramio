@@ -7,13 +7,38 @@ angular.module('userSettingsApp', [
         'ngResource',
         'ui.bootstrap',
         'ponmApp'])
+    .config([   '$stateProvider', '$urlRouterProvider',
+        function ($stateProvider, $urlRouterProvider) {
+
+            // Use $stateProvider to configure your states.
+            $stateProvider
+                .state("settings", {
+//                    abstract: true,
+                    // Use a url of "/" to set a states as the "index".
+                    url: "/settings",
+                    views: {
+
+                        // the main template will be placed here (relatively named)
+                        '': { templateUrl: 'views/settings.html',
+                            controller: 'UserSettingsCtrl'},
+
+                        // for column two, we'll define a separate controller
+                        'navbar': {
+                            templateUrl: 'views/ponm.navbar.html',
+                            controller: 'NavbarCtrl'
+                        }
+                    }
+                })
+            ;
+        }])
     .controller('UserSettingsCtrl', ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', 'UserPhoto',
         'UserService', 'ponmCtxConfig',
         function ($window, $log, $location, $rootScope, $scope, $modal, UserPhoto,
                   UserService, ponmCtxConfig) {
-            $scope.ctx = $window.ctx;
+            $scope.ctx = ponmCtxConfig.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
-            $scope.apirest = $window.apirest;
+            $scope.apirest = ponmCtxConfig.apirest;
+
             $scope.avatar = $scope.userId = $window.userId;
 
             $scope.changeAvatar = function () {

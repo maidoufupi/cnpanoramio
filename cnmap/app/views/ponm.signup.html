@@ -1,0 +1,57 @@
+<div class="signup" style="max-width: 500px;margin: 30px auto;">
+    <form name="signupForm" class="form-horizontal" role="form"
+          method="post"
+          action="http://127.0.0.1:8080/panor-web/signup">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">邮箱</label>
+            <div class="col-sm-7">
+                <input type="email" name="email" ng-model="user.email" required
+                       ng-remote-validate="http://127.0.0.1:8080/panor-web/api/rest/auth/signup/check/username"
+                       ng-remote-method="GET"
+                       class="form-control" placeholder="邮箱">
+            </div>
+            <div><span ng-show="signupForm.email.$dirty && signupForm.email.$error.ngRemoteValidate">邮箱已经被使用</span></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-7">
+                <input type="text" name="username" ng-model="user.username" required
+                       ng-remote-validate="http://127.0.0.1:8080/panor-web/api/rest/auth/signup/check/username"
+                       ng-remote-method="GET"
+                       class="form-control" placeholder="用户名">
+
+            </div>
+            <div><span ng-show="signupForm.username.$dirty && signupForm.username.$error.ngRemoteValidate">用户名已存在</span></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-7">
+                <input type="password" name="password" ng-model="user.password" required class="form-control" placeholder="密码">
+            </div>
+            <div><ul class="password-strength" password-strength="user.password"></ul></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">确认密码</label>
+            <div class="col-sm-7">
+                <input type="password"
+                       required
+                       name="confirmPassword"
+                       password-match="user.password"
+                       ng-model="user.confirmPassword"
+                       ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }"
+                       class="form-control" placeholder="确认密码">
+
+            </div>
+            <div><span ng-show="signupForm.confirmPassword.$dirty && signupForm.confirmPassword.$error.unique">密码不一致</span>
+                <ul class="password-strength" password-strength="user.confirmPassword"></ul></div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-9">
+                <button type="submit" class="btn btn-default"
+                        ng-disabled="!signupForm.$valid"
+                        ng-click="check()">提交</button>
+            </div>
+        </div>
+    </form>
+    <!--<pre>username = "{{user.confirmPassword}}"</pre>-->
+</div>

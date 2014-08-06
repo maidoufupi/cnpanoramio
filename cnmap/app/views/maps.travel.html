@@ -1,5 +1,5 @@
-<div class="container travel">
-    <div class="travel-header" waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-1'}">
+<div class="maps-travel">
+    <div class="travel-header" waypoint-sticky="{'stuckClass': 'navbar-third', 'context': '.waypoint-scrollable', 'offset': '-1'}">
         <div class="media user-info">
             <a class="pull-left" href="{{ctx}}/user#?id={{userOpenInfo.id}}">
                 <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png">
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="container travel-content">
+    <div class="travel-content">
         <div class="panel panel-default travel-spot"
              ng-animate="'animate'"
              ng-repeat="spot in travel.spots"

@@ -396,7 +396,7 @@ module.exports = function (grunt) {
 //             ]
 //             ,
 //             '<%= yeoman.app %>/scripts/ponmApp.vendor.min.js': [
-//                 '<%= yeoman.app %>/bower_components/jquery/dist/jquery.min.js',
+//                 '<%= yeoman.app %>/bower_components/jquery/jquery.min.js',
 //                 '<%= yeoman.app %>/bower_components/jquery.rest/dist/jquery.rest.min.js',
 //                 '<%= yeoman.app %>/bower_components/sass-bootstrap/dist/js/bootstrap.min.js',
 //

@@ -6,10 +6,10 @@
 
 angular.module('ponmApp.controllers')
     .controller('PhotoModalCtrl', ['$window', '$scope', '$log', '$modalInstance', 'photoId', 'travelId', 'PhotoService',
-        'CommentService', 'UserService', 'TravelService', '$q', '$modal', '$filter', 'param', '$location',
-        'ponmCtxConfig',
+        'CommentService', 'UserService', 'TravelService', '$q', '$modal', '$filter', '$location',
+        'ponmCtxConfig', 'jsUtils',
         function ($window, $scope, $log, $modalInstance, photoId, travelId, PhotoService, CommentService, UserService,
-                  TravelService, $q, $modal, $filter, param, $location, ponmCtxConfig) {
+                  TravelService, $q, $modal, $filter, $location, ponmCtxConfig, jsUtils) {
 
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -221,7 +221,7 @@ angular.module('ponmApp.controllers')
             $scope.addTravel = function(data) {
                 var d = $q.defer();
                 TravelService.addPhoto({travelId: data},
-                    param({photos: $scope.photoId}), function (res) {
+                    jsUtils.param({photos: $scope.photoId}), function (res) {
                         if (res.status == "OK") {
                             d.resolve();
                         }else { // {status: "error", msg: "Username should be `awesome`!"}
@@ -647,6 +647,45 @@ angular.module('ponmApp.controllers')
                 resizeEnable: true
                 // ui map config
 //            uiMapCache: false
+            }
+        }])
+    .controller('TypeaheadCtrl', ['$scope', '$http', 'GeocodeService', '$q',
+        function ($scope, $http, GeocodeService, $q) {
+            $scope.selected = undefined;
+            $scope.states = [];
+            // Any function returning a promise object can be used to load values asynchronously
+            $scope.getLocation = function (val) {
+                var d = $q.defer();
+                $scope.mapService.getLocPois(val, function(res) {
+                    d.resolve(res);
+                });
+                return d.promise.then(function(res) {
+                    return res;
+                });
+            };
+
+            $scope.goLocation = function (address) {
+
+                var location = address.location;
+                if (location) {
+//                location = location.split(",");
+//                location = {
+//                    lat: location[1],
+//                    lng: location[0]
+//                };
+                    $scope.mapEventListener.setCenter($scope.map, location.lat, location.lng);
+//                $scope.addOrUpdateMarker($scope.file, location.lat, location.lng);
+//                $scope.setPlace($scope.file,
+//                    location.lat,
+//                    location.lng,
+//                    address.formatted_address);
+
+                    $scope.mapEventListener.setZoom($scope.map, address.zoom);
+
+//                $scope.mapEventListener.setBounds($scope.map,
+//                    geometry.viewport.southwest,
+//                    geometry.viewport.northeast);
+                }
             }
         }])
 ;

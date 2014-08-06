@@ -5,6 +5,57 @@
 
 angular.module('ponmApp.services', [
     'ngResource'])
+    .factory('AuthService', ['$window', '$resource', '$cookies', '$log', '$q', 'ponmCtxConfig',
+        function ($window, $resource, $cookies, $log, $q, ponmCtxConfig) {
+
+            var loginService = $resource($window.apirest + '/auth/login');
+
+        function login(user) {
+            var deferred = $q.defer();
+            loginService.save({username: user.username, password: user.password},
+                function(res) {
+                    $log.debug(res);
+                    if(res.status == "OK") {
+                        $log.debug("login success")
+                        ponmCtxConfig.userId = res.user.id;
+                        ponmCtxConfig.username = res.user.username;
+                        ponmCtxConfig.name = res.user.name;
+                        ponmCtxConfig.login = true;
+
+                        $log.debug($cookies.JSESSIONID);
+                        $log.debug($cookies);
+                        deferred.resolve();
+                    }else {
+                        deferred.reject(1);
+                    }
+                });
+            return deferred.promise;
+        }
+
+        function checkLogin() {
+            var deferred = $q.defer();
+            loginService.get({}, function(res) {
+                if(res.status == "OK") {
+                    ponmCtxConfig.userId = res.user.id;
+                    ponmCtxConfig.username = res.user.username;
+                    ponmCtxConfig.name = res.user.name;
+                    ponmCtxConfig.login = true;
+
+                    $log.debug($cookies.JSESSIONID);
+                    $log.debug($cookies);
+                    deferred.resolve();
+                }else if(res.status == "NO_AUTHORIZE") {
+                    deferred.reject(1);
+                }
+            });
+            return deferred.promise;
+        }
+
+        return {
+            login: login,
+            checkLogin: checkLogin
+        };
+    }])
     .factory('CommentService', ['$window', '$resource', function ($window, $resource) {
         return $resource($window.apirest + '/comment/:commentId/:type',
             {commentId: "@id"},
@@ -306,8 +357,9 @@ angular.module('ponmApp.services', [
             ctx: $window.ctx,
             staticCtx: $window.staticCtx || "http://static.photoshows.cn",
             corsproxyCtx: $window.corsproxyCtx || "http://www.corsproxy.com/static.photoshows.cn",
-            apirest: $window.apirest,
-            userId: $window.userId
+            apirest: $window.apirest
+            ,userId: $window.userId
+            ,login: $window.login
         }
     }])
 ;

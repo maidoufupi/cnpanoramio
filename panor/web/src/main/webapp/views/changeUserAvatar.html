@@ -5,13 +5,14 @@
 </div>
 <div class="modal-body">
     <div id="avatar-form">
-        <input type="file" data-ng-file-select="onFileSelect($files)" >
+        <input type="file" ng-file-select="onFileSelect($files)" >
         <div id="img-cropper">
             <img-cropped src='{{imageUrl}}' bind='previewUrl'></img-cropped>
         </div>
         <button class="btn btn-primary"
-                data-ng-click="fileUpload()">上传</button>
-        <alert data-ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                ng-show="!!imageUrl"
+                ng-click="fileUpload()">上传</button>
+        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
     </div>
 </div>
 <div class="modal-footer">

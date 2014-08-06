@@ -126,15 +126,7 @@
 			key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" />
 		<anonymous />
 	</http>
-	
-<!-- 	<bean id="unauthorizedEntryPoint" class="com.cnpanoramio.security.UnauthorizedEntryPoint" /> -->
-
-<!-- 	<bean id="authenticationTokenProcessingFilter" class="com.cnpanoramio.security.AuthenticationTokenProcessingFilter" >
-		<constructor-arg ref="userDao" />
-	</bean> -->
-	
-	<!-- <bean id="ajaxAuthFailHandler" class=" com.cnpanoramio.webapp.spring.AjaxAuthenticationFailureHandler"></bean> -->
-			 
+				 
 	<bean id="authenticationEntryPoint"
   		class="com.cnpanoramio.webapp.spring.AjaxAwareAuthenticationEntryPoint">
 		<constructor-arg name="loginUrl" value="/login"/>
@@ -142,32 +134,31 @@
 	
 	<http xmlns="http://www.springframework.org/schema/security"
 	      entry-point-ref="authenticationEntryPoint">
-	    <intercept-url pattern="/photo/*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/upload" access="ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/map*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
-		<intercept-url pattern="/settings" access="ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/passwordHint*"
-			access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/signup*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/app/**" access="ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/services/api/photos" access="ROLE_USER" />
-		<intercept-url pattern="/services/api/comment" access="ROLE_USER" />
-		<intercept-url pattern="/services/api/commentquery" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/services/api/panoramiothumbnail" access="ROLE_USER" />
-		<intercept-url pattern="/services/api/settings" access="ROLE_ADMIN,ROLE_USER" />
-		<intercept-url pattern="/services/api/photo/trusted/**" access="ROLE_USER" />
-		<intercept-url pattern="/services/api/photo/user/**" access="ROLE_USER" />
-		<intercept-url pattern="/services/api/photo/**" access="ROLE_USER" />
-		<intercept-url pattern="/services/api/gisindex" access="ROLE_ADMIN" />
+		<intercept-url pattern="/*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
+		<custom-filter before="FORM_LOGIN_FILTER" ref="authenticationFilter"/>
 		<form-login login-page="/login.jsp" default-target-url="/"
 			authentication-failure-url="/login.jsp?error=true"
 			login-processing-url="/j_security_check" />
 		<logout logout-success-url="/" logout-url="/logout.do" />
 		<remember-me user-service-ref="userloginDao"
 			key="e37f4b31-0c45-11dd-bd0b-0800200c9a66" />
-		<!-- <remember-me/> -->
 	</http>
+	
+	<bean id="authenticationFilter"
+	      class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+	    <property name="filterProcessesUrl" value="/login/j_spring_security_check" />
+	    <property name="authenticationManager" ref="authenticationManager" />
+	    <property name="authenticationSuccessHandler">
+	        <bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+	            <property name="useReferer" value="true"/>
+	        </bean>
+	    </property>
+	    <property name="authenticationFailureHandler">
+	        <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+	            <property name="defaultFailureUrl" value="/login?login_error=t" />
+	        </bean>
+	    </property>
+	</bean>
 
 	<bean id="oauthAuthenticationEntryPoint"
 		class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
@@ -307,4 +298,5 @@
 	<oauth:web-expression-handler id="oauthWebExpressionHandler" />
 
 	<bean class="com.cnpanoramio.webapp.listener.AuthenticationListener" />
+		
 </beans>

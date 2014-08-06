@@ -1,31 +1,3 @@
-.map-photo-modal {
-  overflow-y: hidden;
-  .modal-dialog {
-    position: absolute;
-    top: 20px;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    width: auto;
-    padding: 0;
-    box-shadow: 0 0 20px 1px #777;
-    .modal-content {
-      border-radius: initial;
-      border: initial;
-      .modal-header {
-//        color: white;
-      }
-      .modal-body {
-        .map_panel.container {
-          .map-photo-map {
-            bottom: 0;
-            margin: 0;
-          }
-        }
-      }
-    }
-  }
-}
 
 .photo_list_and_map {
   position: relative;
