@@ -11,6 +11,8 @@
 
     IMapEventListener.prototype.addLocationHashListener = function(map, callback) {};
 
+    IMapEventListener.prototype.removeListener = function(listeners) {};
+
     IMapEventListener.prototype.addToolBar = function(map) {};
 
     IMapEventListener.prototype.setCenter = function(map, lat, lng) {};

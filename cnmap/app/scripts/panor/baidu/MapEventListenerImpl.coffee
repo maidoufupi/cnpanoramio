@@ -31,7 +31,9 @@ class MapEventListener extends window.cnmap.IMapEventListener
     map.addOverlay new BMap.Marker new BMap.Point lng, lat
 
   createDraggableMarker: (map, lat, lng) ->
-    map.addOverlay new BMap.Marker new BMap.Point(lng, lat), {enableDragging: true}
+    marker = new BMap.Marker new BMap.Point(lng, lat), {enableDragging: true}
+    map.addOverlay marker
+    return marker
 
   activeMarker: (marker) ->
     if marker
@@ -61,6 +63,9 @@ class MapEventListener extends window.cnmap.IMapEventListener
 
   setMap: (target, map) ->
     map.addOverlay target
+
+MapEventListener.factory = () ->
+  return new cnmap.MapEventListener
 
 window.cnmap = window.cnmap || {}
 window.cnmap.MapEventListener = MapEventListener

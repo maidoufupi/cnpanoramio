@@ -1,4 +1,4 @@
-<div class="photos" waypoint-sticky="{'stuckClass': 'navbar-second-top', 'offset': '-1'}">
+<div class="photos" waypoint-sticky="{'stuckClass': 'navbar-second-top', 'offset': '49'}">
     <div class="navbar-second"
          >
         <nav class="navbar navbar-default"
@@ -17,13 +17,13 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-3">
                     <ul class="nav navbar-nav nav-tray">
                         <li ng-class="{'active': $state.current.name == 'photos.all'}">
-                            <a href="#/photos/yourphotos/all">所有照片</a></li>
+                            <a href="#/photos/{{userId}}/all">所有照片</a></li>
                         <li ng-class="{'active': $state.current.name == 'photos.albums'}">
-                            <a href="#/photos/yourphotos/albums">相册</a></li>
+                            <a href="#/photos/{{userId}}/albums">相册</a></li>
                         <li ng-class="{'active': $state.current.name == 'photos.recent'}">
-                            <a href="#/photos/yourphotos/recent">最近添加</a></li>
+                            <a href="#/photos/{{userId}}/recent">最近添加</a></li>
                         <li ng-class="{'active': $state.current.name == 'photos.trash'}">
-                            <a href="#/photos/yourphotos/trash">回收站</a></li>
+                            <a href="#/photos/{{userId}}/trash">回收站</a></li>
                         <!--<li class="dropdown">
                             <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -102,8 +102,7 @@
 
     </div>
     <div class="select-pane"
-         ponm-rect-multi-select=".photo"
-         ponm-rect-moveselect="true"
+         ponm-rect-multi-select="{'selector': '.photo', 'moveselect': true, 'offsetY': -110}"
          ponm-rect-selector="rectSelected">
         <div class="container-photos">
 

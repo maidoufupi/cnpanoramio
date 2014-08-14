@@ -8,3 +8,4 @@ distanceInMeter = (lat1, lng1, lat2, lng2) ->
 window.cnmap = window.cnmap ? {}
 window.cnmap.GPS = window.cnmap.GPS  ? {}
 window.cnmap.GPS.distanceInMeter = distanceInMeter
+

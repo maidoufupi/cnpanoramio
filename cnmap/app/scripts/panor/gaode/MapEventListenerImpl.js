@@ -20,16 +20,25 @@
         this.opts = opts || this.opts;
 
         this.addLocationHashListener = function(map, callback) {
+            var listeners = [];
+            listeners.push($window.AMap.event.addListener(map, 'zoomend', MapListener));
 
-            $window.AMap.event.addListener(map, 'zoomend', MapListener);
-
-            $window.AMap.event.addListener(map, 'moveend', MapListener);
+            listeners.push($window.AMap.event.addListener(map, 'moveend', MapListener));
 
             function MapListener(evt) {
                 var lnglat = map.getCenter();
                 callback.apply(this, [lnglat.lat, lnglat.lng, map.getZoom()]);
             }
 
+            return listeners;
+        };
+
+        this.removeListener = function(listeners) {
+            if(listeners) {
+                $.each(listeners, function(index, listener) {
+                    $window.AMap.event.removeListener(listener);
+                });
+            }
         };
 
         this.addToolBar = function(mapObj) {
@@ -48,7 +57,6 @@
         this.setZoom = function(map, zoom) {
             map.setZoom(zoom);
         };
-
 
         this.setZoomAndCenter = function(map, zoom, lat, lng) {
             var point = new AMap.LngLat(lng, lat);

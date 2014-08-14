@@ -17,7 +17,7 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav center-block">
                     <!--<li><a href="">分享</a></li>-->
-                    <li><a href="">幻灯片</a></li>
+                    <li><a href="" ng-click="displayGallery()">幻灯片</a></li>
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle">更多<b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -68,6 +68,8 @@
             <input type="range" class="zoom-range">
             <button class="reset">重置</button>
         </div>-->
+
+        <image-gallery options="{'galleryData': 'galleryData'}"></image-gallery>
     </div>
 
     <nav class="navbar navbar-inverse photo-container-booter" role="navigation">
@@ -107,10 +109,10 @@
                     </div>
                 </div>
                 <div class="content">
-                    <div ng-if="!photoEditable && photo.travel_id">
-                        旅行：<a data-ng-href="{{ctx}}/travel#?id={{photo.travel_id}}">{{photo.travel_name}}</a>
+                    <div ng-if="photo.travel_id">
+                        旅行：<a data-ng-href="{{ctx}}/#/maps/travel/{{photo.travel_id}}">{{photo.travel_name}}</a>
                     </div>
-                    <div ng-if="photoEditable">
+                    <div ng-if="false">
                         旅行：
                         <a href=""
                            editable-select="photo.travel_id"
@@ -145,21 +147,29 @@
                             <tbody>
                                 <tr>
                                     <td class="name">地址</td>
-                                    <td  class="value">
-                                        <a href=""
-                                           data-ng-click="openMapPhoto()"
+                                    <td  class="value"
+                                         ng-switch="login">
+                                        <a ng-switch-when="true"
+                                           href=""
+                                           ng-click="openMapPhoto()"
                                            tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
                                            tooltip-trigger="mouseenter"
-                                           tooltip-placement="top">{{photo.point.address}}</a></td>
+                                           tooltip-placement="top">{{photo.point.address}}</a>
+                                        <span ng-switch-default>{{photo.point.address}}</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="name">位置</td>
-                                    <td  class="value">
-                                        <a href=""
-                                           data-ng-click="openMapPhoto()"
+                                    <td  class="value"
+                                         ng-switch="login">
+                                        <a ng-switch-when="true"
+                                           href=""
+                                           ng-click="openMapPhoto()"
                                            tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
                                            tooltip-trigger="mouseenter"
-                                           tooltip-placement="top">{{(photo.point.lat && (photo.point.lat | number) + ',') || '添加位置'}}{{photo.point.lng | number}}</a></td>
+                                           tooltip-placement="top">{{(photo.point.lat && (photo.point.lat | number) + ',') || '添加位置'}}{{photo.point.lng | number}}</a>
+                                        <span ng-switch-default>{{photo.point.lat && ((photo.point.lat | number) + ',')}}{{photo.point.lng | number}}</span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="name">拍摄日期</td>

@@ -9,6 +9,23 @@
 //      height: 100px;
       @include transition-linear(all);
     }
+
+    .ponm-photo-footer {
+      position: absolute;
+      bottom: 0;
+      height: 50%;
+      width: 100%;
+      padding: 5px;
+      background-color: rgba(128, 128, 128, 0.5);
+      color: white;
+      overflow: hidden;
+      font-size: 10px;
+    }
+
+    .action {
+      opacity: 0;
+      @include transition-linear(opacity);
+    }
   }
 
   .photo.ng-enter {
@@ -62,4 +79,19 @@
       border: 5px solid $active-color;
     }
   }
+}
+
+// waypoint timeline for photo in wall
+.timeline {
+  position: fixed;
+  top: 110px;
+  right: 10px;
+  width: 60px;
+  height: 70px;
+  background: #4285f4;
+  border-radius: 2px;
+  color: white;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.57);
+  padding: 3px;
+  text-align: center;
 }

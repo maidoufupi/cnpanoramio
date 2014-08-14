@@ -54,9 +54,12 @@
     };
 
     MapEventListener.prototype.createDraggableMarker = function(map, lat, lng) {
-      return map.addOverlay(new BMap.Marker(new BMap.Point(lng, lat), {
+      var marker;
+      marker = new BMap.Marker(new BMap.Point(lng, lat), {
         enableDragging: true
-      }));
+      });
+      map.addOverlay(marker);
+      return marker;
     };
 
     MapEventListener.prototype.activeMarker = function(marker) {
@@ -104,6 +107,10 @@
     return MapEventListener;
 
   })(window.cnmap.IMapEventListener);
+
+  MapEventListener.factory = function() {
+    return new cnmap.MapEventListener;
+  };
 
   window.cnmap = window.cnmap || {};
 

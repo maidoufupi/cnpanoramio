@@ -80,6 +80,7 @@
     .panel.panel-default.travel-spot {
       position: relative;
       margin-bottom: 10px;
+      border: 0;
 
       .action.spot-remove {
         opacity: 0;
@@ -92,18 +93,20 @@
         padding: 5px;
       }
       .panel-body {
-        padding: 5px;
+        padding: 0;
+        margin: 0 -1px;
+
         /* 旅行相册中的图片 */
         .photo {
-          .ponm-photo-footer {
-            position: absolute;
-            bottom: 0;
-            height: 50%;
-            width: 100%;
-            background-color: rgba(128, 128, 128, 0.5);
-            color: white;
-            overflow: hidden;
-          }
+//          .ponm-photo-footer {
+//            position: absolute;
+//            bottom: 0;
+//            height: 50%;
+//            width: 100%;
+//            background-color: rgba(128, 128, 128, 0.5);
+//            color: white;
+//            overflow: hidden;
+//          }
 
           .ponm-photo-remove {
             position: absolute;
@@ -128,14 +131,14 @@
             }
           }
 
-          .action {
-            opacity: 0;
-            @include transition-linear(opacity);
-          }
+//          .action {
+//            opacity: 0;
+//            @include transition-linear(opacity);
+//          }
 
-          .action.ng-animate.ponm-show-add, .action.ng-animate.ponm-show-remove {
-            opacity: 1;
-          }
+//          .action.ng-animate.ponm-show-add, .action.ng-animate.ponm-show-remove {
+//            opacity: 1;
+//          }
           .action.ponm-show {
             opacity: 1;
           }

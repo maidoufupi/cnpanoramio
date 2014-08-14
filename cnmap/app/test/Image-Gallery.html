@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/blueimp-gallery/css/blueimp-gallery.css">
+    <link rel="stylesheet" href="../bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css">
+    <link rel="stylesheet" href="../bower_components/Bootstrap-Image-Gallery/css/bootstrap-image-gallery.css">
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../scripts/ponmApp.vendor.min.js"></script>
+
+    <script type="text/javascript" src="../bower_components/angular-ui-map-qq/ui-map.js"></script>
+
+    <script type="text/javascript" src="../scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="../scripts/directives.js"></script>
+    <script type="text/javascript" src="../scripts/services/jsUtils.js"></script>
+    <script type="text/javascript" src="../scripts/directives/image-gallery.js"></script>
+    <script type="text/javascript" src="../scripts/directives/waypoint.js"></script>
+    <script type="text/javascript" src="../bower_components/blueimp-gallery/js/blueimp-helper.js"></script>
+    <script type="text/javascript" src="../bower_components/blueimp-gallery/js/blueimp-gallery.js"></script>
+    <script type="text/javascript" src="../bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js"></script>
+    <script type="text/javascript" src="../bower_components/blueimp-gallery/js/blueimp-gallery-fullscreen.js"></script>
+
+    <script type="text/javascript">
+//        $(function() {
+//            $('#image-gallery-button').on('click', function (event) {
+//                event.preventDefault();
+////                blueimp.Gallery($('#links a'), {useBootstrapModal: false, fullScreen: true,
+////                    index: 1});
+//                blueimp.Gallery([
+//                    {
+//                        title: 'Banana',
+//                        href: 'http://test.photoshows.cn/4.jpg@1e_800w_800h_1c.jpg',
+//                        type: 'image/jpeg',
+//                        thumbnail: 'http://test.photoshows.cn/4.jpg@1e_20w_20h_1c.jpg'
+//                    },
+//                    {
+//                        title: 'Apple',
+//                        href: 'http://test.photoshows.cn/5.jpg@1e_800w_800h_1c.jpg',
+//                        type: 'image/jpeg',
+//                        thumbnail: 'http://test.photoshows.cn/5.jpg@1e_20w_20h_1c.jpg'
+//                    }
+//                ], {useBootstrapModal: false, fullScreen: true,
+//                    index: 1});
+//            });
+//        })
+
+
+    </script>
+    <script type="text/javascript">
+        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.apirest = window.ctx + "/api/rest";
+        window.staticCtx = "http://test.photoshows.cn";
+
+        angular.module('galleryApp', [
+            'ngResource',
+            'ui.bootstrap',
+            'ponmApp'
+        ])
+        .config(function () {
+        })
+        .run(['$log', function($log) {
+            $log.info("test app runing");
+        }])
+        .controller('GalleryCtrl', ['$scope', '$http', '$log', '$timeout', '$q', 'ponmCtxConfig',
+            function($scope, $http, $log, $timeout, $q, ponmCtxConfig) {
+
+                $scope.ctx = ponmCtxConfig.ctx;
+                $scope.staticCtx = ponmCtxConfig.staticCtx;
+                $scope.apirest = ponmCtxConfig.apirest;
+
+                $scope.galleryData = [
+                    {
+                        title: 'Banana',
+                        href: 'http://test.photoshows.cn/4.jpg@1e_800w_800h_1c.jpg',
+                        type: 'image/jpeg',
+                        thumbnail: 'http://test.photoshows.cn/4.jpg@1e_20w_20h_1c.jpg'
+                    },
+                    {
+                        title: 'Apple',
+                        href: 'http://test.photoshows.cn/5.jpg@1e_800w_800h_1c.jpg',
+                        type: 'image/jpeg',
+                        thumbnail: 'http://test.photoshows.cn/5.jpg@1e_20w_20h_1c.jpg'
+                    }
+                    ,
+                    {
+                        title: 'Apple',
+                        href: 'http://test.photoshows.cn/6.jpg@1e_800w_800h_1c.jpg',
+                        type: 'image/jpeg',
+                        thumbnail: 'http://test.photoshows.cn/6.jpg@1e_20w_20h_1c.jpg'
+                    }
+                        ,{
+                        title: 'Apple',
+                        href: 'http://test.photoshows.cn/7.jpg@1e_800w_800h_1c.jpg',
+                        type: 'image/jpeg',
+                        thumbnail: 'http://test.photoshows.cn/7.jpg@1e_20w_20h_1c.jpg'
+                    }
+                ];
+
+                $scope.galleryCallFun = function() {
+                    $scope.$broadcast("image-gallery", {index: 1});
+//                    $scope.galleryCall($scope.galleryData, {index: 1});
+                }
+            }]);
+    </script>
+</head>
+<body>
+
+<div ng-app="galleryApp" ng-controller="GalleryCtrl">
+
+    <button id="image-gallery-button" type="button" class="btn btn-primary btn-lg"
+            ng-click="galleryCallFun()">
+        <i class="glyphicon glyphicon-picture"></i>
+        Launch Image Gallery
+    </button>
+
+    <!--<div image-gallery="{'galleryData': 'galleryData'}">
+
+    </div>-->
+
+    <image-gallery options="{'galleryData': 'galleryData'}"></image-gallery>
+</div>
+<!--<script type="text/javascript" src="../bower_components/blueimp-bootstrap-image-gallery/js/bootstrap-image-gallery.js"></script>-->
+</body>
+</html>

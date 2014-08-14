@@ -105,40 +105,13 @@
                 var thumbs = that.getBoundsThumbnails(
                     that.getBounds(),
                     that.getLevel(),
-                    that.getSize(),
-                    function(thumbs) {
-                        var photoIds = [];
-                        var photos = {};
-                        for (var i in thumbs) {
-                            photoIds.push(thumbs[i].id);
-                            photos[thumbs[i].id] = thumbs[i];
-                        }
-                        cnmap.utils.compareArray(
-                            thumbPhotoIds,
-                            photoIds,
-                            function(a, c, b) {
-                                if(a) {
-                                    if(labels[a]) {
-                                        labels[a].setMap(null);
-                                    }
-                                    var index = thumbPhotoIds.indexOf(a);
-                                    if (index > -1) {
-                                        thumbPhotoIds.splice(index, 1);
-                                    }
-                                }
+                    that.getSize())
+            }
+        };
 
-                                if(c) {
-                                    // do nothing
-                                }
-
-                                if(b) {
-                                    that.createMarker(photos[b]);
-                                }
-                            }
-                        );
-                    // trigger data_changed event
-                    $(that).trigger("data_changed", [thumbs]);
-                })
+        this.hideLabel = function(photoId) {
+            if(labels[photoId]) {
+                labels[photoId].setMap(null);
             }
         };
 
@@ -150,7 +123,6 @@
         this.createMarker = function(photo) {
             var map = this.opts.map;
             var that = this;
-            thumbPhotoIds.push(photo.id);
             if(labels[photo.id]) {
                 labels[photo.id].setMap(map);
             }else {
@@ -170,7 +142,7 @@
                                 if (infoWindow.getIsOpen()) {
                                     infoWindow.close();
                                 } else {
-                                    infoWindow.setContent(that.getInfoWindowContent(photos[this.photoId]));
+                                    infoWindow.setContent(that.getInfoWindowContent(photo));
                                     infoWindow.open(map, this.getPosition());
                                 }
                             } else {
@@ -181,20 +153,6 @@
                 labels[photo.id] = label;
                 label.setMap(map);  //在地图上添加点
             }
-        };
-
-        /**
-         * 由外部调用创建图片的图标
-         *
-         * @param photos
-         */
-        this.createPhotosMarker = function(photos) {
-            // 清除缓存
-            this.clearMap();
-            var that = this;
-            jQuery.each(photos, function (key, photo) {
-                that.createMarker(photo);
-            });
         };
 
         this.setOptions = function (options/*:PanoramioLayerOptions*/) { //	None
@@ -245,7 +203,7 @@
 
         this.clearMap = function() {
             labels = [];
-            thumbPhotoIds = [];
+            this.thumbPhotoIds = [];
             this.opts.map && this.opts.map.clearMap();
         };
 

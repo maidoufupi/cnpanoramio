@@ -14,6 +14,11 @@ class IMapEventListener
   addLocationHashListener: (map, callback) ->
 
   ##
+  #
+  # @param listeners : listener Array
+  removeListener: (listeners) ->
+
+  ##
    # 为地图添加ToolBar控件
    #
    # @param map

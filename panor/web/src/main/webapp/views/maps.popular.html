@@ -7,7 +7,7 @@
          photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}">
         <div ng-repeat="photo in photos"
              class="photo"
-             ponm-hover>
+             ponm-hover=">.action">
             <a href=""
                ng-click="displayPhoto(photo.id)">
                 <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_100w_100h.jpg">
@@ -22,6 +22,10 @@
                     <div class="icon-photo-p360"></div>
                 </div>
             </a>
+            <div class="action ponm-photo-footer">
+                <p>{{photo.point.address}}</p>
+                <pre class="description">{{photo.description}}</pre>
+            </div>
         </div>
         <!--<div ng-show="photo.currentPage <= photo.numPages"
              class="btn btn-default load-more"

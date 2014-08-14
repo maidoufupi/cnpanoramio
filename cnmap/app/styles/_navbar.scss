@@ -112,14 +112,20 @@
   }
 }
 
+// second navbar fix to top
 .navbar-second-top {
   .navbar-second {
     position: fixed;
     z-index: 1031;
     top: 0;
   }
+  // photos
   .container-photos {
     margin-top: 61px;
+    // waypoint timeline
+    .timeline {
+      top: 60px;
+    }
   }
 }
 
@@ -137,17 +143,24 @@
   font-size: 16px;
 }
 
-#nav-search-form .form-control {
-  width: auto;
+.navbar.navbar-fixed-top {
+  .navbar-nav.navbar-right {
+    .user {
+      a {
+        line-height: 50px;
+        padding: 0 15px;
+      }
+
+      img {
+        width: 30px;
+      }
+    }
+
+    .btn-group {
+      margin-bottom: 0;
+    }
+  }
 }
-
-//.navbar.navbar-fixed-top span {
-//  color: #7e7e7e;
-//}
-
-//.navbar.navbar-fixed-top a:hover {
-//  color: #fff;
-//}
 
 .nav {
   .white {
@@ -159,11 +172,11 @@
   }
 }
 
-.nav.navbar-nav a.user {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 0;
-}
+//.nav.navbar-nav a.user {
+//  margin-top: 10px;
+//  margin-bottom: 10px;
+//  padding: 0;
+//}
 
 .navbar-profile-image {
   margin-left: 15px;
@@ -174,16 +187,12 @@
   border-radius: 3px;
   border: 0;
 }
-
-#navbar-search {
-  width: 240px;
-  margin-top: 8px;
-  color: #f0ad4e;
-}
-
-.nav.navbar-nav .btn-group {
-  margin-bottom: 0;
-}
+//
+//#navbar-search {
+//  width: 240px;
+//  margin-top: 8px;
+//  color: #f0ad4e;
+//}
 
 .navbar-brand {
   padding: 5px;

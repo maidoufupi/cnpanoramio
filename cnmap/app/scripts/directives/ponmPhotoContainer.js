@@ -552,11 +552,11 @@ angular.module('ponmApp.directives')
                                 angular.element(image1).css("position", "absolute");
                                 angular.element(image1).css("top", "0");
                             }
-                            if(is360) {
-                                image1.src = attrs.ponmPhotoSrcP360;
-                            }else {
+//                            if(is360) {
+//                                image1.src = attrs.ponmPhotoSrcP360;
+//                            }else {
                                 image1.src = attrs.ponmPhotoSrcL1;
-                            }
+//                            }
 
                             var flatImage = imgContainer.find(".flat-canvas");
                             flatImage.append(image1);

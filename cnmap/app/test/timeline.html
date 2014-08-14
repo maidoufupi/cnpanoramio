@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <script type="text/javascript" src="../bower_components/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../scripts/ponmApp.vendor.min.js"></script>
+
+    <script type="text/javascript" src="../bower_components/angular-ui-map-qq/ui-map.js"></script>
+
+    <script type="text/javascript" src="../scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="../scripts/directives.js"></script>
+    <script type="text/javascript" src="../scripts/services/jsUtils.js"></script>
+    <script type="text/javascript" src="../scripts/directives/ponm-photo-fluid.js"></script>
+    <script type="text/javascript" src="../scripts/directives/waypoint.js"></script>
+
+    <style>
+
+    </style>
+
+    <script type="text/javascript">
+        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.apirest = window.ctx + "/api/rest";
+        window.staticCtx = "http://test.photoshows.cn";
+
+        angular.module('timelineApp', [
+            'ngResource',
+            'ui.bootstrap',
+            'ponmApp'
+        ])
+        .config(function () {
+        })
+        .run(['$log', function($log) {
+            $log.info("test app runing");
+        }])
+        .controller('TimlineCtrl', ['$scope', '$http', '$log', '$timeout', '$q', 'ponmCtxConfig',
+            function($scope, $http, $log, $timeout, $q, ponmCtxConfig) {
+
+                $scope.ctx = ponmCtxConfig.ctx;
+                $scope.staticCtx = ponmCtxConfig.staticCtx;
+                $scope.apirest = ponmCtxConfig.apirest;
+
+                $scope.photos = [];
+                for(var i=1; i<60; i++) {
+                    $scope.photos.push({
+                        id: i,
+                        oss_key: i+".jpg",
+                        point: {
+                            address: "address " + i + " sssss"
+                        },
+                        description: "description " + i
+                    })
+                }
+
+                $scope.$on('waypointEvent', function(e, dir, id) {
+                    $log.debug("dir: "+dir + " id: " + id);
+                    $scope.$apply(function() {
+                        $scope.timelineDate = id;
+                    });
+                });
+            }]);
+    </script>
+</head>
+<body ng-app="timelineApp" ng-controller="TimlineCtrl">
+<div class="photo-wall photo-wall-fixed-size">
+    <div ng-repeat="photo in photos"
+         class="photo"
+         ponm-hover=">.action"
+         waypoint="{'offset': 130, id: {id: photo.id, name: photo.oss_key}}">
+        <a href=""
+           ng-click="displayPhoto(photo.id)">
+            <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_200w_200h_1c.jpg"
+                 ng-class="{'selectable': selectable&&!photo.actionSelected,
+                        'selected': photo.actionSelected}">
+        </a>
+        <div class="action ponm-photo-footer">
+            <p>{{photo.point.address}}</p>
+            <pre class="description">{{photo.description}}</pre>
+        </div>
+        <div class="action-select"
+             ng-class="{'action': !selectable, 'ponm-show': selectable}"
+             ng-click="selectPhoto($event, photo)">
+            <span class="icon-photo-select"
+                  ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
+        </div>
+        <div ng-if="photo.is360">
+            <div class="icon-photo-p360"></div>
+        </div>
+    </div>
+</div>
+
+<div class="timeline">
+    <div>
+        <!--<a href="">
+            back
+        </a>-->
+    </div>
+    <div>
+        <span>{{timelineDate | json}}</span>
+    </div>
+
+</div>
+</body>
+</html>

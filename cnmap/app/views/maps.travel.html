@@ -8,7 +8,6 @@
             <div class="media-body">
                 <h4 class="media-heading">{{travel.username}} 旅行：{{travel.title}}</h4>
                 <div class="media-footer">
-                    <div class="title">{{travel.title}}</div>
                     <span class="footnotes">{{'  ' + (travel.time_start | date:'yyyy/MM/dd') + ' - ' + (travel.time_end | date:'yyyy/MM/dd') }}</span>
                 </div>
                 <div class="media-footer">
@@ -115,7 +114,7 @@
                      class="photo-wall">
                     <div ng-repeat="photo in spot.photos"
                          class="photo"
-                         ponm-hover=".action">
+                         ponm-hover=">.action">
                         <a ng-click="activePhoto(photo)"
                            href="">
                             <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}">

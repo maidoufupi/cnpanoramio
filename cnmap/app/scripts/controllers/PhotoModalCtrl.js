@@ -17,7 +17,8 @@ angular.module('ponmApp.controllers')
             $scope.apirest = $window.apirest;
             $scope.photoId = photoId;
             $scope.userId = $window.userId;
-            $scope.login = $window.login;
+            $scope.login = ponmCtxConfig.login;
+            $scope.ponmCtxConfig = ponmCtxConfig;
 
             $scope.photoDetailCollapsed = true;
 
@@ -48,11 +49,13 @@ angular.module('ponmApp.controllers')
                         $scope.comment.numPages = Math.ceil($scope.comment.totalItems / $scope.comment.pageSize);
 
                         // 获取图片的用户信息
-                        UserService.getOpenInfo({'userId': $scope.photo["user_id"]}, function (data) {
+                        UserService.getOpenInfo({userId: $scope.photo.user_id}, function (data) {
                             if (data.status == "OK") {
                                 $scope.userOpenInfo = data.open_info;
                             }
                         });
+
+                        $scope.setGalleryImages($scope.photo);
 
                         // 旅行
                         if (!travelId) {
@@ -117,6 +120,8 @@ angular.module('ponmApp.controllers')
                             });
                         });
                         $scope.travel.totalPhoto = currentPhoto;
+
+                        $scope.setGalleryImages($scope.travel.photos);
                     }
                 });
             }
@@ -408,6 +413,42 @@ angular.module('ponmApp.controllers')
                 });
             };
 
+            $scope.displayGallery = function() {
+                var index = 0;
+                angular.forEach($scope.galleryData, function(photo, key) {
+                    if(photo.photoId == $scope.photoId) {
+                        index = key;
+                    }
+                });
+                $scope.$broadcast("image-gallery", {index: index});
+            };
+
+            $scope.galleryData = [];
+            $scope.setGalleryImages = function(photos) {
+                if (angular.isArray(photos)) {
+                    $scope.galleryData = [];
+                    angular.forEach(photos, function (photo, key) {
+                        $scope.galleryData.push({
+                            photoId: photo.id,
+                            title: photo.title,
+                            href: $scope.getPhotoSrc(photo),
+                            type: 'image/jpeg',
+                            thumbnail: getGalleryThumbnail(photo)
+                        });
+                    });
+                } else if (angular.isObject(photos)) {
+                    $scope.galleryData.push({
+                        photoId: photos.id,
+                        title: photos.title,
+                        href: $scope.getPhotoSrc(photos),
+                        type: 'image/jpeg',
+                        thumbnail: getGalleryThumbnail(photos)});
+                }
+            };
+            function getGalleryThumbnail(photo) {
+                return $scope.staticCtx + '/' + photo.oss_key + '@1e_20w_20h_1c.jpg';
+            }
+
             $scope.share = function() {
             };
         }])
@@ -530,9 +571,12 @@ angular.module('ponmApp.controllers')
 
                 PhotoService.getGPSInfo({photoId: $scope.photoId}, function(res) {
                     if(res.status == "OK") {
-                        addOrUpdateMarker($scope.file, res.gps[0].gps.lat, res.gps[0].gps.lng);
-                        mapEventListener.setCenter($scope.map, res.gps[0].gps.lat, res.gps[0].gps.lng);
-                        $scope.setPlace($scope.file, res.gps[0].gps.lat, res.gps[0].gps.lng, res.gps[0].gps.address);
+                        var gpsInfo = res.gps[0];
+                        if(gpsInfo) {
+                            addOrUpdateMarker($scope.file, gpsInfo.gps.lat, gpsInfo.gps.lng);
+                            mapEventListener.setCenter($scope.map, gpsInfo.gps.lat, gpsInfo.gps.lng);
+                            $scope.setPlace($scope.file, gpsInfo.gps.lat, gpsInfo.gps.lng, gpsInfo.gps.address);
+                        }
                     }
                 })
             }
@@ -592,19 +636,12 @@ angular.module('ponmApp.controllers')
                 $scope.file.mapVendor.latPritty = cnmap.GPS.convert(lat);
                 $scope.file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
 
-//                GeocodeService.regeoAddresses(lat, lng).then(function(res) {
-//                    if(!address) {
-//                        $scope.file.mapVendor.address = res.address;
-//                    }
-//                    $scope.file.mapVendor.addresses = res.addresses;
-//                });
-
                 if (address) {
                     $scope.file.mapVendor.address = address;
                 }
 
                 // 加载gps地点可选的地址列表
-                mapService.getAddrPois(lat, lng, function(addresses, addr) {
+                mapService.getAddrPois(lat, lng).then(function(addresses, addr) {
                     if(!address) {
                         $scope.file.mapVendor.address = addr;
                     }
@@ -656,7 +693,10 @@ angular.module('ponmApp.controllers')
             // Any function returning a promise object can be used to load values asynchronously
             $scope.getLocation = function (val) {
                 var d = $q.defer();
-                $scope.mapService.getLocPois(val, function(res) {
+//                $scope.mapService.getLocPois(val, function(res) {
+//                    d.resolve(res);
+//                });
+                $scope.mapService.getLocPois(val).then(function(res) {
                     d.resolve(res);
                 });
                 return d.promise.then(function(res) {
@@ -686,6 +726,11 @@ angular.module('ponmApp.controllers')
 //                    geometry.viewport.southwest,
 //                    geometry.viewport.northeast);
                 }
-            }
+            };
+
+            $scope.onSelect = function($item, $model, $label) {
+
+                $scope.goLocation($item);
+            };
         }])
 ;

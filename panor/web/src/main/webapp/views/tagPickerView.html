@@ -9,20 +9,37 @@
     </div>
     <div class="dropdown-menu">
         <div class="dropdown-body">
-            <span ng-show="loadingItems"
-                  class="glyphicon glyphicon-refresh">加载中...</span>
             <span class="label label-selectable"
                   ng-class="{'label-default': item.$active, 'label-info': !item.$active}"
                   ng-repeat="item in items"
                   ng-click="setItem(item)">{{item.value}}</span>
-        </div>
-        <div class="form-inline" role="form">
-            <div class="form-group">
-                <!--<label class="sr-only" for="pickerNew">Email address</label>-->
-                <input type="text" class="form-control input-sm" id="pickerNew"
-                       placeholder="添加" ng-model="newItem">
+            <div class="icon loading-spinner" ng-show="loading">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
             </div>
-            <button type="submit" class="btn btn-default" ng-click="createData(newItem)">新建</button>
+        </div>
+        <div class="form-inline">
+            <form name="newForm">
+                <div class="form-group" ng-class="{'has-error': newForm.newItem.$dirty && newForm.newItem.$invalid }">
+                    <!--<label class="sr-only" for="pickerNew">Email address</label>-->
+                    <input type="text" class="form-control input-sm"
+                           id="pickerNew"
+                           name="newItem"
+                           placeholder="添加"
+                           ng-model="newItem"
+                           ng-model-validate="newItemValidate"
+                           ng-disabled="loading">
+                    <div ng-show="newForm.newItem.$dirty && newForm.newItem.$invalid">
+                        <span ng-show="newForm.newItem.$error.duplicate">值重复</span>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-default btn-sm"
+                        ng-disabled="loading"
+                        value="新建"
+                        ng-click="createData(newItem, 'click')">
+            </form>
+
         </div>
     </div>
 </div>

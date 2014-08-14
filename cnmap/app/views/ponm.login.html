@@ -4,7 +4,7 @@
         <div class="login-form">
             <div class="animated bounceIn">
                 <div class="form-header">
-
+                    <span ng-show="loginError">用户名或密码错误</span>
                 </div>
                 <!--  -->
                 <!--action="http://127.0.0.1:8080/panor-web/j_security_check"-->
@@ -33,11 +33,11 @@
                     <div class="row">
                         <div class="col-xs-7 ">
                             <i class="glyphicon glyphicon-lock"></i>
-                            <a href="" data-ng-click="passwordHint()">忘记密码?</a>
+                            <a href="" ng-click="passwordHint()">忘记密码?</a>
                         </div>
                         <div class="col-xs-5">
                             <i class="glyphicon glyphicon-user"></i>
-                            <a ng-href="{{ctx}}/signup">新建用户</a>
+                            <a ng-href="#/signup">新建用户</a>
                         </div>
                     </div>
                 </div>

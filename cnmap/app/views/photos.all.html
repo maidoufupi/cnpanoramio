@@ -4,6 +4,7 @@
      ><!-- infinite-scroll-parent="" -->
     <div ng-repeat="photo in photos"
          ng-controller="PhotosPhotoCtrl"
+         waypoint="{'offset': 130, id: {id: photo.id, date: photo.create_time}}"
          class="photo"
          ponm-hover=">.action">
         <a href=""
@@ -26,4 +27,17 @@
          class="btn btn-default load-more"
          ng-click="getUserPhotos()"
             >{{photoLoading?'loading...':'加载更多'}}</div>
+</div>
+
+<div class="timeline">
+    <div>
+        <!--<a href="">
+            back
+        </a>-->
+    </div>
+    <div>
+        <span>{{timelineDate | date:"yyyy"}}年</span>
+        <span>{{timelineDate | date:"MM"}}月</span>
+    </div>
+
 </div>

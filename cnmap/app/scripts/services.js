@@ -20,6 +20,7 @@ angular.module('ponmApp.services', [
                         ponmCtxConfig.userId = res.user.id;
                         ponmCtxConfig.username = res.user.username;
                         ponmCtxConfig.name = res.user.name;
+                        ponmCtxConfig.avatar = res.user.avatar;
                         ponmCtxConfig.login = true;
 
                         $log.debug($cookies.JSESSIONID);
@@ -34,20 +35,25 @@ angular.module('ponmApp.services', [
 
         function checkLogin() {
             var deferred = $q.defer();
-            loginService.get({}, function(res) {
-                if(res.status == "OK") {
-                    ponmCtxConfig.userId = res.user.id;
-                    ponmCtxConfig.username = res.user.username;
-                    ponmCtxConfig.name = res.user.name;
-                    ponmCtxConfig.login = true;
+            if(ponmCtxConfig.login && ponmCtxConfig.userId) {
+                deferred.resolve();
+            }else {
+                loginService.get({}, function(res) {
+                    if(res.status == "OK") {
+                        ponmCtxConfig.userId = res.user.id;
+                        ponmCtxConfig.username = res.user.username;
+                        ponmCtxConfig.name = res.user.name;
+                        ponmCtxConfig.avatar = res.user.avatar;
+                        ponmCtxConfig.login = true;
 
-                    $log.debug($cookies.JSESSIONID);
-                    $log.debug($cookies);
-                    deferred.resolve();
-                }else if(res.status == "NO_AUTHORIZE") {
-                    deferred.reject(1);
-                }
-            });
+                        $log.debug(res.user);
+                        deferred.resolve();
+                    }else if(res.status == "NO_AUTHORIZE") {
+                        deferred.reject(1);
+                    }
+                });
+            }
+
             return deferred.promise;
         }
 
@@ -338,7 +344,7 @@ angular.module('ponmApp.services', [
         }])
     .factory('safeApply', [function($rootScope) {
         return function($scope, fn) {
-            var phase = $scope.$root.$$phase;
+            var phase = $scope.$root && $scope.$root.$$phase;
             if(phase == '$apply' || phase == '$digest') {
                 if (fn) {
                     $scope.$eval(fn);
@@ -358,7 +364,8 @@ angular.module('ponmApp.services', [
             staticCtx: $window.staticCtx || "http://static.photoshows.cn",
             corsproxyCtx: $window.corsproxyCtx || "http://www.corsproxy.com/static.photoshows.cn",
             apirest: $window.apirest
-            ,userId: $window.userId
+            ,userId: $window.user && $window.user.id
+            ,name: $window.user && $window.user.name
             ,login: $window.login
         }
     }])

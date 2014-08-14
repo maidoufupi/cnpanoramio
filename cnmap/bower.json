@@ -5,7 +5,7 @@
     "angular": "1.2.20",
     "json3": "~3.2.6",
     "es5-shim": "~2.1.0",
-    "jquery": "1.9.1",
+    "jquery": "1.11.1",
     "sass-bootstrap": "~3.0.2",
     "angular-resource": "1.2.20",
     "angular-cookies": "1.2.20",
@@ -16,6 +16,7 @@
     
     "blueimp-file-upload": "9.5.6",
     "blueimp-gallery": "2.14.0",
+    "blueimp-bootstrap-image-gallery": "3.1.1",
     "angular-masonry": "0.7.0",
     "jquery.rest":"1.0.1",
     "jquery.cookie": "1.4.0",
@@ -23,12 +24,12 @@
 
     "angular-ui-mapgaode": "1.0.1",
     "angular-ui-map-qq": "1.0.0",
+    "angular-ui-map-baidu": "1.0.0",
     "bootstrap-tagsinput": "0.3.9",
     "jquery-backstretch": "2.0.4",
     "jquery-waypoints": "2.0.5",
     "angular-ui-utils": "bower",
-    "angular-ui-router": "0.2.10",
-    "ngInfiniteScroll": "1.1.2"
+    "angular-ui-router": "0.2.10"
 
   },
   "devDependencies": {

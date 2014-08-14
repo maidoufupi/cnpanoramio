@@ -20,11 +20,20 @@
         this.opts = opts || this.opts;
 
         this.addLocationHashListener = function(map, callback) {
-
-            $window.qq.maps.event.addListener(map, 'idle', function() {
+            var listeners = [];
+            listeners.push($window.qq.maps.event.addListener(map, 'idle', function() {
                 var latLng = map.getCenter();
                 callback.apply(this, [latLng.lat, latLng.lng, map.getZoom()]);
-            })
+            }));
+            return listeners;
+        };
+
+        this.removeListener = function(listeners) {
+            if(listeners) {
+                $.each(listeners, function (index, listener) {
+                    qq.maps.event.removeListener(listener);
+                });
+            }
         };
 
         this.addToolBar = function(map) {
@@ -37,6 +46,12 @@
 
         this.setZoom = function(map, zoom) {
             map.setZoom(Number(zoom));
+        };
+
+        this.setZoomAndCenter = function(map, zoom, lat, lng) {
+            var point = new qq.maps.LatLng(lat, lng);
+            map.panTo(point);
+            map.zoomTo(Number(zoom));
         };
 
         this.setBounds = function(map, southwest, northeast){

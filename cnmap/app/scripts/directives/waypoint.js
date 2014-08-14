@@ -5,22 +5,28 @@
 
 angular.module('ponmApp.directives')
     .directive('waypoint', ['$log', '$timeout', function ($log, $timeout) {
+
+        var defaults = {
+            stuckClass: 'stuck',
+            direction: 'down right'
+        };
+
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
 
                 $log.debug("waypoint...");
 
+                var options;
+                var opt = scope.$eval(attrs.waypoint || "{}");
+                options = angular.extend({}, $.fn.waypoint.defaults, defaults, opt);
+
                 $timeout( function() {
                     $log.debug("set waypoint");
+
                     $( element ).waypoint(function(direction) {
-                        $log.debug("waypoint - waypointEvent");
-                        scope.$emit('waypointEvent', direction, attrs.waypoint);
-                    }, {
-                        context: '.waypoint-scrollable',
-                        continuous: true,
-                        offset: attrs.waypointOffset || "10%"
-                    });
+                        scope.$emit('waypointEvent', direction, opt.id);
+                    }, options);
                 }, 500);
 
                 attrs.$observe('waypointRefresh', function ( data ) {

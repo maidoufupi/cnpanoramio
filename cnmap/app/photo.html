@@ -19,6 +19,7 @@
 
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 
     <script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
     <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
@@ -27,6 +28,7 @@
     <script type="text/javascript" src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-utils/ui-utils.js"></script>
     <script type="text/javascript" src="bower_components/modernizr/Modernizr.js"></script>
+
     <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
 
     <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
@@ -37,7 +39,6 @@
     <script type="text/javascript" src="scripts/directives/ponmComment.js"></script>
     <script type="text/javascript" src="scripts/directives/bdShare.js"></script>
     <script type="text/javascript" src="scripts/controllers/PhotoModalCtrl.js"></script>
-    <script type="text/javascript" src="photo.js"></script>
 
     <script type="text/javascript" src="scripts/panor/scripts.min.js"></script>
     <script type="text/javascript" src="scripts/panor/scripts.gaode.min.js"></script>
@@ -46,13 +47,58 @@
 
     <link rel="stylesheet" href="styles/main.css">
     <script type="text/javascript">
-        window.login = true;
 //        window.ctx = "http://127.0.0.1:8080/panor-web";
 //        window.ctx = "http://115.28.21.165";
-        window.ctx = "http://www.photoshows.cn";
-        window.apirest = window.ctx + "/api/rest";
-        window.userId = 1;
+//        window.ctx = "http://www.photoshows.cn";
+//        window.apirest = window.ctx + "/api/rest";
 
+        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.apirest = window.ctx + "/api/rest";
+        window.staticCtx = "http://test.photoshows.cn";
+        window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
+        window.user = {
+            id: 1,
+            name: "暗梅幽闻花"
+        };
+
+        angular.module('ponmPhotoApp', [
+            'ponmApp',
+            'ui.bootstrap',
+            'xeditable'
+        ]).run(function(editableOptions) {
+            editableOptions.theme = 'bs3';
+        })
+                .controller('PhotoMCtrl',
+                ['$window', '$log', '$rootScope', '$scope', '$modal',
+                    function ($window, $log, $rootScope, $scope, $modal) {
+                        $scope.ctx = $window.ctx;
+                        $scope.apirest = $window.apirest;
+
+                        $scope.open = function (size) {
+
+                            var modalInstance = $modal.open({
+                                templateUrl: 'views/photo.html',
+                                controller: 'PhotoModalCtrl',
+                                windowClass: 'photo-modal-fullscreen',
+                                resolve: {
+                                    photoId: function () {
+                                        return 51;
+                                    },
+                                    travelId: function() {
+                                        return 1;
+                                    }
+                                }
+                            });
+
+                            modalInstance.result.then(function (selectedItem) {
+                                $scope.selected = selectedItem;
+                            }, function () {
+                                $log.info('Modal dismissed at: ' + new Date());
+                            });
+                        };
+
+                        $scope.open();
+                    }]);
     </script>
 
 

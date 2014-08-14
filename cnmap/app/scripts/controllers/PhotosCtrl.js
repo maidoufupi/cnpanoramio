@@ -107,7 +107,7 @@ angular.module('photosApp', [
                     templateUrl: 'views/photos.all.html',
                     resolve: {
                     },
-                    controller: "PhotosRecentCtrl"
+                    controller: "PhotosAllCtrl"
                 })
                 .state('photos.albums', {
                     url: '/albums',
@@ -159,8 +159,6 @@ angular.module('photosApp', [
             if ($scope.userId == "yourphotos") {
                 $scope.userId = ponmCtxConfig.userId;
             }
-
-//            $scope.hashStateManager.set("userid", $scope.userId);
 
             // 获取图片的用户信息
             UserService.getOpenInfo({userId: $scope.userId}, function (res) {
@@ -310,9 +308,9 @@ angular.module('photosApp', [
         }])
     .controller('PhotosAllCtrl',
     [        '$window', '$location', '$rootScope', '$scope', '$q', '$timeout', 'UserPhoto', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils', 'safeApply',
         function ($window, $location, $rootScope, $scope, $q, $timeout, UserPhoto, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, jsUtils) {
+                  ponmCtxConfig, $log, $state, $stateParams, jsUtils, safeApply) {
 
             // 用户图片分页属性
             $scope.photo = {
@@ -347,11 +345,9 @@ angular.module('photosApp', [
                 }
 
                 $log.debug("load more photos");
-//                $scope.setWaypointRefresh(true);
 
                 UserPhoto.get({userId: $scope.userId, pageSize: $scope.photo.pageSize, pageNo: $scope.photo.currentPage},
                     function (data) {
-//                        $scope.setWaypointRefresh(false);
                         if (data.status == "OK") {
                             $scope.photos = $scope.photos.concat(data.photos);
                         }
@@ -367,19 +363,16 @@ angular.module('photosApp', [
             $scope.getUserPhotos = getUserPhotos;
             getUserPhotos();
 
-            $scope.$on('waypointEvent', function (e, direction, elmId) {
-                $log.debug("waypointSpot: " + direction + " = " + elmId);
-                if (elmId == "loadMore") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (direction == "down") {
-                        getUserPhotos();
-                    } else {
-//                        getUserPhotos();
-                    }
+            // timeline widget for photos in wall, reached event
+            $scope.$on('waypointEvent', function(e, dir, id) {
+                if(id.date) {
+                    safeApply($scope, function() {
+                        $scope.timelineDate = id.date;
+                    });
                 }
             });
 
+            // when a photo be removed
             $scope.$on('removePhotoDo', function (e, photoId) {
                 jsUtils.Array.removeItem($scope.photos, "id", photoId);
             });
@@ -551,9 +544,9 @@ angular.module('photosApp', [
         function ($window, $location, $rootScope, $scope, TravelService, UserService, $modalInstance,
                   ponmCtxConfig, $log, $q, jsUtils, operateType, photos) {
 
-            $scope.ctx = $window.ctx;
+            $scope.ctx = ponmCtxConfig.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
-            $scope.apirest = $window.apirest;
+            $scope.apirest = ponmCtxConfig.apirest;
 
             $scope.photos = photos;
 
@@ -591,6 +584,9 @@ angular.module('photosApp', [
 
             $scope.ok = function () {
                 if($scope.newTravel.selected) {
+                    if(!$scope.selectedTravel.name) {
+                        return ;
+                    }
                     createTravel($scope.selectedTravel.name, $scope.photos).then(function () {
                         $modalInstance.close();
                     }, function (reason) {

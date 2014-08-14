@@ -59,9 +59,20 @@ angular.module('ponmApp.directives')
             };
         }
 
+        var defaults = {
+            selector: ".photo",
+            moveselect: true,
+            offsetX: 0,
+            offsetY: 0
+        };
+
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
+
+                var options;
+                var opt = scope.$eval(attrs.ponmRectMultiSelect || "{}");
+                options = angular.extend({}, defaults, opt);
 
                 var initialW = 0,
                     initialH = 0,
@@ -77,32 +88,33 @@ angular.module('ponmApp.directives')
 
                 element.bind('mousedown', function (e) {
 
-//                    if(!(ghostSelectGrid[0] == e.target)) {
-//                        return;
-//                    }
+                    var mouseX = e.pageX + options.offsetX,
+                        mouseY = e.pageY + options.offsetY;
+
                     bigGhost.removeClass("ponm-show");
                     ghostSelect.addClass("ponm-show");
                     ghostSelect.css({
-                        'left': e.pageX,
-                        'top': e.pageY
+                        'left': mouseX,
+                        'top': mouseY
                     });
 
-                    initialW = e.pageX;
-                    initialH = e.pageY;
+                    initialW = mouseX;
+                    initialH = mouseY;
 
                     mousedown = true;
 
                 });
 //                element.bind("mouseup", selectElements);
                 $(document).bind("mousemove", openSelector);
+//                $(document).bind("scroll", openSelector);
                 $(document).bind("mouseup", function(e) {
                     if(!mousedown) {
                         return;
                     }
                     mousedown = false;
 
-                    var w = Math.abs(initialW - e.pageX);
-                    var h = Math.abs(initialH - e.pageY);
+                    var w = Math.abs(initialW - e.pageX - options.offsetX);
+                    var h = Math.abs(initialH - e.pageY - options.offsetY);
 
                     if(w < 10 && h < 10) {
                         return;
@@ -121,8 +133,13 @@ angular.module('ponmApp.directives')
 
                     e.preventDefault();
 
-                    var w = Math.abs(initialW - e.pageX);
-                    var h = Math.abs(initialH - e.pageY);
+                    var mouseX = e.pageX + options.offsetX,
+                        mouseY = e.pageY + options.offsetY;
+
+                    $log.debug("mouseX: " +  mouseX + " mouseY: " +  mouseY);
+
+                    var w = Math.abs(initialW - mouseX);
+                    var h = Math.abs(initialH - mouseY);
 
                     if(w < 10 && h < 10) {
                         return;
@@ -132,30 +149,27 @@ angular.module('ponmApp.directives')
                         'width': w,
                         'height': h
                     });
-                    if (e.pageX <= initialW && e.pageY >= initialH) {
+                    if (mouseX <= initialW && mouseY >= initialH) {
                         ghostSelect.css({
-                            'left': e.pageX
+                            'left': mouseX
                         });
-                    } else if (e.pageY <= initialH && e.pageX >= initialW) {
+                    } else if (mouseY <= initialH && mouseX >= initialW) {
                         ghostSelect.css({
-                            'top': e.pageY
+                            'top': mouseY
                         });
-                    } else if (e.pageY < initialH && e.pageX < initialW) {
+                    } else if (mouseY < initialH && mouseX < initialW) {
                         ghostSelect.css({
-                            'left': e.pageX,
-                            "top": e.pageY
+                            'left': mouseX,
+                            "top": mouseY
                         });
                     }
 
-                    if(attrs.ponmRectMoveselect != undefined && attrs.ponmRectMoveselect != "false") {
+                    if(options.moveselect) {
                         selectElements(e);
                     }
                 }
 
                 function selectElements(e) {
-
-//                    $(document).unbind("mousemove", openSelector);
-//                    $(document).unbind("mouseup", selectElements);
 
                     var maxX = 0;
                     var minX = 5000;
@@ -164,7 +178,8 @@ angular.module('ponmApp.directives')
                     var totalElements = 0;
                     var elementArr = new Array();
                     var setter  = $parse(attrs.ponmRectSelector || 'selected').assign;
-                    angular.forEach(element.find(attrs.ponmRectMultiSelect || ".elements"), function(bElem, key) {
+                    angular.forEach(element.find(options.selector),
+                        function(bElem, key) {
 
                         bElem = angular.element(bElem);
                         var scope = bElem.scope();

@@ -28,7 +28,7 @@
         this.preZoom = 0;
         this.preBounds = null;
 
-        this.opts = $jQuery.extend( {clickable: true}, opts);
+        this.opts = $jQuery.extend( {clickable: true, auto: true}, opts);
 
         if (this.opts.map) {
             this.setMap(this.opts.map);
@@ -55,113 +55,100 @@
                     'idle',
                     getBoundsThumbnails
                 );
+                listener = qq.maps.event.addListener(
+                    map,
+                    'dragend',
+                    getBoundsThumbnails
+                );
             } else {
                 this.opts.map = undefined;
                 // TODO
-                this.clearVisible();
+//                this.clearVisible();
             }
 
             var that = this;
             function getBoundsThumbnails() {
+
+                $(that).trigger("map_changed", [that.getBounds(), that.getLevel(), that.getSize()]);
+
+                if(!that.opts.auto) {
+                    return;
+                }
+
                 var bounds = map.getBounds();
                 // 地图为初始化完时 getBounds()为空
                 if(!bounds) {
                     return;
                 }
-                var mapContainer = $jQuery(map.getContainer());
-                var size = {
-                    width: parseInt(mapContainer.width()),
-                    height: parseInt(mapContainer.height())
-                };
-                var thumbs = that.getBoundsThumbnails({
-                        ne: {
-                            lat: bounds.getNorthEast().lat,
-                            lng: bounds.getNorthEast().lng
-                        },
-                        sw: {
-                            lat: bounds.getSouthWest().lat,
-                            lng: bounds.getSouthWest().lng
-                        }
-                    },
-                    map.getZoom(),
-                    size,
-                    processRes
-                )
+
+                var thumbs = that.getBoundsThumbnails(that.getBounds(),
+                                                     that.getLevel(),
+                                                     that.getSize());
             }
 
-            function processRes(thumbs) {
-                var photoIds = [];
-                var photos = {};
-                for (var i in thumbs) {
-                    photoIds.push(thumbs[i].photo_id);
-                    photos[thumbs[i].photo_id] = thumbs[i];
-                }
-                cnmap.utils.compareArray(
-                    thumbPhotoIds,
-                    photoIds,
-                    function(a, c, b) {
-                        if(a) {
-                            if(labels[a]) {
-                                labels[a].setVisible(false);
-                            }
-                            var index = thumbPhotoIds.indexOf(a);
-                            if (index > -1) {
-                                thumbPhotoIds.splice(index, 1);
-                            }
-                        }
+        };
 
-                        if(c) {
-                            // do nothing
-                        }
-
-                        if(b) {
-                            thumbPhotoIds.push(b);
-                            if(labels[b]) {
-                                labels[b].setVisible(true);
-                                labels[b].setMap(map);
-                            }else{
-                                var label = new qq.maps.Label();
-                                label.photoId = b;
-                                label.setContent(that.getLabelContent(photos[b].oss_key));  //自定义点标记覆盖物内容);
-                                label.setMap(map);
-                                label.setPosition(new qq.maps.LatLng(photos[b].lat, photos[b].lng));
-                                if(that.opts.clickable) {
-                                    qq.maps.event.addListener(
-                                        label,
-                                        'click',
-                                        function () {
-                                            if (that.opts.suppressInfoWindows) {
-                                                infoWindow.setOptions({
-                                                    content: that.getInfoWindowContent(photos[this.photoId]),
-                                                    position: this.getPosition()
-                                                });
-                                                infoWindow.open();
-                                            }else {
-                                                $jQuery(that).trigger("data_clicked", [this.photoId]);
-                                            }
-                                        });
-                                }
-                                labels[b] = label;
-                            }
-                        }
-                    })
-
-                // trigger data_changed event
-                $jQuery(that).trigger("data_changed", [thumbs]);
+        this.hideLabel = function(photoId) {
+            if(labels[photoId]) {
+                labels[photoId].setVisible(false);
+                labels[photoId].setMap(null);
             }
         };
 
-        this.getLabelContent = function(photoOssKey) {
-
-            if(this.opts.phone) {
-                return "<img src='" + this.staticCtx + "/"
-                    + photoOssKey + "@!panor-lg' style='width: 34px; height: 34px;'>";
+        /**
+         * 创建图片图标
+         *
+         * @param photo
+         */
+        this.createMarker = function(photo) {
+            var map = this.opts.map;
+            var that = this;
+            var label = labels[photo.id];
+            if(label) {
+                label.setVisible(true);
+                label.setMap(map);
             }else {
-                return "<img src='" + this.staticCtx + "/" + photoOssKey
-                    + "@!panor-lg' style='width: 34px; height: 34px;'>";
+                label = new qq.maps.Label({
+                    style: {
+                        padding: 0,
+                        border: 0
+                    }
+                });
+                label.photoId = photo.id;
+                label.setContent(that.getLabelContent(photo.oss_key));  //自定义点标记覆盖物内容);
+                label.setMap(map);
+                label.setPosition(new qq.maps.LatLng(photo.point.lat, photo.point.lng));
+                if(that.opts.clickable) {
+                    qq.maps.event.addListener(
+                        label,
+                        'click',
+                        function () {
+                            if (that.opts.suppressInfoWindows) {
+                                infoWindow.setOptions({
+                                    content: that.getInfoWindowContent(photo),
+                                    position: this.getPosition()
+                                });
+                                infoWindow.open();
+                            }else {
+                                $jQuery(that).trigger("data_clicked", [this.photoId]);
+                            }
+                        });
+                }
+                labels[photo.id] = label;
             }
-
         };
+
+//        this.getLabelContent = function(photoOssKey) {
+//
+//            if(this.opts.phone) {
+//                return "<img src='" + this.staticCtx + "/"
+//                    + photoOssKey + "@!panor-lg' style='width: 34px; height: 34px;'>";
+//            }else {
+//                return "<img src='" + this.staticCtx + "/" + photoOssKey
+//                    + "@!panor-lg' style='width: 34px; height: 34px;'>";
+//            }
+//
+//        };
 
 //        this.getInfoWindowContent = function(photoId) {
 //            var infoWindow = document.createElement("div");
@@ -211,11 +198,52 @@
         };
 
         this.trigger = function(event) {
-            qq.maps.event.trigger(this.opts.map, "idle");
+            if(this.opts.map) {
+                qq.maps.event.trigger(this.opts.map, "dragend");
+//                qq.maps.event.trigger(this.opts.map, "idle");
+            }
         };
 
         this.center_changed = function () {
 //            infoWindows = [];
+        };
+
+        this.getBounds = function() {
+            var bounds = this.opts.map.getBounds();
+            return {
+                ne: {
+                    lat: bounds.getNorthEast().lat,
+                    lng: bounds.getNorthEast().lng
+                },
+                sw: {
+                    lat: bounds.getSouthWest().lat,
+                    lng: bounds.getSouthWest().lng
+                }
+            };
+        };
+
+        this.getLevel = function() {
+            return this.opts.map.getZoom();
+        };
+
+        this.getSize = function() {
+            var mapContainer = $jQuery(this.opts.map.getContainer());
+            return {
+                width: parseInt(mapContainer.width()),
+                height: parseInt(mapContainer.height())
+            };
+        };
+
+        this.clearMap = function() {
+            $.each(labels, function( index, label ) {
+                label && label.setMap(null);
+            });
+            labels = [];
+            this.thumbPhotoIds = [];
+        };
+
+        this.setAuto = function(auto) {
+            this.opts.auto = auto;
         };
     };
 

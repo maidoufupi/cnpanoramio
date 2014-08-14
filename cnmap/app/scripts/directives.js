@@ -206,6 +206,30 @@ angular.module('ponmApp.directives', [
             };
 
     }] )
-
-
+    .directive('ngModelValidate', [function () {
+        return {
+            require: 'ngModel',
+            scope: {
+                ngModelValidate: "&"
+            },
+            link: function (scope, elem , attrs, ctrl) {
+                var ngModelValidate = scope.ngModelValidate && scope.ngModelValidate();
+                ctrl.$parsers.unshift(function(viewValue) {
+                    if(!ngModelValidate) {
+                        ngModelValidate = scope.ngModelValidate && scope.ngModelValidate();
+                    }
+                    if(ngModelValidate) {
+                        var valid = ngModelValidate(viewValue);
+                        ctrl.$setValidity(valid.errorKey, valid.isValid);
+                        if(valid.isValid) {
+                            return viewValue;
+                        }else {
+                            return undefined;
+                        }
+                    }
+                    return viewValue;
+                });
+            }
+        };
+    }])
 ;

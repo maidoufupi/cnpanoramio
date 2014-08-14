@@ -41,58 +41,69 @@ angular.module('ponmApp.services')
 
             return {
                 Array: {
+                    containKeys: function(arr, prop, value) {
+                        var contain = false;
+                        angular.forEach(arr, function(item, key) {
+                            if(item[prop] == value) {
+                                contain = true;
+                            }
+                        });
+                        return contain;
+                    },
                     removeItem: function (arr, prop, value) {
                         if(arguments.length==2) {
                             value = prop;
                             prop = null;
                         }
-                        angular.forEach(arr, function (item, key) {
-                            if ((!!prop && item[prop] == value) || (item == value)) {
-                                delete arr.splice(key, 1);
+                        var i;
+                        for (i = arr.length - 1; i >= 0; i -= 1) {
+                            if ((!!prop && arr[i][prop] == value) || (arr[i] == value)) {
+                                delete arr.splice(i, 1);
                             }
-                        });
+                        }
                     },
                     mergeRightist: function(arrayLeft, arrayRight, key) {
 
-                        angular.forEach(arrayLeft, function(al, kl) {
+                        var i;
+                        for (i = arrayLeft.length - 1; i >= 0; i -= 1) {
                             var exist = false;
                             angular.forEach(arrayRight, function(ar, kr) {
-                                if(al[key] == ar[key]) {
+                                if(arrayLeft[i][key] == ar[key]) {
                                     exist = true;
                                 }
                             });
                             if(!exist) {
-                                delete arrayLeft.splice(kl, 1);
+                                delete arrayLeft.splice(i, 1);
                             }
-                        });
+                        }
 
-                        angular.forEach(arrayRight, function(ar, kr) {
+                        for (i = arrayRight.length - 1; i >= 0; i -= 1) {
                             var exist = false;
                             angular.forEach(arrayLeft, function(al, kl) {
-                                if(al[key] == ar[key]) {
+                                if(al[key] == arrayRight[i][key]) {
                                     exist = true;
                                 }
                             });
                             if(!exist) {
-                                arrayLeft.push(ar);
+                                arrayLeft.push(arrayRight[i]);
                             }
-                        });
+                        }
 
                         return arrayLeft;
                     },
                     append: function(arrayLeft, arrayRight, key) {
-                        angular.forEach(arrayRight, function(ar, kr) {
+                        var i;
+                        for (i = arrayRight.length - 1; i >= 0; i -= 1) {
                             var exist = false;
                             angular.forEach(arrayLeft, function(al, kl) {
-                                if(al[key] == ar[key]) {
+                                if(al[key] == arrayRight[i][key]) {
                                     exist = true;
                                 }
                             });
                             if(!exist) {
-                                arrayLeft.push(ar);
+                                arrayLeft.push(arrayRight[i]);
                             }
-                        });
-
+                        }
                         return arrayLeft;
                     }
                 },

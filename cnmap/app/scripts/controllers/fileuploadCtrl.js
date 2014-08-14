@@ -50,14 +50,19 @@ angular.module('fileuploadApp', [
     ])
 
     .controller('DemoFileUploadController', [ '$window',
-        '$scope', '$http', 'fileUpload', '$modal', '$log', 'PhotoService', 'GPSConvertService',
-        'LoginUserService', 'UserService', 'TravelService', 'jsUtils', 'safeApply',
-        function ($window, $scope, $http, fileUpload, $modal, $log, PhotoService, GPSConvertService,
-                  LoginUserService, UserService, TravelService, jsUtils, safeApply) {
+        '$scope', '$http', 'fileUpload', '$modal', '$log', '$q', 'PhotoService', 'GPSConvertService',
+        'LoginUserService', 'UserService', 'TravelService', 'jsUtils', 'safeApply', 'ponmCtxConfig',
+        function ($window, $scope, $http, fileUpload, $modal, $log, $q, PhotoService, GPSConvertService,
+                  LoginUserService, UserService, TravelService, jsUtils, safeApply, ponmCtxConfig) {
 
             $scope.apirest = $window.apirest;
             $scope.ctx = $window.ctx;
-            $scope.userId = $window.userId;
+            $scope.userId = ponmCtxConfig.userId;
+            $scope.$watch(function() {
+                return ponmCtxConfig.userId;
+            }, function(userId) {
+                $scope.userId = userId;
+            });
 
             var mapService = new $window.cnmap.MapService();
 
@@ -112,6 +117,9 @@ angular.module('fileuploadApp', [
                 fail: function(e, data) {
                     if (data.result) {
                         if(data.result.status == "NO_AUTHORIZE") {
+                            data.files[0].error = "请重新登录";
+                        }
+                        if(data.result.status == "ACCESS_DENIED") {
                             data.files[0].error = "请重新登录";
                         }
                         data.files[0].$cancel = function () {
@@ -267,45 +275,65 @@ angular.module('fileuploadApp', [
 
             // 异步加载用户travels数据
             $scope.loadTravelData = function (callback) {
-                var travels = UserService.getTravels({userId: LoginUserService.getUserId()}, function (res) {
+                var deferred = $q.defer();
+                var travels = UserService.getTravels({userId: $scope.userId}, function (res) {
                     if (res.status == "OK") {
-                        callback && callback.apply(undefined, [res.open_info.travels]);
+                        deferred.resolve(res.open_info.travels);
+//                        callback && callback.apply(undefined, [res.open_info.travels]);
                     }
                 });
-                $log.debug(travels);
+//                $log.debug(travels);
+                return deferred.promise;
             };
 
             // 用户创建travel
             $scope.newTravelData = function (newObj, callback) {
                 $log.debug("new data: " + newObj);
+                var deferred = $q.defer();
                 TravelService.create({}, jsUtils.param({travel: newObj}), function (res) {
                     if (res.status == "OK") {
-                        callback && callback.apply(undefined, [res.travels]);
+                        deferred.resolve(res.travel);
+//                        callback && callback.apply(undefined, [res.travels]);
+                    }else {
+                        deferred.reject();
                     }
+                },function(error) {
+                    deferred.reject();
                 });
-                // 返回false，让其在不刷新数据，在callback接口返回后刷新
-                return false;
+                return deferred.promise;
             };
 
             $scope.loadTagData = function (callback) {
                 $log.debug("load tags data");
-                UserService.getTags({userId: LoginUserService.getUserId()}, function (res) {
+                var deferred = $q.defer();
+                UserService.getTags({userId: $scope.userId}, function (res) {
                     if (res.status == "OK") {
-                        callback && callback.apply(undefined, [res.open_info.tags]);
+                        deferred.resolve(res.open_info.tags);
+//                        callback && callback.apply(undefined, [res.open_info.tags]);
+                    }else {
+                        deferred.reject();
                     }
+                },function(error) {
+                    deferred.reject();
                 });
-                return true;
+                return deferred.promise;
             };
 
             $scope.newTagData = function (newObj, callback) {
                 $log.debug("new data: " + newObj);
-                UserService.createTag({userId: LoginUserService.getUserId(), value: newObj},
+                var deferred = $q.defer();
+                UserService.createTag({userId: $scope.userId, value: newObj},
                     function (res) {
                         if (res.status == "OK") {
-                            callback && callback.apply(undefined, [res.open_info.tags]);
+                            deferred.resolve(newObj);
+//                            callback && callback.apply(undefined, [res.open_info.tags]);
+                        }else {
+                            deferred.reject();
                         }
+                    },function(error) {
+                        deferred.reject();
                     });
-                return false;
+                return deferred.promise;
             };
 
             // 当travel值有变化时，更新所有photo到新的travel上
@@ -367,8 +395,12 @@ angular.module('fileuploadApp', [
             $scope.activePhoto = function(file) {
                 $scope.$emit('photoActive', {id: file.photoId});
                 $scope.activeFile && ($scope.activeFile.active = false);
-                file.active = true;
-                $scope.activeFile = file;
+                $scope.activeFile = null;
+                if(file.photoId) {
+                    file.active = true;
+                    $scope.activeFile = file;
+                }
+
             };
 
             $scope.$on("photoReverseActive", function(e, photo) {

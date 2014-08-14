@@ -326,6 +326,12 @@ module.exports = function (grunt) {
            '<%= yeoman.app %>/styles/main.min.css': [
              '<%= yeoman.app %>/styles/main.css'
            ]
+//           ,'<%= yeoman.app %>/styles/vendor.min.css': [
+//                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/css/xeditable.css',
+//                 '<%= yeoman.app %>/bower_components/blueimp-file-upload/css/jquery.fileupload.css',
+//                 '<%= yeoman.app %>/bower_components/Jcrop/css/jquery.Jcrop.css',
+//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css'
+//             ]
          }
        }
     },
@@ -348,22 +354,11 @@ module.exports = function (grunt) {
                  '<%= yeoman.app %>/scripts/services/*.js'
              ],
            '<%= yeoman.app %>/scripts/ponmApp.directives.min.js': [
-               '<%= yeoman.app %>/scripts/directives/filters.js',
-               '<%= yeoman.app %>/scripts/directives/FlexText.js',
-               '<%= yeoman.app %>/scripts/directives/ponmPhotoContainer.js',
-               '<%= yeoman.app %>/scripts/directives/PhotoFluidContainer.js',
-               '<%= yeoman.app %>/scripts/directives/ponmComment.js',
-               '<%= yeoman.app %>/scripts/directives/repeatComplete.js',
-               '<%= yeoman.app %>/scripts/directives/bdShare.js',
-               '<%= yeoman.app %>/scripts/directives/backstretch.js',
-               '<%= yeoman.app %>/scripts/directives/waypoint.js',
-               '<%= yeoman.app %>/scripts/directives/ponmMapControls.js',
-               '<%= yeoman.app %>/scripts/directives/ponmRectMultiSelect.js',
-               '<%= yeoman.app %>/scripts/directives/infinite-scroll.js'
+               '<%= yeoman.app %>/scripts/directives/*.js'
                ],
            '<%= yeoman.app %>/scripts/panor/scripts.min.js': [
-               '<%= yeoman.app %>/scripts/panor/MapUtils.js',
-               '<%= yeoman.app %>/scripts/panor/MapTravel.js',
+//               '<%= yeoman.app %>/scripts/panor/MapUtils.js',
+//               '<%= yeoman.app %>/scripts/panor/MapTravel.js',
                '<%= yeoman.app %>/scripts/panor/Map*.js',
                '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.comm.js',
                '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.Panoramio.js'
@@ -375,6 +370,10 @@ module.exports = function (grunt) {
            '<%= yeoman.app %>/scripts/panor/scripts.qq.min.js': [
                '<%= yeoman.app %>/scripts/panor/qq/Map*.js',
                '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.qq.js'
+             ],
+           '<%= yeoman.app %>/scripts/panor/scripts.baidu.min.js': [
+               '<%= yeoman.app %>/scripts/panor/baidu/*.js',
+               '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.baidu.js'
              ],
            '<%= yeoman.app %>/scripts/ponmApp.controllers.min.js': [
                  '<%= yeoman.app %>/scripts/controllers/*Ctrl.js'
@@ -396,7 +395,7 @@ module.exports = function (grunt) {
 //             ]
 //             ,
 //             '<%= yeoman.app %>/scripts/ponmApp.vendor.min.js': [
-//                 '<%= yeoman.app %>/bower_components/jquery/jquery.min.js',
+//                 '<%= yeoman.app %>/bower_components/jquery/dist/jquery.js',
 //                 '<%= yeoman.app %>/bower_components/jquery.rest/dist/jquery.rest.min.js',
 //                 '<%= yeoman.app %>/bower_components/sass-bootstrap/dist/js/bootstrap.min.js',
 //
@@ -417,6 +416,12 @@ module.exports = function (grunt) {
 //                 '<%= yeoman.app %>/bower_components/imagesloaded/imagesloaded.js',
 //                 '<%= yeoman.app %>/bower_components/jquery-backstretch/jquery.backstretch.min.js',
 //                 '<%= yeoman.app %>/bower_components/jquery-waypoints/waypoints.min.js',
+//                 '<%= yeoman.app %>/bower_components/Jcrop/js/jquery.Jcrop.min.js',
+//                 // image gallery
+//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-helper.js',
+//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery.js',
+//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js',
+//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery-fullscreen.js',
 //
 //                 '<%= yeoman.app %>/scripts/panor/js/jquery.mousewheel.js',
 //                 '<%= yeoman.app %>/scripts/panor/js/jquery.panzoom.js',

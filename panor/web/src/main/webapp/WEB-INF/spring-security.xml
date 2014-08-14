@@ -136,7 +136,7 @@
 	      entry-point-ref="authenticationEntryPoint">
 		<intercept-url pattern="/*" access="ROLE_ANONYMOUS,ROLE_ADMIN,ROLE_USER" />
 		<custom-filter before="FORM_LOGIN_FILTER" ref="authenticationFilter"/>
-		<form-login login-page="/login.jsp" default-target-url="/"
+		<form-login login-page="/login.jsp" default-target-url="/#/maps"
 			authentication-failure-url="/login.jsp?error=true"
 			login-processing-url="/j_security_check" />
 		<logout logout-success-url="/" logout-url="/logout.do" />
@@ -155,7 +155,7 @@
 	    </property>
 	    <property name="authenticationFailureHandler">
 	        <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-	            <property name="defaultFailureUrl" value="/login?login_error=t" />
+	            <property name="defaultFailureUrl" value="/#/login?login_error=t" />
 	        </bean>
 	    </property>
 	</bean>

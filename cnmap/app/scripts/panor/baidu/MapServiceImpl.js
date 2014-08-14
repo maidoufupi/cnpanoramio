@@ -17,7 +17,9 @@
 
     MapService.prototype.init = function(map, callback) {
       this.geocoder = new BMap.Geocoder();
-      return callback.apply(this.geocoder, [this.geocoder]);
+      if (callback) {
+        return callback.apply(this.geocoder, [this.geocoder]);
+      }
     };
 
     MapService.prototype.getAddress = function(lat, lng, callback) {
@@ -31,6 +33,32 @@
       });
     };
 
+    MapService.prototype.getAddrPois = function(lat, lng, callback) {
+      var deferred;
+      deferred = jQuery.Deferred();
+      this.geocoder.getLocation(new BMap.Point(lng, lat), function(result) {
+        var addresses;
+        console.log(result);
+        addresses = {};
+        if (result) {
+          $.each(result.surroundingPois, function(index, poi) {
+            var address;
+            if (poi.title) {
+              address = poi.address + " / " + poi.title;
+            } else {
+              address = poi.address;
+            }
+            return addresses[address] = {
+              poiweight: 1,
+              location: poi.point
+            };
+          });
+        }
+        return deferred.resolve(addresses, result.address);
+      });
+      return deferred.promise();
+    };
+
     MapService.prototype.getLocation = function(address, callback) {
       if (!this.geocoder) {
         this.init();
@@ -42,9 +70,38 @@
       });
     };
 
+    MapService.prototype.getLocPois = function(address, callback) {
+      var deferred;
+      deferred = jQuery.Deferred();
+      if (!this.geocoder) {
+        this.init();
+      }
+      this.geocoder.getPoint(address, function(point) {
+        var addresses;
+        addresses = [];
+        if (point) {
+          addresses.push({
+            address: address,
+            location: point,
+            similarity: 1
+          });
+        }
+        return deferred.resolve(addresses);
+      });
+      return deferred.promise();
+    };
+
     return MapService;
 
   })(window.cnmap.IMapService);
+
+  MapService.factory = function() {
+    return new window.cnmap.MapService;
+  };
+
+  window.cnmap = window.cnmap || {};
+
+  window.cnmap.MapService = MapService;
 
 }).call(this);
 

@@ -9,10 +9,14 @@
 <meta charset="utf-8">
 
 	<link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/bower_components/angular-xeditable/dist/css/xeditable.css"/>">
+	<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-gallery/css/blueimp-gallery.css"/>">
+    <%-- <link rel="stylesheet" href="<c:url value="/bower_components/angular-xeditable/dist/css/xeditable.css"/>">
     <link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload.css"/>">
 	<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload-ui.css"/>">
+	<link rel="stylesheet" href='<c:url value="bower_components/Jcrop/css/jquery.Jcrop.css"/>'/> --%>
+	
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/main.min.css'/>" />
+    <link rel="stylesheet" type="text/css" href="<c:url value='/styles/vendor.min.css'/>" />
     
 </head>
 <body>
@@ -25,8 +29,9 @@
 	<script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=41cd06c76f253eebc6f322c863d4baa1"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/js/cnmap.baidu.js"/>"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=kp3ODQt4pkpHMW2Yskl2Lwee"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-baidu/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.baidu.min.js'/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
     <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>

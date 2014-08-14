@@ -12,11 +12,14 @@ angular.module('ponmApp.services')
                 this.location = location;
                 this.scope.hashStateObj = {};
                 this.hashStateCache = {};
+                // hash哈希状态初始化标识
+                this.initialized = false;
 
                 var that = this;
                 scope.$watch(function () {
                     return location.hash();
                 }, function (hash) {
+                    that.initialized = true;
                     that.scope.hashStateObj = jsUtils.deparam(hash);
                 });
             };
@@ -80,7 +83,15 @@ angular.module('ponmApp.services')
                     }
                 }
 
-                this.location.hash(jsUtils.param(this.hashStateCache));
+                // 状态已初始化后才能开始向location中设置hash state
+                if(this.initialized) {
+                    this.location.hash(jsUtils.param(this.hashStateCache));
+                }
+
+            };
+
+            HashStateManager.prototype.clear = function() {
+                this.location.hash("");
             };
 
             return HashStateManager;

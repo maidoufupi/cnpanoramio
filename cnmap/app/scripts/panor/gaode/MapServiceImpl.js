@@ -80,6 +80,9 @@
 
         var addrPoiss = [];
         this.getAddrPois = function(lat, lng, callback) {
+
+            var deferred = jQuery.Deferred();
+
             var point = new AMap.LngLat(lng, lat);
             if (!geocoder) {
                 this.init(function() {
@@ -107,26 +110,36 @@
                 if(addrPoiss.length) {
                     var addrpois = addrPoiss[0];
                     AMap.event.addListenerOnce(geocoder, "complete", function(res) {
+                        var addresses = {};
                         if (res.info == "OK") {
                             var regeocode = res.regeocode;
-                            var addresses = {};
                             var baseAddr = regeocode.addressComponent.province + regeocode.addressComponent.district
                                 + regeocode.addressComponent.city + regeocode.addressComponent.township;
 
-                            angular.forEach(regeocode.pois, function(poi, key) {
-                                addresses[baseAddr + poi.name] = {
+                            $.each(regeocode.pois, function(key, poi) {
+                                var address = baseAddr + poi.address;
+                                if(poi.name) {
+                                    address = address + " / " + poi.name;
+                                }
+                                addresses[address] = {
                                     poiweight: poi.poiweight,
-                                    location: poi.location
+                                    location: poi.location,
+                                    distance: poi.distance
                                 };
                             });
-                            addrpois.callback.apply(undefined, [addresses, regeocode.formattedAddress]);
+//                            addrpois.callback.apply(undefined, [addresses, regeocode.formattedAddress]);
                         }
+
+                        deferred.resolve(addresses, regeocode.formattedAddress);
+
                         delete addrPoiss.splice(0, 1);
                         process();
                     });
                     geocoder.getAddress(addrpois.point);
                 }
             }
+
+            return deferred.promise();
         };
 
         this.getLocation = function (address, callback) {
@@ -148,6 +161,8 @@
         };
 
         this.getLocPois = function (address, callback) {
+            var deferred = jQuery.Deferred();
+
             if (!geocoder) {
                 this.init(function() {
                     ga();
@@ -159,7 +174,7 @@
                 AMap.event.addListenerOnce(geocoder, "complete", function(res) {
                     var addresses = [];
                     if(res.info == "OK") {
-                        angular.forEach(res.geocodes, function(geocode, key) {
+                        $.each(res.geocodes, function(key, geocode) {
                             addresses.push({
                                 address: geocode.formattedAddress,
                                 location: geocode.location,
@@ -168,10 +183,14 @@
                             });
                         });
                     }
-                    callback.apply(undefined, [addresses]);
+                    deferred.resolve(addresses);
+
+//                    callback.apply(undefined, [addresses]);
                 });
                 geocoder.getLocation(address);
             }
+
+            return deferred.promise();
         };
 
     };

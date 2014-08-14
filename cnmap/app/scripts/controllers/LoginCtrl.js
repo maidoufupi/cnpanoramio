@@ -47,8 +47,24 @@ angular.module('ponmApp.controllers')
             $scope.ponmCtxConfig = ponmCtxConfig;
 
             AuthService.checkLogin().then(function() {
-                $state.go("maps.popular", {travelId: travel.id});
+                $state.go("maps.popular", {});
             });
+
+            $scope.$watch(function() {
+                return $location.search().login_error;
+            }, function(login_error) {
+                if(login_error) {
+                    $scope.loginError = true;
+                }else {
+                    $scope.loginError = false;
+                }
+            });
+
+//            $scope.$watch('userForm.$dirty', function($dirty) {
+//                if($dirty) {
+//                    $scope.loginError = false;
+//                }
+//            });
 
             $scope.credentials = {};
 

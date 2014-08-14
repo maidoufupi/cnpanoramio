@@ -31,18 +31,27 @@ angular.module('userSettingsApp', [
                 })
             ;
         }])
-    .controller('UserSettingsCtrl', ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', 'UserPhoto',
-        'UserService', 'ponmCtxConfig',
-        function ($window, $log, $location, $rootScope, $scope, $modal, UserPhoto,
-                  UserService, ponmCtxConfig) {
+    .controller('UserSettingsCtrl',
+    ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', '$state', 'UserPhoto', 'UserService',
+        'ponmCtxConfig', 'AuthService',
+        function ($window, $log, $location, $rootScope, $scope, $modal, $state, UserPhoto, UserService,
+                  ponmCtxConfig, AuthService) {
             $scope.ctx = ponmCtxConfig.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
             $scope.apirest = ponmCtxConfig.apirest;
+            $scope.ponmCtxConfig = ponmCtxConfig;
 
-            $scope.avatar = $scope.userId = $window.userId;
+            AuthService.checkLogin().then(function(){
+                $scope.userId = ponmCtxConfig.userId;
+                getSettings();
+            }, function(){
+                $state.go("login", {});
+            });
+
+//            $scope.avatar = $scope.userId = $window.userId;
 
             $scope.changeAvatar = function () {
-                $scope.avatar = 1;
+//                $scope.avatar = 1;
 
                 var modalInstance = $modal.open({
                     templateUrl: 'views/changeUserAvatar.html',
@@ -52,18 +61,18 @@ angular.module('userSettingsApp', [
                     }
                 });
 
-                modalInstance.result.then(function () {
-                    $scope.avatar = $scope.userId;
-                }, function () {
-                    $scope.avatar = $scope.userId;
-                    $log.info('Modal dismissed at: ' + new Date());
+                modalInstance.result.then(function (avatar) {
+                    $scope.ponmCtxConfig.avatar = avatar;
+                }, function (avatar) {
+                    $log.debug("dismissed avatar is " + avatar);
+                    if(avatar) {
+                        $scope.ponmCtxConfig.avatar = avatar;
+                    }
                 });
-            }
-
-            getSettings();
+            };
 
             function getSettings() {
-                UserService.getSettings({'userId': $scope.userId}, function(data) {
+                UserService.getSettings({userId: $scope.userId}, function(data) {
                     if(data.status == "OK") {
                         $scope.settings = data.settings;
                     }
@@ -71,7 +80,7 @@ angular.module('userSettingsApp', [
             }
 
             $scope.submit = function() {
-                UserService.updateSettings({'userId': $scope.userId}, $scope.settings, function(data) {
+                UserService.updateSettings({userId: $scope.userId}, $scope.settings, function(data) {
                     if(data.status == "OK") {
                         $scope.addAlert({type: "success", msg: "保存成功!"});
                     }else {

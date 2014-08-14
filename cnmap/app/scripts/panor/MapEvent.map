@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "MapEvent.js",
+  "sourceRoot": "",
+  "sources": [
+    "MapEvent.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,MAAA,SAAA;;AAAA,EAAM;2BACJ;;AAAA,wBAAA,OAAA,GAAS,SAAC,QAAD,EAAW,SAAX,GAAA,CAAT,CAAA;;qBAAA;;MADF,CAAA;;AAAA,EAGA,MAAM,CAAC,IAAP,GAAc,MAAM,CAAC,IAAP,IAAe,EAH7B,CAAA;;AAAA,EAIA,MAAM,CAAC,IAAI,CAAC,SAAZ,GAAwB,SAJxB,CAAA;AAAA"
+}

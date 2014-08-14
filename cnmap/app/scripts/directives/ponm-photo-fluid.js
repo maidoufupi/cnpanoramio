@@ -114,7 +114,7 @@ angular.module('ponmApp.directives')
                         angular.forEach(items, function (item, key) {
                             item = angular.element(item);
 
-                            if(item.scope &&
+                            if(item.scope && item.scope() &&
                                 item.scope().photo &&
                                 item.scope().photo.width &&
                                 item.scope().photo.height) {
@@ -151,7 +151,7 @@ angular.module('ponmApp.directives')
                             itemLineWidth = 0;
                         angular.forEach(items, function (item, key) {
                             item = angular.element(item);
-                            if(item.scope &&
+                            if(item.scope && item.scope() &&
                                 item.scope().photo &&
                                 item.scope().photo.width &&
                                 item.scope().photo.height) {
@@ -240,12 +240,20 @@ angular.module('ponmApp.directives')
 
                     element.on('mouseenter', function (e) {
                         var photoAction = element.find(attrs.ponmHover);
+                        photoAction.addClass("ponm-show");
                         $animate.addClass(photoAction, "ponm-show");
+//                        angular.forEach(photoAction, function(action, key) {
+//                            $animate.addClass(action, "ponm-show");
+//                        });
                     });
 
                     element.on('mouseleave', function (e) {
                         var photoAction = element.find(attrs.ponmHover);
+                        photoAction.removeClass("ponm-show");
                         $animate.removeClass(photoAction, "ponm-show");
+//                        angular.forEach(photoAction, function(action, key) {
+//                            $animate.removeClass(action, "ponm-show");
+//                        });
                     });
                 }
             };

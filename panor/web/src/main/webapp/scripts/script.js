@@ -1,4 +1,5 @@
 window.staticCtx = "http://test.photoshows.cn";
+window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
 //window.staticCtx = "http://static.photoshows.cn";
 
 //$("document").ready(function() {

@@ -29,6 +29,8 @@
 
         this.opts = opts || {};
 
+        this.thumbPhotoIds = [];
+
         this.getBoundsThumbnails = function (bounds/*:LatLngBounds*/, zoomLevel, size/*:Size*/, callback) {
             var clearVisible = this.clearVisible,
                 setVisible = this.setVisible;
@@ -63,16 +65,65 @@
             var that = this;
             client.photo.read(params).done(function (data) {
                 if(data.status == "OK" && that.opts.auto) {
-                    for (var i in data.photos) {
-                        if (!photos[data.photos[i].photoId]) {
-                            photos[data.photos[i].photoId] = data.photos[i];
+
+//                    for (var i in data.photos) {
+//                        if (!photos[data.photos[i].photoId]) {
+//                            photos[data.photos[i].photoId] = data.photos[i];
+//                        }
+//                    }
+//                    callback.apply(null, [data.photos]);
+
+//                    var thumbs = data.photos;
+
+                    var photoIds = [];
+                    var photos = {};
+                    $.each(data.photos, function(index, photo) {
+                        photoIds.push(photo.id);
+                        photos[photo.id] = photo;
+                    });
+                    cnmap.utils.compareArray(
+                        that.thumbPhotoIds,
+                        photoIds,
+                        function(a, c, b) {
+                            if(a) {
+                                that.hideLabel(a);
+                                var index = that.thumbPhotoIds.indexOf(a);
+                                if (index > -1) {
+                                    that.thumbPhotoIds.splice(index, 1);
+                                }
+                            }
+
+                            if(c) {
+                                // do nothing
+                            }
+
+                            if(b) {
+                                that.thumbPhotoIds.push(photos[b].id);
+                                that.createMarker(photos[b]);
+                            }
                         }
-                    }
-                    callback.apply(null, [data.photos]);
+                    );
+                    // trigger data_changed event
+                    $(that).trigger("data_changed", [data.photos]);
                 }}
             );
 
         };
+
+        /**
+         * 从地图上删除图标
+         *
+         * @param photo
+         */
+        this.hideLabel = function(photo) {
+        };
+
+        /**
+         * 创建图片图标
+         *
+         * @param photo
+         */
+        this.createMarker= function(photo){};
 
 //        this.getThumbnail = function (id/*PhotoId*/) {
 //            return client.photos.read(id);
@@ -225,18 +276,18 @@
         };
 
         /**
-         * 创建图片图标
-         *
-         * @param photo
-         */
-        this.createMarker= function(photo){};
-
-        /**
          * 由外部调用创建图片的图标
          *
          * @param photos
          */
-        this.createPhotosMarker = function(photos) {};
+        this.createPhotosMarker = function(photos) {
+            // 清除缓存
+            this.clearMap();
+            var that = this;
+            jQuery.each(photos, function (key, photo) {
+                that.createMarker(photo);
+            });
+        };
 
         this.getBounds = function() {
         };
@@ -249,7 +300,9 @@
 
         this.clearMap = function() {};
 
-        this.setAuto = function() {};
+        this.setAuto = function(auto) {
+            this.opts.auto = auto;
+        };
     };
 
 //    window.cnmap.PanoramioOptions = {

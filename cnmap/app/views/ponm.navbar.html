@@ -42,14 +42,24 @@
                         <span class="glyphicon glyphicon-picture"></span>
                     </a>
                 </li>
-                <li ng-switch on="!!ponmCtxConfig.userId"
+                <li popover="上传图片" popover-trigger="mouseenter" popover-placement="bottom"
+                    ng-show="ponmCtxConfig.login"
                     class="white">
+                    <a href="#/maps/upload" >
+                        <span>上传</span>
+                        <span class="glyphicon glyphicon-cloud-upload"></span>
+                    </a>
+                </li>
+                <li ng-switch on="ponmCtxConfig.login"
+                    class="user white"
+                    ng-class="{'active': !ponmCtxConfig.login}">
                     <a href="#/photos/{{ponmCtxConfig.userId}}/all"
                        ng-switch-when="true">
                         <span>{{ponmCtxConfig.name}}</span>
-                        <span class="glyphicon glyphicon-user"></span>
+                        <span><img ng-src="{{staticCtx}}/avatar{{ponmCtxConfig.avatar || 1}}.png"
+                                   class="img-circle"></span>
                     </a>
-                    <a href="/#/login" class="active white"
+                    <a href="#/login" class="active white"
                        ng-switch-default>
                         <span>登录</span>
                         <span class="glyphicon glyphicon-user"></span>
@@ -59,9 +69,9 @@
                     <a href="" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-th-list white"></span>
                     </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="/#/settings"><span class="glyphicon glyphicon-cog"></span>用户设置</a></li>
-                        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>注销</a></li>
+                    <ul class="dropdown-menu" >
+                        <li><a href="#/settings"><span class="glyphicon glyphicon-cog"></span>用户设置</a></li>
+                        <li><a href="{{ponmCtxConfig.ctx}}/logout"><span class="glyphicon glyphicon-log-out"></span>注销</a></li>
                     </ul>
                 </li>
             </ul>

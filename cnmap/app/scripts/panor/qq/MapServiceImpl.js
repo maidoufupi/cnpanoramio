@@ -48,22 +48,37 @@
         };
 
         this.getAddrPois = function(lat, lng, callback) {
+
+            var deferred = jQuery.Deferred();
+
             var point = new qq.maps.LatLng(lat, lng);
             geocoder.setComplete(function(res) {
+                var addresses = {};
+
                 if(res["type"] == "GEO_INFO") {
                     var regeocode = res.detail;
-                    var addresses = {};
-                    angular.forEach(regeocode.nearPois, function(poi, key) {
-                        addresses[poi.address + " " + poi.name] = {
+
+                    $.each(regeocode.nearPois, function(key, poi) {
+                        var address = "";
+                        if(poi.name) {
+                            address = poi.address + " / " + poi.name;
+                        }else {
+                            address = poi.address;
+                        }
+                        addresses[address] = {
                             poiweight: poi.dist,
                             location: poi.latLng
                         };
                     });
-                    callback.apply(undefined, [addresses, regeocode.address]);
+//                    callback.apply(undefined, [addresses, regeocode.address]);
                 }
+
+                deferred.resolve(addresses, regeocode.address);
             });
 
             geocoder.getAddress(point);
+
+            return deferred.promise();
         };
 
         this.getLocation = function (address, callback) {
@@ -75,6 +90,9 @@
         };
 
         this.getLocPois = function(address, callback) {
+
+            var deferred = jQuery.Deferred();
+
             geocoder.setComplete(function(res) {
                 var addresses = [];
                 if(res.type == "GEO_INFO") {
@@ -85,7 +103,7 @@
                         similarity: detail.similarity,
                         zoom: gpsTypeZoom[detail.gps_type] || 3
                     });
-                    angular.forEach(detail.similarResults, function(similar, key) {
+                    $.each(detail.similarResults, function(key, similar) {
                         addresses.push({
                             address: similar.address,
                             location: similar.location,
@@ -94,10 +112,13 @@
                         });
                     });
                 }
-                callback.apply(undefined, [addresses]);
+                deferred.resolve(addresses);
+//                callback.apply(undefined, [addresses]);
             });
 
             geocoder.getLocation(address);
+
+            return deferred.promise();
         };
 
     };

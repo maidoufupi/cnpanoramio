@@ -20,7 +20,7 @@
                  ng-click="select(travel)"
                  ponm-hover>
                 <div class="thumbnail">
-                    <img ng-src="{{staticCtx}}/{{travel.album_cover}}@1e_200w_200h_1c.jpg" alt="">
+                    <img ng-src="{{travel.album_cover ? staticCtx+'/'+travel.album_cover+'@1e_200w_200h_1c.jpg' : ctx+'/images/travel-album-cover.jpg'}} " alt="">
                     <div class="caption">
                         <p>{{travel.title}}</p>
                         <span>{{travel.create_time | date:'yyyy年MM月dd日'}}</span>
@@ -38,6 +38,6 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="ok()"
-            data-ng-disabled="!selectedTravel.selected">{{displayText.ok}}</button>
+            ng-disabled="!selectedTravel.selected">{{displayText.ok}}</button>
     <button class="btn btn-warning" ng-click="cancel()">取消</button>
 </div>

@@ -12,8 +12,8 @@ angular.module('travelPickerApp', [
     .run(['$log', function($log) {
         $log.info("test app runing");
     }])
-    .controller('TravelPickerCtrl', ['$scope', '$http', '$log', '$timeout',
-        function($scope, $http, $log, $timeout) {
+    .controller('TravelPickerCtrl', ['$scope', '$http', '$log', '$timeout', '$q',
+        function($scope, $http, $log, $timeout, $q) {
 
             $scope.travels = ["无锡之旅",
                 "南京行",
@@ -25,16 +25,20 @@ angular.module('travelPickerApp', [
 
             $scope.loadTravelData = function(callback) {
                 $log.debug("load data");
+                var deferred = $q.defer();
                 $timeout(function() {
-                    callback.apply(null, [$scope.travels]);
-                }, 2000);
-                return "";
+                    deferred.resolve($scope.travels);
+                }, 500);
+
+                return deferred.promise;
             };
 
             $scope.newTravelData = function(newObj) {
                 $log.debug("new data: " + newObj);
-                $scope.travels.push(newObj);
-                return $scope.travels ;
+                var deferred = $q.defer();
+//                $scope.travels.push(newObj);
+                deferred.resolve(newObj);
+                return deferred.promise;
             };
 
             $scope.items = [{
@@ -50,19 +54,31 @@ angular.module('travelPickerApp', [
                 }];
             $scope.loadItemObj = function() {
                 $log.debug("load data");
-                return $scope.items;
-            }
+                var deferred = $q.defer();
+                $timeout(function() {
+                    deferred.resolve($scope.items);
+                }, 2000);
 
+                return deferred.promise;
+            };
+
+            var i = 3;
             $scope.newItemObj = function(newObj) {
                 $log.debug("new data: " + newObj);
-                $scope.items.push(newObj);
-                return $scope.items;
-            }
+                var deferred = $q.defer();
+//                $scope.items.push(newObj);
+                i++;
+                $timeout(function() {
+                    deferred.resolve({id: i, name: newObj});
+                }, 2000);
+
+                return deferred.promise;
+            };
 
             $scope.$watch('atravel3', function(newValue) {
                 $log.debug("a travel 3: ");
                 $log.debug(newValue);
-            })
+            });
     }])
 
 ;

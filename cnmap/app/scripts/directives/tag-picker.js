@@ -4,8 +4,8 @@
 'use strict';
 
 angular.module('ponmApp.directives')
-.directive('itemPicker', ['$parse', '$log',
-    function($parse, $log) {
+.directive('itemPicker', ['$parse', '$log', 'jsUtils',
+    function($parse, $log, jsUtils) {
 
         return {
             restrict: 'EA',
@@ -17,6 +17,8 @@ angular.module('ponmApp.directives')
             },
             templateUrl: 'views/tagPickerView.html',
             link: function(scope, element, attrs, ngModel) {
+
+                var options = scope.$eval(attrs.options || "{}");
 
                 var dataType = "String";
 
@@ -40,13 +42,14 @@ angular.module('ponmApp.directives')
                     if(scope.loadData) {
                         var loadDataRef;
                         if(loadDataRef = scope.loadData()) {
-                            scope.loadingItems = true;
-                            items = loadDataRef(function(res) {
-                                items = res;
+                            scope.loading = true;
+                            loadDataRef().then(function(tags) {
+                                items = tags;
                                 convertItems();
-                                scope.loadingItems = false;
+                                scope.loading = false;
+                            }, function(error) {
+                                scope.loading = false;
                             });
-                            convertItems();
                         }else {
                             $log.error("load-data function " + attrs.loadData + " is not defined!")
                         }
@@ -57,29 +60,28 @@ angular.module('ponmApp.directives')
 
                 function convertItems() {
                     scope.items = [];
-                    if(angular.isArray(items) && items.length) {
-                        scope.loadingItems = false;
-                    }
                     angular.forEach(items, function(item, key) {
-                        if(angular.isObject(item)) {
-                            dataType = "Object";
-                            scope.items.push({
-                                value: item[scope.itemValueName],
-                                id: item.id,
-                                $key: key
-                            })
-                        }else if(angular.isString(item)) {
-                            dataType = "String";
-                            scope.items.push({
-                                value: item,
-                                $key: key
-                            })
-                        }
-
+                        addItem(item, key);
                     })
                 }
 
-                angular.element('.dropdown-menu').on('click', function(event) {
+                function addItem(item, key) {
+                    if(angular.isObject(item)) {
+                        return scope.items.push({
+                            value: item[scope.itemValueName],
+                            id: item.id,
+                            $key: key
+                        });
+                    }else if(angular.isString(item)) {
+//                            dataType = "String";
+                        return scope.items.push({
+                            value: item,
+                            $key: key
+                        });
+                    }
+                }
+
+                element.find('.dropdown-menu').on('click', function(event) {
                     event.preventDefault();
                     event.stopPropagation();
                 });
@@ -124,14 +126,6 @@ angular.module('ponmApp.directives')
                     scope.items = null;
                 };
 
-//                    scope.$watch('item', function(newItem) {
-//                        if(newItem != scope.originalItemValue) {
-//                            angular.forEach(scope.items, function(item, key) {
-//                                item.$active = false;
-//                            })
-//                        }
-//                    });
-
                 /**
                  * 创建新值
                  *
@@ -139,20 +133,40 @@ angular.module('ponmApp.directives')
                  * @returns {boolean}
                  */
                 scope.createData = function(value) {
-                    if(value) {
-                        if(scope.newData) {
-                            if(items = scope.newData()(value, function(res) {
-                                items = res;
-                                scope.newItem = '';
-                                convertItems();
-                            })) {
-                                scope.newItem = '';
-                                scope.clearItems();
-                                convertItems();
-                            }
-                        }
+                    if(!value) {
+                        return;
+                    }
+                    if(!options.duplicate && jsUtils.Array.containKeys(scope.items, "value", value)) {
+                        return;
+                    }
+                    if(scope.newData) {
+                        scope.loading = true;
+                        scope.newData()(value).then(function(tag) {
+                            scope.loading = false;
+                            var length = items.push(tag);
+                            scope.newItem = '';
+                            length = addItem(tag, length-1);
+                            scope.setItem(scope.items[length-1]);
+                        }, function(error) {
+                            scope.loading = false;
+                        });
                     }
 
+                };
+
+                scope.newItemValidate = function(value) {
+                    var errorObj = {
+                        errorKey: "duplicate",
+                        isValid: true
+                    };
+
+                    if(!value) {
+                        return errorObj;
+                    }
+                    if(!options.duplicate && jsUtils.Array.containKeys(scope.items, "value", value)) {
+                        errorObj.isValid = false;
+                    }
+                    return errorObj;
                 };
 
                 //是否允许多选

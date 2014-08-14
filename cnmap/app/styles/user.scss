@@ -35,8 +35,12 @@
   padding-right: 15px;
 
   .form-header {
-    padding: 20px 0;
+    height: 20px;
+    margin: 20px 0;
     text-align: center;
+    span {
+      background: yellow;
+    }
 //    .fa-user {
 //      font-size: 50px;
 //      color: #ffffff;
