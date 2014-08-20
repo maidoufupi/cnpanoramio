@@ -16,13 +16,17 @@
     }
 
     MapEventListener.prototype.addLocationHashListener = function(map, callback) {
-      var MapListener;
-      map.addEventListener("moveend", MapListener);
-      map.addEventListener("zoomend", MapListener);
-      map.addEventListener("dragend", MapListener);
-      return MapListener = function(e) {
-        return callback.apply(this, [e.point.lat, e.point.lng, this.getZoom()]);
+      var MapListener, listeners;
+      listeners = [];
+      MapListener = function(e) {
+        var point;
+        point = this.getCenter();
+        return callback.apply(this, [point.lat, point.lng, this.getZoom()]);
       };
+      listeners.push(map.addEventListener("moveend", MapListener));
+      listeners.push(map.addEventListener("zoomend", MapListener));
+      listeners.push(map.addEventListener("dragend", MapListener));
+      return listeners;
     };
 
     MapEventListener.prototype.addToolBar = function(map) {
@@ -40,6 +44,12 @@
       return map.setZoom(zoom);
     };
 
+    MapEventListener.prototype.setZoomAndCenter = function(map, zoom, lat, lng) {
+      var point;
+      point = new BMap.Point(lng, lat);
+      return map.centerAndZoom(point, zoom);
+    };
+
     MapEventListener.prototype.setBounds = function(map, sw, ne) {
       return map.setViewport([new BMap.Point(sw.lng, sw.lat), new BMap.Point(ne.lng, ne.lat)]);
     };
@@ -47,6 +57,14 @@
     MapEventListener.prototype.inMapView = function(lat, lng, map) {
       map = map || this.opts.map;
       return map.getBounds().containsPoint(new BMap.Point(lng, lat));
+    };
+
+    MapEventListener.prototype.pixelToPoint = function(map, pixel) {
+      return map.pixelToPoint(new BMap.Pixel(pixel.x, pixel.y));
+    };
+
+    MapEventListener.prototype.pointToPixel = function(map, point) {
+      return map.pointToPixel(new BMap.Point(point.lng, pixel.lat));
     };
 
     MapEventListener.prototype.addMarker = function(map, lat, lng) {

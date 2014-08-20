@@ -8,7 +8,6 @@ import java.util.List;
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
 import org.appfuse.model.User;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -16,9 +15,10 @@ import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.dao.ViewsDao;
 import com.cnpanoramio.domain.Views;
+import com.cnpanoramio.domain.ViewsPK;
 
 @Repository("viewsDao")
-public class ViewsDaoImpl extends GenericDaoHibernate<Views, Views.ViewsPK>
+public class ViewsDaoImpl extends GenericDaoHibernate<Views, ViewsPK>
 		implements ViewsDao {
 
 	public ViewsDaoImpl() {
@@ -29,7 +29,7 @@ public class ViewsDaoImpl extends GenericDaoHibernate<Views, Views.ViewsPK>
 	@Override
 	public void view(Long photoId, String appId) {
 //		Date date = getDateWOTime();
-		Views.ViewsPK pk = new Views.ViewsPK(photoId, appId);
+		ViewsPK pk = new ViewsPK(photoId, appId);
 		List<Views> views = getSession().createCriteria(Views.class)
 				.add(Restrictions.eq("pk", pk)).list();
 		if (null == views || views.size() == 0) {
@@ -45,7 +45,7 @@ public class ViewsDaoImpl extends GenericDaoHibernate<Views, Views.ViewsPK>
 	@Override
 	public int getViewsCount(Long photoId, String appId) {
 //		Date date = getDateWOTime();
-		Views.ViewsPK pk = new Views.ViewsPK(photoId, appId);
+		ViewsPK pk = new ViewsPK(photoId, appId);
 
 		Criteria criteria = getSession().createCriteria(Views.class)
 				.add(Restrictions.eq("pk.photoId", photoId))

@@ -42,6 +42,9 @@
 <script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js"></script>
 <script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-gallery-fullscreen.js"></script>
 
+<script type="text/javascript" src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
+<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
+
 <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
 <script type="text/javascript" src="scripts/panor/js/three.min.js"></script>
@@ -55,6 +58,7 @@
 <script type="text/javascript" src="scripts/services/HashStateManager.js"></script>
 <script type="text/javascript" src="scripts/services/travel.js"></script>
 <script type="text/javascript" src="scripts/services/GeocodeService.js"></script>
+<script type="text/javascript" src="scripts/services/alertService.js"></script>
 
 <script type="text/javascript" src="scripts/controllers/ponmAppCtrl.js"></script>
 <script type="text/javascript" src="scripts/controllers/fileuploadCtrl.js"></script>
@@ -65,6 +69,8 @@
 <script type="text/javascript" src="scripts/controllers/LoginCtrl.js"></script>
 <script type="text/javascript" src="scripts/controllers/UserSettingsCtrl.js"></script>
 <script type="text/javascript" src="scripts/controllers/ChUserAvatarCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/AdminCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/IndexCtrl.js"></script>
 
 <script type="text/javascript" src="scripts/directives/ponmComment.js"></script>
 <script type="text/javascript" src="scripts/directives/filters.js"></script>
@@ -76,7 +82,6 @@
 <script type="text/javascript" src="scripts/directives/infinite-scroll.js"></script>
 <script type="text/javascript" src="scripts/directives/tag-picker.js"></script>
 <script type="text/javascript" src="scripts/directives/image-gallery.js"></script>
-
 
 <!--<script type="text/javascript" src="scripts/panor/scripts.min.js"></script>-->
 <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
@@ -110,29 +115,44 @@
 
 <!--<script charset="utf-8" src="http://union.mapbar.com/apis/maps/free?f=mapi&v=31.3&k=aCW9cItqL7sqT7AxaB0zdHZoZSWmbBsuT7JhMHTsMeD6ZIl9NzFsZHT=@JBL979@Iu7lJJZWWq0IDu9xZMzMxq7I9AhH7LAAA6hqzZHZZLTbZZauxlDz7C7DD9ZCFGT="></script>
 <script type="text/javascript" src="scripts/panor/js/cnmap.mapbar.js"></script>-->
-
+<style>
+    .drag-marker {
+        /*border: 10px solid #0000ff;*/
+        width: 20px;
+        height: 35px;
+        background-image: url("images/marker.png");
+        z-index: 9999999;
+        /*position: absolute;*/
+    }
+    .drag-marker canvas{
+        display: none;
+    }
+</style>
 <script>
     var map;
 //    var ctx = "http://127.0.0.1:8080/panor-web";
-//    window.ctx = "http://115.28.21.165";
-    window.ctx = "http://127.0.0.1:8080/panor-web";
+    window.ctx = "http://www.photoshows.cn";
+//    window.ctx = "http://127.0.0.1:8080";
     window.apirest = window.ctx + "/api/rest";
-    window.staticCtx = "http://test.photoshows.cn";
+//    window.staticCtx = "http://test.photoshows.cn";
+    window.staticCtx = "http://static.photoshows.cn";
     window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
     window.user = {
-            id: 1,
+            id: 3,
             name: "暗梅幽闻花"
             };
     window.login = true;
+    window.dev = true;
 </script>
-<div ng-app="ponmApp.Index" ng-controller="IndexCtrl">
+<div ng-app="ponmApp.Index">
     <div ui-view="navbar">
         <i>Some content will load here!</i>
     </div>
-    <div ui-view style="position: absolute;
-                        bottom: 0;
-                        top: 51px;
-                        width: 100%;">
+    <div ui-view="alert">
+        alerts
+    </div>
+
+    <div ui-view style="position: absolute; bottom: 0; top: 103px; width: 100%;">
         <i>Some content will load here!</i>
     </div>
 </div>

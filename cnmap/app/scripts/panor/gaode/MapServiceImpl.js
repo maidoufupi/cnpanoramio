@@ -95,12 +95,12 @@
                 if(addrPoiss.length) {
                     addrPoiss.push({
                         point: point,
-                        callback: callback
+                        deferred: deferred
                     });
                 }else {
                     addrPoiss.push({
                         point: point,
-                        callback: callback
+                        deferred: deferred
                     });
                     process();
                 }
@@ -109,6 +109,7 @@
             function process() {
                 if(addrPoiss.length) {
                     var addrpois = addrPoiss[0];
+                    var deferred = addrpois.deferred;
                     AMap.event.addListenerOnce(geocoder, "complete", function(res) {
                         var addresses = {};
                         if (res.info == "OK") {
@@ -127,10 +128,11 @@
                                     distance: poi.distance
                                 };
                             });
+                            deferred.resolve(addresses, regeocode.formattedAddress);
 //                            addrpois.callback.apply(undefined, [addresses, regeocode.formattedAddress]);
+                        }else {
+                            deferred.reject(res.info);
                         }
-
-                        deferred.resolve(addresses, regeocode.formattedAddress);
 
                         delete addrPoiss.splice(0, 1);
                         process();

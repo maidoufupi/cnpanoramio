@@ -20,6 +20,7 @@ import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoLatestIndex;
 import com.cnpanoramio.domain.PhotoPanoramioIndex;
 import com.cnpanoramio.domain.PhotoPanoramioIndexPK;
+import com.cnpanoramio.domain.Point;
 
 @Repository("photoPanoramioIndexDao")
 public class PhotoPanoramioIndexDaoImpl extends
@@ -36,20 +37,19 @@ public class PhotoPanoramioIndexDaoImpl extends
 	}
 
 	@Override
-	public List<Photo> getPhotoPanoramio(Double swLat,
-			Double swLng, Double neLat, Double neLng,
+	public List<Photo> getPhotoPanoramio(Point sw, Point ne,
 			int level, MapVendor mVendor, int width, int height) {
 
-		Double heightRate = height / (neLat - swLat),
-				widthRate = width / (neLng - swLng);
+		Double heightRate = height / (ne.lat - sw.lat),
+				widthRate = width / (ne.lng - sw.lng);
 		Double lSouth, lWest, lNorth, lEast;
 
 		Double lMeasure;
 		lMeasure = conMeasure / Math.pow(2D, level);
-		lSouth = swLat - (swLat % lMeasure);
-		lWest = swLng - (swLng % lMeasure);
-		lNorth = neLat - (neLat % lMeasure);
-		lEast = neLng - (neLng % lMeasure);
+		lSouth = sw.lat - (sw.lat % lMeasure);
+		lWest = sw.lng - (sw.lng % lMeasure);
+		lNorth = ne.lat - (ne.lat % lMeasure);
+		lEast = ne.lng - (ne.lng % lMeasure);
 
 		log.debug("getPhotoPanoramio [" + lSouth + ", " + lWest + "; " + lNorth + ", " + lEast + "]");
 		Criteria criteria = getSession()
@@ -108,17 +108,16 @@ public class PhotoPanoramioIndexDaoImpl extends
 	}
 
 	@Override
-	public List<Photo> getUserPhotoPanoramio(Double swLat,
-			Double swLng, Double neLat, Double neLng, int level,
+	public List<Photo> getUserPhotoPanoramio(Point sw, Point ne, int level,
 			MapVendor vendor, int width, int height, Long userId, boolean favorite) {
 		
-		Double heightRate = height / (neLat - swLat),
-				widthRate = width / (neLng - swLng);
+		Double heightRate = height / (ne.lat - sw.lat),
+				widthRate = width / (ne.lng - sw.lng);
 			
 		Criteria criteria = getSession()
 				.createCriteria(Photo.class, "photo")
-				.add(Restrictions.ge("gpsPoint.lat", swLat))
-				.add(Restrictions.le("gpsPoint.lat", neLat))
+				.add(Restrictions.ge("gpsPoint.lat", sw.lat))
+				.add(Restrictions.le("gpsPoint.lat", ne.lat))
 				;
 		if(favorite) {
 			criteria.createAlias("photo.favorites", "favorite")
@@ -126,13 +125,13 @@ public class PhotoPanoramioIndexDaoImpl extends
 		}else {
 			criteria.add(Restrictions.eq("owner.id", userId));
 		}
-		if(swLng < neLng) {
-			criteria.add(Restrictions.gt("gpsPoint.lng", swLng))
-					.add(Restrictions.lt("gpsPoint.lng", neLng));
+		if(sw.lng < ne.lng) {
+			criteria.add(Restrictions.gt("gpsPoint.lng", sw.lng))
+					.add(Restrictions.lt("gpsPoint.lng", ne.lng));
 		}else {
 			criteria.add(Restrictions.or(
-					Restrictions.and(Restrictions.ge("gpsPoint.lng", swLng), Restrictions.le("gpsPoint.lng", 180D)), 
-					Restrictions.and(Restrictions.ge("gpsPoint.lng", -180D), Restrictions.le("gpsPoint.lng", neLng))));
+					Restrictions.and(Restrictions.ge("gpsPoint.lng", sw.lng), Restrictions.le("gpsPoint.lng", 180D)), 
+					Restrictions.and(Restrictions.ge("gpsPoint.lng", -180D), Restrictions.le("gpsPoint.lng", ne.lng))));
 		}
 		
 		List<Photo> photos = criteria.list();
@@ -175,26 +174,19 @@ public class PhotoPanoramioIndexDaoImpl extends
 	}
 
 	@Override
-	public List<Photo> getLatestPanoramio(Double swLat,
-			Double swLng, Double neLat, Double neLng, int level,
+	public List<Photo> getLatestPanoramio(Point sw, Point ne, int level,
 			MapVendor vendor, int width, int height) {
 		
-		Double heightRate = height / (neLat - swLat),
-				widthRate = width / (neLng - swLng);
+		Double heightRate = height / (ne.lat - sw.lat),
+				widthRate = width / (ne.lng - sw.lng);
 		Double lSouth, lWest, lNorth, lEast;
 		
 		Double lMeasure;
 		lMeasure = conMeasure / Math.pow(2D, level);
-		lSouth = swLat - (swLat % lMeasure);
-		lWest = swLng - (swLng % lMeasure);
-		lNorth = neLat - (neLat % lMeasure);
-		lEast = neLng - (neLng % lMeasure);
-
-//		log.info("getLatestPanoramio level = " + level);
-//		log.info("getLatestPanoramio lNorth = " + lNorth);
-//		log.info("getLatestPanoramio lSouth = " + lSouth);
-//		log.info("getLatestPanoramio lEast = " + lEast);
-//		log.info("getLatestPanoramio lWest = " + lWest);
+		lSouth = sw.lat - (sw.lat % lMeasure);
+		lWest = sw.lng - (sw.lng % lMeasure);
+		lNorth = ne.lat - (ne.lat % lMeasure);
+		lEast = ne.lng - (ne.lng % lMeasure);
 			
 		Criteria criteria = getSession().createCriteria(PhotoLatestIndex.class)
 				.add(Restrictions.eq("pk.level", level))
@@ -249,25 +241,24 @@ public class PhotoPanoramioIndexDaoImpl extends
 		}
 	}
 	
-	public List<Photo> search(Double swLat,
-			Double swLng, Double neLat, Double neLng, int level, int width, int height, String term, String type) {
+	public List<Photo> search(Point sw, Point ne, int level, int width, int height, String term, String type) {
 		
 		String termStr = term.trim();
 		termStr = termStr.replace(" ", "%");
 		termStr = "%" + termStr + "%";
 		
-		log.info("search dao [" + swLat + ", " + swLng + ", " + neLat
-				+ ", " + neLng + ", " + level  + ", "
-				+ width + ", " + height + ", " + term + ", " + type + "]");
+//		log.info("search dao [" + swLat + ", " + swLng + ", " + neLat
+//				+ ", " + neLng + ", " + level  + ", "
+//				+ width + ", " + height + ", " + term + ", " + type + "]");
 				
 		Double lSouth, lWest, lNorth, lEast;
 		
 		Double lMeasure;
 		lMeasure = conMeasure / Math.pow(2D, level);
-		lSouth = swLat - (swLat % lMeasure);
-		lWest = swLng - (swLng % lMeasure);
-		lNorth = neLat - (neLat % lMeasure);
-		lEast = neLng - (neLng % lMeasure);
+		lSouth = sw.lat - (sw.lat % lMeasure);
+		lWest = sw.lng - (sw.lng % lMeasure);
+		lNorth = ne.lat - (ne.lat % lMeasure);
+		lEast = ne.lng - (ne.lng % lMeasure);
 		
 		Criteria criteria = getSession().createCriteria(PhotoPanoramioIndex.class, "photoIndex")
 				.add(Restrictions.eq("pk.level", level))
@@ -324,8 +315,8 @@ public class PhotoPanoramioIndexDaoImpl extends
 		List<PhotoPanoramioIndex> photoIndexs = criteria.list();
         
 		log.info("search res size: " + photoIndexs.size() );
-	    Double heightRate = height / (neLat - swLat),
-					widthRate = width / (neLng - swLng);
+	    Double heightRate = height / (ne.lat - sw.lat),
+					widthRate = width / (ne.lng - sw.lng);
 	    return filterPanoramioIndex(photoIndexs, widthRate, heightRate);
 	}
 	

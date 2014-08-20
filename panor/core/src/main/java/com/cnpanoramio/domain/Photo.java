@@ -1,8 +1,10 @@
 package com.cnpanoramio.domain;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -27,9 +30,11 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
+import com.cnpanoramio.MapVendor;
+
 @Entity
 @Table(name = "photo")
-public class Photo implements Comparable<Photo> {
+public class Photo extends BaseEntity implements Comparable<Photo> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,11 +59,11 @@ public class Photo implements Comparable<Photo> {
 	@Embedded
 	private Point gpsPoint;
 
-	@Column(name = "create_date")
-	private Date createDate;
-
-	@Column(name = "modify_date")
-	private Date modifyDate;
+//	@Column(name = "create_date")
+//	private Date createDate;
+//
+//	@Column(name = "modify_date")
+//	private Date modifyDate;
 
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
@@ -73,11 +78,12 @@ public class Photo implements Comparable<Photo> {
 	@Column(nullable = true)
 	private boolean deleted;
 
-	@Column(name = "mark_best")
+	@Column(name = "mark_best", nullable = true)
 	private boolean markBest;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<PhotoGps> gps;
+	@OneToMany(mappedBy="photo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@MapKey(name="vendor")
+	private Map<MapVendor, PhotoGps> gps = new HashMap<MapVendor, PhotoGps>();
 
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "photo")
 	@PrimaryKeyJoinColumn
@@ -88,8 +94,9 @@ public class Photo implements Comparable<Photo> {
 	@JoinColumn(name = "photo_id")
 	private Set<Views> views = new HashSet<Views>(0);
 
-	@OneToMany(mappedBy="pk.photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private Set<Favorite> favorites = new HashSet<Favorite>(0);
+	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@MapKey(name="user")
+	private Map<User, Favorite> favorites = new HashMap<User, Favorite>(0);
 
 	@Column(name = "rating")
 	private Integer Rating;
@@ -107,10 +114,10 @@ public class Photo implements Comparable<Photo> {
 	@Column(name = "is360")
 	private boolean is360;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<Like> likes = new HashSet<Like>(0);
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<Comment> comments = new HashSet<Comment>(0);
 	
 	public final Long getId() {
@@ -161,21 +168,21 @@ public class Photo implements Comparable<Photo> {
 		this.gpsPoint = gpsPoint;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public Date getModifyDate() {
-		return modifyDate;
-	}
-
-	public void setModifyDate(Date modifyDate) {
-		this.modifyDate = modifyDate;
-	}
+//	public Date getCreateDate() {
+//		return createDate;
+//	}
+//
+//	public void setCreateDate(Date createDate) {
+//		this.createDate = createDate;
+//	}
+//
+//	public Date getModifyDate() {
+//		return modifyDate;
+//	}
+//
+//	public void setModifyDate(Date modifyDate) {
+//		this.modifyDate = modifyDate;
+//	}
 
 	public User getOwner() {
 		return owner;
@@ -216,12 +223,21 @@ public class Photo implements Comparable<Photo> {
 	public void setMarkBest(boolean markBest) {
 		this.markBest = markBest;
 	}
+	
 
-	public Set<PhotoGps> getGps() {
+//	public Set<PhotoGps> getGps() {
+//		return gps;
+//	}
+//
+//	public void setGps(Set<PhotoGps> gps) {
+//		this.gps = gps;
+//	}
+
+	public Map<MapVendor, PhotoGps> getGps() {
 		return gps;
 	}
 
-	public void setGps(Set<PhotoGps> gps) {
+	public void setGps(Map<MapVendor, PhotoGps> gps) {
 		this.gps = gps;
 	}
 
@@ -263,41 +279,41 @@ public class Photo implements Comparable<Photo> {
 		this.views = views;
 	}
 
-	public Set<Favorite> getFavorites() {
+	public Map<User, Favorite> getFavorites() {
 		return favorites;
 	}
 
-	public void setFavorites(Set<Favorite> favorites) {
+	public void setFavorites(Map<User, Favorite> favorites) {
 		this.favorites = favorites;
 	}
 
-	public void addFavorite(Favorite favorite) {
-		Iterator<Favorite> iter = this.favorites.iterator();
-		Favorite fav;
-		boolean has = false;
-		while (iter.hasNext()) {
-			fav = iter.next();
-			if (fav.getPk().getUserId().equals(favorite.getPk().getUserId())) {
-				has = true;
-				break;
-			}
-		}
-		if(!has) {
-			favorite.getPk().setPhoto(this);
-			this.favorites.add(favorite);			
-		}
-	}
-	
-	public void removeFavorite(Long userId) {
-		Iterator<Favorite> iter = this.favorites.iterator();
-		Favorite fav;
-		while (iter.hasNext()) {
-			fav = iter.next();
-			if (fav.getPk().getUserId().equals(userId)) {
-				iter.remove();
-			}
-		}
-	}
+//	public void addFavorite(Favorite favorite) {
+//		Iterator<Favorite> iter = this.favorites.iterator();
+//		Favorite fav;
+//		boolean has = false;
+//		while (iter.hasNext()) {
+//			fav = iter.next();
+//			if (fav.getUser() == favorite.getUser()) {
+//				has = true;
+//				break;
+//			}
+//		}
+//		if(!has) {
+//			favorite.setPhoto(this);
+//			this.favorites.add(favorite);			
+//		}
+//	}
+//	
+//	public void removeFavorite(Long userId) {
+//		Iterator<Favorite> iter = this.favorites.iterator();
+//		Favorite fav;
+//		while (iter.hasNext()) {
+//			fav = iter.next();
+//			if (fav.getUser().getId().equals(userId)) {
+//				iter.remove();
+//			}
+//		}
+//	}
 
 	public boolean isIs360() {
 		return is360;

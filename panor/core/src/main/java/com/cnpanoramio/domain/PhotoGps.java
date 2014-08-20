@@ -4,10 +4,13 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -22,101 +25,68 @@ import com.cnpanoramio.MapVendor;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class PhotoGps {
 	
-	@EmbeddedId
-	private PhotoGpsPK pk;
+//	@EmbeddedId
+//	private PhotoGpsPK pk;
 	
-	private Point gps;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	
-	public PhotoGpsPK getPk() {
-		return pk;
+	@ManyToOne
+	private Photo photo;
+	
+	@Enumerated(EnumType.STRING)
+	private MapVendor vendor;
+	
+	private Point point;
+	
+	public PhotoGps() {
+		super();
+	}
+	
+	public PhotoGps(Photo photo, MapVendor vendor) {
+		super();
+		this.photo = photo;
+		this.vendor = vendor;
+	}
+	
+	public PhotoGps(Photo photo, MapVendor vendor, Point point) {
+		super();
+		this.photo = photo;
+		this.vendor = vendor;
+		this.point = point;
+	}
+	
+	public Point getPoint() {
+		return point;
 	}
 
-	public void setPk(PhotoGpsPK pk) {
-		this.pk = pk;
+	public void setPoint(Point point) {
+		this.point = point;
+	}
+
+	public MapVendor getVendor() {
+		return vendor;
+	}
+
+	public void setVendor(MapVendor vendor) {
+		this.vendor = vendor;
 	}	
-	
-	public Point getGps() {
-		return gps;
+
+	public Long getId() {
+		return id;
 	}
 
-	public void setGps(Point gps) {
-		this.gps = gps;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	@XmlRootElement
-	@Embeddable
-	public static class PhotoGpsPK implements Serializable {
-		
-		public PhotoGpsPK() {
-		}
-		
-		public PhotoGpsPK(Long photoId, MapVendor mapVendor) {
-			super();
-			this.photoId = photoId;
-			this.mapVendor = mapVendor;
-		}
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 7688224326101899701L;
+	public Photo getPhoto() {
+		return photo;
+	}
 
-		@Column(name = "photo_id")
-		@JsonProperty("photo_id")
-		private Long photoId;
-
-		@Enumerated(EnumType.STRING)
-		@Column(name = "vendor")
-		@JsonProperty("vendor")
-		private MapVendor mapVendor;
-		
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result
-					+ ((mapVendor == null) ? 0 : mapVendor.hashCode());
-			result = prime * result
-					+ ((photoId == null) ? 0 : photoId.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			PhotoGpsPK other = (PhotoGpsPK) obj;
-			if (mapVendor != other.mapVendor)
-				return false;
-			if (photoId == null) {
-				if (other.photoId != null)
-					return false;
-			} else if (!photoId.equals(other.photoId))
-				return false;
-			return true;
-		}
-
-		public Long getPhotoId() {
-			return photoId;
-		}
-
-		public void setPhotoId(Long photoId) {
-			this.photoId = photoId;
-		}
-
-		public MapVendor getMapVendor() {
-			return mapVendor;
-		}
-
-		public void setMapVendor(MapVendor mapVendor) {
-			this.mapVendor = mapVendor;
-		}
-		
-		
+	public void setPhoto(Photo photo) {
+		this.photo = photo;
 	}
 }
 

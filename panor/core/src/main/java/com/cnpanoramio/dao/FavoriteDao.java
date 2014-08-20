@@ -5,7 +5,7 @@ import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Favorite;
 
-public interface FavoriteDao extends GenericDao<Favorite, Favorite.PK> {
+public interface FavoriteDao extends GenericDao<Favorite, Long> {
 
 	/**
 	 * 获取Favorite

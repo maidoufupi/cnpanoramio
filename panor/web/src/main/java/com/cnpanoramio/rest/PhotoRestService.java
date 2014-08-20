@@ -1,11 +1,9 @@
 package com.cnpanoramio.rest;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
@@ -341,7 +338,8 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 		PhotoResponse reponse = new PhotoResponse();
 		try {
-			List<PhotoGps> gps = photoService.getGPSInfo(id, mVendor);
+			PhotoGps gps = photoService.getGPSInfo(id, mVendor);
+			gps.setPhoto(null);
 			reponse.setGps(gps);
 			reponse.setStatus(PhotoResponse.Status.OK.name());
 		} catch (DataAccessException ex) {

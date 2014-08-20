@@ -2,8 +2,10 @@
  * Created by any on 14-3-12.
  */
 angular.module('ponmApp.controllers')
-    .controller('ChUserAvatarCtrl', ['$window', '$scope', '$log', '$sce', '$http', '$modalInstance',
-        function ($window, $scope, $log, $sce, $http, $modalInstance) {
+    .controller('ChUserAvatarCtrl', ['$window', '$scope', '$log', '$sce', '$http', '$modalInstance', 'alertService',
+        function ($window, $scope, $log, $sce, $http, $modalInstance, alertService) {
+
+            $scope.alertService = angular.copy(alertService);
 
             var url = $window.apirest + "/user/avatar";
 
@@ -17,7 +19,8 @@ angular.module('ponmApp.controllers')
 
             $scope.fileUpload = function () {
 
-                $scope.closeAlert(0);
+                $scope.alertService.clear();
+
                 if(!$scope.$$childTail.$$childTail.previewUrl) {
                     return;
                 }
@@ -39,31 +42,19 @@ angular.module('ponmApp.controllers')
                 }).success(function (data, status, headers, config) {
                         if (data.status == "OK") {
                             $scope.avatar = data.open_info.avatar;
-                            $scope.addAlert({type: "success", msg: "上传成功!"});
+                            $scope.alertService.add("success", "上传成功!", 5000);
                         } else {
-                            $scope.addAlert({type: "danger", msg: "上传失败!"});
+                            $scope.alertService.add("danger", "上传失败!", 5000);
                         }
                     });
             }
 
             $scope.onFileSelect = function ($files) {
-                $scope.closeAlert(0);
+                $scope.alertService.clear();
                 var url = $sce.trustAsResourceUrl(getBlobURL($files[0]));
                 $scope.imageUrl = url;
             }
-
-            $scope.addAlert = function(msg) {
-                $scope.alerts = [];
-                $scope.alerts.push(msg);
-            };
-
-            $scope.closeAlert = function (index) {
-                if($scope.alerts) {
-                    $scope.alerts.splice(index, 1);
-                }
-            };
         }])
-
     .directive('imgCropped', function () {
         return {
             restrict: 'E',

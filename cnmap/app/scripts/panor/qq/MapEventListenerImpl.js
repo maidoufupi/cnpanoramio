@@ -76,6 +76,31 @@
             }
         };
 
+        this.pixelToPoint =function(map, pixel) {
+
+            var bounds = map.getBounds(),
+                size,
+                point = {};
+
+            var mapContainer = $(map.getContainer());
+            size =  {
+                    width: parseInt(mapContainer.width()),
+                    height: parseInt(mapContainer.height())
+                };
+
+            point.lng = pixel.x / size.width * (bounds.getNorthEast().lng - bounds.getSouthWest().lng) + bounds.getSouthWest().lng;
+            point.lat = bounds.getNorthEast().lat - pixel.y / size.height * (bounds.getNorthEast().lat - bounds.getSouthWest().lat);
+
+            return point;
+//            var projection = map.getProjection();
+//            return projection.fromPointToLatLng(new qq.maps.Point(pixel.x, pixel.y));
+        };
+
+        this.pointToPixel =function(map, point) {
+            var projection = map.getProjection();
+            return projection.fromLatLngToPoint(new qq.maps.LatLng(point.lat, pixel.lng));
+        };
+
         this.addMarker = function(map, lat, lng) {
             return new qq.maps.Marker({
                 map: map,
@@ -118,6 +143,10 @@
                 callback.apply(marker, [event.latLng.lat, event.latLng.lng]);
             });
         };
+
+        this.removeMarker = function(marker) {
+            marker.setMap(null);
+        }
 
         this.addMapClickListener = function(map, callback) {
             $window.qq.maps.event.addListener(map, "click", function (event) {

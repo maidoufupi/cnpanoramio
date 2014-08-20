@@ -70,7 +70,7 @@
       });
     };
 
-    MapService.prototype.getLocPois = function(address, callback) {
+    MapService.prototype.getLocPois = function(address) {
       var deferred;
       deferred = jQuery.Deferred();
       if (!this.geocoder) {

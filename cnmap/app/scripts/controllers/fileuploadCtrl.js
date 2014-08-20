@@ -22,7 +22,7 @@ angular.module('fileuploadApp', [
 //                    // Demo settings:
             angular.extend(fileUploadProvider.defaults, {
 //                autoUpload: false,
-                autoUpload: true,
+                autoUpload: !window.dev,
 
                 // Enable image resizing, except for Android and Opera,
                 // which actually support image resizing, but fail to
@@ -51,9 +51,9 @@ angular.module('fileuploadApp', [
 
     .controller('DemoFileUploadController', [ '$window',
         '$scope', '$http', 'fileUpload', '$modal', '$log', '$q', 'PhotoService', 'GPSConvertService',
-        'LoginUserService', 'UserService', 'TravelService', 'jsUtils', 'safeApply', 'ponmCtxConfig',
+        'LoginUserService', 'UserService', 'TravelService', 'jsUtils', 'safeApply', 'ponmCtxConfig', 'alertService',
         function ($window, $scope, $http, fileUpload, $modal, $log, $q, PhotoService, GPSConvertService,
-                  LoginUserService, UserService, TravelService, jsUtils, safeApply, ponmCtxConfig) {
+                  LoginUserService, UserService, TravelService, jsUtils, safeApply, ponmCtxConfig, alertService) {
 
             $scope.apirest = $window.apirest;
             $scope.ctx = $window.ctx;
@@ -63,6 +63,11 @@ angular.module('fileuploadApp', [
             }, function(userId) {
                 $scope.userId = userId;
             });
+
+            // copy a local message service
+            $scope.alertService = angular.copy(alertService);
+            $scope.alertService.options.alone = true;
+            $scope.alertService.options.ttl = 1000;
 
             var mapService = new $window.cnmap.MapService();
 
@@ -74,7 +79,7 @@ angular.module('fileuploadApp', [
                     var lat = this.files[0].lat || 0,
                         lng = this.files[0].lng || 0,
                         address = this.files[0].address || '',
-                        vendor = this.files[0].vendor || 'gps';
+                        vendor = ponmCtxConfig.getCoordSS(this.files[0].vendor);
                     return [
                         {
                             name: "lat",
@@ -131,6 +136,7 @@ angular.module('fileuploadApp', [
                 }
             };
 
+            $scope.photos = [];
             /**
              * 从server返回的图片属性中抽取信息给file
              *
@@ -140,24 +146,22 @@ angular.module('fileuploadApp', [
             function extractProps(file, photo) {
                 file.photoId = photo.id;
                 file.is360 = photo.is360;
+                file.vendor = ponmCtxConfig.getCoordSS(photo.vendor);
                 if(photo.point) {
                     file.lat = photo.point.lat;
                     file.lng = photo.point.lng;
-                    file.vendor = photo.vendor;
+
                     file.latPritty = cnmap.GPS.convert(file.lat);
                     file.lngPritty = cnmap.GPS.convert(file.lng);
-
-//                        mapService.getAddress(file.lat, file.lng, function(res) {
-//                            file.address = res;
-//                            file.saveProperties && file.saveProperties();
-//                        });
-
-//                        GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
-//                            file.address = regeocode.formatted_address;
-//                        });
                 }
 
                 $scope.$emit('photoAdd', photo);
+
+                angular.forEach($scope.queue, function(qFile, key) {
+                    if(qFile === file) {
+                        $scope.photos[key] = photo;
+                    }
+                });
             }
 
             if(!fileUpload.defaults.autoUpload) {
@@ -220,8 +224,11 @@ angular.module('fileuploadApp', [
                         // TODO DEBUG
                         $scope.photoCount = $scope.photoCount || 0;
                         $scope.photoCount += 1;
-                        file.photoId = $scope.photoCount;
-                        $scope.$emit('photoAdd', {id: $scope.photoCount});
+                        if($scope.photoCount % 2 == 1) {
+                            file.photoId = $scope.photoCount;
+                            $scope.$emit('photoAdd', {id: $scope.photoCount});
+                        }
+                        $scope.photos.push({id: $scope.photoCount});
                     }
             }
 
@@ -356,10 +363,19 @@ angular.module('fileuploadApp', [
                     }
                 });
                 if (photos.length) {
+
+                    // todo DEBUG
+//                    $scope.alertService.add("success", "更新成功", {ttl: 1000});
+
                     TravelService.addPhoto({travelId: travel.id},
                         jsUtils.param({photos: photos.join(",")}), function (res) {
                             if (res.status == "OK") {
+                                $scope.alertService.add("success", "更新成功");
+                            }else {
+                                $scope.alertService.add("danger", "更新失败:" + res.info, {ttl: 3000});
                             }
+                        },function(error) {
+                            $scope.alertService.add("danger", "更新失败", {ttl: 3000});
                         });
                 }
 
@@ -373,19 +389,6 @@ angular.module('fileuploadApp', [
                     }
                 });
             });
-
-//            $scope.cancelUpload = function() {
-//                angular.forEach($scope.queue, function (file, key) {
-//                    if (!file.photoId) {
-//                        $scope.$emit('photoDelete', {id: file.photoId});
-//                    }
-//                });
-//            }
-
-//            $scope.$watch('photoMap', function(map) {
-//                mapService.init(map);
-//            });
-
         }
     ])
     .controller('PhotoUploadRowCtrl', [
@@ -491,12 +494,14 @@ angular.module('fileuploadApp', [
                             'address': _this.address
                         },
                         'vendor': _this.vendor,
-                        'file_size': _this.size,
                         'is360': _this.is360
                     }, function (data) {
                         if (data) {
-                            $log.debug("properties update successful");
+                            $scope.alertService.add("success", "更新成功");
+//                            $log.debug("properties update successful");
                         }
+                    },function(error) {
+                        $scope.alertService.add("danger", "更新失败", {ttl: 3000});
                     })
                 }
             };
@@ -515,25 +520,15 @@ angular.module('fileuploadApp', [
                 }
                 tags = tags.concat(_this.tags || []).concat($scope.tags || []);
 
-//                if (tags.length) {
-                    PhotoService.tag({photoId: _this.photoId}, tags, function (data) {
-                        if (data) {
-                            $log.debug("tags update successful");
-                        }
-                    });
-//                }
-
+                PhotoService.tag({photoId: _this.photoId}, tags, function (data) {
+                    if (data) {
+                        $scope.alertService.add("success", "更新成功");
+//                        $log.debug("tags update successful");
+                    }
+                },function(error) {
+                    $scope.alertService.add("danger", "更新失败", {ttl: 3000});
+                });
             };
-
-//            $scope.$watch('title', function (title) {
-//                $scope.file.title = $scope.title;
-//                file.saveProperties();
-//            });
-//
-//            $scope.$watch('description', function (title) {
-//                $scope.file.description = $scope.description;
-//                file.saveProperties();
-//            });
 
             $scope.$watch('file.tags', function (newTags) {
                 file.saveTags();
@@ -546,6 +541,10 @@ angular.module('fileuploadApp', [
             $scope.$watch('indoor.is', function (indoor) {
                 file.saveTags();
             });
+
+//            $scope.onDragStart = function(e, ui) {
+//                $log.debug(ui.helper.addClass('drag-marker'));
+//            };
 
         }])
 

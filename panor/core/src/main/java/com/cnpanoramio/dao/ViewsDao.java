@@ -7,8 +7,9 @@ import org.appfuse.dao.GenericDao;
 import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Views;
+import com.cnpanoramio.domain.ViewsPK;
 
-public interface ViewsDao extends GenericDao<Views, Views.ViewsPK> {
+public interface ViewsDao extends GenericDao<Views, ViewsPK> {
 	
 	/**
 	 * 通过appId的应用程序进行了查看photoId记录计数,以每天为单位计数

@@ -26,6 +26,24 @@
 		<mapping class="com.cnpanoramio.domain.TravelSpot" />		
 		<mapping class="com.cnpanoramio.domain.Like" />		
 		<mapping class="com.cnpanoramio.domain.Recycle" />		
+		<mapping class="com.cnpanoramio.domain.Circle" />		
+		<mapping class="com.cnpanoramio.domain.Message" />		
+		<mapping class="com.cnpanoramio.domain.MessageQueue" />		
 		
+		<!-- <event type="save-update">
+        	<listener class="com.cnpanoramio.Listener.SaveOrUpdateDateListener"/>
+      	</event>
+		<event type="save">
+        	<listener class="com.cnpanoramio.Listener.SaveOrUpdateDateListener"/>
+      	</event>
+		<event type="create">
+        	<listener class="com.cnpanoramio.Listener.PersistDateListener"/>
+      	</event>
+		<event type="create-onflush">
+        	<listener class="com.cnpanoramio.Listener.PersistDateListener"/>
+      	</event>
+		<event type="merge">
+        	<listener class="com.cnpanoramio.Listener.MergeDateListener"/>
+      	</event> -->
 	</session-factory>
 </hibernate-configuration>

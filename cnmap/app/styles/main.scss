@@ -21,6 +21,7 @@
 @import '_icons.scss';
 @import '_wall.scss';
 @import '_modal.scss';
+@import '_alerts.scss';
 @import 'photo-upload.scss';
 
 body {
@@ -167,16 +168,6 @@ span.footnotes {
   .modal-title {
     float: left;
   }
-}
-
-/** alert */
-.alert {
-  position: fixed;
-  left: 50%;
-  margin-left: -100px;
-  width: 200px;
-  top: 0;
-  z-index: 10000;
 }
 
 /** baidu share */

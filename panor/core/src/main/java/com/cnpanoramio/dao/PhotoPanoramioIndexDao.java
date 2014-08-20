@@ -26,8 +26,7 @@ public interface PhotoPanoramioIndexDao extends
 	 * @param height
 	 * @return
 	 */
-	public List<Photo> getPhotoPanoramio(Double swLat,
-			Double swLng, Double neLat, Double neLng,
+	public List<Photo> getPhotoPanoramio(Point sw, Point ne,
 			int level, MapVendor vendor, int width, int height);
 
 	/**
@@ -77,8 +76,7 @@ public interface PhotoPanoramioIndexDao extends
 	 * @param userId
 	 * @return
 	 */
-	public List<Photo> getUserPhotoPanoramio(Double swLat,
-			Double swLng, Double neLat, Double neLng, int level,
+	public List<Photo> getUserPhotoPanoramio(Point sw, Point ne, int level,
 			MapVendor vendor, int width, int height, Long userId, boolean favorite);
 
 	/**
@@ -120,10 +118,20 @@ public interface PhotoPanoramioIndexDao extends
 	 * @param userId
 	 * @return
 	 */
-	public List<Photo> getLatestPanoramio(Double swLat, Double swLng,
-			Double neLat, Double neLng, int level, MapVendor vendor, int width,
+	public List<Photo> getLatestPanoramio(Point sw, Point ne, int level, MapVendor vendor, int width,
 			int height);
 	
-	public List<Photo> search(Double swLat,
-			Double swLng, Double neLat, Double neLng, int level, int width, int height, String term, String type);
+	/**
+	 * 在图片索引中搜索关键字
+	 * 
+	 * @param sw
+	 * @param ne
+	 * @param level
+	 * @param width
+	 * @param height
+	 * @param term
+	 * @param type
+	 * @return
+	 */
+	public List<Photo> search(Point sw, Point ne, int level, int width, int height, String term, String type);
 }

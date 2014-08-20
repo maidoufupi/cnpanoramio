@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
 		
 		com.cnpanoramio.domain.Comment commentD = new com.cnpanoramio.domain.Comment();
 		commentD.setComment(comment.getContent());
-		commentD.setCreateTime(Calendar.getInstance());
+//		commentD.setCreateTime(Calendar.getInstance());
 		commentD.setUser(me);
 		Photo photo = photoDao.get(comment.getPhotoId());
 		commentD.setPhoto(photo);
@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 		comment.setId(commentD.getId());
 		// 昵称
 		comment.setUsername(settings.getName());
-		comment.setCreateTime(commentD.getCreateTime().getTime());
+//		comment.setCreateTime(commentD.getCreateTime().getTime());
 		comment.setUserId(commentD.getUser().getId());
 		comment.setUserAvatar(settings.getUserAvatar());
 		return comment;		
@@ -122,7 +122,7 @@ public class CommentServiceImpl implements CommentService {
 		
 		// 昵称
 		comment.setUsername(settings.getName());
-		comment.setCreateTime(commentD.getCreateTime().getTime());
+//		comment.setCreateTime(commentD.getCreateTime().getTime());
 		comment.setUserId(commentD.getUser().getId());
 		comment.setContent(commentD.getComment());
 		if(null != commentD.getPhoto()) {

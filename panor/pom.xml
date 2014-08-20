@@ -6,9 +6,9 @@
 	<groupId>com.cnpanoramio</groupId>
 	<artifactId>panor</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>Photo on map Modular Application</name>
-	<url>http://www.mycompany.com</url>
+	<url>http://www.photoshows.cn</url>
 
 	<prerequisites>
 		<maven>2.2.1</maven>
@@ -67,6 +67,8 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
+					<path>/</path>
+					<contextReloadable>true</contextReloadable>
 					<url>http://localhost:8080/manager/text</url>
 					<server>myserver</server>
 					<username>admin</username>
@@ -484,7 +486,7 @@
 		<jdbc.version>5.1.22</jdbc.version>
 		<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
 
-		<db.name>panor</db.name>
+		<db.name>panornew</db.name>
 		<jdbc.url>jdbc:mysql://localhost/${db.name}?createDatabaseIfNotExist=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8&amp;amp;autoReconnect=true</jdbc.url>
 		<jdbc.username>root</jdbc.username>
 		<jdbc.password>root</jdbc.password>

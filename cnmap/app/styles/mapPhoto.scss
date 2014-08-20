@@ -49,17 +49,31 @@
   background-position: 0px -1450px;
 }
 
-.map_panel {
+$selected_photo_editor_height: 160px;
+
+.map-panel {
   position: relative;
   overflow: hidden;
-  //    float: left;
   vertical-align: top;
-  //    padding-left: 135px;
-  //    width: 100%;
   height: 100%;
+  width: 100%;
+
+  .map-photo-map {
+    @extend #upload-map;
+    bottom: 60px;
+  }
+
+  #upload-map {
+    position: absolute;
+    width: 100%;
+    margin: 5px 0;
+    top: $selected_photo_editor_height + 10px;
+    bottom: 0;
+    //    padding-top: 170px;
+  }
 }
 
-$selected_photo_editor_height: 160px;
+
 
 .selected_photo_editor {
   //    position: absolute;
@@ -85,16 +99,6 @@ $selected_photo_editor_height: 160px;
   -moz-box-shadow: 1px 1px 2px #ccc;
   -webkit-box-shadow: 1px 1px 2px #ccc;
 }
-
-.map_panel #upload-map {
-  position: absolute;
-  width: 100%;
-  margin: 5px 0;
-  top: $selected_photo_editor_height + 10px;
-  bottom: 0;
-  //    padding-top: 170px;
-}
-
 .map_photo_thumbnail {
   width: 80%;
   max-width: 60px;
@@ -151,7 +155,7 @@ $selected_photo_editor_height: 160px;
     margin: 0;
   }
 
-  .photo_list_and_map .map_panel {
+  .photo_list_and_map .map-panel {
     position: static;
     overflow: hidden;
     float: left;
@@ -172,7 +176,7 @@ $selected_photo_editor_height: 160px;
     margin: 0;
   }
 
-  .map_panel #upload-map {
+  .map-panel #upload-map {
     position: relative;
     width: 100%;
     margin: 0;
@@ -184,16 +188,6 @@ $selected_photo_editor_height: 160px;
   .list-group-item {
     padding: 5px;
   }
-}
-
-#map_canvas {
-  width: 100%;
-  height: 100%;
-}
-
-.map_panel .map-photo-map {
-  @extend #upload-map;
-  bottom: 60px;
 }
 
 .map-photo.modal-footer {

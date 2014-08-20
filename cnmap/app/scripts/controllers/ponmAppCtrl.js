@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('ponmApp.Index', ['ponmApp', 'photosApp', 'mapsApp', 'userSettingsApp',
+angular.module('ponmApp.Index', ['ponmApp', 'photosApp', 'mapsApp', 'userSettingsApp', 'adminApp', 'indexApp',
     'ui.router',
     'ui.map',
     'ui.bootstrap'])
@@ -17,7 +17,7 @@ angular.module('ponmApp.Index', ['ponmApp', 'photosApp', 'mapsApp', 'userSetting
 //                .when('/', '/yourphotos/all')
 
                 // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
-                .otherwise('/');
+                .otherwise('/maps');
             //////////////////////////
             // State Configurations //
             //////////////////////////
@@ -87,5 +87,11 @@ angular.module('ponmApp.Index', ['ponmApp', 'photosApp', 'mapsApp', 'userSetting
 //                    $scope.hashStateManager.set("photoid", "");
                 });
             };
+        }])
+    .controller('AlertsCtrl',
+    [        '$window', '$rootScope', '$scope', 'ponmCtxConfig', '$log', '$state', '$stateParams', 'alertService',
+        function ($window, $rootScope, $scope, ponmCtxConfig, $log, $state, $stateParams, alertService) {
+
+            $scope.alertService = alertService;
         }])
 ;

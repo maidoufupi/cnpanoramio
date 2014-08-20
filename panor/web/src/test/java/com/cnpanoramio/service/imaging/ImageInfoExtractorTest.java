@@ -26,7 +26,7 @@ public class ImageInfoExtractorTest {
 //		ins = getClass().getResourceAsStream("/image/PANO_20131004_142351.jpg");
 //		ins = getClass().getResourceAsStream("/image/IMG_20140531_120150.jpg");
 //		ins = getClass().getResourceAsStream("/image/PANO_20140601_102907.jpg");
-		ins = getClass().getResourceAsStream("/image/7.jpg");
+		ins = getClass().getResourceAsStream("/image/A.jpg");
 		iier = new ImageInfoExtractor(ins);
 	}
 

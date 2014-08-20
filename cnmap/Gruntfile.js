@@ -410,6 +410,8 @@ module.exports = function (grunt) {
 //                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/js/xeditable.min.js',
 //                 '<%= yeoman.app %>/bower_components/angular-ui-utils/ui-utils.min.js',
 //                 '<%= yeoman.app %>/bower_components/angular-ui-router/release/angular-ui-router.js',
+//                 '<%= yeoman.app %>/bower_components/angular-dragdrop/src/angular-dragdrop.js',
+//                 '<%= yeoman.app %>/bower_components/jquery-ui/jquery-ui.js',
 //
 //                 '<%= yeoman.app %>/bower_components/eventie/eventie.js',
 //                 '<%= yeoman.app %>/bower_components/eventEmitter/EventEmitter.min.js',

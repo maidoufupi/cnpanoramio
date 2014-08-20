@@ -1,6 +1,6 @@
 <div class="media comment"
-     data-ng-class="{'comment-active': mouseEnter}">
-    <a class="pull-left" href="{{ctx}}/user#?id={{comment.user_id}}">
+     ng-class="{'comment-active': mouseEnter}">
+    <a class="pull-left" href="{{ctx}}/#/photos/{{comment.user_id}}/albums">
         <img class="media-object img-rounded"
              ng-src="{{staticCtx}}/avatar{{comment.user_avatar || 1}}.png"
              width="60" height="60" alt="{{comment.username}}">
@@ -8,7 +8,7 @@
     <div class="media-body">
         <div class="header">
             <h6 class="media-heading">
-                <a href="{{ctx}}/user#?id={{comment.user_id}}">{{comment.username}}</a>
+                <a href="{{ctx}}/#/photos/{{comment.user_id}}/albums">{{comment.username}}</a>
             </h6>
             <div>
                 <span class="footnotes">{{comment.create_time | calculatetime | date:'yyyy-MM-dd'}}</span>
@@ -23,15 +23,15 @@
                    tooltip-placement="top"><span class="glyphicon glyphicon-thumbs-up"></span></a>
             </div>
         </div>
-        <div class="action ponm-show-hide" data-ng-switch="comment.editable"
+        <div class="action ponm-show-hide" ng-switch="comment.editable"
              ng-show="mouseEnter">
-            <div data-ng-switch-when="true">
-                <a href="" data-ng-click="deleteCommment(comment)"
+            <div ng-switch-when="true">
+                <a href="" ng-click="deleteCommment(comment)"
                    tooltip="删除"
                    tooltip-trigger="mouseenter"
                    tooltip-placement="top"><span class="glyphicon glyphicon-remove-sign"></span></a>
             </div>
-            <div data-ng-switch-default>
+            <div ng-switch-default>
                 <a href=""
                    ng-click="replyComment(comment)"><span class="glyphicon">回复</span></a>
                 <a href=""
@@ -40,9 +40,9 @@
                    tooltip-placement="top"><span class="glyphicon glyphicon-flag"></span></a>
             </div>
         </div>
-        <div data-ng-switch="comment.editable">
+        <div ng-switch="comment.editable">
             <a href=""
-               data-ng-switch-when="true"
+               ng-switch-when="true"
                editable-textarea="comment.content" e-rows="4"
                onbeforesave="modifyComment(comment, $data)"
                tooltip="修改"
@@ -51,7 +51,7 @@
                 <pre class="content">{{comment.content}}</pre>
             </a>
             <pre class="content"
-                 data-ng-switch-default>{{comment.content}}</pre>
+                 ng-switch-default>{{comment.content}}</pre>
         </div>
 
     </div>

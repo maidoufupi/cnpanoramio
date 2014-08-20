@@ -7,8 +7,6 @@
     <file url="file://$PROJECT_DIR$/app/scripts/controllers/MapPhotoCtrl.js" />
     <file url="file://$PROJECT_DIR$/app/scripts/controllers/PhotoCtrl.js" />
     <file url="file://$PROJECT_DIR$/app/scripts/controllers/UserPageCtrl.js" />
-    <file url="file://$PROJECT_DIR$/app/scripts/services/deparam.js" />
-    <file url="file://$PROJECT_DIR$/app/scripts/services/GPSConvertService.js" />
   </component>
   <component name="ProjectRootManager" version="2" />
 </project>

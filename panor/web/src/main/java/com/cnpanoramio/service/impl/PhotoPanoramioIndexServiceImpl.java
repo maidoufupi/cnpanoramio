@@ -16,10 +16,14 @@ import com.cnpanoramio.dao.PhotoPanoramioDao;
 import com.cnpanoramio.dao.PhotoPanoramioIndexDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.PhotoPanoramioIndex;
 import com.cnpanoramio.domain.PhotoPanoramioIndexPK;
+import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.service.PhotoPanoramioIndexService;
+import com.cnpanoramio.service.lbs.BDConverter;
+import com.cnpanoramio.service.lbs.LatLng;
 import com.cnpanoramio.utils.PhotoUtil;
 
 @Service("panoramioIndexService")
@@ -52,33 +56,31 @@ public class PhotoPanoramioIndexServiceImpl implements
 	}
 
 	@Override
-	public List<PhotoProperties> getPanoramio(Double swLat, Double swLng,
-			Double neLat, Double neLng, int level, MapVendor vendor, int width,
+	public List<PhotoProperties> getPanoramio(LatLng sw, LatLng ne, int level, MapVendor vendor, int width,
 			int height) {
-		List<Photo> photos = panorIndexDao.getPhotoPanoramio(swLat, swLng,
-				neLat, neLng, level, vendor, width, height);
+		
+		List<Photo> photos = panorIndexDao.getPhotoPanoramio(convertToGCJ02(sw, vendor),
+				convertToGCJ02(ne, vendor), level, vendor, width, height);
 		// log.debug("get photo size: " + photos.size());
-		List<PhotoProperties> pps = fillPhotoList(photos);
+		List<PhotoProperties> pps = fillPhotoList(photos, vendor);
 		// log.debug("get pp size: " + pps.size());
 		return pps;
 	}
 
 	@Override
-	public List<PhotoProperties> getUserPhotoPanoramio(Double swLat,
-			Double swLng, Double neLat, Double neLng, int level,
+	public List<PhotoProperties> getUserPhotoPanoramio(LatLng sw, LatLng ne, int level,
 			MapVendor vendor, int width, int height, Long userId) {
 		return fillPhotoList(panorIndexDao.getUserPhotoPanoramio(
-				swLat, swLng, neLat, neLng, level, vendor, width, height,
-				userId, false));
+				convertToGCJ02(sw, vendor), convertToGCJ02(ne, vendor), level, vendor, width, height,
+				userId, false), vendor);
 	}
 
 	@Override
-	public List<PhotoProperties> getUserFavPanoramio(Double swLat, Double swLng,
-			Double neLat, Double neLng, int level, MapVendor vendor, int width,
+	public List<PhotoProperties> getUserFavPanoramio(LatLng sw, LatLng ne, int level, MapVendor vendor, int width,
 			int height, Long userId) {
 		return fillPhotoList(panorIndexDao.getUserPhotoPanoramio(
-				swLat, swLng, neLat, neLng, level, vendor, width, height,
-				userId, true));
+				convertToGCJ02(sw, vendor), convertToGCJ02(ne, vendor), level, vendor, width, height,
+				userId, true), vendor);
 	}
 
 	@Override
@@ -87,26 +89,40 @@ public class PhotoPanoramioIndexServiceImpl implements
 	}
 
 	@Override
-	public List<PhotoProperties> getLatestPanoramio(Double swLat, Double swLng,
-			Double neLat, Double neLng, int level, MapVendor vendor, int width,
+	public List<PhotoProperties> getLatestPanoramio(LatLng sw, LatLng ne, int level, MapVendor vendor, int width,
 			int height) {
 		log.debug("getLatestPanoramio service");
-		return fillPhotoList(panorIndexDao.getLatestPanoramio(swLat,
-				swLng, neLat, neLng, level, vendor, width, height));
+		return fillPhotoList(panorIndexDao.getLatestPanoramio(convertToGCJ02(sw, vendor), convertToGCJ02(ne, vendor), 
+				level, vendor, width, height), vendor);
 	}
 
-	private List<PhotoProperties> fillPhotoList(List<Photo> photos) {
+	private List<PhotoProperties> fillPhotoList(List<Photo> photos, MapVendor vendor) {
 		List<PhotoProperties> pps = new ArrayList<PhotoProperties>();
 		PhotoProperties pp;
 		for (Photo photo : photos) {
 			pp = PhotoUtil.transformProperties(photo);
 			if (null != pp) {
+				if(vendor == MapVendor.baidu) {
+					PhotoGps gps = photo.getGps().get(MapVendor.baidu);
+					if(null != gps) {
+						pp.setPoint(gps.getPoint());
+						pp.setVendor(MapVendor.baidu.name());
+					}					
+				}
 				pps.add(pp);
 			}
 		}
 		return pps;
 	}
-
+	
+	private Point convertToGCJ02(LatLng p, MapVendor vendor) {
+		if(vendor == MapVendor.baidu) {
+			LatLng larLng = BDConverter.bd_decrypt(p.lat, p.lng);
+			return new Point(larLng.lat, larLng.lng);
+		}
+		return new Point(p.lat, p.lng);
+	}
+	
 	public boolean updatePhotoIndex() {
 		int lLevel = 0;
 		double lMeasure = 0;
@@ -245,17 +261,17 @@ public class PhotoPanoramioIndexServiceImpl implements
 		}
 	}
 	
-	public List<PhotoProperties> search(Double swLat, Double swLng, Double neLat, Double neLng, int level, 
+	public List<PhotoProperties> search(LatLng sw, LatLng ne, int level, MapVendor vendor, 
 			int width, int height, String term, String type) {
 		int photoSize = (width / bigPix) * (height / bigPix) / 2;
 		
 		List<Photo> photos = null;
 		do {
 			level += 1;
-			photos = panorIndexDao.search(swLat, swLng, neLat, neLng, level, width, height, term, type);
+			photos = panorIndexDao.search(convertToGCJ02(sw, vendor), convertToGCJ02(ne, vendor), level, width, height, term, type);
 			log.debug("Panoramio search photo size: " + photos.size());
 		}while(level < 19 && photos.size() < photoSize);
 		
-		return fillPhotoList(photos);
+		return fillPhotoList(photos, MapVendor.gaode);
 	}
 }

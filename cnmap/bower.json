@@ -29,7 +29,8 @@
     "jquery-backstretch": "2.0.4",
     "jquery-waypoints": "2.0.5",
     "angular-ui-utils": "bower",
-    "angular-ui-router": "0.2.10"
+    "angular-ui-router": "0.2.10",
+    "angular-dragdrop": "1.0.7"
 
   },
   "devDependencies": {

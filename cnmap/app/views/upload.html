@@ -1,51 +1,50 @@
 <div class="photo-upload">
 
     <!-- The file upload form used as target for the file upload widget -->
-    <div id="fileupload" action="http://127.0.0.1:8080/panor-web/api/rest/photo/upload"
-          method="POST" enctype="multipart/form-data"
+    <div id="fileupload"
           ng-controller="DemoFileUploadController"
           file-upload="options"
           ng-class="{'fileupload-processing': processing() || loadingFiles}"
             >
         <div class="container-fluid header"
-             waypoint-sticky="{'stuckClass': 'navbar-third', 'context': '.waypoint-scrollable', 'offset': '-1'}">
-        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-        <div class="row fileupload-buttonbar">
-            <div class="col col-sm-6">
-                <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
-                    <i class="glyphicon glyphicon-plus"></i>
-                    <span>添加图片...</span>
-                    <input type="file" name="files[]" multiple ng-disabled="disabled">
-                </span>
-                <!--<button type="button" class="btn btn-primary start" data-ng-click="submit()">
-                    <i class="glyphicon glyphicon-upload"></i>
-                    <span>开始上传</span>
-                </button>-->
-                <button type="button" class="btn btn-warning cancel"
-                        ng-click="cancel()"
-                        data-ng-show="queue.length">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>取消上传</span>
-                </button>
+             waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-1'}">
+            <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+            <div class="row fileupload-buttonbar">
+                <div class="col col-sm-6">
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                    <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span>添加图片...</span>
+                        <input type="file" name="files[]" multiple ng-disabled="disabled">
+                    </span>
+                    <!--<button type="button" class="btn btn-primary start" data-ng-click="submit()">
+                        <i class="glyphicon glyphicon-upload"></i>
+                        <span>开始上传</span>
+                    </button>-->
+                    <button type="button" class="btn btn-warning cancel"
+                            ng-click="cancel()"
+                            data-ng-show="queue.length">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        <span>取消上传</span>
+                    </button>
 
-                <!-- The global file processing state -->
-                <span class="fileupload-process"></span>
+                    <!-- The global file processing state -->
+                    <span class="fileupload-process"></span>
+                </div>
+                <div class="col col-sm-3">
+                    <item-picker ng-model="travel"
+                                 load-data="loadTravelData"
+                                 new-data="newTravelData"
+                                 item-value-name="title"
+                                 options="{'duplicate': false}"
+                                 place-holder="添加到旅行"></item-picker>
+                </div>
+                <div class="col col-sm-3">
+                    <span>
+                        共 {{queue.length}} 张图片
+                    </span>
+                </div>
             </div>
-            <div class="col col-sm-3">
-                <item-picker ng-model="travel"
-                             load-data="loadTravelData"
-                             new-data="newTravelData"
-                             item-value-name="title"
-                             options="{'duplicate': false}"
-                             place-holder="添加到旅行"></item-picker>
-            </div>
-            <div class="col col-sm-3">
-                <span>
-                    共 {{queue.length}} 张图片
-                </span>
-            </div>
-        </div>
             <div class="row fade" ng-class="{in: active()}">
                 <!-- The global progress bar -->
                 <div class="progress progress-striped active"
@@ -54,6 +53,9 @@
                 </div>
                 <!-- The extended global progress state -->
                 <!--<div class="progress-extended">&nbsp;</div>-->
+            </div>
+            <div class="message">
+                <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
             </div>
         </div>
 
@@ -73,13 +75,13 @@
                 ng-click="activePhoto(file)"
                 ng-class="{'processing': file.$processing(), 'active': file.active}"
                 ponm-hover=".action">
-                <td data-ng-switch data-on="!!file.thumbnailUrl">
-                    <div class="preview" data-ng-switch-when="true">
-                        <a data-ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" data-gallery>
-                            <img data-ng-src="{{file.thumbnailUrl}}" alt="">
+                <td ng-switch on="!!file.thumbnailUrl">
+                    <div class="preview" ng-switch-when="true">
+                        <a ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" gallery>
+                            <img ng-src="{{file.thumbnailUrl}}" alt="">
                         </a>
                     </div>
-                    <div class="preview" data-ng-switch-default data-file-upload-preview="file"></div>
+                    <div class="preview" ng-switch-default file-upload-preview="file"></div>
                 </td>
                 <td>
                     <div >
@@ -138,31 +140,17 @@
 
                     <strong data-ng-show="file.error" class="error text-danger">{{file.error}}</strong>
                 </td>
-                <!--<td>
-                    <button type="button" class="btn btn-primary start" data-ng-click="file.$submit()" data-ng-hide="!file.$submit || options.autoUpload" data-ng-disabled="file.$state() == 'pending' || file.$state() == 'rejected'">
-                        <i class="glyphicon glyphicon-upload"></i>
-                        <span>上传</span>
-                    </button>
-                    <button type="button" class="btn btn-warning cancel"
-                            data-ng-click="file.$cancel()"
-                            data-ng-hide="!file.$cancel">
-                        <i class="glyphicon glyphicon-ban-circle"></i>
-                        <span>取消</span>
-                    </button>
-                    <button ng-controller="FileDestroyController"
-                            type="button"
-                            class="btn btn-danger destroy"
-                            data-ng-click="file.$destroy()"
-                            data-ng-hide="!file.$endestroy">
-                        <i class="glyphicon glyphicon-trash"></i>
-                        <span>删除</span>
-                    </button>
-                </td>-->
-                <td>
-                    <p>
-                        <a class="action"
-                           href=""
-                           ng-if="!file.latPritty">点击地图设置地点</a>
+                <td class="info">
+                    <div>
+                        <div class="palce-marker"
+                             ng-class="{action: !file.latPritty, 'ponm-show': !!file.latPritty}"
+                             drag="true"
+                             jqyoui-options="{revert: 'invalid', helper: 'clone'}"
+                             ng-model="photos"
+                             jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep' }">
+                            <span class="glyphicon glyphicon-map-marker"></span>
+                        </div>
+                        <span class="action" ng-if="!file.latPritty">拖动地理图标放在地图相应位置上</span>
                         <div ng-if="!file.address"
                              class="location-display-place">
                             <a href=""
@@ -182,8 +170,8 @@
                                 {{ file.address || "[解析地址]"}}
                             </a>
                         </div>
-                    </p>
-                    <p>
+                    </div>
+                    <div>
                         <div ng-class="{'action': !file.tags.length, 'ponm-show': file.tags.length}"
                              style="margin: 2px 0;">
                             <item-picker ng-model="file.tags"
@@ -193,16 +181,15 @@
                                          place-holder="添加标签"
                                     />
                         </div>
-                    </p>
-                    <div class="progress progress-striped active fade" data-ng-class="{pending: 'in'}[file.$state()]" data-file-upload-progress="file.$progress()"><div class="progress-bar progress-bar-success" data-ng-style="{width: num + '%'}"></div></div>
+                    </div>
+                    <div class="progress progress-striped active fade"
+                         ng-class="{pending: 'in'}[file.$state()]"
+                         file-upload-progress="file.$progress()">
+                        <div class="progress-bar progress-bar-success" ng-style="{width: num + '%'}"></div>
+                    </div>
                 </td>
 
-                <!--<td class="info-tag">
-                    <span class="label label-primary"
-                          data-ng-show="file.is360">全景</span>
-                </td>-->
-                <td class="link-tag"
-                    ng-class="{'photo-upload-ok': file.photoId}"
+                <td class="status"
                     ng-controller="FileDestroyController">
                     <div class="action">
                         <button type="button"
@@ -211,30 +198,23 @@
                             <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                         </button>
                     </div>
+                    <span class="glyphicon glyphicon-cloud"
+                          ng-if="file.photoId"></span>
+                    <span class="glyphicon glyphicon-warning-sign"
+                          ng-if="!file.photoId"></span>
 
-                    <!--<span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-ok': file.photoId}"></span>
-                    <a ng-href="{{ctx}}/map##lat={{file.lat}}&lng={{file.lng}}&zoom=18&userid={{userId}}"
-                       tooltip="在地图中查看"
-                       tooltip-trigger="mouseenter"
-                       tooltip-placement="top">
-                        <span data-ng-class="{'glyphicon': file.photoId, 'glyphicon-globe': file.photoId}"></span>
-                    </a>-->
+                    <span class="glyphicon glyphicon-pushpin"
+                          ng-if="file.active"></span>
                 </td>
             </tr>
         </table>
-        <!--<div class="fileupload-footer" data-ng-show="queue.length">
-            <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
-                        <i class="glyphicon glyphicon-plus"></i>
-                        <span>添加图片...</span>
-                        <input type="file" name="files[]" multiple ng-disabled="disabled">
-                    </span>
-            <a type="button" class="btn btn-primary" data-ng-href="{{ctx}}/map##userid={{userId}}">
-                <i class="glyphicon glyphicon-ok-circle"></i>
-                <span>完成</span>
-            </a>
-        </div>-->
+
+        <a ng-if="queue.length && !processing() && !loadingFiles"
+           href="#/maps/user/{{userId}}"
+           type="button" class="btn btn-primary pull-right">完成</a>
     </div>
-    <br >
+    <br/>
+    <br/>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">注意事项</h3>
@@ -243,6 +223,7 @@
             <ul>
                 <li>上传文件最大为<strong>10 MB</strong></li>
                 <li>你可以拖动电脑上的图片到网页上进行上传</li>
+                <li>上传后一周内，通过审核的图片才能显示在地图上</li>
             </ul>
         </div>
     </div>

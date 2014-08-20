@@ -39,7 +39,6 @@ import com.cnpanoramio.domain.Like;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.PhotoGps;
-import com.cnpanoramio.domain.PhotoGps.PhotoGpsPK;
 import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
@@ -50,7 +49,9 @@ import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.imaging.ImageInfoExtractor;
+import com.cnpanoramio.service.lbs.BDConverter;
 import com.cnpanoramio.service.lbs.GpsConverter;
+import com.cnpanoramio.service.lbs.LatLng;
 import com.cnpanoramio.utils.PhotoUtil;
 import com.cnpanoramio.utils.UserUtil;
 
@@ -239,12 +240,21 @@ public class PhotoServiceImpl implements PhotoManager {
 	@Override
 	public Boolean markBest(Long photoId, Long userId, boolean best) {
 		Photo photo = photoDao.get(photoId);
+		User user = userManager.get(userId);
+		Favorite f = photo.getFavorites().get(user);
 		if (best) {
-			Favorite f = new Favorite(userId);
-			f.setDate(Calendar.getInstance().getTime());
-			photo.addFavorite(f);
+			
+			if(null == f) {
+				f = new Favorite(user, photo);
+				f.setDate(Calendar.getInstance().getTime());
+				f = favoriteDao.save(f);
+				photo.getFavorites().put(user, f);
+			}
 		} else {
-			photo.removeFavorite(userId);
+			if(null != f) {
+				photo.getFavorites().remove(user);
+				favoriteDao.remove(f);
+			}			
 		}
 		return true;
 	}
@@ -260,10 +270,10 @@ public class PhotoServiceImpl implements PhotoManager {
 			photo.setDescription(properties.getDescription());
 		}
 		if (null != properties.getPoint()) {
-			if ((null != properties.getPoint().getLat() && properties
-					.getPoint().getLat() != 0)
-					|| (null != properties.getPoint().getLng() && properties
-							.getPoint().getLng() != 0)) {
+			if (properties
+					.getPoint().getLat() != 0
+					||  properties
+							.getPoint().getLng() != 0) {
 				updatePhotoGps(photo, properties.getPoint().getLat(),
 						properties.getPoint().getLng(), properties.getPoint()
 								.getAddress(),
@@ -358,7 +368,18 @@ public class PhotoServiceImpl implements PhotoManager {
 			}
 		}
 		
-		return PhotoUtil.transformProperties(photo);
+		// 获取相应供应商的gps
+		log.debug("upload photo vendor: " + vendor.name());
+		PhotoProperties pp = PhotoUtil.transformProperties(photo);
+		if(null != vendor) {
+			pp.setVendor(vendor.name());
+			PhotoGps gps = photo.getGps().get(vendor);
+			log.debug("upload photo vendor's gps: " + gps);
+			if(null != gps) {
+				pp.setPoint(gps.getPoint());
+			}
+		}
+		return pp;
 	}
 
 	/**
@@ -398,33 +419,66 @@ public class PhotoServiceImpl implements PhotoManager {
 		PhotoDetails detail = photo.getDetails();
 		Point point = null;
 		if (latDouble != 0 || lngDouble != 0) {
-			if (vendor.equals(MapVendor.gps)) {
+			if (vendor == MapVendor.gps) {
 				// 用户设置GPS为标准GPS坐标
-				// 转化GPS坐标为高德地图坐标
-				GpsConverter.Point p = gpsc.getEncryPoint(lngDouble, latDouble);
-				point = new Point(p.getY(), p.getX(), 0D);
+				// 转化GPS坐标为火星坐标
+				LatLng p = gpsc.getEncryPoint(lngDouble, latDouble);
+				point = new Point(p.getLat(), p.getLng(), 0D);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
 				photo.setGpsPoint(point);
 				photoDao.save(photo);
-
-				gps = new PhotoGps();
-				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gaode));
-				gps.setGps(point);
-				photoGpsDao.save(gps);
+				
+				saveOrUpdatePhotoGps(photo, MapVendor.gaode, point);
+				
+				// 转化火星坐标到百度摩卡拖坐标
+				p = BDConverter.bd_encrypt(p.lat, p.lng);
+				point = new Point(p.getLat(), p.getLng(), 0D);
+				if (StringUtils.hasText(address)) {
+					point.setAddress(address.trim());
+				}
+				saveOrUpdatePhotoGps(photo, MapVendor.baidu, point);
 
 				// 保存原始GPS坐标
 				point = new Point(latDouble, lngDouble);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
-				gps = new PhotoGps();
-				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gps));
-				gps.setGps(point);
-				photoGpsDao.save(gps);
-			} else {
-				// 用户设置位置不为GPS，则默认为高德地图坐标
+				saveOrUpdatePhotoGps(photo, MapVendor.gps, point);
+
+			} else if(vendor == MapVendor.baidu) {
+				// 用户设置为baidu，则默认为baidu坐标
+				point = new Point(latDouble, lngDouble, 0D);
+				if (StringUtils.hasText(address)) {
+					point.setAddress(address.trim());
+				}
+				saveOrUpdatePhotoGps(photo, MapVendor.baidu, point);
+				
+				// 转化百度摩卡拖坐标 为 火星坐标
+				LatLng p = BDConverter.bd_decrypt(latDouble, lngDouble);
+				point = new Point(p.lat, p.lng);
+				if (StringUtils.hasText(address)) {
+					point.setAddress(address.trim());
+				}
+				photo.setGpsPoint(point);
+				photoDao.save(photo);
+
+				saveOrUpdatePhotoGps(photo, MapVendor.gaode, point);
+				
+				// 保存图片原有GPS信息为GPS坐标
+				if (null != detail
+						&& (null != detail.getGPSLatitude()
+								&& detail.getGPSLatitude() != 0
+								&& null != detail.getGPSLongitude() && detail
+								.getGPSLongitude() != 0)) {
+					point = new Point(detail.getGPSLatitude(),
+							detail.getGPSLongitude(), detail.getGPSAltitude());
+					saveOrUpdatePhotoGps(photo, MapVendor.gps, point);
+				}
+				
+			}else {
+				// 用户设置位置不为GPS和baidu，则默认为火星坐标
 				point = new Point(latDouble, lngDouble);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
@@ -432,10 +486,15 @@ public class PhotoServiceImpl implements PhotoManager {
 				photo.setGpsPoint(point);
 				photoDao.save(photo);
 
-				gps = new PhotoGps();
-				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gaode));
-				gps.setGps(point);
-				photoGpsDao.save(gps);
+				saveOrUpdatePhotoGps(photo, MapVendor.gaode, point);
+				
+				// 转化火星坐标到百度摩卡拖坐标
+				LatLng p = BDConverter.bd_encrypt(latDouble, lngDouble);
+				point = new Point(p.getLat(), p.getLng(), 0D);
+				if (StringUtils.hasText(address)) {
+					point.setAddress(address.trim());
+				}
+				saveOrUpdatePhotoGps(photo, MapVendor.baidu, point);
 
 				// 保存图片原有GPS信息为GPS坐标
 				if (null != detail
@@ -443,12 +502,9 @@ public class PhotoServiceImpl implements PhotoManager {
 								&& detail.getGPSLatitude() != 0
 								&& null != detail.getGPSLongitude() && detail
 								.getGPSLongitude() != 0)) {
-					gps = new PhotoGps();
-					gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gps));
 					point = new Point(detail.getGPSLatitude(),
 							detail.getGPSLongitude(), detail.getGPSAltitude());
-					gps.setGps(point);
-					photoGpsDao.save(gps);
+					saveOrUpdatePhotoGps(photo, MapVendor.gps, point);
 				}
 			}
 		} else {
@@ -461,24 +517,50 @@ public class PhotoServiceImpl implements PhotoManager {
 				lngDouble = detail.getGPSLongitude();
 				latDouble = detail.getGPSLatitude();
 
-				// 转化GPS坐标为高德地图坐标
-				GpsConverter.Point p = gpsc.getEncryPoint(lngDouble, latDouble);
-				point = new Point(p.getY(), p.getX());
+				// 转化GPS坐标为火星坐标
+				LatLng p = gpsc.getEncryPoint(lngDouble, latDouble);
+				point = new Point(p.lat, p.lng);
 				photo.setGpsPoint(point);
 				photoDao.save(photo);
 
-				gps = new PhotoGps();
-				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gaode));
-				gps.setGps(point);
-				photoGpsDao.save(gps);
+				saveOrUpdatePhotoGps(photo, MapVendor.gaode, point);
+				
+				// 转化火星坐标到百度摩卡拖坐标
+				p = BDConverter.bd_encrypt(p.lat, p.lng);
+				point = new Point(p.getLat(), p.getLng(), 0D);
+				if (StringUtils.hasText(address)) {
+					point.setAddress(address.trim());
+				}
+				saveOrUpdatePhotoGps(photo, MapVendor.baidu, point);
 
 				// 保存原始GPS坐标
 				point = new Point(latDouble, lngDouble);
-				gps = new PhotoGps();
-				gps.setPk(new PhotoGpsPK(photo.getId(), MapVendor.gps));
-				gps.setGps(point);
-				photoGpsDao.save(gps);
+				saveOrUpdatePhotoGps(photo, MapVendor.gps, point);
 			}
+		}
+	}
+	
+	/**
+	 * 保存图片相应标准的gps信息
+	 * 
+	 * @param photo
+	 * @param vendor
+	 * @param lat
+	 * @param lng
+	 */
+	private void saveOrUpdatePhotoGps(Photo photo, MapVendor vendor, Point point) {
+		PhotoGps gps = photo.getGps().get(vendor);
+		if(null == gps) {
+			gps = new PhotoGps(photo, vendor, point);
+			gps = photoGpsDao.save(gps);
+			photo.getGps().put(vendor, gps);
+		}else {
+			Point pointOrign = gps.getPoint();
+			// 如果点没有高度信息，则保留原有高度属性值
+			if(point.getAlt() == 0) {
+				point.setAlt(pointOrign.getAlt());
+			}
+			gps.setPoint(point);
 		}
 	}
 
@@ -500,15 +582,14 @@ public class PhotoServiceImpl implements PhotoManager {
 	}
 
 	@Override
-	public List<PhotoGps> getGPSInfo(Long id, MapVendor vendor) {
+	public PhotoGps getGPSInfo(Long id, MapVendor vendor) {
+
 		if (null == vendor) {
-			return photoGpsDao.getAll(id);
-		} else {
-			PhotoGps gps = photoGpsDao.get(new PhotoGps.PhotoGpsPK(id, vendor));
-			List<PhotoGps> gpss = new ArrayList<PhotoGps>();
-			gpss.add(gps);
-			return gpss;
-		}
+			vendor = MapVendor.gaode;
+		} 
+
+		return photoDao.get(id).getGps().get(vendor);
+		
 	}
 
 	@Override

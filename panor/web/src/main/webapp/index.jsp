@@ -70,6 +70,9 @@
     <div ui-view="navbar">
         <i>Some content will load here!</i>
     </div>
+    <div ui-view="alert">
+        alert
+    </div>
     <div ui-view style="position: absolute;
                         bottom: 0;
                         top: 51px;

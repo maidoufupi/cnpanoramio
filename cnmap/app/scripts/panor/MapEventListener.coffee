@@ -76,6 +76,22 @@ class IMapEventListener
   inMapView: (lat, lng, map) ->
 
   ##
+   # 像素坐标转换为经纬度坐标。
+   #
+   # @param map
+   # @param pixel
+   #/
+  pixelToPoint: (map, pixel) ->
+
+  ##
+    # 经纬度坐标转换为像素坐标。
+    #
+    # @param map
+    # @param point
+    #/
+  pointToPixel: (map, point) ->
+
+  ##
    # 添加标记
    #
    # @param map

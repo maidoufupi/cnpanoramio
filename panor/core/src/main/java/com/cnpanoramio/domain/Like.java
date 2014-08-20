@@ -1,7 +1,6 @@
 package com.cnpanoramio.domain;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

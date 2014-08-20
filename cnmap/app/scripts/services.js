@@ -367,6 +367,18 @@ angular.module('ponmApp.services', [
             ,userId: $window.user && $window.user.id
             ,name: $window.user && $window.user.name
             ,login: $window.login
+            ,mapVendor: $window.mapVendor
+            // Coordinate System Standards 坐标体系标准
+            ,getCoordSS: function(mapVendor) {
+                if(!mapVendor) {
+                    mapVendor = this.mapVendor;
+                }
+                if(mapVendor == 'qq') {
+                    return 'gaode';
+                }
+                return mapVendor;
+            }
+            ,dev: $window.dev
         }
     }])
 ;

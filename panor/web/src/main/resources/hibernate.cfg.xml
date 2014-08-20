@@ -14,7 +14,6 @@
 		<mapping class="com.cnpanoramio.domain.Tag" />
 		<mapping class="com.cnpanoramio.domain.UserSettings" />
 		<mapping class="com.cnpanoramio.domain.PhotoDetails" />
-		<mapping class="com.cnpanoramio.domain.IndexPhoto" />		
 		<mapping class="com.cnpanoramio.domain.PhotoGps" />		
 		<mapping class="com.cnpanoramio.domain.PhotoPanoramio" />		
 		<mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex" />
@@ -26,6 +25,9 @@
 		<mapping class="com.cnpanoramio.domain.TravelSpot"/>
 		<mapping class="com.cnpanoramio.domain.Like" />
 		<mapping class="com.cnpanoramio.domain.Recycle" />
+		<mapping class="com.cnpanoramio.domain.Circle" />
+		<mapping class="com.cnpanoramio.domain.Message" />
+		<mapping class="com.cnpanoramio.domain.MessageQueue" />
 				
 	</session-factory>
 </hibernate-configuration>

@@ -36,7 +36,7 @@ public class TravelSpot {
 	@IndexedEmbedded
 	private Travel travel;
 	
-	@OneToMany
+	@OneToMany(mappedBy="travelSpot")
 	private Set<Photo> photos = new HashSet<Photo>(0);
 	
 	@Column(name="create_time")

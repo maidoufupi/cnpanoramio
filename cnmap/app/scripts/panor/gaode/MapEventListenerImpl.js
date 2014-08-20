@@ -80,6 +80,23 @@
             return map.getBounds().contains(point);
         };
 
+        this.pixelToPoint =function(map, pixel) {
+            return map.containerToLngLat(new AMap.Pixel(pixel.x, pixel.y));
+
+            var bounds = map.getBounds(),
+                size = map.getSize(),
+                point = {};
+
+            point.lng = pixel.x / size.width * (bounds.northeast.lng - bounds.southwest.lng) + bounds.southwest.lng;
+            point.lat = bounds.northeast.lat - pixel.y / size.height * (bounds.northeast.lat - bounds.southwest.lat);
+
+            return point//, map.getZoom());
+        };
+
+        this.pointToPixel =function(map, point) {
+            return map.lngLatToContainer(new AMap.LngLat(point.lng, pixel.lat))//, map.getZoom());
+        };
+
         this.addMarker = function(map, lat, lng) {
             return new AMap.Marker({
                 map: map,
@@ -129,7 +146,7 @@
 
         this.removeMarker = function(marker) {
             marker.setMap(null);
-        }
+        };
 
         this.addMapClickListener = function(map, callback) {
             AMap.event.addListener(map, "click", function (event) {

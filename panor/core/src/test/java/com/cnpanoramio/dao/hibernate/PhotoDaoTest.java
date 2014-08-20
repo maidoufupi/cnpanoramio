@@ -164,10 +164,10 @@ public class PhotoDaoTest {
 		Photo photo = photoDao.get(1L);
 //		photo.addFavorite(new Favorite(1L));
 //		photo = photoDao.save(photo);
-		Favorite f = photo.getFavorites().iterator().next();
-		if(f != null) {
-			photo.getFavorites().remove(f);
-		}
+//		Favorite f = photo.getFavorites().iterator().next();
+//		if(f != null) {
+//			photo.getFavorites().remove(f);
+//		}
 	}
 	
 	@Test

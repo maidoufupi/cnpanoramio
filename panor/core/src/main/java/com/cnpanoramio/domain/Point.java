@@ -11,11 +11,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Point {
     
-	private Double lat;
-	private Double lng;
+	public double lat;
+	public double lng;
 	
 	// altitude
-	private Double alt;
+	public double alt;
 	
 	private String address;
 	
@@ -23,40 +23,45 @@ public class Point {
 		super();
 	}
 	
-	public Point( Double geoLat, Double geoLng) {
+	public Point( double geoLat, double geoLng) {
 		super();
 		this.lat = geoLat;
 		this.lng = geoLng;
 	}
 	
-	public Point( Double geoLat, Double geoLng, Double geoAlti) {
+	public Point( double geoLat, double geoLng, double geoAlti) {
 		super();
 		this.lat = geoLat;
 		this.lng = geoLng;
 		this.alt = geoAlti;
 	}
 	
-	@Column(name = "lng")
-	public Double getLng() {
+	
+	public double getLng() {
 		return lng;
 	}
-	public void setLng(Double geoLong) {
+	
+	@Column(name = "lng", nullable = true)
+	public void setLng(double geoLong) {
 		this.lng = geoLong;
 	}
 	
-	@Column(name = "lat")
-	public Double getLat() {
+	
+	public double getLat() {
 		return lat;
 	}
-	public void setLat(Double geoLat) {
+	
+	@Column(name = "lat", nullable = true)
+	public void setLat(double geoLat) {
 		this.lat = geoLat;
 	}
 	
-	@Column(name = "alt")
-	public Double getAlt() {
+	public double getAlt() {
 		return alt;
 	}
-	public void setAlt(Double geoAlti) {
+	
+	@Column(name = "alt", nullable = true)
+	public void setAlt(double geoAlti) {
 		this.alt = geoAlti;
 	}
 
@@ -73,9 +78,13 @@ public class Point {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((alt == null) ? 0 : alt.hashCode());
-		result = prime * result + ((lat == null) ? 0 : lat.hashCode());
-		result = prime * result + ((lng == null) ? 0 : lng.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(alt);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(lat);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(lng);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -88,22 +97,14 @@ public class Point {
 		if (getClass() != obj.getClass())
 			return false;
 		Point other = (Point) obj;
-		if (alt == null) {
-			if (other.alt != null)
-				return false;
-		} else if (!alt.equals(other.alt))
+		if (Double.doubleToLongBits(alt) != Double.doubleToLongBits(other.alt))
 			return false;
-		if (lat == null) {
-			if (other.lat != null)
-				return false;
-		} else if (!lat.equals(other.lat))
+		if (Double.doubleToLongBits(lat) != Double.doubleToLongBits(other.lat))
 			return false;
-		if (lng == null) {
-			if (other.lng != null)
-				return false;
-		} else if (!lng.equals(other.lng))
+		if (Double.doubleToLongBits(lng) != Double.doubleToLongBits(other.lng))
 			return false;
 		return true;
-	}	
+	}
+
 	
 }

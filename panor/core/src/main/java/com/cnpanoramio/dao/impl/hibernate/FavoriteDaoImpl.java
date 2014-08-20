@@ -10,7 +10,7 @@ import com.cnpanoramio.dao.FavoriteDao;
 import com.cnpanoramio.domain.Favorite;
 
 @Repository("favoriteDao")
-public class FavoriteDaoImpl extends GenericDaoHibernate<Favorite, Favorite.PK>
+public class FavoriteDaoImpl extends GenericDaoHibernate<Favorite, Long>
 	implements FavoriteDao {
 
 	public FavoriteDaoImpl() {

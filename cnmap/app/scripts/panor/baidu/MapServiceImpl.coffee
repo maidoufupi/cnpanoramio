@@ -43,7 +43,7 @@ class MapService extends window.cnmap.IMapService
       if point
         callback.apply(undefined, [point])
 
-  getLocPois: (address, callback) ->
+  getLocPois: (address) ->
     deferred = jQuery.Deferred()
 
     if !@geocoder

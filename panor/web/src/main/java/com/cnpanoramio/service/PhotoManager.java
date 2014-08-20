@@ -1,7 +1,6 @@
 package com.cnpanoramio.service;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -187,7 +186,7 @@ public interface PhotoManager {
 	 * @param id
 	 * @return
 	 */
-	public List<PhotoGps> getGPSInfo(Long id, MapVendor vendor);
+	public PhotoGps getGPSInfo(Long id, MapVendor vendor);
 	
 	/**
 	 * 获取用户某个tag的图片总数

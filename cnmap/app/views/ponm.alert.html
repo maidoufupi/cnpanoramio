@@ -1,0 +1,3 @@
+<div class="navbar-alert">
+    <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
+</div>

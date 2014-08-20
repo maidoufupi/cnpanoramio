@@ -1,0 +1,29 @@
+.navbar-alert {
+  position: fixed;
+  top: 51px;
+  width: 100%;
+  max-height: 45px;
+  z-index: 2100;
+  .alert {
+    text-align: center;
+  }
+//  .alert.ng-enter {
+//    @include animation(enter_sequence 300ms ease-out);
+//  }
+
+  .alert.ng-leave {
+    @include animation(leave_sequence 300ms ease-out);
+  }
+}
+
+// alerts
+.alerts {
+  background-color: #fefce0;
+  color: #737373;
+//  height: 45px;
+  line-height: 45px;
+//  margin-bottom: 22px;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%;
+}

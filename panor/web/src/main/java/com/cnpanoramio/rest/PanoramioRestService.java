@@ -17,6 +17,7 @@ import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.json.PanoramioResponse;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.service.PhotoPanoramioIndexService;
+import com.cnpanoramio.service.lbs.LatLng;
 import com.cnpanoramio.utils.PhotoUtil;
 
 @Controller
@@ -63,8 +64,8 @@ public class PanoramioRestService extends AbstractRestService {
 				+ widthI + ", " + heightI + ", " + userId + ", " + favorite
 				+ ", " + tag + ", " + latestb + "]");
 		if (latestb) {
-			pps = panorIndexService.getLatestPanoramio(swLatD, swLngD, neLatD,
-					neLngD, levelI, mVendor, widthI, heightI);
+			pps = panorIndexService.getLatestPanoramio(new LatLng(swLatD, swLngD), new LatLng(neLatD, neLngD), 
+					levelI, mVendor, widthI, heightI);
 		} else {
 			if (StringUtils.hasText(tag)) {
 
@@ -72,17 +73,15 @@ public class PanoramioRestService extends AbstractRestService {
 				if (StringUtils.hasText(userId)) {
 					userIdL = Long.parseLong(userId);
 					if (StringUtils.hasText(favorite)) {
-						pps = panorIndexService.getUserFavPanoramio(swLatD,
-								swLngD, neLatD, neLngD, levelI, mVendor,
-								widthI, heightI, userIdL);
+						pps = panorIndexService.getUserFavPanoramio(new LatLng(swLatD, swLngD), new LatLng(neLatD, neLngD), 
+								levelI, mVendor, widthI, heightI, userIdL);
 					} else {
-						pps = panorIndexService.getUserPhotoPanoramio(swLatD,
-								swLngD, neLatD, neLngD, levelI, mVendor,
-								widthI, heightI, userIdL);
+						pps = panorIndexService.getUserPhotoPanoramio(new LatLng(swLatD, swLngD), new LatLng(neLatD, neLngD), 
+								levelI, mVendor, widthI, heightI, userIdL);
 					}
 				} else {
-					pps = panorIndexService.getPanoramio(swLatD, swLngD,
-							neLatD, neLngD, levelI, mVendor, widthI, heightI);
+					pps = panorIndexService.getPanoramio(new LatLng(swLatD, swLngD), new LatLng(neLatD, neLngD), 
+							levelI, mVendor, widthI, heightI);
 				}
 			}
 		}
@@ -149,7 +148,8 @@ public class PanoramioRestService extends AbstractRestService {
 				+ ", " + neLngD + ", " + levelI + ", " + mVendor + ", "
 				+ widthI + ", " + heightI + ", " + term + ", " + type + "]");
 		
-		List<PhotoProperties> pps = panorIndexService.search(swLatD, swLngD, neLatD, neLngD, levelI, widthI, heightI, term, type);
+		List<PhotoProperties> pps = panorIndexService.search(new LatLng(swLatD, swLngD), new LatLng(neLatD, neLngD), 
+				levelI, mVendor, widthI, heightI, term, type);
 		response.setStatus(PanoramioResponse.Status.OK.name());
 		response.setPhotos(pps);
 		return response;

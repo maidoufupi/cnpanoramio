@@ -91,7 +91,10 @@
                     'left-fixed': contentLayouts[contentLayout]=='left-fixed',
                     'right-full': contentLayouts[contentLayout]=='right-full',
                     'right-fixed': contentLayouts[contentLayout]=='right-fixed'}">
-        <div class="left">
+        <div class="left"
+             drop="true"
+             ng-model='markers'
+             jqyoui-droppable="{multiple:true, onOver:'onPhotoOver', onDrop:'onPhotoDrop'}">
             <div class="map-container">
                 <div class="map-canvas" ui-map="myMap" ui-options="mapOptions"></div>
                 <!--<div class="map-controls"
@@ -104,7 +107,8 @@
             </div>
         </div>
         <div class="right" >
-            <div ui-view class="waypoint-scrollable"></div>
+            <div ui-view ></div>
+            <!-- class="waypoint-scrollable" -->
         </div>
     </div>
 </div>

@@ -2,11 +2,14 @@ $window = window
 BMap = $window.BMap
 class MapEventListener extends window.cnmap.IMapEventListener
   addLocationHashListener: (map, callback) ->
-    map.addEventListener "moveend", MapListener
-    map.addEventListener "zoomend", MapListener
-    map.addEventListener "dragend", MapListener
+    listeners = []
     MapListener = (e) ->
-      callback.apply this, [e.point.lat, e.point.lng, this.getZoom()]
+      point = this.getCenter()
+      callback.apply this, [point.lat, point.lng, this.getZoom()]
+    listeners.push map.addEventListener "moveend", MapListener
+    listeners.push map.addEventListener "zoomend", MapListener
+    listeners.push map.addEventListener "dragend", MapListener
+    listeners
 
   addToolBar: (map) ->
     map.addControl(new BMap.NavigationControl());
@@ -20,12 +23,22 @@ class MapEventListener extends window.cnmap.IMapEventListener
   setZoom: (map, zoom) ->
     map.setZoom zoom
 
+  setZoomAndCenter: (map, zoom, lat, lng) ->
+    point = new BMap.Point lng, lat
+    map.centerAndZoom point, zoom
+
   setBounds: (map, sw, ne) ->
     map.setViewport [new BMap.Point(sw.lng, sw.lat), new BMap.Point(ne.lng, ne.lat)]
 
   inMapView: (lat, lng, map) ->
     map = map || @opts.map
     map.getBounds().containsPoint(new BMap.Point(lng, lat))
+
+  pixelToPoint: (map, pixel) ->
+    map.pixelToPoint new BMap.Pixel(pixel.x, pixel.y)
+
+  pointToPixel: (map, point) ->
+    map.pointToPixel new BMap.Point(point.lng, pixel.lat)
 
   addMarker: (map, lat, lng) ->
     map.addOverlay new BMap.Marker new BMap.Point lng, lat

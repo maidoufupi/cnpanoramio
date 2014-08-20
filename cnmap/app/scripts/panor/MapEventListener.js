@@ -27,6 +27,10 @@
 
     IMapEventListener.prototype.inMapView = function(lat, lng, map) {};
 
+    IMapEventListener.prototype.pixelToPoint = function(map, pixel) {};
+
+    IMapEventListener.prototype.pointToPixel = function(map, point) {};
+
     IMapEventListener.prototype.addMarker = function(map, lat, lng) {};
 
     IMapEventListener.prototype.createDraggableMarker = function(map, lat, lng) {};

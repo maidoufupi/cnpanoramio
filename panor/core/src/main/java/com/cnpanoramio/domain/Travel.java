@@ -49,7 +49,7 @@ public class Travel {
 	@JoinColumn(name="user_id")
 	private UserSettings user;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy="travel", cascade = CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval = true)
 	private Set<TravelSpot> spots = new HashSet<TravelSpot>(0);
 	
 	// 默认的spot
@@ -84,7 +84,7 @@ public class Travel {
 	@Column(name="deleted")
 	private Boolean deleted;
 	
-	@OneToMany
+	@OneToMany(mappedBy="travel")
 	private Set<Like> likes = new HashSet<Like>(0);
 	
 	// 相册封面图片

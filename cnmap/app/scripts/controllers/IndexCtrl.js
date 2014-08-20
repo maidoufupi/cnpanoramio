@@ -3,8 +3,10 @@
  */
 'use strict';
 
-angular.module('indexApp', ["ponmApp", "ui.map"])
-    .controller('IndexCtrl', ['$window', '$scope', function ($window, $scope) {
+angular.module('indexApp', ["ponmApp"])
+    .controller('IndexCtrl', ['$window', '$scope', 'alertService', function ($window, $scope, alertService) {
+
+        $scope.alertService = alertService;
 
         var mapEventListener = $window.cnmap.MapEventListener.factory();
         $scope.mapOptions = {

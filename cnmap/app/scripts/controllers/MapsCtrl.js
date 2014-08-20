@@ -10,7 +10,8 @@ angular.module('mapsApp', [
     'ui.router',
 //    'ponmApp',
     'xeditable',
-    'fileuploadApp'
+    'fileuploadApp',
+    'ngDragDrop'
 ])
     .config([   '$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
@@ -241,8 +242,9 @@ angular.module('mapsApp', [
             $scope.mapService = $window.cnmap.MapService.factory();
 
             var panoramioLayer = new cnmap.PanoramioLayer(
-                {suppressInfoWindows: false,
-                    mapVendor: $window.mapVendor || "gaode"}
+                {suppressInfoWindows: false
+//                    ,mapVendor: $window.mapVendor || "gaode"
+                }
 //                    auto: false
             );
             $scope.panoramioLayer = panoramioLayer;
@@ -275,8 +277,16 @@ angular.module('mapsApp', [
                 locationHash(mapObj);
             });
 
-            $scope.displayPhoto = function(photoId) {
-                $scope.hashStateManager.set("photoid", photoId);
+            /**
+             * state 参数说明打开图片是由地址栏photoid状态变化引起，不需要重新设置为photoid状态值
+             *
+             * @param photoId
+             * @param state
+             */
+            $scope.displayPhoto = function(photoId, state) {
+                if(!state) {
+                    $scope.hashStateManager.set("photoid", photoId);
+                }
 
                 $scope.photoDisplayModal = $modal.open({
                     templateUrl: 'views/photo.html',
@@ -366,9 +376,9 @@ angular.module('mapsApp', [
                 listeners = $scope.mapEventListener.addLocationHashListener(map,
                     function(lat ,lng, zoom) {
                         $log.debug("locationHashListener");
-                        if (changeState) {
-                            return;
-                        }
+//                        if (changeState) {
+//                            return;
+//                        }
 
                         if ($scope.setState) {
                             $timeout.cancel($scope.setState);
@@ -425,7 +435,7 @@ angular.module('mapsApp', [
             $scope.hashStateManager.watch("photoid", function(photoId) {
                 $scope.photoDisplayModal && $scope.photoDisplayModal.dismiss('cancel');
                 if(photoId) {
-                    $scope.displayPhoto(photoId);
+                    $scope.displayPhoto(photoId, true);
                 }
             });
 
@@ -496,6 +506,25 @@ angular.module('mapsApp', [
                 $scope.photoDisplayModal && $scope.photoDisplayModal.dismiss('cancel');
 //                panoramioLayer.clearMap();
             };
+
+            $scope.markers = [];
+
+            $scope.onPhotoDrop = function(e, ui) {
+                $log.debug(e);
+                $log.debug(e.offsetX);
+                $log.debug(e.offsetY);
+
+                $log.debug(ui);
+                $log.debug(ui.position);
+                $log.debug(ui.offset);
+                $log.debug($scope.markers[$scope.markers.length-1].photoId);
+                $scope.$broadcast("onDrop", {event: e, ui: ui, item: $scope.markers[$scope.markers.length-1]});
+            };
+
+            $scope.onPhotoOver = function(e, ui) {
+                $log.debug(e);
+//                $log.debug(ui.helper.addClass('drag-marker'));
+            };
         }])
     .controller('PhotosAlertsCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
@@ -524,7 +553,7 @@ angular.module('mapsApp', [
             // Any function returning a promise object can be used to load values asynchronously
             $scope.getLocation = function (val) {
                 var d = $q.defer();
-                $scope.mapService.getLocPois(val, function(res) {
+                $scope.mapService.getLocPois(val).then(function(res) {
                     d.resolve(res);
                 });
                 return d.promise.then(function(res) {
@@ -1001,10 +1030,10 @@ angular.module('mapsApp', [
             });
 
             if($scope.map) {
-                addMapClickEvent($scope.map);
+//                addMapClickEvent($scope.map);
             }
             $scope.$on("mapChanged", function(e, map) {
-                addMapClickEvent($scope.map);
+//                addMapClickEvent($scope.map);
             });
 
             function addOrUpdateMarker(photo, lat, lng) {
@@ -1111,7 +1140,7 @@ angular.module('mapsApp', [
                 $log.debug("setPlace for photo: " + file.id);
 
                 // 加载gps地点可选的地址列表
-                mapService.getAddrPois(lat, lng, function(addresses, addr) {
+                mapService.getAddrPois(lat, lng).then(function(addresses, addr) {
                     if(!address) {
                         file.mapVendor.address = addr;
                     }
@@ -1121,7 +1150,31 @@ angular.module('mapsApp', [
                 });
             };
 
+            // 当拖动放到地图上时
+            $scope.$on("onDrop", function(e, drop) {
+                $log.debug(drop.item.id);
+                var photo;
+                if(photos[drop.item.id]) {
+                    photo = photos[drop.item.id];
+                }else {
+                    photo = {
+                        id: drop.item.id,
+                        mapVendor: {}
+                    };
+                    photos[photo.id] = photo;
+                }
+                var point = mapEventListener.pixelToPoint($scope.map, {x: (drop.ui.offset.left + drop.event.offsetX), y: (drop.event.clientY - 103)});
+                addOrUpdateMarker(photo, point.lat, point.lng);
+//                $scope.activePhoto(photo);
+//                mapEventListener.activeMarker(photo.mapVendor.marker);
+            });
+
             $scope.$on("$destroy", function() {
+                angular.forEach(photos, function(photo, key) {
+                    if(photo.mapVendor && photo.mapVendor.marker) {
+                        mapEventListener.removeMarker(photo.mapVendor.marker);
+                    }
+                });
                 mapEventListener.clearMap();
                 $scope.clearState();
             });

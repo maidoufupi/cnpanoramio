@@ -1,0 +1,25 @@
+<div class="container" style="padding: 20px">
+    <div data-alerts="alerts" data-titles="{'warning': '<em>Warning!</em>'}" data-ids="myid" data-fade="3000"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading">trigger update photo gis index table</div>
+        <div class="panel-body">
+            <button class="btn btn-primary"
+                    ng-click="updatePanoramioIndex()">更新热门图片索引</button>
+            <button class="btn btn-primary"
+                    ng-click="updatePanoramioLatest()">更新最新图片索引</button>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">set index photo id</div>
+        <div class="panel-body">
+            <div class="input-group input-group-sm">
+                <input id="photo-id" type="text" class="form-control" placeholder="Photo Id">
+                <span class="input-group-btn">
+                   <button id="index-photo-id" class="btn btn-primary">set</button>
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>

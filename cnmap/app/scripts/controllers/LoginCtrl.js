@@ -112,11 +112,13 @@ angular.module('ponmApp.controllers')
         function ($window, $scope, $log, $q, jsUtils, $location, $cookieStore, AuthService,
                   ponmCtxConfig) {
 
+            $scope.ponmCtxConfig = ponmCtxConfig;
+
             $scope.user = {};
 
-            $scope.$watch('user', function(passwordConfirm) {
-                $log.debug(passwordConfirm);
-            });
+//            $scope.$watch('user', function(passwordConfirm) {
+//                $log.debug(passwordConfirm);
+//            });
 
         }])
 ;

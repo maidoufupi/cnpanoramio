@@ -27,15 +27,19 @@ angular.module('userSettingsApp', [
                             templateUrl: 'views/ponm.navbar.html',
                             controller: 'NavbarCtrl'
                         }
+                        ,'alert': {
+                            templateUrl: 'views/ponm.alert.html',
+                            controller: 'AlertsCtrl'
+                        }
                     }
                 })
             ;
         }])
     .controller('UserSettingsCtrl',
     ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', '$state', 'UserPhoto', 'UserService',
-        'ponmCtxConfig', 'AuthService',
+        'ponmCtxConfig', 'AuthService', 'alertService',
         function ($window, $log, $location, $rootScope, $scope, $modal, $state, UserPhoto, UserService,
-                  ponmCtxConfig, AuthService) {
+                  ponmCtxConfig, AuthService, alertService) {
             $scope.ctx = ponmCtxConfig.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
             $scope.apirest = ponmCtxConfig.apirest;
@@ -82,24 +86,12 @@ angular.module('userSettingsApp', [
             $scope.submit = function() {
                 UserService.updateSettings({userId: $scope.userId}, $scope.settings, function(data) {
                     if(data.status == "OK") {
-                        $scope.addAlert({type: "success", msg: "保存成功!"});
+                        alertService.add("success",  "保存成功!", 5000);
                     }else {
-                        $scope.addAlert({type: "danger", msg: "保存失败!"});
+                        alertService.add("danger", "保存失败!", 5000);
                     }
                 }, function(data) {
-                    $scope.addAlert({type: "danger", msg: "保存失败!"});
+                    alertService.add("danger", "保存失败!", 5000);
                 })
-            }
-
-            $scope.addAlert = function(msg) {
-                $scope.alerts = [];
-                $scope.alerts.push(msg);
             };
-
-            $scope.closeAlert = function (index) {
-                if($scope.alerts) {
-                    $scope.alerts.splice(index, 1);
-                }
-            };
-
         }]);

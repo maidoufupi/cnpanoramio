@@ -165,4 +165,13 @@ public interface UserSettingsManager {
 	 * @return
 	 */
 	public User signup(User user);
+	
+	/**
+	 * 关注/取消关注 用户
+	 * 
+	 * @param userId
+	 * @param followingId
+	 * @return
+	 */
+	public void following(User user, User following, boolean follow);
 }

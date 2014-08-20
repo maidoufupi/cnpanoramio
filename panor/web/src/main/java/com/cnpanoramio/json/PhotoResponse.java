@@ -36,7 +36,7 @@ public class PhotoResponse extends ExceptionResponse {
 	private PhotoCameraInfo camerainfo;
 	
 //	@XmlAttribute
-	private List<PhotoGps> gps;
+	private PhotoGps gps;
 
 	public PhotoProperties getProp() {
 		return prop;
@@ -54,11 +54,11 @@ public class PhotoResponse extends ExceptionResponse {
 		this.camerainfo = camerainfo;
 	}
 
-	public List<PhotoGps> getGps() {
+	public PhotoGps getGps() {
 		return gps;
 	}
 
-	public void setGps(List<PhotoGps> gps) {
+	public void setGps(PhotoGps gps) {
 		this.gps = gps;
 	}
 

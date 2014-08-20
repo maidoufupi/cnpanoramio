@@ -53,7 +53,7 @@ public class CommentQueryServiceImpl implements CommentQueryService {
 			c1.setId(comment.getId());
 			c1.setUserid(comment.getUser().getId());
 			c1.setUsername(comment.getUser().getUsername());
-			c1.setCreateTime(format.format(comment.getCreateTime().getTime()));
+//			c1.setCreateTime(format.format(comment.getCreateTime().getTime()));
 			c1.setComment(comment.getComment());
 			cs.add(c1);
 		}

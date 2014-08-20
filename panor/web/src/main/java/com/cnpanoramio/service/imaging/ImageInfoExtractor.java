@@ -140,8 +140,9 @@ public class ImageInfoExtractor {
 			e1.printStackTrace();
 		}
 		
+		// 有的图片经过修改，实际大小比例与详情中的大小比例不一致，所以要以实际大小为准
 		PhotoDetails detail = photo.getDetails();
-		if(null == detail.getPixelXDimension()) {
+//		if(null == detail.getPixelXDimension()) {
 			try {
 				Dimension size = parser.getImageSize(bsIns.getAll());
 				detail.setPixelXDimension((int)Math.round(size.getWidth()));
@@ -153,7 +154,7 @@ public class ImageInfoExtractor {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}		
+//		}		
 
 		try {
 			extraXmpInfo(parser);

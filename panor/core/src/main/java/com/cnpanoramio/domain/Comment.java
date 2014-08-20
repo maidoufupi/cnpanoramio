@@ -18,8 +18,13 @@ import org.appfuse.model.User;
 
 @Entity
 @Table(name = "comment")
-public class Comment {
+public class Comment extends BaseEntity {
     
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4705603625193289640L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -35,11 +40,11 @@ public class Comment {
 	@Column(length=1000)
 	private String comment;
 	
-	@Column(name="create_time")
-	private Calendar createTime;
-	
-	@Column(name="modify_time")
-	private Calendar modifyTime;
+//	@Column(name="create_time")
+//	private Calendar createTime;
+//	
+//	@Column(name="modify_time")
+//	private Calendar modifyTime;
 	
 	@OneToMany
 	private Set<Like> likes = new HashSet<Like>(0);
@@ -76,21 +81,21 @@ public class Comment {
 		this.comment = comment;
 	}
 
-	public Calendar getCreateTime() {
-		return createTime;
-	}
+//	public Calendar getCreateTime() {
+//		return createTime;
+//	}
+//
+//	public void setCreateTime(Calendar createTime) {
+//		this.createTime = createTime;
+//	}
+//
+//	public Calendar getModifyTime() {
+//		return modifyTime;
+//	}
 
-	public void setCreateTime(Calendar createTime) {
-		this.createTime = createTime;
-	}
-
-	public Calendar getModifyTime() {
-		return modifyTime;
-	}
-
-	public void setModifyTime(Calendar modifyTime) {
-		this.modifyTime = modifyTime;
-	}
+//	public void setModifyTime(Calendar modifyTime) {
+//		this.modifyTime = modifyTime;
+//	}
 
 	public Set<Like> getLikes() {
 		return likes;

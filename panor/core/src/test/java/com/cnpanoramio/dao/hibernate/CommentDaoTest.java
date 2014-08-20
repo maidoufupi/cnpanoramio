@@ -1,7 +1,7 @@
 package com.cnpanoramio.dao.hibernate;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -23,7 +23,6 @@ import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.domain.Comment;
 import com.cnpanoramio.domain.Photo;
-import com.cnpanoramio.domain.UserSettings;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -50,6 +49,7 @@ public class CommentDaoTest {
 	public void preMethodSetup() {
 		user = userDao.getUsers().get(0);
 		photo = new Photo();
+		
 		photo.setOwner(user);
 		photoDao.save(photo);
 		
@@ -57,14 +57,17 @@ public class CommentDaoTest {
 		comment.setPhoto(photo);
 		comment.setUser(userDao.getUsers().get(1));
 		comment.setComment("Very good");
-		comment.setCreateTime(Calendar.getInstance());
+		comment.setCreateDate(new Date());
+//		comment.setCreateTime(Calendar.getInstance());
+		comment = commentDao.save(comment);
 		comment = commentDao.save(comment);
 		
 		comment = new Comment();
-		comment.setCreateTime(Calendar.getInstance());
+//		comment.setCreateTime(Calendar.getInstance());
 		comment.setPhoto(photo);
 		comment.setUser(userDao.getUsers().get(1));
 		comment.setComment("Very good 2");
+		comment.setCreateDate(new Date());
 		comment = commentDao.save(comment);
 	}
 
@@ -88,11 +91,11 @@ public class CommentDaoTest {
 		Assert.assertEquals(commentDao.getCommentSize(photo.getId()).intValue(), 2);
 		List<Comment> comments = commentDao.getCommentPager(photo.getId(), 2, 1);
 		Assert.assertTrue(comments.size() == 1);
-		log.info(comments.get(0).getCreateTime().get(Calendar.YEAR));
-		log.info(comments.get(0).getCreateTime().get(Calendar.MONTH));
-		log.info(comments.get(0).getCreateTime().get(Calendar.DATE));
+//		log.info(comments.get(0).getCreateTime().get(Calendar.YEAR));
+//		log.info(comments.get(0).getCreateTime().get(Calendar.MONTH));
+//		log.info(comments.get(0).getCreateTime().get(Calendar.DATE));
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-		log.info(format1.format(comments.get(0).getCreateTime().getTime()));
+//		log.info(format1.format(comments.get(0).getCreateTime().getTime()));
 		log.info(comments.get(0).getComment());
 		log.info(comments.get(0).getPhoto().getOwner().getUsername());
 		log.info(comments.get(0).getUser().getUsername());

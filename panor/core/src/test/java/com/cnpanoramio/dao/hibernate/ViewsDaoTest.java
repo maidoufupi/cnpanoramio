@@ -55,7 +55,7 @@ public class ViewsDaoTest {
 	@Test
 	public void testPersisted() {
 		Views view = new Views();
-		view.setPk(new Views.ViewsPK(1L, appId));
+//		view.setPk(new Views.ViewsPK(1L, appId));
 		view = viewsDao.save(view);
 		log.info(view.getPk().getDate());
 		Assert.assertTrue(1L == view.getPk().getPhotoId());

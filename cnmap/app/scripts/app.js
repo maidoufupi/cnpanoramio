@@ -14,7 +14,7 @@ angular.module('ponmApp', [
   .config(['$logProvider', '$sceDelegateProvider',
   function ($logProvider, $sceDelegateProvider) {
         // enable log debug level
-        $logProvider.debugEnabled = true;
+        $logProvider.debugEnabled = false;
 
       $sceDelegateProvider.resourceUrlWhitelist([
           // Allow same origin resource loads.

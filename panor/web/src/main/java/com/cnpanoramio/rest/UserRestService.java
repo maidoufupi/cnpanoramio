@@ -32,8 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.UserSettings;
+import com.cnpanoramio.json.MessageResponse;
 import com.cnpanoramio.json.PhotoProperties;
-import com.cnpanoramio.json.PhotoResponse;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
 import com.cnpanoramio.json.UserTransfer;
@@ -246,7 +246,7 @@ public class UserRestService extends AbstractRestService {
 			me = UserUtil.getCurrentUser(userManager);
 			// me = userManager.get(1L);
 		} catch (UsernameNotFoundException ex) {
-			reponse.setStatus(PhotoResponse.Status.NO_AUTHORIZE.name());
+			reponse.setStatus(UserResponse.Status.NO_AUTHORIZE.name());
 			return reponse;
 		}
 		if (!file.isEmpty()) {
@@ -263,17 +263,17 @@ public class UserRestService extends AbstractRestService {
 				openInfo.setId(me.getId());
 				openInfo.setAvatar(avatar.getId());
 				reponse.setOpenInfo(openInfo);
-				reponse.setStatus(PhotoResponse.Status.OK.name());
+				reponse.setStatus(UserResponse.Status.OK.name());
 				return reponse;
 			} catch (Exception e) {
-				reponse.setStatus(PhotoResponse.Status.EXCEPTION.name());
+				reponse.setStatus(UserResponse.Status.EXCEPTION.name());
 				reponse.setInfo(e.getMessage());
 				return reponse;
 			}
 		} else {
 			log.debug("file is empty");
 
-			reponse.setStatus(PhotoResponse.Status.EXCEPTION.name());
+			reponse.setStatus(UserResponse.Status.EXCEPTION.name());
 			reponse.setInfo("file is empty");
 			return reponse;
 		}
@@ -311,7 +311,7 @@ public class UserRestService extends AbstractRestService {
 		openInfo.setId(user.getId());
 		openInfo.setTags(userSettingsManager.getUserTags(user));
 		reponse.setOpenInfo(openInfo);
-		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setStatus(UserResponse.Status.OK.name());
 		return reponse;
 	}
 	
@@ -328,7 +328,7 @@ public class UserRestService extends AbstractRestService {
 		openInfo.setId(me.getId());
 		openInfo.setTags(userSettingsManager.createTag(me, tag));		
 		reponse.setOpenInfo(openInfo);
-		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setStatus(UserResponse.Status.OK.name());
 		return reponse;
 	}
 	
@@ -345,7 +345,7 @@ public class UserRestService extends AbstractRestService {
 		openInfo.setId(me.getId());
 		openInfo.setTags(userSettingsManager.deleteTag(me, tag));		
 		reponse.setOpenInfo(openInfo);
-		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setStatus(UserResponse.Status.OK.name());
 		return reponse;
 	}
 	
@@ -359,7 +359,7 @@ public class UserRestService extends AbstractRestService {
 		openInfo.setId(user.getId());
 		openInfo.setTravels(travelService.getTravels(user));		
 		reponse.setOpenInfo(openInfo);
-		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setStatus(UserResponse.Status.OK.name());
 		return reponse;
 	}
 
@@ -370,7 +370,7 @@ public class UserRestService extends AbstractRestService {
 
 		userSettingsManager.emptyRecycleBin(Long.parseLong(userId));
 		
-		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setStatus(UserResponse.Status.OK.name());
 		return reponse;
 	}
 	
@@ -381,7 +381,7 @@ public class UserRestService extends AbstractRestService {
 		
 		reponse.setRecycles(userSettingsService.getRecycleBin(Long.parseLong(userId)));
 		
-		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setStatus(UserResponse.Status.OK.name());
 		return reponse;
 	}
 	
@@ -392,9 +392,10 @@ public class UserRestService extends AbstractRestService {
 
 		userSettingsManager.removeRecycle(Long.parseLong(userId), Long.parseLong(recycleId));
 		
-		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setStatus(UserResponse.Status.OK.name());
 		return reponse;
 	}
+	
 	@RequestMapping(value = "/{userId}/recycle/{recycleId}/cancel", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse cancelRecycle(@PathVariable String userId, @PathVariable String recycleId) {
@@ -402,7 +403,52 @@ public class UserRestService extends AbstractRestService {
 		
 		userSettingsManager.cancelRecycle(Long.parseLong(userId), Long.parseLong(recycleId));
 		
-		reponse.setStatus(PhotoResponse.Status.OK.name());
+		reponse.setStatus(UserResponse.Status.OK.name());
+		return reponse;
+	}
+	
+	@RequestMapping(value = "/{userId}/message", method = RequestMethod.GET)
+	@ResponseBody
+	public MessageResponse getMessages(@PathVariable String userId) {
+		MessageResponse reponse = new MessageResponse();
+		
+		
+		
+		reponse.setStatus(MessageResponse.Status.OK.name());
+		return reponse;
+	}
+	
+	@RequestMapping(value = "/{userId}/following/{followingId}", method = RequestMethod.POST)
+	@ResponseBody
+	public UserResponse following(@PathVariable String userId, @PathVariable String followingId) {
+		UserResponse reponse = new UserResponse();
+		User user = userManager.getUser(userId);
+		User me = UserUtil.getCurrentUser(userManager);
+		if(me.equals(user)) {
+			User following = userManager.getUser(followingId);
+			userSettingsManager.following(user, following, true);
+		}else {
+			throw new AccessDeniedException("用户 " + userId + " 未授权");
+		}
+		
+		reponse.setStatus(UserResponse.Status.OK.name());
+		return reponse;
+	}
+	
+	@RequestMapping(value = "/{userId}/following/{followingId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public UserResponse cancelFollowing(@PathVariable String userId, @PathVariable String followingId) {
+		UserResponse reponse = new UserResponse();
+		User user = userManager.getUser(userId);
+		User me = UserUtil.getCurrentUser(userManager);
+		if(me.equals(user)) {
+			User following = userManager.getUser(followingId);
+			userSettingsManager.following(user, following, false);
+		}else {
+			throw new AccessDeniedException("用户 " + userId + " 未授权");
+		}
+		
+		reponse.setStatus(UserResponse.Status.OK.name());
 		return reponse;
 	}
 }

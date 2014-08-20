@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.service.lbs.LatLng;
 
 public interface PhotoPanoramioIndexService {
 
@@ -24,8 +25,7 @@ public interface PhotoPanoramioIndexService {
 	 * @param height
 	 * @return
 	 */
-	public List<PhotoProperties> getPanoramio(Double swLat,
-			Double swLng, Double neLat, Double neLng, int level, MapVendor vendor, int width, int height);
+	public List<PhotoProperties> getPanoramio(LatLng sw, LatLng ne, int level, MapVendor vendor, int width, int height);
 	
 	/**
 	 * 获取地图上用户自己的图片信息
@@ -41,7 +41,7 @@ public interface PhotoPanoramioIndexService {
 	 * @param userId
 	 * @return
 	 */
-	public List<PhotoProperties> getUserPhotoPanoramio(Double swLat, Double swLng, Double neLat, Double neLng, int level, MapVendor vendor, int width, int height, Long userId);
+	public List<PhotoProperties> getUserPhotoPanoramio(LatLng sw, LatLng ne, int level, MapVendor vendor, int width, int height, Long userId);
 	
 	/**
 	 * 获取地图上用户收藏的图片信息
@@ -57,7 +57,7 @@ public interface PhotoPanoramioIndexService {
 	 * @param userId
 	 * @return
 	 */
-	public List<PhotoProperties> getUserFavPanoramio(Double swLat, Double swLng, Double neLat, Double neLng, int level, MapVendor vendor, int width, int height, Long userId);
+	public List<PhotoProperties> getUserFavPanoramio(LatLng sw, LatLng ne, int level, MapVendor vendor, int width, int height, Long userId);
 	
 	/**
 	 * 更新最新图片索引表
@@ -80,7 +80,7 @@ public interface PhotoPanoramioIndexService {
 	 * @param userId
 	 * @return
 	 */
-	public List<PhotoProperties> getLatestPanoramio(Double swLat, Double swLng, Double neLat, Double neLng, int level, MapVendor vendor, int width, int height);
+	public List<PhotoProperties> getLatestPanoramio(LatLng sw, LatLng ne, int level, MapVendor vendor, int width, int height);
 
 	/**
 	 * 
@@ -94,6 +94,6 @@ public interface PhotoPanoramioIndexService {
 	 * @param term
 	 * @return
 	 */
-	public List<PhotoProperties> search(Double swLat, Double swLng, Double neLat, Double neLng, int level, 
+	public List<PhotoProperties> search(LatLng sw, LatLng ne, int level, MapVendor vendor, 
 			int width, int height, String term, String type);
 }

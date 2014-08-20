@@ -3,7 +3,20 @@
 // --------------------------------------------------
 
 .navbar-second {
+  position: fixed;
+  width: 100%;
+  z-index: 1029;
+  top: 51px;
+
+  .navbar-right {
+    margin-right: 15px;
+  }
+
   .navbar {
+    border-radius: 0;
+    border: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
+    margin-bottom: 0;
     .nav {
       > li {
         padding: 0 15px;
@@ -93,23 +106,6 @@
   top: 0;
   left: 0;
   right: 0;
-}
-
-/** second navbar */
-.navbar-second {
-  width: 100%;
-  z-index: 1029;
-//  @include transition-linear(all);
-  .navbar {
-    border-radius: 0;
-    border: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
-    margin-bottom: 0;
-  }
-
-  .navbar-right {
-    margin-right: 15px;
-  }
 }
 
 // second navbar fix to top

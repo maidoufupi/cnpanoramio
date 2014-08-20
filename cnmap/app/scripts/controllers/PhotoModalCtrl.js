@@ -505,9 +505,9 @@ angular.module('ponmApp.controllers')
         });
     }])
     .controller('MapPhotoCtrl2', ['$window', '$log', '$timeout', '$scope', '$modalInstance', 'PhotoService',
-        'GeocodeService', 'photoId', 'ponmCtxConfig',
+        'GeocodeService', 'photoId', 'ponmCtxConfig', 'alertService',
         function ($window, $log, $timeout, $scope, $modalInstance, PhotoService, GeocodeService, photoId,
-                  ponmCtxConfig) {
+                  ponmCtxConfig, alertService) {
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
             $scope.apirest = $window.apirest;
@@ -519,6 +519,8 @@ angular.module('ponmApp.controllers')
             $scope.mapService = mapService;
 
             $scope.photoId = photoId;
+
+            $scope.alertService = angular.copy(alertService);
 
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel');
@@ -537,12 +539,15 @@ angular.module('ponmApp.controllers')
                 }, function(data) {
                     if(data.status == "OK") {
                         $log.debug("properties update successful");
-                        $scope.addAlert({type: "success", msg: "保存成功!"});
+                        $scope.alertService.clear();
+                        $scope.alertService.add("success", "保存成功!", 5000);
                     }else {
-                        $scope.addAlert({type: "danger", msg: "保存失败 " + data.status});
+                        $scope.alertService.clear();
+                        $scope.alertService.add("danger", "保存失败 " + data.status, 5000);
                     }
                 }, function(error) {
-                    $scope.addAlert({type: "danger", msg: "保存失败 " + (error.data && error.data.status)});
+                    $scope.alertService.clear();
+                    $scope.alertService.add("danger", "保存失败 " + (error.data && error.data.status), 5000);
                 });
 
             };
@@ -571,11 +576,11 @@ angular.module('ponmApp.controllers')
 
                 PhotoService.getGPSInfo({photoId: $scope.photoId}, function(res) {
                     if(res.status == "OK") {
-                        var gpsInfo = res.gps[0];
+                        var gpsInfo = res.gps;
                         if(gpsInfo) {
-                            addOrUpdateMarker($scope.file, gpsInfo.gps.lat, gpsInfo.gps.lng);
-                            mapEventListener.setCenter($scope.map, gpsInfo.gps.lat, gpsInfo.gps.lng);
-                            $scope.setPlace($scope.file, gpsInfo.gps.lat, gpsInfo.gps.lng, gpsInfo.gps.address);
+                            addOrUpdateMarker($scope.file, gpsInfo.point.lat, gpsInfo.point.lng);
+                            mapEventListener.setCenter($scope.map, gpsInfo.point.lat, gpsInfo.point.lng);
+                            $scope.setPlace($scope.file, gpsInfo.point.lat, gpsInfo.point.lng, gpsInfo.point.address);
                         }
                     }
                 })
@@ -653,24 +658,6 @@ angular.module('ponmApp.controllers')
             $scope.clearPlace = function () {
                 //$scope.hideMarker();
                 //delete $scope.file.mapVendor;
-            };
-
-            var alertPromise = null;
-            $scope.addAlert = function(msg) {
-                $scope.alerts = [];
-                $scope.alerts.push(msg);
-                if(alertPromise) {
-                    $timeout.cancel(alertPromise);
-                }
-                alertPromise = $timeout(function() {
-                    $scope.alerts = [];
-                }, 3000);
-            };
-
-            $scope.closeAlert = function (index) {
-                if($scope.alerts) {
-                    $scope.alerts.splice(index, 1);
-                }
             };
 
             $scope.mapOptions = {

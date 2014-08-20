@@ -1,8 +1,10 @@
 package com.cnpanoramio.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -40,8 +42,8 @@ public class UserSettings {
 	@JoinTable(name="user_tag")
 	private Set<Tag> tags = new HashSet<Tag>(0);
 	
-	@OneToMany
-	@JoinTable(name="user_travel")
+	@OneToMany(mappedBy="user")
+//	@JoinTable(name="user_travel")
 	private List<Travel> travels = new ArrayList<Travel>(0);
 	
 	// 地图供应商
@@ -108,18 +110,29 @@ public class UserSettings {
 	
 	// follower
 	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name="user_follower")
+	@JoinTable(name="user_follower",
+			joinColumns = @JoinColumn(name="id"),
+	        inverseJoinColumns = @JoinColumn(name="follower_id")
+	)
 	private Set<User> follower = new HashSet<User>(0);
 	
 	// following
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name="user_following")
-	private Set<User> following = new HashSet<User>(0);
+//	@OneToMany(fetch = FetchType.LAZY)
+//	@JoinTable(name="user_following")
+//	private Set<User> following = new HashSet<User>(0);
 	
 	// recycle
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
-	@JoinTable(name="user_recycle")
+	@OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+//	@JoinTable(name="user_recycle")
 	private Set<Recycle> recycle = new HashSet<Recycle>(0);
+	
+	// following
+	@OneToMany(mappedBy="owner", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
+	private Set<Circle> circles = new HashSet<Circle>(0);
+	
+	@OneToMany(mappedBy="user", fetch = FetchType.LAZY, orphanRemoval=true)
+//	@JoinTable(name="user_message")
+	private List<MessageQueue> messageQueue = new ArrayList<MessageQueue>(0);
 	
 	public User getUser() {
 		return user;
@@ -258,24 +271,32 @@ public class UserSettings {
 		this.travels = travels;
 	}
 
+	public Set<Circle> getCircles() {
+		return circles;
+	}
+
+	public void setCircles(Set<Circle> circles) {
+		this.circles = circles;
+	}
+
+	public List<MessageQueue> getMessageQueue() {
+		return messageQueue;
+	}
+
+	public void setMessageQueue(List<MessageQueue> messageQueue) {
+		this.messageQueue = messageQueue;
+	}
+
+	public Set<Recycle> getRecycle() {
+		return recycle;
+	}
+	
 	public Set<User> getFollower() {
 		return follower;
 	}
 
 	public void setFollower(Set<User> follower) {
 		this.follower = follower;
-	}
-
-	public Set<User> getFollowing() {
-		return following;
-	}
-
-	public void setFollowing(Set<User> following) {
-		this.following = following;
-	}		
-
-	public Set<Recycle> getRecycle() {
-		return recycle;
 	}
 
 	@SuppressWarnings("unused")

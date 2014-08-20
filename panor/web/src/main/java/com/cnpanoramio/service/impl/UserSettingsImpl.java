@@ -2,10 +2,10 @@ package com.cnpanoramio.service.impl;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -27,12 +27,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.AvatarDao;
+import com.cnpanoramio.dao.CircleDao;
 import com.cnpanoramio.dao.FavoriteDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.RecycleDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.dao.ViewsDao;
 import com.cnpanoramio.domain.Avatar;
+import com.cnpanoramio.domain.Circle;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
@@ -91,6 +93,9 @@ public class UserSettingsImpl implements UserSettingsManager {
 	
 	@Autowired
 	private RoleManager roleManager;
+	
+	@Autowired
+	private CircleDao circleDao;
 
 	@Override
 	public UserSettings save(UserSettings userSettings) {
@@ -402,6 +407,30 @@ public class UserSettingsImpl implements UserSettingsManager {
 //        saveMessage(request, getText("user.registered", user.getUsername(), locale));
 //        request.getSession().setAttribute(Constants.REGISTERED, Boolean.TRUE);
 		return null;
+	}
+
+	@Override
+	public void following(User user, User following, boolean follow) {
+		UserSettings userSetting = userSettingsDao.get(user.getId());
+		UserSettings followingSetting = userSettingsDao.get(following.getId());
+		Circle circle = null;
+		if(userSetting.getCircles().isEmpty()) {
+			circle = new Circle();
+			circle.setName("好友");
+			circle.setOwner(user);
+			circle.setCreateDate(new Date());
+			circle = circleDao.save(circle);
+		}else {
+			circle = (Circle) userSetting.getCircles().toArray()[0];
+		}
+
+		if(follow) {
+			circle.getUsers().add(following);
+			followingSetting.getFollower().add(user);
+		}else {
+			circle.getUsers().remove(following);
+			followingSetting.getFollower().remove(user);
+		}
 	}
 		
 }

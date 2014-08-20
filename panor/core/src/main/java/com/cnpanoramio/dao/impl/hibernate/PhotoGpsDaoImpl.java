@@ -10,7 +10,7 @@ import com.cnpanoramio.dao.PhotoGpsDao;
 import com.cnpanoramio.domain.PhotoGps;
 
 @Repository("photoGpsDao")
-public class PhotoGpsDaoImpl extends GenericDaoHibernate<PhotoGps,  PhotoGps.PhotoGpsPK> implements PhotoGpsDao {
+public class PhotoGpsDaoImpl extends GenericDaoHibernate<PhotoGps,  Long> implements PhotoGpsDao {
 
 	public PhotoGpsDaoImpl() {
 		super(PhotoGps.class);

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="../bower_components/sass-bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
+
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../scripts/ponmApp.vendor.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="../bower_components/angular-ui-map-qq/ui-map.js"></script>
+
+    <script type="text/javascript" src="../scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="../scripts/directives.js"></script>
+    <script type="text/javascript" src="../scripts/services/jsUtils.js"></script>
+    <style>
+        .marker {
+            /*border: 10px solid #0000ff;*/
+            width: 20px;
+            height: 35px;
+            background-image: url("../images/marker.png");
+        }
+        .marker img{
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+        window.ctx = "http://127.0.0.1:8080/panor-web";
+        window.apirest = window.ctx + "/api/rest";
+        window.staticCtx = "http://test.photoshows.cn";
+
+        angular.module('dragDropApp', [
+            'ngResource',
+            'ngDragDrop',
+            'ponmApp'
+        ])
+        .config(function () {
+        })
+        .run(['$log', function($log) {
+            $log.info("test app runing");
+        }])
+        .controller('DragDropCtrl', ['$scope', '$http', '$log', '$timeout', '$q', 'ponmCtxConfig',
+            function($scope, $http, $log, $timeout, $q, ponmCtxConfig) {
+
+                $scope.ctx = ponmCtxConfig.ctx;
+                $scope.staticCtx = ponmCtxConfig.staticCtx;
+                $scope.apirest = ponmCtxConfig.apirest;
+
+                $scope.dphotos = [];
+
+                $scope.onPhotoDrop = function(e, ui, item) {
+                    $log.debug(e);
+                    $log.debug(ui.position);
+                    $log.debug(ui.offset);
+                    $log.debug($scope.dphotos[$scope.dphotos.length-1].title);
+                };
+
+                $scope.onPhotoOver = function(e, ui) {
+                    $log.debug(e);
+                    $log.debug(ui.helper.addClass('marker'));
+                };
+            }])
+        .controller('FileUploadCtrl', ['$scope', '$http', '$log', '$timeout', '$q', 'ponmCtxConfig',
+            function($scope, $http, $log, $timeout, $q, ponmCtxConfig) {
+
+                $scope.ctx = ponmCtxConfig.ctx;
+                $scope.staticCtx = ponmCtxConfig.staticCtx;
+                $scope.apirest = ponmCtxConfig.apirest;
+
+                $scope.photos = [
+                    {
+                        title: 'Banana',
+                        href: 'http://test.photoshows.cn/4.jpg@1e_100w_100h_1c.jpg',
+                        type: 'image/jpeg',
+                        thumbnail: 'http://test.photoshows.cn/4.jpg@1e_20w_20h_1c.jpg'
+                    },
+                    {
+                        title: 'Apple',
+                        href: 'http://test.photoshows.cn/5.jpg@1e_100w_100h_1c.jpg',
+                        type: 'image/jpeg',
+                        thumbnail: 'http://test.photoshows.cn/5.jpg@1e_20w_20h_1c.jpg'
+                    }
+                    ,
+                    {
+                        title: 'Apple',
+                        href: 'http://test.photoshows.cn/6.jpg@1e_100w_100h_1c.jpg',
+                        type: 'image/jpeg',
+                        thumbnail: 'http://test.photoshows.cn/6.jpg@1e_20w_20h_1c.jpg'
+                    }
+                    ,{
+                        title: 'Apple',
+                        href: 'http://test.photoshows.cn/7.jpg@1e_100w_100h_1c.jpg',
+                        type: 'image/jpeg',
+                        thumbnail: 'http://test.photoshows.cn/7.jpg@1e_20w_20h_1c.jpg'
+                    }
+                ];
+            }]);
+    </script>
+
+</head>
+<body ng-app="dragDropApp" ng-controller="DragDropCtrl">
+
+    <div style="margin: 100px;">
+        <div style="width: 400px; height: 400px; background-color: blanchedalmond;"
+             drop="true"
+             ng-model='dphotos'
+             jqyoui-droppable="{multiple:true, onOver:'onPhotoOver', onDrop:'onPhotoDrop'}">
+            <ul>
+                <li ng-repeat="item in dphotos track by $index"
+                    drag="true"
+                    jqyoui-options="{revert: 'invalid', helper: 'clone'}"
+                    ng-model="dphotos"
+                    jqyoui-draggable="{index: {{$index}},animate:true}">{{item.title}}</li>
+                <li class="placeholder" ng-hide="hideMe()">Add your items here</li>
+            </ul>
+        </div>
+        <div ng-controller="FileUploadCtrl">
+            <ul>
+                <li ng-repeat="photo in photos"
+                    drag="true"
+                    jqyoui-options="{revert: 'invalid', helper: 'clone'}"
+                    ng-model="photos"
+                    jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep'}">
+                    <img ng-src="{{photo.href}}" style="width: 100px; height: 100px;">
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

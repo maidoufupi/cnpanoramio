@@ -249,7 +249,7 @@ public class GpsConverter {
 		}
 	}
 
-	public Point getEncryPoint(double x, double y) {
+	public LatLng getEncryPoint(double x, double y) {
 		Point point = new Point();
 		double x1, tempx;
 		double y1, tempy;
@@ -265,10 +265,12 @@ public class GpsConverter {
 		tempy = point.getY();
 		tempx = tempx / 3686400.0;
 		tempy = tempy / 3686400.0;
-		point = new Point();
-		point.setX(tempx);
-		point.setY(tempy);
-		return point;
+		
+		LatLng latLng = new LatLng();
+		latLng.setLat(tempy);
+		latLng.setLng(tempx);
+
+		return latLng;
 	}
 
 	protected String getEncryCoord(String coord, boolean flag) {
@@ -298,34 +300,34 @@ public class GpsConverter {
 
 	public static void main(String argv[]) throws Exception {
 		GpsConverter c = new GpsConverter();
-		Point p = c.getEncryPoint(102.702825064591, 25.0457617282833);		
-		System.out.println("昆明市 x:" + p.x + " y:" + p.y);
+		LatLng p = c.getEncryPoint(102.702825064591, 25.0457617282833);		
+		System.out.println("昆明市 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(102.485140720179, 24.9226075470813);
-		System.out.println("安宁市 x:" + p.x + " y:" + p.y);
+		System.out.println("安宁市 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(102.795792248383, 24.8909889571743);
-		System.out.println("呈贡县 x:" + p.x + " y:" + p.y);
+		System.out.println("呈贡县 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(102.702825064591, 25.0457617282833);
-		System.out.println("城区 x:" + p.x + " y:" + p.y);
+		System.out.println("城区 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(103.180145041594, 26.0851335734867);
-		System.out.println("东川区 x:" + p.x + " y:" + p.y);
+		System.out.println("东川区 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(102.484333184238, 25.238607620033);
-		System.out.println("富民县 x:" + p.x + " y:" + p.y);
+		System.out.println("富民县 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(102.740115855018, 25.0118811075002);
-		System.out.println("官渡区 x:" + p.x + " y:" + p.y);
+		System.out.println("官渡区 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(102.595106736332, 24.6679260310969);
-		System.out.println("晋宁县 x:" + p.x + " y:" + p.y);
+		System.out.println("晋宁县 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(102.468291511824, 25.5529734769783);
-		System.out.println("禄劝县 x:" + p.x + " y:" + p.y);
+		System.out.println("禄劝县 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(103.273299939618, 24.7568405347061);
-		System.out.println("石林县 x:" + p.x + " y:" + p.y);
+		System.out.println("石林县 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(103.041508523306, 25.3310846069293);
-		System.out.println("嵩明县 x:" + p.x + " y:" + p.y);
+		System.out.println("嵩明县 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(103.151790850516, 25.3343405555925);
-		System.out.println("寻甸县 x:" + p.x + " y:" + p.y);
+		System.out.println("寻甸县 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(102.65842000874, 25.0390786264324);
-		System.out.println("西山区 x:" + p.x + " y:" + p.y);
+		System.out.println("西山区 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(103.146517127597, 24.9222445338786);
-		System.out.println("宜良县 x:" + p.x + " y:" + p.y);
+		System.out.println("宜良县 x:" + p.lng + " y:" + p.lat);
 	}
 
 	public class Point {

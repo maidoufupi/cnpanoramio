@@ -33,7 +33,7 @@
         this.preBounds = null;
 
         this.opts = $.extend(
-            {clickable: true, auto: true},
+            {clickable: true, auto: true, mapVendor: "baidu"},
             opts);
 
         if (this.opts.map) {
@@ -42,12 +42,6 @@
 
         this.getMap = function () { //    Map    Returns the map on which this layer is displayed.
             return this.opts.map;
-        };
-
-        this.getTag = function () { //     string
-        };
-
-        this.getUserId = function () { //	string
         };
 
         /**
@@ -171,16 +165,6 @@
             if(this.opts.map) {
                 this.loadPhotos();
             }
-        };
-
-        this.setTag = function (tag/*:string*/) { //	None
-        };
-
-        this.setUserId = function (userId/*:string*/) { //	None
-        };
-
-        this.center_changed = function () {
-//            infoWindows = [];
         };
 
         this.getBounds = function() {
