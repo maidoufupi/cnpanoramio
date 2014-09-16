@@ -1,0 +1,64 @@
+<div id="person" class="panel panel-default">
+    <div class="panel-heading"><h2>个人档案</h2></div>
+    <div class="panel-body">
+        <form class="form-horizontal" role="form" name="accountForm" ng-submit="changeAccount()">
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">用户名称</label>
+                <div class="col-sm-9" >
+                    <input class="text form-control" id="name"
+                           ng-model="settings.name"
+                           name="name"
+                           size="40" >
+                    <span class="form-help">用户名称将显示在您的照片下方、讨论区帖子等等… </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="homepage_url" class="col-sm-3 control-label">你的网页</label>
+                <div class="col-sm-9" >
+                    <input class="text form-control" id="homepage_url"
+                           ng-model="settings.homepage_url"
+                           name="homepageUrl" size="55" >
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="homepage_url" class="col-sm-3 control-label">你的头像</label>
+                <div class="col-sm-9" >
+                    <div>
+                        <img id="avatar_picture" class="img-rounded"
+                             ng-src="{{staticCtx}}/avatar{{user.avatar || 1}}.png"
+                             alt="您的头像">
+                        <a href="" ng-click="changeAvatar()" id="change_avatar">更改头像</a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-3 control-label">写一些关于自己的</label>
+                <div class="col-sm-9" >
+                    <textarea id="description" name="description"
+                              ng-model="settings.description"
+                              cols="55"	rows="9" class="form-control"></textarea>
+                </div>
+            </div>
+            <hr>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input class="btn btn-primary" type="submit" value="保存更改"
+                           ng-disabled="saving||!accountForm.$dirty">
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div id="delete_account" class="panel panel-danger">
+    <div class="panel-heading">
+        <h2>删除帐户</h2>
+    </div>
+    <div class="panel-body">
+        <p>
+            如果您希望删除自己的帐户，请点击<a href="#">此处</a>。点击后，我们会先向您确认，然后再删除帐户。
+        </p>
+    </div>
+</div>

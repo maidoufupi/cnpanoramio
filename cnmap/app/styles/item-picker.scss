@@ -1,0 +1,25 @@
+/** item-picker */
+item-picker, *[item-picker] {
+  .label.label-selectable {
+    cursor: pointer;
+    margin: 2px;
+    float: left;
+  }
+
+  .dropdown.dropdown-picker {
+    display: block;
+    .dropdown-toggle {
+      .label.label-info {
+        display: inline-block;
+      }
+    }
+    .dropdown-menu {
+      //    max-width: 320px;
+      padding: 2px;
+      .dropdown-body {
+        //      max-width: 300px;
+        display: inline-block;
+      }
+    }
+  }
+}

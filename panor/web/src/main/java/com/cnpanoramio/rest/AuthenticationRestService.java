@@ -28,6 +28,7 @@ import com.cnpanoramio.json.AuthResponse;
 import com.cnpanoramio.json.AuthResponse.LoginRequest;
 import com.cnpanoramio.json.AuthResponse.SignupCheckRes;
 import com.cnpanoramio.service.UserSettingsManager;
+import com.cnpanoramio.service.UserSettingsService;
 
 @Controller
 @RequestMapping("/api/rest/auth")
@@ -39,6 +40,8 @@ public class AuthenticationRestService extends AbstractRestService {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private UserSettingsManager userSettingsManager;
+	@Autowired
+	private UserSettingsService userSettingsService;
 	
 	@ResponseBody
 	@RequestMapping(value="/login", method = RequestMethod.POST)
@@ -59,7 +62,7 @@ public class AuthenticationRestService extends AbstractRestService {
 	            HttpSession session = request.getSession(true);
 	            session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 	            User user = userSettingsManager.getUser(loginRequest.getUsername());
-	            response.setUser(userSettingsManager.getOpenInfo(user.getId()));
+	            response.setUser(userSettingsService.getOpenInfo(user, user));
 	            response.setStatus(AuthResponse.Status.OK.name());
 
 	        }else{
@@ -77,20 +80,30 @@ public class AuthenticationRestService extends AbstractRestService {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/logout", method = RequestMethod.POST)
-	public AuthResponse logout(HttpServletRequest request) {
+	@RequestMapping(value="/login/check", method = RequestMethod.POST)
+	public AuthResponse loginCheck(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
 		AuthResponse response = new AuthResponse();
-		
-		try {
-			SecurityContextHolder.getContext().setAuthentication(null);
-			response.setStatus(AuthResponse.Status.OK.name());
-		}catch (Exception e) {    
-	    	e.printStackTrace();
-	    	response.setStatus(AuthResponse.Status.EXCEPTION.name()); 
-	    	log.debug("logout exception");
-	    }
+		response.setStatus(AuthResponse.Status.OK.name());
+		log.debug("username: " + loginRequest.getUsername() + " password: " + loginRequest.getPassword());
+		userSettingsService.loginCheck(loginRequest);
 		return response;
 	}
+	
+//	@ResponseBody
+//	@RequestMapping(value="/logout", method = RequestMethod.POST)
+//	public AuthResponse logout(HttpServletRequest request) {
+//		AuthResponse response = new AuthResponse();
+//		
+//		try {
+//			SecurityContextHolder.getContext().setAuthentication(null);
+//			response.setStatus(AuthResponse.Status.OK.name());
+//		}catch (Exception e) {    
+//	    	e.printStackTrace();
+//	    	response.setStatus(AuthResponse.Status.EXCEPTION.name()); 
+//	    	log.debug("logout exception");
+//	    }
+//		return response;
+//	}
 	
 	@ResponseBody
 	@RequestMapping(value="/login", method = RequestMethod.GET)
@@ -102,7 +115,7 @@ public class AuthenticationRestService extends AbstractRestService {
 			Authentication auth = securityContext.getAuthentication();
 			String name = auth.getName(); //get logged in username
 			User user = userSettingsManager.getUser(name);
-	        response.setUser(userSettingsManager.getOpenInfo(user.getId()));
+	        response.setUser(userSettingsManager.getOpenInfo(user));
 			response.setStatus(AuthResponse.Status.OK.name());
 			
 			for(Cookie cook : request.getCookies()) {
@@ -138,11 +151,11 @@ public class AuthenticationRestService extends AbstractRestService {
 		return response;
 	}
 	
-	@ResponseBody
-	@RequestMapping(value="/signup", method = RequestMethod.POST)
-	public AuthResponse signup(HttpServletRequest request, HttpServletResponse httpResponse) {
-		AuthResponse response = new AuthResponse();
-		
-		return response;
-	}
+//	@ResponseBody
+//	@RequestMapping(value="/signup", method = RequestMethod.POST)
+//	public AuthResponse signup(HttpServletRequest request, HttpServletResponse httpResponse) {
+//		AuthResponse response = new AuthResponse();
+//		
+//		return response;
+//	}
 }

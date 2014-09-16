@@ -1,25 +1,4 @@
 
-
-//.interim-info-card {
-//  .interim-tags li {
-//    display: inline;
-//    list-style-type: none;
-//  }
-//
-//  .interim-tags li:before {
-//    content: " \002022 ";
-//  }
-//}
-//
-//.thumb-overlay {
-//  position: absolute;
-//  bottom: 0;
-//  left: 0;
-//  display: block;
-//  background: rgba(88, 88, 59, 0.24);
-//  width: 100%;
-//}
-
 /** login page **********************/
 .login-container {
   height: 100%;
@@ -118,25 +97,14 @@
   }
 }
 
-.signup {
-  .form-control.ng-dirty.ng-invalid {
-    border: 1px solid red;
-  }
+.password-strength {
+  display:inline;
+  list-style:none;
+  margin:0;
+  margin-left:15px;
+  padding:0;
+  vertical-align:2px;
 
-  input.ng-pristine + ul#strength {
-    display:none;
-  }
-  ul.password-strength {
-    display:inline;
-    list-style:none;
-    margin:0;
-    margin-left:15px;
-    padding:0;
-    vertical-align:2px;
-  }
-  .point:last {
-    margin:0 !important;
-  }
   .point {
     background:#DDD;
     border-radius:2px;
@@ -145,8 +113,267 @@
     margin-right:1px;
     width:20px;
   }
+
+}
+
+.signup {
+  .form-control.ng-dirty.ng-invalid {
+    border: 1px solid red;
+  }
+
+  input.ng-pristine + ul#strength {
+    display:none;
+  }
+
+//  .point:last {
+//    margin:0 !important;
+//  }
+
   .footer {
     position:fixed;
     bottom:5px;
   }
 }
+
+// user page
+.user {
+  .navbar-second {
+    position: relative;
+    top: 0;
+    .navbar {
+//      box-shadow: initial;
+    }
+    .ProfileCanopy-card {
+      @include box-sizing(border-box);
+      height: 51px;
+      max-width: 100%;
+      overflow: hidden;
+      padding-top: 51px;
+      transition: padding-top .3s;
+      float: left;
+      .ProfileCardMini {
+        padding: 8px;
+        .ProfileCardMini-avatarImage {
+          border-radius: 4px;
+          height: 36px;
+          max-width: 100%;
+          width: 36px;
+        }
+
+        .media-body {
+          .media-heading {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-second.navbar-second-top {
+    position: fixed;
+    z-index: 1030;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
+    .ProfileCanopy-card {
+      padding-top: 0;
+    }
+  }
+
+  .container.user {
+    padding: 10px 0;
+  }
+}
+
+.user-followers {
+
+  .follower {
+    padding: 0 5px;
+    margin-bottom: 10px!important;
+  }
+
+  .block {
+    width: 10px;
+    height: 1000px;
+  }
+}
+
+.user-following {
+
+  .following {
+    padding: 0 5px;
+    margin-bottom: 10px!important;
+  }
+
+  .block {
+    width: 10px;
+    height: 1000px;
+  }
+}
+
+.ProfileCard {
+  max-width: 288px;
+//  height: 300px;
+  text-align: left;
+//  border: 1px solid #e1e8ed;
+  @include box-sizing(border-box);
+
+  .ProfileCard-bg {
+    width: 100%;
+    height: 90px;
+    display: block;
+    overflow: hidden;
+    img {
+      width: 100%;
+      @include border-radius(2px);
+    }
+  }
+  .ProfileCard-content {
+    position: relative;
+    margin: 10px 15px;
+    padding: 15px 0;
+    .ProfileCard-avatarLink {
+      @include border-radius(6px);
+      display: inline-block;
+      margin: -45px 2px 0 -3px;
+      position: relative;
+      vertical-align: bottom;
+      z-index: 1;
+      height: 70px;
+      width: 70px;
+      border: 3px solid white;
+      img {
+        @include border-radius(6px);
+      }
+    }
+    .ProfileCard-avatarImage {
+      border-radius: 5px;
+      display: block;
+      height: 70px;
+      width: 70px;
+    }
+
+    .ProfileCard-actions {
+      display: inline-block;
+      height: 35px;
+      margin: 0 0 -4px 0;
+      position: absolute;
+      right: 0;
+      vertical-align: bottom;
+    }
+
+    .ProfileCard-userFields {
+      height: 150px;
+      .ProfileCard-desc {
+        margin-top: 5px ;
+      }
+      .ProfileCard-desc.scroller {
+        position: relative;
+        max-height: 120px;
+        overflow-y: hidden;
+      }
+    }
+  }
+
+}
+
+.WhoToFollow {
+  margin-top: 10px;
+  padding: 15px;
+  .WhoToFollow-header {
+    margin-bottom: 10px;
+  }
+  .WhoToFollow-title {
+    color: #66757f;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1;
+    margin: 0;
+  }
+
+  .WhoToFollow-users {
+    >.account-summary {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+.account-summary{
+  position: relative;
+  display: block;
+  min-height: 48px;
+  .dismiss {
+    margin-top: 0;
+    color: #ccd6dd;
+  }
+
+  .content {
+    margin-left: 58px;
+    margin-right: 20px;
+  }
+
+  .avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+.dismiss {
+  float: right;
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 5px;
+  -moz-force-broken-image-icon: 1;
+}
+
+.user-card {
+  width: 230px;
+  z-index: 1999;
+}
+//.user-card:hover {
+//  display: block !important;
+//}
+
+.ProfileSidebar {
+  .Footer {
+    border-radius: 0;
+    border: 0;
+    margin-top: 20px;
+    padding-right: 15px;
+    padding-left: 15px;
+    text-align: center;
+    .u-cf {
+      padding: 0;
+    }
+    .Footer-item {
+      display: inline-block;
+      color: grey;
+    }
+    a {
+      color: grey;
+    }
+  }
+}
+
+.Trends {
+  margin-top: 10px;
+  padding: 15px;
+  h5 {
+    margin: 0;
+    display: inline-block;
+  }
+}
+
+.follow-button {
+  .button-text {
+    font-weight: bold;
+  }
+}
+

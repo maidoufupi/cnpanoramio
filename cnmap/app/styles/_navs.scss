@@ -5,7 +5,7 @@
 .nav.nav-tray {
   > li {
     > a {
-      border-bottom-width: 2px;
+      border-bottom-width: 3px;
       border-bottom-style: solid;
       border-bottom-color: transparent;
       @include transition-linear(border-bottom-color);

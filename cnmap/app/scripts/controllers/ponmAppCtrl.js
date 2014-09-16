@@ -3,7 +3,9 @@
  */
 'use strict';
 
-angular.module('ponmApp.Index', ['ponmApp', 'photosApp', 'mapsApp', 'userSettingsApp', 'adminApp', 'indexApp',
+angular.module('ponmApp.Index', ['ponmApp', 'ponmApp.photos', 'ponmApp.maps', 'ponmApp.settings', 'adminApp', 'indexApp',
+    'ponmApp.dynamic',
+    'ponmApp.user',
     'ui.router',
     'ui.map',
     'ui.bootstrap'])
@@ -59,7 +61,47 @@ angular.module('ponmApp.Index', ['ponmApp', 'photosApp', 'mapsApp', 'userSetting
                 })
                 ;
         }])
+    .run(['$rootScope', '$state', 'localStorageService', 'AuthService',
+    function($rootScope, $state, localStorageService, AuthService) {
+        $rootScope.$on('$stateChangeStart',
+            function(event, toState, toParams, fromState, fromParams){
 
+                var unauthStateName = "unauthState";
+
+                // 登录后转到之前未授权的页面
+                var unauthState = localStorageService.get(unauthStateName);
+                if(toState.name != "login") {
+                    if(unauthState) {
+                        AuthService.checkLogin().then(function(){
+                            $state.go(unauthState, {});
+                        }, function(){
+                        });
+                        localStorageService.set(unauthStateName, "");
+                    }
+                }
+
+                // 用户是否登录的检查，查看这些页面时需要登录
+                if(toState.name == "maps.dynamic"
+                    || toState.name == "maps.upload"
+                    || toState.name == "dynamic.my"
+                    || toState.name == "photos") {
+                    AuthService.checkLogin().then(function(){
+                    }, function(){
+                        event.preventDefault();
+                        if(fromState.name == "login") {
+                            $state.go("maps.popular", {});
+                        }else {
+                            localStorageService.set(unauthStateName, toState.name);
+                            $state.go("login", {});
+                        }
+
+                    });
+                }
+
+                // transitionTo() promise will be rejected with
+                // a 'transition prevented' error
+            })
+    }])
     .controller('IndexCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'PhotoService', 'UserService', '$modal',
         'ponmCtxConfig', '$log', '$state', '$stateParams', 'safeApply', 'jsUtils', 'HashStateManager', 'AuthService',

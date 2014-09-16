@@ -1,6 +1,11 @@
 package com.cnpanoramio.service;
 
+import org.appfuse.model.User;
+
+import com.cnpanoramio.domain.Comment;
 import com.cnpanoramio.domain.Like;
+import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.Travel;
 
 public interface LikeManager {
 
@@ -10,7 +15,9 @@ public interface LikeManager {
 	 * @param id
 	 * @return
 	 */
-	public Like likePhoto(Long id);
+	public Like likePhoto(User user, Long id);
+	
+	public void unLikePhoto(User user, Long id);
 	
 	/**
 	 * 赞或取消 评论
@@ -18,7 +25,8 @@ public interface LikeManager {
 	 * @param id
 	 * @return
 	 */
-	public Like likeComment(Long id);
+	public Like likeComment(User user, Long id);
+	public void unLikeComment(User user, Long id);
 	
 	/**
 	 * 赞或取消 旅行
@@ -26,5 +34,10 @@ public interface LikeManager {
 	 * @param id
 	 * @return
 	 */
-	public Like likeTravel(Long id);
+	public Like likeTravel(User user, Long id);
+	public void unLikeTravel(User user, Long id);
+	
+	public Like getLikePhoto(User user, Photo photo);
+	public Like getLikeComment(User user, Comment comment);
+	public Like getLikeTravel(User user, Travel travel);
 }

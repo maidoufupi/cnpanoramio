@@ -1,7 +1,5 @@
 package com.cnpanoramio.service.impl;
 
-import java.util.Iterator;
-
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,36 +7,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cnpanoramio.dao.MessageDao;
 import com.cnpanoramio.dao.MessageQueueDao;
 import com.cnpanoramio.dao.UserSettingsDao;
-import com.cnpanoramio.domain.Message;
-import com.cnpanoramio.domain.MessageQueue;
-import com.cnpanoramio.domain.UserSettings;
-import com.cnpanoramio.service.MessageManager;
+import com.cnpanoramio.service.MessageOperateManager;
+import com.cnpanoramio.service.MessageQueueManager;
+import com.cnpanoramio.service.UserSettingsManager;
 
-public abstract class AbstractMessageManagerImpl implements MessageManager {
+public abstract class AbstractMessageManagerImpl implements MessageOperateManager {
 
 	private UserManager userManager;
 	
 	private UserSettingsDao userSettingsDao;
 	
+	private UserSettingsManager userSettingsManager;
+	
 	private MessageDao messageDao;
 	
 	private MessageQueueDao messageQueueDao;
 	
-	public void publishMessage(Long userId, Message message) {
-		UserSettings user = userSettingsDao.get(userId);
-		Iterator<User> iter = user.getFollower().iterator();
-		while(iter.hasNext()) {
-			User follower = iter.next();
-			MessageQueue queue = messageQueueDao.getMessageQueue(follower, message);
-			if(null == queue) {
-				queue = new MessageQueue();
-				queue.setUser(follower);
-				queue.setMessage(message);
-				queue = messageQueueDao.save(queue);
-			}else {
-				messageQueueDao.save(queue);
-			}
-		}
+	private MessageQueueManager messageQueueManager;
+	
+	protected User getUser(Long id) {
+		return getUserManager().get(id);
 	}
 
 	public UserManager getUserManager() {
@@ -75,6 +63,24 @@ public abstract class AbstractMessageManagerImpl implements MessageManager {
 	@Autowired
 	public void setMessageQueueDao(MessageQueueDao messageQueueDao) {
 		this.messageQueueDao = messageQueueDao;
+	}
+
+	public MessageQueueManager getMessageQueueManager() {
+		return messageQueueManager;
+	}
+
+	@Autowired
+	public void setMessageQueueManager(MessageQueueManager messageQueueManager) {
+		this.messageQueueManager = messageQueueManager;
+	}
+
+	public UserSettingsManager getUserSettingsManager() {
+		return userSettingsManager;
+	}
+
+	@Autowired
+	public void setUserSettingsManager(UserSettingsManager userSettingsManager) {
+		this.userSettingsManager = userSettingsManager;
 	}
 	
 }

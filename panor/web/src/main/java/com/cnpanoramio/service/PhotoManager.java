@@ -216,4 +216,12 @@ public interface PhotoManager {
 	 * @return
 	 */
 	public Collection<PhotoProperties> getUserPhotoPageByTag(Long userId, String tag, int pageSize, int pageNo);
+	
+	/**
+	 * 获取用户没有旅行相册的图片
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<Photo> getNoTravel(User user);
 }

@@ -20,7 +20,6 @@ import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -32,7 +31,7 @@ import com.cnpanoramio.dao.FavoriteDao;
 import com.cnpanoramio.dao.LikeDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.PhotoGpsDao;
-import com.cnpanoramio.dao.RecycleDao;
+import com.cnpanoramio.dao.TagDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Favorite;
 import com.cnpanoramio.domain.Like;
@@ -42,12 +41,14 @@ import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.Point;
 import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
+import com.cnpanoramio.domain.Travel;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
+import com.cnpanoramio.service.RecycleManager;
 import com.cnpanoramio.service.imaging.ImageInfoExtractor;
 import com.cnpanoramio.service.lbs.BDConverter;
 import com.cnpanoramio.service.lbs.GpsConverter;
@@ -69,6 +70,9 @@ public class PhotoServiceImpl implements PhotoManager {
 
 	@Autowired
 	private UserSettingsDao userSettingsDao = null;
+	
+	@Autowired
+	private TagDao tagDao;
 
 	@Autowired
 	private PhotoGpsDao photoGpsDao = null;
@@ -83,7 +87,7 @@ public class PhotoServiceImpl implements PhotoManager {
 	private LikeDao likeDao = null;
 	
 	@Autowired
-	private RecycleDao recycleDao = null;
+	private RecycleManager recycleManager;
 	
 	@Autowired
 	public void setUserManager(UserManager userManager) {
@@ -186,6 +190,7 @@ public class PhotoServiceImpl implements PhotoManager {
 		photo = photoDao.save(photo);
 		
 		// 再、保存原始photo file
+		// TODO debug
 		fileService.saveFile(FileService.TYPE_IMAGE, photo.getId(),
 				photo.getFileType(), is1);		
 
@@ -200,9 +205,9 @@ public class PhotoServiceImpl implements PhotoManager {
 		}
 		
 		// 第四、新线程运行生成图片缩略图
-		is1 = new ByteArrayInputStream(content);
-		new Thread(new SaveThumbnailsRunnable(is1, photo.getId(),
-				photo.getFileType())).start();
+//		is1 = new ByteArrayInputStream(content);
+//		new Thread(new SaveThumbnailsRunnable(is1, photo.getId(),
+//				photo.getFileType())).start();
 
 		return photo;
 	}
@@ -213,6 +218,7 @@ public class PhotoServiceImpl implements PhotoManager {
 	 * @author any
 	 * 
 	 */
+	@Deprecated
 	private class SaveThumbnailsRunnable implements Runnable {
 
 		private InputStream ins;
@@ -270,15 +276,12 @@ public class PhotoServiceImpl implements PhotoManager {
 			photo.setDescription(properties.getDescription());
 		}
 		if (null != properties.getPoint()) {
-			if (properties
-					.getPoint().getLat() != 0
-					||  properties
-							.getPoint().getLng() != 0) {
-				updatePhotoGps(photo, properties.getPoint().getLat(),
-						properties.getPoint().getLng(), properties.getPoint()
-								.getAddress(),
-						PhotoUtil.getMapVendor(properties.getVendor()));
-			}
+
+			updatePhotoGps(photo, properties.getPoint().getLat(),
+					properties.getPoint().getLng(), properties.getPoint()
+							.getAddress(),
+					PhotoUtil.getMapVendor(properties.getVendor()));
+			
 		}
 //		if(null != properties.getFileSize()) {
 //			photo.setFileSize(properties.getFileSize());
@@ -304,21 +307,24 @@ public class PhotoServiceImpl implements PhotoManager {
 	@Override
 	public PhotoProperties delete(Long id) {
 		User me = UserUtil.getCurrentUser(userManager);
-		UserSettings settings = userSettingsDao.get(me.getId());
 		Photo photo = photoDao.get(id);
 		photo.setDeleted(true);
-		Recycle recycle = new Recycle();
-		recycle.setUser(settings);
-		recycle.setCreateTime(new Date());
-		recycle.setRecyType(Recycle.CON_TYPE_PHOTO);
-		recycle.setRecyId(photo.getId());
-		recycle = recycleDao.save(recycle);
-		settings.getRecycle().add(recycle);
+		
+		recycleManager.saveRecycle(me, Recycle.RecycleType.photo, photo.getId());
+		
+//		Recycle recycle = new Recycle();
+//		recycle.setUser(settings);
+//		recycle.setCreateDate(new Date());
+//		recycle.setRecyType(Recycle.RecycleType.photo);
+//		recycle.setRecyId(photo.getId());
+//		recycle = recycleDao.persist(recycle);
+//		settings.getRecycle().add(recycle);
 		
 		// 删除对应旅行
-		if(null != photo.getTravelSpot()) {
-			photo.getTravelSpot().getPhotos().remove(photo);
-		}
+//		if(null != photo.getTravelSpot()) {
+//			photo.getTravelSpot().getPhotos().remove(photo);
+//		}
+//		photo.setTravelSpot(null);
 				
 		PhotoProperties pp = PhotoUtil.transformProperties(photo);
 				
@@ -418,7 +424,7 @@ public class PhotoServiceImpl implements PhotoManager {
 
 		PhotoDetails detail = photo.getDetails();
 		Point point = null;
-		if (latDouble != 0 || lngDouble != 0) {
+		if ((null != latDouble && latDouble != 0) || (null!=lngDouble && lngDouble != 0)) {
 			if (vendor == MapVendor.gps) {
 				// 用户设置GPS为标准GPS坐标
 				// 转化GPS坐标为火星坐标
@@ -557,7 +563,7 @@ public class PhotoServiceImpl implements PhotoManager {
 		}else {
 			Point pointOrign = gps.getPoint();
 			// 如果点没有高度信息，则保留原有高度属性值
-			if(point.getAlt() == 0) {
+			if(null == point.getAlt()) {
 				point.setAlt(pointOrign.getAlt());
 			}
 			gps.setPoint(point);
@@ -574,22 +580,15 @@ public class PhotoServiceImpl implements PhotoManager {
 
 		photo.getTags().clear();
 		for (Tag tag : tags) {
-			Tag t = userSettingsDao.getOrCreateUserTag(user, tag.getTag());
+			Tag t = tagDao.getOrCreateUserTag(user, tag.getContent());
 			photo.addTag(t);
-			t.getPhoto().add(photo);
 		}
 		return photo.getTags();
 	}
 
 	@Override
 	public PhotoGps getGPSInfo(Long id, MapVendor vendor) {
-
-		if (null == vendor) {
-			vendor = MapVendor.gaode;
-		} 
-
-		return photoDao.get(id).getGps().get(vendor);
-		
+		return photoDao.get(id).getGps().get(vendor);		
 	}
 
 	@Override
@@ -721,8 +720,13 @@ public class PhotoServiceImpl implements PhotoManager {
 		Photo photo = photoDao.get(id);
 		checkIsMyPhoto(photo);
 		photo.setDeleted(false);
+		
+		// 如果图片有旅行相册并被删除，则恢复相册
 		if(null != photo.getTravelSpot()) {
-			photo.getTravelSpot().getPhotos().add(photo);
+			Travel travel = photo.getTravelSpot().getTravel();
+			if(travel.isDeleted()) {
+				travel.setDeleted(false);
+			}
 		}		
 						
 		PhotoProperties pp = PhotoUtil.transformProperties(photo);
@@ -735,7 +739,13 @@ public class PhotoServiceImpl implements PhotoManager {
 		Photo photo = this.getPhoto(id);
 		// 删除oss图片文件
 		fileService.deleteFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType());
+
 		// 删除数据库记录
-//		photoDao.remove(id);
+		photoDao.remove(photo);
+	}
+
+	@Override
+	public List<Photo> getNoTravel(User user) {
+		return photoDao.getNoTravel(user);
 	}
 }

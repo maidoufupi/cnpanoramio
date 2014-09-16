@@ -10,9 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.appfuse.model.User;
 
@@ -33,8 +34,12 @@ public class Circle extends BaseEntity {
 	@JoinColumn(name="owner_id")
 	private User owner;
 	
-	@OneToMany
-	@JoinTable(name="circle_users")
+	@ManyToMany
+	@JoinTable(name="circle_users", 
+			joinColumns = @JoinColumn(name = "circle_id"),
+			inverseJoinColumns = @JoinColumn(name = "users_id"),
+			uniqueConstraints = @UniqueConstraint(name = "uq_circle_users",
+				columnNames = {"circle_id", "users_id"}))
 	private Set<User> users = new HashSet<User>(0);
 	
 	@Column

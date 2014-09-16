@@ -9,7 +9,7 @@
     <link rel="icon" href="<c:url value="/images/favicon.ico"/>"/>
     <title><decorator:title/> | <fmt:message key="webapp.name"/></title>
 
-    <link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>">
+    <link rel="stylesheet" href="<c:url value="/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css"/>">
     <link rel="stylesheet" href="<c:url value="/bower_components/angular-xeditable/dist/css/xeditable.css"/>">
     <!-- Bootstrap theme -->
     <%-- <link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap-theme.min.css"/>"> --%>

@@ -5,8 +5,7 @@
     <div ng-repeat="photo in photos"
          ng-controller="PhotosPhotoCtrl"
          waypoint="{'offset': 130, id: {id: photo.id, date: photo.create_time}}"
-         class="photo"
-         ponm-hover=">.action">
+         class="photo">
         <a href=""
            ng-click="displayPhoto(photo.id)">
             <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_200w_200h_1c.jpg"

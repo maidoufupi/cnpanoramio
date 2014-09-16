@@ -19,6 +19,7 @@ import org.codehaus.jackson.map.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -74,42 +75,42 @@ public class PhotoRestService extends AbstractRestService {
 
 	@Override
 	protected PhotoResponse responseFactory() {
-		PhotoResponse reponse = new PhotoResponse();
-		reponse.setStatus(PhotoResponse.Status.OK.name());
-		return reponse;
+		PhotoResponse response = new PhotoResponse();
+		response.setStatus(PhotoResponse.Status.OK.name());
+		return response;
 	}
 
 	@RequestMapping(value = "/{photoId}/favorite", method = RequestMethod.PUT)
 	@ResponseBody
 	public PhotoResponse markFavorite(@PathVariable String photoId) {
 
-		PhotoResponse reponse = new PhotoResponse();
+		PhotoResponse response = new PhotoResponse();
 
 		User me = UserUtil.getCurrentUser(userManager);
 		Long id = Long.parseLong(photoId);
 
 		try {
 			photoService.markBest(id, me.getId(), true);
-			reponse.setStatus(PhotoResponse.Status.OK.name());
+			response.setStatus(PhotoResponse.Status.OK.name());
 		} catch (DataAccessException ex) {
-			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+			response.setStatus(PhotoResponse.Status.NO_ENTITY.name());
 		}
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{photoId}/favorite", method = RequestMethod.DELETE)
 	@ResponseBody
 	public PhotoResponse removeFvorite(@PathVariable String photoId) {
-		PhotoResponse reponse = new PhotoResponse();
+		PhotoResponse response = new PhotoResponse();
 		User me = UserUtil.getCurrentUser(userManager);
 		Long id = Long.parseLong(photoId);
 		try {
 			photoService.markBest(id, me.getId(), false);
-			reponse.setStatus(PhotoResponse.Status.OK.name());
+			response.setStatus(PhotoResponse.Status.OK.name());
 		} catch (DataAccessException ex) {
-			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+			response.setStatus(PhotoResponse.Status.NO_ENTITY.name());
 		}
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{photoId}/properties", method = RequestMethod.POST)
@@ -154,16 +155,16 @@ public class PhotoRestService extends AbstractRestService {
 	public PhotoResponse cameraInfo(@PathVariable String photoId) {
 
 		Long id = Long.parseLong(photoId);
-		PhotoResponse reponse = new PhotoResponse();
+		PhotoResponse response = new PhotoResponse();
 
 		PhotoCameraInfo camerainfo = photoService.getCameraInfo(id);
 
 		// 图片被查看
 		viewsManager.view(id, Constant.C_APP_MAIN);
-		reponse.setStatus(PhotoResponse.Status.OK.name());
-		reponse.setCamerainfo(camerainfo);
+		response.setStatus(PhotoResponse.Status.OK.name());
+		response.setCamerainfo(camerainfo);
 
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{photoId}/oss", method = RequestMethod.GET, produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
@@ -238,13 +239,13 @@ public class PhotoRestService extends AbstractRestService {
 	@ResponseBody
 	public PhotoResponse delete(@PathVariable String photoId) {
 		Long id = Long.parseLong(photoId);
-		PhotoResponse reponse = new PhotoResponse();
+		PhotoResponse response = new PhotoResponse();
 
 		PhotoProperties prop = photoService.delete(id);
-		reponse.setStatus(PhotoResponse.Status.OK.name());
-		reponse.setProp(prop);
+		response.setStatus(PhotoResponse.Status.OK.name());
+		response.setProp(prop);
 
-		return reponse;
+		return response;
 	}
 
 	/**
@@ -257,7 +258,7 @@ public class PhotoRestService extends AbstractRestService {
 	@ResponseBody
 	public PhotoResponse get(@PathVariable String photoId) {
 		Long id = Long.parseLong(photoId);
-		PhotoResponse reponse = responseFactory();
+		PhotoResponse response = responseFactory();
 
 		User me = null;
 
@@ -273,12 +274,12 @@ public class PhotoRestService extends AbstractRestService {
 		// 设置图片总访问量
 		prop.setViews(viewsManager.getViewsCount(id));
 
-		reponse.setStatus(PhotoResponse.Status.OK.name());
-		reponse.setProp(prop);
+		response.setStatus(PhotoResponse.Status.OK.name());
+		response.setProp(prop);
 		// } catch (DataAccessException ex) {
-		// reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+		// response.setStatus(PhotoResponse.Status.NO_ENTITY.name());
 		// }
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
@@ -296,21 +297,21 @@ public class PhotoRestService extends AbstractRestService {
 			@RequestParam("files[]") MultipartFile file) throws Exception {
 
 		MapVendor mVendor = PhotoUtil.getMapVendor(vendor);
-		PhotoResponse reponse = new PhotoResponse();
+		PhotoResponse response = new PhotoResponse();
 
 		User me = UserUtil.getCurrentUser(userManager);
 
 		if (!file.isEmpty()) {
 			PhotoProperties prop = photoService.upload(lat, lng, address,
 					mVendor, file);
-			reponse.setProp(prop);
-			reponse.setStatus(PhotoResponse.Status.OK.name());
+			response.setProp(prop);
+			response.setStatus(PhotoResponse.Status.OK.name());
 		} else {
 			log.debug("file is empty");
-			reponse.setStatus(PhotoResponse.Status.EXCEPTION.name());
-			reponse.setInfo("file is empty");
+			response.setStatus(PhotoResponse.Status.EXCEPTION.name());
+			response.setInfo("file is empty");
 		}
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{photoId}/tag", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -318,10 +319,10 @@ public class PhotoRestService extends AbstractRestService {
 	public PhotoResponse addTags(@PathVariable String photoId,
 			@RequestBody final Tags tags) {
 		log.info("add " + tags.size() + " tags to " + photoId);
-		PhotoResponse reponse = responseFactory();
+		PhotoResponse response = responseFactory();
 		Long id = Long.parseLong(photoId);
 		photoService.addTags(id, tags);
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{photoId}/gps", method = RequestMethod.GET)
@@ -333,55 +334,77 @@ public class PhotoRestService extends AbstractRestService {
 		if (StringUtils.hasText(vendor)) {
 			mVendor = PhotoUtil.getMapVendor(vendor);
 		} else {
-			mVendor = null;
+			mVendor = MapVendor.gaode;
 		}
-		Long id = Long.parseLong(photoId);
-		PhotoResponse reponse = new PhotoResponse();
-		try {
-			PhotoGps gps = photoService.getGPSInfo(id, mVendor);
+		PhotoResponse response = new PhotoResponse();
+		PhotoGps gps = photoService.getGPSInfo(Long.parseLong(photoId), mVendor);
+		if(null != gps) {
 			gps.setPhoto(null);
-			reponse.setGps(gps);
-			reponse.setStatus(PhotoResponse.Status.OK.name());
-		} catch (DataAccessException ex) {
-			reponse.setStatus(PhotoResponse.Status.NO_ENTITY.name());
+			response.setGps(gps);
+			response.setStatus(PhotoResponse.Status.OK.name());
+		}else {
+			throw new EmptyResultDataAccessException(0);
 		}
-		return reponse;
+		
+		return response;
 	}
 
-	@RequestMapping(value = "/{photoId}/comment/{pageSize}/{pageNo}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{photoId}/comment", method = RequestMethod.GET)
 	@ResponseBody
-	public PhotoResponse getComments(@PathVariable String photoId,
-			@PathVariable String pageSize, @PathVariable String pageNo) {
-		PhotoResponse reponse = PhotoResponse.getInstance();
+	public PhotoResponse getComments(@PathVariable String photoId) {
+		PhotoResponse response = PhotoResponse.getInstance();
 		Long photoIdL = Long.parseLong(photoId);
-		Integer pageSizeI = Integer.parseInt(pageSize);
-		Integer pageNoI = Integer.parseInt(pageNo);
-
+		
 		User me = null;
 		try {
 			me = UserUtil.getCurrentUser(userManager);
 		} catch (UsernameNotFoundException ex) {
 		}
 
-		reponse.setComments(commentService.getComments(photoIdL, pageSizeI,
+		response.setComments(commentService.getPhotoComments(photoIdL, me));
+		return response;
+	}
+	
+	@RequestMapping(value = "/{photoId}/comment/{pageSize}/{pageNo}", method = RequestMethod.GET)
+	@ResponseBody
+	public PhotoResponse getComments(@PathVariable String photoId,
+			@PathVariable String pageSize, @PathVariable String pageNo) {
+		PhotoResponse response = PhotoResponse.getInstance();
+		Long photoIdL = Long.parseLong(photoId);
+		Integer pageSizeI = Integer.parseInt(pageSize);
+		Integer pageNoI = Integer.parseInt(pageNo);
+		
+		User me = null;
+		try {
+			me = UserUtil.getCurrentUser(userManager);
+		} catch (UsernameNotFoundException ex) {
+		}
+		
+		response.setComments(commentService.getComments(photoIdL, pageSizeI,
 				pageNoI, me));
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{photoId}/like", method = RequestMethod.GET)
 	@ResponseBody
 	public PhotoResponse likePhoto(@PathVariable String photoId) {
-		PhotoResponse reponse = PhotoResponse.getInstance();
-		likeManager.likePhoto(Long.parseLong(photoId));
-		return reponse;
+		PhotoResponse response = PhotoResponse.getInstance();
+		
+		User me = UserUtil.getCurrentUser(userManager);
+		
+		likeManager.likePhoto(me, Long.parseLong(photoId));
+		return response;
 	}
 
 	@RequestMapping(value = "/{photoId}/like", method = RequestMethod.DELETE)
 	@ResponseBody
 	public PhotoResponse unLikePhoto(@PathVariable String photoId) {
-		PhotoResponse reponse = PhotoResponse.getInstance();
-		likeManager.likePhoto(Long.parseLong(photoId));
-		return reponse;
+		PhotoResponse response = PhotoResponse.getInstance();
+		
+		User me = UserUtil.getCurrentUser(userManager);
+		
+		likeManager.likePhoto(me, Long.parseLong(photoId));
+		return response;
 	}
 
 }

@@ -1,5 +1,4 @@
 'use strict';
-
 mod = angular.module('ponmApp.directives');
 
 mod.value('THROTTLE_MILLISECONDS', null)

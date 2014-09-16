@@ -35,11 +35,15 @@
   .photo.ng-leave {
     @include animation(leave_sequence 300ms ease-out);
   }
+  .photo:hover, .photo.hover {
+    .action {
+      opacity: 1;
+    }
+  }
 }
 
 .photo-wall.photo-wall-fixed-size {
   .photo {
-    
     img {
       width: 100%;
       height: 100%;
@@ -50,9 +54,9 @@
 // photo selectable container
 .photo-selectable-container {
   width: 100%;
-  display: inline-block;
+//  display: inline-block;
   .photo {
-    float: left;
+//    float: left;
     position: relative;
     margin: 1px;
     img {

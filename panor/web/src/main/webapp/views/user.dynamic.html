@@ -1,0 +1,11 @@
+<div class="user-dynamic ">
+    <div dynamic-messages-layout
+         column-size="3"
+         ponm-messages="messages"
+         class="dynamic-container"></div>
+    <div class="btn btn-default loadmore"
+         ng-if="!messageManager.ended"
+         waypoint="{'offset': 'bottom-in-view'}"
+         on-waypoint="onLoadWaypoint($element, $direction)"
+         ng-click="onLoadWaypoint()">loading more</div>
+</div>

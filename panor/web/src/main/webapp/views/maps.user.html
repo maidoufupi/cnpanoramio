@@ -5,14 +5,24 @@
      infinite-scroll-immediate-check="false"
      class="maps-user">
     <div class="header"
-         waypoint-sticky="{'stuckClass': 'navbar-third', 'context': '.waypoint-scrollable', 'offset': '-1'}">
-        <span>此区域共 {{photos.length}} 张图片</span>
+         waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '101'}">
+        <div class="media user-info">
+            <a class="pull-left" href="{{ctx}}/#/photos/{{user.id}}/albums"
+               user-card owner="{id:userId}" user-id="user.id">
+                <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{user.avatar || 1}}.png">
+            </a>
+
+            <div class="media-body">
+                <h4 class="media-heading">{{user.name}}</h4>
+                <span>此区域共 {{photos.length}} 张图片</span>
+            </div>
+        </div>
+
     </div>
     <div class="photo-wall photo-fluid-container"
          photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}">
         <div ng-repeat="photo in photos"
-             class="photo"
-             ponm-hover=">.action">
+             class="photo">
             <a href=""
                ng-click="displayPhoto(photo.id)">
                 <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_100w_100h.jpg">

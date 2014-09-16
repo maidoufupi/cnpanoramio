@@ -54,6 +54,14 @@
             map.zoomTo(Number(zoom));
         };
 
+        this.zoomIn = function(map) {
+            map.zoomBy(1);
+        };
+
+        this.zoomOut = function(map) {
+            map.zoomBy(-1);
+        };
+
         this.setBounds = function(map, southwest, northeast){
             map.fitBounds(new qq.maps.LatLngBounds(
                 new qq.maps.LatLng(southwest.lat, southwest.lng),

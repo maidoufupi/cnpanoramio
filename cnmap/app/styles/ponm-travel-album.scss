@@ -1,0 +1,66 @@
+.travel-album {
+//  display: inline-block;
+//  cursor: pointer;
+  width: 100%;
+  padding-right: 53px;
+  position: relative;
+
+  .front-cover {
+    position: relative;
+    height: 161px;
+    margin-right: 1px;
+    overflow: hidden;
+
+    .header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      color: white;
+      a {
+        color: white;
+      }
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      padding: 10px;
+      opacity: 0;
+      color: white;
+    }
+  }
+
+  .auxiliary {
+    width: 53px;
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
+    .auxiliary-photo {
+      width: 53px;
+      height: 53px;
+      margin-bottom: 1px;
+      display: inline-block;
+    }
+  }
+}
+.travel-album:hover {
+  .front-cover {
+    .header {
+
+//      background-color: rgba(0,0,0,0.8);
+    }
+    .footer {
+      opacity: 1;
+      @include transition(background-color .218s,opacity .75s ease .5s,visibility 0 .5s);
+      background-color: rgba(0,0,0,0.6);
+    }
+
+    .footer:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+  }
+}

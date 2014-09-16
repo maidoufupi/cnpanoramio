@@ -1,0 +1,288 @@
+
+.flip-container {
+
+  /* flip speed goes here */
+  .flipper {
+    @include perspective(1000px);
+    position: relative;
+
+    /* hide back of pane during swap */
+    .front, .back {
+      @include transition(transform 0.6s);
+//      @include transition-transform(preserve-3d);
+      -webkit-transform-style: preserve-3d; /* Chrome, Safari, Opera */
+      transform-style: preserve-3d;
+      @include backface-visibility(hidden);
+
+      top: 0;
+      left: 0;
+      background-color: white;
+      @include border-radius(3px);
+
+      border-top-width: 0;
+    }
+
+    /* front pane, placed above back */
+    .front {
+      z-index: 2;
+      @include rotateY(0deg);
+    }
+
+    /* back, initially hidden pane */
+    .back {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+
+      @include rotateY(180deg);
+
+      .message-dynamic-card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        z-index: 2;
+        opacity: 0;
+        @include transition(all 0.6s);
+      }
+
+      .share-card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        z-index: 1;
+        opacity: 0;
+        @include transition(all 0.6s);
+        .message-header {
+          padding-top: 10px;
+        }
+      }
+      .share-card.sharing {
+        z-index: 3;
+        opacity: 1;
+      }
+    }
+  }
+}
+/* flip the pane when hovered */
+.flip-container.hover {
+  .flipper {
+    .front {
+      @include rotateY(-179.9deg);
+    }
+    .back {
+      @include rotateY(0deg);
+      .message-dynamic-card {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.message-card {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+
+  .message-header {
+    position: relative;
+    margin-bottom: 20px;
+    padding: 0 20px 0 20px;
+
+    .card-action {
+      height: 20px;
+      .dropdown {
+        height: 20px;
+        .action-dropdown {
+          background-color: #fff;
+          float: right;
+          margin-right: -3px;
+          margin-top: 9px;
+          visibility: hidden;
+        }
+      }
+
+      .front-back {
+        filter: alpha(opacity=70);
+        opacity: .7;
+        background: no-repeat url(../images/stream_showroom.png) -122px -121px;
+        cursor: pointer;
+        float: right;
+        height: 20px;
+        //        margin-right: 15px;
+        margin-top: 15px;
+        width: 20px;
+      }
+    }
+    .user-info {
+      margin-top: 0;
+      //      padding: 23px 0 0 0;
+      .media-body {
+        margin: 3px 0;
+      }
+    }
+
+    .message-tags {
+      -webkit-transition: box-shadow .218s ease,background-color .218s ease,max-width .218s step-end;
+      transition: box-shadow .218s ease,background-color .218s ease,max-width .218s step-end;
+      font-size: 12px;
+      margin: 38px 0 0 0;
+      max-width: 5%;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      .tag {
+        clear: both;
+        height: 26px;
+        line-height: 26px;
+        word-wrap: normal;
+
+        .bookmark1, .bookmark2, .bookmark3 {
+          float: right;
+          height: 26px;
+          margin-right: -4px;
+          padding-right: 4px;
+          width: 0;
+        }
+        .bookmark1.Gh {
+          background-color: #404040;
+        }
+        .bookmark2.Gh {
+          background-color: #737373;
+        }
+        .bookmark3.Gh {
+          background-color: #aaaaaa;
+        }
+
+        a {
+          max-width: 130px;
+          outline: none;
+          //          -webkit-transition: opacity .218s ease,max-width .218s step-end,visibility .218s step-end;
+          //          transition: opacity .218s ease,max-width .218s step-end,visibility .218s step-end;
+          color: #999;
+          display: block;
+          float: right;
+          overflow: hidden;
+          padding: 0 10px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-decoration: none;
+
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+
+      .tag.active {
+        background-color: #f5f5f5;
+        float: right;
+        a {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+
+    .message-tags:hover {
+      -webkit-transition: box-shadow .218s ease,background-color .218s ease,max-width .218s step-start;
+      transition: box-shadow .218s ease,background-color .218s ease,max-width .218s step-start;
+      box-shadow: 0 0 20px rgba(0,0,0,.2);
+      max-width: 100%;
+      z-index: 3;
+
+      .tag {
+        background-color: #fff;
+        cursor: pointer;
+        display: block;
+        float: none;
+        white-space: nowrap;
+        a {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+
+      .tag:hover {
+        background-color: #404040;
+
+        a {
+          color: #fff;
+          text-decoration: none;
+        }
+      }
+
+
+    }
+  }
+
+  .message-body {
+    margin: 0 0 0 0;
+    padding: 0 20px 0 20px;
+    text-overflow: ellipsis;
+    .message-content {
+      color: #404040;
+      font-size: 13px;
+      line-height: 1.4;
+      min-height: 0;
+      padding: 0 0 20px 0;
+      overflow: hidden;
+    }
+
+    .message-media {
+      margin: 0 -14px 0 -14px;
+
+      img {
+        width: 100%;
+      }
+
+      .image-border {
+        background: repeat-x url(../images/embeds_article_sawtooth.png) 0 0;
+        background-position-x: 1px;
+        height: 16px;
+        margin: -14px 0;
+        position: relative;
+      }
+    }
+  }
+
+  .message-user-action {
+    padding: 20px;
+  }
+
+  .message-comments {
+    border-top: 1px solid #e5e5e5;
+    background-color: whitesmoke;
+
+    .status {
+      cursor: pointer;
+      border-bottom: none;
+      border-top: none;
+      background-color: #f5f5f5;
+      margin: 12px 20px;
+      padding: 0;
+      height: 19px;
+    }
+  }
+}
+
+.message-card:hover {
+
+  .action-dropdown {
+    visibility: visible !important;
+  }
+}
+
+.message-card {
+  opacity: 0;
+  @include animation(0.4s);
+}
+
+.message-card.shown {
+  @include animation(popUp .8s ease-in forwards);
+}

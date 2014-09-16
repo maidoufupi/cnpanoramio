@@ -8,6 +8,8 @@ import com.cnpanoramio.domain.Travel;
 
 public interface TravelDao extends GenericDao<Travel, Long> {
 	
+	public Travel persist(Travel travel);
+	
 	/**
 	 * 通过名称获取用户travel
 	 * 

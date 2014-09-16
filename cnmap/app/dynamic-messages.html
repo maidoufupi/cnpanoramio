@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>User dynamic messages</title>
+    <link rel="stylesheet" href="bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css"/>
+    <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css"/>
+    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="bower_components/Jcrop/css/jquery.Jcrop.css">
+    <link rel="stylesheet" href="bower_components/perfect-scrollbar/src/perfect-scrollbar.css">
+
+    <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery.css">
+    <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css">
+
+    <link rel="stylesheet" type="text/css" href="styles/main.css"/>
+</head>
+<body>
+<!--<script type="text/javascript" src="scripts/ponmApp.vendor.min.js"></script>-->
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="bower_components/jquery.rest/dist/jquery.rest.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<script type="text/javascript" src="scripts/blueimp-file-upload.min.js"></script>
+<!--<script type="text/javascript" src="scripts/directives/fileupload-angular.js"></script>-->
+<script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+<script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+<script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
+<script type="text/javascript" src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
+<script type="text/javascript" src="bower_components/eventie/eventie.js"></script>
+<script type="text/javascript" src="bower_components/eventEmitter/EventEmitter.js"></script>
+<script type="text/javascript" src="bower_components/imagesloaded/imagesloaded.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-utils/ui-utils.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="bower_components/jquery-backstretch/src/jquery.backstretch.js"></script>
+<script type="text/javascript" src="bower_components/jquery-waypoints/waypoints.min.js"></script>
+<script type="text/javascript" src="bower_components/Jcrop/js/jquery.Jcrop.min.js"></script>
+
+<script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-helper.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-gallery.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-gallery-fullscreen.js"></script>
+
+<script type="text/javascript" src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
+<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript" src="bower_components/perfect-scrollbar/src/perfect-scrollbar.js"></script>
+<script type="text/javascript" src="bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
+
+<script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
+<script type="text/javascript" src="scripts/panor/js/three.min.js"></script>
+<!--<script type="text/javascript" src="scripts/ponmApp.min.js"></script>-->
+<!--<script type="text/javascript" src="scripts/ponmApp.controllers.min.js"></script>-->
+<script type="text/javascript" src="scripts/app.js"></script>
+<script type="text/javascript" src="scripts/controllers.js"></script>
+<script type="text/javascript" src="scripts/directives.js"></script>
+<script type="text/javascript" src="scripts/services.js"></script>
+<script type="text/javascript" src="scripts/services/jsUtils.js"></script>
+<script type="text/javascript" src="scripts/services/HashStateManager.js"></script>
+<script type="text/javascript" src="scripts/services/GeocodeService.js"></script>
+<script type="text/javascript" src="scripts/services/alertService.js"></script>
+
+<script type="text/javascript" src="scripts/controllers/ponmAppCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/fileuploadCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/NavbarCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/PhotosCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/MapsCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/PhotoModalCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/LoginCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/UserSettingsCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/ChUserAvatarCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/AdminCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/IndexCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/DynamicMessagesCtrl.js"></script>
+
+<script type="text/javascript" src="scripts/directives/ponmComment.js"></script>
+<script type="text/javascript" src="scripts/directives/filters.js"></script>
+<script type="text/javascript" src="scripts/directives/ponmPhotoContainer.js"></script>
+<script type="text/javascript" src="scripts/directives/ponmRectMultiSelect.js"></script>
+<script type="text/javascript" src="scripts/directives/ponm-photo-fluid.js"></script>
+<script type="text/javascript" src="scripts/directives/waypoint.js"></script>
+<script type="text/javascript" src="scripts/directives/backstretch.js"></script>
+<script type="text/javascript" src="scripts/directives/infinite-scroll.js"></script>
+<script type="text/javascript" src="scripts/directives/tag-picker.js"></script>
+<script type="text/javascript" src="scripts/directives/image-gallery.js"></script>
+<script type="text/javascript" src="scripts/directives/user-card.js"></script>
+<script type="text/javascript" src="scripts/directives/dynamic-message.js"></script>
+<script type="text/javascript" src="scripts/directives/dynamic-messages-layout.js"></script>
+
+<!--<script type="text/javascript" src="scripts/panor/scripts.min.js"></script>-->
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.Panoramio.js"></script>
+<script type="text/javascript" src="scripts/panor/MapEventListener.js"></script>
+<script type="text/javascript" src="scripts/panor/MapService.js"></script>
+<script type="text/javascript" src="scripts/panor/MapTravel.js"></script>
+<script type="text/javascript" src="scripts/panor/MapEvent.js"></script>
+
+<!--<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
+<script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.gaode.js"></script>
+<script type="text/javascript" src="scripts/panor/gaode/MapEventListenerImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>-->
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=kp3ODQt4pkpHMW2Yskl2Lwee"></script>
+<script type="text/javascript" src="bower_components/angular-ui-map-baidu/ui-map.js"></script>
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.baidu.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapEventListenerImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapServiceImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapTravelImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>-->
+
+<!--<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>-->
+<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>
+<script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>
+
+<!--<script charset="utf-8" src="http://union.mapbar.com/apis/maps/free?f=mapi&v=31.3&k=aCW9cItqL7sqT7AxaB0zdHZoZSWmbBsuT7JhMHTsMeD6ZIl9NzFsZHT=@JBL979@Iu7lJJZWWq0IDu9xZMzMxq7I9AhH7LAAA6hqzZHZZLTbZZauxlDz7C7DD9ZCFGT="></script>
+<script type="text/javascript" src="scripts/panor/js/cnmap.mapbar.js"></script>-->
+
+<style>
+</style>
+<script>
+    var map;
+    window.ctx = "http://127.0.0.1:8080";
+//    window.ctx = "http://www.photoshows.cn";
+    //    window.ctx = "http://127.0.0.1:8080";
+    window.apirest = window.ctx + "/api/rest";
+    window.staticCtx = "http://test.photoshows.cn";
+//    window.staticCtx = "http://static.photoshows.cn";
+    window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
+    window.user = {
+        id: 1,
+        name: "暗梅幽闻花"
+    };
+    window.login = true;
+    window.dev = true;
+</script>
+<div ng-app="ponmApp.dynamic">
+    <div ui-view="navbar">
+        <i>Some content will load here!</i>
+    </div>
+    <div ui-view="alert">
+        alerts
+    </div>
+
+    <div ui-view style="position: absolute; bottom: 0; top: 103px; width: 100%;">
+        <i>Some content will load here!</i>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<div class="travel-album">
+    <div class="front-cover" ng-click="photoClick(travel.photos[0].id)">
+        <div class="header">
+            <a href="#/maps/travel/{{travel.id}}" target="_blank"
+               ng-click="$event.stopPropagation();">{{travel.title}}</a>
+            <div>{{travel.photos.length}} 张照片</div>
+        </div>
+        <div style="" >
+            <img ng-src="{{staticCtx}}/{{travel.photos[0].oss_key}}@1e_161w_161h_1c.jpg">
+        </div>
+        <a href="#/maps/user/{{travel.user.id}}" target="_blank"
+           ng-click="$event.stopPropagation();"
+           class="footer" >{{travel.user.name}} 的照片</a>
+    </div>
+    <div class="auxiliary">
+        <div class="auxiliary-photo"
+             ng-click="photoClick(travel.photos[1].id)">
+            <img ng-src="{{staticCtx}}/{{travel.photos[1].oss_key}}@1e_53w_53h_1c.jpg">
+        </div>
+        <div class="auxiliary-photo"
+             ng-click="photoClick(travel.photos[2].id)">
+            <img ng-src="{{staticCtx}}/{{travel.photos[2].oss_key}}@1e_53w_53h_1c.jpg">
+        </div>
+        <div class="auxiliary-photo"
+             ng-click="photoClick(travel.photos[3].id)">
+            <img ng-src="{{staticCtx}}/{{travel.photos[3].oss_key}}@1e_53w_53h_1c.jpg">
+        </div>
+    </div>
+</div>

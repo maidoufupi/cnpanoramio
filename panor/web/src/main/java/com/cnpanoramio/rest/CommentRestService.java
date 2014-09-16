@@ -2,6 +2,7 @@ package com.cnpanoramio.rest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import com.cnpanoramio.json.CommentResponse;
 import com.cnpanoramio.json.CommentResponse.Comment;
 import com.cnpanoramio.service.CommentService;
 import com.cnpanoramio.service.LikeManager;
+import com.cnpanoramio.utils.UserUtil;
 
 @Controller
 @RequestMapping("/api/rest/comment")
@@ -44,7 +46,10 @@ public class CommentRestService extends AbstractRestService {
 	@ResponseBody
 	public CommentResponse saveComment(@RequestBody Comment comment) {
 		CommentResponse response = CommentResponse.getInstance();
-		response.setComment(commentService.save(comment));
+		
+		User me = UserUtil.getCurrentUser(userManager);
+		
+		response.setComment(commentService.save(me, comment));
 		response.setStatus(CommentResponse.Status.OK.name());
 		return response;
 	}
@@ -82,7 +87,8 @@ public class CommentRestService extends AbstractRestService {
 		CommentResponse response = CommentResponse.getInstance();
 		response.setStatus(CommentResponse.Status.OK.name());
 
-		likeManager.likeComment(Long.parseLong(commentId));
+		User me = UserUtil.getCurrentUser(userManager);
+		likeManager.likeComment(me, Long.parseLong(commentId));
 		
 		return response;
 	}
@@ -94,7 +100,8 @@ public class CommentRestService extends AbstractRestService {
 		CommentResponse response = CommentResponse.getInstance();
 		response.setStatus(CommentResponse.Status.OK.name());
 		
-		likeManager.likeComment(Long.parseLong(commentId));
+		User me = UserUtil.getCurrentUser(userManager);
+		likeManager.likeComment(me, Long.parseLong(commentId));
 		
 		return response;
 	}

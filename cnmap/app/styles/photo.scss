@@ -186,9 +186,13 @@
       }
     }
 
+    .comments  {
+      .comment-container.scroller {
+        max-height: initial;
+      }
+    }
+
     .comment {
-      margin-bottom: 15px;
-      padding: 5px;
       .editable-buttons {
         float: left;
       }
@@ -205,11 +209,11 @@
   }
 }
 
-.nav {
-  .glyphicon {
-    width: 40px;
-  }
-}
+//.nav {
+//  .glyphicon {
+//    width: 40px;
+//  }
+//}
 
 .photo-travel-album {
   .travel-album-background {
@@ -227,7 +231,7 @@
     height: 100%;
   }
 
-  .travel-album {
+  .travel-album-container {
     position: fixed;
     left: 0;
     bottom: 51px;
@@ -272,10 +276,10 @@
     }
   }
 
-  .travel-album.ng-animate.show-add, .travel-album.ng-animate.show-remove {
-    height: 283px;
-  }
-  .travel-album.show {
+//  .travel-album-container.ng-enter, .travel-album-container.ng-remove {
+//    height: 283px;
+//  }
+  .travel-album-container.show {
     height: 283px;
   }
 }
@@ -323,21 +327,29 @@
 
 /****************************************************************************************/
 /** photos page *************************************************************************/
-.container-photos {
-//  width: 80%;
-  @include transition-linear(top);
-  margin: 10px 100px;
-  transition: top linear 0.3s;
-  position: relative;
+.photos {
+  position: absolute;
+  top: 52px;
+  width: 100%;
+  .container-photos {
+    //  width: 80%;
+    @include transition-linear(top);
+//    margin: 10px 100px;
+    transition: top linear 0.3s;
+    position: relative;
+  }
+
+  .container-photos.expand {
+    position: absolute;
+    top: 0;
+  }
 }
 
-.container-photos.expand {
-  position: absolute;
-  top: 0;
-}
 
 // photos all
 .photo-wall.photo-wall-fixed-size.photo-all {
+//  width: 1220px;
+//  margin: auto;
   .photo {
     width: 200px;
     height: 200px;

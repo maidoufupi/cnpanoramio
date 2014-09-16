@@ -1,7 +1,6 @@
 package com.cnpanoramio.service.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,20 +9,22 @@ import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.dao.LikeDao;
 import com.cnpanoramio.dao.PhotoDao;
-import com.cnpanoramio.domain.Favorite;
+import com.cnpanoramio.dao.TravelDao;
+import com.cnpanoramio.domain.Comment.CommentType;
 import com.cnpanoramio.domain.Like;
+import com.cnpanoramio.domain.Message;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.Travel;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.CommentResponse.Comment;
-import com.cnpanoramio.json.UserResponse.Settings;
 import com.cnpanoramio.service.CommentService;
+import com.cnpanoramio.service.MessageManager;
 import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.UserUtil;
 
@@ -40,31 +41,59 @@ public class CommentServiceImpl implements CommentService {
 	@Autowired
 	private PhotoDao photoDao;
 	@Autowired
+	private TravelDao travelDao;
+	@Autowired
 	private CommentDao commentDao;
 	@Autowired
 	private LikeDao likeDao;
+	@Autowired
+	private MessageManager messageManager;
 	
 	@Override
-	public Comment save(Comment comment) {
+	public Comment save(User user, Comment comment) {
 		
-		User me = UserUtil.getCurrentUser(userManager);
+		user = userManager.get(user.getId());
 		
 		com.cnpanoramio.domain.Comment commentD = new com.cnpanoramio.domain.Comment();
-		commentD.setComment(comment.getContent());
-//		commentD.setCreateTime(Calendar.getInstance());
-		commentD.setUser(me);
-		Photo photo = photoDao.get(comment.getPhotoId());
-		commentD.setPhoto(photo);
-		commentD = commentDao.save(commentD);
-		photo.getComments().add(commentD);
+		commentD.setContent(comment.getContent());
+		commentD.setUser(user);
 		
-		Settings settings = userSettingsManager.getCurrentUserSettings();
+		if(comment.getType().equalsIgnoreCase("photo")) {
+			Photo photo = photoDao.get(comment.getEntityId());
+			commentD.setType(CommentType.photo);
+			commentD.setPhoto(photo);
+		}else if (comment.getType().equalsIgnoreCase("travel")) {
+			Travel travel = travelDao.get(comment.getEntityId());
+			commentD.setType(CommentType.travel);
+			commentD.setTravel(travel);
+		}else if (comment.getType().equalsIgnoreCase("comment")) {
+			com.cnpanoramio.domain.Comment commentComment = commentDao.get(comment.getEntityId());
+			commentD.setType(CommentType.comment);
+			commentD.setComment(commentComment);
+		}else if(comment.getType().equalsIgnoreCase("message")) {
+			Message message = messageManager.get(comment.getEntityId());
+			if(message.getType() == Message.MessageType.photo) {
+				Photo photo = photoDao.get(message.getEntityId());
+				commentD.setType(CommentType.photo);
+				commentD.setPhoto(photo);
+			}else if(message.getType() == Message.MessageType.travel) {
+				Travel travel = travelDao.get(message.getEntityId());
+				commentD.setType(CommentType.travel);
+				commentD.setTravel(travel);
+			}else if(message.getType() == Message.MessageType.message){
+				comment.setEntityId(message.getEntityId());
+				return this.save(user, comment);
+			}
+		}
+		
+		commentD = commentDao.persist(commentD);
+		
+		UserSettings settings = userSettingsManager.get(user);
 		comment.setId(commentD.getId());
 		// 昵称
 		comment.setUsername(settings.getName());
-//		comment.setCreateTime(commentD.getCreateTime().getTime());
 		comment.setUserId(commentD.getUser().getId());
-		comment.setUserAvatar(settings.getUserAvatar());
+		comment.setUserAvatar(settings.getAvatar().getId());
 		return comment;		
 	}
 	
@@ -82,17 +111,11 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	public Collection<Comment> getComments(Long id, int pageSize, int pageNo, User user) {
-		List<com.cnpanoramio.domain.Comment> comments = commentDao.getCommentPager(id, pageSize, pageNo);
+		List<com.cnpanoramio.domain.Comment> comments = null;//commentDao.getCommentPager(id, pageSize, pageNo);
 		
 		List<Comment> cs = new ArrayList<Comment>();
 		for(com.cnpanoramio.domain.Comment comment : comments) {
-			Comment c1 = convertComment(comment);
-			if(null != user) {
-				Like like = likeDao.getComment(comment, user);
-				if(null != like) {
-					c1.setLike(true);
-				}
-			}
+			Comment c1 = convertComment(comment, user);
 			cs.add(c1);
 		}
 		
@@ -106,13 +129,14 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public Comment modify(Long id, String content) {
 		com.cnpanoramio.domain.Comment comment = commentDao.get(id);
-		comment.setComment(content);
-		return convertComment(comment);
+		comment.setContent(content);
+		return convertComment(comment, null);
 	}
 	
-	public Comment convertComment(com.cnpanoramio.domain.Comment commentD) {
+	@Override
+	public Comment convertComment(com.cnpanoramio.domain.Comment commentD, User user) {
 		Comment comment = new Comment();
-		UserSettings settings = userSettingsManager.get(commentD.getUser().getId());
+		UserSettings settings = userSettingsManager.get(commentD.getUser());
 		comment.setId(commentD.getId());
 		if(null != settings.getAvatar()) {
 			comment.setUserAvatar(settings.getAvatar().getId());
@@ -122,15 +146,43 @@ public class CommentServiceImpl implements CommentService {
 		
 		// 昵称
 		comment.setUsername(settings.getName());
-//		comment.setCreateTime(commentD.getCreateTime().getTime());
+		comment.setCreateDate(commentD.getCreateDate());
 		comment.setUserId(commentD.getUser().getId());
-		comment.setContent(commentD.getComment());
+		comment.setContent(commentD.getContent());
 		if(null != commentD.getPhoto()) {
-			comment.setPhotoId(commentD.getPhoto().getId());
+			comment.setEntityId(commentD.getPhoto().getId());
 		}
 		
 		comment.setLikeCount(commentD.getLikes().size());
 		
+		// 设置此评论是否被此用户赞
+		if(null != user) {
+			Like like = likeDao.getComment(commentD, user);
+			if(null != like) {
+				comment.setLike(true);
+			}
+		}
+		
+		// 转换评论的评论
+		if(null != commentD.getComments()) {
+			comment.setComments(convertComments(commentD.getComments(), user));
+		}
 		return comment;
+	}
+
+	@Override
+	public List<Comment> convertComments(
+			List<com.cnpanoramio.domain.Comment> commentDs, User user) {
+		List<Comment> comments = new ArrayList<Comment>(0);
+		for(com.cnpanoramio.domain.Comment commentD : commentDs) {
+			comments.add(this.convertComment(commentD, user));			
+		}
+		return comments;
+	}
+
+	@Override
+	public List<Comment> getPhotoComments(Long photoId, User user) {
+		Photo photo = photoDao.get(photoId);
+		return convertComments(photo.getComments(), user);
 	}
 }

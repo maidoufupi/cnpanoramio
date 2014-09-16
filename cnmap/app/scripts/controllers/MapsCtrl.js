@@ -3,12 +3,11 @@
  */
 'use strict';
 
-angular.module('mapsApp', [
+angular.module('ponmApp.maps', [
 //    'ngAnimate',
     'ui.bootstrap',
     'ui.map',
     'ui.router',
-//    'ponmApp',
     'xeditable',
     'fileuploadApp',
     'ngDragDrop'
@@ -130,6 +129,13 @@ angular.module('mapsApp', [
                     resolve: {
                     },
                     controller: "MapsPhotoUploadCtrl"
+                })
+                .state('maps.dynamic', {
+                    url: '/dynamic',
+                    templateUrl: 'views/maps.dynamic.html',
+                    resolve: {
+                    },
+                    controller: "MapsDynamicCtrl"
                 });
         }])
     .run(['$rootScope', '$window', 'editableOptions', function ($rootScope, $window, editableOptions) {
@@ -192,33 +198,33 @@ angular.module('mapsApp', [
             $scope.hashStateManager = new HashStateManager($scope, $location);
 
             $scope.stateStatus = {
-                popular: $state.current.url == '/popular',
-                recent: $state.current.url == '/recent',
+                popular: $state.current.name == 'maps.popular',
+                recent: $state.current.name == 'maps.recent',
                 travel: $state.current.name == 'maps.travel',
                 upload: $state.current.name == 'maps.upload',
-                camera: $state.current.url == '/camera',
+                camera: $state.current.name == 'maps.camera',
                 user: $state.current.name == 'maps.user',
-                travels: $state.current.url == '/travels'
+                travels: $state.current.name == 'maps.travels'
             };
 
             $rootScope.$on('$stateChangeSuccess',
                 function (event, toState, toParams, fromState, fromParams) {
                     $scope.stateStatus = {
-                        popular: toState.url == '/popular',
-                        recent: toState.url == '/recent',
+                        popular: toState.name == 'maps.popular',
+                        recent: toState.name == 'maps.recent',
                         travel: toState.name == 'maps.travel',
                         upload: toState.name == 'maps.upload',
-                        camera: toState.url == '/camera',
+                        camera: toState.name == 'maps.camera',
                         user: toState.name == 'maps.user',
-                        travels: toState.url == '/travels'
+                        travels: toState.name == 'maps.travels'
                     };
                 }
             );
 
             $scope.contentLayouts = ['right-fixed', 'left-fixed', 'right-full', 'left-full'];
-            $scope.contentLayout = 0;
+            $scope.contentLayouts.index = 0;
             $scope.changeContentLayout = function() {
-                $scope.contentLayout = ($scope.contentLayout + 1) % 4;
+                $scope.contentLayouts.index = ($scope.contentLayouts.index + 1) % 4;
             };
 
             $scope.mapOptions = {
@@ -311,6 +317,10 @@ angular.module('mapsApp', [
                 });
             };
 
+            $scope.$on('photo.click', function(e, photoId) {
+                $scope.displayPhoto(photoId);
+            });
+
             /**
              * 设置浏览类型
              *
@@ -376,9 +386,6 @@ angular.module('mapsApp', [
                 listeners = $scope.mapEventListener.addLocationHashListener(map,
                     function(lat ,lng, zoom) {
                         $log.debug("locationHashListener");
-//                        if (changeState) {
-//                            return;
-//                        }
 
                         if ($scope.setState) {
                             $timeout.cancel($scope.setState);
@@ -428,6 +435,14 @@ angular.module('mapsApp', [
                         }
 
                     }
+
+                    // 由hashstate导致地图状态变化时 重新搜索
+                    if($scope.searchVal) {
+                        $timeout(function () {
+                            $scope.$broadcast("searchChanged", $scope.searchVal);
+                        }, 500);
+                    }
+
                 });
             }
 
@@ -473,23 +488,38 @@ angular.module('mapsApp', [
                 return deferred.promise;
             };
 
-            $scope.setSearch = function(search) {
+            $scope.hashStateManager.watch("search", function(search) {
+//                $scope.setSearch(search, true);
+                if(search) {
+                    panoramioLayer.clearMap();
+                    panoramioLayer.setAuto(false);
+//                    $scope.setPanormaioType("manual");
+                }else {
+                    panoramioLayer.clearMap();
+                    panoramioLayer.setAuto(true);
+//                    $scope.setPanormaioType("auto");
+                }
+                $scope.searchVal = search;
+                $scope.$broadcast("searchChanged", search);
+            });
+
+            $scope.setSearch = function(search, state) {
                 if(search) {
                     $scope.setPanormaioType("manual");
                 }else {
                     $scope.setPanormaioType("auto");
                 }
-                $scope.searchValObject = {
-                    val: search
-                };
-                $scope.hashStateManager.set("search", search);
+                $scope.searchVal = search;
+                if(!state) {
+                    $scope.hashStateManager.set("search", search);
+                }
 
                 $scope.$broadcast("searchChanged", search);
             };
 
             $scope.clearSearch = function() {
                 panoramioLayer.setAuto(true);
-                $scope.searchValObject = "";
+                $scope.searchVal = "";
                 $scope.hashStateManager.set("search", "");
             };
 
@@ -507,18 +537,17 @@ angular.module('mapsApp', [
 //                panoramioLayer.clearMap();
             };
 
+            /**
+             * on photo drop on the map
+             * @type {Array}
+             */
             $scope.markers = [];
-
             $scope.onPhotoDrop = function(e, ui) {
-                $log.debug(e);
-                $log.debug(e.offsetX);
-                $log.debug(e.offsetY);
-
-                $log.debug(ui);
-                $log.debug(ui.position);
-                $log.debug(ui.offset);
-                $log.debug($scope.markers[$scope.markers.length-1].photoId);
-                $scope.$broadcast("onDrop", {event: e, ui: ui, item: $scope.markers[$scope.markers.length-1]});
+                $log.debug("drop items length = " + $scope.markers.length);
+                $log.debug("drop item is " + $scope.markers[$scope.markers.length-1]);
+                if($scope.markers[$scope.markers.length-1]) {
+                    $scope.$broadcast("onDrop", {event: e, ui: ui, id: $scope.markers[$scope.markers.length-1]});
+                }
             };
 
             $scope.onPhotoOver = function(e, ui) {
@@ -632,9 +661,9 @@ angular.module('mapsApp', [
         }])
     .controller('MapsTravelCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', '$q', 'jsUtils',
         function ($window, $location, $rootScope, $scope, TravelService, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, jsUtils) {
+                  ponmCtxConfig, $log, $state, $stateParams, $q, jsUtils) {
 
             $scope.clearSearch();
             $scope.setPanormaioType('manual');
@@ -647,7 +676,7 @@ angular.module('mapsApp', [
                         $scope.setTravel(res.travel);
 
                         if($scope.travel.spots[0]) {
-//                            $scope.activeSpot($scope.travel.spots[0]);
+                            $scope.activeSpot($scope.travel.spots[0]);
                         }
 
                         // 获取图片的用户信息
@@ -686,7 +715,28 @@ angular.module('mapsApp', [
                     $scope.travelLayer.setTravel($scope.travel);
                     $scope.travelLayer.initMap();
                 }
+            };
 
+            $scope.updateTravel = function(travel, propName, $data) {
+                var d = $q.defer();
+                var params = {};
+                params[propName] = $data;
+                TravelService.changeTravel({travelId: travel.id}, jsUtils.param(params),
+                    function(res) {
+                        res = res || {};
+                        if(res.status === 'OK') { // {status: "OK"}
+                            d.resolve()
+                        } else { // {status: "error", msg: "Username should be `awesome`!"}
+                            d.resolve(res.info);
+                        }
+                    }, function(error) {
+                        if(error.data) {
+                            d.reject(error.data.info);
+                        }else {
+                            d.reject('Server error!');
+                        }
+                    });
+                return d.promise;
             };
 
             $scope.$on("travelChanged", function(e, travelId) {
@@ -702,6 +752,32 @@ angular.module('mapsApp', [
                     $scope.travelEnedit = ($scope.userId == $scope.travel.user_id) && editableView;
                 }
             });
+
+            $scope.$on('photoDeleteEvent', function(e, data) {
+                $log.debug("photo delete event: photoId = " + data);
+                e.preventDefault();
+                e.stopPropagation();
+
+                // remove travel photo on server
+                TravelService.deletePhoto({travelId: $scope.travel.id, typeId: data}, function(res) {
+                    if(res.status == "OK") {
+                        angular.forEach($scope.travel.spots, function (spot, key) {
+                            angular.forEach(spot.photos, function (photo, key) {
+                                if (photo.id == data) {
+                                    delete spot.photos.splice(key, 1);
+                                }
+                            });
+
+                            if(!spot.photos.length) {
+                                delete $scope.travel.spots.splice(key, 1);
+                            }
+                        });
+
+                        $scope.$broadcast('ponmPhotoFluidResize');
+                    }
+                });
+            });
+
 
             function initTravelLayer(map) {
                 $scope.travelLayer = new $window.cnmap.TravelLayer({
@@ -835,6 +911,7 @@ angular.module('mapsApp', [
             $scope.createSpot = function(photo) {
                 TravelService.createSpot({travelId: $scope.spot.travel_id}, jsUtils.param({}), function(res) {
                     if(res.status == "OK") {
+                        $scope.travelLayer.addSpot(res.spot);
                         $scope.addSpotPhoto(photo, res.spot);
                     }
                 });
@@ -845,7 +922,9 @@ angular.module('mapsApp', [
                 TravelService.addSpotPhoto({travelId: spot.travel_id, typeId: spot.id},
                     jsUtils.param(photos), function(res) {
                         if(res.status == "OK") {
-                            $scope.setTravel(res.travel);
+                            $scope.travelLayer.removePhoto(photo);
+                            $scope.travelLayer.addPhoto(spot, photo);
+//                            $scope.setTravel(res.travel);
                         }
                     });
             };
@@ -857,11 +936,21 @@ angular.module('mapsApp', [
             $scope.deleteSpot = function(spot) {
                 TravelService.deleteSpot({travelId: spot.travel_id, typeId: spot.id}, function(res) {
                     if(res.status == "OK") {
-                        $scope.setTravel(res.travel);
+                        $scope.travelLayer.removeSpot(spot);
+//                        $scope.setTravel(res.travel);
                     }
                 });
             };
 
+            // 默认显示旅行的线
+            $scope.displayLine = true;
+            $scope.$watch("displayLine", function(displayLine) {
+                $scope.travelLayer.toggleSpotLine($scope.spot, !!displayLine);
+            });
+
+            $scope.$on("ponm-photo-fluid-resized", function() {
+                $scope.$broadcast("waypoint-refresh");
+            });
         }])
     .controller('MapsUserCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
@@ -871,7 +960,14 @@ angular.module('mapsApp', [
 
             $scope.selectable = false;
 
-            $scope.userId = $stateParams.userId;
+            var userId = $stateParams.userId;
+
+            // 获取图片的用户信息
+            UserService.getOpenInfo({userId: userId}, function (data) {
+                if (data.status == "OK") {
+                    $scope.user = data.open_info;
+                }
+            });
 
             // 用户图片分页属性
             $scope.photo = {
@@ -889,7 +985,7 @@ angular.module('mapsApp', [
                     return;
                 }
                 $scope.loadBusy = true;
-                UserPhoto.get({userId: $scope.userId,
+                UserPhoto.get({userId: userId,
                         pageSize: $scope.photo.pageSize,
                         pageNo: $scope.photo.currentPage,
                         swlat:$scope.bounds.sw.lat, swlng:$scope.bounds.sw.lng,
@@ -928,7 +1024,7 @@ angular.module('mapsApp', [
             });
 
             // 要在bind map_changed event 之后，才能有初始化图片的动作
-            $scope.setPanormaioType('user', $scope.userId);
+            $scope.setPanormaioType('user', userId);
 
             $scope.loadMorePhotos = function() {
                 loadUserPhotos();
@@ -1152,13 +1248,13 @@ angular.module('mapsApp', [
 
             // 当拖动放到地图上时
             $scope.$on("onDrop", function(e, drop) {
-                $log.debug(drop.item.id);
+                $log.debug(drop.id);
                 var photo;
-                if(photos[drop.item.id]) {
-                    photo = photos[drop.item.id];
+                if(photos[drop.id]) {
+                    photo = photos[drop.id];
                 }else {
                     photo = {
-                        id: drop.item.id,
+                        id: drop.id,
                         mapVendor: {}
                     };
                     photos[photo.id] = photo;
@@ -1179,4 +1275,50 @@ angular.module('mapsApp', [
                 $scope.clearState();
             });
         }])
+    .controller("MapsDynamicCtrl", ['$scope', '$log', '$state', 'MessageManager', 'ponmCtxConfig',
+    function($scope, $log, $state, MessageManager, ponmCtxConfig) {
+
+        $scope.contentLayouts.index = 1;
+        $scope.setPanormaioType('manual');
+
+        $scope.$watch(function() {
+            return ponmCtxConfig.userId;
+        }, function(userId) {
+            if(userId) {
+                $scope.userId = userId;
+                $scope.messageManager = new MessageManager($scope.userId);
+                $scope.onLoadWaypoint();
+            }
+        });
+
+        $scope.onLoadWaypoint = function(element, direction) {
+
+            if($scope.messageManager) {
+                $scope.messageManager.getMoreMessages().then(function(messages) {
+                    $scope.$broadcast("message.add", messages);
+                });
+
+            }
+
+        };
+
+        var messagePoints = [],
+            currentPoint;
+        $scope.$on('message.point', function(e, message) {
+
+            var messagePoint = messagePoints[message.id],
+                point = message.point;
+            if(!messagePoint) {
+                messagePoint = {id: message.id};
+                messagePoint.marker = $scope.mapEventListener.addMarker($scope.map, point.lat, point.lng);
+                messagePoints[message.id] = messagePoint;
+            }
+            $scope.mapEventListener.setCenter($scope.map, point.lat, point.lng);
+            if(currentPoint == message.id) {
+                $scope.mapEventListener.zoomIn($scope.map);
+            }else {
+                currentPoint = message.id;
+            }
+        });
+    }])
 ;

@@ -1,3 +1,4 @@
+
 distanceInMeter = (lat1, lng1, lat2, lng2) ->
   e = Math.PI * lat1 / 180;
   f = Math.PI * lng1 / 180;

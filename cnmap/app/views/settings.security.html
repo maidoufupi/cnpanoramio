@@ -1,0 +1,140 @@
+<div id="sharing" class="panel panel-default">
+
+    <div class="panel-heading">
+        <h2>安全与隐私</h2>
+        分享，许可和版权
+    </div>
+
+    <form class="form-horizontal" role="form">
+
+        <div class="list-group">
+            <div class="list-group-item">
+                <h3>
+                    为您的照片设置默认许可协议：
+                </h3>
+
+                <fieldset class="form-group">
+                    <label class="col-sm-2 control-label">
+                        登录验证
+                    </label>
+                    <div class="col-sm-10">
+                        <div class="control-list">
+                            <label class="radio">
+                                <input type="radio" value="off" id="no_login_verification" name="user[login_verification_type]" checked="">
+                                不要验证登录请求
+                            </label>
+                            <label class="t1-label radio">
+                                <input type="radio" value="sms" id="sms_login_verification" name="user[login_verification_type]" disabled="">
+                                <input type="hidden" id="sms_login_verification_enabled" value="false">
+                                发送登录验证请求到我的手机`
+                            </label>
+                            <p>你需要<a href="https://support.twitter.com/articles/97942">确认邮件地址</a>以启用此功能。</p>
+                            <p>你需要<a href="/settings/devices">添加一部手机</a>到你的 Twitter 账号以在网页上启用此功能。</p>
+                            <label class="t1-label radio">
+                                <input type="radio" value="push" disabled="" name="user[login_verification_type]">
+                                发送登录验证请求到 Twitter 应用
+                            </label>
+                            <p>仅需一次点击即可在启用登录验证时通过 Twitter iPhone 和 Android 客户端接受登录请求。 <a href="https://support.twitter.com/articles/20170388">了解更多</a></p>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="list-group-item">
+                <h3>
+                    隐私
+                </h3>
+
+                <fieldset class="form-group">
+                    <label class="col-sm-2 control-label">
+                        登录验证
+                    </label>
+                    <div class="col-sm-10">
+                        <div class="control-list">
+                            <label class="radio">
+                                <input type="radio" value="off" id="no_login_verification" name="user[login_verification_type]" checked="">
+                                不要验证登录请求
+                            </label>
+                            <label class="t1-label radio">
+                                <input type="radio" value="sms" id="sms_login_verification" name="user[login_verification_type]" disabled="">
+                                <input type="hidden" id="sms_login_verification_enabled" value="false">
+                                发送登录验证请求到我的手机`
+                            </label>
+                            <p>你需要<a href="https://support.twitter.com/articles/97942">确认邮件地址</a>以启用此功能。</p>
+                            <p>你需要<a href="/settings/devices">添加一部手机</a>到你的 Twitter 账号以在网页上启用此功能。</p>
+                            <label class="t1-label radio">
+                                <input type="radio" value="push" disabled="" name="user[login_verification_type]">
+                                发送登录验证请求到 Twitter 应用
+                            </label>
+                            <p>仅需一次点击即可在启用登录验证时通过 Twitter iPhone 和 Android 客户端接受登录请求。 <a href="https://support.twitter.com/articles/20170388">了解更多</a></p>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+
+
+    </form>
+
+
+    <table class="table table-hover">
+        <tr>
+            <td>
+                <div class="inline">
+                    <input onclick="this.blur()"
+                           type="radio"
+                           id="all_rights_reserved"
+                           ng-model="settings.all_rights_reserved"
+                           name="allRightsReserved"
+                           value="true">
+                    <label for="all_rights_reserved">保留所有权利</label>
+
+                    <p class="explanation">任何人在未获得您明确许可的情况下，都不得复制或使用您的照片。</p>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="inline">
+                    <input onclick="this.blur()" type="radio"
+                           id="some_rights_reserved"
+                           ng-model="settings.some_rights_reserved"
+                           name="allRightsReserved"
+                           value="true">
+                    <label for="some_rights_reserved">保留部份权利</label>
+
+                    <p class="explanation">保留版权，但允许有条件的使用，请选择：</p>
+
+                    <div id="conditions" class="panel-body">
+
+                        <p class="sublegend">是否允许用作商业用途？</p>
+
+                        <input onclick="this.blur()"
+                               type="radio"
+                               id="comm-use-yes"
+                               name="commercialUse"
+                               value="true" disabled="">
+                        <label for="comm-use-yes">是</label>
+                        <input onclick="this.blur()"
+                               type="radio" id="comm-use-no"
+                               name="commercialUse" value="false" disabled="">
+                        <label for="comm-use-no">否</label>
+
+                        <p class="sublegend">是否允许修改？</p>
+
+                        <input onclick="this.blur()" type="radio" id="modify-yes"
+                               ng-model="settings.modify"
+                               name="modify" value="true" disabled=""><label for="modify-yes">是</label>
+                        <input onclick="this.blur()"
+                               type="radio" id="modify-no" name="modify" disabled=""
+                               value="false"> <label for="modify-no">否</label>
+
+                        <input onclick="this.blur()" type="radio" id="modify-sa"
+                               name="modify" value="false" disabled=""> <label
+                            for="modify-sa"> 是，条件是其它人必须以相同方式共享 </label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

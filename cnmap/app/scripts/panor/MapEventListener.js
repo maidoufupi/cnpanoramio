@@ -21,6 +21,10 @@
 
     IMapEventListener.prototype.setZoomAndCenter = function(map, zoom, lat, lng) {};
 
+    IMapEventListener.prototype.zoomIn = function(map) {};
+
+    IMapEventListener.prototype.zoomOut = function(map) {};
+
     IMapEventListener.prototype.setBounds = function(map, sw, ne) {};
 
     IMapEventListener.prototype.clearMap = function(map) {};

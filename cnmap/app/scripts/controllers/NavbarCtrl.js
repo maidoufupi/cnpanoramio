@@ -3,13 +3,15 @@
  */
 angular.module('ponmApp')
     .controller('NavbarCtrl',
-    ['$window', '$scope', '$log', '$http', 'ponmCtxConfig',
-    function ($window, $scope, $log, $http, ponmCtxConfig) {
+    ['$window', '$scope', '$log', '$http', 'AuthService', 'ponmCtxConfig',
+    function ($window, $scope, $log, $http, AuthService, ponmCtxConfig) {
 
         $scope.ctx = ponmCtxConfig.ctx;
         $scope.staticCtx = ponmCtxConfig.staticCtx;
         $scope.apirest = ponmCtxConfig.apirest;
         $scope.ponmCtxConfig = ponmCtxConfig;
+
+        AuthService.checkLogin();
 
         $scope.$on("login", function() {
             $log.debug($scope.ponmCtxConfig.userId);

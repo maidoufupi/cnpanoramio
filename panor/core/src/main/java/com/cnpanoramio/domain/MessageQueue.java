@@ -13,6 +13,7 @@ import org.appfuse.model.User;
 
 @Entity
 @Table(name = "message_queue")
+@Deprecated
 public class MessageQueue extends BaseEntity {
 	/**
 	 * 
@@ -32,11 +33,8 @@ public class MessageQueue extends BaseEntity {
 	private Message message;
 	
 	@Column(name="have_read")
-	private Boolean haveRead;
+	private boolean haveRead;
 	
-	@Column
-	private Boolean deleted;
-
 	public Long getId() {
 		return id;
 	}
@@ -61,20 +59,11 @@ public class MessageQueue extends BaseEntity {
 		this.message = message;
 	}
 
-	public Boolean getHaveRead() {
+	public boolean isHaveRead() {
 		return haveRead;
 	}
 
-	public void setHaveRead(Boolean haveRead) {
+	public void setHaveRead(boolean haveRead) {
 		this.haveRead = haveRead;
 	}
-
-	public Boolean getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
-	
 }

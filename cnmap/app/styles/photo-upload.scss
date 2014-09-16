@@ -54,13 +54,31 @@
   }
 
   .table.files {
+    table-layout: fixed;
+
+    .photo-thumbnail {
+      width: 18%;
+    }
+    .photo-info {
+      width: 100px;
+    }
+
+    // editable a link
+    a.editable-empty {
+      color: #428bca;
+    }
+
+    // one row is .photo
     .photo {
       .preview {
         cursor: pointer;
+        canvas {
+          max-width: 100%;
+        }
       }
 
       .action {
-        opacity: 0;
+        opacity: 0.3;
       }
 
       p {
@@ -77,12 +95,26 @@
       -webkit-animation: leave_sequence 500ms ease-in; /* Safari/Chrome */
       animation: leave_sequence 500ms ease-in; /* IE10+ and Future Browsers */
     }
+    
+    .photo:hover, .photo.hover {
+      .action {
+        opacity: 1;
+      }
+      .geo-info {
+        .palce-marker {
+          -webkit-animation: ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1;
+          animation: ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1;
+        }
+      }
+    }
 
-    .info {
+    .geo-info {
+      width: 35%;
       .palce-marker {
         display: inline;
         cursor: pointer;
       }
+
       .location-display-place {
         display: inline;
       }
@@ -104,5 +136,6 @@
         color: $brand-warning;
       }
     }
+
   }
 }

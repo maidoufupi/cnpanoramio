@@ -6,6 +6,7 @@
             <span class="footnotes">{{travel.time_start | calculatetime | date:'yyyy/MM/dd'}}{{'  -  '}}{{travel.time_end | calculatetime | date:'yyyy/MM/dd'}}</span>
             <span class="clickable"
                   ng-click="selectAll()">全选</span>
+            <a href="#/maps/travel/{{travel.id}}">编辑</a>
         </div>
     </div>
 

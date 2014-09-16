@@ -136,7 +136,7 @@ angular.module('ponmApp.directives')
                     var mouseX = e.pageX + options.offsetX,
                         mouseY = e.pageY + options.offsetY;
 
-                    $log.debug("mouseX: " +  mouseX + " mouseY: " +  mouseY);
+//                    $log.debug("mouseX: " +  mouseX + " mouseY: " +  mouseY);
 
                     var w = Math.abs(initialW - mouseX);
                     var h = Math.abs(initialH - mouseY);

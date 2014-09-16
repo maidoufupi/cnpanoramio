@@ -137,5 +137,13 @@ public class PhotoDaoImpl extends GenericDaoHibernate<Photo, Long> implements Ph
 		return criteria.list();
 	}
 
+	@Override
+	public List<Photo> getNoTravel(User user) {
+		return getSession().createCriteria(Photo.class)
+				.add(Restrictions.eq("owner", user))
+				.add(Restrictions.eq("deleted", false))
+				.add(Restrictions.isNull("travelSpot"))
+				.addOrder(Order.desc("createDate")).list();
+	}
 	
 }

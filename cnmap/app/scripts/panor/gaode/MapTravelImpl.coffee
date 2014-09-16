@@ -12,11 +12,11 @@ class TravelLayer extends window.cnmap.ITravelLayer
         @createLabel photo for photo in spot.photos
         point = []
         point.push @createPoint photo for photo in spot.photos
-        new AMap.Polyline {
-          map: @map
-          path: point
-          strokeStyle: 'dashed'
-        }
+        spot.polyline = new AMap.Polyline {
+            map: @map
+            path: point
+            strokeStyle: 'dashed'
+          }
 
   createPoint: (photo) ->
     new AMap.LngLat(photo.point.lng, photo.point.lat)
@@ -37,6 +37,25 @@ class TravelLayer extends window.cnmap.ITravelLayer
 
     label.photoId = photo.id
     label.setMap(@map)
+
+  toggleSpotLine: (spot, visible) ->
+    if spot.polyline
+      if visible
+        spot.polyline.show()
+      else
+        spot.polyline.hide()
+
+  updateSpotLine: (spot) ->
+    point = []
+    point.push @createPoint photo for photo in spot.photos
+    if spot.polyline
+      spot.polyline.setPath point
+    else
+      spot.polyline = new AMap.Polyline {
+          map: @map
+          path: point
+          strokeStyle: 'dashed'
+        }
 
   createSpot: (spot) ->
     distance = 0

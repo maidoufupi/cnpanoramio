@@ -17,7 +17,9 @@ public interface TravelService {
 	 * @return
 	 */
 	public Travel getTravel(Long travelId);
-
+	
+	public Travel getNoTravel();	
+	
 	/**
 	 * 获取用户所有travel
 	 * 
@@ -61,6 +63,15 @@ public interface TravelService {
 	 * @return
 	 */
 	public Travel changeTravelDesc(Long id, String description);
+	
+	/**
+	 * 更改travel name
+	 * 
+	 * @param id
+	 * @param name
+	 * @return
+	 */
+	public Travel changeTravelName(Long id, String name);
 	
 	/**
 	 * 更改TravelSpot（景点）的属性

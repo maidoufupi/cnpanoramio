@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -30,6 +29,9 @@ public abstract class BaseEntity implements Serializable, CreateModifiable {
 	/** 修改日期 */
 	@Column(name="modify_date", nullable = false)
 	private Date modifyDate;
+	
+	@Column
+	private boolean deleted;
 
 	/**
 	 * 获取创建日期
@@ -76,5 +78,12 @@ public abstract class BaseEntity implements Serializable, CreateModifiable {
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
-	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 }

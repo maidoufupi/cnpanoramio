@@ -34,7 +34,7 @@
             photo = _ref2[_k];
             point.push(this.createPoint(photo));
           }
-          _results.push(new AMap.Polyline({
+          _results.push(spot.polyline = new AMap.Polyline({
             map: this.map,
             path: point,
             strokeStyle: 'dashed'
@@ -65,6 +65,35 @@
       }
       label.photoId = photo.id;
       return label.setMap(this.map);
+    };
+
+    TravelLayer.prototype.toggleSpotLine = function(spot, visible) {
+      if (spot.polyline) {
+        if (visible) {
+          return spot.polyline.show();
+        } else {
+          return spot.polyline.hide();
+        }
+      }
+    };
+
+    TravelLayer.prototype.updateSpotLine = function(spot) {
+      var photo, point, _i, _len, _ref;
+      point = [];
+      _ref = spot.photos;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        point.push(this.createPoint(photo));
+      }
+      if (spot.polyline) {
+        return spot.polyline.setPath(point);
+      } else {
+        return spot.polyline = new AMap.Polyline({
+          map: this.map,
+          path: point,
+          strokeStyle: 'dashed'
+        });
+      }
     };
 
     TravelLayer.prototype.createSpot = function(spot) {

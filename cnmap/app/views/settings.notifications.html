@@ -1,0 +1,63 @@
+<div id="alert" class="panel panel-default">
+    <div class="panel-heading"><h2>电子邮件提醒和私密信息</h2></div>
+    <div class="panel-body">
+        <table class="table table-hover">
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label for="alert_comments">
+                            <input type="checkbox"
+                                   id="alert_comments"
+                                   ng-model="settings.alert_comments"
+                                   name="alertComments"
+                                   class="alert-checkbox" onclick="this.blur()" value="true">
+                            我的照片有新的评论
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label for="alert_photos"> <input type="checkbox"
+                                                          id="alert_photos"
+                                                          ng-model="settings.alert_photos"
+                                                          name="alertPhotos"
+                                                          class="alert-checkbox"
+                                                          onclick="this.blur()" value="true">
+                            我订阅的用户上传了新照片
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label for="alert_group_invitations"> <input
+                                type="checkbox"
+                                id="alert_group_invitations"
+                                ng-model="settings.alert_group_invitations"
+                                name="alertGroupInvitations"
+                                class="alert-checkbox" onclick="this.blur()" value="true">
+                            新的和更新后的群组加入邀请
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label for="private_messages">
+                            <input type="checkbox"
+                                   id="private_messages"
+                                   ng-model="settings.private_messages"
+                                   name="privateMessages"
+                                   class="alert-checkbox"
+                                   onclick="this.blur()" value="true"> 启用私密信息
+                        </label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

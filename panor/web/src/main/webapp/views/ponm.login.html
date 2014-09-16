@@ -4,13 +4,13 @@
         <div class="login-form">
             <div class="animated bounceIn">
                 <div class="form-header">
-                    <span ng-show="loginError">用户名或密码错误</span>
+                    <span ng-show="loginError&&!userForm.$dirty">用户名或密码错误</span>
                 </div>
                 <!--  -->
-                <!--action="http://127.0.0.1:8080/panor-web/j_security_check"-->
+                <!--action="/login/j_spring_security_check"-->
                 <div class="form-main">
                     <form method="post"
-                          action="http://127.0.0.1:8080/panor-web/login/j_spring_security_check"
+                          action="/login/j_spring_security_check"
                           name="userForm"
                           novalidate>
                         <div class="form-group">
@@ -23,8 +23,7 @@
                                    ng-model="credentials.password"
                                    required>
                         </div>
-                        <button type="submit" class="btn btn-block signin"
-                                ng-click="login($event, userForm.$valid, credentials)"
+                        <button class="btn btn-block signin"
                                 ng-disabled="userForm.$invalid">登录
                         </button>
                     </form>

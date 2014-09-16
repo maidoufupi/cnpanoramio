@@ -16,4 +16,10 @@ public class TravelSpotDaoImpl extends GenericDaoHibernate<TravelSpot, Long>
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public TravelSpot persist(TravelSpot travelSpot) {
+		getSession().persist(travelSpot);
+		return travelSpot;
+	}
+
 }

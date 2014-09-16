@@ -1,0 +1,58 @@
+/*
+Syntax error: Undefined variable: "$screen-xs-min".
+        on line 62 of dynamic-messages-layout.scss
+
+57:     animation: popUp .8s ease-in forwards;
+58:   }
+59: }
+60: 
+61: // Extra small screen / phone <  < Small screen / tablet
+62: @media (min-width: $screen-xs-min) and (max-width: $screen-sm-min) {
+63:   .dynamic-container {
+64:     width: 500px;
+65:     .masonry-item {
+66:       width: 378px;
+67:       padding: 10px 10px;
+
+Backtrace:
+dynamic-messages-layout.scss:62
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/script/variable.rb:49:in `_perform'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/script/node.rb:40:in `perform'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:398:in `block in run_interp_no_strip'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:396:in `map'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:396:in `run_interp_no_strip'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:406:in `run_interp'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:360:in `visit_media'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:37:in `visit'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:100:in `visit'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:53:in `block in visit_children'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:53:in `map'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:53:in `visit_children'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:109:in `block in visit_children'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:121:in `with_environment'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:108:in `visit_children'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:37:in `block in visit'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:128:in `visit_root'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:37:in `visit'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:100:in `visit'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:7:in `visit'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/tree/root_node.rb:20:in `render'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/engine.rb:315:in `_render'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/engine.rb:262:in `render'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/plugin/compiler.rb:362:in `update_stylesheet'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/plugin/compiler.rb:203:in `block in update_stylesheets'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/plugin/compiler.rb:201:in `each'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/plugin/compiler.rb:201:in `update_stylesheets'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/plugin.rb:81:in `update_stylesheets'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/exec.rb:443:in `watch_or_update'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/exec.rb:326:in `process_result'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/exec.rb:41:in `parse'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/lib/sass/exec.rb:21:in `parse!'
+D:/dev/tools/Ruby200-x64/lib/ruby/gems/2.0.0/gems/sass-3.2.14/bin/scss:13:in `<top (required)>'
+D:/dev/tools/Ruby200-x64/bin/scss:23:in `load'
+D:/dev/tools/Ruby200-x64/bin/scss:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: Undefined variable: \"$screen-xs-min\".\A         on line 62 of dynamic-messages-layout.scss\A \A 57:     animation: popUp .8s ease-in forwards;\A 58:   }\A 59: }\A 60: \A 61: // Extra small screen / phone <  < Small screen / tablet\A 62: @media (min-width: $screen-xs-min) and (max-width: $screen-sm-min) {\A 63:   .dynamic-container {\A 64:     width: 500px;\A 65:     .masonry-item {\A 66:       width: 378px;\A 67:       padding: 10px 10px;"; }

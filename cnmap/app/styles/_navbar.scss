@@ -13,16 +13,16 @@
   }
 
   .navbar {
-    border-radius: 0;
+    height: 51px;
     border: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
     margin-bottom: 0;
+    @include border-radius(0);
+    @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
     .nav {
       > li {
         padding: 0 15px;
         > a {
-          padding: 15px 0;
-
+          padding: 14px 0;
           background-color: initial !important;
         }
       }
@@ -31,8 +31,17 @@
 }
 
 .navbar-third {
-  position: fixed;
-  top: 102px;
+  position: fixed !important;
+  top: 102px !important;
+  @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
+  z-index: 1028;
+}
+
+.navbar-forth {
+  position: fixed !important;
+  top: 153px !important;
+  z-index: 1027;
+  @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
 }
 
 .navbar-edit {
@@ -65,20 +74,18 @@
         min-width: 200px;
         min-height: 100px;
         border: 0;
-        -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.575);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.575);
+        @include box-shadow(0 6px 12px rgba(0, 0, 0, 0.575));
         .photo {
           position: relative;
           float: left;
           margin: 4px;
           .icon-photo-select {
-            opacity: .7;
-            -webkit-transition: opacity 218ms;
-            transition: opacity 218ms;
-            cursor: pointer;
-            left: 0;
             position: absolute;
+            left: 0;
             top: 42px;
+            cursor: pointer;
+            @include opacity(.7);
+            @include transition(opacity 218ms);
           }
         }
       }
@@ -135,9 +142,9 @@
 
 /* navbar-start *******************************************************/
 
-.glyphicon{
-  font-size: 16px;
-}
+//.glyphicon{
+//  font-size: 16px;
+//}
 
 .navbar.navbar-fixed-top {
   .navbar-nav.navbar-right {
@@ -179,8 +186,7 @@
   vertical-align: middle;
   height: 30px;
   width: 30px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
+  @include border-radius(3px);
   border: 0;
 }
 //

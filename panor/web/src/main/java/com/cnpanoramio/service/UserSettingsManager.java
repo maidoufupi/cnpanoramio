@@ -2,15 +2,15 @@ package com.cnpanoramio.service;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
 
 import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Avatar;
-import com.cnpanoramio.domain.Recycle;
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
-import com.cnpanoramio.json.UserResponse.Settings;
 
 public interface UserSettingsManager {
 	
@@ -33,19 +33,14 @@ public interface UserSettingsManager {
 	public UserSettings create(User user);
 	
 	/**
-	 * 获取当前用户的详细设置
-	 * 
-	 * @return
-	 */
-	public Settings getCurrentUserSettings();
-	
-	/**
 	 * 获取用户设置
 	 * 
 	 * @param id
 	 * @return
 	 */
 	public UserSettings get(Long id);
+	
+	public UserSettings get(User user);
 	
 	/**
 	 * 通过用户名查找详细设置
@@ -61,7 +56,9 @@ public interface UserSettingsManager {
 	 * @param id
 	 * @return
 	 */
-	public UserOpenInfo getOpenInfo(Long id);
+	public UserOpenInfo getOpenInfo(User user, User owner);
+	
+	public UserOpenInfo getOpenInfo(User user);
 	
 	/**
 	 * 根据email查询用户
@@ -95,7 +92,7 @@ public interface UserSettingsManager {
 	 * @param user
 	 * @return
 	 */
-	public List<String> getUserTags(User user);
+	public Set<String> getUserTags(User user);
 	
 	/**
 	 * 创建用户的tag
@@ -104,7 +101,7 @@ public interface UserSettingsManager {
 	 * @param tag
 	 * @return
 	 */
-	public List<String> createTag(User user, String tag);
+	public Tag createTag(User user, String tag);
 	
 	/**
 	 * 删除用户tag
@@ -113,35 +110,17 @@ public interface UserSettingsManager {
 	 * @param tag
 	 * @return
 	 */
-	public List<String> deleteTag(User user, String tag);
+	public Set<String> deleteTag(User user, String tag);
 	
 	/**
 	 * 获取用户的回收站全部内容
 	 * 
 	 * @param id 用户id
 	 */
-	public List<Recycle> getRecycleBin(Long id);
+//	public List<Recycle> getRecycleBin(Long id);
 	
-	/**
-	 * 清空用户的回收站
-	 * 
-	 * @param id 用户id
-	 */
-	public void emptyRecycleBin(Long id);
 	
-	/**
-	 * 撤销删除操作
-	 * 
-	 * @param id 删除记录的id
-	 */
-	public void cancelRecycle(Long userId, Long id);
 	
-	/**
-	 * 永久删除操作
-	 * 
-	 * @param id 删除记录的id
-	 */
-	public void removeRecycle(Long userId, Long id);
 	
 	/**
 	 * 获取用户指定区域内的全部图片
@@ -164,7 +143,7 @@ public interface UserSettingsManager {
 	 * @param user
 	 * @return
 	 */
-	public User signup(User user);
+//	public User signup(User user);
 	
 	/**
 	 * 关注/取消关注 用户
@@ -174,4 +153,13 @@ public interface UserSettingsManager {
 	 * @return
 	 */
 	public void following(User user, User following, boolean follow);
+	
+	/**
+	 * 用户密码是否正确
+	 * 
+	 * @param user
+	 * @param password
+	 * @return
+	 */
+	public boolean isPasswordValid(User user, String password);
 }

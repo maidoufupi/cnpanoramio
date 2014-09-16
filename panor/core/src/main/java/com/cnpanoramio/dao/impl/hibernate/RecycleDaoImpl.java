@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.dao.RecycleDao;
 import com.cnpanoramio.domain.Recycle;
-import com.cnpanoramio.domain.Travel;
 
 @Repository("recycleDao")
 public class RecycleDaoImpl extends GenericDaoHibernate<Recycle, Long> implements RecycleDao {
@@ -18,9 +17,14 @@ public class RecycleDaoImpl extends GenericDaoHibernate<Recycle, Long> implement
 	}
 
 	@Override
+	public Recycle persist(Recycle recycle) {
+		getSession().persist(recycle);
+		return recycle;
+	}
+	
+	@Override
 	public List<Recycle> getUserRecycle(Long id) {
 		return getSession().createCriteria(Recycle.class)
 				.add(Restrictions.eq("user.id", id)).list();
 	}
-
 }

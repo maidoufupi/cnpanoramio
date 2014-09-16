@@ -1,30 +1,25 @@
 package com.cnpanoramio.domain;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-@XmlRootElement
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Entity
 @Table(name = "recycle")
-public class Recycle {
+public class Recycle extends BaseEntity {
 	
-	public static String CON_TYPE_PHOTO = "photo";
-	public static String CON_TYPE_TRAVEL = "travel";
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3796390836280086933L;
 	
-
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private Long id;
@@ -32,18 +27,17 @@ public class Recycle {
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private UserSettings user;
-	
-	@JsonProperty("create_time")
-	@Column(name="create_time")
-	private Date createTime;
-	
-	@JsonProperty("recy_type")
+
 	@Column(name="recy_type")
-	private String recyType;
+	@Enumerated(EnumType.STRING)
+	private RecycleType recyType;
 	
-	@JsonProperty("recy_id")
 	@Column(name="recy_id")
 	private Long recyId;
+	
+	public enum RecycleType {
+		photo, travel, message
+	}
 
 	public Long getId() {
 		return id;
@@ -61,19 +55,11 @@ public class Recycle {
 		this.user = user;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getRecyType() {
+	public RecycleType getRecyType() {
 		return recyType;
 	}
 
-	public void setRecyType(String recyType) {
+	public void setRecyType(RecycleType recyType) {
 		this.recyType = recyType;
 	}
 

@@ -1,0 +1,130 @@
+<div class="message-card flip-container" ng-class="{hover: flipx}">
+    <div class="flipper">
+        <div class="front card">
+            <!-- 前面内容 -->
+            <div class="message-header">
+                <div class="card-action">
+                    <div class="dropdown">
+                        <span class="action-dropdown icon-dropdown dropdown-toggle" ></span>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+                            <li ng-click="flipx=true"><a href="">查看信息动态</a></li>
+                            <li role="presentation"><a href="">忽略此信息</a></li>
+                            <li role="presentation"><a href="">从动态列表中删除</a></li>
+                            <li role="presentation"><a href="">举报此此信息</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="media user-info" >
+                    <a class="pull-left" href="#/photos/{{message.user.id}}/albums"
+                       user-card owner="owner" user-id="message.user.id">
+                        <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{message.user.avatar || 1}}.png">
+                    </a>
+
+                    <div class="media-body">
+                        <a href="#/photos/{{message.user.id}}/albums"
+                           user-card owner="owner" user-id="message.user.id">
+                            <h4 class="media-heading">{{message.user.name}}</h4>
+                        </a>
+                        <div>
+                            <span class="footnotes">{{message.create_date | date:'yyyy年MM月dd日'}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-tags" ng-show="message.tags.length">
+                    <div class="tag active">
+                            <span class="bookmark1 Gh">
+                            </span>
+                        <a href="">
+                            {{message.tags[0]}}
+                        </a>
+                    </div>
+                    <div class="tag">
+                            <span class="bookmark2 Gh">
+                            </span>
+                        <a href="">
+                            {{message.tags[1]}}
+                        </a>
+                    </div>
+                    <div class="tag">
+                            <span class="bookmark3 Gh">
+                            </span>
+                        <a href="">
+                            {{message.tags[2]}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-body">
+                <div class="content">
+                    <pre class="description" ng-bind-html="message.content"></pre>
+                </div>
+                <div class="message-media">
+                    <div ng-switch="message.type">
+                        <a ng-switch-when="photo"
+                           href=""
+                           ng-click="photoClick(message.photo.id)">
+                            <img ng-src="{{getPhotoSrc(message.photo)}}">
+                            <div class="image-border"></div>
+                        </a>
+                        <ponm-travel-album travel="message.travel" ng-switch-when="travel"></ponm-travel-album>
+                    </div>
+                    <!--ng-style="{width: '344px', height: (message.photo.height&&(message.photo.height/message.photo.width*344+'px'))||'344px'}"-->
+
+                </div>
+            </div>
+
+            <div class="message-user-action">
+                <div class="status">
+                    <div>
+                        <button type="button"
+                                class="btn btn-sm"
+                                title="{{(message.like && '取消赞') || '赞一个'}}"
+                                ng-class="{'btn-danger': message.like, 'btn-default': !message.like}"
+                                ng-click="like()">{{message.like_count || '0'}}个赞</button>
+                        <button type="button"
+                                class="btn btn-default btn-sm"
+                                title="分享"
+                                ng-click="share()"><span class="glyphicon glyphicon-share-alt"></span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-comments">
+
+                <div ponm-comments="{type: 'message', commentLimit: 1}"
+                     ponm-comment-to="message.id"
+                     ponm-comment-comments="message.comments">
+                </div>
+            </div>
+        </div>
+        <div class="back card">
+            <!-- 背面内容 -->
+
+            <div class="message-header">
+                <div class="card-action">
+                            <span class="front-back"
+                                  ng-click="flipx=false"></span>
+                </div>
+                <div class="media user-info" >
+                    <a class="pull-left" href="{{ctx}}/#/photos/{{message.user.id}}/albums"
+                            >
+                        <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{message.user.avatar || 1}}.png">
+                    </a>
+
+                    <div class="media-body">
+                        <a href="{{ctx}}/#/photos/{{message.user.id}}/albums"
+                                >
+                            <h4 class="media-heading" user-card>{{message.user.name}}</h4>
+                        </a>
+                        <div>
+                            <span class="footnotes">{{message.photo.create_time | date:'yyyy年MM月dd日'}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

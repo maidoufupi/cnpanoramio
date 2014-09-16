@@ -6,8 +6,7 @@
     <div class="photo-wall photo-fluid-container"
          photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}">
         <div ng-repeat="photo in photos"
-             class="photo"
-             ponm-hover=">.action">
+             class="photo">
             <a href=""
                ng-click="displayPhoto(photo.id)">
                 <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_100w_100h.jpg">

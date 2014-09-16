@@ -1,0 +1,11 @@
+<div class="container-fluid">
+    <div class="messages-col"
+         ng-repeat="col in cols">
+        <div ng-repeat="message in col.messages"
+             waypoint="{'offset': '98%', id: {id: message.id}}"
+             on-waypoint="onWaypoint($element, $direction)"
+             class="message">
+            <div dynamic-message></div>
+        </div>
+    </div>
+</div>

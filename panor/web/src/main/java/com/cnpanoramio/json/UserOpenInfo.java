@@ -1,13 +1,16 @@
 package com.cnpanoramio.json;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.TravelResponse.Travel;
 
 
@@ -26,6 +29,9 @@ public class UserOpenInfo {
 	// 头像
 	private Long avatar;
 	
+	// 描述
+	private String description;
+	
 	// 拥有的图片总数
 	@JsonProperty("photo_count")
 	private Long photoCount;
@@ -39,10 +45,13 @@ public class UserOpenInfo {
 	private Integer photoFavorites;
 	
 	// 其所有标签
-	private List<String> tags = new ArrayList<String>(0);
+	private Set<String> tags = new HashSet<String>(0);
 	
 	// 其所有travel
 	private List<Travel> travels = new ArrayList<Travel>(0);
+	
+	@JsonProperty("follow")
+	private Boolean follow;
 	
 	public Long getId() {
 		return id;
@@ -92,11 +101,11 @@ public class UserOpenInfo {
 		this.photoFavorites = photoFavorites;
 	}
 
-	public List<String> getTags() {
+	public Set<String> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<String> tags) {
+	public void setTags(Set<String> tags) {
 		this.tags = tags;
 	}
 
@@ -114,5 +123,23 @@ public class UserOpenInfo {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public Boolean getFollow() {
+		return follow;
+	}
+
+	public void setFollow(Boolean follow) {
+		this.follow = follow;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}	
+	
+	
 }

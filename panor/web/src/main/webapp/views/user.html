@@ -1,0 +1,111 @@
+<div class="user" >
+    <div class="navbar-second" waypoint-sticky="{'stuckClass': 'navbar-second-top', 'offset': '49'}">
+        <nav class="navbar navbar-default"
+             role="navigation">
+            <div class="container">
+                <div class="ProfileCanopy-card">
+                    <div class="media ProfileCardMini">
+                        <a class="pull-left">
+                            <img class="media-object ProfileCardMini-avatarImage" ng-src="{{staticCtx}}/avatar{{user.avatar || 1}}.png">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{user.name}}</h4>
+                            <div>
+                                <span class="footnotes">{{user.username}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav nav-tray">
+                        <li ng-class="{'active': $state.current.name == 'user.dynamic'}">
+                            <a href="#/user/{{userId}}/dynamic">动态</a></li>
+                        <li ng-class="{'active': $state.current.name == 'user.following'}">
+                            <a href="#/user/{{userId}}/following">正在关注</a></li>
+                        <li ng-class="{'active': $state.current.name == 'user.followers'}">
+                            <a href="#/user/{{userId}}/followers">关注者</a></li>
+                        <li ng-class="{'active': $state.current.name == 'user.likes'}">
+                            <a href="#/user/{{userId}}/likes">收藏</a></li>
+                        <!--<li class="dropdown">
+                            <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/yourphotos/trash">回收站</a></li>
+                                <li><a href="">功能介绍</a></li>
+                            </ul>
+                        </li>-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container user">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4 col-md-3 ProfileSidebar">
+                    <div>
+                        <a href="">
+                            <h4>{{user.name}}</h4>
+                        </a>
+                        <a href="">
+                            <span class="footnotes">@{{user.username}}</span>
+                        </a>
+
+                    </div>
+                    <div ng-if="user.id==ponmCtxConfig.userId">
+                        <div ponm-who-to-follow user="user">
+                            WhoToFollow is-visible
+                        </div>
+                    </div>
+                    <div class="Trends card" style="display: block;">
+                        <div class="trends-inner"><div class="flex-module trends-container ">
+                            <div class="flex-module-header">
+                                <h5>
+                                  <span class="trend-location js-trend-location">
+                                      趋势
+                                  </span>
+                                </h5>
+                                <small>· <a role="button" href="#" data-modal="change-trends" class="change-trends js-trend-toggle" ng-show="false">更改</a></small>
+                            </div>
+                            <div class="flex-module-inner">
+                                <ul class="trend-items js-trends">
+                                    <li class="trend-item js-trend-item  "
+                                        ng-repeat="trendItem in trendItems"
+                                        data-trend-name="#{{trendItem}}">
+                                        <a class="js-nav trend-name" href="#/maps/popular#lat=37.737508&lng=106.028072&zoom=5&search={{trendItem}}">#{{trendItem}}</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="Footer module roaming-module Footer--slim">
+                        <div class="flex-module">
+                            <div class="flex-module-inner js-items-container">
+                                <ul class="u-cf">
+                                    <li class="Footer-item Footer-copyright copyright">© 2014 ponm</li>
+                                    <li class="Footer-item"><a class="Footer-link" href="/about">关于</a></li>
+                                    <li class="Footer-item"><a class="Footer-link" href="//support.photoshows.cn">帮助</a></li>
+                                    <li class="Footer-item"><a class="Footer-link" href="//support.photoshows.cn/articles/20170451">广告信息</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8 col-md-9">
+                    <div ui-view></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

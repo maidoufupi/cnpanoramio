@@ -19,8 +19,8 @@ public class MergeDateListener extends DefaultMergeEventListener {
 
 	@Override
 	public void onMerge(MergeEvent event) throws HibernateException {
-		if (event.getOriginal() instanceof CreateModifiable) {
-			CreateModifiable record = (CreateModifiable) event.getOriginal();
+		if (event.getResult() instanceof CreateModifiable) {
+			CreateModifiable record = (CreateModifiable) event.getResult();
 			record.setCreateDate(new Date());
 			record.setModifyDate(new Date());
 		}

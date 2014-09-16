@@ -1,5 +1,6 @@
 'use strict';
-angular.module('ponmApp.controllers', ['ponmApp', 'xeditable', 'ui.map', 'ui.bootstrap'])
+angular.module('ponmApp.controllers',
+    ['ngAnimate', 'ponmApp', 'xeditable', 'ui.map', 'ui.bootstrap'])
     .run(['editableOptions', 'editableThemes', function(editableOptions, editableThemes) {
         editableOptions.theme = 'bs3';
         // overwrite submit button template

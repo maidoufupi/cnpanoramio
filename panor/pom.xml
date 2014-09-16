@@ -68,7 +68,7 @@
 				<version>2.2</version>
 				<configuration>
 					<path>/</path>
-					<contextReloadable>true</contextReloadable>
+					<!-- <contextReloadable>true</contextReloadable> -->
 					<url>http://localhost:8080/manager/text</url>
 					<server>myserver</server>
 					<username>admin</username>

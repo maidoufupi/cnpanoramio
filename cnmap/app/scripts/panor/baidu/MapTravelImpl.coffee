@@ -13,10 +13,12 @@ class TravelLayer extends window.cnmap.ITravelLayer
         point = []
         point.push @createPoint photo for photo in spot.photos
 
-        @map.addOverlay new BMap.Polyline point, {
+        spot.polyline = new BMap.Polyline point, {
             map: @map
             strokeStyle: 'dashed'
           }
+
+        @map.addOverlay spot.polyline
 
   createPoint: (photo) ->
     new BMap.Point photo.point.lng, photo.point.lat
@@ -37,5 +39,24 @@ class TravelLayer extends window.cnmap.ITravelLayer
       label.addEventListener 'click',
         () ->
           jQuery(that).trigger("data_clicked", [this.photoId])
+
+  toggleSpotLine: (spot, visible) ->
+    if spot.polyline
+      if visible
+        spot.polyline.show()
+      else
+        spot.polyline.hide()
+
+  updateSpotLine: (spot) ->
+    point = []
+    point.push @createPoint photo for photo in spot.photos
+    if spot.polyline
+      spot.polyline.setPath point
+    else
+      spot.polyline = new BMap.Polyline point, {
+          map: @map
+          strokeStyle: 'dashed'
+        }
+      @map.addOverlay spot.polyline
 
 window.cnmap.TravelLayer = TravelLayer

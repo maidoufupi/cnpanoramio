@@ -640,3 +640,12 @@ $container-active-color:       #f5f5f5 !default;
 
 $nav-item-active-color: #00bcd4;
 $nav-item-want-active-color: #4dd0e1;
+
+// ----------
+// nav-links
+//** Text color of disabled list items
+$nav-links-disabled-color:      $gray-light !default;
+//** Background color of disabled list items
+$nav-links-disabled-bg:         $gray-lighter !default;
+//** Text color for content within disabled list items
+$nav-links-disabled-text-color: $nav-links-disabled-color !default;

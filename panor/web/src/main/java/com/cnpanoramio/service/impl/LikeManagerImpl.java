@@ -17,7 +17,6 @@ import com.cnpanoramio.domain.Like;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Travel;
 import com.cnpanoramio.service.LikeManager;
-import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.utils.UserUtil;
 
 @Service
@@ -42,49 +41,77 @@ public class LikeManagerImpl implements LikeManager {
 	private UserManager userManager = null;
 	
 	@Override
-	public Like likePhoto(Long id) {
-		User me = UserUtil.getCurrentUser(userManager);
+	public Like likePhoto(User user, Long id) {
 		Photo photo = photoDao.get(id);
 		
-		Like like = likeDao.getPhoto(photo, me);
+		Like like = likeDao.getPhoto(photo, user);
 		if(null == like) {
-			like = likeDao.likePhoto(photo, me);
-			photo.getLikes().add(like);
-		}else {
-			likeDao.unLikePhoto(photo, me);
-			photo.getLikes().remove(like);
+			like = likeDao.likePhoto(photo, user);
 		}
 		return like;
 	}
+	
+	@Override
+	public void unLikePhoto(User user, Long id) {
+		Photo photo = photoDao.get(id);
+		
+		Like like = likeDao.getPhoto(photo, user);
+		if(null != like) {
+			likeDao.remove(like);
+		}
+	}
 
 	@Override
-	public Like likeComment(Long id) {
-		User me = UserUtil.getCurrentUser(userManager);
+	public Like likeComment(User user, Long id) {
 		Comment comment = commentDao.get(id);
-		Like like = likeDao.getComment(comment, me);
+		Like like = likeDao.getComment(comment, user);
 		if(null == like) {
-			like = likeDao.likeComment(comment, me);
-			comment.getLikes().add(like);
-		}else {
-			likeDao.unLikeComment(comment, me);
-			comment.getLikes().remove(like);
+			like = likeDao.likeComment(comment, user);
 		}
 		return like;
 	}
+	
+	@Override
+	public void unLikeComment(User user, Long id) {
+		Comment comment = commentDao.get(id);
+		Like like = likeDao.getComment(comment, user);
+		if(null != like) {
+			likeDao.remove(like);
+		}		
+	}
 
 	@Override
-	public Like likeTravel(Long id) {
-		User me = UserUtil.getCurrentUser(userManager);
+	public Like likeTravel(User user, Long id) {
 		Travel travel = travelDao.get(id);
-		Like like = likeDao.getTravel(travel, me);
+		Like like = likeDao.getTravel(travel, user);
 		if(null == like) {
-			like = likeDao.likeTravel(travel, me);
-			travel.getLikes().add(like);
-		}else {
-			likeDao.unLikeTravel(travel, me);
-			travel.getLikes().remove(like);
+			like = likeDao.likeTravel(travel, user);
 		}
 		return like;
+	}
+	
+	@Override
+	public void unLikeTravel(User user, Long id) {
+		Travel travel = travelDao.get(id);
+		Like like = likeDao.getTravel(travel, user);
+		if(null != like) {
+			likeDao.remove(like);
+		}		
+	}
+
+	@Override
+	public Like getLikePhoto(User user, Photo photo) {
+		return likeDao.getPhoto(photo, user);
+	}
+
+	@Override
+	public Like getLikeComment(User user, Comment comment) {
+		return likeDao.getComment(comment, user);
+	}
+
+	@Override
+	public Like getLikeTravel(User user, Travel travel) {
+		return likeDao.getTravel(travel, user);
 	}
 
 }

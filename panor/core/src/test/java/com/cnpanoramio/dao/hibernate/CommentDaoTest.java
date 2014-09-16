@@ -54,9 +54,9 @@ public class CommentDaoTest {
 		photoDao.save(photo);
 		
 		comment = new Comment();
-		comment.setPhoto(photo);
+//		comment.setPhoto(photo);
 		comment.setUser(userDao.getUsers().get(1));
-		comment.setComment("Very good");
+		comment.setContent("Very good");
 		comment.setCreateDate(new Date());
 //		comment.setCreateTime(Calendar.getInstance());
 		comment = commentDao.save(comment);
@@ -64,9 +64,9 @@ public class CommentDaoTest {
 		
 		comment = new Comment();
 //		comment.setCreateTime(Calendar.getInstance());
-		comment.setPhoto(photo);
+//		comment.setPhoto(photo);
 		comment.setUser(userDao.getUsers().get(1));
-		comment.setComment("Very good 2");
+		comment.setContent("Very good 2");
 		comment.setCreateDate(new Date());
 		comment = commentDao.save(comment);
 	}
@@ -82,14 +82,14 @@ public class CommentDaoTest {
 		List<Comment> comments = commentDao.getComments(photo.getId());
 		Assert.assertTrue(comments.size() == 1);
 		log.info(comments.get(0).getComment());
-		log.info(comments.get(0).getPhoto().getOwner().getUsername());
+//		log.info(comments.get(0).getPhoto().getOwner().getUsername());
 		log.info(comments.get(0).getUser().getUsername());
 	}
 	
 	@Test
 	public void testGetCommentsPager() {
 		Assert.assertEquals(commentDao.getCommentSize(photo.getId()).intValue(), 2);
-		List<Comment> comments = commentDao.getCommentPager(photo.getId(), 2, 1);
+		List<Comment> comments = commentDao.getComments(photo.getId());
 		Assert.assertTrue(comments.size() == 1);
 //		log.info(comments.get(0).getCreateTime().get(Calendar.YEAR));
 //		log.info(comments.get(0).getCreateTime().get(Calendar.MONTH));
@@ -97,7 +97,7 @@ public class CommentDaoTest {
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 //		log.info(format1.format(comments.get(0).getCreateTime().getTime()));
 		log.info(comments.get(0).getComment());
-		log.info(comments.get(0).getPhoto().getOwner().getUsername());
+//		log.info(comments.get(0).getPhoto().getOwner().getUsername());
 		log.info(comments.get(0).getUser().getUsername());
 	}
 	

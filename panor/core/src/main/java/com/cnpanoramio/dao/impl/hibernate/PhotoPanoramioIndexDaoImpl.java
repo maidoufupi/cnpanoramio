@@ -40,16 +40,16 @@ public class PhotoPanoramioIndexDaoImpl extends
 	public List<Photo> getPhotoPanoramio(Point sw, Point ne,
 			int level, MapVendor mVendor, int width, int height) {
 
-		Double heightRate = height / (ne.lat - sw.lat),
-				widthRate = width / (ne.lng - sw.lng);
+		Double heightRate = height / (ne.getLat() - sw.getLat()),
+				widthRate = width / (ne.getLng() - sw.getLng());
 		Double lSouth, lWest, lNorth, lEast;
 
 		Double lMeasure;
 		lMeasure = conMeasure / Math.pow(2D, level);
-		lSouth = sw.lat - (sw.lat % lMeasure);
-		lWest = sw.lng - (sw.lng % lMeasure);
-		lNorth = ne.lat - (ne.lat % lMeasure);
-		lEast = ne.lng - (ne.lng % lMeasure);
+		lSouth = sw.getLat() - (sw.getLat() % lMeasure);
+		lWest = sw.getLng() - (sw.getLng() % lMeasure);
+		lNorth = ne.getLat() - (ne.getLat() % lMeasure);
+		lEast = ne.getLng() - (ne.getLng() % lMeasure);
 
 		log.debug("getPhotoPanoramio [" + lSouth + ", " + lWest + "; " + lNorth + ", " + lEast + "]");
 		Criteria criteria = getSession()
@@ -111,13 +111,13 @@ public class PhotoPanoramioIndexDaoImpl extends
 	public List<Photo> getUserPhotoPanoramio(Point sw, Point ne, int level,
 			MapVendor vendor, int width, int height, Long userId, boolean favorite) {
 		
-		Double heightRate = height / (ne.lat - sw.lat),
-				widthRate = width / (ne.lng - sw.lng);
+		Double heightRate = height / (ne.getLat() - sw.getLat()),
+				widthRate = width / (ne.getLng() - sw.getLng());
 			
 		Criteria criteria = getSession()
 				.createCriteria(Photo.class, "photo")
-				.add(Restrictions.ge("gpsPoint.lat", sw.lat))
-				.add(Restrictions.le("gpsPoint.lat", ne.lat))
+				.add(Restrictions.ge("gpsPoint.lat", sw.getLat()))
+				.add(Restrictions.le("gpsPoint.lat", ne.getLat()))
 				;
 		if(favorite) {
 			criteria.createAlias("photo.favorites", "favorite")
@@ -125,13 +125,13 @@ public class PhotoPanoramioIndexDaoImpl extends
 		}else {
 			criteria.add(Restrictions.eq("owner.id", userId));
 		}
-		if(sw.lng < ne.lng) {
-			criteria.add(Restrictions.gt("gpsPoint.lng", sw.lng))
-					.add(Restrictions.lt("gpsPoint.lng", ne.lng));
+		if(sw.getLng() < ne.getLng()) {
+			criteria.add(Restrictions.gt("gpsPoint.lng", sw.getLng()))
+					.add(Restrictions.lt("gpsPoint.lng", ne.getLng()));
 		}else {
 			criteria.add(Restrictions.or(
-					Restrictions.and(Restrictions.ge("gpsPoint.lng", sw.lng), Restrictions.le("gpsPoint.lng", 180D)), 
-					Restrictions.and(Restrictions.ge("gpsPoint.lng", -180D), Restrictions.le("gpsPoint.lng", ne.lng))));
+					Restrictions.and(Restrictions.ge("gpsPoint.lng", sw.getLng()), Restrictions.le("gpsPoint.lng", 180D)), 
+					Restrictions.and(Restrictions.ge("gpsPoint.lng", -180D), Restrictions.le("gpsPoint.lng", ne.getLng()))));
 		}
 		
 		List<Photo> photos = criteria.list();
@@ -177,16 +177,16 @@ public class PhotoPanoramioIndexDaoImpl extends
 	public List<Photo> getLatestPanoramio(Point sw, Point ne, int level,
 			MapVendor vendor, int width, int height) {
 		
-		Double heightRate = height / (ne.lat - sw.lat),
-				widthRate = width / (ne.lng - sw.lng);
+		Double heightRate = height / (ne.getLat() - sw.getLat()),
+				widthRate = width / (ne.getLng() - sw.getLng());
 		Double lSouth, lWest, lNorth, lEast;
 		
 		Double lMeasure;
 		lMeasure = conMeasure / Math.pow(2D, level);
-		lSouth = sw.lat - (sw.lat % lMeasure);
-		lWest = sw.lng - (sw.lng % lMeasure);
-		lNorth = ne.lat - (ne.lat % lMeasure);
-		lEast = ne.lng - (ne.lng % lMeasure);
+		lSouth = sw.getLat() - (sw.getLat() % lMeasure);
+		lWest = sw.getLng() - (sw.getLng() % lMeasure);
+		lNorth = ne.getLat() - (ne.getLat() % lMeasure);
+		lEast = ne.getLng() - (ne.getLng() % lMeasure);
 			
 		Criteria criteria = getSession().createCriteria(PhotoLatestIndex.class)
 				.add(Restrictions.eq("pk.level", level))
@@ -255,10 +255,10 @@ public class PhotoPanoramioIndexDaoImpl extends
 		
 		Double lMeasure;
 		lMeasure = conMeasure / Math.pow(2D, level);
-		lSouth = sw.lat - (sw.lat % lMeasure);
-		lWest = sw.lng - (sw.lng % lMeasure);
-		lNorth = ne.lat - (ne.lat % lMeasure);
-		lEast = ne.lng - (ne.lng % lMeasure);
+		lSouth = sw.getLat() - (sw.getLat() % lMeasure);
+		lWest = sw.getLng() - (sw.getLng() % lMeasure);
+		lNorth = ne.getLat() - (ne.getLat() % lMeasure);
+		lEast = ne.getLng() - (ne.getLng() % lMeasure);
 		
 		Criteria criteria = getSession().createCriteria(PhotoPanoramioIndex.class, "photoIndex")
 				.add(Restrictions.eq("pk.level", level))
@@ -284,16 +284,21 @@ public class PhotoPanoramioIndexDaoImpl extends
 		Criterion travelTitle = null;
 		Criterion travelDesc = null;
 		Criterion travelAddress = null;
+		Criterion tag = null;
+		Criterion travelTag = null;
 		
 		if(null == type || type.equalsIgnoreCase("") || type.equalsIgnoreCase("all") || type.equalsIgnoreCase("photo")) {
 			criteria.createAlias("photoIndex.photo", "photo");
+			criteria.createAlias("photo.tags", "tag");
 			photoName = Restrictions.ilike("photo.name", termStr);
 			photoTitle = Restrictions.ilike("photo.title", termStr);
 			photoDesc = Restrictions.ilike("photo.description", termStr);
+			tag = Restrictions.ilike("tag.content", termStr);
 		}
 		if(null == type || type.equalsIgnoreCase("") || type.equalsIgnoreCase("all") || type.equalsIgnoreCase("travel")){
 			criteria.createAlias("photoIndex.photo.travelSpot", "travelSpot")
-				.createAlias("travelSpot.travel", "travel");
+				.createAlias("travelSpot.travel", "travel")
+			.createAlias("travel.tags", "travelTag");
 			
 			travelSpotTitle = Restrictions.ilike("travelSpot.title", termStr);
 			travelSpotDesc = Restrictions.ilike("travelSpot.description", termStr);
@@ -301,22 +306,23 @@ public class PhotoPanoramioIndexDaoImpl extends
 			travelTitle = Restrictions.ilike("travel.title", termStr);
 			travelDesc = Restrictions.ilike("travel.description", termStr);
 			travelAddress = Restrictions.ilike("travel.address", termStr);
+			travelTag = Restrictions.ilike("travelTag.content", termStr);
 		}
 		if(null == type || type.equalsIgnoreCase("") || type.equalsIgnoreCase("all")) {
 			criteria.add(Restrictions.or(photoName, photoTitle, photoDesc, travelSpotTitle, travelSpotDesc, travelSpotAddress,
-					travelTitle, travelDesc, travelAddress));
+					travelTitle, travelDesc, travelAddress, tag, travelTag));
 		}else if(type.equalsIgnoreCase("photo")) {
-			criteria.add(Restrictions.or(photoName, photoTitle, photoDesc));
+			criteria.add(Restrictions.or(photoName, photoTitle, photoDesc, tag));
 		}else if(type.equalsIgnoreCase("travel")) {
 			criteria.add(Restrictions.or(travelSpotTitle, travelSpotDesc, travelSpotAddress,
-					travelTitle, travelDesc, travelAddress));
+					travelTitle, travelDesc, travelAddress, travelTag));
 		}		
 		
 		List<PhotoPanoramioIndex> photoIndexs = criteria.list();
         
-		log.info("search res size: " + photoIndexs.size() );
-	    Double heightRate = height / (ne.lat - sw.lat),
-					widthRate = width / (ne.lng - sw.lng);
+		log.debug("search res size: " + photoIndexs.size() );
+	    Double heightRate = height / (ne.getLat() - sw.getLat()),
+					widthRate = width / (ne.getLng() - sw.getLng());
 	    return filterPanoramioIndex(photoIndexs, widthRate, heightRate);
 	}
 	

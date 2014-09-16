@@ -1,21 +1,27 @@
 <!-- Modal -->
-<alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
+<div class="alert-header">
+    <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
+</div>
 <div class="modal-header">
     <button type="button" class="close" data-ng-click="cancel()">&times;</button>
     <h4 class="modal-title" id="myModalLabel"><span>更改</span> 你的头像</h4>
 </div>
 <div class="modal-body">
-    <div id="avatar-form">
-        <input type="file" ng-file-select="onFileSelect($files)" >
-        <div id="img-cropper">
-            <img-cropped src='{{imageUrl}}' bind='previewUrl'></img-cropped>
+    <div class="avatar-form">
+        <div class="row image-selector">
+            <button type="button" class="btn btn-primary">上传照片</button>
+            <input type="file" class="file-input" ng-file-select="onFileSelect($files)" >
+            {{'.             在图片上框选出你的头像'}}
         </div>
-        <button class="btn btn-primary"
-                ng-show="!!imageUrl"
-                ng-click="fileUpload()">上传</button>
+        <div class="row alert-row" ng-show="!!imageUrl">
+            <div class="alert alert-info">在图片上框选出你的头像</div>
+        </div>
+        <div class="row img-cropper">
+            <img-cropped src='{{imageUrl}}' preview-url='previewUrl'></img-cropped>
+        </div>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="cancel()">完成</button>
+    <button class="btn btn-primary" ng-show="!!imageUrl&&!!previewUrl" ng-click="fileUpload()">应用</button>
     <button class="btn btn-warning" ng-click="cancel()">取消</button>
 </div>

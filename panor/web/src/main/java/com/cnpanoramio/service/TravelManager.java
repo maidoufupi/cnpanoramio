@@ -19,7 +19,7 @@ public interface TravelManager extends GenericManager<Travel, Long> {
 	 * @return
 	 */
 	public Travel getTravel(Long travelId);
-
+	
 	/**
 	 * 获取用户所有travel
 	 * 
@@ -72,6 +72,15 @@ public interface TravelManager extends GenericManager<Travel, Long> {
 	 * @return
 	 */
 	public Travel changeTravelDesc(Long id, String description);
+	
+	/**
+	 * 更改travel name
+	 * 
+	 * @param id
+	 * @param name
+	 * @return
+	 */
+	public Travel changeTravelName(Long id, String name);
 	
 	/**
 	 * 

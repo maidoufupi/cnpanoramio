@@ -7,10 +7,6 @@
   .alert {
     text-align: center;
   }
-//  .alert.ng-enter {
-//    @include animation(enter_sequence 300ms ease-out);
-//  }
-
   .alert.ng-leave {
     @include animation(leave_sequence 300ms ease-out);
   }
@@ -26,4 +22,15 @@
   text-align: center;
   vertical-align: middle;
   width: 100%;
+}
+
+.alert-header {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  .alert {
+    display: inline-block;
+    min-width: 200px;
+    max-width: 500px;
+  }
 }

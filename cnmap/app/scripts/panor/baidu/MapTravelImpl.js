@@ -34,10 +34,11 @@
             photo = _ref2[_k];
             point.push(this.createPoint(photo));
           }
-          _results.push(this.map.addOverlay(new BMap.Polyline(point, {
+          spot.polyline = new BMap.Polyline(point, {
             map: this.map,
             strokeStyle: 'dashed'
-          })));
+          });
+          _results.push(this.map.addOverlay(spot.polyline));
         }
         return _results;
       }
@@ -63,6 +64,35 @@
         return label.addEventListener('click', function() {
           return jQuery(that).trigger("data_clicked", [this.photoId]);
         });
+      }
+    };
+
+    TravelLayer.prototype.toggleSpotLine = function(spot, visible) {
+      if (spot.polyline) {
+        if (visible) {
+          return spot.polyline.show();
+        } else {
+          return spot.polyline.hide();
+        }
+      }
+    };
+
+    TravelLayer.prototype.updateSpotLine = function(spot) {
+      var photo, point, _i, _len, _ref;
+      point = [];
+      _ref = spot.photos;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        point.push(this.createPoint(photo));
+      }
+      if (spot.polyline) {
+        return spot.polyline.setPath(point);
+      } else {
+        spot.polyline = new BMap.Polyline(point, {
+          map: this.map,
+          strokeStyle: 'dashed'
+        });
+        return this.map.addOverlay(spot.polyline);
       }
     };
 

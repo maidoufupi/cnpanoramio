@@ -76,6 +76,7 @@ angular.module('ponmApp.directives')
                             minimizationAlgorithm(items, containerWidth);
                         }
 
+                        scope.$emit("ponm-photo-fluid-resized");
                     }
 
                     function setWidthHeight(items, height) {
@@ -98,7 +99,7 @@ angular.module('ponmApp.directives')
                     }
 
                     scope.$watch(attrs.photoFluidContainer, function() {
-                        $log.debug("photoFluidContainer changed");
+//                        $log.debug("photoFluidContainer changed");
                         if(scope.updatePromise) {
                             $timeout.cancel(scope.updatePromise);
                         }
@@ -175,86 +176,6 @@ angular.module('ponmApp.directives')
                             setWidthHeight(itemLine, (containerWidth * (options.lineMaxHeight / itemLineWidth)));
                         }
                     }
-//                    function minimizationAlgorithm(items, containerWidth) {
-//                        var itemLine = [],
-//                            itemLineWidth = 0;
-//                        angular.forEach(items, function (item, key) {
-//                            item = angular.element(item);
-//                            var itemWidth = item.outerWidth() + 2*options.itemMargin,
-//                                itemHeight = item.outerHeight() + 2*options.itemMargin;
-////                            $log.debug("itemWidth: " + itemWidth + "itemHeight: " + itemHeight);
-////                            var itemLineWidthTemp = itemLineWidth + Math.round(itemWidth * options.lineMinHeight / itemHeight);
-//                            var itemLineWidthTemp = itemLineWidth + (itemWidth * options.lineMinHeight / itemHeight);
-//                            if (itemLineWidthTemp > containerWidth) {
-////                                $log.debug("itemLineWidth: " + itemLineWidth);
-////                                setWidthHeight(itemLine, Math.round(containerWidth / itemLineWidth * options.lineMinHeight));
-//                                setWidthHeight(itemLine, (containerWidth / itemLineWidth * options.lineMinHeight));
-//                                itemLine = [item];
-////                                itemLineWidth = Math.round(options.lineMinHeight * itemWidth / itemHeight);
-//                                itemLineWidth = (options.lineMinHeight * itemWidth / itemHeight);
-//                            } else {
-//                                itemLine.push(item);
-//                                itemLineWidth = itemLineWidthTemp;
-//                            }
-//                        });
-//                        if (itemLine.length) {
-////                            $log.debug("itemLineWidth: " + itemLineWidth);
-////                            setWidthHeight(itemLine, Math.round(containerWidth / itemLineWidth * options.lineMinHeight));
-//                            setWidthHeight(itemLine, (containerWidth / itemLineWidth * options.lineMinHeight));
-//                        }
-//                    }
-//
-//                    function maximumAlgorithm(items, containerWidth) {
-//                        var itemLine = [],
-//                            itemLineWidth = 0;
-//                        angular.forEach(items, function (item, key) {
-//                            item = angular.element(item);
-//                            var itemWidth = item.outerWidth() + 2*options.itemMargin,
-//                                itemHeight = item.outerHeight() + 2*options.itemMargin;
-//
-//                            itemLine.push(item);
-//                            itemLineWidth = itemLineWidth + ((itemWidth / itemHeight) * options.lineMaxHeight);
-//                            if (itemLineWidth >= containerWidth) {
-////                                $log.debug("containerWidth: " + containerWidth);
-////                                $log.debug("itemLineWidth: " + itemLineWidth);
-////                                $log.debug("items size : " + itemLine.length);
-////                                $log.debug("lineHeight: " + (containerWidth * (options.lineMaxHeight / itemLineWidth)));
-//                                setWidthHeight(itemLine, (containerWidth * (options.lineMaxHeight / itemLineWidth)));
-//                                itemLine = [];
-//                                itemLineWidth = 0;
-//                            }
-//                        });
-//                        if (itemLine.length) {
-//                            setWidthHeight(itemLine, (containerWidth * (options.lineMaxHeight / itemLineWidth)));
-//                        }
-//                    }
-
-                }
-            };
-        }])
-    .directive('ponmHover', ['$window', '$parse', '$animate', '$log',
-        function ($window, $parse, $animate, $log) {
-            return {
-                restrict: 'A',
-                link: function (scope, element, attrs, ngModel) {
-
-                    element.on('mouseenter', function (e) {
-                        var photoAction = element.find(attrs.ponmHover);
-                        photoAction.addClass("ponm-show");
-                        $animate.addClass(photoAction, "ponm-show");
-//                        angular.forEach(photoAction, function(action, key) {
-//                            $animate.addClass(action, "ponm-show");
-//                        });
-                    });
-
-                    element.on('mouseleave', function (e) {
-                        var photoAction = element.find(attrs.ponmHover);
-                        photoAction.removeClass("ponm-show");
-                        $animate.removeClass(photoAction, "ponm-show");
-//                        angular.forEach(photoAction, function(action, key) {
-//                            $animate.removeClass(action, "ponm-show");
-//                        });
-                    });
                 }
             };
         }])

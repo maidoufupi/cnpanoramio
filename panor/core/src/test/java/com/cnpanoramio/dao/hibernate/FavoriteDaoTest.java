@@ -56,8 +56,8 @@ public class FavoriteDaoTest {
 	@Test
 	public void testGetUserPhotoFavoriteCount() {
 		User user = userDao.get(3L);
-		Long views = favoriteDao.getUserPhotoFavoriteCount(user);
-		log.info(views);
+//		Long views = favoriteDao.get(id)
+//		log.info(views);
 	}	
 
 	

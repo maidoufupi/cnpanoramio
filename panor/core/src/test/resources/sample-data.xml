@@ -123,6 +123,7 @@
         <column>file_type</column>
         <column>deleted</column>
         <column>mark_best</column>
+        <column>is360</column>
         <column>owner_id</column>
         <column>lat</column>
         <column>lng</column>
@@ -136,6 +137,7 @@
             <value description="file_type">jpg</value>
             <value description="deleted">0</value>
             <value description="mark_best">0</value>
+            <value description="is360">0</value>
             <value description="owner_id">1</value>
             <value description="lat">36</value>
             <value description="lng">118</value>
@@ -149,6 +151,7 @@
             <value description="file_type">jpg</value>
             <value description="deleted">0</value>
             <value description="mark_best">0</value>
+            <value description="is360">0</value>
             <value description="owner_id">1</value>
             <value description="lat">35</value>
             <value description="lng">116</value>
@@ -162,6 +165,7 @@
             <value description="file_type">jpg</value>
             <value description="deleted">0</value>
             <value description="mark_best">0</value>
+            <value description="is360">0</value>
             <value description="owner_id">2</value>
             <value description="lat">32</value>
             <value description="lng">120</value>
@@ -175,6 +179,7 @@
             <value description="file_type">jpg</value>
             <value description="deleted">0</value>
             <value description="mark_best">0</value>
+            <value description="is360">0</value>
             <value description="owner_id">1</value>
             <value description="lat">36</value>
             <value description="lng">104</value>
@@ -188,6 +193,7 @@
             <value description="file_type">jpg</value>
             <value description="deleted">0</value>
             <value description="mark_best">0</value>
+            <value description="is360">0</value>
             <value description="owner_id">1</value>
             <value description="lat">37</value>
             <value description="lng">100</value>
@@ -225,50 +231,90 @@
     
     <table name="comment">
         <column>id</column>
+        <column>type</column>
         <column>photo_id</column>
+        <column>comment_id</column>
         <column>user_id</column>
         <column>create_date</column>
         <column>modify_date</column>
-        <column>comment</column>
+        <column>content</column>
+        <column>deleted</column>
         <row>
             <value description="id">1</value>
+            <value description="type">photo</value>
             <value description="photo_id">5</value>
+            <null/>
             <value description="user_id">2</value>
             <value description="create_date">2014-01-01 01:01:01</value>
             <value description="modify_date">2014-01-01 01:01:01</value>
-            <value description="comment">comment content 1</value>
+            <value description="content">comment content 1</value>
+            <value description="deleted">0</value>
         </row>
         <row>
             <value description="id">2</value>
+            <value description="type">photo</value>
             <value description="photo_id">5</value>
+            <null/>
             <value description="user_id">2</value>
             <value description="create_date">2014-01-01 01:01:01</value>
             <value description="modify_date">2014-01-01 01:01:01</value>
-            <value description="comment">comment content 2</value>
+            <value description="content">comment content 2</value>
+            <value description="deleted">0</value>
         </row>
         <row>
             <value description="id">3</value>
+            <value description="type">photo</value>
             <value description="photo_id">3</value>
+            <null/>
             <value description="user_id">1</value>
             <value description="create_date">2014-01-01 01:01:01</value>
             <value description="modify_date">2014-01-01 01:01:01</value>
-            <value description="comment">comment content 3</value>
+            <value description="content">comment content 3</value>
+            <value description="deleted">0</value>
         </row>
         <row>
             <value description="id">4</value>
+            <value description="type">photo</value>
             <value description="photo_id">1</value>
+            <null/>
             <value description="user_id">2</value>
             <value description="create_date">2014-01-01 01:01:01</value>
             <value description="modify_date">2014-01-01 01:01:01</value>
-            <value description="comment">comment content 4</value>
+            <value description="content">comment content 4</value>
+            <value description="deleted">0</value>
         </row>
         <row>
             <value description="id">5</value>
+            <value description="type">photo</value>
             <value description="photo_id">2</value>
+            <null/>
             <value description="user_id">2</value>
             <value description="create_date">2014-01-01 01:01:01</value>
             <value description="modify_date">2014-01-01 01:01:01</value>
-            <value description="comment">comment content 5</value>
+            <value description="content">comment content 5</value>
+            <value description="deleted">0</value>
+        </row>
+        <row>
+            <value description="id">6</value>
+            <value description="type">comment</value>
+            <null/>
+            <value description="comment_id">5</value>
+            <value description="user_id">2</value>
+            <value description="create_date">2014-01-01 01:01:01</value>
+            <value description="modify_date">2014-01-01 01:01:01</value>
+            <value description="content">comment 5 comment</value>
+            <value description="deleted">0</value>
+        </row>
+        <row>
+            <value description="id">7</value>
+            <value description="type">comment</value>
+            <null/>
+            <value description="comment_id">5</value>
+            <value description="user_id">2</value>
+            <value description="create_date">2014-01-01 01:01:01</value>
+            <value description="modify_date">2014-01-01 01:01:01</value>
+            <value description="content">comment 5 comment</value>
+            <value description="deleted">0</value>
         </row>
     </table>
     

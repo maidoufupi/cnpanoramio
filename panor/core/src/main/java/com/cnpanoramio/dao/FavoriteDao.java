@@ -22,5 +22,5 @@ public interface FavoriteDao extends GenericDao<Favorite, Long> {
 	 * @param user
 	 * @return
 	 */
-	public Long getUserPhotoFavoriteCount(User user);
+//	public Long getUserPhotoFavoriteCount(User user);
 }

@@ -1,9 +1,9 @@
 package com.cnpanoramio.domain;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +27,6 @@ import javax.persistence.Table;
 import org.appfuse.model.User;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
 
 import com.cnpanoramio.MapVendor;
@@ -35,6 +34,11 @@ import com.cnpanoramio.MapVendor;
 @Entity
 @Table(name = "photo")
 public class Photo extends BaseEntity implements Comparable<Photo> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2125921095320469942L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,12 +63,6 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	@Embedded
 	private Point gpsPoint;
 
-//	@Column(name = "create_date")
-//	private Date createDate;
-//
-//	@Column(name = "modify_date")
-//	private Date modifyDate;
-
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
 	private User owner;
@@ -74,9 +72,6 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	
 	@Column
 	private String description;
-
-	@Column(nullable = true)
-	private boolean deleted;
 
 	@Column(name = "mark_best", nullable = true)
 	private boolean markBest;
@@ -117,8 +112,8 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<Like> likes = new HashSet<Like>(0);
 	
-	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private Set<Comment> comments = new HashSet<Comment>(0);
+	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Comment> comments = new ArrayList<Comment>(0);
 	
 	public final Long getId() {
 		return id;
@@ -168,22 +163,6 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 		this.gpsPoint = gpsPoint;
 	}
 
-//	public Date getCreateDate() {
-//		return createDate;
-//	}
-//
-//	public void setCreateDate(Date createDate) {
-//		this.createDate = createDate;
-//	}
-//
-//	public Date getModifyDate() {
-//		return modifyDate;
-//	}
-//
-//	public void setModifyDate(Date modifyDate) {
-//		this.modifyDate = modifyDate;
-//	}
-
 	public User getOwner() {
 		return owner;
 	}
@@ -208,14 +187,6 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 		this.description = description;
 	}
 
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
 	public boolean isMarkBest() {
 		return markBest;
 	}
@@ -224,15 +195,6 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 		this.markBest = markBest;
 	}
 	
-
-//	public Set<PhotoGps> getGps() {
-//		return gps;
-//	}
-//
-//	public void setGps(Set<PhotoGps> gps) {
-//		this.gps = gps;
-//	}
-
 	public Map<MapVendor, PhotoGps> getGps() {
 		return gps;
 	}
@@ -331,11 +293,11 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 		this.likes = likes;
 	}
 
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 

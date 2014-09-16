@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('ponmApp.directives', [
-    'ngResource'])
+    'ngResource', 'ponm.Matchmedia'])
     .directive('passwordMatch', [function () {
         return {
             require: 'ngModel',
@@ -231,5 +231,17 @@ angular.module('ponmApp.directives', [
                 });
             }
         };
+    }])
+    .directive('resize', ['$window', function ($window) {
+        return function (scope, element) {
+            var w = angular.element($window);
+
+            w.bind('resize', function () {
+                scope.$broadcast("window-resize", {
+                    'height': w.height(),
+                    'width': w.width()
+                });
+            });
+        }
     }])
 ;

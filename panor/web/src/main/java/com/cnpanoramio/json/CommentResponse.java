@@ -1,6 +1,7 @@
 package com.cnpanoramio.json;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -23,6 +24,8 @@ public class CommentResponse extends ExceptionResponse {
 
 		private Long id;
 		
+		private String type;
+		
 		@JsonProperty("user_id")
 		private Long userId;
 		
@@ -33,16 +36,18 @@ public class CommentResponse extends ExceptionResponse {
 		
 		private String content;
 		
-		@JsonProperty("create_time")
-		private Date createTime;
+		@JsonProperty("create_date")
+		private Date createDate;
 		
-		@JsonProperty("photo_id")
-		private Long photoId;
+		@JsonProperty("entity_id")
+		private Long entityId;
 		
 		private Boolean like;
 		
 		@JsonProperty("like_count")
-		private Integer likeCount;
+		private int likeCount;
+		
+		private List<Comment> comments = null;
 
 		public Long getId() {
 			return id;
@@ -75,21 +80,29 @@ public class CommentResponse extends ExceptionResponse {
 		public void setContent(String content) {
 			this.content = content;
 		}
-		
-		public Date getCreateTime() {
-			return createTime;
+
+		public Date getCreateDate() {
+			return createDate;
 		}
 
-		public void setCreateTime(Date createTime) {
-			this.createTime = createTime;
+		public void setCreateDate(Date createDate) {
+			this.createDate = createDate;
 		}
 
-		public Long getPhotoId() {
-			return photoId;
+		public String getType() {
+			return type;
 		}
 
-		public void setPhotoId(Long photoId) {
-			this.photoId = photoId;
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public Long getEntityId() {
+			return entityId;
+		}
+
+		public void setEntityId(Long entityId) {
+			this.entityId = entityId;
 		}
 
 		public Boolean getLike() {
@@ -100,11 +113,11 @@ public class CommentResponse extends ExceptionResponse {
 			this.like = like;
 		}
 
-		public Integer getLikeCount() {
+		public int getLikeCount() {
 			return likeCount;
 		}
 
-		public void setLikeCount(Integer likeCount) {
+		public void setLikeCount(int likeCount) {
 			this.likeCount = likeCount;
 		}
 
@@ -114,6 +127,14 @@ public class CommentResponse extends ExceptionResponse {
 
 		public void setUserAvatar(Long userAvatar) {
 			this.userAvatar = userAvatar;
+		}
+
+		public List<Comment> getComments() {
+			return comments;
+		}
+
+		public void setComments(List<Comment> comments) {
+			this.comments = comments;
 		}
 		
 		

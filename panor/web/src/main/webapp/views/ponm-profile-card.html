@@ -1,0 +1,73 @@
+<div class="ProfileCard card">
+    <a class="ProfileCard-bg" href="#/user/{{user.id}}">
+       <img ng-src="{{staticCtx}}/avatar{{user.avatar || 1}}.png">
+    </a>
+
+    <div class="ProfileCard-content">
+        <a class="ProfileCard-avatarLink" href="#/user/{{user.id}}"
+           backstretch background-url="{{staticCtx}}/avatar{{user.avatar || 1}}.png">
+        </a>
+
+        <div class="ProfileCard-actions">
+            <div class="ProfileCard-userActions with-rightCaret js-userActions">
+                <div class="UserActions">
+                    <span class="UserActions-moreActions">
+                        <div class="btn-group" ng-switch="user.follow">
+
+                            <button ng-switch-when="true"
+                                    ng-click="unFollowing(user)"
+                                    ng-disabled="followDoing"
+                                    type="button"
+                                    class="btn btn-sm follow-button"
+                                    ng-class="{'btn-danger': user.mouseover, 'btn-info': !user.mouseover}"
+                                    ng-mouseover="user.mouseover=true"
+                                    ng-mouseleave="user.mouseover=false">
+                                <span class="button-text follow-text" ng-show="!user.follow&&!user.mouseover">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    关注
+                                </span>
+                                <span class="button-text following-text" ng-show="user.follow&&!user.mouseover">正在关注</span>
+                                <span class="button-text unfollow-text" ng-show="user.follow&&user.mouseover">取消关注</span>
+                                <span class="button-text blocked-text" ng-show="false">已屏蔽</span>
+                                <span class="button-text unblock-text" ng-show="false">取消屏蔽</span>
+                                <span class="button-text pending-text" ng-show="false">等待确认</span>
+                                <span class="button-text cancel-text" ng-show="false">取消</span>
+                            </button>
+                            <button ng-switch-default
+                                    ng-click="following(user)"
+                                    ng-disabled="followDoing"
+                                    type="button" class="btn btn-sm btn-default">
+                                <span class="button-text follow-text">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    关注
+                                </span>
+                            </button>
+                            <button type="button" class="btn btn-sm dropdown-toggle"
+                                    ng-class="{'btn-danger': user.follow&&user.mouseover, 'btn-info': user.follow&&!user.mouseover, 'btn-default': !user.follow}"
+                                    data-toggle="dropdown">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="">静音</a></li>
+                                <li class="divider"></li>
+                                <li><a href="">拉黑</a></li>
+                                <li><a href="">举报</a></li>
+                            </ul>
+                        </div>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="ProfileCard-userFields">
+            <div>{{user.name}}</div>
+            <div>{{user.username}}</div>
+            <perfect-scrollbar class="ProfileCard-desc scroller" wheel-propagation="false" wheel-speed="50" refresh-on-change="user.description">
+                <p>{{user.description}}</p>
+            </perfect-scrollbar>
+
+        </div>
+    </div>
+</div>

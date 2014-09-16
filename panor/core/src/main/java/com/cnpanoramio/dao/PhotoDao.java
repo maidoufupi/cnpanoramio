@@ -87,4 +87,11 @@ public interface PhotoDao extends GenericDao<Photo, Long>{
 	 */
 	public Photo delete(Long id);
 	
+	/**
+	 * 获取用户没有旅行相册的图片
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<Photo> getNoTravel(User user);
 }

@@ -63,6 +63,14 @@
             map.setZoomAndCenter(zoom, point);
         };
 
+        this.zoomIn = function(map) {
+            map.zoomIn();
+        };
+
+        this.zoomOut = function(map) {
+            map.zoomOut();
+        };
+
         this.setBounds = function(map, southwest, northeast){
             map.setBounds(new AMap.Bounds(
                 new AMap.LngLat(southwest.lng, southwest.lat),

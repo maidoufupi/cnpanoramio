@@ -1,0 +1,50 @@
+<div id="mapsel" class="panel panel-default">
+    <div class="panel-heading">
+        <h2>地图选择</h2>
+        <p>选择你网站地图的一个供应商</p>
+    </div>
+    <div class="panel-body">
+
+        <form class="form-horizontal" role="form" name="mapForm" ng-submit="changeMapVendor()">
+            <div class="form-group">
+                <label for="mapvendor" class="col-sm-2 control-label">地图供应商</label>
+                <div class="col-sm-10" id="mapvendor">
+                    <div class="radio">
+                        <label>
+                            <input type="radio"
+                                   ng-model="settings.map_vendor"
+                                   name="mapVendor"
+                                   value="baidu">百度地图
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio"
+                                   ng-model="settings.map_vendor"
+                                   name="mapVendor"
+                                   value="qq"> 腾讯地图
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio"
+                                   ng-model="settings.map_vendor"
+                                   name="mapVendor"
+                                   value="gaode"> 高德地图
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input class="btn btn-primary" type="submit" value="保存更改"
+                            ng-disabled="saving||!mapForm.$dirty">
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

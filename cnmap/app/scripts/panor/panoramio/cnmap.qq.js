@@ -111,7 +111,8 @@
                 label = new qq.maps.Label({
                     style: {
                         padding: 0,
-                        border: 0
+                        border: 0,
+                        cursor: "pointer"
                     }
                 });
                 label.photoId = photo.id;
@@ -210,16 +211,23 @@
 
         this.getBounds = function() {
             var bounds = this.opts.map.getBounds();
-            return {
-                ne: {
-                    lat: bounds.getNorthEast().lat,
-                    lng: bounds.getNorthEast().lng
-                },
-                sw: {
-                    lat: bounds.getSouthWest().lat,
-                    lng: bounds.getSouthWest().lng
-                }
-            };
+            if(bounds) {
+                return {
+                    ne: {
+                        lat: bounds.getNorthEast().lat,
+                        lng: bounds.getNorthEast().lng
+                    },
+                    sw: {
+                        lat: bounds.getSouthWest().lat,
+                        lng: bounds.getSouthWest().lng
+                    }
+                };
+            }else {
+                return {
+
+                };
+            }
+
         };
 
         this.getLevel = function() {

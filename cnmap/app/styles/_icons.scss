@@ -1,3 +1,8 @@
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /** icons */
 .action-select {
   position: absolute;
@@ -14,18 +19,16 @@
   background: no-repeat url(../images/photos-action.png) -42px -50px;
   background-clip: content-box;
   cursor: pointer;
-  height: 24px;
-  left: 0;
-  //  padding: 9px;
   position: absolute;
+  left: 0;
   top: 0;
   width: 24px;
+  height: 24px;
 }
 .icon-photo-select.icon-photo-selected {
-  -webkit-animation: ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1;
-  animation: ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1;
-  filter: alpha(opacity=100);
-  opacity: 1;
+  @include animation(ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1);
+//  filter: alpha(opacity=100);
+  @include opacity(1);
   background: no-repeat url(../images/photos-action.png) -109px -50px;
   background-clip: content-box;
 }
@@ -96,4 +99,18 @@
       transform: scale(1.0);
       -webkit-transform: scale(1.0);
     }
+}
+
+.icon-dropdown {
+  background: no-repeat url(../images/stream_showroom.png) -347px -164px;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+}
+
+.icon-dropup {
+  background: no-repeat url(../images/stream_showroom.png) -145px -34px;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
 }

@@ -81,10 +81,12 @@
                     <!--<li><a href="">分享</a></li>
                     <li><a href="">幻灯片</a></li>-->
                     <li><a href="" class="glyphicon glyphicon-arrow-left"
-                           data-ng-click="previous()"></a></li>
-                    <li><a href="" class="glyphicon glyphicon-th" data-ng-click="openTravelAlbum()"></a></li>
+                           ng-click="previous()"></a></li>
+                    <li><a href="" ng-click="openTravelAlbum()">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </a></li>
                     <li><a href="" class="glyphicon glyphicon-arrow-right"
-                           data-ng-click="next()"></a></li>
+                           ng-click="next()"></a></li>
                     <li class="text-explain"><span>第 {{travel.activePhoto.sortCount || 1}} 张（共 {{travel.totalPhoto || 1}} 张）查看次数：{{photo.views || 0}}</span></li>
                 </ul>
             </div>
@@ -97,12 +99,16 @@
         <div class="info-container">
             <div class="user-container">
                 <div class="media user-info">
-                    <a class="pull-left" href="{{ctx}}/#/photos/{{userOpenInfo.id}}/albums">
+                    <a class="pull-left" href="{{ctx}}/#/photos/{{userOpenInfo.id}}/albums"
+                       user-card owner="{id:ponmCtxConfig.userId}" user-id="userOpenInfo.id">
                         <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png">
                     </a>
 
                     <div class="media-body">
-                        <h4 class="media-heading">{{userOpenInfo.name}}</h4>
+                        <h4 class="media-heading"
+                            user-card owner="{id:ponmCtxConfig.userId}" user-id="userOpenInfo.id">
+                            {{userOpenInfo.name}}
+                        </h4>
                         <div>
                             <span class="footnotes">{{photo.create_time | date:'yyyy年MM月dd日'}}</span>
                         </div>
@@ -110,7 +116,7 @@
                 </div>
                 <div class="content">
                     <div ng-if="photo.travel_id">
-                        旅行：<a data-ng-href="{{ctx}}/#/maps/travel/{{photo.travel_id}}">{{photo.travel_name}}</a>
+                        旅行：<a data-ng-href="#/maps/travel/{{photo.travel_id}}">{{photo.travel_name}}</a>
                     </div>
                     <div ng-if="false">
                         旅行：
@@ -167,7 +173,8 @@
                                            ng-click="openMapPhoto()"
                                            tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
                                            tooltip-trigger="mouseenter"
-                                           tooltip-placement="top">{{(photo.point.lat && (photo.point.lat | number) + ',') || '添加位置'}}{{photo.point.lng | number}}</a>
+                                           tooltip-placement="top">
+                                            {{(photo.point&&((photo.point.lat | number) +', ' + (photo.point.lng | number))) || '添加位置'}}</a>
                                         <span ng-switch-default>{{photo.point.lat && ((photo.point.lat | number) + ',')}}{{photo.point.lng | number}}</span>
                                     </td>
                                 </tr>
@@ -248,33 +255,20 @@
                                 ng-click="share()"><span class="glyphicon glyphicon-share-alt"></span></button>
                     </div>
                 </div>
-                <div class="comments">
-                    <div class="status">{{photo.comment_count}}条评论</div>
-                    <div ng-repeat="comment in comments">
-                        <div ponm-comment comment="comment" user-id="userId" deleted-comment="deletedComment">
-                        </div>
-                    </div>
+                <div ponm-comments
+                     ponm-comment-to="photo.id"
+                     ponm-comment-comments="comments">
                 </div>
             </div>
         </div>
-        <div class="comment" data-ng-show="login">
-            <div class="editable">
-                <a href=""
-                   editable-textarea="commentContent"
-                   e-rows="4"
-                   onbeforesave="createComment($data)"
-                   oncancel="cancelComment()"
-                   >
-                    <input type="text" class="form-control" placeholder="{{comment.placeholder || '发表评论'}}">
-                    <!--<pre>{{ user.desc || 'no description' }}</pre>-->
-                </a>
-            </div>
-        </div>
+
     </div>
 
     <div class="photo-travel-album" photo-travel-album>
-        <div class="travel-album-background"></div>
-        <div class="travel-album">
+        <div class="travel-album-background" ng-click="show=false"
+             ng-class="{show: show}"></div>
+        <div class="travel-album-container"
+             ng-class="{show: show}">
             <div class="header">
                 旅行中的所有照片（{{travel.totalPhoto || 0}}）
                 <a href="" class="close" aria-hidden="true"
@@ -292,10 +286,11 @@
     </div>
 
     <div class="photo-recommend-album" photo-recommend-album>
-        <div class="recommend-album-background">
+        <div class="recommend-album-background" ng-click="recommendAlbumShow=false"
+                ng-class="{show:recommendAlbumShow}">
 
         </div>
-        <div class="recommend-album">
+        <div class="recommend-album" ng-class="{show:recommendAlbumShow}">
 
         </div>
     </div>

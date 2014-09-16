@@ -1,105 +1,120 @@
-.panel.panel-primary {
-    margin-left: 30px;
-    margin-right: 20px;
+.container.settings {
+  padding: 5px 0;
 }
 
-#explore-expanded-input {
-    background-color: #5a5a5a;
-    color: #000000;
-    transition: all .5s;
+.nav.nav-links {
+  > li {
+    position: relative;
+    display: block;
+    margin-bottom: -1px;
+    background-color: $list-group-bg;
+    border: 1px solid $list-group-border;
+  }
+  > li:first-child {
+    @include border-top-radius($list-group-border-radius);
+  }
+  > li:last-child {
+    margin-bottom: 0;
+    @include border-bottom-radius($list-group-border-radius);
+  }
+
+  li {
+    .glyphicon {
+      color: grey;
+      opacity: .5;
+    }
+    // Disabled state
+    &.disabled,
+    &.disabled:hover,
+    &.disabled:focus {
+      background-color: $nav-links-disabled-bg;
+      color: $nav-links-disabled-color;
+      cursor: not-allowed;
+
+      // Force color to inherit for custom content
+      .list-group-item-heading {
+        color: inherit;
+      }
+      .list-group-item-text {
+        color: $nav-links-disabled-text-color;
+      }
+    }
+  }
+  li:hover, li.active {
+    a {
+      color: #000000;
+    }
+    .glyphicon {
+      opacity: 1;
+    }
+  }
 }
 
-#explore-expanded-input:focus {
-    background-color: #ddd;
-    -webkit-transition: all .5s;
+.module {
+  margin-bottom: 10px;
+  @include border-radius(6px);
+  .ProfileCard {
+    background-color: white;
+    border: 1px solid #dddddd;
+    .ProfileCard-userFields {
+      height: initial;
+    }
+  }
 }
 
-/**/
-#settings {
-    margin: 0;
-    padding: 0
+.avatar-upload-modal {
+  .modal-dialog {
+    .avatar-form {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: 10px;
+      .row {
+        margin: 5px 0;
+      }
+      .alert-row {
+        height: 50px;
+      }
+      .img-cropper {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 100px 0 0;
+        .jcrop-holder {
+          float: left;
+        }
+      }
+    }
+  }
 }
 
-#settings fieldset {
-    margin: 5px 0 10px;
-    border: 0;
-    border-bottom: 1px solid #dfdfdf;
-    padding: 0 10px 10px;
-    clear: both;
-    float: left;
-    width: 760px
-}
-
-#settings #actual-pwd {
-    margin: 0 0 8px;
-    background-color: #f0f0f0;
-    padding: 10px 10px 8px 0
-}
-
-#settings #actual-pwd span.form-help {
-    font-weight: bold
-}
-
-#settings legend {
-    float: left;
-    margin: 0 0 20px 40px;
-    font-size: 110%;
-    font-weight: bold;
-    padding-left: 23px;
-    background-repeat: no-repeat;
-    background-position: left 0;
-    color: #000
-}
-
-#settings fieldset #conditions label {
-    font-size: 80%;
-    vertical-align: top
-}
-
-#settings fieldset div label {
-    float: left;
-    width: 180px;
-    text-align: right
-}
-
-#settings fieldset div.inline {
-    margin-left: 183px;
-    width: 580px;
-    display: inline
-}
-
-#settings fieldset div.inline .radio {
-    margin-left: 183px;
-    display: inline
-}
-
-#settings fieldset p.sublegend {
-    margin-left: 140px;
-    font-weight: bold
-}
-
-#settings fieldset p.sublegend span {
-    font-weight: normal;
-    color: #8a8a8a;
-    font-size: 90%
-}
-
-#settings fieldset p.explanation {
-    margin: 0 0 8px 23px;
-    color: #8a8a8a;
-    font-size: 80%
-}
-
-#botones {
-    padding: 10px 0 60px;
-    clear: both;
-    width: 760px;
-    color: Gray;
-    text-align: center
-}
-
-form#settings {
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+.image-selector {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 30px;
+  width: 100px;
+  overflow: hidden;
+  cursor: pointer;
+  .btn {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 9;
+    cursor: pointer;
+  }
+  .file-input {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    cursor: pointer;
+    opacity: 0;
+    -ms-filter: "alpha(opacity=0)";
+  }
 }

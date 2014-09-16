@@ -12,7 +12,7 @@
     }
 
     TravelLayer.prototype.initMap = function(map) {
-      var photo, point, polyline, spot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
+      var photo, point, spot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
       if (map) {
         this.map = map;
       }
@@ -35,13 +35,13 @@
             photo = _ref2[_k];
             point.push(this.createPoint(photo));
           }
-          polyline = new qq.maps.Polyline({
+          spot.polyline = new qq.maps.Polyline({
             map: this.map,
             path: point,
             strokeDashStyle: 'dash',
             strokeWeight: 5
           });
-          _results.push(this.labels.push(polyline));
+          _results.push(this.labels.push(spot.polyline));
         }
         return _results;
       }
@@ -72,6 +72,33 @@
       label.photoId = photo.id;
       label.setMap(this.map);
       return label;
+    };
+
+    TravelLayer.prototype.toggleSpotLine = function(spot, visible) {
+      if (spot.polyline) {
+        return spot.polyline.setVisible(visible);
+      }
+    };
+
+    TravelLayer.prototype.updateSpotLine = function(spot) {
+      var photo, point, _i, _len, _ref;
+      point = [];
+      _ref = spot.photos;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        point.push(this.createPoint(photo));
+      }
+      if (spot.polyline) {
+        return spot.polyline.setPath(point);
+      } else {
+        spot.polyline = new qq.maps.Polyline({
+          map: this.map,
+          path: point,
+          strokeDashStyle: 'dash',
+          strokeWeight: 5
+        });
+        return this.labels.push(spot.polyline);
+      }
     };
 
     TravelLayer.prototype.clearMap = function() {

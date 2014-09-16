@@ -17,15 +17,15 @@
     }
   }
 
-  .content {
+  .maps-content {
     position: absolute;
-    top: 0;
+    top: 51px;
     bottom: 0;
     width: 100%;
 
     .left {
       position: fixed;
-      top: 105px;
+      top: 102px;
       left: 0;
       bottom: 0;
       @include transition-linear(all);
@@ -34,22 +34,12 @@
     .right {
       position: absolute;
       top: 0;
-//      bottom: 0;
       right: 0;
       min-height: 100%;
+      background-color: #ececec;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
 
       @include transition-linear(all);
-
-      >.waypoint-scrollable {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        overflow-y: scroll;
-        overflow-x: hidden;
-      }
 
       .photo-wall.photo-fluid-container {
         margin: 1px -1px;
@@ -71,7 +61,7 @@
     }
   }
 
-  .content.right-fixed {
+  .maps-content.right-fixed {
     .left {
       right: 0;
       margin: 0 600px 0 0;
@@ -79,40 +69,40 @@
     .right {
       width: 600px;
       margin: 0;
-      .navbar-third {
+      .navbar-third, .navbar-forth {
         width: 600px;
       }
     }
   }
 
-  .content.left-fixed {
+  .maps-content.left-fixed {
     .left {
       width: 600px;
     }
     .right {
       left: 0;
       margin: 0 0 0 600px;
-      .navbar-third {
+      .navbar-third, .navbar-forth {
         left: 600px;
         right: 0;
       }
     }
   }
 
-  .content.right-full {
+  .maps-content.right-full {
     .left {
       width: 0;
     }
     .right {
       width: 100%;
       margin: 0;
-      .navbar-third {
+      .navbar-third, .navbar-forth {
         width: 100%;
       }
     }
   }
 
-  .content.left-full {
+  .maps-content.left-full {
     .left {
       width: 100%;
     }
@@ -174,7 +164,7 @@
   -moz-box-sizing: border-box;
   height: 32px;
   outline: none;
-  width: 300px;
+  width: 150px;
   vertical-align: top;
 
   input {
@@ -189,7 +179,7 @@
     border: 0;
     border-radius: 0 2px 2px 0;
     height: 32px;
-    left: 300px;
+    left: 150px;
     position: absolute;
     text-align: center;
     top: 0;
@@ -205,33 +195,10 @@
 }
 
 .maps-travels {
-  .album {
-    display: inline-block;
-    cursor: pointer;
-    box-shadow: 0 0 10px grey;
-    /* border: 1px solid grey; */
-    margin: 3px;
-
-    .front-cover {
-      margin-right: 1px;
-      float: left;
-      position: relative;
-
-      .header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding: 10px;
-      }
-
-      .footer {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-        padding: 10px;
-      }
-    }
+  .travel {
+    width: 214px;
+    float: left;
+    margin: 5px 10px 5px 0;
   }
 }
 
@@ -242,7 +209,7 @@
   }
   .header.navbar-third {
     margin: 0;
-    padding: 15px 5px;
+    padding: 10px;
     background-color: rgba(255, 255, 255, .9);
     @include box-shadow(0 0 10px rgba(0, 0, 0, 0.3));
     z-index: 1001;

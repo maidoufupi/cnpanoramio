@@ -33,18 +33,12 @@ public class Message extends BaseEntity {
 	private Long entityId;
 	
 	@ManyToOne
-	private User user;	
+	private User user;
 	
-//	@ManyToOne
-////	@JoinColumn(name = "photo_id")
-//	private Photo photo;
-//	
-//	@ManyToOne
-////	@JoinColumn(name = "travel_id")
-//	private Travel travel;
-		
+	private String content;
+			
 	public enum MessageType {
-		photo, travel
+		photo, travel, message
 	}
 
 	public Long getId() {
@@ -77,6 +71,14 @@ public class Message extends BaseEntity {
 
 	public void setEntityId(Long entityId) {
 		this.entityId = entityId;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 //	public Photo getPhoto() {

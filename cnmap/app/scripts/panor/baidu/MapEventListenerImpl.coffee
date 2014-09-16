@@ -1,3 +1,4 @@
+
 $window = window
 BMap = $window.BMap
 class MapEventListener extends window.cnmap.IMapEventListener
@@ -26,6 +27,12 @@ class MapEventListener extends window.cnmap.IMapEventListener
   setZoomAndCenter: (map, zoom, lat, lng) ->
     point = new BMap.Point lng, lat
     map.centerAndZoom point, zoom
+
+  zoomIn: (map) ->
+    map.zoomIn()
+
+  zoomOut: (map) ->
+    map.zoomOut()
 
   setBounds: (map, sw, ne) ->
     map.setViewport [new BMap.Point(sw.lng, sw.lat), new BMap.Point(ne.lng, ne.lat)]

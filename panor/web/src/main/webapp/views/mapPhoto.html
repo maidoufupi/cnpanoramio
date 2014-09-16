@@ -1,4 +1,8 @@
-<alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
+<div class="alert-header">
+    <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
+</div>
+
+
 <div class="modal-header">
     <h3 class="modal-title">更改图片位置</h3>
     <button type="button" class="close" aria-hidden="true"

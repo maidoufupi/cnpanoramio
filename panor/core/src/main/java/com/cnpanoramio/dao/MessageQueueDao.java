@@ -9,9 +9,11 @@ import com.cnpanoramio.domain.Message;
 import com.cnpanoramio.domain.MessageQueue;
 
 public interface MessageQueueDao extends GenericDao<MessageQueue, Long> {
+	
+	public MessageQueue persist(MessageQueue messageQueue);
 
 	/**
-	 * 获取Message queue
+	 * 获取（用户&Message对应的）Message queue
 	 * 
 	 * @param user
 	 * @param message
@@ -26,5 +28,13 @@ public interface MessageQueueDao extends GenericDao<MessageQueue, Long> {
 	 * @return
 	 */
 	public List<MessageQueue> getMessageQueueList(User user, int pageSize, int pageNo);
+	
+	/**
+	 * 获取Message对应的MessageQueue列表
+	 * 
+	 * @param user
+	 * @param message
+	 */
+	public List<MessageQueue> getMessageQueueListByMessage(Message message);
 	
 }

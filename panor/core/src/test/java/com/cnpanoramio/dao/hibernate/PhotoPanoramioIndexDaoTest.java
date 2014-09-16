@@ -108,43 +108,63 @@ public class PhotoPanoramioIndexDaoTest {
 //		}
 //	}
 	
-//	@Test
-//	public void testSearchPhoto() {
-//		Double swLat = 23D;
-//		Double swLng = 90D;
-//		Double neLat = 40D;
-//		Double neLng = 130D;
-//		int level = 19;
-//		int width = 1000;
-//		int height = 1000;
-//		String term = "大  理";
-//		String type = "all";
-//		
-//		List<Photo> photos = photoPanoramioIndexDao.search(swLat, swLng, neLat, neLng, level, width, height, term, type);
-//		log.info("search all: ");
-//		for(Photo photo : photos) {
-//			log.info("  " + photo.getId());
-//			log.info("  " + photo.getName());
-//			log.info("  " + photo.getDescription());
-//		}
-//		
-//		type = "photo";
-//		photos = photoPanoramioIndexDao.search(swLat, swLng, neLat, neLng, level, width, height, term, type);
-//		log.info("search photo: ");
-//		for(Photo photo : photos) {
-//			log.info("  " + photo.getId());
-//			log.info("  " + photo.getName());
-//			log.info("  " + photo.getDescription());
-//		}
-//		
-//		term = "山东";
-//		type = "travel";
-//		photos = photoPanoramioIndexDao.search(swLat, swLng, neLat, neLng, level, width, height, term, type);
-//		log.info("search travel: ");
-//		for(Photo photo : photos) {
-//			log.info("  " + photo.getId());
-//			log.info("  " + photo.getName());
-//			log.info("  " + photo.getDescription());
-//		}
-//	}
+	@Test
+	public void testSearchPhoto() {
+		Double swLat = 23D;
+		Double swLng = 90D;
+		Double neLat = 40D;
+		Double neLng = 130D;
+		int level = 19;
+		int width = 1000;
+		int height = 1000;
+		String term = "大  理";
+		String type = "all";
+		
+		List<Photo> photos = photoPanoramioIndexDao.search(new Point(swLat, swLng), new Point(neLat, neLng), level, width, height, term, type);
+		log.info("search all: ");
+		for(Photo photo : photos) {
+			log.info("  " + photo.getId());
+			log.info("  " + photo.getName());
+			log.info("  " + photo.getDescription());
+		}
+		
+		type = "photo";
+		photos = photoPanoramioIndexDao.search(new Point(swLat, swLng), new Point(neLat, neLng), level, width, height, term, type);
+		log.info("search photo: ");
+		for(Photo photo : photos) {
+			log.info("  " + photo.getId());
+			log.info("  " + photo.getName());
+			log.info("  " + photo.getDescription());
+		}
+		
+		term = "山东";
+		type = "travel";
+		photos = photoPanoramioIndexDao.search(new Point(swLat, swLng), new Point(neLat, neLng), level, width, height, term, type);
+		log.info("search travel: ");
+		for(Photo photo : photos) {
+			log.info("  " + photo.getId());
+			log.info("  " + photo.getName());
+			log.info("  " + photo.getDescription());
+		}
+	}
+	
+	@Test
+	public void testSearchPhotoByTag() {
+		Double swLat = 23D;
+		Double swLng = 90D;
+		Double neLat = 40D;
+		Double neLng = 130D;
+		int level = 19;
+		int width = 1000;
+		int height = 1000;
+		String term = "上海";
+		String type = "all";
+		
+		List<Photo> photos = photoPanoramioIndexDao.search(new Point(swLat, swLng), new Point(neLat, neLng), level, width, height, term, type);
+		for(Photo photo : photos) {
+			log.info("  " + photo.getId());
+			log.info("  " + photo.getName());
+			log.info("  " + photo.getDescription());
+		}
+	}
 }

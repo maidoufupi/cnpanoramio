@@ -6,30 +6,48 @@
 angular.module('ponmApp.services', [
     'ngResource'])
     .factory('AuthService', ['$window', '$resource', '$cookies', '$log', '$q', 'ponmCtxConfig',
-        function ($window, $resource, $cookies, $log, $q, ponmCtxConfig) {
+    function ($window, $resource, $cookies, $log, $q, ponmCtxConfig) {
 
-            var loginService = $resource($window.apirest + '/auth/login');
+        var loginService = $resource(ponmCtxConfig.apirest + '/auth/login/:type'),
+            loginPost = $resource(ponmCtxConfig.ctx+'/login/j_spring_security_check');
+
+        function loginCheck(user) {
+            var deferred = $q.defer();
+            loginService.save({type: 'check'}, {username: user.username, password: user.password},
+                function(res) {
+                    if(res.status == "OK") {
+                        deferred.resolve();
+                    }
+                },
+                function(error) {
+                    $log.debug(error.data);
+                    deferred.reject(1);
+                }
+            );
+            return deferred.promise;
+        }
 
         function login(user) {
             var deferred = $q.defer();
-            loginService.save({username: user.username, password: user.password},
-                function(res) {
-                    $log.debug(res);
-                    if(res.status == "OK") {
-                        $log.debug("login success")
-                        ponmCtxConfig.userId = res.user.id;
-                        ponmCtxConfig.username = res.user.username;
-                        ponmCtxConfig.name = res.user.name;
-                        ponmCtxConfig.avatar = res.user.avatar;
-                        ponmCtxConfig.login = true;
-
-                        $log.debug($cookies.JSESSIONID);
-                        $log.debug($cookies);
-                        deferred.resolve();
-                    }else {
-                        deferred.reject(1);
-                    }
-                });
+            loginPost.save({username: user.username, password: user.password});
+//            loginService.save({username: user.username, password: user.password},
+//                function(res) {
+//                    $log.debug(res);
+//                    if(res.status == "OK") {
+//                        $log.debug("login success")
+//                        ponmCtxConfig.userId = res.user.id;
+//                        ponmCtxConfig.username = res.user.username;
+//                        ponmCtxConfig.name = res.user.name;
+//                        ponmCtxConfig.avatar = res.user.avatar;
+//                        ponmCtxConfig.login = true;
+//
+//                        $log.debug($cookies.JSESSIONID);
+//                        $log.debug($cookies);
+//                        deferred.resolve();
+//                    }else {
+//                        deferred.reject(1);
+//                    }
+//                });
             return deferred.promise;
         }
 
@@ -41,6 +59,7 @@ angular.module('ponmApp.services', [
                 loginService.get({}, function(res) {
                     if(res.status == "OK") {
                         ponmCtxConfig.userId = res.user.id;
+                        ponmCtxConfig.id = res.user.id;
                         ponmCtxConfig.username = res.user.username;
                         ponmCtxConfig.name = res.user.name;
                         ponmCtxConfig.avatar = res.user.avatar;
@@ -58,6 +77,7 @@ angular.module('ponmApp.services', [
         }
 
         return {
+            loginCheck: loginCheck,
             login: login,
             checkLogin: checkLogin
         };
@@ -123,33 +143,98 @@ angular.module('ponmApp.services', [
                     method: 'POST',
                     params: {'type': 'settings'}
                 },
+                // 所有旅行
                 getTravels: {
                     method: 'GET',
                     params: {'type': 'travel'}
                 },
+                // 所有标签
                 getTags: {
                     method: 'GET',
                     params: {'type': 'tag'}
                 },
+                // 创建标签
                 createTag: {
                     method: 'GET',
                     params: {'type': 'tag'}
                 },
+                // 回收站
                 getRecycleBin: {
                     method: 'GET',
                     params: {'type': 'recycle'}
                 },
+                // 清空回收站
                 emptyRecycleBin: {
                     method: 'DELETE',
                     params: {'type': 'recycle'}
                 },
+                // 彻底删除
                 removeRecycle: {
                     method: 'DELETE',
                     params: {'type': 'recycle'}
                 },
+                // 取消删除
                 cancelRecycle: {
                     method: 'GET',
                     params: {'type': 'recycle', action: 'cancel'}
+                },
+                // 动态列表
+                getMessages: {
+                    method: 'GET',
+                    params: {'type': 'messages'}
+                },
+                // 自己的消息
+                getMyMessages: {
+                    method: 'GET',
+                    params: {'type': 'mymessages'}
+                }
+                // 跟随者
+                ,getFollowers: {
+                    method: 'GET',
+                    params: {'type': 'follower'}
+                }
+                // 关注
+                ,following: {
+                    method: 'POST',
+                    params: {'type': 'following'}
+                }
+                // 取消关注
+                ,unFollowing: {
+                    method: 'DELETE',
+                    params: {'type': 'following'}
+                }
+                // 所有圈子
+                ,getCircles: {
+                    method: 'GET',
+                    params: {'type': 'circle'}
+                }
+                // 推荐关注
+                ,getFollowSuggested: {
+                    method: 'GET',
+                    params: {'type': 'follow', 'value': 'suggested'}
+                }
+                // 可能感兴趣的
+                ,getFollowInterested: {
+                    method: 'GET',
+                    params: {'type': 'follow', 'value': 'interested'}
+                }
+            });
+    }])
+    .factory('SettingsService', ['$window', '$resource', function ($window, $resource) {
+        return $resource($window.apirest + '/settings/:userId/:type',
+            {'userId': "@id"},
+            {
+                changeMapVendor: {
+                    method: 'POST',
+                    params: {'type': 'map'}
+                },
+                changePassword: {
+                    method: 'POST',
+                    params: {'type': 'password'}
+                },
+                changeAccount: {
+                    method: 'POST',
+                    params: {'type': 'account'}
                 }
             });
     }])
@@ -336,6 +421,43 @@ angular.module('ponmApp.services', [
                 }
             });
     }])
+    .factory('MessageService', ['ponmCtxConfig', '$resource', function (ponmCtxConfig, $resource) {
+        return $resource(ponmCtxConfig.apirest + '/message/:id/:type/:value',
+            {'id': '@id'},
+            {
+                like: {
+                    method: 'GET',
+                    params: {
+                        type: 'like'
+                    }
+                }
+                ,unLike: {
+                    method: 'DELETE',
+                    params: {
+                        type: 'like'
+                    }
+                }
+                ,share: {
+                    method: 'POST',
+                    params: {
+                        type: 'share'
+                    }
+                }
+            });
+    }])
+    .factory('RecycleService', ['ponmCtxConfig', '$resource', function (ponmCtxConfig, $resource) {
+        return $resource(ponmCtxConfig.apirest + '/recycle/:id/:type/:value',
+            {'id': '@id'},
+            {
+                cancel: {
+                    method: 'GET',
+                    params: {
+                        type: 'cancel'
+                    }
+                }
+            });
+    }])
+
     .service('LoginUserService', ['$window', '$resource', '$rootScope',
         function ($window, $resource, $rootScope) {
             this.getUserId = function() {

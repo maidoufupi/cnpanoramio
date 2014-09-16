@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.dao.CommentDao;
 import com.cnpanoramio.domain.Comment;
+import com.cnpanoramio.domain.Message;
 
 @Repository("commentDao")
 public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long> 
@@ -21,27 +22,33 @@ public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long>
 	}
 	
 	@Override
+	public Comment persist(Comment comment) {
+		getSession().persist(comment);
+		return comment;
+	}
+	
+	@Override
 	public List<Comment> getComments(Long photoId) {
 		Query photoListQuery = getSession().createQuery("select c from Comment as c left join c.photo as p "
-				+ "where p.id = :photoid order by create_time desc");
+				+ "where p.id = :photoid order by create_date desc");
 		
 		photoListQuery.setParameter("photoid", photoId);
 		List<Comment> res = photoListQuery.list();
         return res;
 	}
 
-	@Override
-	public List<Comment> getCommentPager(Long photoId, int pageSize, int pageNo) {
-		Query query = getSession().createQuery("select c from Comment as c left join c.photo as p "
-				+ "where p.id = :photoid order by create_time desc");
-		
-		query.setParameter("photoid", photoId);
-		query.setFirstResult((pageNo - 1) * pageSize);  
-        query.setMaxResults(pageSize);  
-  
-		List<Comment> res = query.list();
-		return res;
-	}
+//	@Override
+//	public List<Comment> getCommentPager(Long photoId, int pageSize, int pageNo) {
+//		Query query = getSession().createQuery("select c from Comment as c left join c.photo as p "
+//				+ "where p.id = :photoid order by create_date desc");
+//		
+//		query.setParameter("photoid", photoId);
+//		query.setFirstResult((pageNo - 1) * pageSize);  
+//        query.setMaxResults(pageSize);  
+//  
+//		List<Comment> res = query.list();
+//		return res;
+//	}
 
 	@Override
 	public Long getCommentSize(Long photoId) {

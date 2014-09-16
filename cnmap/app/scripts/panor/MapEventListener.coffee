@@ -51,6 +51,22 @@ class IMapEventListener
   setZoomAndCenter: (map, zoom, lat, lng) ->
 
   ##
+    # 放大
+    #
+    # @param map
+    # @param zoom
+    #/
+  zoomIn: (map) ->
+
+  ##
+    # 缩小
+    #
+    # @param map
+    # @param zoom
+    #/
+  zoomOut: (map) ->
+
+  ##
    # 设置地图边界
    #
    # @param map

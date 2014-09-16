@@ -11,8 +11,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "index_photo")
+//@Entity
+//@Table(name = "index_photo")
+@Deprecated
 public class IndexPhoto {
 
 	@ManyToOne

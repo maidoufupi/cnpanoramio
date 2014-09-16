@@ -8,6 +8,8 @@ import com.cnpanoramio.domain.Recycle;
 
 public interface RecycleDao extends GenericDao<Recycle, Long> {
 
+	public Recycle persist(Recycle recycle);
+	
 	/**
 	 * 获取用户全部的删除记录
 	 * 

@@ -3,6 +3,7 @@ package com.cnpanoramio.service.impl;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,16 +11,15 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.appfuse.Constants;
 import org.appfuse.dao.UserDao;
 import org.appfuse.model.User;
 import org.appfuse.service.RoleManager;
-import org.appfuse.service.UserExistsException;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.ObjectRetrievalFailureException;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.dao.SaltSource;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +31,7 @@ import com.cnpanoramio.dao.CircleDao;
 import com.cnpanoramio.dao.FavoriteDao;
 import com.cnpanoramio.dao.PhotoDao;
 import com.cnpanoramio.dao.RecycleDao;
+import com.cnpanoramio.dao.TagDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.dao.ViewsDao;
 import com.cnpanoramio.domain.Avatar;
@@ -42,6 +43,7 @@ import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
+import com.cnpanoramio.service.CircleManager;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.TravelService;
@@ -96,11 +98,28 @@ public class UserSettingsImpl implements UserSettingsManager {
 	
 	@Autowired
 	private CircleDao circleDao;
+	
+	@Autowired
+	private CircleManager circleManager;
+	
+	@Autowired
+	private TagDao tagDao;
+	
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private UserDao userDao;
+    @Autowired(required = false)
+    private SaltSource saltSource;
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
 	@Override
 	public UserSettings save(UserSettings userSettings) {
 
-		User user = getCurrentUser();
+//		User user = getCurrentUser();
+		User user = UserUtil.getCurrentUser(userManager);
 		UserSettings settings = userSettingsDao.get(user.getId());
 
 		settings.setAlertComments(userSettings.getAlertComments());
@@ -123,44 +142,16 @@ public class UserSettingsImpl implements UserSettingsManager {
 
 		return userSettings;
 	}
-	
-	
 
 	@Override
-	public UserResponse.Settings getCurrentUserSettings() {
-
-		UserSettings userSettings = null;
-
-		User user = getCurrentUser();
-		if (null != user) {
-			userSettings = userSettingsDao.getByUserName(user.getUsername());
-			return UserUtil.transformSettings(userSettings);
-		}
-		return null;
+	public UserSettings get(User user) {
+		return userSettingsDao.get(user.getId());
 	}
 
 	@Override
 	public UserSettings getSettingsByUserName(String userName) {
 		UserSettings userSettings = userSettingsDao.getByUserName(userName);
 		return userSettings;
-	}
-
-	protected User getCurrentUser() {
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		if (null != auth) {
-			Object principal = auth.getPrincipal();
-			String username;
-			if (principal instanceof UserDetails) {
-				username = ((UserDetails) principal).getUsername();
-			} else {
-				username = principal.toString();
-			}
-			return userManager.getUserByUsername(username);
-		} else {
-			return null;
-		}
-
 	}
 
 	public UserSettingsDao getUserSettingsDao() {
@@ -178,26 +169,37 @@ public class UserSettingsImpl implements UserSettingsManager {
 	public void setUserManager(UserManager userManager) {
 		this.userManager = userManager;
 	}
-
+	
 	@Override
-	public UserOpenInfo getOpenInfo(Long id) {
+	public UserOpenInfo getOpenInfo(User user) {
+		User owner = UserUtil.getCurrentUser(userManager);
+		return getOpenInfo(user, owner);
+	}
+	
+	@Override
+	public UserOpenInfo getOpenInfo(User user, User owner) {
+		
 		UserOpenInfo openInfo = new UserOpenInfo();
-		UserSettings setting = userSettingsDao.get(id);
+		
+		UserSettings setting = userSettingsDao.get(user.getId());
 		openInfo.setId(setting.getId());
 		
 		// 昵称
 		openInfo.setName(setting.getName());
+		
+		// 描述
+		openInfo.setDescription(setting.getDescription());
 		
 		// 用户头像
 		if (null != setting.getAvatar()) {
 			openInfo.setAvatar(setting.getAvatar().getId());
 		} else {
 			// 默认头像
-			openInfo.setAvatar(1L);
+			openInfo.setAvatar(0L);
 		}
 
 		// 系统用户名
-		User user = userManager.get(id);
+		user = userManager.get(user.getId());
 		openInfo.setUsername(user.getUsername());
 
 		// 拥有照片数
@@ -209,15 +211,19 @@ public class UserSettingsImpl implements UserSettingsManager {
 		openInfo.setPhotoViews(views.intValue());
 
 		// 多少张被收藏
-		Long favs = favDao.getUserPhotoFavoriteCount(user);
-		openInfo.setPhotoFavorites(favs.intValue());
+//		Long favs = favDao.getUserPhotoFavoriteCount(user);
+//		openInfo.setPhotoFavorites(favs.intValue());
 
 		// 用户全部标签 tags
-		List<String> tags = userSettingsDao.getUserTags(user);
-		openInfo.setTags(tags);
+		for(Tag tag : setting.getTags()) {
+			openInfo.getTags().add(tag.getContent());
+		}
 		
 		// 用户全部旅行
-		openInfo.setTravels(travelService.getTravels(user));
+//		openInfo.setTravels(travelService.getTravels(user));
+		
+		// 登录用户是否follow此用户
+		openInfo.setFollow(circleManager.isFollow(owner, user));
 
 		return openInfo;
 	}
@@ -271,30 +277,30 @@ public class UserSettingsImpl implements UserSettingsManager {
 	}
 
 	@Override
-	public List<String> getUserTags(User user) {
+	public Set<String> getUserTags(User user) {
 		UserSettings settings = userSettingsDao.get(user.getId());
 		return convertTags(settings.getTags());
 	}
 
 	@Override
-	public List<String> createTag(User user, String tag) {
+	public Tag createTag(User user, String tagContent) {
 		UserSettings settings = userSettingsDao.get(user.getId());
-		Set<Tag> tags = userSettingsDao.createTag(settings, tag);
-		return convertTags(tags);
+		Tag tag = tagDao.getOrCreateUserTag(settings, tagContent);
+		return tag;
 	}
 
 	@Override
-	public List<String> deleteTag(User user, String tag) {
+	public Set<String> deleteTag(User user, String tag) {
 		UserSettings settings = userSettingsDao.get(user.getId());
 		Tag t = new Tag(tag);
 		settings.getTags().remove(t);
 		return convertTags(settings.getTags());
 	}
 	
-	private List<String> convertTags(Set<Tag> tags) {
-		List<String> list = new ArrayList<String>();
+	private Set<String> convertTags(Set<Tag> tags) {
+		Set<String> list = new HashSet<String>();
 		for(Tag t: tags) {
-			list.add(t.getTag());
+			list.add(t.getContent());
 		}
 		return list;
 	}
@@ -304,48 +310,34 @@ public class UserSettingsImpl implements UserSettingsManager {
 		return userSettingsDao.get(id);
 	}
 	
-	@Override
-	public List<Recycle> getRecycleBin(Long id) {
-		return recycleDao.getUserRecycle(id);		
-	}
+//	@Override
+//	public List<Recycle> getRecycleBin(Long id) {
+//		return recycleDao.getUserRecycle(id);		
+//	}
 
-	@Override
-	public void emptyRecycleBin(Long id) {
-		
-		UserSettings settings = userSettingsDao.get(id);
-		for(Recycle recycle : settings.getRecycle()) {
-			removeRecycle(settings, recycle);
-		}
-		
-	}
+	
 
-	@Override
-	public void cancelRecycle(Long userId, Long id) {
-		UserSettings settings = userSettingsDao.get(userId);
-		Recycle recycle = recycleDao.get(id);
-		if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
-			try {
-				photoService.cancelDelete(recycle.getRecyId());
-				settings.getRecycle().remove(recycle);
-			}catch(DataAccessException ex) {
-			}				
-		}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
-			try {
-				travelService.cancelDeleteTravel(recycle.getRecyId());
-				settings.getRecycle().remove(recycle);
-			}catch(DataAccessException ex) {
-			}	
-		}
-		
-	}
+//	@Override
+//	public void cancelRecycle(Long userId, Long id) {
+//		UserSettings settings = userSettingsDao.get(userId);
+//		Recycle recycle = recycleDao.get(id);
+//		if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
+//			try {
+//				photoService.cancelDelete(recycle.getRecyId());
+//				settings.getRecycle().remove(recycle);
+//			}catch(DataAccessException ex) {
+//			}				
+//		}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
+//			try {
+//				travelService.cancelDeleteTravel(recycle.getRecyId());
+//				settings.getRecycle().remove(recycle);
+//			}catch(DataAccessException ex) {
+//			}	
+//		}
+//		
+//	}
 
-	@Override
-	public void removeRecycle(Long userId, Long id) {
-		UserSettings settings = userSettingsDao.get(userId);
-		Recycle recycle = recycleDao.get(id);
-		
-		removeRecycle(settings, recycle);
-	}
+	
 	
 	/**
 	 * 永久删除垃圾箱记录
@@ -353,21 +345,21 @@ public class UserSettingsImpl implements UserSettingsManager {
 	 * @param settings
 	 * @param recycle
 	 */
-	private void removeRecycle(UserSettings settings, Recycle recycle) {
-		if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
-			try {
-				photoService.removePhoto(recycle.getRecyId());
-				settings.getRecycle().remove(recycle);
-			}catch(DataAccessException ex) {
-			}				
-		}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
-			try {
-				travelService.removeTravel(recycle.getRecyId());
-				settings.getRecycle().remove(recycle);
-			}catch(DataAccessException ex) {
-			}
-		}
-	}
+//	private void removeRecycle(UserSettings settings, Recycle recycle) {
+//		if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
+//			try {
+//				photoService.removePhoto(recycle.getRecyId());
+//				settings.getRecycle().remove(recycle);
+//			}catch(DataAccessException ex) {
+//			}				
+//		}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
+//			try {
+//				travelService.removeTravel(recycle.getRecyId());
+//				settings.getRecycle().remove(recycle);
+//			}catch(DataAccessException ex) {
+//			}
+//		}
+//	}
 
 	@Override
 	public List<PhotoProperties> getPhotosForUserBounds(String id,
@@ -380,34 +372,33 @@ public class UserSettingsImpl implements UserSettingsManager {
 		return PhotoUtil.transformPhotos(photos);
 	}
 
-
-	@Override
-	public User signup(User user) {
-		user.setEnabled(true);
-
-        // Set the default user role on this new user
-        user.addRole(roleManager.getRole(Constants.USER_ROLE));
-        
-        // 用户默认详细设置
-        UserSettings userSettings = new UserSettings();
-        
-        try {
-            user = this.getUserManager().saveUser(user);
-            this.create(user);
-        } catch (AccessDeniedException ade) {
-            // thrown by UserSecurityAdvice configured in aop:advisor userManagerSecurity
-            log.warn(ade.getMessage());
-            return null; 
-        } catch (UserExistsException e) {
-            // redisplay the unencrypted passwords
-            user.setPassword(user.getConfirmPassword());
-//            return "signup";
-        }
-
-//        saveMessage(request, getText("user.registered", user.getUsername(), locale));
-//        request.getSession().setAttribute(Constants.REGISTERED, Boolean.TRUE);
-		return null;
-	}
+//	@Override
+//	public User signup(User user) {
+//		user.setEnabled(true);
+//
+//        // Set the default user role on this new user
+//        user.addRole(roleManager.getRole(Constants.USER_ROLE));
+//        
+//        // 用户默认详细设置
+//        UserSettings userSettings = new UserSettings();
+//        
+//        try {
+//            user = this.getUserManager().saveUser(user);
+//            this.create(user);
+//        } catch (AccessDeniedException ade) {
+//            // thrown by UserSecurityAdvice configured in aop:advisor userManagerSecurity
+//            log.warn(ade.getMessage());
+//            return null; 
+//        } catch (UserExistsException e) {
+//            // redisplay the unencrypted passwords
+//            user.setPassword(user.getConfirmPassword());
+////            return "signup";
+//        }
+//
+////        saveMessage(request, getText("user.registered", user.getUsername(), locale));
+////        request.getSession().setAttribute(Constants.REGISTERED, Boolean.TRUE);
+//		return null;
+//	}
 
 	@Override
 	public void following(User user, User following, boolean follow) {
@@ -419,7 +410,7 @@ public class UserSettingsImpl implements UserSettingsManager {
 			circle.setName("好友");
 			circle.setOwner(user);
 			circle.setCreateDate(new Date());
-			circle = circleDao.save(circle);
+			circle = circleDao.persist(circle);
 		}else {
 			circle = (Circle) userSetting.getCircles().toArray()[0];
 		}
@@ -431,6 +422,18 @@ public class UserSettingsImpl implements UserSettingsManager {
 			circle.getUsers().remove(following);
 			followingSetting.getFollower().remove(user);
 		}
+	}
+
+	@Override
+	public boolean isPasswordValid(User user, String password) {
+		
+		if (passwordEncoder != null) {
+			String currentPassword = userDao.getUserPassword(user.getId());
+			return passwordEncoder.isPasswordValid(currentPassword, password, saltSource.getSalt(user));
+		} else {
+            log.warn("PasswordEncoder not set, skipping password encryption...");
+            return false;
+        }
 	}
 		
 }

@@ -1,8 +1,10 @@
 package com.cnpanoramio.domain;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -27,8 +30,13 @@ import org.hibernate.search.annotations.Field;
 @Table(name = "travel")
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
-public class Travel {
+public class Travel extends BaseEntity {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 40442655172045487L;
+
 	public Travel() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -37,7 +45,7 @@ public class Travel {
 	public Travel(String title) {
 		super();
 		this.title = title;
-		this.createTime = Calendar.getInstance().getTime();
+		this.setCreateDate(Calendar.getInstance().getTime());
 	}
 
 	@Id
@@ -56,13 +64,7 @@ public class Travel {
 	@OneToOne
 	@JoinColumn(name="spot_id")
 	private TravelSpot spot;
-	
-	@Column(name="create_time")
-	private Date createTime;
-	
-	@Column(name="modify_time")
-	private Date modifyTime;
-	
+		
 	@Column(name="time_start")
 	private Date timeStart;
 	
@@ -81,16 +83,19 @@ public class Travel {
 	@Field
 	private String description;
 	
-	@Column(name="deleted")
-	private Boolean deleted;
-	
-	@OneToMany(mappedBy="travel")
+	@OneToMany(mappedBy="travel", cascade = CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval = true)
 	private Set<Like> likes = new HashSet<Like>(0);
 	
 	// 相册封面图片
 	@ManyToOne
 	@JoinColumn(name="album_cover")
 	private Photo albumCover;
+	
+	@OneToMany(mappedBy="travel", cascade = CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval = true)
+	private List<Comment> comments = new ArrayList<Comment>(0);
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<Tag> tags = new HashSet<Tag>(0);
 
 	public Long getId() {
 		return id;
@@ -115,22 +120,6 @@ public class Travel {
 	@SuppressWarnings("unused")
 	private void setSpots(Set<TravelSpot> spots) {
 		this.spots = spots;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getModifyTime() {
-		return modifyTime;
-	}
-
-	public void setModifyTime(Date modifyTime) {
-		this.modifyTime = modifyTime;
 	}
 
 	public Date getTimeStart() {
@@ -189,20 +178,28 @@ public class Travel {
 		this.likes = likes;
 	}
 
-	public Boolean getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
-
 	public Photo getAlbumCover() {
 		return albumCover;
 	}
 
 	public void setAlbumCover(Photo albumCover) {
 		this.albumCover = albumCover;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public Set<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
 	}
 		
 }

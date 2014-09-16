@@ -13,13 +13,13 @@ class TravelLayer extends window.cnmap.ITravelLayer
         @labels.push @createLabel photo for photo in spot.photos
         point = []
         point.push @createPoint photo for photo in spot.photos
-        polyline = new qq.maps.Polyline {
+        spot.polyline = new qq.maps.Polyline {
           map: @map
           path: point
           strokeDashStyle: 'dash'
           strokeWeight: 5
         }
-        @labels.push polyline
+        @labels.push spot.polyline
 
 
   createPoint: (photo) ->
@@ -45,6 +45,24 @@ class TravelLayer extends window.cnmap.ITravelLayer
     label.photoId = photo.id
     label.setMap(@map)
     return label
+
+  toggleSpotLine: (spot, visible) ->
+    if spot.polyline
+      spot.polyline.setVisible visible
+
+  updateSpotLine: (spot) ->
+    point = []
+    point.push @createPoint photo for photo in spot.photos
+    if spot.polyline
+      spot.polyline.setPath point
+    else
+      spot.polyline = new qq.maps.Polyline {
+          map: @map
+          path: point
+          strokeDashStyle: 'dash'
+          strokeWeight: 5
+        }
+      @labels.push spot.polyline
 
 #  createSpot: (spot) ->
 #    distance = 0

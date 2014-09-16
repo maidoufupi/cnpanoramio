@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.json.TravelResponse;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
 import com.cnpanoramio.service.LikeManager;
@@ -37,6 +36,7 @@ public class TravelRestService extends AbstractRestService {
 	
 	@Autowired
 	private TravelManager travelManager;
+	
 	@Autowired
 	private TravelService travelService;
 	
@@ -61,23 +61,36 @@ public class TravelRestService extends AbstractRestService {
 	@ResponseBody
 	public TravelResponse getTravel(@PathVariable String travelId) {
 		TravelResponse response = responseFactory();
-		response.setTravel(travelService.getTravel(Long.parseLong(travelId)));
+		Long id = Long.parseLong(travelId);
+		if(0 == id) {
+			response.setTravel(travelService.getNoTravel());
+		}else {
+			response.setTravel(travelService.getTravel(Long.parseLong(travelId)));
+		}
+				
 		return response;
 	}
 	
 	@RequestMapping(value = "/{travelId}", method = RequestMethod.POST)
 	@ResponseBody
-	public TravelResponse changeTravel(@PathVariable String travelId, @RequestParam("description") String description) {
+	public TravelResponse changeTravel(@PathVariable String travelId, 
+			@RequestParam(value="name", required=false) String name,
+			@RequestParam(value="description", required=false) String description) {
 		TravelResponse response = responseFactory();
-		response.setTravel(travelService.changeTravelDesc(Long.parseLong(travelId), description));
+		if(null != name) {
+			response.setTravel(travelService.changeTravelName(Long.parseLong(travelId), name));
+		}
+		if(null != description) {
+			response.setTravel(travelService.changeTravelDesc(Long.parseLong(travelId), description));
+		}
 		return response;
 	}
 	
 	@RequestMapping(value = "/{travelId}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public TravelResponse deleteTravel(@PathVariable String travelId) {
+	public TravelResponse delete(@PathVariable String travelId) {
 		TravelResponse response = responseFactory();
-		travelService.deleteTravel(Long.parseLong(travelId));
+		travelManager.deleteTravel(Long.parseLong(travelId));
 		return response;
 	}
 	
@@ -186,7 +199,8 @@ public class TravelRestService extends AbstractRestService {
 	public TravelResponse likeTravel(@PathVariable String travelId) {
 		TravelResponse response = responseFactory();
 		
-		likeManager.likeTravel(Long.parseLong(travelId));
+		User me = UserUtil.getCurrentUser(userManager);
+		likeManager.likeTravel(me, Long.parseLong(travelId));
 		
 		return response;
 	}
@@ -196,7 +210,8 @@ public class TravelRestService extends AbstractRestService {
 	public TravelResponse unLikeTravel(@PathVariable String travelId) {
 		TravelResponse response = responseFactory();
 		
-		likeManager.likeTravel(Long.parseLong(travelId));
+		User me = UserUtil.getCurrentUser(userManager);
+		likeManager.likeTravel(me, Long.parseLong(travelId));
 		
 		return response;
 	}

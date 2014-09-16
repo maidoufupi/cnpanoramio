@@ -59,10 +59,10 @@ public class PanoramioRestService extends AbstractRestService {
 
 		List<PhotoProperties> pps = null;
 		Long userIdL = null;
-		log.debug("getPanoramio [" + swLatD + ", " + swLngD + ", " + neLatD
-				+ ", " + neLngD + ", " + levelI + ", " + mVendor + ", "
-				+ widthI + ", " + heightI + ", " + userId + ", " + favorite
-				+ ", " + tag + ", " + latestb + "]");
+//		log.debug("getPanoramio [" + swLatD + ", " + swLngD + ", " + neLatD
+//				+ ", " + neLngD + ", " + levelI + ", " + mVendor + ", "
+//				+ widthI + ", " + heightI + ", " + userId + ", " + favorite
+//				+ ", " + tag + ", " + latestb + "]");
 		if (latestb) {
 			pps = panorIndexService.getLatestPanoramio(new LatLng(swLatD, swLngD), new LatLng(neLatD, neLngD), 
 					levelI, mVendor, widthI, heightI);

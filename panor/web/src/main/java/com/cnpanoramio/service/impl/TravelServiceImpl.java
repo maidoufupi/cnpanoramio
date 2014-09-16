@@ -12,9 +12,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cnpanoramio.dao.TravelSpotDao;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.json.TravelResponse.Travel;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
+import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.utils.PhotoUtil;
@@ -29,6 +31,12 @@ public class TravelServiceImpl implements TravelService {
 	
 	@Autowired
 	private TravelManager travelManager;
+	
+	@Autowired
+	private TravelSpotDao travelSpotDao;
+	
+	@Autowired
+	private PhotoManager photoManager;
 	
 	@Override
 	public Travel getTravel(Long travelId) {
@@ -106,7 +114,10 @@ public class TravelServiceImpl implements TravelService {
 		BeanUtils.copyProperties(travelSpot, tSpot, new String[]{"travel", "photos"});
 		tSpot.setTravelId(travelSpot.getTravel().getId());
 		for(Photo photo : travelSpot.getPhotos()) {
-			tSpot.getPhotos().add(PhotoUtil.transformProperties(photo));
+			// 过滤掉被标记删除的图片
+			if(!photo.isDeleted()) {
+				tSpot.getPhotos().add(PhotoUtil.transformProperties(photo));
+			}			
 		}
 		return tSpot;
 	}
@@ -114,7 +125,11 @@ public class TravelServiceImpl implements TravelService {
 	@Override
 	public TravelSpot changeSpot(Long id, TravelSpot spot) {
 		
-		com.cnpanoramio.domain.TravelSpot travelSpot = new com.cnpanoramio.domain.TravelSpot();
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.TravelSpot travelSpot = travelSpotDao.get(id);
+		checkMyTravel(travelSpot.getTravel(), me);
+		
+		travelSpot = new com.cnpanoramio.domain.TravelSpot();
 		travelSpot.setAddress(spot.getAddress());
 		travelSpot.setTitle(spot.getTitle());
 		travelSpot.setDescription(spot.getDescription());
@@ -127,10 +142,17 @@ public class TravelServiceImpl implements TravelService {
 	public Travel changeTravelDesc(Long id, String description) {
 		com.cnpanoramio.domain.Travel travel = travelManager.getTravel(id);
 		User me = UserUtil.getCurrentUser(userManager);
-		if(!travel.getUser().getId().equals(me.getId())) {
-			throw new AccessDeniedException("Travel (id=" + id + ") is not belong to you");
-		}
+		checkMyTravel(travel, me);
 		return convertTravel(travelManager.changeTravelDesc(id, description));
+	}
+	
+	@Override
+	public Travel changeTravelName(Long id, String name) {
+		com.cnpanoramio.domain.Travel travel = travelManager.getTravel(id);
+		User me = UserUtil.getCurrentUser(userManager);
+		checkMyTravel(travel, me);
+		
+		return convertTravel(travelManager.changeTravelName(id, name));
 	}
 
 	@Override
@@ -140,16 +162,33 @@ public class TravelServiceImpl implements TravelService {
 
 	@Override
 	public Travel addTravelPhotos(Long id, List<Long> photos) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
+		checkMyTravel(travel, me);
+		Photo photo = null;
+		for (Long photoId : photos) {
+			photo = photoManager.getPhoto(photoId);
+			PhotoUtil.checkMyPhoto(photo, me);
+		}
+		
 		return convertTravel(travelManager.addTravelPhotos(id, photos));
 	}
 
 	@Override
 	public Travel removeTravelPhotos(Long id, List<Long> photos) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
+		checkMyTravel(travel, me);
+		
 		return convertTravel(travelManager.removeTravelPhotos(id, photos));
 	}
 
 	@Override
 	public TravelSpot createTravelSpot(Long id, TravelSpot spot) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
+		checkMyTravel(travel, me);
+		
 		com.cnpanoramio.domain.TravelSpot travelSpot = new com.cnpanoramio.domain.TravelSpot();
 		travelSpot.setAddress(spot.getAddress());
 		travelSpot.setTitle(spot.getTitle());
@@ -160,27 +199,69 @@ public class TravelServiceImpl implements TravelService {
 
 	@Override
 	public Travel addSpotPhotos(Long id, List<Long> photos) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.TravelSpot spot = travelSpotDao.get(id);
+		checkMyTravel(spot.getTravel(), me);
+		Photo photo = null;
+		for (Long photoId : photos) {
+			photo = photoManager.getPhoto(photoId);
+			PhotoUtil.checkMyPhoto(photo, me);
+		}
 		return convertTravel(travelManager.addSpotPhotos(id, photos));
 	}
 
 	@Override
 	public Travel deleteSpot(Long id) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.TravelSpot spot = travelSpotDao.get(id);
+		checkMyTravel(spot.getTravel(), me);
 		return convertTravel(travelManager.deleteSpot(id));
 	}
 
 	@Override
 	public void deleteTravel(Long id) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
+		checkMyTravel(travel, me);
 		travelManager.deleteTravel(id);
 	}
 
 	@Override
 	public void removeTravel(Long id) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
+		checkMyTravel(travel, me);
 		travelManager.removeTravel(id);		
 	}
 
 	@Override
 	public void cancelDeleteTravel(Long id) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
+		checkMyTravel(travel, me);
 		travelManager.cancelDeleteTravel(id);		
+	}
+
+	private void checkMyTravel(com.cnpanoramio.domain.Travel travel, User me) {
+
+		if (!travel.getUser().getId().equals(me.getId())) {
+			throw new AccessDeniedException("Travel (id=" + travel.getId()
+					+ ") is not belong to you");
+		}
+	}
+
+	@Override
+	public Travel getNoTravel() {
+		User me = UserUtil.getCurrentUser(userManager);
+		List<Photo> photos = photoManager.getNoTravel(me);
+		TravelSpot spot = new TravelSpot();
+		Travel travel = new Travel();
+		
+		spot.setPhotos(PhotoUtil.transformPhotos(photos));
+		travel.setId(0L);
+		travel.getSpots().add(spot);
+		travel.setPhotoSize(photos.size());
+		return travel;
 	}
 
 }

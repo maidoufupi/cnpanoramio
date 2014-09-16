@@ -4,7 +4,8 @@
 'use strict';
 
 angular.module('ponmApp.directives')
-    .directive('waypoint', ['$log', '$timeout', function ($log, $timeout) {
+    .directive('waypoint', ['$log', '$timeout', '$parse', 'safeApply',
+        function ($log, $timeout, $parse, safeApply) {
 
         var defaults = {
             stuckClass: 'stuck',
@@ -15,16 +16,23 @@ angular.module('ponmApp.directives')
             restrict: 'A',
             link: function (scope, element, attrs) {
 
-                $log.debug("waypoint...");
+//                $log.debug("waypoint...");
 
                 var options;
                 var opt = scope.$eval(attrs.waypoint || "{}");
                 options = angular.extend({}, $.fn.waypoint.defaults, defaults, opt);
 
+                var onWaypoint = $parse(attrs.onWaypoint);
+
                 $timeout( function() {
-                    $log.debug("set waypoint");
+//                    $log.debug("set waypoint");
 
                     $( element ).waypoint(function(direction) {
+                        if(onWaypoint) {
+                            safeApply(scope, function() {
+                                onWaypoint(scope, {$direction: direction, $element: element});
+                            });
+                        }
                         scope.$emit('waypointEvent', direction, opt.id);
                     }, options);
                 }, 500);
@@ -44,12 +52,18 @@ angular.module('ponmApp.directives')
     }])
     .directive('waypointSticky', ['$log', '$timeout', function ($log, $timeout) {
 
-        var defaults;
+        var defaults = {
+                wrapper: '<div class="sticky-wrapper" />',
+                stuckClass: 'stuck',
+                direction: 'down right'
+                },
+            wrap = function($elements, options) {
+                var $parent;
 
-        defaults = {
-            stuckClass: 'stuck',
-            direction: 'down right'
-        };
+                $elements.wrap(options.wrapper);
+                $parent = $elements.parent();
+                return $parent.data('isWaypointStickyWrapper', true);
+            };
 
         return {
             restrict: 'A',
@@ -57,17 +71,21 @@ angular.module('ponmApp.directives')
 
                 $log.debug("waypoint sticky...");
 
-                var options, originalHandler, opt, $sticky;
+                var $wrap, options, originalHandler, opt, $sticky;
 
                 opt = scope.$eval(attrs.waypointSticky || "{}");
 
                 options = $.extend({}, $.fn.waypoint.defaults, defaults, opt);
+                $wrap = wrap(element, options);
+
                 originalHandler = options.handler;
                 $sticky = $(element);
                 options.handler = function(direction) {
                     var shouldBeStuck;
 
                     shouldBeStuck = options.direction.indexOf(direction) !== -1;
+                    $wrap.height(shouldBeStuck ? $sticky.outerHeight() : '');
+
                     $sticky.toggleClass(options.stuckClass, shouldBeStuck);
 
 //                    $log.debug(direction);
@@ -77,33 +95,28 @@ angular.module('ponmApp.directives')
                 };
 
                 $timeout(function() {
-                    $sticky.waypoint(options);
+                    $wrap.waypoint(options);
                     $sticky.data('stuckClass', options.stuckClass);
-                }, 500);
+                }, 1000);
+
+                scope.$on('waypoint-refresh', function ( data ) {
+                    $.waypoints('refresh');
+                });
 
                 attrs.$observe('waypointEnable', function ( data ) {
                     if(data && data == "true") {
-
+                        $sticky.waypoint('enable');
                     }else {
-                        $sticky.waypoint('destroy');
-                        $sticky.removeClass($sticky.data('stuckClass'));
+                        $sticky.waypoint('disable');
+//                        $sticky.waypoint('destroy');
+//                        $sticky.removeClass($sticky.data('stuckClass'));
                     }
                 });
 
             }
         }
     }])
-    .directive('whenScrolled', function() {
-        return function(scope, elm, attr) {
-            var raw = elm[0];
 
-            elm.bind('scroll', function() {
-                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
-                    scope.$apply(attr.whenScrolled);
-                }
-            });
-        };
-    })
     .directive('waypointInfinite', ['$log', '$timeout', function ($log, $timeout) {
 
         var defaults;

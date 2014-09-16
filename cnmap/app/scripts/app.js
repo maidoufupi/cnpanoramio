@@ -4,6 +4,8 @@ angular.module('ponmApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
+    'ngAnimate',
+    'LocalStorageModule',
     'xeditable',
     'ui.router',
     'ui.bootstrap',

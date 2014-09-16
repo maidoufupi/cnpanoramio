@@ -1,10 +1,8 @@
 package com.cnpanoramio.domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,11 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.appfuse.model.User;
@@ -38,12 +36,10 @@ public class UserSettings {
 	@Id 
     private Long id;
 	
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name="user_tag")
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	private Set<Tag> tags = new HashSet<Tag>(0);
 	
 	@OneToMany(mappedBy="user")
-//	@JoinTable(name="user_travel")
 	private List<Travel> travels = new ArrayList<Travel>(0);
 	
 	// 地图供应商
@@ -109,10 +105,12 @@ public class UserSettings {
 	private Avatar avatar;
 	
 	// follower
-	@OneToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name="user_follower",
 			joinColumns = @JoinColumn(name="id"),
-	        inverseJoinColumns = @JoinColumn(name="follower_id")
+	        inverseJoinColumns = @JoinColumn(name="follower_id"),
+	        uniqueConstraints = @UniqueConstraint(name = "uq_user_follower",
+					columnNames = {"id", "follower_id"})
 	)
 	private Set<User> follower = new HashSet<User>(0);
 	
@@ -130,9 +128,9 @@ public class UserSettings {
 	@OneToMany(mappedBy="owner", fetch = FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval=true)
 	private Set<Circle> circles = new HashSet<Circle>(0);
 	
-	@OneToMany(mappedBy="user", fetch = FetchType.LAZY, orphanRemoval=true)
+//	@OneToMany(mappedBy="user", fetch = FetchType.LAZY, orphanRemoval=true)
 //	@JoinTable(name="user_message")
-	private List<MessageQueue> messageQueue = new ArrayList<MessageQueue>(0);
+//	private List<MessageQueue> messageQueue = new ArrayList<MessageQueue>(0);
 	
 	public User getUser() {
 		return user;
@@ -279,13 +277,13 @@ public class UserSettings {
 		this.circles = circles;
 	}
 
-	public List<MessageQueue> getMessageQueue() {
-		return messageQueue;
-	}
-
-	public void setMessageQueue(List<MessageQueue> messageQueue) {
-		this.messageQueue = messageQueue;
-	}
+//	public List<MessageQueue> getMessageQueue() {
+//		return messageQueue;
+//	}
+//
+//	public void setMessageQueue(List<MessageQueue> messageQueue) {
+//		this.messageQueue = messageQueue;
+//	}
 
 	public Set<Recycle> getRecycle() {
 		return recycle;

@@ -1,11 +1,16 @@
 package com.cnpanoramio.domain;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.appfuse.model.User;
+
 
 @Entity
 @Table(name = "comment")
@@ -29,40 +35,45 @@ public class Comment extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(length=10)
+	private CommentType type;
+	
 	@ManyToOne
 	@JoinColumn(name="photo_id")
 	private Photo photo;
 	
 	@ManyToOne
+	@JoinColumn(name="travel_id")
+	private Travel travel;
+	
+	@ManyToOne
+	@JoinColumn(name="comment_id")
+	private Comment comment;
+		
+	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
 	
 	@Column(length=1000)
-	private String comment;
-	
-//	@Column(name="create_time")
-//	private Calendar createTime;
-//	
-//	@Column(name="modify_time")
-//	private Calendar modifyTime;
-	
-	@OneToMany
+	private String content;
+		
+	@OneToMany(mappedBy="comment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Like> likes = new HashSet<Like>(0);
+	
+	@OneToMany(mappedBy="comment", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Comment> comments = new ArrayList<Comment>(0);
 
+	public enum CommentType {
+		photo, travel, comment
+	}
+	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Photo getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(Photo photo) {
-		this.photo = photo;
 	}
 
 	public User getUser() {
@@ -73,36 +84,61 @@ public class Comment extends BaseEntity {
 		this.user = user;
 	}
 
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
-//	public Calendar getCreateTime() {
-//		return createTime;
-//	}
-//
-//	public void setCreateTime(Calendar createTime) {
-//		this.createTime = createTime;
-//	}
-//
-//	public Calendar getModifyTime() {
-//		return modifyTime;
-//	}
-
-//	public void setModifyTime(Calendar modifyTime) {
-//		this.modifyTime = modifyTime;
-//	}
-
 	public Set<Like> getLikes() {
 		return likes;
 	}
 
 	public void setLikes(Set<Like> likes) {
 		this.likes = likes;
-	}	
+	}
+
+	public CommentType getType() {
+		return type;
+	}
+
+	public void setType(CommentType type) {
+		this.type = type;
+	}
+
+	public Photo getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(Photo photo) {
+		this.photo = photo;
+	}
+
+	public Travel getTravel() {
+		return travel;
+	}
+
+	public void setTravel(Travel travel) {
+		this.travel = travel;
+	}
+
+	public Comment getComment() {
+		return comment;
+	}
+
+	public void setComment(Comment comment) {
+		this.comment = comment;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
 	
 }

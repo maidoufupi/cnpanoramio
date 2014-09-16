@@ -21,12 +21,12 @@
                         <i class="glyphicon glyphicon-upload"></i>
                         <span>开始上传</span>
                     </button>-->
-                    <button type="button" class="btn btn-warning cancel"
+                    <!--<button type="button" class="btn btn-warning cancel"
                             ng-click="cancel()"
-                            data-ng-show="queue.length">
+                            ng-show="queue.length">
                         <i class="glyphicon glyphicon-ban-circle"></i>
                         <span>取消上传</span>
-                    </button>
+                    </button>-->
 
                     <!-- The global file processing state -->
                     <span class="fileupload-process"></span>
@@ -74,8 +74,8 @@
                 ng-controller="PhotoUploadRowCtrl"
                 ng-click="activePhoto(file)"
                 ng-class="{'processing': file.$processing(), 'active': file.active}"
-                ponm-hover=".action">
-                <td ng-switch on="!!file.thumbnailUrl">
+                >
+                <td ng-switch on="!!file.thumbnailUrl" class="photo-thumbnail">
                     <div class="preview" ng-switch-when="true">
                         <a ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" gallery>
                             <img ng-src="{{file.thumbnailUrl}}" alt="">
@@ -123,7 +123,7 @@
                     </div>
 
                 </td>
-                <td>
+                <td class="photo-info">
                     <p class="size">{{file.size | formatFileSize}}</p>
                     <p>
                         <span class="label label-clickable"
@@ -138,20 +138,20 @@
                               ng-click="indoor.is=!indoor.is">{{indoor.tag}}</span>
                     </p>
 
-                    <strong data-ng-show="file.error" class="error text-danger">{{file.error}}</strong>
+                    <strong ng-show="file.error" class="error text-danger">{{file.error}}</strong>
                 </td>
-                <td class="info">
+                <td class="geo-info">
                     <div>
                         <div class="palce-marker"
                              ng-class="{action: !file.latPritty, 'ponm-show': !!file.latPritty}"
                              drag="true"
                              jqyoui-options="{revert: 'invalid', helper: 'clone'}"
-                             ng-model="photos"
-                             jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep' }">
+                             ng-model="file.photoId"
+                             jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep', onStart: 'onDragStart($e, file)' }">
                             <span class="glyphicon glyphicon-map-marker"></span>
                         </div>
                         <span class="action" ng-if="!file.latPritty">拖动地理图标放在地图相应位置上</span>
-                        <div ng-if="!file.address"
+                        <!--<div ng-if="!file.address"
                              class="location-display-place">
                             <a href=""
                                ng-click="changeLocation([file])">
@@ -159,7 +159,7 @@
                                 <span class="comma">{{file.latPritty && ", "}} </span>
                                 <span class="lng">{{file.lngPritty}} {{file.lngPritty && file.lngRef}}</span>
                             </a>
-                        </div>
+                        </div>-->
                         <div class="location-display-address"
                              ng-if="file.latPritty">
                             <a href=""
@@ -202,16 +202,17 @@
                           ng-if="file.photoId"></span>
                     <span class="glyphicon glyphicon-warning-sign"
                           ng-if="!file.photoId"></span>
-
+                    <span class="glyphicon glyphicon-send"
+                          ng-show="file.messageId"></span>
                     <span class="glyphicon glyphicon-pushpin"
-                          ng-if="file.active"></span>
+                          ng-show="file.active"></span>
                 </td>
             </tr>
         </table>
 
-        <a ng-if="queue.length && !processing() && !loadingFiles"
-           href="#/maps/user/{{userId}}"
-           type="button" class="btn btn-primary pull-right">完成</a>
+        <button ng-if="queue.length && !processing() && !loadingFiles"
+           ng-click="publishMessages()"
+           type="button" class="btn btn-primary pull-right">完成并发布消息</button>
     </div>
     <br/>
     <br/>

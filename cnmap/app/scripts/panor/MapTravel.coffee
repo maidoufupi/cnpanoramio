@@ -12,6 +12,8 @@ class ITravelLayer
     if @travel
       ## 计算出游览景点开始时间的最小值, 为后面计算第几天
       for spot in @travel.spots
+        # 为图片排序，按图片拍摄时间
+        spot.photos.sort((a,b) -> return a.create_time-b.create_time)
         if spot.time_start
           spot.spotDate = new Date spot.time_start
         if spot.spotDate
@@ -61,6 +63,29 @@ class ITravelLayer
       @mapEventListener.setCenter(@map, photo.point.lat, photo.point.lng)
 
   createMarker: () ->
+
+  addSpot: (spot) ->
+    @travel.spots.push spot
+  addPhoto: (spot, photo) ->
+    spot.photos.push photo
+    @calcSpotTime()
+    @updateSpotLine(spot)
+
+  removePhoto: (photo, spot) ->
+    if spot
+      spot.photos = (p for p in spot.photos when p.id != photo.id )
+      @updateSpotLine(spot)
+    else
+      for spot in @travel.spots
+        spot.photos = (p for p in spot.photos when p.id != photo.id )
+        @updateSpotLine(spot)
+
+    @calcSpotTime()
+
+  removeSpot: (spot) ->
+    @travel.spots = (sp for sp in @travel.spots when sp.id != spot.id )
+    @calcSpotTime()
+    @updateSpotLine(spot)
 
   activeSpot: (spotid) ->
     if not angular.isObject spotid

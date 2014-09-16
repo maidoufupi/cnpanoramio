@@ -1,28 +1,6 @@
 <div class="maps-travels">
-    <div ng-repeat="travel in travels">
-        <div class="album"
-             ng-click="goTravel(travel)">
-            <div class="front-cover">
-                <div class="header">
-                    header
-                </div>
-                <div style="">
-                    <img ng-src="{{staticCtx}}/{{travel.photos[0].oss_key}}@1e_161w_161h_1c.jpg">
-                </div>
-                <a href="#/maps/travel/{{travel.id}}"
-                   class="footer" >lianjie</a>
-            </div>
-            <div style="display: inline-block; width: 53px;">
-                <div style="width: 53px; height: 53px; display: inline-block; margin-bottom: 1px;">
-                    <img ng-src="{{staticCtx}}/{{travel.photos[1].oss_key}}@1e_53w_53h_1c.jpg">
-                </div>
-                <div style="width: 53px; height: 53px; display: inline-block; margin-bottom: 1px;">
-                    <img ng-src="{{staticCtx}}/{{travel.photos[2].oss_key}}@1e_53w_53h_1c.jpg">
-                </div>
-                <div style="width: 53px; height: 53px; display: inline-block; margin-bottom: 0;">
-                    <img ng-src="{{staticCtx}}/{{travel.photos[3].oss_key}}@1e_53w_53h_1c.jpg">
-                </div>
-            </div>
-        </div>
+    <div ng-repeat="travel in travels"
+         class="travel card">
+        <ponm-travel-album travel="travel"></ponm-travel-album>
     </div>
 </div>

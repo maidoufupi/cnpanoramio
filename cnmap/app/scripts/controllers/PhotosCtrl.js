@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('photosApp', [
+angular.module('ponmApp.photos', [
     'ui.bootstrap',
     'ui.map',
     'ui.router',
@@ -159,6 +159,9 @@ angular.module('photosApp', [
             if ($scope.userId == "yourphotos") {
                 $scope.userId = ponmCtxConfig.userId;
             }
+            if(!$scope.userId || $scope.userId != ponmCtxConfig.userId) {
+                $state.go("maps.popular", {});
+            }
 
             // 获取图片的用户信息
             UserService.getOpenInfo({userId: $scope.userId}, function (res) {
@@ -205,13 +208,6 @@ angular.module('photosApp', [
                 }
             };
 
-            $scope.setWaypointRefresh = function (waypointRefresh) {
-                $scope.waypointRefresh = waypointRefresh;
-                $scope.photoLoading = waypointRefresh;
-            };
-
-//            var hashObj = {};
-//            var updateState = function(){};
             $scope.displayPhoto = function(photoId) {
                 $scope.hashStateManager.set("photoid", photoId);
 
@@ -314,7 +310,7 @@ angular.module('photosApp', [
 
             // 用户图片分页属性
             $scope.photo = {
-                pageSize: 10,
+                pageSize: 30,
                 totalItems: 0,
                 numPages: 2,
                 currentPage: 1,
@@ -386,26 +382,34 @@ angular.module('photosApp', [
 
         }])
     .controller('PhotosAlbumsCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams',
-        function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams) {
+    [        '$rootScope', '$scope', 'UserService', 'ponmCtxConfig', '$log', 'TravelService',
+        function ($rootScope, $scope, UserService, ponmCtxConfig, $log, TravelService) {
 
+            $scope.travels = [];
             UserService.getTravels({userId: $scope.userId}, function (res) {
                 if (res.status == "OK") {
-                    $scope.travels = res.open_info.travels;
+                    $scope.travels = $scope.travels.concat(res.open_info.travels);
+                }
+            });
+
+            TravelService.get({travelId: 0}, function(res) {
+                if(res.status == "OK" && res.travel.spots && res.travel.spots[0].photos.length) {
+                    res.travel.title = "无旅行的图片";
+                    $scope.travels.splice(0, 0, res.travel);
                 }
             });
         }])
     .controller('PhotosAlbumCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modal',
-                 'ponmCtxConfig', '$log', '$state', '$stateParams', 'Travel', 'jsUtils',
-        function ($window, $location, $rootScope, $scope, TravelService, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, Travel, jsUtils) {
+    [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', 'dialogService',
+                 'ponmCtxConfig', '$log', '$state', '$stateParams', 'TravelManager', 'jsUtils',
+        function ($window, $location, $rootScope, $scope, TravelService, UserService, dialogService,
+                  ponmCtxConfig, $log, $state, $stateParams, TravelManager, jsUtils) {
 
             $scope.travelId = $stateParams.travelId;
 
             getTravel($scope.travelId);
+
+            var travelManager;
 
             function getTravel(travelId) {
                 if (!travelId) {
@@ -414,7 +418,8 @@ angular.module('photosApp', [
                 TravelService.getTravel({travelId: travelId}, function (res) {
                     if (res.status == "OK") {
                         $scope.travel = res.travel;
-                        Travel.calculate($scope.travel);
+                        travelManager = new TravelManager($scope.travel);
+                        travelManager.calculate();
                         // 获取图片的用户信息
                         UserService.getOpenInfo({'userId': $scope.travel.user_id}, function (data) {
                             if (data.status == "OK") {
@@ -433,6 +438,25 @@ angular.module('photosApp', [
                 });
             };
 
+            var delTravelModalOptions = {
+                closeButtonText: '取消',
+                actionButtonText: '删除旅行相册',
+                headerText: '删除 ' + ' ' + '?',
+                bodyText: '这么做会删除该相册及其中的照片。'
+            };
+
+
+            $scope.deleteTravel = function(travel) {
+                delTravelModalOptions.headerText = '删除 ' + travel.title + '?';
+                dialogService.showModal({}, delTravelModalOptions).then(function (result) {
+                    TravelService.delete({travelId: travel.id}, function(res) {
+                        if(res.status == "OK") {
+                            $state.go("photos.albums");
+                        }
+                    });
+                });
+            };
+
             $scope.$on('removePhotoDo', function (e, photoId) {
                 angular.forEach($scope.travel.spots, function(spot, key) {
                     jsUtils.Array.removeItem(spot.photos, "id", photoId);
@@ -440,14 +464,12 @@ angular.module('photosApp', [
             });
         }])
     .controller('PhotosTrashCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils',
-        function ($window, $location, $rootScope, $scope, TravelService, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, jsUtils) {
+    [        '$location', '$rootScope', '$scope', 'RecycleService', '$log', 'jsUtils', 'TravelManager',
+        function ($location, $rootScope, $scope, RecycleService, $log, jsUtils, TravelManager) {
 
-            $scope.travels = {};
-            UserService.getRecycleBin({userId: $scope.userId}, function(res) {
-                if(res.status == "OK") {
+
+            RecycleService.get({}, function(res) {
+                if (res.status == "OK") {
                     angular.forEach(res.recycles, function(recycle, key) {
                         if(recycle.recy_type == "photo") {
                             recycle.photo.recycle = recycle.id;
@@ -462,19 +484,52 @@ angular.module('photosApp', [
                                 $scope.travels[recycle.photo.travel_id].photos.push(recycle.photo);
                             }else {
                                 $scope.travels['noTravel'] = $scope.travels['noTravel'] ||
-                                                                {user_id: recycle.photo.user_id,
-                                                                    name: "无旅行",
-                                                                    photos:[]};
+                                {user_id: recycle.photo.user_id,
+                                    name: "无旅行",
+                                    photos:[]};
                                 $scope.travels['noTravel'].photos.push(recycle.photo);
                             }
+                        }else if(recycle.recy_type == "travel") {
+                            recycle.travel.name = recycle.travel.title;
+                            recycle.travel.user_id = recycle.travel.user.id;
+                            recycle.travel.recycleId = recycle.id;
+                            var travelManager = new TravelManager(recycle.travel);
+                            $scope.travels[recycle.travel.id] = travelManager.travel;
                         }
                     });
                 }
             });
 
+            $scope.travels = {};
+//            UserService.getRecycleBin({userId: $scope.userId}, function(res) {
+//                if(res.status == "OK") {
+//                    angular.forEach(res.recycles, function(recycle, key) {
+//                        if(recycle.recy_type == "photo") {
+//                            recycle.photo.recycle = recycle.id;
+//                            if(recycle.photo.travel_id) {
+//                                $scope.travels[recycle.photo.travel_id]
+//                                    = $scope.travels[recycle.photo.travel_id] || {
+//                                    id: recycle.photo.travel_id,
+//                                    name: recycle.photo.travel_name,
+//                                    user_id: recycle.photo.user_id,
+//                                    photos: []
+//                                };
+//                                $scope.travels[recycle.photo.travel_id].photos.push(recycle.photo);
+//                            }else {
+//                                $scope.travels['noTravel'] = $scope.travels['noTravel'] ||
+//                                                                {user_id: recycle.photo.user_id,
+//                                                                    name: "无旅行",
+//                                                                    photos:[]};
+//                                $scope.travels['noTravel'].photos.push(recycle.photo);
+//                            }
+//                        }
+//                    });
+//                }
+//            });
+
             $scope.$on('cancelRecycleDo', function (e) {
                 angular.forEach($scope.selectedPhotos, function(photo, key) {
-                    UserService.cancelRecycle({userId: $scope.userId, value: photo.recycle},
+                    RecycleService.cancel({id: photo.recycle},
                         function(res) {
                             if(res.status == "OK") {
                                 removePhoto(photo);
@@ -485,7 +540,7 @@ angular.module('photosApp', [
 
             $scope.$on('removeRecycleDo', function (e) {
                 angular.forEach($scope.selectedPhotos, function(photo, key) {
-                    UserService.removeRecycle({userId: $scope.userId, value: photo.recycle},
+                    RecycleService.delete({id: photo.recycle},
                         function(res) {
                             if(res.status == "OK") {
                                 removePhoto(photo);
@@ -513,7 +568,7 @@ angular.module('photosApp', [
             });
 
             $scope.$on('emptyRecycleBinDo', function (e) {
-                UserService.emptyRecycleBin({userId: $scope.userId},
+                RecycleService.delete({},
                     function(res) {
                         if(res.status == "OK") {
                             delete $scope.travels;

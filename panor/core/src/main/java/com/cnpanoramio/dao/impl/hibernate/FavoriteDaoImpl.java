@@ -21,17 +21,17 @@ public class FavoriteDaoImpl extends GenericDaoHibernate<Favorite, Long>
 	@Override
 	public Favorite get(Long photoId, Long userId) {
 		return (Favorite) getSession().createCriteria(Favorite.class)
-				.add(Restrictions.eq("pk.photo.id", photoId))
-				.add(Restrictions.eq("pk.userId", userId))
+				.add(Restrictions.eq("photo.id", photoId))
+				.add(Restrictions.eq("user.id", userId))
 				.uniqueResult();
 	}
 
-	@Override
-	public Long getUserPhotoFavoriteCount(User user) {
-		Query query = getSession().createQuery("select count(*) from Photo as p inner join p.favorites as f where p.owner = :user");
-		query.setParameter("user", user);
-		  
-		Long count = (Long) query.uniqueResult();
-		return count;
-	}
+//	@Override
+//	public Long getUserPhotoFavoriteCount(User user) {
+//		Query query = getSession().createQuery("select count(*) from Photo as p inner join p.favorites as f where p.owner = :user");
+//		query.setParameter("user", user);
+//		  
+//		Long count = (Long) query.uniqueResult();
+//		return count;
+//	}
 }

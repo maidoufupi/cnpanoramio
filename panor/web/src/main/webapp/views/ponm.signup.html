@@ -1,12 +1,12 @@
 <div class="signup" style="max-width: 500px;margin: 30px auto;">
     <form name="signupForm" class="form-horizontal" role="form"
           method="post"
-          action="http://127.0.0.1:8080/panor-web/signup">
+          action="/signup">
         <div class="form-group">
             <label class="col-sm-2 control-label">邮箱</label>
             <div class="col-sm-7">
                 <input type="email" name="email" ng-model="user.email" required
-                       ng-remote-validate="http://127.0.0.1:8080/panor-web/api/rest/auth/signup/check/username"
+                       ng-remote-validate="{{ponmCtxConfig.apirest}}/auth/signup/check/username"
                        ng-remote-method="GET"
                        class="form-control" placeholder="邮箱">
             </div>
@@ -16,7 +16,7 @@
             <label class="col-sm-2 control-label">用户名</label>
             <div class="col-sm-7">
                 <input type="text" name="username" ng-model="user.username" required
-                       ng-remote-validate="http://127.0.0.1:8080/panor-web/api/rest/auth/signup/check/username"
+                       ng-remote-validate="{{ponmCtxConfig.apirest}}/auth/signup/check/username"
                        ng-remote-method="GET"
                        class="form-control" placeholder="用户名">
 

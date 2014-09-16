@@ -10,7 +10,7 @@ import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
 
 import com.cnpanoramio.domain.PhotoPanoramioIndexPK;
-
+@Deprecated
 public class PhotoPanoramioIndexPkBridge implements TwoWayFieldBridge {
 
 	@Override

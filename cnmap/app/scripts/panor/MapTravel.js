@@ -20,6 +20,9 @@
         _ref = this.travel.spots;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           spot = _ref[_i];
+          spot.photos.sort(function(a, b) {
+            return a.create_time - b.create_time;
+          });
           if (spot.time_start) {
             spot.spotDate = new Date(spot.time_start);
           }
@@ -86,6 +89,72 @@
     };
 
     ITravelLayer.prototype.createMarker = function() {};
+
+    ITravelLayer.prototype.addSpot = function(spot) {
+      return this.travel.spots.push(spot);
+    };
+
+    ITravelLayer.prototype.addPhoto = function(spot, photo) {
+      spot.photos.push(photo);
+      this.calcSpotTime();
+      return this.updateSpotLine(spot);
+    };
+
+    ITravelLayer.prototype.removePhoto = function(photo, spot) {
+      var p, _i, _len, _ref;
+      if (spot) {
+        spot.photos = (function() {
+          var _i, _len, _ref, _results;
+          _ref = spot.photos;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            p = _ref[_i];
+            if (p.id !== photo.id) {
+              _results.push(p);
+            }
+          }
+          return _results;
+        })();
+        this.updateSpotLine(spot);
+      } else {
+        _ref = this.travel.spots;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          spot = _ref[_i];
+          spot.photos = (function() {
+            var _j, _len1, _ref1, _results;
+            _ref1 = spot.photos;
+            _results = [];
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              p = _ref1[_j];
+              if (p.id !== photo.id) {
+                _results.push(p);
+              }
+            }
+            return _results;
+          })();
+          this.updateSpotLine(spot);
+        }
+      }
+      return this.calcSpotTime();
+    };
+
+    ITravelLayer.prototype.removeSpot = function(spot) {
+      var sp;
+      this.travel.spots = (function() {
+        var _i, _len, _ref, _results;
+        _ref = this.travel.spots;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          sp = _ref[_i];
+          if (sp.id !== spot.id) {
+            _results.push(sp);
+          }
+        }
+        return _results;
+      }).call(this);
+      this.calcSpotTime();
+      return this.updateSpotLine(spot);
+    };
 
     ITravelLayer.prototype.activeSpot = function(spotid) {
       var ispot, ne, photo, spot, sw, _i, _j, _len, _len1, _ref, _ref1;

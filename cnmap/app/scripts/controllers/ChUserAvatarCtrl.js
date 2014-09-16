@@ -2,8 +2,10 @@
  * Created by any on 14-3-12.
  */
 angular.module('ponmApp.controllers')
-    .controller('ChUserAvatarCtrl', ['$window', '$scope', '$log', '$sce', '$http', '$modalInstance', 'alertService',
-        function ($window, $scope, $log, $sce, $http, $modalInstance, alertService) {
+    .controller('ChUserAvatarCtrl', ['$window', '$scope', '$log', '$sce', '$http', '$modalInstance', '$timeout',
+        'alertService',
+        function ($window, $scope, $log, $sce, $http, $modalInstance, $timeout,
+        alertService) {
 
             $scope.alertService = angular.copy(alertService);
 
@@ -43,27 +45,30 @@ angular.module('ponmApp.controllers')
                         if (data.status == "OK") {
                             $scope.avatar = data.open_info.avatar;
                             $scope.alertService.add("success", "上传成功!", 5000);
+                            $timeout(function() {
+                                $scope.cancel();
+                            }, 1000);
                         } else {
                             $scope.alertService.add("danger", "上传失败!", 5000);
                         }
                     });
-            }
+            };
 
             $scope.onFileSelect = function ($files) {
                 $scope.alertService.clear();
                 var url = $sce.trustAsResourceUrl(getBlobURL($files[0]));
                 $scope.imageUrl = url;
-            }
+            };
         }])
     .directive('imgCropped', function () {
         return {
             restrict: 'E',
-            replace: true,
+//            replace: true,
             scope: { 'src': '@',
-                'bind': '=previewUrl' },
+                'previewUrl': '=previewUrl' },
             link: function (scope, element, attr) {
 
-                var boxWidth = 800;
+                var boxWidth = 500;
                 var boxHeight = 420;
                 var myImg;
                 var preview;
@@ -85,6 +90,8 @@ angular.module('ponmApp.controllers')
                     clear();
                     if (nv) {
                         element.after('<img />');
+                        boxWidth = element.parent().innerWidth();
+                        boxHeight = element.parent().innerHeight() - 110;
                         myImg = element.next();
                         myImg.attr('src', nv);
                         $(myImg).Jcrop({
@@ -97,7 +104,7 @@ angular.module('ponmApp.controllers')
                             aspectRatio: 1
                         });
 
-                        myImg.after('<img />');
+                        myImg.after('<img class="thumbnail"/>');
                         preview = myImg.next();
 
                     }

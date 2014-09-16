@@ -50,6 +50,14 @@
       return map.centerAndZoom(point, zoom);
     };
 
+    MapEventListener.prototype.zoomIn = function(map) {
+      return map.zoomIn();
+    };
+
+    MapEventListener.prototype.zoomOut = function(map) {
+      return map.zoomOut();
+    };
+
     MapEventListener.prototype.setBounds = function(map, sw, ne) {
       return map.setViewport([new BMap.Point(sw.lng, sw.lat), new BMap.Point(ne.lng, ne.lat)]);
     };

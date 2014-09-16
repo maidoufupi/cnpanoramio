@@ -8,7 +8,7 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <meta charset="utf-8">
 
-	<link rel="stylesheet" href="<c:url value="/bower_components/sass-bootstrap/dist/css/bootstrap.min.css"/>">
+	<link rel="stylesheet" href="<c:url value="/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css"/>">
 	<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-gallery/css/blueimp-gallery.css"/>">
     <%-- <link rel="stylesheet" href="<c:url value="/bower_components/angular-xeditable/dist/css/xeditable.css"/>">
     <link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload.css"/>">
@@ -55,10 +55,13 @@
 
 	<script>
 	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径
-	    window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录
+	    /* window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录 */
 	    window.userId = "${sessionScope.userId}"; // 用户ID
 	    window.apirest = ctx + "/api/rest";
 	    window.mapVendor = '<c:out value="${sessionScope.mapVendor}"/>' || "gaode";
+	    window.user = {
+	            id: window.userId
+	            };
     </script>
     
 <script>
@@ -66,7 +69,7 @@
 			angular.bootstrap(document.getElementById("ponmAppIndex"), ['ponmApp.Index']);
 	})
 </script>
-	<div id="ponmAppIndex" ng-controller="IndexCtrl">
+	<div id="ponmAppIndex">
     <div ui-view="navbar">
         <i>Some content will load here!</i>
     </div>

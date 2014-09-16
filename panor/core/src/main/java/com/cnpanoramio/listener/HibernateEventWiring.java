@@ -27,7 +27,8 @@ public class HibernateEventWiring {
 		EventListenerRegistry registry = ((SessionFactoryImpl) sessionFactory)
 				.getServiceRegistry().getService(EventListenerRegistry.class);
 		registry.prependListeners(EventType.PERSIST, persistListener);
-		registry.prependListeners(EventType.MERGE, mListener);
+		// MERGE 加上会有问题 会持久化两个一样的实体 未解决; 持久化时要使用persist
+//		registry.prependListeners(EventType.MERGE, mListener);
 		registry.prependListeners(EventType.SAVE_UPDATE, saveUpdateListener);
 		registry.prependListeners(EventType.SAVE, saveUpdateListener);
 	}

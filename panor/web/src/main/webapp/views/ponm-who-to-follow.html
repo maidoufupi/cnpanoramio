@@ -1,0 +1,78 @@
+<div class="WhoToFollow card">
+
+    <div class="WhoToFollow-header">
+        <h5 class="WhoToFollow-title">推荐关注</h5>
+        ·
+        <a href="" ng-click="refresh()">
+            刷新
+        </a>
+        ·
+        <a href="/who_to_follow/suggestions" element-term="view_all_link" ng-show="false">
+            查看全部
+        </a>
+    </div>
+    <div class="WhoToFollow-users">
+        <div ng-repeat="account in follows | limitTo: 3" class="account-summary">
+            <div class="dismiss js-action-dismiss" ng-click="removeFollow(account)"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></div>
+            <div class="content">
+                <a href="#/user/{{account.id}}">
+                    <img ng-src="{{staticCtx}}/avatar{{account.avatar || 1}}.png"
+                         class="avatar">
+                    <span>
+                        {{account.name}}
+                    </span>
+                </a>
+
+                <small class="metadata social-context">
+                </small>
+
+                <div class="user-actions not-following not-muting" data-user-id="22832997">
+
+                    <!--<small class="metadata with-icn js-disclosure js-tooltip" data-original-title="">
+                        <a href="/IEEEXplore" class="js-promoted-badge js-user-profile-link">
+                            <span class="Icon Icon--small Icon--promoted"></span>推荐
+                        </a>
+                    </small>-->
+
+                    <div class="btn-group" ng-switch="account.follow">
+
+                        <button ng-switch-when="true"
+                                ng-click="unFollowing(account)"
+                                ng-disabled="followDoing"
+                                type="button"
+                                class="btn btn-xs"
+                                ng-class="{'btn-danger': account.mouseover, 'btn-info': !account.mouseover}"
+                                ng-mouseover="account.mouseover=true"
+                                ng-mouseleave="account.mouseover=false">
+                            <span class="button-text following-text" ng-show="account.follow&&!account.mouseover">正在关注</span>
+                            <span class="button-text unfollow-text" ng-show="account.follow&&account.mouseover">取消关注</span>
+                        </button>
+                        <button ng-switch-default
+                                ng-click="following(account)"
+                                ng-disabled="followDoing"
+                                type="button" class="btn btn-xs btn-default">
+                            <span class="glyphicon glyphicon-user"></span>关注</button>
+                        <button type="button" class="btn btn-xs dropdown-toggle"
+                                ng-class="{'btn-danger': account.follow&&account.mouseover,
+                                            'btn-info': account.follow&&!account.mouseover,
+                                            'btn-default': !account.follow}"
+                                data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="">静音</a></li>
+                            <li class="divider"></li>
+                            <li><a href="">拉黑</a></li>
+                            <li><a href="">举报</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="WhoToFollow-footer">
+
+    </div>
+</div>

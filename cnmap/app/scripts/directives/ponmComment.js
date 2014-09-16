@@ -13,32 +13,16 @@ angular.module('ponmApp.directives')
                     comment: "=",
                     userId: "="
                 },
-                templateUrl: "views/ponmComment.html",
+                templateUrl: "views/ponm-comment.html",
                 link: function (scope, element, attrs) {
 
-                    scope.ctx = $window.ctx;
-                    scope.apirest = $window.apirest;
+                    scope.ctx = ponmCtxConfig.ctx;
+//                    scope.apirest = ponmCtxConfig.apirest;
                     scope.staticCtx = ponmCtxConfig.staticCtx;
+                    scope.ponmCtxConfig = ponmCtxConfig;
 
                     // 设置comment是否是本人的评论
                     scope.comment.editable = (scope.comment.user_id == scope.userId);
-
-                    // 赞的按钮
-                    var thumbsUp = element.find(".thumbs-up"),
-                        action = element.find(".action");
-
-                    if(scope.userId) {
-                        element.on("mouseenter", function(e) {
-                            scope.$apply(function() {
-                                scope.mouseEnter = true;
-                            });
-                        });
-                        element.on("mouseleave", function(e) {
-                            scope.$apply(function() {
-                                scope.mouseEnter = false;
-                            });
-                        });
-                    }
 
                     scope.deleteCommment = function(comment) {
 
@@ -104,6 +88,91 @@ angular.module('ponmApp.directives')
                     scope.replyComment = function(comment) {
                         scope.$emit('replyCommentEvent', {id: comment.user_id, name: comment.username});
                     }
+                }
+            };
+        }])
+    .directive('ponmComments', ['$window', '$animate', '$log', '$q', 'ponmCtxConfig', 'CommentService',
+        function ($window, $animate, $log, $q, ponmCtxConfig, CommentService) {
+
+            var defaults = {
+                type: "photo"
+            };
+
+            return {
+                restrict: 'A',
+                scope: {
+                    entityId: "&ponmCommentTo",
+                    comments: "=ponmCommentComments"
+                },
+                templateUrl: 'views/ponm-comments.html',
+                link: function (scope, element, attrs) {
+
+                    scope.ctx = ponmCtxConfig.ctx;
+//                    scope.apirest = ponmCtxConfig.apirest;
+                    scope.staticCtx = ponmCtxConfig.staticCtx;
+                    scope.ponmCtxConfig = ponmCtxConfig;
+
+                    var opts, options;
+
+                    options = scope.$eval(attrs.ponmComments || "{}");
+
+                    opts = angular.extend({}, defaults, options);
+
+                    scope.comment = {
+                        commentLimit: opts.commentLimit,
+                        limit: opts.commentLimit || (scope.comments&&scope.comments.length)
+                    };
+
+                    scope.$watch('comments', function(comments) {
+                        scope.comment.limit = scope.comment.commentLimit || (comments&&comments.length);
+                    });
+
+                    function updateLimit() {
+                        if(!scope.comment.commentLimit) {
+                            scope.comment.limit = scope.comments&&scope.comments.length;
+                        }
+                    }
+
+                    /**
+                     * 回复评论人的事件响应
+                     */
+                    scope.$on('replyCommentEvent', function(e, user) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        scope.comment = scope.comment || {};
+                        scope.comment.placeholder = "回复 " + user.name;
+                        scope.commentContent = "@" + user.name + " ";
+                    });
+
+                    /**
+                     * 创建评论
+                     *
+                     * @param content
+                     */
+                    scope.createComment = function (content) {
+                        var d = $q.defer();
+                        if (content) {
+                            CommentService.save({type: opts.type, entity_id: scope.entityId(scope), content: content}, function (res) {
+                                res = res || {};
+                                if (res.status == "OK") {
+                                    scope.comments.splice(0, 0, res.comment);
+                                    updateLimit();
+                                    d.resolve(false);
+                                } else {
+                                    d.resolve(res.info);
+                                }
+                            }, function (error) {
+                                if (error.data) {
+                                    d.reject(error.data.info);
+                                } else {
+                                    d.reject('Server error!');
+                                }
+                            })
+                        }else {
+                            d.resolve(false);
+                        }
+                        return d.promise;
+                    };
                 }
             };
         }])

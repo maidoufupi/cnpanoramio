@@ -31,14 +31,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.domain.Avatar;
-import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.MessageResponse;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
+import com.cnpanoramio.json.UserSettings;
 import com.cnpanoramio.json.UserTransfer;
+import com.cnpanoramio.service.CircleManager;
 import com.cnpanoramio.service.FileService;
+import com.cnpanoramio.service.MessageManager;
+import com.cnpanoramio.service.MessageQueueManager;
+import com.cnpanoramio.service.MessageService;
 import com.cnpanoramio.service.PhotoManager;
+import com.cnpanoramio.service.RecycleManager;
+import com.cnpanoramio.service.RecycleService;
+import com.cnpanoramio.service.TagManager;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.service.UserSettingsManager;
@@ -55,11 +62,11 @@ public class UserRestService extends AbstractRestService {
 	private UserManager userManager = null;
 
 	@Autowired
-	private UserSettingsManager userSettingsManager;
+	private UserSettingsService userSettingsService;
 	
 	@Autowired
-	private UserSettingsService userSettingsService;
-
+	private UserSettingsManager userSettingsManager;
+	
 	@Autowired
 	private PhotoManager photoService;
 
@@ -71,6 +78,27 @@ public class UserRestService extends AbstractRestService {
 	
 	@Autowired
 	private TravelService travelService;
+	
+	@Autowired
+	private CircleManager circleManager;
+	
+	@Autowired
+	private MessageQueueManager messageQueueManager;
+	
+	@Autowired
+	private MessageManager messageManager;
+	
+	@Autowired
+	private MessageService messageService;
+	
+	@Autowired
+	private TagManager tagManager;
+	
+	@Autowired
+	private RecycleManager recycleManager;
+	
+	@Autowired
+	private RecycleService recycleService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
@@ -86,23 +114,25 @@ public class UserRestService extends AbstractRestService {
 	
 	@RequestMapping(value = "/{userId}/settings", method = RequestMethod.POST)
 	@ResponseBody
-	public UserResponse save(@RequestBody final UserResponse.Settings settings) {
-		UserResponse reponse = new UserResponse();
-		UserSettings userSettings = UserUtil.transformSettings(settings);
-		userSettingsManager.save(userSettings);
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
+	public UserResponse save(@RequestBody final UserSettings settings) {
+		UserResponse response = new UserResponse();
+		userSettingsService.save(settings);
+//		UserSettings userSettings = UserUtil.transformSettings(settings);
+//		userSettingsManager.save(userSettings);
+		response.setStatus(UserResponse.Status.OK.name());
+		return response;
 	}
 	
 	@RequestMapping(value = "/{userId}/settings", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse getSettings() {
-		UserResponse reponse = new UserResponse();
-//		User me = UserUtil.getCurrentUser(userManager);
-		UserResponse.Settings settings = userSettingsManager.getCurrentUserSettings();
-		reponse.setStatus(UserResponse.Status.OK.name());
-		reponse.setSettings(settings);
-		return reponse;
+		UserResponse response = new UserResponse();
+		User me = UserUtil.getCurrentUser(userManager);
+//		UserSettings settings = userSettingsManager.getCurrentUserSettings();
+		UserSettings settings = userSettingsService.getUserSettings(me);
+		response.setSettings(settings);
+		response.setStatus(UserResponse.Status.OK.name());
+		return response;
 	}
 
 	@RequestMapping(value = "/{userId}/photos/{pageSize}/{pageNo}", method = RequestMethod.GET)
@@ -115,7 +145,7 @@ public class UserRestService extends AbstractRestService {
 								  @RequestParam(value = "nelat", required = false) String neLat,
 								  @RequestParam(value = "nelng", required = false) String neLng) {
 
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 		
 		int pageSizeI = Integer.valueOf(pageSize).intValue();
 		int pageNoI = Integer.valueOf(pageNo).intValue();
@@ -138,17 +168,17 @@ public class UserRestService extends AbstractRestService {
 					userId, pageSizeI, pageNoI);
 		}
 		
-		reponse.setStatus(UserResponse.Status.OK.name());
-		reponse.setPhotos(photos);
+		response.setStatus(UserResponse.Status.OK.name());
+		response.setPhotos(photos);
 
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{userId}/photos/{photoId}", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse getPhotosWithPhoto(@PathVariable String userId,
 			@PathVariable String photoId) {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 
 		try {
 			Long photoIdL = Long.parseLong(photoId);
@@ -156,39 +186,43 @@ public class UserRestService extends AbstractRestService {
 			int num = photoService.getUserPhotoNum(user, photoIdL);
 			Collection<PhotoProperties> pps = photoService
 					.getUserPhotosWithPhoto(user, photoIdL);
-			reponse.setStatus(UserResponse.Status.OK.name());
-			reponse.setPhotoInfo(new UserResponse.PhotoInfo(photoService.getPhotoCount(user), num));
-			reponse.setPhotos(pps);
+			response.setStatus(UserResponse.Status.OK.name());
+			response.setPhotoInfo(new UserResponse.PhotoInfo(photoService.getPhotoCount(user), num));
+			response.setPhotos(pps);
 		} catch (NumberFormatException ex) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
-			return reponse;
+			response.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
+			return response;
 		}
 
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{userId}/openinfo", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse getOpenInfo(@PathVariable String userId) {
-		UserResponse reponse = new UserResponse();
-//		try {
-			Long id = Long.parseLong(userId);
-			UserOpenInfo openInfo = userSettingsManager.getOpenInfo(id);
-			reponse.setStatus(UserResponse.Status.OK.name());
-			reponse.setOpenInfo(openInfo);
-//		} catch (NumberFormatException ex) {
-//			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
-//			return reponse;
-//		}
+		UserResponse response = new UserResponse();
+		
+		User me = null;
+		try {
+			me = UserUtil.getCurrentUser(userManager);
+		}catch(Exception ex) {
+		}
+		 
+		User user = userManager.getUser(userId);
 
-		return reponse;
+		UserOpenInfo openInfo = userSettingsService.getOpenInfo(user, me);
+		
+		response.setStatus(UserResponse.Status.OK.name());
+		response.setOpenInfo(openInfo);
+
+		return response;
 	}
 
 	@RequestMapping(value = "/{userId}/photos/tag/{tag}", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse getPhotoCountByTag(@PathVariable String userId,
 			@PathVariable String tag) {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 
 		try {
 			tag = new String(tag.getBytes("ISO-8859-1"), "UTF-8");
@@ -197,16 +231,16 @@ public class UserRestService extends AbstractRestService {
 			Long count = photoService.getUserPhotoCountByTag(userIdL, tag);
 			// Collection<PhotoProperties> pps =
 			// photoService.getUserPhotosByTag(userIdL, tag);
-			reponse.setStatus(UserResponse.Status.OK.name());
-			reponse.setPhotoInfo(new UserResponse.PhotoInfo(count));
-			// reponse.setPhotos(pps);
+			response.setStatus(UserResponse.Status.OK.name());
+			response.setPhotoInfo(new UserResponse.PhotoInfo(count));
+			// response.setPhotos(pps);
 		} catch (NumberFormatException ex) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
+			response.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
 		} catch (UnsupportedEncodingException e) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
+			response.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
 		}
 
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/{userId}/photos/tag/{tag}/{pageSize}/{pageNo}", method = RequestMethod.GET)
@@ -214,7 +248,7 @@ public class UserRestService extends AbstractRestService {
 	public UserResponse getPhotoPageByTag(@PathVariable String userId,
 			@PathVariable String tag, @PathVariable String pageSize,
 			@PathVariable String pageNo) {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 
 		try {
 			tag = new String(tag.getBytes("ISO-8859-1"), "UTF-8");
@@ -225,29 +259,29 @@ public class UserRestService extends AbstractRestService {
 
 			Collection<PhotoProperties> pps = photoService
 					.getUserPhotoPageByTag(userIdL, tag, pageSizeI, pageNoI);
-			reponse.setStatus(UserResponse.Status.OK.name());
-			reponse.setPhotos(pps);
+			response.setStatus(UserResponse.Status.OK.name());
+			response.setPhotos(pps);
 		} catch (NumberFormatException ex) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
+			response.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
 		} catch (UnsupportedEncodingException e) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
+			response.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
 		}
 
-		return reponse;
+		return response;
 	}
 
 	@RequestMapping(value = "/avatar", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody
 	UserResponse avatarUpload(@RequestParam("file") MultipartFile file) {
 
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 		User me = null;
 		try {
 			me = UserUtil.getCurrentUser(userManager);
 			// me = userManager.get(1L);
 		} catch (UsernameNotFoundException ex) {
-			reponse.setStatus(UserResponse.Status.NO_AUTHORIZE.name());
-			return reponse;
+			response.setStatus(UserResponse.Status.NO_AUTHORIZE.name());
+			return response;
 		}
 		if (!file.isEmpty()) {
 			try {
@@ -262,20 +296,20 @@ public class UserRestService extends AbstractRestService {
 				UserOpenInfo openInfo = new UserOpenInfo();
 				openInfo.setId(me.getId());
 				openInfo.setAvatar(avatar.getId());
-				reponse.setOpenInfo(openInfo);
-				reponse.setStatus(UserResponse.Status.OK.name());
-				return reponse;
+				response.setOpenInfo(openInfo);
+				response.setStatus(UserResponse.Status.OK.name());
+				return response;
 			} catch (Exception e) {
-				reponse.setStatus(UserResponse.Status.EXCEPTION.name());
-				reponse.setInfo(e.getMessage());
-				return reponse;
+				response.setStatus(UserResponse.Status.EXCEPTION.name());
+				response.setInfo(e.getMessage());
+				return response;
 			}
 		} else {
 			log.debug("file is empty");
 
-			reponse.setStatus(UserResponse.Status.EXCEPTION.name());
-			reponse.setInfo("file is empty");
-			return reponse;
+			response.setStatus(UserResponse.Status.EXCEPTION.name());
+			response.setInfo("file is empty");
+			return response;
 		}
 	}
 
@@ -305,20 +339,20 @@ public class UserRestService extends AbstractRestService {
 	@RequestMapping(value = "/{userId}/tag", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse getUserTags(@PathVariable String userId) {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 		User user = userManager.getUser(userId);
 		UserOpenInfo openInfo = new UserOpenInfo();
 		openInfo.setId(user.getId());
 		openInfo.setTags(userSettingsManager.getUserTags(user));
-		reponse.setOpenInfo(openInfo);
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
+		response.setOpenInfo(openInfo);
+		response.setStatus(UserResponse.Status.OK.name());
+		return response;
 	}
 	
 	@RequestMapping(value = "/{userId}/tag/{tag}", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse createUserTag(@PathVariable String userId, @PathVariable String tag) throws UnsupportedEncodingException {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 		User me = UserUtil.getCurrentUser(userManager);
 		if(!me.getId().toString().equals(userId)) {
 			throw new AccessDeniedException("Access Denied!");
@@ -326,102 +360,130 @@ public class UserRestService extends AbstractRestService {
 		tag = new String(tag.getBytes("ISO-8859-1"), "UTF-8");
 		UserOpenInfo openInfo = new UserOpenInfo();
 		openInfo.setId(me.getId());
-		openInfo.setTags(userSettingsManager.createTag(me, tag));		
-		reponse.setOpenInfo(openInfo);
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
+		// 创建tag
+		userSettingsManager.createTag(me, tag);
+		// 重新获取tags
+		openInfo.setTags(userSettingsManager.getUserTags(me));		
+		response.setOpenInfo(openInfo);
+		response.setStatus(UserResponse.Status.OK.name());
+		return response;
 	}
 	
 	@RequestMapping(value = "/{userId}/tag/{tag}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public UserResponse deleteUserTag(@PathVariable String userId, @PathVariable String tag) throws UnsupportedEncodingException {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 		User me = UserUtil.getCurrentUser(userManager);
 		if(!me.getId().toString().equals(userId)) {
 			throw new AccessDeniedException("Access Denied!");
 		}
 		tag = new String(tag.getBytes("ISO-8859-1"), "UTF-8");
+		// 删除用户tag
+		tagManager.deleteUserTag(me, tag);
 		UserOpenInfo openInfo = new UserOpenInfo();
 		openInfo.setId(me.getId());
-		openInfo.setTags(userSettingsManager.deleteTag(me, tag));		
-		reponse.setOpenInfo(openInfo);
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
+		// 重新获取tags
+		openInfo.setTags(userSettingsManager.getUserTags(me));		
+		response.setOpenInfo(openInfo);
+		response.setStatus(UserResponse.Status.OK.name());
+		return response;
 	}
 	
 	@RequestMapping(value = "/{userId}/travel", method = RequestMethod.GET)
 	@ResponseBody
 	public UserResponse getUserTravels(@PathVariable String userId) {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 		User user = userManager.getUser(userId);
 		
 		UserOpenInfo openInfo = new UserOpenInfo();
 		openInfo.setId(user.getId());
 		openInfo.setTravels(travelService.getTravels(user));		
-		reponse.setOpenInfo(openInfo);
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
+		response.setOpenInfo(openInfo);
+		response.setStatus(UserResponse.Status.OK.name());
+		return response;
 	}
 
-	@RequestMapping(value = "/{userId}/recycle", method = RequestMethod.DELETE)
+//	@RequestMapping(value = "/{userId}/recycle", method = RequestMethod.DELETE)
+//	@ResponseBody
+//	public UserResponse emptyRecycleBin(@PathVariable String userId) {
+//		UserResponse response = new UserResponse();
+//
+//		recycleManager.emptyRecycleBin(Long.parseLong(userId));
+//		
+//		response.setStatus(UserResponse.Status.OK.name());
+//		return response;
+//	}
+	
+//	@RequestMapping(value = "/{userId}/recycle", method = RequestMethod.GET)
+//	@ResponseBody
+//	public UserResponse getRecycleBin(@PathVariable String userId) {
+//		UserResponse response = new UserResponse();
+//		
+//		response.setRecycles(recycleService.getUserRecycleBin(Long.parseLong(userId)));
+//		
+//		response.setStatus(UserResponse.Status.OK.name());
+//		return response;
+//	}
+	
+//	@RequestMapping(value = "/{userId}/recycle/{recycleId}", method = RequestMethod.DELETE)
+//	@ResponseBody
+//	public UserResponse removeRecycle(@PathVariable String userId, @PathVariable String recycleId) {
+//		UserResponse response = new UserResponse();
+//
+//		userSettingsManager.removeRecycle(Long.parseLong(userId), Long.parseLong(recycleId));
+//		
+//		response.setStatus(UserResponse.Status.OK.name());
+//		return response;
+//	}
+//	
+//	@RequestMapping(value = "/{userId}/recycle/{recycleId}/cancel", method = RequestMethod.GET)
+//	@ResponseBody
+//	public UserResponse cancelRecycle(@PathVariable String userId, @PathVariable String recycleId) {
+//		UserResponse response = new UserResponse();
+//		
+//		userSettingsManager.cancelRecycle(Long.parseLong(userId), Long.parseLong(recycleId));
+//		
+//		response.setStatus(UserResponse.Status.OK.name());
+//		return response;
+//	}
+	
+	@RequestMapping(value = "/{userId}/mymessages/{pageSize}/{pageNo}", method = RequestMethod.GET)
 	@ResponseBody
-	public UserResponse emptyRecycleBin(@PathVariable String userId) {
-		UserResponse reponse = new UserResponse();
-
-		userSettingsManager.emptyRecycleBin(Long.parseLong(userId));
+	public MessageResponse getMyMessages(@PathVariable String userId,
+			@PathVariable String pageSize,
+			@PathVariable String pageNo) {
+		MessageResponse response = new MessageResponse();
+		User user = userManager.getUser(userId);
+		response.setMessages(messageService.getUserMessages(user, Integer.parseInt(pageSize), Integer.parseInt(pageNo)));
 		
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
+		response.setStatus(MessageResponse.Status.OK.name());
+		return response;
 	}
 	
-	@RequestMapping(value = "/{userId}/recycle", method = RequestMethod.GET)
+	@RequestMapping(value = "/{userId}/messages/{pageSize}/{pageNo}", method = RequestMethod.GET)
 	@ResponseBody
-	public UserResponse getRecycleBin(@PathVariable String userId) {
-		UserResponse reponse = new UserResponse();
+	public MessageResponse getMessages(@PathVariable String userId,
+			@PathVariable String pageSize,
+			@PathVariable String pageNo) {
+		MessageResponse response = new MessageResponse();
+		User user = userManager.getUser(userId);
+		// TODO debug
+		User me = UserUtil.getCurrentUser(userManager);
+		if(me.equals(user)) {
+			response.setMessages(messageService.getMessages(user, Integer.parseInt(pageSize), Integer.parseInt(pageNo)));
+//			response.setMessages(messageQueueManager.getMessages(user, Integer.parseInt(pageSize), Integer.parseInt(pageNo)));
+		}else {
+			throw new AccessDeniedException("用户 " + userId + " 未授权");
+		}
 		
-		reponse.setRecycles(userSettingsService.getRecycleBin(Long.parseLong(userId)));
-		
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
-	}
-	
-	@RequestMapping(value = "/{userId}/recycle/{recycleId}", method = RequestMethod.DELETE)
-	@ResponseBody
-	public UserResponse removeRecycle(@PathVariable String userId, @PathVariable String recycleId) {
-		UserResponse reponse = new UserResponse();
-
-		userSettingsManager.removeRecycle(Long.parseLong(userId), Long.parseLong(recycleId));
-		
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
-	}
-	
-	@RequestMapping(value = "/{userId}/recycle/{recycleId}/cancel", method = RequestMethod.GET)
-	@ResponseBody
-	public UserResponse cancelRecycle(@PathVariable String userId, @PathVariable String recycleId) {
-		UserResponse reponse = new UserResponse();
-		
-		userSettingsManager.cancelRecycle(Long.parseLong(userId), Long.parseLong(recycleId));
-		
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
-	}
-	
-	@RequestMapping(value = "/{userId}/message", method = RequestMethod.GET)
-	@ResponseBody
-	public MessageResponse getMessages(@PathVariable String userId) {
-		MessageResponse reponse = new MessageResponse();
-		
-		
-		
-		reponse.setStatus(MessageResponse.Status.OK.name());
-		return reponse;
+		response.setStatus(MessageResponse.Status.OK.name());
+		return response;
 	}
 	
 	@RequestMapping(value = "/{userId}/following/{followingId}", method = RequestMethod.POST)
 	@ResponseBody
 	public UserResponse following(@PathVariable String userId, @PathVariable String followingId) {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 		User user = userManager.getUser(userId);
 		User me = UserUtil.getCurrentUser(userManager);
 		if(me.equals(user)) {
@@ -431,14 +493,14 @@ public class UserRestService extends AbstractRestService {
 			throw new AccessDeniedException("用户 " + userId + " 未授权");
 		}
 		
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
+		response.setStatus(UserResponse.Status.OK.name());
+		return response;
 	}
 	
 	@RequestMapping(value = "/{userId}/following/{followingId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public UserResponse cancelFollowing(@PathVariable String userId, @PathVariable String followingId) {
-		UserResponse reponse = new UserResponse();
+		UserResponse response = new UserResponse();
 		User user = userManager.getUser(userId);
 		User me = UserUtil.getCurrentUser(userManager);
 		if(me.equals(user)) {
@@ -448,7 +510,84 @@ public class UserRestService extends AbstractRestService {
 			throw new AccessDeniedException("用户 " + userId + " 未授权");
 		}
 		
-		reponse.setStatus(UserResponse.Status.OK.name());
-		return reponse;
+		response.setStatus(UserResponse.Status.OK.name());
+		return response;
+	}
+	
+	@RequestMapping(value = "/{userId}/circle", method = RequestMethod.GET)
+	@ResponseBody
+	public UserResponse getCircles(@PathVariable String userId) {
+		UserResponse response = new UserResponse();
+		User user = userManager.getUser(userId);
+//		User me = UserUtil.getCurrentUser(userManager);
+//		if(me.equals(user)) {
+			response.setStatus(UserResponse.Status.OK.name());
+			response.setCircles(circleManager.getCircles(user));
+//		}else {
+//			throw new AccessDeniedException("用户 " + userId + " 未授权");
+//		}	
+		
+		return response;
+	}
+	
+	@RequestMapping(value = "/{userId}/circle/{circleId}", method = RequestMethod.GET)
+	@ResponseBody
+	public UserResponse getCircle(@PathVariable String userId, @PathVariable String circleId) {
+		UserResponse response = new UserResponse();
+		User user = userManager.getUser(userId);
+		User me = UserUtil.getCurrentUser(userManager);
+		if(me.equals(user)) {
+			response.setStatus(UserResponse.Status.OK.name());
+			response.setCircle(circleManager.getCircle(user, Long.parseLong(circleId)));
+		}else {
+			throw new AccessDeniedException("用户 " + userId + " 未授权");
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/{userId}/follower", method = RequestMethod.GET)
+	@ResponseBody
+	public UserResponse getFollowers(@PathVariable String userId) {
+		UserResponse response = new UserResponse();
+		User user = userManager.getUser(userId);
+//		User me = UserUtil.getCurrentUser(userManager);
+//		if(me.equals(user)) {
+			response.setStatus(UserResponse.Status.OK.name());
+			response.setFollowers(circleManager.getUserFollowers(user));
+//		}else {
+//			throw new AccessDeniedException("用户 " + userId + " 未授权");
+//		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/{userId}/follower/{followerId}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public UserResponse deleteFollower(@PathVariable String userId, @PathVariable String followerId) {
+		UserResponse response = new UserResponse();
+		User user = userManager.getUser(userId);
+		User me = UserUtil.getCurrentUser(userManager);
+		if(me.equals(user)) {
+			response.setStatus(UserResponse.Status.OK.name());
+			circleManager.deleteUserFollower(user, Long.parseLong(followerId));
+		}else {
+			throw new AccessDeniedException("用户 " + userId + " 未授权");
+		}
+		return response;
+	}
+	
+	@RequestMapping(value = "/{userId}/follow/suggested", method = RequestMethod.GET)
+	@ResponseBody
+	public UserResponse getFollowSuggested(@PathVariable String userId) {
+		UserResponse response = new UserResponse();
+		User user = userManager.getUser(userId);
+		User me = UserUtil.getCurrentUser(userManager);
+		if(me.equals(user)) {
+			response.setStatus(UserResponse.Status.OK.name());
+			
+			response.setFollow(circleManager.getFollowSuggested(user, 10, 1));
+		}else {
+			throw new AccessDeniedException("用户 " + userId + " 未授权");
+		}
+		return response;
 	}
 }

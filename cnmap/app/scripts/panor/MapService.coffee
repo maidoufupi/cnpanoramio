@@ -31,11 +31,11 @@ class IMapService
   getAddrPois: (lat, lng, callback) ->
 
   ##
-   # 根据地址获取gps信息
-   #
-   # @param address
-   # @param callback
-   #/
+  # 根据地址获取gps信息
+  #
+  # @param address
+  # @param callback
+  #/
   getLocation:  (address, callback) ->
 
   ##

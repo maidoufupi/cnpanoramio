@@ -21,10 +21,7 @@ import org.appfuse.model.User;
 @Entity
 @Table(name = "favorite")
 public class Favorite {
-		
-//	@EmbeddedId
-//	private PK pk = new PK();
-	
+			
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

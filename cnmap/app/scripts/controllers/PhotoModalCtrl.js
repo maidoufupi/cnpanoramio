@@ -42,7 +42,7 @@ angular.module('ponmApp.controllers')
                     if (data.status == 'OK') {
                         $scope.photo = data.prop;
                         // 设置此photo是否可以被登录者编辑
-                        $scope.photoEditable = ($scope.userId == $scope.photo.user_id);
+                        $scope.photoEditable = ($scope.ponmCtxConfig.userId == $scope.photo.user_id);
 
                         // 评论
                         $scope.comment.totalItems = data.prop.comment_count;
@@ -91,8 +91,7 @@ angular.module('ponmApp.controllers')
              * 获取详细评论(分页)
              */
             function getComments(photoId) {
-                PhotoService.getComments({photoId: photoId, pageSize: $scope.comment.pageSize,
-                    pageNo: $scope.comment.currentPage}, function (data) {
+                PhotoService.getComments({photoId: photoId}, function (data) {
                     if (data.status == "OK") {
                         $scope.comments = data.comments;
                     }
@@ -134,66 +133,25 @@ angular.module('ponmApp.controllers')
                 if(!photo) {
                     return "";
                 }
-                var extension = "@";
-                if(photo.width > 2000 || photo.height > 2000) {
-                    extension = extension + "0e_2000w_2000h";
-                }
-                if(photo.file_size > 1024*1024*4) {
-                    extension = extension + "_50Q";
-                }else if(photo.file_size > 1024*1024*2) {
-                    extension = extension + "_80Q";
-                }else if(photo.file_size > 1024*1024) {
-                    extension = extension + "_90Q";
-                }
-                extension = extension + ".jpg";
-                return $scope.staticCtx + '/' + photo.oss_key + extension;
-            };
-
-            /**
-             * 创建评论
-             *
-             * @param content
-             */
-            $scope.createComment = function (content) {
-                var d = $q.defer();
-                if (content) {
-                    CommentService.save({photo_id: $scope.photoId, content: content}, function (res) {
-                        res = res || {};
-                        if (res.status == "OK") {
-                            $scope.comment.count = $scope.comment.count + 1;
-                            $scope.comments.push(res.comment);
-//                            $scope.comments.splice(0, 0, res.comment);
-                            $scope.photo.comment_count += 1;
-                            d.resolve(false);
-                        } else {
-                            d.resolve(res.info);
-                        }
-                    }, function (error) {
-                        if (error.data) {
-                            d.reject(error.data.info);
-                        } else {
-                            d.reject('Server error!');
-                        }
-                    })
+                if(photo.file_type == "gif") {
+                    return $scope.staticCtx + '/' + photo.oss_key;
                 }else {
-                    d.resolve(false);
+                    var extension = "@";
+                    if(photo.width > 2000 || photo.height > 2000) {
+                        extension = extension + "0e_2000w_2000h";
+                    }
+                    if(photo.file_size > 1024*1024*4) {
+                        extension = extension + "_50Q";
+                    }else if(photo.file_size > 1024*1024*2) {
+                        extension = extension + "_80Q";
+                    }else if(photo.file_size > 1024*1024) {
+                        extension = extension + "_90Q";
+                    }
+                    extension = extension + ".jpg";
+                    return $scope.staticCtx + '/' + photo.oss_key + extension;
                 }
-                return d.promise;
-            };
 
-            /**
-             * 根据id删除评论, 当删除评论后调用此方法
-             *
-             * @param commentId
-             */
-//            $scope.deletedComment = function (commentId) {
-//                angular.forEach($scope.comments, function (comment, key) {
-//                    if (comment.id == commentId) {
-//                        delete $scope.comments.splice(key, 1);
-//                        $scope.photo.comment_count -= 1;
-//                    }
-//                });
-//            };
+            };
 
             /**
              * 更新图片属性
@@ -321,23 +279,15 @@ angular.module('ponmApp.controllers')
                 $modalInstance.dismiss('cancel');
             };
 
-            $scope.setTravelAlbum = function (travelAlbum) {
-                $scope.travelAlbum = travelAlbum;
-            };
             $scope.openTravelAlbum = function () {
-                $log.debug("open travel album");
-                $scope.travelAlbum.open();
+                $scope.$broadcast("travelAlbum.open");
             };
             $scope.closeTravelAlbum = function () {
-                $scope.travelAlbum.close();
+                $scope.$broadcast("travelAlbum.close");
             };
 
-            $scope.setRecommendAlbum = function (recommendAlbum) {
-                $scope.recommendAlbum = recommendAlbum;
-            };
             $scope.openRecommendAlbum = function () {
-                $log.debug("open recommend album");
-                $scope.recommendAlbum.open();
+                $scope.$broadcast("photoRecommendAlbum.open");
             };
 
             /**
@@ -457,24 +407,12 @@ angular.module('ponmApp.controllers')
         return({
             restrict: "A",
             link: function (scope, element, attrs) {
-                var background = element.find(".travel-album-background"),
-                    travelAlbum = element.find(".travel-album");
-
-                background.on("click", function (e) {
-                    openClose.close();
+                scope.$on("travelAlbum.open", function() {
+                    scope.show = true;
                 });
-                var openClose = {
-                    open: function () {
-                        $animate.addClass(background, "show");
-                        $animate.addClass(travelAlbum, "show");
-                    },
-                    close: function () {
-                        $animate.removeClass(background, "show");
-                        $animate.removeClass(travelAlbum, "show");
-                    }
-                };
-                scope.setTravelAlbum(openClose);
-
+                scope.$on("travelAlbum.close", function() {
+                    scope.show = false;
+                });
             }
         });
     }])
@@ -484,23 +422,13 @@ angular.module('ponmApp.controllers')
         return({
             restrict: "A",
             link: function (scope, element, attrs) {
-                var background = element.find(".recommend-album-background"),
-                    travelAlbum = element.find(".recommend-album");
 
-                background.on("click", function (e) {
-                    openClose.close();
+                scope.$on("photoRecommendAlbum.open", function() {
+                    scope.recommendAlbumShow = true;
                 });
-                var openClose = {
-                    open: function () {
-                        $animate.addClass(background, "show");
-                        $animate.addClass(travelAlbum, "show");
-                    },
-                    close: function () {
-                        $animate.removeClass(background, "show");
-                        $animate.removeClass(travelAlbum, "show");
-                    }
-                };
-                scope.setRecommendAlbum(openClose);
+                scope.$on("photoRecommendAlbum.close", function() {
+                    scope.recommendAlbumShow = false;
+                });
             }
         });
     }])
@@ -540,14 +468,14 @@ angular.module('ponmApp.controllers')
                     if(data.status == "OK") {
                         $log.debug("properties update successful");
                         $scope.alertService.clear();
-                        $scope.alertService.add("success", "保存成功!", 5000);
+                        $scope.alertService.add("success", "保存成功!", {ttl: 3000});
                     }else {
                         $scope.alertService.clear();
-                        $scope.alertService.add("danger", "保存失败 " + data.status, 5000);
+                        $scope.alertService.add("danger", "保存失败 " + data.status, {ttl: 2000});
                     }
                 }, function(error) {
                     $scope.alertService.clear();
-                    $scope.alertService.add("danger", "保存失败 " + (error.data && error.data.status), 5000);
+                    $scope.alertService.add("danger", "保存失败 " + (error.data && error.data.status), {ttl: 2000});
                 });
 
             };

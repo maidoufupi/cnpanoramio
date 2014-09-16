@@ -81,16 +81,7 @@ public class UserSettingsDaoTest {
 		Assert.assertFalse(userSettingsDao.getAll().size() == 0);
 	}
 	
-	@Test
-	public void testGetUserTags() {
-		User user = userDao.get(1L);
-		List<String> tags = userSettingsDao.getUserTags(user);
-		
-		log.info(tags.size());
-		for(String tag : tags) {
-			log.info(tag);
-		}
-	}
+	
 	
 	@Test
 	public void testAvatar() {
@@ -100,43 +91,6 @@ public class UserSettingsDaoTest {
 		avatar = avatarDao.save(avatar);
 		userSettings.setAvatar(avatar);
 		log.info(userSettings.getAvatar().getId());
-	}
-	
-	@Test
-	public void testCreateTag() {
-		
-		userSettingsDao.createTag(userSettings, "四川");
-		
-		userSettings.getTags().add(new Tag("上海"));
-		userSettings.getTags().add(new Tag("上海"));
-		userSettings = userSettingsDao.save(userSettings);
-		for(Tag tag: userSettings.getTags()) {
-			log.info(tag);
-		}
-		UserSettings userSettings2 = userSettingsDao.get(2L);
-		userSettings2.getTags().add(new Tag("上海"));
-		userSettings2 = userSettingsDao.save(userSettings2);
-		for(Tag tag: userSettings2.getTags()) {
-			log.info(tag);
-		}
-		
-	}
-	
-	@Test
-	public void testGetOrCreateUserTag() {
-		
-		Tag tag = userSettingsDao.getOrCreateUserTag(userSettings, "上海");
-		log.info(tag);
-	}
-	
-	@Test
-	public void testDeleteTag() {
-		userSettingsDao.createTag(userSettings, "四川");
-		userSettingsDao.createTag(userSettings, "上海");
-		userSettings.getTags().remove(new Tag("四川"));
-		for(Tag tag: userSettings.getTags()) {
-			log.info(tag);
-		}
 	}
 	
 	@Test

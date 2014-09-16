@@ -32,7 +32,7 @@ angular.module('fileuploadApp', [
                 maxFileSize: 10000000
 //                        loadImageMaxFileSize: 10000000,
 //                        imageQuality: 2000000,
-//                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                ,acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
 //                        disableImageResize: /Android(?!.*Chrome)|Opera/
 //                            .test(window.navigator && navigator.userAgent),
                 //previewMaxWidth: 200,
@@ -49,11 +49,13 @@ angular.module('fileuploadApp', [
         }
     ])
 
-    .controller('DemoFileUploadController', [ '$window',
-        '$scope', '$http', 'fileUpload', '$modal', '$log', '$q', 'PhotoService', 'GPSConvertService',
+    .controller('DemoFileUploadController',
+    [ '$window', '$scope', '$http', 'fileUpload', '$modal', '$log', '$q', 'PhotoService', 'GPSConvertService',
         'LoginUserService', 'UserService', 'TravelService', 'jsUtils', 'safeApply', 'ponmCtxConfig', 'alertService',
+        'MessageService',
         function ($window, $scope, $http, fileUpload, $modal, $log, $q, PhotoService, GPSConvertService,
-                  LoginUserService, UserService, TravelService, jsUtils, safeApply, ponmCtxConfig, alertService) {
+                  LoginUserService, UserService, TravelService, jsUtils, safeApply, ponmCtxConfig, alertService,
+                  MessageService ) {
 
             $scope.apirest = $window.apirest;
             $scope.ctx = $window.ctx;
@@ -147,7 +149,7 @@ angular.module('fileuploadApp', [
                 file.photoId = photo.id;
                 file.is360 = photo.is360;
                 file.vendor = ponmCtxConfig.getCoordSS(photo.vendor);
-                if(photo.point) {
+                if(photo.point && photo.point.lat != 0 && photo.point.lng != 0) {
                     file.lat = photo.point.lat;
                     file.lng = photo.point.lng;
 
@@ -259,26 +261,26 @@ angular.module('fileuploadApp', [
              *
              * @param file
              */
-            $scope.changeLocation = function (files) {
-                var modalInstance = $modal.open({
-                    templateUrl: 'views/changeLocationModal.html',
-                    controller: "ChLocModalCtrl",
-                    windowClass: 'map-photo-modal',
-                    resolve: {
-                        'files': function () {
-                            return files;
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function (selectedItem) {
-                    angular.forEach(selectedItem, function (file, key) {
-                        file.saveProperties();
-                    });
-                }, function () {
-                    $log.info('Modal dismissed at: ' + new Date());
-                });
-            };
+//            $scope.changeLocation = function (files) {
+//                var modalInstance = $modal.open({
+//                    templateUrl: 'views/changeLocationModal.html',
+//                    controller: "ChLocModalCtrl",
+//                    windowClass: 'map-photo-modal',
+//                    resolve: {
+//                        'files': function () {
+//                            return files;
+//                        }
+//                    }
+//                });
+//
+//                modalInstance.result.then(function (selectedItem) {
+//                    angular.forEach(selectedItem, function (file, key) {
+//                        file.saveProperties();
+//                    });
+//                }, function () {
+//                    $log.info('Modal dismissed at: ' + new Date());
+//                });
+//            };
 
             // 异步加载用户travels数据
             $scope.loadTravelData = function (callback) {
@@ -389,6 +391,30 @@ angular.module('fileuploadApp', [
                     }
                 });
             });
+
+            /**
+             * 上传图片后发布图片消息
+             */
+            $scope.publishMessages = function() {
+                // todo DEBUG
+                angular.forEach($scope.queue, function (file, key) {
+                    if (file.photoId && !file.messageId) {
+                        MessageService.save({}, {
+                            "type": "photo",
+                            "photo": {
+                                "id": file.photoId
+                            }
+                        }, function(res) {
+                            if(res.status == "OK") {
+                                file.messageId = res.message.id;
+                            }
+                        },function(error) {
+                            file.messageId = true;
+                        });
+                    }
+                });
+
+            };
         }
     ])
     .controller('PhotoUploadRowCtrl', [
@@ -542,9 +568,11 @@ angular.module('fileuploadApp', [
                 file.saveTags();
             });
 
-//            $scope.onDragStart = function(e, ui) {
-//                $log.debug(ui.helper.addClass('drag-marker'));
-//            };
+            $scope.onDragStart = function(e, ui) {
+//                $log.debug(e);
+                $log.debug("drag photo id = " + file.photoId);
+                e.photoId = file.photoId;
+            };
 
         }])
 

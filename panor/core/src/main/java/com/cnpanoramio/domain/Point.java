@@ -10,62 +10,60 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Point {
-    
-	public double lat;
-	public double lng;
+	
+	@Column(name = "lat")
+	private Double lat;
+	@Column(name = "lng")
+	private Double lng;
 	
 	// altitude
-	public double alt;
+	@Column(name = "alt")
+	private Double alt;
 	
+	@Column(name = "address")
 	private String address;
 	
 	public Point() {
 		super();
 	}
 	
-	public Point( double geoLat, double geoLng) {
+	public Point( Double geoLat, Double geoLng) {
 		super();
 		this.lat = geoLat;
 		this.lng = geoLng;
 	}
 	
-	public Point( double geoLat, double geoLng, double geoAlti) {
+	public Point( Double geoLat, Double geoLng, Double geoAlti) {
 		super();
 		this.lat = geoLat;
 		this.lng = geoLng;
-		this.alt = geoAlti;
-	}
-	
-	
-	public double getLng() {
-		return lng;
-	}
-	
-	@Column(name = "lng", nullable = true)
-	public void setLng(double geoLong) {
-		this.lng = geoLong;
-	}
-	
-	
-	public double getLat() {
-		return lat;
-	}
-	
-	@Column(name = "lat", nullable = true)
-	public void setLat(double geoLat) {
-		this.lat = geoLat;
-	}
-	
-	public double getAlt() {
-		return alt;
-	}
-	
-	@Column(name = "alt", nullable = true)
-	public void setAlt(double geoAlti) {
 		this.alt = geoAlti;
 	}
 
-	@Column(name = "address")
+	public Double getLat() {
+		return lat;
+	}
+
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public Double getLng() {
+		return lng;
+	}
+
+	public void setLng(Double lng) {
+		this.lng = lng;
+	}
+
+	public Double getAlt() {
+		return alt;
+	}
+
+	public void setAlt(Double alt) {
+		this.alt = alt;
+	}
+
 	public String getAddress() {
 		return address;
 	}

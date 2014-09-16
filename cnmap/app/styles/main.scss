@@ -2,8 +2,7 @@
 @import '_mixins.scss';
 
 @import 'comm.scss';
-@import 'style.scss';
-@import 'index.scss';
+//@import 'style.scss';
 //@import 'modal.scss';
 //@import 'ExploreWorld.scss';
 //@import 'PhotoDisplay.scss';
@@ -22,10 +21,19 @@
 @import '_wall.scss';
 @import '_modal.scss';
 @import '_alerts.scss';
+@import '_comment.scss';
 @import 'photo-upload.scss';
+@import 'dynamic-messages-layout.scss';
+@import 'dynamic-message.scss';
+@import 'ponm-photo-container.scss';
+@import 'ponm-rect-multi-select.scss';
+@import 'item-picker.scss';
+@import '_card.scss';
+@import 'ponm-travel-album.scss';
 
 body {
   background-color: #ececec;
+  overflow-x: hidden;
 }
 
 /** editable */
@@ -34,6 +42,7 @@ pre.description {
   padding: 0;
   border: 0;
   background-color: initial;
+  white-space: normal; //pre-wrap; // firefox
 }
 
 pre.description.hover {
@@ -100,48 +109,7 @@ span.footnotes {
   text-align: left;
 }
 
-/** comments */
-.comments {
-  margin: 2px 0;
-  background-color: $photo-info-frontground-color;
-  .media.comment {
-    padding: 15px;
-    margin: 0;
-    img.media-object {
-      width: 28px;
-      height: 28px;
-    }
-    .media-body {
-      .header {
-        width: 130px;
-        float: left;
-        .thumbs-up {
-        }
-        .thumbs-up.like {
-          color: #ce352c;
-        }
-      }
-      .action {
-        float: right;
-      }
-      .content {
-        clear: both;
-        padding: 0;
-        margin: 0;
-        border: 0;
-        background-color: initial;
-      }
-      .glyphicon {
-        font-size: 12px;
-      }
-    }
-  }
 
-  .media.comment.comment-active {
-    border-top-color: grey;
-    border-bottom-color: grey;
-  }
-}
 
 /** show hide animame */
 .ponm-show-hide.ng-hide-add, .ponm-show-hide.ng-hide-remove {

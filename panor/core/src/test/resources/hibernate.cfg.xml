@@ -14,7 +14,6 @@
 		<mapping class="com.cnpanoramio.domain.Tag" />
 		<mapping class="com.cnpanoramio.domain.UserSettings" />
 		<mapping class="com.cnpanoramio.domain.PhotoDetails" />
-		<mapping class="com.cnpanoramio.domain.IndexPhoto" />		
 		<mapping class="com.cnpanoramio.domain.PhotoGps" />		
 		<mapping class="com.cnpanoramio.domain.PhotoPanoramio" />		
 		<mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex" />		
@@ -30,20 +29,5 @@
 		<mapping class="com.cnpanoramio.domain.Message" />		
 		<mapping class="com.cnpanoramio.domain.MessageQueue" />		
 		
-		<!-- <event type="save-update">
-        	<listener class="com.cnpanoramio.Listener.SaveOrUpdateDateListener"/>
-      	</event>
-		<event type="save">
-        	<listener class="com.cnpanoramio.Listener.SaveOrUpdateDateListener"/>
-      	</event>
-		<event type="create">
-        	<listener class="com.cnpanoramio.Listener.PersistDateListener"/>
-      	</event>
-		<event type="create-onflush">
-        	<listener class="com.cnpanoramio.Listener.PersistDateListener"/>
-      	</event>
-		<event type="merge">
-        	<listener class="com.cnpanoramio.Listener.MergeDateListener"/>
-      	</event> -->
 	</session-factory>
 </hibernate-configuration>

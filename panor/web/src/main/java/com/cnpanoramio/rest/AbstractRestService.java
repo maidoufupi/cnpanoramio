@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.cnpanoramio.ParameterException;
 import com.cnpanoramio.json.ExceptionResponse;
-import com.cnpanoramio.json.UserResponse;
+import com.cnpanoramio.json.ExceptionResponse;
 
 public abstract class AbstractRestService {
 
@@ -30,7 +31,7 @@ public abstract class AbstractRestService {
 	@ResponseBody
 	public ExceptionResponse handleAccessDeniedException(AccessDeniedException ex) {
 		ExceptionResponse reponse = responseFactory();
-		reponse.setStatus(UserResponse.Status.NO_AUTHORIZE.name());
+		reponse.setStatus(ExceptionResponse.Status.NO_AUTHORIZE.name());
 		reponse.setInfo(ex.getMessage());
 		return reponse;
 	}
@@ -40,7 +41,7 @@ public abstract class AbstractRestService {
 	@ResponseBody
 	public ExceptionResponse handleUsernameNotFoundException(UsernameNotFoundException ex) {
 		ExceptionResponse reponse = responseFactory();
-		reponse.setStatus(UserResponse.Status.ACCESS_DENIED.name());
+		reponse.setStatus(ExceptionResponse.Status.ACCESS_DENIED.name());
 		reponse.setInfo(ex.getMessage());
 		return reponse;
 	}
@@ -53,19 +54,22 @@ public abstract class AbstractRestService {
 		ExceptionResponse reponse = responseFactory();
 		reponse.setInfo(ex.getMessage());
 		if(ex instanceof NumberFormatException) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
-		}else if (ex instanceof UnsupportedEncodingException) {
-			reponse.setStatus(UserResponse.Status.ID_FORMAT_ERROR.name());
+			reponse.setStatus(ExceptionResponse.Status.ID_FORMAT_ERROR.name());
+		}else if (ex instanceof ParameterException) {
+			reponse.setStatus(ExceptionResponse.Status.PARAM_ERROR.name());
+		}
+		else if (ex instanceof UnsupportedEncodingException) {
+			reponse.setStatus(ExceptionResponse.Status.ID_FORMAT_ERROR.name());
 		}else if (ex instanceof UsernameNotFoundException) {
-			reponse.setStatus(UserResponse.Status.NO_AUTHORIZE.name());
+			reponse.setStatus(ExceptionResponse.Status.NO_AUTHORIZE.name());
 		}else if (ex instanceof DataAccessException) {
-			reponse.setStatus(UserResponse.Status.NO_ENTITY.name());
+			reponse.setStatus(ExceptionResponse.Status.NO_ENTITY.name());
 		}else if (ex instanceof AccessDeniedException) {
-			reponse.setStatus(UserResponse.Status.ACCESS_DENIED.name());
+			reponse.setStatus(ExceptionResponse.Status.ACCESS_DENIED.name());
 		}else if (ex instanceof HttpMediaTypeNotSupportedException) {
-			reponse.setStatus(UserResponse.Status.EXCEPTION.name());
+			reponse.setStatus(ExceptionResponse.Status.EXCEPTION.name());
 		}else {
-			reponse.setStatus(UserResponse.Status.EXCEPTION.name());
+			reponse.setStatus(ExceptionResponse.Status.EXCEPTION.name());
 		}
 		
 		return reponse;

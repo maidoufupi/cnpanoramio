@@ -14,7 +14,7 @@ public class ExceptionResponse {
 	
 	public ExceptionResponse(Status status) {
 		super();
-		this.status = status.name();
+		this.status = status;
 	}
 	
 	public static enum Status {
@@ -26,6 +26,10 @@ public class ExceptionResponse {
 		 * 图片ID格式错误
 		 */
 		ID_FORMAT_ERROR,
+		/**
+		 * 输入参数错误
+		 */
+		PARAM_ERROR,
 		/**
 		 * 找不到对象
 		 */
@@ -44,16 +48,20 @@ public class ExceptionResponse {
 		EXCEPTION
 	}
 	
-	private String status;
+	private Status status;
 	
 	private String info;
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = Status.valueOf(status);
 	}
 
 	public String getInfo() {

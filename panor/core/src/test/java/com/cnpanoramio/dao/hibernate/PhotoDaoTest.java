@@ -33,11 +33,11 @@ import com.cnpanoramio.domain.Tag;
 public class PhotoDaoTest {
 	protected transient final Log log = LogFactory.getLog(getClass());
 
-	Photo photo;
-	User user;
+	private Photo photo;
+	private User user;
 
-	PhotoDao photoDao;
-	UserDao userDao;
+	private PhotoDao photoDao;
+	private UserDao userDao;
 	
 	private Long userId;
 

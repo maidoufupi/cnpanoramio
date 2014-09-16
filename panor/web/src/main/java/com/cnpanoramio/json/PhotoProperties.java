@@ -21,6 +21,7 @@ public class PhotoProperties {
 	private Long id;
 	private String title;
 	private String description;
+	// 上传时间
 	@JsonProperty("create_time")
 	private Date createTime;
 	
@@ -69,6 +70,9 @@ public class PhotoProperties {
 	// 文件名
 	@JsonProperty("file_name")
 	private String fileName;
+	// 文件类型
+	@JsonProperty("file_type")
+	private String fileType;
 	
 	// 拍摄日期
 	@JsonProperty("date_time")
@@ -267,6 +271,14 @@ public class PhotoProperties {
 
 	public void setUserAvatar(String userAvatar) {
 		this.userAvatar = userAvatar;
+	}
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
 	}	
 	
 }

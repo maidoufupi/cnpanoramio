@@ -24,7 +24,12 @@ import org.hibernate.search.annotations.IndexedEmbedded;
 @Table(name = "travel_spot")
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
-public class TravelSpot {
+public class TravelSpot extends BaseEntity {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9221810498502750152L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,13 +43,7 @@ public class TravelSpot {
 	
 	@OneToMany(mappedBy="travelSpot")
 	private Set<Photo> photos = new HashSet<Photo>(0);
-	
-	@Column(name="create_time")
-	private Date createTime;
-	
-	@Column(name="modify_time")
-	private Date modifyTime;
-	
+		
 	@Column(name="time_start")
 	private Date timeStart;
 	
@@ -91,22 +90,6 @@ public class TravelSpot {
 
 	public void setPhotos(Set<Photo> photos) {
 		this.photos = photos;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getModifyTime() {
-		return modifyTime;
-	}
-
-	public void setModifyTime(Date modifyTime) {
-		this.modifyTime = modifyTime;
 	}
 
 	public Date getTimeStart() {

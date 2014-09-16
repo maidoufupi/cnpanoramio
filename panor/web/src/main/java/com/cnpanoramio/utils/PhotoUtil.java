@@ -74,6 +74,7 @@ public class PhotoUtil {
 		pp.setUserId(photo.getOwner().getId());
 		pp.setFileSize(photo.getFileSize());
 		pp.setFileName(photo.getName());
+		pp.setFileType(photo.getFileType().toLowerCase());
 		
 		pp.setOssKey(getPhotoOssKey(photo));
 		
@@ -84,7 +85,7 @@ public class PhotoUtil {
 		}		
 		
 		for(Tag tag : photo.getTags()) {
-			pp.getTags().add(tag.getTag());
+			pp.getTags().add(tag.getContent());
 		}
 		// 收藏
 		pp.setFavCount(photo.getFavorites().size());

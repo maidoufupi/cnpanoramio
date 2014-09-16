@@ -12,7 +12,6 @@ import org.appfuse.service.UserManager;
 import org.appfuse.service.impl.GenericManagerImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +21,12 @@ import com.cnpanoramio.dao.TravelSpotDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
+import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Travel;
 import com.cnpanoramio.domain.TravelSpot;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.service.PhotoManager;
+import com.cnpanoramio.service.RecycleManager;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.utils.PhotoUtil;
 import com.cnpanoramio.utils.UserUtil;
@@ -39,8 +40,10 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
 	private TravelDao travelDao;
+	
 	@Autowired
 	private TravelSpotDao travelSpotDao;
+	
 	@Autowired
 	private PhotoDao photoDao;
 
@@ -52,6 +55,9 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 
 	@Autowired
 	private UserManager userManager = null;
+	
+	@Autowired
+	private RecycleManager recycleManager;
 
 	public TravelDao getTravelDao() {
 		return travelDao;
@@ -71,7 +77,13 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 	@Override
 	public List<Travel> getTravels(User user) {
 		UserSettings settings = userSettingsDao.get(user.getId());
-		return settings.getTravels();
+		List<Travel> travels = new ArrayList<Travel>();
+		for(Travel travel : settings.getTravels()) {
+			if(!travel.isDeleted()) {
+				travels.add(travel);
+			}
+		}
+		return travels;
 	}
 
 	@Override
@@ -82,7 +94,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		if (null == tra) {
 			tra = new Travel(travel);
 			// 保存实体
-			tra = travelDao.save(tra);
+			tra = travelDao.persist(tra);
 			// 相互设置
 			tra.setUser(settings);
 			settings.getTravels().add(tra);
@@ -148,7 +160,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 			// 保存实体
 			travelSpot.setTravel(travel);
 
-			travelSpot = travelSpotDao.save(travelSpot);
+			travelSpot = travelSpotDao.persist(travelSpot);
 
 			// 相互设置
 			travel.getSpots().add(travelSpot);
@@ -162,19 +174,23 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 
 	@Override
 	public Travel changeTravelDesc(Long id, String description) {
-		User me = UserUtil.getCurrentUser(userManager);
 		Travel travel = travelDao.get(id);
-		checkMyTravel(travel, me);
 		travel.setDescription(description);
+		return travel;
+	}
+	
+	@Override
+	public Travel changeTravelName(Long id, String name) {
+		Travel travel = travelDao.get(id);
+		travel.setTitle(name);
 		return travel;
 	}
 
 	@Override
 	public TravelSpot changeSpot(Long id, TravelSpot spot) {
-		User me = UserUtil.getCurrentUser(userManager);
-		TravelSpot travelSpot = travelSpotDao.get(id);
-		checkMyTravel(travelSpot.getTravel(), me);
 
+		TravelSpot travelSpot = travelSpotDao.get(id);
+		
 		if (null != spot.getTitle()) {
 			travelSpot.setTitle(spot.getTitle());
 		}
@@ -198,15 +214,13 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 
 	@Override
 	public Travel addTravelPhotos(Long id, List<Long> photos) {
-		User me = UserUtil.getCurrentUser(userManager);
-		Travel travel = travelDao.get(id);
-		checkMyTravel(travel, me);
-
+		
+		Travel travel = this.get(id);
+		
 		log.debug("add photos size: " + photos.size());
 		Photo photo = null;
 		for (Long photoId : photos) {
 			photo = photoManager.getPhoto(photoId);
-			PhotoUtil.checkMyPhoto(photo, me);
 			addTravelPhoto(travel, photo);
 		}
 		return travel;
@@ -214,14 +228,12 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 
 	@Override
 	public Travel removeTravelPhotos(Long id, List<Long> photos) {
-		User me = UserUtil.getCurrentUser(userManager);
-		Travel travel = travelDao.get(id);
-		checkMyTravel(travel, me);
 
+		Travel travel = this.get(id);
+		
 		Photo photo = null;
 		for (Long photoId : photos) {
 			photo = photoManager.getPhoto(photoId);
-			PhotoUtil.checkMyPhoto(photo, me);
 			removePhoto(travel, photo);
 		}
 		return travel;
@@ -244,20 +256,19 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		
 	}
 	
-	private void checkMyTravel(Travel travel, User me) {
-
-		if (!travel.getUser().getId().equals(me.getId())) {
-			throw new AccessDeniedException("Travel (id=" + travel.getId()
-					+ ") is not belong to you");
-		}
-	}
+//	private void checkMyTravel(Travel travel, User me) {
+//
+//		if (!travel.getUser().getId().equals(me.getId())) {
+//			throw new AccessDeniedException("Travel (id=" + travel.getId()
+//					+ ") is not belong to you");
+//		}
+//	}
 
 	@Override
 	public TravelSpot createTravelSpot(Long id, TravelSpot spot) {
-		User me = UserUtil.getCurrentUser(userManager);
-		Travel travel = travelDao.get(id);
-		checkMyTravel(travel, me);
 
+		Travel travel = this.get(id);
+		
 		TravelSpot travelSpot = new TravelSpot();
 		travelSpot.setTimeStart(spot.getTimeStart());
 		travelSpot.setAddress(spot.getAddress());
@@ -266,7 +277,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 
 		// 保存实体
 		travelSpot.setTravel(travel);
-		travelSpot = travelSpotDao.save(travelSpot);
+		travelSpot = travelSpotDao.persist(travelSpot);
 
 		// 相互设置
 		travel.getSpots().add(travelSpot);
@@ -276,14 +287,10 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 
 	@Override
 	public Travel addSpotPhotos(Long id, List<Long> photos) {
-		User me = UserUtil.getCurrentUser(userManager);
 		TravelSpot spot = travelSpotDao.get(id);
-		checkMyTravel(spot.getTravel(), me);
-
 		Photo photo = null;
 		for(Long photoId : photos) {
 			photo = photoManager.getPhoto(photoId);
-			PhotoUtil.checkMyPhoto(photo, me);
 			addSpotPhoto(spot, photo);
 		}
 		return spot.getTravel();
@@ -305,10 +312,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 
 	@Override
 	public Travel deleteSpot(Long id) {
-		User me = UserUtil.getCurrentUser(userManager);
 		TravelSpot spot = travelSpotDao.get(id);
-		checkMyTravel(spot.getTravel(), me);
-		
 		Travel travel = spot.getTravel();
 		// 从travel中移除
 		travel.getSpots().remove(spot);
@@ -321,21 +325,36 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		return travel;
 	}
 
+	/**
+	 * 将旅行相册移动到回收站，如果旅行中有图片则全部放入回收站，如果没有图片则直接删除旅行相册
+	 */
 	@Override
 	public void deleteTravel(Long id) {
-		User me = UserUtil.getCurrentUser(userManager);
-		Travel travel = travelDao.get(id);
-		checkMyTravel(travel, me);
 
+		Travel travel = this.get(id);
+		
 		travel.setDeleted(true);
 		
+		boolean existPhoto = false;
+		for(TravelSpot spot : travel.getSpots()) {
+			for(Photo photo : spot.getPhotos()) {
+				photoManager.delete(photo.getId());
+				existPhoto = true;
+			}
+		}
+		if(!existPhoto) {
+			this.removeTravel(travel.getId());
+		}
+		
+//		recycleManager.saveRecycle(me, Recycle.RecycleType.travel, travel.getId());
 	}
 
+	/**
+	 * 删除旅行相册
+	 */
 	@Override
 	public void removeTravel(Long id) {
-		User me = UserUtil.getCurrentUser(userManager);
-		Travel travel = travelDao.get(id);
-		checkMyTravel(travel, me);
+		Travel travel = this.get(id);
 
 		for (TravelSpot spot : travel.getSpots()) {
 			for (Photo photo : spot.getPhotos()) {
@@ -349,11 +368,13 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 
 	@Override
 	public void cancelDeleteTravel(Long id) {
-		User me = UserUtil.getCurrentUser(userManager);
-		Travel travel = travelDao.get(id);
-		checkMyTravel(travel, me);
+		Travel travel = this.get(id);
 
 		travel.setDeleted(false);
+		for(TravelSpot spot : travel.getSpots()) {
+			for(Photo photo : spot.getPhotos()) {
+				photo.setDeleted(false);
+			}
+		}
 	}
-
 }

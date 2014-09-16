@@ -39,12 +39,13 @@ angular.module('ponmApp.controllers')
                 })
         }])
     .controller('LoginCtrl',
-    ['$window', '$scope', '$log', '$q', 'jsUtils', '$location', '$state', 'AuthService',
+    ['$scope', '$log', '$q', 'jsUtils', '$location', '$state', 'AuthService',
         'ponmCtxConfig',
-        function ($window, $scope, $log, $q, jsUtils, $location, $state, AuthService,
+        function ($scope, $log, $q, jsUtils, $location, $state, AuthService,
                   ponmCtxConfig) {
 
             $scope.ponmCtxConfig = ponmCtxConfig;
+            $scope.$log = $log;
 
             AuthService.checkLogin().then(function() {
                 $state.go("maps.popular", {});
@@ -69,23 +70,47 @@ angular.module('ponmApp.controllers')
             $scope.credentials = {};
 
             $scope.login = function(e, user) {
-                if(!$scope.credentials.username) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $scope.userForm.j_username.$dirty = true;
+//                if(!$scope.credentials.username) {
+//                    e.preventDefault();
+//                    e.stopPropagation();
+//                    $scope.userForm.j_username.$dirty = true;
+//                }
+//                if(!$scope.credentials.password) {
+//                    e.preventDefault();
+//                    e.stopPropagation();
+//                    $scope.userForm.j_password.$dirty = true;
+//                }
+
+                if($scope.userForm.$valid) {
+                    AuthService.loginCheck(user).then(function() {
+
+                    }, function() {
+                        $scope.loginError = true;
+                    });
+                }else {
                 }
-                if(!$scope.credentials.password) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    $scope.userForm.j_password.$dirty = true;
+            };
+
+            $scope.loginSubmit = function(e, user) {
+                if($scope.userForm.$valid) {
+                    AuthService.loginCheck(user).then(function() {
+                        $scope.loginError = false;
+                        return true;
+//                        AuthService.login(user);
+                    }, function() {
+                        $scope.loginError = true;
+                        $log.debug(e);
+                        e.originalEvent.preventDefault();
+                        e.originalEvent.stopPropagation();
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return true;
+                    });
+                }else {
+//                    e.preventDefault();
+//                    e.stopPropagation();
+                    return false;
                 }
-//                AuthService.login($scope.credentials).then(function() {
-//                    $scope.ok();
-//                },function(error) {
-//                    if(error === 1) {
-//                        $log.debug("username or password error");
-//                    }
-//                });
             };
 
             $scope.passwordHint = function() {

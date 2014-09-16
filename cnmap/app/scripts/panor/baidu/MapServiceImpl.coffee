@@ -1,3 +1,4 @@
+
 $window = window
 BMap = $window.BMap
 class MapService extends window.cnmap.IMapService

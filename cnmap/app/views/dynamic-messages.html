@@ -1,0 +1,9 @@
+<div class="container-fluid">
+    <div class="messages-col"
+         ng-repeat="col in cols">
+        <div ng-repeat="message in col.messages"
+             class="message">
+            <div dynamic-message message="message" owner="owner"></div>
+        </div>
+    </div>
+</div>

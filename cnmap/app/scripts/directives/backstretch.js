@@ -7,8 +7,11 @@ angular.module('ponmApp.directives')
     .directive('backstretch', function () {
         return {
             restrict: 'A',
-            link: function (scope, element, attr) {
-                jQuery(element).backstretch(attr.backgroundUrl);
+            link: function (scope, element, attrs) {
+                jQuery(element).backstretch(attrs.backgroundUrl);
+                attrs.$observe("backgroundUrl", function(url) {
+                    jQuery(element).backstretch(url);
+                });
             }
         }
     });
