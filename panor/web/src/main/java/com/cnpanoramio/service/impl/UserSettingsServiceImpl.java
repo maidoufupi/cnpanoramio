@@ -1,5 +1,7 @@
 package com.cnpanoramio.service.impl;
 
+import javax.servlet.http.HttpSession;
+
 import org.appfuse.model.User;
 import org.appfuse.service.UserExistsException;
 import org.appfuse.service.UserManager;
@@ -24,6 +26,9 @@ import com.cnpanoramio.service.UserSettingsService;
 @Transactional
 public class UserSettingsServiceImpl implements UserSettingsService {
 
+	@Autowired
+	private HttpSession httpSession;
+	
 	@Autowired
 	private UserManager userManager;
 
@@ -156,6 +161,8 @@ public class UserSettingsServiceImpl implements UserSettingsService {
 				.get(user);
 		settings.setMapVendor(mapVendor);
 
+		httpSession.setAttribute("mapVendor", settings.getMapVendor());
+		
 		return transformSettings(settings);
 	}
 

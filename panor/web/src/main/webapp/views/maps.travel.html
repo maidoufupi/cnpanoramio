@@ -8,7 +8,18 @@
 
             <div class="media-body">
                 <h4 class="media-heading">{{travel.username}}</h4>
-                <h5 class="media-heading">旅行：{{travel.title}}</h5>
+                <span ng-switch="travelEnedit">
+                    <h5 class="media-heading"
+                        ng-switch-default>旅行：{{travel.title}}</h5>
+                    <a ng-switch-when="true"
+                       href=""
+                       class="editable"
+                       editable-text="travel.title"
+                       onbeforesave="updateTravel(travel, 'name', $data)">
+                        <h5 class="media-heading">{{ travel.title || '添加名称' }}</h5>
+                    </a>
+                </span>
+
                 <div class="media-footer">
                     <span class="footnotes">{{'  ' + (travel.time_start | date:'yyyy/MM/dd') + ' - ' + (travel.time_end | date:'yyyy/MM/dd') }}</span>
                 </div>
@@ -25,11 +36,11 @@
                    href=""
                    class="editable"
                    editable-textarea="travel.description" e-rows="4" e-cols="40"
-                   onbeforesave="updateTravel(travel, $data)">
+                   onbeforesave="updateTravel(travel, 'description', $data)">
                     <pre class="description">{{ travel.description || '添加描述' }}</pre>
                 </a>
-                    <pre class="description"
-                         ng-switch-default>{{travel.description}}</pre>
+                <pre class="description"
+                     ng-switch-default>{{travel.description}}</pre>
             </div>
         </div>
     </div>

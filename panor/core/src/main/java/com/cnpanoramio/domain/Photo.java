@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
@@ -23,6 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.appfuse.model.User;
 import org.hibernate.search.annotations.DocumentId;
@@ -97,7 +99,11 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	private Integer Rating;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@IndexedEmbedded
+	@JoinTable(name="photo_tags", 
+		joinColumns = @JoinColumn(name = "photo_id"),
+		inverseJoinColumns = @JoinColumn(name = "tag_id"),
+		uniqueConstraints = @UniqueConstraint(name = "uq_photo_tag",
+			columnNames = {"photo_id", "tag_id"}))
 	private Set<Tag> tags = new HashSet<Tag>(0);
 		
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

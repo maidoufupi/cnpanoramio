@@ -11,12 +11,14 @@ import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cnpanoramio.ParameterException;
 import com.cnpanoramio.json.TravelResponse;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
 import com.cnpanoramio.service.LikeManager;
@@ -51,6 +53,9 @@ public class TravelRestService extends AbstractRestService {
 	public TravelResponse create(@RequestParam("travel") String travel) {
 		TravelResponse response = new TravelResponse();
 		
+		if(!StringUtils.hasText(travel)) {
+			throw new ParameterException("Parameter 'travel' is empty");
+		}
 		User me = UserUtil.getCurrentUser(userManager);
 		response.setTravel(travelService.createMyTravel(me, travel));
 		response.setStatus(TravelResponse.Status.OK.name());

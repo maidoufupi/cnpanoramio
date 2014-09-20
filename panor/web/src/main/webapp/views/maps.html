@@ -19,8 +19,7 @@
                         <a href="#/maps/popular">受欢迎</a></li>
                     <li ng-class="{'active': stateStatus.recent}">
                         <a href="#/maps/recent">最新</a></li>
-                    <li ng-class="{'active': stateStatus.travels}">
-                        <a href="#/maps/travels">旅行</a></li>
+
                     <li ng-if="stateStatus.travel"
                         ng-class="{'active': stateStatus.travel}">
                         <a href="#/maps/travel">旅行<span class="footnote">{{stateStatus.name}}</span></a></li>
@@ -31,7 +30,14 @@
                         <a href="#/maps/upload">上传</a></li>
                     <!--<li>
                         <a>搜索{{searchValObject.typeDesc+": "+searchValObject.val}}</a></li>-->
-
+                    <li class="dropdown">
+                        <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/maps/dynamic">你的动态</a></li>
+                            <li ng-class="{'active': stateStatus.travels}">
+                                <a href="#/maps/travels">旅行</a></li>
+                        </ul>
+                    </li>
                     <li ng-controller="MapsSearchCtrl">
                         <div class="searchbox">
                             <form ng-submit="goLocation(asyncSelected)">
@@ -48,14 +54,6 @@
                             </form>
                         </div>
                     </li>
-                    <!--<li ng-if="navbarType == 'move'"
-                        class="dropdown">
-                        <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="">回收站</a></li>
-                            <li><a href="">功能介绍</a></li>
-                        </ul>
-                    </li>-->
                 </ul>
 
                 <script type="text/ng-template" id="customTemplate.html">
@@ -82,10 +80,10 @@
                             布局<span class="icon icon-dropdown"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li ng-click="contentLayout=3"><a href=""><span class="glyphicon glyphicon-align-justify"></span>只有地图</a></li>
-                            <li ng-click="contentLayout=1"><a href=""><span class="glyphicon glyphicon-align-left"></span>固定地图</a></li>
-                            <li ng-click="contentLayout=0"><a href=""><span class="glyphicon glyphicon-align-right"></span>固定右栏</a></li>
-                            <li ng-click="contentLayout=2"><a href=""><span class="glyphicon glyphicon-list"></span>只有右栏</a></li>
+                            <li ng-click="contentLayouts.index=3"><a href=""><span class="glyphicon glyphicon-align-justify"></span>只有地图</a></li>
+                            <li ng-click="contentLayouts.index=1"><a href=""><span class="glyphicon glyphicon-align-left"></span>固定地图</a></li>
+                            <li ng-click="contentLayouts.index=0"><a href=""><span class="glyphicon glyphicon-align-right"></span>固定右栏</a></li>
+                            <li ng-click="contentLayouts.index=2"><a href=""><span class="glyphicon glyphicon-list"></span>只有右栏</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -98,11 +96,8 @@
 
     </div>
 
-    <div class="content"
-         ng-class="{'left-full': contentLayouts[contentLayout]=='left-full',
-                    'left-fixed': contentLayouts[contentLayout]=='left-fixed',
-                    'right-full': contentLayouts[contentLayout]=='right-full',
-                    'right-fixed': contentLayouts[contentLayout]=='right-fixed'}">
+    <div class="maps-content"
+         ng-class="contentLayouts[contentLayouts.index]">
         <div class="left"
              drop="true"
              ng-model='markers'

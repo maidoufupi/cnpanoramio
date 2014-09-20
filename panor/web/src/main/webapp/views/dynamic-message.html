@@ -1,4 +1,6 @@
-<div class="message-card flip-container" ng-class="{hover: flipx}">
+<div class="message-card flip-container" ng-class="{hover: flipx}"
+     waypoint="{'offset': '98%', id: {id: message.id}}"
+     on-waypoint="onWaypoint($element, $direction)">
     <div class="flipper">
         <div class="front card">
             <!-- 前面内容 -->
@@ -9,8 +11,9 @@
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
                             <li ng-click="flipx=true"><a href="">查看信息动态</a></li>
                             <li role="presentation"><a href="">忽略此信息</a></li>
-                            <li role="presentation"><a href="">从动态列表中删除</a></li>
                             <li role="presentation"><a href="">举报此此信息</a></li>
+                            <li role="presentation" ng-if="owner.id==message.user.id"><a href=""
+                                    ng-click="delete(message)">删除</a></li>
                         </ul>
                     </div>
                 </div>
@@ -56,10 +59,35 @@
             </div>
 
             <div class="message-body">
-                <div class="content">
-                    <pre class="description" ng-bind-html="message.content"></pre>
+                <div class="message-content" ng-switch="message.type">
+                    <div ng-switch-when="photo">
+                        <pre class="description" ng-bind-html="message.content"></pre>
+                    </div>
+                    <div ng-switch-when="travel">
+                        <pre class="description" ng-bind-html="message.content"></pre>
+                    </div>
+                    <div ng-switch-when="message">
+                        <pre class="description" ng-bind-html="message.content"></pre>
+                        <hr>
+                        <h6>此<a href="">信息</a>最初是由<a href="" user-card owner="owner" user-id="message.share_message.user.id">{{message.share_message.user.name}}</a>分享的：</h6>
+                        <pre class="description" ng-bind-html="message.share_message.content"></pre>
+                    </div>
+                </div>
+                <div class="message-geo" ng-if="message.point">
+                    <a href="" ng-click="pointClick()">
+                        <h7>
+                            <span class="glyphicon glyphicon-map-marker"></span>
+                            {{message.point.address}}
+                        </h7>
+                        <div>
+                            <span>{{message.point.lat | number}}</span>
+                            <span>{{message.point&&', '}}</span>
+                            <span>{{message.point.lng | number}}</span>
+                        </div>
+                    </a>
                 </div>
                 <div class="message-media">
+
                     <div ng-switch="message.type">
                         <a ng-switch-when="photo"
                            href=""
@@ -68,6 +96,17 @@
                             <div class="image-border"></div>
                         </a>
                         <ponm-travel-album travel="message.travel" ng-switch-when="travel"></ponm-travel-album>
+                        <div ng-switch-when="message"
+                             ng-switch="message.share_message.type">
+                            <a ng-switch-when="photo"
+                               href=""
+                               ng-click="photoClick(message.share_message.photo.id)">
+                                <img ng-src="{{getPhotoSrc(message.share_message.photo)}}">
+                                <div class="image-border"></div>
+                            </a>
+                            <ponm-travel-album travel="message.share_message.travel" ng-switch-when="travel"></ponm-travel-album>
+                        </div>
+
                     </div>
                     <!--ng-style="{width: '344px', height: (message.photo.height&&(message.photo.height/message.photo.width*344+'px'))||'344px'}"-->
 
@@ -81,11 +120,11 @@
                                 class="btn btn-sm"
                                 title="{{(message.like && '取消赞') || '赞一个'}}"
                                 ng-class="{'btn-danger': message.like, 'btn-default': !message.like}"
-                                ng-click="like()">{{message.like_count || '0'}}个赞</button>
+                                ng-click="like(message.like)">{{message.like_count || '0'}}个赞</button>
                         <button type="button"
                                 class="btn btn-default btn-sm"
                                 title="分享"
-                                ng-click="share()"><span class="glyphicon glyphicon-share-alt"></span></button>
+                                ng-click="flipx=true;sharing=true;"><span class="glyphicon glyphicon-share-alt"></span></button>
                     </div>
                 </div>
             </div>
@@ -100,27 +139,57 @@
         </div>
         <div class="back card">
             <!-- 背面内容 -->
-
-            <div class="message-header">
-                <div class="card-action">
+            <div class="message-dynamic-card">
+                <div class="message-header">
+                    <div class="card-action">
                             <span class="front-back"
                                   ng-click="flipx=false"></span>
-                </div>
-                <div class="media user-info" >
-                    <a class="pull-left" href="{{ctx}}/#/photos/{{message.user.id}}/albums"
-                            >
-                        <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{message.user.avatar || 1}}.png">
-                    </a>
-
-                    <div class="media-body">
-                        <a href="{{ctx}}/#/photos/{{message.user.id}}/albums"
+                    </div>
+                    <div class="media user-info" >
+                        <a class="pull-left" href="{{ctx}}/#/photos/{{message.user.id}}/albums"
                                 >
-                            <h4 class="media-heading" user-card>{{message.user.name}}</h4>
+                            <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{message.user.avatar || 1}}.png">
                         </a>
-                        <div>
-                            <span class="footnotes">{{message.photo.create_time | date:'yyyy年MM月dd日'}}</span>
+
+                        <div class="media-body">
+                            <a href="{{ctx}}/#/photos/{{message.user.id}}/albums"
+                                    >
+                                <h4 class="media-heading" user-card>{{message.user.name}}</h4>
+                            </a>
+                            <div>
+                                <span class="footnotes">{{message.create_date | date:'yyyy年MM月dd日'}}</span>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="share-card" ng-class="{sharing: sharing}">
+                <div class="message-header">
+                    <h4>分享此信息</h4>
+                </div>
+
+                <div class="message-body">
+                    <div class="media user-info" >
+                        <a class="pull-left" href="{{ctx}}/#/user/{{owner.id}}">
+                            <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{owner.avatar || 1}}.png">
+                        </a>
+
+                        <div class="media-body">
+                            <textarea ng-model="shareContent" placeholder="发布评论"
+                                      class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-user-action">
+                    <button type="button"
+                            class="btn btn-sm btn-success"
+                            ng-click="share(message)"
+                            >分享</button>
+                    <button type="button"
+                            class="btn btn-sm btn-default"
+                            ng-click="flipx=false;sharing=false;">取消</button>
                 </div>
             </div>
         </div>

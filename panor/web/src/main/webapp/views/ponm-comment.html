@@ -1,6 +1,7 @@
 <div class="media comment"
      ng-class="{'userable': ponmCtxConfig.login}">
-    <a class="pull-left" href="{{ctx}}/#/photos/{{comment.user_id}}/albums">
+    <a class="pull-left" href="{{ctx}}/#/photos/{{comment.user_id}}/albums"
+            user-card owner="ponmCtxConfig" user-id="comment.user_id">
         <img class="media-object img-rounded"
              ng-src="{{staticCtx}}/avatar{{comment.user_avatar || 1}}.png"
              width="60" height="60" alt="{{comment.username}}">

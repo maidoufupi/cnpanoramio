@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.cnpanoramio</groupId>
 		<artifactId>panor</artifactId>
-		<version>1.1.0</version>
+		<version>1.2.0</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -25,7 +25,6 @@
 					<components>
 						<component>
 							<name>hbm2ddl</name>
-							<name>hbm2sql</name>
 							<implementation>annotationconfiguration</implementation>
 						</component>
 					</components>
@@ -41,7 +40,6 @@
 						<phase>process-test-resources</phase>
 						<goals>
 							<goal>hbm2ddl</goal>
-							<goal>hbm2sql</goal>
 						</goals>
 					</execution>
 				</executions>

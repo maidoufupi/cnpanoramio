@@ -1,39 +1,79 @@
 
-<div class="photo-trash-container">
+<div class="photo-trash-container photo-selectable-container">
     <div ng-repeat="travel in travels"
          class="photo-trash">
-        <div class="media user-info">
-            <a class="pull-left">
-                <img class="media-object img-circle"
-                     ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png">
-            </a>
-
-            <div class="media-body">
-                <h4 class="media-heading">{{travel.name}}</h4>
-                <p>{{travel.create_date}}</p>
-            </div>
-        </div>
-
-        <div photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}"
-             class="photo-wall photo-selectable-container">
-            <div ng-repeat="photo in travel.photos"
-                 ng-controller="PhotosPhotoCtrl"
-                 class="photo">
-                <a ng-click="activePhoto(photo)"
-                   href="">
-                    <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
-                         ng-class="{'selectable': selectable&&!photo.actionSelected,
-                            'selected': photo.actionSelected}">
-                </a>
-
+        <div ng-switch="!!travel.recycleId">
+            <div ng-switch-when="true" class="photo clearfix">
                 <div class="action-select"
                      ng-class="{'action': !selectable, 'ponm-show': selectable}"
-                     ng-click="selectPhoto($event, photo, spot.photos)">
+                     ng-click="selectPhoto($event, travel)">
+                        <span class="icon-photo-select"
+                              ng-class="{'icon-photo-selected': travel.rectSelected}"></span>
+                </div>
+                <div class="media user-info">
+                    <a class="pull-left">
+                        <img class="media-object img-circle"
+                             ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png">
+                    </a>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">{{travel.name}}</h4>
+                        <p>{{travel.create_date}}</p>
+                    </div>
+                </div>
+
+                <div photo-fluid-container="{'size': 'mini', 'itemSelector': '.travel-photo', itemMargin: 1}"
+                     class="photo-wall">
+                    <div ng-repeat="photo in travel.photos"
+                         ng-controller="PhotosPhotoCtrl"
+                         class="travel-photo pull-left">
+                        <a ng-click="activePhoto(photo)"
+                           href="">
+                            <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                                 ng-class="{'selectable': selectable&&!photo.actionSelected,
+                            'selected': photo.actionSelected}">
+                        </a>
+                        <div ng-if="photo.is360">
+                            <div class="icon-photo-p360"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-default class="clearfix">
+                <div class="media user-info">
+                    <a class="pull-left">
+                        <img class="media-object img-circle"
+                             ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png">
+                    </a>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">{{travel.name}}</h4>
+                        <p>{{travel.create_date}}</p>
+                    </div>
+                </div>
+
+                <div photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}"
+                     class="photo-wall">
+                    <div ng-repeat="photo in travel.photos"
+                         ng-controller="PhotosPhotoCtrl"
+                         class="photo">
+                        <a ng-click="activePhoto(photo)"
+                           href="">
+                            <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                                 ng-class="{'selectable': selectable&&!photo.actionSelected,
+                            'selected': photo.actionSelected}">
+                        </a>
+
+                        <div class="action-select"
+                             ng-class="{'action': !selectable, 'ponm-show': selectable}"
+                             ng-click="selectPhoto($event, photo, spot.photos)">
                         <span class="icon-photo-select"
                               ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
-                </div>
-                <div ng-if="photo.is360">
-                    <div class="icon-photo-p360"></div>
+                        </div>
+                        <div ng-if="photo.is360">
+                            <div class="icon-photo-p360"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
