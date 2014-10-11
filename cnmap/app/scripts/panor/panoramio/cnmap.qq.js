@@ -21,7 +21,7 @@
 
     $window.cnmap.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
 
-        var infoWindow = new qq.maps.InfoWindow();;
+        var infoWindow ;
         var labels = {};
         var thumbPhotoIds = [];
 
@@ -45,9 +45,10 @@
         this.setMap = function (map/*:Map*/) { //	None	Renders the layer on the specified map. If map is set to null, the layer will be removed.
             if (map) {
                 this.opts.map = map;
-                this.bindTo("zoom", map);
-                this.bindTo("center", map);
-
+//                this.bindTo("zoom", map);
+//                this.bindTo("center", map);
+                // 当map出现时说明地图加载过，才创建地图的各种对象
+                infoWindow = new qq.maps.InfoWindow();
                 infoWindow.setMap(map);
 
                 var listener = qq.maps.event.addListener(
@@ -255,7 +256,7 @@
         };
     };
 
-    $window.cnmap.Panoramio.prototype = new qq.maps.MVCObject();
+//    $window.cnmap.Panoramio.prototype = new qq.maps.MVCObject();
     $window.cnmap.PanoramioLayer.prototype = new $window.cnmap.Panoramio();
 
 //    $.cnmap.qq.PanoramioLayer.prototype.zoom_changed = function () {

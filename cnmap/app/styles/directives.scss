@@ -67,32 +67,20 @@
   }
 }
 
+/** baidu share */
+.bd-share {
+  z-index: 1029;
+  @include transition-linear(all);
+  .bds_more {
+    height: 26px;
+  }
+}
+.bd-share.active {
+}
 
-
-/** photo fluid directive ***********************************************************/
-//.photo-fluid-container {
-//  width: 100%;
-//  a {
-////    position: relative;
-//  }
-//  .fluid-brick {
-//    position: relative;
-//    height: 130px;
-//    float: left;
-//    border: 2px solid #ffffff;
-//    padding: 0;
-//    background-color: #f1f1f1;
-//    box-shadow: 0 2px 3px #dfdfdf;
-//    @include transition-ease-out(all);
-//
-//    img {
-//      height: 100%;
-//      //      max-height: 100%;
-//      max-width: 100%;
-//    }
-//
-//  }
-//
-//
-//}
+.editable-empty, .editable-empty:hover, .editable-empty:focus, a.editable-empty, a.editable-empty:hover, a.editable-empty:focus {
+  font-style: italic;
+  color: initial;
+  text-decoration: none;
+}
 

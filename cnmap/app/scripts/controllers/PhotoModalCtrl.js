@@ -481,10 +481,12 @@ angular.module('ponmApp.controllers')
             };
 
             $scope.$watch('$$childTail.myMap', function (map) {
-                $scope.map = map;
-                mapService.init(map);
-                addMapClickEvent($scope.map);
-                updatePhotoIdListener();
+                if(map) {
+                    $scope.map = map;
+                    mapService.init(map);
+                    addMapClickEvent($scope.map);
+                    updatePhotoIdListener();
+                }
             });
 
             function updatePhotoIdListener() {

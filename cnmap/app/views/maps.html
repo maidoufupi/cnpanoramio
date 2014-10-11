@@ -35,7 +35,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="#/maps/dynamic">你的动态</a></li>
                             <li ng-class="{'active': stateStatus.travels}">
-                                <a href="#/maps/travels">旅行</a></li>
+                                <a href="#/maps/travels">热门旅行</a></li>
                         </ul>
                     </li>
                     <li ng-controller="MapsSearchCtrl">
@@ -98,7 +98,7 @@
 
     <div class="maps-content"
          ng-class="contentLayouts[contentLayouts.index]">
-        <div class="left"
+        <div class="maps-left"
              drop="true"
              ng-model='markers'
              jqyoui-droppable="{multiple:true, onOver:'onPhotoOver', onDrop:'onPhotoDrop'}">
@@ -113,7 +113,7 @@
                 </div>-->
             </div>
         </div>
-        <div ui-view class="right maps-view-page" >
+        <div ui-view class="maps-right maps-view-page" >
             <!--<div class="page-rotate-fall"></div>-->
             <!-- class="waypoint-scrollable" -->
         </div>

@@ -26,7 +26,7 @@
           _ref1 = spot.photos;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
             photo = _ref1[_j];
-            this.createLabel(photo);
+            this.createMarker(photo);
           }
           point = [];
           _ref2 = spot.photos;
@@ -36,7 +36,7 @@
           }
           spot.polyline = new BMap.Polyline(point, {
             map: this.map,
-            strokeStyle: 'dashed'
+            strokeWeight: 2
           });
           _results.push(this.map.addOverlay(spot.polyline));
         }
@@ -48,22 +48,31 @@
       return new BMap.Point(photo.point.lng, photo.point.lat);
     };
 
-    TravelLayer.prototype.createLabel = function(photo) {
-      var label, that;
+    TravelLayer.prototype.createMarker = function(photo) {
+      var marker, that;
       that = this;
-      label = new BMap.Label;
-      label.setContent(this.getLabelContent(photo.oss_key));
-      label.setPosition(this.createPoint(photo));
-      label.setStyle({
-        border: 0,
-        padding: 0
+      marker = new BMap.Marker(this.createPoint(photo), {
+        icon: new BMap.Icon(this.getMarkerImage(photo), {
+          width: 34,
+          height: 34
+        }),
+        title: photo.title || ''
       });
-      label.photoId = photo.id;
-      this.map.addOverlay(label);
+      marker.photo = photo;
+      this.map.addOverlay(marker);
       if (this.opts.clickable) {
-        return label.addEventListener('click', function() {
-          return jQuery(that).trigger("data_clicked", [this.photoId]);
+        marker.addEventListener('click', function(e) {
+          return jQuery(that).trigger("data_clicked", [this.photo.id]);
         });
+      }
+      photo.marker = marker;
+      return marker;
+    };
+
+    TravelLayer.prototype.removeMarker = function(photo) {
+      if (photo.marker) {
+        this.map.removeOverlay(photo.marker);
+        return delete photo.marker;
       }
     };
 
@@ -75,6 +84,63 @@
           return spot.polyline.hide();
         }
       }
+    };
+
+    TravelLayer.prototype.setSpotEditable = function(spot, editable) {
+      var editMarker, photo, that, _i, _len, _ref, _results;
+      editable = !!editable;
+      that = this;
+      editMarker = function(marker) {
+        if (marker) {
+          if (editable) {
+            marker.enableDragging();
+          } else {
+            marker.disableDragging();
+          }
+          if (that.opts.editable && editable) {
+            return marker.addEventListener('dragend', function(e) {
+              if (!this.photo.oPoint) {
+                this.photo.oPoint = $.extend({}, this.photo.point);
+              }
+              this.photo.point.lat = e.point.lat;
+              this.photo.point.lng = e.point.lng;
+              that.updateSpotLine(spot);
+              return $(that).trigger("spot.edited", [spot.id]);
+            });
+          } else {
+            return marker.removeEventListener('dragend');
+          }
+        }
+      };
+      if (this.opts.editable) {
+        _ref = spot.photos;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          photo = _ref[_i];
+          _results.push(editMarker(photo.marker));
+        }
+        return _results;
+      }
+    };
+
+    TravelLayer.prototype.cancelSpotEdit = function(spot) {
+      var cancelMarker, photo, that, _i, _len, _ref;
+      that = this;
+      cancelMarker = function(photo) {
+        if (photo.oPoint) {
+          photo.point = photo.oPoint;
+          delete photo.oPoint;
+        }
+        if (photo.marker) {
+          return photo.marker.setPosition(that.createPoint(photo));
+        }
+      };
+      _ref = spot.photos;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        cancelMarker(photo);
+      }
+      return this.updateSpotLine(spot);
     };
 
     TravelLayer.prototype.updateSpotLine = function(spot) {

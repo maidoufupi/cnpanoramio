@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -45,6 +47,7 @@ public class UserSettings {
 	// 地图供应商
 //	@XmlAttribute(name = "map_vendor")
 	@Column(name = "map_vendor")
+	@Enumerated(EnumType.STRING)
 	private MapVendor mapVendor;
 			
 	// 昵称

@@ -1,3 +1,33 @@
+.modal-open .modal {
+  background-color: #ececec;
+}
+
+.photo-modal-fullscreen {
+  overflow: hidden;
+  .modal-dialog {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: auto;
+  }
+}
+
+.photo-modal-fullscreen.modal.fade.in {
+  .modal-dialog {
+    @include translate3d(0, 0, 0);
+    @include scale(1);
+  }
+}
+.photo-modal-fullscreen.modal.fade {
+  .modal-dialog {
+    @include translate3d(0, -25%, 0);
+    @include scale(0.8);
+    -moz-transition: -moz-transform 0.3s ease-out;
+    -o-transition: -o-transform 0.3s ease-out;
+    @include transition(transform 0.3s ease-out);
+  }
+}
+
 .ponm-modal {
   overflow-y: hidden;
 

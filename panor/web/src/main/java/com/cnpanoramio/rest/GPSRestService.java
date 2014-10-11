@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cnpanoramio.service.lbs.BDConverter;
 import com.cnpanoramio.service.lbs.GpsConverter;
 import com.cnpanoramio.service.lbs.LatLng;
 
@@ -39,11 +40,17 @@ public class GPSRestService extends AbstractRestService {
 		try {
 			Double latD = Double.parseDouble(lat);
 			Double lngD = Double.parseDouble(lng);
+			LatLng p = new LatLng();
 			if(source.equalsIgnoreCase("gps") && dest.equalsIgnoreCase("mars")) {
-				LatLng p = gpsc.getEncryPoint(lngD, latD);
+				p = gpsc.getEncryPoint(lngD, latD);
 				return new com.cnpanoramio.domain.Point(p.lat, p.lng);
+			}else if(source.equalsIgnoreCase("gps") && dest.equalsIgnoreCase("baidu")) {
+				p = gpsc.getEncryPoint(lngD, latD);
+				p = BDConverter.bd_encrypt(p.lat, p.lng);
+			}else if(source.equalsIgnoreCase("mars") && dest.equalsIgnoreCase("baidu")) {
+				p = BDConverter.bd_encrypt(latD, lngD);
 			}
-			return new com.cnpanoramio.domain.Point();
+			return new com.cnpanoramio.domain.Point(p.lat, p.lng);
 		} catch (NumberFormatException ex) {
 			throw ex;
 		}

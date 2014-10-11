@@ -83,6 +83,14 @@ public interface TravelService {
 	public TravelSpot changeSpot(Long id, TravelSpot spot);
 	
 	/**
+	 * 更改旅行景点中的图片位置
+	 * 
+	 * @param id
+	 * @param spot
+	 */
+	public void changeSpotPhotoPostion(Long id, TravelSpot spot);
+	
+	/**
 	 * 获取TravelSpot（景点）的属性
 	 * 
 	 * @param id

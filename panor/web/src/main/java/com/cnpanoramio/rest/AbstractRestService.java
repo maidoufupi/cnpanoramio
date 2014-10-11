@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.cnpanoramio.ParameterException;
 import com.cnpanoramio.json.ExceptionResponse;
-import com.cnpanoramio.json.ExceptionResponse;
 
 public abstract class AbstractRestService {
 

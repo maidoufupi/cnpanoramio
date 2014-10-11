@@ -26,7 +26,7 @@
           _ref1 = spot.photos;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
             photo = _ref1[_j];
-            this.createLabel(photo);
+            this.createMarker(photo);
           }
           point = [];
           _ref2 = spot.photos;
@@ -37,7 +37,7 @@
           _results.push(spot.polyline = new AMap.Polyline({
             map: this.map,
             path: point,
-            strokeStyle: 'dashed'
+            strokeWeight: 2
           }));
         }
         return _results;
@@ -48,23 +48,31 @@
       return new AMap.LngLat(photo.point.lng, photo.point.lat);
     };
 
-    TravelLayer.prototype.createLabel = function(photo) {
-      var label, that;
+    TravelLayer.prototype.createMarker = function(photo) {
+      var marker, that;
       that = this;
-      label = new AMap.Marker({
+      marker = new AMap.Marker({
         map: this.map,
         position: new AMap.LngLat(photo.point.lng, photo.point.lat),
         offset: new AMap.Pixel(-15, -15),
-        content: this.getLabelContent(photo.oss_key)
+        content: this.getLabelContent(photo.oss_key),
+        topWhenClick: true
       });
-      label.photoId = photo.id;
+      marker.photo = photo;
       if (this.opts.clickable) {
-        AMap.event.addListener(label, 'click', function() {
-          return jQuery(that).trigger("data_clicked", [this.photoId]);
+        AMap.event.addListener(marker, 'click', function() {
+          return jQuery(that).trigger("data_clicked", [this.photo.id]);
         });
       }
-      label.photoId = photo.id;
-      return label.setMap(this.map);
+      photo.marker = marker;
+      return marker;
+    };
+
+    TravelLayer.prototype.removeMarker = function(photo) {
+      if (photo.marker) {
+        photo.marker.setMap(null);
+        return delete photo.marker;
+      }
     };
 
     TravelLayer.prototype.toggleSpotLine = function(spot, visible) {
@@ -75,6 +83,59 @@
           return spot.polyline.hide();
         }
       }
+    };
+
+    TravelLayer.prototype.setSpotEditable = function(spot, editable) {
+      var editMarker, photo, that, _i, _len, _ref, _results;
+      editable = !!editable;
+      that = this;
+      editMarker = function(marker) {
+        if (marker) {
+          marker.setDraggable(editable);
+          if (that.opts.editable && editable) {
+            return marker.dragListener = AMap.event.addListener(marker, 'dragend', function(e) {
+              if (!this.photo.oPoint) {
+                this.photo.oPoint = $.extend({}, this.photo.point);
+              }
+              this.photo.point.lat = e.lnglat.getLat();
+              this.photo.point.lng = e.lnglat.getLng();
+              that.updateSpotLine(spot);
+              return $(that).trigger("spot.edited", [spot.id]);
+            });
+          } else if (marker.dragListener) {
+            AMap.event.removeListener(marker.dragListener);
+            return marker.dragListener = null;
+          }
+        }
+      };
+      if (this.opts.editable) {
+        _ref = spot.photos;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          photo = _ref[_i];
+          _results.push(editMarker(photo.marker));
+        }
+        return _results;
+      }
+    };
+
+    TravelLayer.prototype.cancelSpotEdit = function(spot) {
+      var cancelMarker, photo, _i, _len, _ref;
+      cancelMarker = function(photo) {
+        if (photo.oPoint) {
+          photo.point = photo.oPoint;
+          delete photo.oPoint;
+        }
+        if (photo.marker) {
+          return photo.marker.setPosition(new AMap.LngLat(photo.point.lng, photo.point.lat));
+        }
+      };
+      _ref = spot.photos;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        cancelMarker(photo);
+      }
+      return this.updateSpotLine(spot);
     };
 
     TravelLayer.prototype.updateSpotLine = function(spot) {
@@ -91,7 +152,7 @@
         return spot.polyline = new AMap.Polyline({
           map: this.map,
           path: point,
-          strokeStyle: 'dashed'
+          strokeWeight: 2
         });
       }
     };
@@ -118,28 +179,6 @@
         fillOpacity: 0.2
       });
     };
-
-    TravelLayer.prototype.createLine = function(spots) {
-      var i, path, spot;
-      path = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (i = _i = 0, _len = spots.length; _i < _len; i = ++_i) {
-          spot = spots[i];
-          _results.push((function(spot, i) {
-            return new AMap.LngLat(spot.center_lng, spot.center_lat);
-          })(spot, i));
-        }
-        return _results;
-      })();
-      return new AMap.Polyline({
-        map: this.map,
-        path: path,
-        strokeStyle: 'dashed'
-      });
-    };
-
-    TravelLayer.prototype.createMarker = function() {};
 
     return TravelLayer;
 

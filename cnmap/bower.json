@@ -20,9 +20,9 @@
     "jquery.rest": "1.0.1",
     "jquery.cookie": "1.4.0",
     "imgLiquid": "0.9.944",
-    "angular-ui-mapgaode": "1.0.1",
-    "angular-ui-map-qq": "1.0.0",
-    "angular-ui-map-baidu": "1.0.0",
+    "angular-ui-mapgaode": "1.1.0",
+    "angular-ui-map-qq": "1.1.2",
+    "angular-ui-map-baidu": "1.1.4",
     "bootstrap-tagsinput": "0.3.9",
     "jquery-backstretch": "2.0.4",
     "jquery-waypoints": "2.0.5",
@@ -34,7 +34,10 @@
     "angular-perfect-scrollbar": "~0.1.4",
     "matchmedia-ng": "~1.0.3",
     "angular-material": "~0.0.2",
-    "angular-local-storage": "~0.0.7"
+    "angular-local-storage": "~0.0.7",
+    "angular-scroll": "~0.6.2",
+    "angular-ui-map-google": "~0.6.1",
+    "angular-bootstrap-datetimepicker": "~0.2.4"
   },
   "devDependencies": {
     "angular-mocks": "1.2.20",

@@ -55,6 +55,10 @@ public class TravelResponse extends ExceptionResponse {
 		@JsonProperty("photo_size")
 		private Integer photoSize;
 		
+		// 所属消息
+		@JsonProperty("message_id")
+		private Long messageId;
+		
 		public Long getId() {
 			return id;
 		}
@@ -151,6 +155,12 @@ public class TravelResponse extends ExceptionResponse {
 		}
 		public void setPhotoSize(Integer photoSize) {
 			this.photoSize = photoSize;
+		}
+		public Long getMessageId() {
+			return messageId;
+		}
+		public void setMessageId(Long messageId) {
+			this.messageId = messageId;
 		}
 		
 	}

@@ -1,6 +1,5 @@
 package com.cnpanoramio.service.impl;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,10 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cnpanoramio.dao.MessageDao;
 import com.cnpanoramio.dao.MessageQueueDao;
 import com.cnpanoramio.dao.UserSettingsDao;
-import com.cnpanoramio.domain.Like;
 import com.cnpanoramio.domain.Message;
-import com.cnpanoramio.domain.Photo;
-import com.cnpanoramio.domain.Tag;
+import com.cnpanoramio.domain.Message.MessageType;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.service.LikeManager;
 import com.cnpanoramio.service.MessageManager;
@@ -27,8 +24,6 @@ import com.cnpanoramio.service.MessagePhotoManager;
 import com.cnpanoramio.service.MessageQueueManager;
 import com.cnpanoramio.service.MessageTravelManager;
 import com.cnpanoramio.service.UserSettingsManager;
-import com.cnpanoramio.utils.PhotoUtil;
-import com.cnpanoramio.utils.UserUtil;
 
 @Service
 @Transactional
@@ -68,6 +63,11 @@ public class MessageManagerImpl extends GenericManagerImpl<Message, Long>
 	public void setMessageDao(MessageDao messageDao) {
 		this.messageDao = messageDao;
 		this.dao = messageDao;
+	}
+	
+	@Override
+	public Message getMessage(MessageType type, Long id) {
+		return messageDao.getMessage(type, id);
 	}
 
 	@Override
@@ -171,5 +171,7 @@ public class MessageManagerImpl extends GenericManagerImpl<Message, Long>
 		message = getMessageDao().persist(message);
 		return message;
 	}
+
+	
 
 }

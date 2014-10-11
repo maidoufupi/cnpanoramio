@@ -29,7 +29,7 @@
         $.getScript(url).done(function () {
             callback.apply(null, [remote_ip_info.city]);
         });
-    }
+    };
 
     window.cnmap.GPS = window.cnmap.GPS || {};
 
@@ -55,6 +55,12 @@
                         dms = dms[1].split("\"");
                         var second = Number(dms[0]);
                         output = degree + ( minute + second / 60 ) / 60;
+                    }else {
+                        res = input.search(/[0-9]+,[0-9]+,[0-9]+/);
+                        if (res !== -1) {
+                            var dms = input.split(",");
+                            output = Number(dms[0]) + ( Number(dms[1]) + Number(dms[2]) / 60 ) / 60;
+                        }
                     }
                 }
             } else if ((typeof input == 'number') && input.constructor == Number) {

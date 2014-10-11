@@ -3,7 +3,6 @@ class ITravelLayer
   constructor: (@opts) ->
     {@ctx, @staticCtx, @map, @travel} = @opts if @opts
     @mapEventListener = window.cnmap.MapEventListener.factory()
-#    @marker = @createMarker()
 
   initMap: () ->
 
@@ -12,8 +11,8 @@ class ITravelLayer
     if @travel
       ## 计算出游览景点开始时间的最小值, 为后面计算第几天
       for spot in @travel.spots
-        # 为图片排序，按图片拍摄时间
-        spot.photos.sort((a,b) -> return a.create_time-b.create_time)
+        # 图片排序，按图片拍摄时间
+        spot.photos.sort((a,b) -> return a.date_time-b.date_time)
         if spot.time_start
           spot.spotDate = new Date spot.time_start
         if spot.spotDate
@@ -46,11 +45,15 @@ class ITravelLayer
     for spot in @travel.spots
       spot.photos.sort((a,b) -> return a.date_time-b.date_time)
 
-  createLabel: (photo) ->
+  ## 在地图上创建marker
+  createMarker: (photo) ->
+    ## TO IMPL
+  ## 从地图上移除marker
+  removeMarker: (photo) ->
+    ## TO IMPL
 
   getLabelContent: (photoOssKey) ->
     "<img src='#{@staticCtx}/#{photoOssKey}@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
-
 
   activePhoto: (photo) ->
 
@@ -62,10 +65,9 @@ class ITravelLayer
 #      @mapEventListener.setPosition(@marker, photo.point.lat, photo.point.lng)
       @mapEventListener.setCenter(@map, photo.point.lat, photo.point.lng)
 
-  createMarker: () ->
-
   addSpot: (spot) ->
     @travel.spots.push spot
+
   addPhoto: (spot, photo) ->
     spot.photos.push photo
     @calcSpotTime()
@@ -73,10 +75,14 @@ class ITravelLayer
 
   removePhoto: (photo, spot) ->
     if spot
+      for p in spot.photos when p.id == photo.id
+        @removeMarker p
       spot.photos = (p for p in spot.photos when p.id != photo.id )
       @updateSpotLine(spot)
     else
       for spot in @travel.spots
+        for p in spot.photos when p.id is photo.id
+          @removeMarker p
         spot.photos = (p for p in spot.photos when p.id != photo.id )
         @updateSpotLine(spot)
 
@@ -115,6 +121,22 @@ class ITravelLayer
 
   clearMap: () ->
     @mapEventListener.clearMap @map
+
+  ## 旅行是否可编辑
+  setEditable: (editable) ->
+    if not editable and @travel
+      for spot in @travel.spots
+        @setSpotEditable spot, false
+    @opts.editable = editable
+    if editable and @travel
+      for spot in @travel.spots
+        @setSpotEditable spot, true
+
+  getEditable: () ->
+    @opts.editable
+
+  getMarkerImage: (photo) ->
+    "#{@staticCtx}/#{photo.oss_key}@!panor-lg"
 
 window.cnmap = window.cnmap ? {}
 

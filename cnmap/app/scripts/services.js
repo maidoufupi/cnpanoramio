@@ -370,7 +370,14 @@ angular.module('ponmApp.services', [
                         'Accept': 'application/json'
                     }
                 },
-                deleteSpot: {
+                changeSpotPhotoPosition: {
+                    method: 'POST',
+                    params: {
+                        'type': 'spot',
+                        'action': 'position'
+                    }
+                }
+                ,deleteSpot: {
                     method: 'DELETE',
                     params: {
                         'type': 'spot'
@@ -501,6 +508,9 @@ angular.module('ponmApp.services', [
                 return mapVendor;
             }
             ,dev: $window.dev
+            ,settings: {
+                autoUoload: true
+            }
         }
     }])
 ;

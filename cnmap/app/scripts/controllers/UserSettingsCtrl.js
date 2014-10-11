@@ -69,6 +69,11 @@ angular.module('ponmApp.settings', [
                     templateUrl: 'views/settings.map.html',
                     controller: "SettingsMapCtrl"
                 })
+                .state("settings.photo", {
+                    url: "/photo",
+                    templateUrl: 'views/settings.photo.html',
+                    controller: "SettingsPhotoCtrl"
+                })
             ;
         }])
     .controller('UserSettingsCtrl',
@@ -204,5 +209,27 @@ angular.module('ponmApp.settings', [
                 });
         };
     }])
+    .controller('SettingsPhotoCtrl',
+    ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', '$state', 'UserPhoto', 'UserService',
+        'ponmCtxConfig', 'AuthService', 'alertService',
+        function ($window, $log, $location, $rootScope, $scope, $modal, $state, UserPhoto, UserService,
+                  ponmCtxConfig, AuthService, alertService) {
+
+            $scope.capacity = {
+                type: "warning",
+                value: 90,
+                stacked: []
+            };
+
+            $scope.capacity.stacked.push({
+                type: "success",
+                value: "70"
+            });
+            $scope.capacity.stacked.push({
+                type: "warning",
+                value: "20"
+            });
+
+        }])
 
 ;

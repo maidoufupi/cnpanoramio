@@ -18,13 +18,13 @@
                     </div>
                 </div>
                 <div class="media user-info" >
-                    <a class="pull-left" href="#/photos/{{message.user.id}}/albums"
+                    <a class="pull-left" href="/#/user/{{message.user.id}}"
                        user-card owner="owner" user-id="message.user.id">
                         <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{message.user.avatar || 1}}.png">
                     </a>
 
                     <div class="media-body">
-                        <a href="#/photos/{{message.user.id}}/albums"
+                        <a href="/#/user/{{message.user.id}}"
                            user-card owner="owner" user-id="message.user.id">
                             <h4 class="media-heading">{{message.user.name}}</h4>
                         </a>

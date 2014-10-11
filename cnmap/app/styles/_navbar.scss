@@ -2,6 +2,12 @@
 // Navbars
 // --------------------------------------------------
 
+.navbar.navbar-default {
+  .navbar-collapse {
+    background-color: #f8f8f8;
+  }
+}
+
 .navbar-second {
   position: fixed;
   width: 100%;
@@ -13,11 +19,11 @@
   }
 
   .navbar {
-    height: 51px;
+//    height: 51px;
     border: 0;
     margin-bottom: 0;
     @include border-radius(0);
-    @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
+    @include box-shadow(0 0 5px rgba(0, 0, 0, 0.57));
     .nav {
       > li {
         padding: 0 15px;
@@ -39,9 +45,9 @@
 
 .navbar-forth {
   position: fixed !important;
-  top: 153px !important;
+  top: 152px !important;
   z-index: 1027;
-  @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
+//  @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
 }
 
 .navbar-edit {

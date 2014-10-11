@@ -1,17 +1,7 @@
 /****************************************************************************************/
 /** photo modal page ********************************************************************/
-.photo-modal-fullscreen {
-  overflow: hidden;
-  .modal-dialog {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    width: auto;
-  }
-}
 
 .photo-modal-container {
-  background-color: $photo-container-background-color;
   bottom: 0;
   left: 0;
   overflow: hidden;
@@ -22,21 +12,17 @@
 
   .photo-container-header {
     height: 44px;
-    left: 0;
-    position: absolute;
-    right: 320px;
-    top: 0;
     margin: 0;
     border: 0;
+    z-index: 2;
     .container-fluid {
       background-color: $photo-container-background-color;
-      .navbar-right {
-        > li {
-          height: 50px;
-          width: 50px;
-        }
-      }
       .cancel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 50px;
+        width: 50px;
         cursor: pointer;
         opacity: .8;
       }
@@ -48,11 +34,9 @@
   }
 
   .photo-container-body {
-    position: absolute;
-    top: 50px;
-    bottom: 50px;
-    left: 0;
-    right: 320px;
+    background-color: $photo-container-background-color;
+    min-height: 120px;
+    z-index: 1;
     .buttons {
       position: absolute;
       bottom: 0;
@@ -60,10 +44,6 @@
   }
 
   .photo-container-booter {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 320px;
     margin: 0;
     border: 0;
     .collapse.navbar-collapse {
@@ -76,7 +56,7 @@
     .container-fluid {
       background-color: $photo-container-background-color;
       .collapse.navbar-collapse {
-        text-align: center;
+//        text-align: center;
         .nav.navbar-nav.center-block {
           display: inline-block;
           float: initial;
@@ -94,14 +74,9 @@
   }
 
   .photo-info {
-    -webkit-transition: 218ms;
-    transition: 218ms;
-    overflow-y: auto;
-    bottom: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 320px;
+    @include transition(218ms);
+    //    overflow-y: scroll;
+
     background-color: $photo-info-frontground-color;
 
     .info-container {
@@ -117,6 +92,7 @@
         right: 0;
         top: 0;
         overflow-y: auto;
+        overflow-x: hidden;
         padding: 15px;
         background-color: $photo-info-background-color;
 
@@ -209,12 +185,6 @@
   }
 }
 
-//.nav {
-//  .glyphicon {
-//    width: 40px;
-//  }
-//}
-
 .photo-travel-album {
   .travel-album-background {
     position: fixed;
@@ -292,6 +262,7 @@
     height: 0;
     opacity: .75;
     background-color: #000;
+    z-index: 2;
   }
   .recommend-album-background.ng-animate.show-add, .recommend-album-background.ng-animate.show-remove {
     height: 100%;
@@ -311,6 +282,7 @@
     margin: 50px auto;
     display: none;
     @include transition-ease-out(height);
+    z-index: 2;
   }
 
   .recommend-album.ng-animate.show-add, .recommend-album.ng-animate.show-remove {
@@ -320,6 +292,73 @@
   .recommend-album.show {
     height: 400px;
     display: block;
+  }
+}
+@media (min-width: $screen-xs-min) {
+  .photo-modal-container {
+    .photo-container-header {
+      left: 0;
+      position: absolute;
+      right: 320px;
+      top: 0;
+    }
+    .navbar {
+      .container-fluid {
+        .collapse.navbar-collapse {
+          text-align: center;
+          .nav {
+            margin-left: auto;
+            margin-right: auto;
+            display: inline-block;
+            float: initial;
+          }
+        }
+      }
+    }
+    .photo-container-body {
+      position: absolute;
+      top: 50px;
+      bottom: 50px;
+      left: 0;
+      right: 320px;
+    }
+    .photo-container-booter {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 320px;
+    }
+    .photo-info {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 320px;
+    }
+  }
+}
+@media (max-width: $screen-xs-min) {
+  .photo-modal-container {
+    overflow-y: auto;
+    .photo-main {
+      width: 100%;
+      .photo-container-header {
+        .navbar-toggle {
+          float: left;
+        }
+      }
+      .ponm-photo-container {
+        .loading {
+          margin: auto;
+        }
+      }
+
+      .photo-container-booter {
+      }
+    }
+    .photo-info {
+      width: 100%;
+    }
   }
 }
 /** photo modal page ********************************************************************/

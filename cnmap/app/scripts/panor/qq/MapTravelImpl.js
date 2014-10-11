@@ -27,7 +27,7 @@
           _ref1 = spot.photos;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
             photo = _ref1[_j];
-            this.labels.push(this.createLabel(photo));
+            this.labels.push(this.createMarker(photo));
           }
           point = [];
           _ref2 = spot.photos;
@@ -38,8 +38,7 @@
           spot.polyline = new qq.maps.Polyline({
             map: this.map,
             path: point,
-            strokeDashStyle: 'dash',
-            strokeWeight: 5
+            strokeWeight: 2
           });
           _results.push(this.labels.push(spot.polyline));
         }
@@ -51,33 +50,89 @@
       return new qq.maps.LatLng(photo.point.lat, photo.point.lng);
     };
 
-    TravelLayer.prototype.createLabel = function(photo) {
-      var label, that;
+    TravelLayer.prototype.createMarker = function(photo) {
+      var marker, that;
       that = this;
-      label = new qq.maps.Label({
+      marker = new qq.maps.Marker({
+        icon: new qq.maps.MarkerImage("" + this.staticCtx + "/" + photo.oss_key + "@!panor-lg"),
+        title: photo.title || '',
         map: this.map,
-        position: new qq.maps.LatLng(photo.point.lat, photo.point.lng),
-        content: this.getLabelContent(photo.oss_key),
-        style: {
-          padding: 0,
-          border: 0
-        }
+        position: new qq.maps.LatLng(photo.point.lat, photo.point.lng)
       });
-      label.photoId = photo.id;
+      marker.photo = photo;
       if (this.opts.clickable) {
-        qq.maps.event.addListener(label, 'click', function() {
-          return jQuery(that).trigger("data_clicked", [this.photoId]);
+        qq.maps.event.addListener(marker, 'click', function() {
+          return jQuery(that).trigger("data_clicked", [this.photo.id]);
         });
       }
-      label.photoId = photo.id;
-      label.setMap(this.map);
-      return label;
+      photo.marker = marker;
+      return marker;
+    };
+
+    TravelLayer.prototype.removeMarker = function(photo) {
+      if (photo.marker) {
+        photo.marker.setMap(null);
+        return delete photo.marker;
+      }
     };
 
     TravelLayer.prototype.toggleSpotLine = function(spot, visible) {
       if (spot.polyline) {
         return spot.polyline.setVisible(visible);
       }
+    };
+
+    TravelLayer.prototype.setSpotEditable = function(spot, editable) {
+      var editMarker, photo, that, _i, _len, _ref, _results;
+      editable = !!editable;
+      that = this;
+      editMarker = function(marker) {
+        if (marker) {
+          marker.setDraggable(editable);
+          if (that.opts.editable && editable) {
+            return marker.dragListener = qq.maps.event.addListener(marker, 'dragend', function(e) {
+              if (!this.photo.oPoint) {
+                this.photo.oPoint = $.extend({}, this.photo.point);
+              }
+              this.photo.point.lat = e.latLng.lat;
+              this.photo.point.lng = e.latLng.lng;
+              that.updateSpotLine(spot);
+              return $(that).trigger("spot.edited", [spot.id]);
+            });
+          } else if (marker.dragListener) {
+            qq.maps.event.removeListener(marker.dragListener);
+            return marker.dragListener = null;
+          }
+        }
+      };
+      if (this.opts.editable) {
+        _ref = spot.photos;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          photo = _ref[_i];
+          _results.push(editMarker(photo.marker));
+        }
+        return _results;
+      }
+    };
+
+    TravelLayer.prototype.cancelSpotEdit = function(spot) {
+      var cancelMarker, photo, _i, _len, _ref;
+      cancelMarker = function(photo) {
+        if (photo.oPoint) {
+          photo.point = photo.oPoint;
+          delete photo.oPoint;
+        }
+        if (photo.marker) {
+          return photo.marker.setPosition(new qq.maps.LatLng(photo.point.lat, photo.point.lng));
+        }
+      };
+      _ref = spot.photos;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        cancelMarker(photo);
+      }
+      return this.updateSpotLine(spot);
     };
 
     TravelLayer.prototype.updateSpotLine = function(spot) {
@@ -94,18 +149,20 @@
         spot.polyline = new qq.maps.Polyline({
           map: this.map,
           path: point,
-          strokeDashStyle: 'dash',
-          strokeWeight: 5
+          strokeWeight: 2
         });
         return this.labels.push(spot.polyline);
       }
     };
 
     TravelLayer.prototype.clearMap = function() {
-      $.each(this.labels, function(index, label) {
-        label.setMap(null);
-        return label.setVisible(false);
-      });
+      var overlay, _i, _len, _ref;
+      _ref = this.labels;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        overlay = _ref[_i];
+        overlay.setMap(null);
+        overlay.setVisible(false);
+      }
       return this.labels = [];
     };
 

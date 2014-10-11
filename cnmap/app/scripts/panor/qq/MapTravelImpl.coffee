@@ -2,53 +2,80 @@ class TravelLayer extends window.cnmap.ITravelLayer
 
   initMap: (map) ->
     @map = map if map
-#    @mapEventListener.setMap @marker, @map
-
     @calcSpotTime()
     @labels = []
-
     point = []
     if @travel
       for spot in @travel.spots
-        @labels.push @createLabel photo for photo in spot.photos
+        @labels.push @createMarker photo for photo in spot.photos
         point = []
         point.push @createPoint photo for photo in spot.photos
         spot.polyline = new qq.maps.Polyline {
           map: @map
           path: point
-          strokeDashStyle: 'dash'
-          strokeWeight: 5
+#          strokeDashStyle: 'dash'
+          strokeWeight: 2
         }
         @labels.push spot.polyline
-
 
   createPoint: (photo) ->
     new qq.maps.LatLng(photo.point.lat, photo.point.lng)
 
-  createLabel: (photo) ->
+  createMarker: (photo) ->
     that = this
-    label = new qq.maps.Label({
+    marker = new qq.maps.Marker({
+      icon: new qq.maps.MarkerImage("#{@staticCtx}/#{photo.oss_key}@!panor-lg")
+      title: photo.title||''
       map: @map
-      position: new qq.maps.LatLng(photo.point.lat, photo.point.lng) ##基点位置
-      content: @getLabelContent(photo.oss_key)  ##自定义点标记覆盖物内容
-      style: {
-        padding: 0
-        border: 0
-      }
+      position: new qq.maps.LatLng(photo.point.lat, photo.point.lng)
     })
-    label.photoId = photo.id
+    marker.photo = photo
     if @opts.clickable
-      qq.maps.event.addListener(label, 'click',
+      qq.maps.event.addListener(marker, 'click',
         () ->
-          jQuery(that).trigger("data_clicked", [this.photoId]))
+          jQuery(that).trigger("data_clicked", [this.photo.id]))
+    photo.marker = marker
+    marker
 
-    label.photoId = photo.id
-    label.setMap(@map)
-    return label
+  removeMarker: (photo) ->
+    if photo.marker
+      photo.marker.setMap null
+      delete photo.marker
 
   toggleSpotLine: (spot, visible) ->
     if spot.polyline
       spot.polyline.setVisible visible
+
+  setSpotEditable: (spot, editable) ->
+    editable = !!editable
+    that = this
+    editMarker = (marker) ->
+      if marker
+        marker.setDraggable editable
+        if that.opts.editable and editable
+          marker.dragListener = qq.maps.event.addListener marker, 'dragend',
+            (e) ->
+              if not this.photo.oPoint
+                this.photo.oPoint = $.extend {}, this.photo.point
+              this.photo.point.lat = e.latLng.lat
+              this.photo.point.lng = e.latLng.lng
+              that.updateSpotLine spot
+              $(that).trigger("spot.edited", [spot.id]);
+        else if marker.dragListener
+          qq.maps.event.removeListener marker.dragListener
+          marker.dragListener = null
+    if @opts.editable
+      editMarker photo.marker for photo in spot.photos
+
+  cancelSpotEdit: (spot) ->
+    cancelMarker = (photo) ->
+      if photo.oPoint
+        photo.point = photo.oPoint
+        delete photo.oPoint
+      if photo.marker
+        photo.marker.setPosition new qq.maps.LatLng(photo.point.lat, photo.point.lng)
+    cancelMarker photo for photo in spot.photos
+    @updateSpotLine spot
 
   updateSpotLine: (spot) ->
     point = []
@@ -59,48 +86,15 @@ class TravelLayer extends window.cnmap.ITravelLayer
       spot.polyline = new qq.maps.Polyline {
           map: @map
           path: point
-          strokeDashStyle: 'dash'
-          strokeWeight: 5
+#          strokeDashStyle: 'dash'
+          strokeWeight: 2
         }
       @labels.push spot.polyline
 
-#  createSpot: (spot) ->
-#    distance = 0
-#    for photo in spot.photos
-#      cdistance = window.cnmap.GPS.distanceInMeter(spot.center_lat, spot.center_lng, photo.point.lat, photo.point.lng)
-#      if cdistance > distance
-#        distance = cdistance
-#    new AMap.Circle {
-#      map: @map
-#      center: new AMap.LngLat(spot.center_lng, spot.center_lat)
-#      radius: distance
-#      strokeStyle: 'dashed'
-#      strokeColor: '#0066FF'
-#      strokeOpacity: 0.2
-#      fillColor: '#0066FF'
-#      fillOpacity: 0.2
-#    }
-
-#  createLine: (spots) ->
-#    path = for spot, i in spots
-#      do (spot, i) ->
-#        new AMap.LngLat(spot.center_lng, spot.center_lat)
-#    new AMap.Polyline {
-#        map: @map
-#        path: path
-#        strokeStyle: 'dashed'
-#      }
-
-#  createMarker: () ->
-#    new AMap.Marker {
-#      map: @map
-#      icon: "images/marker.png"
-#      animation: "AMAP_ANIMATION_BOUNCE"
-#    }
-
   clearMap: () ->
-    $.each @labels, (index, label) ->
-      label.setMap null
-      label.setVisible false
+    for overlay in @labels
+      overlay.setMap null
+      overlay.setVisible false
     @labels = [];
+
 window.cnmap.TravelLayer = TravelLayer

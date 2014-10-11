@@ -13,12 +13,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cnpanoramio.ParameterException;
+import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.TravelResponse;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
 import com.cnpanoramio.service.LikeManager;
@@ -168,6 +170,19 @@ public class TravelRestService extends AbstractRestService {
 			photoIds.add(Long.parseLong(id));
 		}
 		response.setTravel(travelService.addSpotPhotos(Long.parseLong(spotId), photoIds));;
+		return response;
+	}
+	
+	@RequestMapping(value = "/{travelId}/spot/{spotId}/position", method = RequestMethod.POST)
+	@ResponseBody
+	public TravelResponse changeSpotPhotoPosition(@PathVariable String travelId, 
+			@PathVariable String spotId, 
+			@RequestBody final TravelSpot spot) {
+		
+		TravelResponse response = responseFactory();
+		
+		travelService.changeSpotPhotoPostion(Long.parseLong(spotId), spot);
+
 		return response;
 	}
 	

@@ -94,8 +94,7 @@ angular.module('ponmApp.directives')
                         }
                     });
                     element.on("mouseout", function(e) {
-//                        $log.debug("mouseout");
-//                        $log.debug("hide");
+
                         if(userCardElm&&!userCardEnter) {
                             if(!removeCardHander) {
                                 removeCardHander = $timeout(function() {
@@ -126,9 +125,15 @@ angular.module('ponmApp.directives')
                             }
                         });
                     }
+
+                    scope.$on("$destroy", function(e) {
+                        if(userCardElm) {
+                            userCardElm.remove();
+                            userCardElm = null;
+                        }
+                    });
                 }
             };
-
 
         }])
 ;

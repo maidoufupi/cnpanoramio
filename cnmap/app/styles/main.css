@@ -382,50 +382,56 @@
       -o-transition: all linear 0.3s;
       transition: all linear 0.3s;
       margin: 10px 0; }
-    .maps-travel .travel-header .media.user-info .media-heading {
-      font-family: "Microsoft YaHei";
-      -webkit-transition: all linear 0.3s;
-      -moz-transition: all linear 0.3s;
-      -ms-transition: all linear 0.3s;
-      -o-transition: all linear 0.3s;
-      transition: all linear 0.3s; }
-    .maps-travel .travel-header .media.user-info .pull-left img.media-object {
-      -webkit-transition: all linear 0.3s;
-      -moz-transition: all linear 0.3s;
-      -ms-transition: all linear 0.3s;
-      -o-transition: all linear 0.3s;
-      transition: all linear 0.3s; }
-    .maps-travel .travel-header .media.user-info .media-body {
-      -webkit-transition: all linear 0.3s;
-      -moz-transition: all linear 0.3s;
-      -ms-transition: all linear 0.3s;
-      -o-transition: all linear 0.3s;
-      transition: all linear 0.3s; }
-      .maps-travel .travel-header .media.user-info .media-body .media-heading {
+    .maps-travel .travel-header .media.user-info {
+      position: relative; }
+      .maps-travel .travel-header .media.user-info .media-heading {
+        font-family: "Microsoft YaHei";
         -webkit-transition: all linear 0.3s;
         -moz-transition: all linear 0.3s;
         -ms-transition: all linear 0.3s;
         -o-transition: all linear 0.3s;
         transition: all linear 0.3s; }
-      .maps-travel .travel-header .media.user-info .media-body .title {
-        display: inline-block; }
-      .maps-travel .travel-header .media.user-info .media-body span.footnotes {
-        color: white; }
+      .maps-travel .travel-header .media.user-info .pull-left img.media-object {
+        -webkit-transition: all linear 0.3s;
+        -moz-transition: all linear 0.3s;
+        -ms-transition: all linear 0.3s;
+        -o-transition: all linear 0.3s;
+        transition: all linear 0.3s; }
+      .maps-travel .travel-header .media.user-info .media-body {
+        -webkit-transition: all linear 0.3s;
+        -moz-transition: all linear 0.3s;
+        -ms-transition: all linear 0.3s;
+        -o-transition: all linear 0.3s;
+        transition: all linear 0.3s; }
+        .maps-travel .travel-header .media.user-info .media-body .media-heading {
+          -webkit-transition: all linear 0.3s;
+          -moz-transition: all linear 0.3s;
+          -ms-transition: all linear 0.3s;
+          -o-transition: all linear 0.3s;
+          transition: all linear 0.3s; }
+        .maps-travel .travel-header .media.user-info .media-body .title {
+          display: inline-block; }
+        .maps-travel .travel-header .media.user-info .media-body span.footnotes {
+          color: white; }
+      .maps-travel .travel-header .media.user-info .bd-share {
+        position: absolute;
+        top: 0;
+        right: 0; }
   .maps-travel .travel-header.navbar-third {
     padding: 10px;
-    height: 51px; }
-    .maps-travel .travel-header.navbar-third .media.user-info {
-      line-height: 30px; }
-      .maps-travel .travel-header.navbar-third .media.user-info .media-body .media-heading {
-        display: inline;
-        vertical-align: middle;
-        margin: 0 5px; }
-      .maps-travel .travel-header.navbar-third .media.user-info .media-body .media-footer {
-        display: inline; }
-      .maps-travel .travel-header.navbar-third .media.user-info .pull-left img.media-object {
-        height: 30px;
-        width: 30px;
-        display: inline-block; }
+    -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.57);
+    -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0.57);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.57); }
+    .maps-travel .travel-header.navbar-third .media.user-info .media-body .media-heading {
+      display: inline;
+      vertical-align: middle;
+      margin: 0 5px; }
+    .maps-travel .travel-header.navbar-third .media.user-info .media-body .media-footer {
+      display: none; }
+    .maps-travel .travel-header.navbar-third .media.user-info .pull-left img.media-object {
+      height: 30px;
+      width: 30px;
+      display: inline-block; }
     .maps-travel .travel-header.navbar-third .travel-desc {
       opacity: 0;
       margin: 0;
@@ -443,28 +449,23 @@
         right: 0;
         z-index: 1; }
       .maps-travel .travel-content .panel.panel-default.travel-spot .panel-heading {
-        padding: 5px; }
+        padding: 5px;
+        background-color: whitesmoke; }
+      .maps-travel .travel-content .panel.panel-default.travel-spot .panel-heading.navbar-forth {
+        border-radius: 0;
+        padding: 0 5px;
+        border-bottom: 1px solid #00bcd4; }
+        .maps-travel .travel-content .panel.panel-default.travel-spot .panel-heading.navbar-forth .spot-description {
+          display: none; }
+        .maps-travel .travel-content .panel.panel-default.travel-spot .panel-heading.navbar-forth .travel-spot-header .spot-date {
+          border-color: #00bcd4; }
+          .maps-travel .travel-content .panel.panel-default.travel-spot .panel-heading.navbar-forth .travel-spot-header .spot-date a {
+            color: #00bcd4; }
+          .maps-travel .travel-content .panel.panel-default.travel-spot .panel-heading.navbar-forth .travel-spot-header .spot-date .spot-date-flag {
+            color: #00bcd4; }
       .maps-travel .travel-content .panel.panel-default.travel-spot .panel-body {
         padding: 0;
-        margin: 0 -1px;
-        /* 旅行相册中的图片 */ }
-        .maps-travel .travel-content .panel.panel-default.travel-spot .panel-body .photo .ponm-photo-remove {
-          position: absolute;
-          top: 4px;
-          right: 4px;
-          color: white; }
-          .maps-travel .travel-content .panel.panel-default.travel-spot .panel-body .photo .ponm-photo-remove .glyphicon {
-            font-size: 12px; }
-        .maps-travel .travel-content .panel.panel-default.travel-spot .panel-body .photo .ponm-photo-remove:hover {
-          color: red; }
-        .maps-travel .travel-content .panel.panel-default.travel-spot .panel-body .photo .ponm-photo-option {
-          position: absolute;
-          top: 2px;
-          left: 2px; }
-          .maps-travel .travel-content .panel.panel-default.travel-spot .panel-body .photo .ponm-photo-option .btn.dropdown-toggle {
-            margin: 0; }
-        .maps-travel .travel-content .panel.panel-default.travel-spot .panel-body .photo .action.ponm-show {
-          opacity: 1; }
+        margin: 0 -1px; }
       .maps-travel .travel-content .panel.panel-default.travel-spot .spot-date.navbar-forth {
         background-color: white;
         left: initial;
@@ -478,31 +479,34 @@
     .maps-travel .travel-content .travel-spot:hover > .action, .maps-travel .travel-content .travel-spot.hover > .action {
       opacity: 1 !important; }
 
-.travel-circle-header {
+.travel-spot-header {
   position: relative;
   padding: 5px 5px 5px 95px;
-  min-height: 100px;
-  background-color: whitesmoke; }
-  .travel-circle-header .spot-date {
+  min-height: 100px; }
+  .travel-spot-header .spot-date {
     position: absolute;
     left: 0;
     display: inline-block;
     width: 80px;
     height: 80px;
     text-align: center;
-    padding: 0; }
-    .travel-circle-header .spot-date > a:hover {
+    padding: 0;
+    border: 1px solid grey;
+    border-radius: 50px; }
+    .travel-spot-header .spot-date a {
+      color: grey; }
+    .travel-spot-header .spot-date > a:hover {
       text-decoration: none; }
-    .travel-circle-header .spot-date .spot-date-txt {
+    .travel-spot-header .spot-date .spot-date-txt {
       height: 40px;
       line-height: 40px;
       font-size: 40px;
       display: block;
       font-family: "Gulim"; }
-    .travel-circle-header .spot-date .spot-date-flag {
+    .travel-spot-header .spot-date .spot-date-flag {
       display: block;
       font-weight: bold; }
-  .travel-circle-header .info {
+  .travel-spot-header .info {
     margin: 5px 0; }
 
 .travel-circle-header.navbar-forth {
@@ -510,6 +514,27 @@
 
 .control-label {
   text-align: right; }
+
+/* 旅行相册中的图片 */
+.photo .action.datetime-picker {
+  position: absolute;
+  top: 5px;
+  right: 5px; }
+.photo .ponm-photo-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  color: white; }
+  .photo .ponm-photo-remove .glyphicon {
+    font-size: 12px; }
+.photo .ponm-photo-remove:hover {
+  color: red; }
+.photo .ponm-photo-option {
+  position: absolute;
+  top: 5px;
+  left: 5px; }
+.photo .action.ponm-show {
+  opacity: 1; }
 
 /** date picker */
 .ponm-datepicker .dropdown-menu {
@@ -749,7 +774,7 @@
 .maps-container .navbar {
   z-index: 1002; }
   .maps-container .navbar ul li {
-    line-height: 50px; }
+    line-height: 49px; }
 .maps-container .searchbox {
   vertical-align: middle;
   display: inline-block; }
@@ -771,7 +796,7 @@
   top: 51px;
   bottom: 0;
   width: 100%; }
-  .maps-container .maps-content .left {
+  .maps-container .maps-content .maps-left {
     position: fixed;
     top: 102px;
     left: 0;
@@ -781,7 +806,7 @@
     -ms-transition: all linear 0.3s;
     -o-transition: all linear 0.3s;
     transition: all linear 0.3s; }
-  .maps-container .maps-content .right {
+  .maps-container .maps-content .maps-right {
     position: absolute;
     top: 0;
     right: 0;
@@ -793,44 +818,44 @@
     -ms-transition: all linear 0.3s;
     -o-transition: all linear 0.3s;
     transition: all linear 0.3s; }
-    .maps-container .maps-content .right .photo-wall.photo-fluid-container {
+    .maps-container .maps-content .maps-right .photo-wall.photo-fluid-container {
       margin: 1px -1px; }
-    .maps-container .maps-content .right .photo-container {
+    .maps-container .maps-content .maps-right .photo-container {
       padding: 10px; }
-      .maps-container .maps-content .right .photo-container .photo {
+      .maps-container .maps-content .maps-right .photo-container .photo {
         width: 100px;
         height: 100px; }
-        .maps-container .maps-content .right .photo-container .photo img {
+        .maps-container .maps-content .maps-right .photo-container .photo img {
           height: initial;
           width: initial;
           max-height: 100%;
           max-width: 100%; }
-.maps-container .maps-content.right-fixed .left {
+.maps-container .maps-content.maps-right-fixed .maps-left {
   right: 0;
   margin: 0 600px 0 0; }
-.maps-container .maps-content.right-fixed .right {
+.maps-container .maps-content.maps-right-fixed .maps-right {
   width: 600px;
   margin: 0; }
-  .maps-container .maps-content.right-fixed .right .navbar-third, .maps-container .maps-content.right-fixed .right .navbar-forth {
+  .maps-container .maps-content.maps-right-fixed .maps-right .navbar-third, .maps-container .maps-content.maps-right-fixed .maps-right .navbar-forth {
     width: 600px; }
-.maps-container .maps-content.left-fixed .left {
+.maps-container .maps-content.maps-left-fixed .maps-left {
   width: 600px; }
-.maps-container .maps-content.left-fixed .right {
+.maps-container .maps-content.maps-left-fixed .maps-right {
   left: 0;
   margin: 0 0 0 600px; }
-  .maps-container .maps-content.left-fixed .right .navbar-third, .maps-container .maps-content.left-fixed .right .navbar-forth {
+  .maps-container .maps-content.maps-left-fixed .maps-right .navbar-third, .maps-container .maps-content.maps-left-fixed .maps-right .navbar-forth {
     left: 600px;
     right: 0; }
-.maps-container .maps-content.right-full .left {
+.maps-container .maps-content.maps-right-full .maps-left {
   width: 0; }
-.maps-container .maps-content.right-full .right {
+.maps-container .maps-content.maps-right-full .maps-right {
   width: 100%;
   margin: 0; }
-  .maps-container .maps-content.right-full .right .navbar-third, .maps-container .maps-content.right-full .right .navbar-forth {
+  .maps-container .maps-content.maps-right-full .maps-right .navbar-third, .maps-container .maps-content.maps-right-full .maps-right .navbar-forth {
     width: 100%; }
-.maps-container .maps-content.left-full .left {
+.maps-container .maps-content.maps-left-full .maps-left {
   width: 100%; }
-.maps-container .maps-content.left-full .right {
+.maps-container .maps-content.maps-left-full .maps-right {
   width: 0;
   display: none; }
 
@@ -848,6 +873,18 @@
   .map-container .amap-maptype-title {
     width: 100%; }
 
+@media (max-width: 480px) {
+  .maps-container .maps-content.maps-right-fixed .maps-right {
+    width: 100%; }
+    .maps-container .maps-content.maps-right-fixed .maps-right .navbar-third {
+      width: 100%; }
+  .maps-container .maps-content.maps-right-fixed .maps-left {
+    width: 100%; }
+  .maps-container .maps-content.maps-left-fixed .maps-right {
+    display: none; }
+  .maps-container .maps-content.maps-left-fixed .maps-left {
+    margin: 0;
+    width: 100%; } }
 /** map controls */
 .searchbox, .searchbox-shadow {
   -webkit-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
@@ -920,16 +957,7 @@
 
 /****************************************************************************************/
 /** photo modal page ********************************************************************/
-.photo-modal-fullscreen {
-  overflow: hidden; }
-  .photo-modal-fullscreen .modal-dialog {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    width: auto; }
-
 .photo-modal-container {
-  background-color: #191919;
   bottom: 0;
   left: 0;
   overflow: hidden;
@@ -939,36 +967,29 @@
   z-index: 1099; }
   .photo-modal-container .photo-container-header {
     height: 44px;
-    left: 0;
-    position: absolute;
-    right: 320px;
-    top: 0;
     margin: 0;
-    border: 0; }
+    border: 0;
+    z-index: 2; }
     .photo-modal-container .photo-container-header .container-fluid {
       background-color: #191919; }
-      .photo-modal-container .photo-container-header .container-fluid .navbar-right > li {
-        height: 50px;
-        width: 50px; }
       .photo-modal-container .photo-container-header .container-fluid .cancel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 50px;
+        width: 50px;
         cursor: pointer;
         opacity: .8; }
       .photo-modal-container .photo-container-header .container-fluid .cancel:hover {
         opacity: 1; }
   .photo-modal-container .photo-container-body {
-    position: absolute;
-    top: 50px;
-    bottom: 50px;
-    left: 0;
-    right: 320px; }
+    background-color: #191919;
+    min-height: 120px;
+    z-index: 1; }
     .photo-modal-container .photo-container-body .buttons {
       position: absolute;
       bottom: 0; }
   .photo-modal-container .photo-container-booter {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 320px;
     margin: 0;
     border: 0; }
     .photo-modal-container .photo-container-booter .collapse.navbar-collapse {
@@ -976,25 +997,17 @@
       height: 51px !important; }
   .photo-modal-container .navbar .container-fluid {
     background-color: #191919; }
-    .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse {
-      text-align: center; }
-      .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block {
-        display: inline-block;
-        float: initial; }
-        .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block .text-explain {
-          line-height: 50px;
-          margin-left: 10px; }
-          .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block .text-explain span {
-            vertical-align: middle; }
+    .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block {
+      display: inline-block;
+      float: initial; }
+      .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block .text-explain {
+        line-height: 50px;
+        margin-left: 10px; }
+        .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block .text-explain span {
+          vertical-align: middle; }
   .photo-modal-container .photo-info {
     -webkit-transition: 218ms;
     transition: 218ms;
-    overflow-y: auto;
-    bottom: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 320px;
     background-color: whitesmoke; }
     .photo-modal-container .photo-info .info-container {
       -webkit-perspective: 3000px;
@@ -1008,6 +1021,7 @@
         right: 0;
         top: 0;
         overflow-y: auto;
+        overflow-x: hidden;
         padding: 15px;
         background-color: white; }
         .photo-modal-container .photo-info .info-container .user-container .user-info {
@@ -1118,7 +1132,8 @@
   width: 100%;
   height: 0;
   opacity: .75;
-  background-color: #000; }
+  background-color: #000;
+  z-index: 2; }
 .photo-recommend-album .recommend-album-background.ng-animate.show-add, .photo-recommend-album .recommend-album-background.ng-animate.show-remove {
   height: 100%; }
 .photo-recommend-album .recommend-album-background.show {
@@ -1137,7 +1152,8 @@
   -moz-transition: height ease-out 0.3s;
   -ms-transition: height ease-out 0.3s;
   -o-transition: height ease-out 0.3s;
-  transition: height ease-out 0.3s; }
+  transition: height ease-out 0.3s;
+  z-index: 2; }
 .photo-recommend-album .recommend-album.ng-animate.show-add, .photo-recommend-album .recommend-album.ng-animate.show-remove {
   height: 400px;
   display: block; }
@@ -1145,6 +1161,47 @@
   height: 400px;
   display: block; }
 
+@media (min-width: 480px) {
+  .photo-modal-container .photo-container-header {
+    left: 0;
+    position: absolute;
+    right: 320px;
+    top: 0; }
+  .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse {
+    text-align: center; }
+    .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav {
+      margin-left: auto;
+      margin-right: auto;
+      display: inline-block;
+      float: initial; }
+  .photo-modal-container .photo-container-body {
+    position: absolute;
+    top: 50px;
+    bottom: 50px;
+    left: 0;
+    right: 320px; }
+  .photo-modal-container .photo-container-booter {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 320px; }
+  .photo-modal-container .photo-info {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 320px; } }
+@media (max-width: 480px) {
+  .photo-modal-container {
+    overflow-y: auto; }
+    .photo-modal-container .photo-main {
+      width: 100%; }
+      .photo-modal-container .photo-main .photo-container-header .navbar-toggle {
+        float: left; }
+      .photo-modal-container .photo-main .ponm-photo-container .loading {
+        margin: auto; }
+    .photo-modal-container .photo-info {
+      width: 100%; } }
 /** photo modal page ********************************************************************/
 /****************************************************************************************/
 /****************************************************************************************/
@@ -1422,7 +1479,25 @@ span.clickable:hover {
   87.5% {
     box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2), 1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2), 2.5em 0em 0 0em rgba(255, 255, 255, 0.2), 1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2), 0em 2.5em 0 0em rgba(255, 255, 255, 0.2), -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.5), -2.6em 0em 0 0em rgba(255, 255, 255, 0.7), -1.8em -1.8em 0 0em white; } }
 
-/** photo fluid directive ***********************************************************/
+/** baidu share */
+.bd-share {
+  z-index: 1029;
+  -webkit-transition: all linear 0.3s;
+  -moz-transition: all linear 0.3s;
+  -ms-transition: all linear 0.3s;
+  -o-transition: all linear 0.3s;
+  transition: all linear 0.3s; }
+  .bd-share .bds_more {
+    height: 26px; }
+
+.editable-empty, .editable-empty:hover, .editable-empty:focus, a.editable-empty, a.editable-empty:hover, a.editable-empty:focus {
+  font-style: italic;
+  color: initial;
+  text-decoration: none; }
+
+.navbar.navbar-default .navbar-collapse {
+  background-color: #f8f8f8; }
+
 .navbar-second {
   position: fixed;
   width: 100%;
@@ -1431,16 +1506,15 @@ span.clickable:hover {
   .navbar-second .navbar-right {
     margin-right: 15px; }
   .navbar-second .navbar {
-    height: 51px;
     border: 0;
     margin-bottom: 0;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
     border-radius: 0;
-    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
-    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.57); }
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.57);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.57);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.57); }
     .navbar-second .navbar .nav > li {
       padding: 0 15px; }
       .navbar-second .navbar .nav > li > a {
@@ -1457,11 +1531,8 @@ span.clickable:hover {
 
 .navbar-forth {
   position: fixed !important;
-  top: 153px !important;
-  z-index: 1027;
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
-  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.57); }
+  top: 152px !important;
+  z-index: 1027; }
 
 .navbar-edit {
   background-color: #427fed; }
@@ -1782,6 +1853,35 @@ span.clickable:hover {
   padding: 3px;
   text-align: center; }
 
+.modal-open .modal {
+  background-color: #ececec; }
+
+.photo-modal-fullscreen {
+  overflow: hidden; }
+  .photo-modal-fullscreen .modal-dialog {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: auto; }
+
+.photo-modal-fullscreen.modal.fade.in .modal-dialog {
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1); }
+
+.photo-modal-fullscreen.modal.fade .modal-dialog {
+  -webkit-transform: translate3d(0, -25%, 0);
+  transform: translate3d(0, -25%, 0);
+  -webkit-transform: scale(0.8);
+  -ms-transform: scale(0.8);
+  transform: scale(0.8);
+  -moz-transition: -moz-transform 0.3s ease-out;
+  -o-transition: -o-transform 0.3s ease-out;
+  -webkit-transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out; }
+
 .ponm-modal, .move-photo-modal, .map-photo-modal, .avatar-upload-modal {
   overflow-y: hidden; }
   .ponm-modal .modal-content, .move-photo-modal .modal-content, .map-photo-modal .modal-content, .avatar-upload-modal .modal-content {
@@ -1950,6 +2050,83 @@ span.clickable:hover {
     margin: 0 15px;
     padding: 0 0 20px 0; }
 
+.scroller {
+  overflow: hidden; }
+
+::-webkit-scrollbar {
+  height: 12px;
+  overflow: visible;
+  width: 12px; }
+
+::-webkit-scrollbar-button {
+  height: 0;
+  width: 0; }
+
+::-webkit-scrollbar-track {
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0 0 0 0; }
+
+::-webkit-scrollbar-track:horizontal {
+  border-width: 4px 0 0; }
+
+::-webkit-scrollbar-track:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.1); }
+
+::-webkit-scrollbar-track:horizontal:hover {
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1); }
+
+::-webkit-scrollbar-track:active {
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.14), inset -1px 0 0 rgba(0, 0, 0, 0.07); }
+
+::-webkit-scrollbar-track:horizontal:active {
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.14), inset 0 -1px 0 rgba(0, 0, 0, 0.07); }
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0;
+  min-height: 28px;
+  padding: 100px 0 0;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07); }
+
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 6px 1px 1px;
+  padding: 0 0 0 100px;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset -1px 0 0 rgba(0, 0, 0, 0.07); }
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25); }
+
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.35); }
+
+::-webkit-scrollbar-corner {
+  background: transparent; }
+
+body::-webkit-scrollbar-track-piece {
+  background-clip: padding-box;
+  background-color: #f5f5f5;
+  border: solid #fff;
+  border-width: 0 0 0 0;
+  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.14), inset -1px 0 0 rgba(0, 0, 0, 0.07); }
+
+body::-webkit-scrollbar-track-piece:horizontal {
+  border-width: 3px 0 0;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.14), inset 0 -1px 0 rgba(0, 0, 0, 0.07); }
+
+body::-webkit-scrollbar-corner {
+  background-clip: padding-box;
+  background-color: #f5f5f5;
+  border: solid #fff;
+  border-width: 3px 0 0 3px;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.14); }
+
 .photo-upload .header {
   padding: 20px 16px 0;
   -webkit-transition: all linear 0.3s;
@@ -2112,6 +2289,8 @@ span.clickable:hover {
     .flip-container .flipper .front, .flip-container .flipper .back {
       -webkit-transition: transform 0.6s;
       transition: transform 0.6s;
+      -webkit-transition: -webkit-transform 0.6s;
+      transition: -webkit-transform 0.6s;
       -webkit-transform-style: preserve-3d;
       /* Chrome, Safari, Opera */
       transform-style: preserve-3d;
@@ -2136,6 +2315,7 @@ span.clickable:hover {
       top: 0;
       bottom: 0;
       width: 100%;
+      display: none;
       -webkit-transform: rotateY(180deg);
       -ms-transform: rotateY(180deg);
       transform: rotateY(180deg); }
@@ -2173,6 +2353,7 @@ span.clickable:hover {
   -ms-transform: rotateY(-179.9deg);
   transform: rotateY(-179.9deg); }
 .flip-container.hover .flipper .back {
+  display: block;
   -webkit-transform: rotateY(0deg);
   -ms-transform: rotateY(0deg);
   transform: rotateY(0deg); }
@@ -2534,7 +2715,8 @@ item-picker .dropdown.dropdown-picker, *[item-picker] .dropdown.dropdown-picker 
 
 body {
   background-color: #ececec;
-  overflow-x: hidden; }
+  overflow-x: hidden;
+  overflow-y: scroll; }
 
 /** editable */
 pre.description {
@@ -2608,32 +2790,6 @@ span.footnotes {
   opacity: 1 !important; }
 
 /** modal */
-.modal-header .modal-title {
-  float: left; }
-
-/** baidu share */
-.bd-share {
-  padding: 5px;
-  width: 25px;
-  z-index: 1111;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  background-color: black;
-  opacity: .5;
-  -webkit-transition: all linear 0.3s;
-  -moz-transition: all linear 0.3s;
-  -ms-transition: all linear 0.3s;
-  -o-transition: all linear 0.3s;
-  transition: all linear 0.3s; }
-
-.bd-share.active {
-  padding: 10px;
-  right: 10px;
-  width: 440px;
-  opacity: 1;
-  background-color: white; }
-
 .btn.btn-default.load-more {
   width: 100%;
   border: 0; }

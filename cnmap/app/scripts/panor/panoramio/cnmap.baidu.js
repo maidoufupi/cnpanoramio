@@ -25,9 +25,8 @@
     window.cnmap.PanoramioLayer = function (opts/*?:PanoramioLayerOptions*/) {
 
         var labels = [];
-        var marker = new BMap.Marker();
-        var infoWindow = new BMap.InfoWindow("");
-        infoWindow.enableCloseOnClick();
+//        var marker;
+        var infoWindow;
 
         this.preZoom = 0;
         this.preBounds = null;
@@ -52,6 +51,10 @@
 
             if (map) {
                 this.opts.map = map;
+
+                infoWindow = new BMap.InfoWindow("");
+                infoWindow.enableCloseOnClick();
+
                 map.addOverlay(infoWindow);
 
                 map.addEventListener('load', getBoundsThumbnails);

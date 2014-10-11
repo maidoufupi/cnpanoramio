@@ -3,7 +3,7 @@
     z-index: 1002;
     ul {
       li {
-        line-height: 50px;
+        line-height: 49px;
       }
     }
   }
@@ -23,7 +23,7 @@
     bottom: 0;
     width: 100%;
 
-    .left {
+    .maps-left {
       position: fixed;
       top: 102px;
       left: 0;
@@ -31,7 +31,7 @@
       @include transition-linear(all);
     }
 
-    .right {
+    .maps-right {
       position: absolute;
       top: 0;
       right: 0;
@@ -61,12 +61,12 @@
     }
   }
 
-  .maps-content.right-fixed {
-    .left {
+  .maps-content.maps-right-fixed {
+    .maps-left {
       right: 0;
       margin: 0 600px 0 0;
     }
-    .right {
+    .maps-right {
       width: 600px;
       margin: 0;
       .navbar-third, .navbar-forth {
@@ -75,11 +75,11 @@
     }
   }
 
-  .maps-content.left-fixed {
-    .left {
+  .maps-content.maps-left-fixed {
+    .maps-left {
       width: 600px;
     }
-    .right {
+    .maps-right {
       left: 0;
       margin: 0 0 0 600px;
       .navbar-third, .navbar-forth {
@@ -89,11 +89,11 @@
     }
   }
 
-  .maps-content.right-full {
-    .left {
+  .maps-content.maps-right-full {
+    .maps-left {
       width: 0;
     }
-    .right {
+    .maps-right {
       width: 100%;
       margin: 0;
       .navbar-third, .navbar-forth {
@@ -102,11 +102,11 @@
     }
   }
 
-  .maps-content.left-full {
-    .left {
+  .maps-content.maps-left-full {
+    .maps-left {
       width: 100%;
     }
-    .right {
+    .maps-right {
       width: 0;
       display: none;
     }
@@ -131,6 +131,32 @@
   .amap-maptype-title {
     width: 100%;
   }
+}
+
+@media (max-width: $screen-xs-min) {
+  .maps-container {
+    .maps-content.maps-right-fixed {
+      .maps-right {
+        width: 100%;
+        .navbar-third {
+          width: 100%;
+        }
+      }
+      .maps-left {
+        width: 100%;
+      }
+    }
+    .maps-content.maps-left-fixed {
+      .maps-right {
+        display: none;
+      }
+      .maps-left {
+        margin: 0;
+        width: 100%;
+      }
+    }
+  }
+
 }
 
 /** map controls */

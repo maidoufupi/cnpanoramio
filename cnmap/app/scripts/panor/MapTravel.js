@@ -21,7 +21,7 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           spot = _ref[_i];
           spot.photos.sort(function(a, b) {
-            return a.create_time - b.create_time;
+            return a.date_time - b.date_time;
           });
           if (spot.time_start) {
             spot.spotDate = new Date(spot.time_start);
@@ -73,7 +73,9 @@
       return _results;
     };
 
-    ITravelLayer.prototype.createLabel = function(photo) {};
+    ITravelLayer.prototype.createMarker = function(photo) {};
+
+    ITravelLayer.prototype.removeMarker = function(photo) {};
 
     ITravelLayer.prototype.getLabelContent = function(photoOssKey) {
       return "<img src='" + this.staticCtx + "/" + photoOssKey + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
@@ -88,8 +90,6 @@
       }
     };
 
-    ITravelLayer.prototype.createMarker = function() {};
-
     ITravelLayer.prototype.addSpot = function(spot) {
       return this.travel.spots.push(spot);
     };
@@ -101,14 +101,21 @@
     };
 
     ITravelLayer.prototype.removePhoto = function(photo, spot) {
-      var p, _i, _len, _ref;
+      var p, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
       if (spot) {
+        _ref = spot.photos;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          p = _ref[_i];
+          if (p.id === photo.id) {
+            this.removeMarker(p);
+          }
+        }
         spot.photos = (function() {
-          var _i, _len, _ref, _results;
-          _ref = spot.photos;
+          var _j, _len1, _ref1, _results;
+          _ref1 = spot.photos;
           _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            p = _ref[_i];
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            p = _ref1[_j];
             if (p.id !== photo.id) {
               _results.push(p);
             }
@@ -117,15 +124,22 @@
         })();
         this.updateSpotLine(spot);
       } else {
-        _ref = this.travel.spots;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          spot = _ref[_i];
+        _ref1 = this.travel.spots;
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          spot = _ref1[_j];
+          _ref2 = spot.photos;
+          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
+            p = _ref2[_k];
+            if (p.id === photo.id) {
+              this.removeMarker(p);
+            }
+          }
           spot.photos = (function() {
-            var _j, _len1, _ref1, _results;
-            _ref1 = spot.photos;
+            var _l, _len3, _ref3, _results;
+            _ref3 = spot.photos;
             _results = [];
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              p = _ref1[_j];
+            for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+              p = _ref3[_l];
               if (p.id !== photo.id) {
                 _results.push(p);
               }
@@ -197,6 +211,35 @@
 
     ITravelLayer.prototype.clearMap = function() {
       return this.mapEventListener.clearMap(this.map);
+    };
+
+    ITravelLayer.prototype.setEditable = function(editable) {
+      var spot, _i, _j, _len, _len1, _ref, _ref1, _results;
+      if (!editable && this.travel) {
+        _ref = this.travel.spots;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          spot = _ref[_i];
+          this.setSpotEditable(spot, false);
+        }
+      }
+      this.opts.editable = editable;
+      if (editable && this.travel) {
+        _ref1 = this.travel.spots;
+        _results = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          spot = _ref1[_j];
+          _results.push(this.setSpotEditable(spot, true));
+        }
+        return _results;
+      }
+    };
+
+    ITravelLayer.prototype.getEditable = function() {
+      return this.opts.editable;
+    };
+
+    ITravelLayer.prototype.getMarkerImage = function(photo) {
+      return "" + this.staticCtx + "/" + photo.oss_key + "@!panor-lg";
     };
 
     return ITravelLayer;

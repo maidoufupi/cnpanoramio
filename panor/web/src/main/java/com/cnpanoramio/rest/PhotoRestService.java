@@ -140,7 +140,7 @@ public class PhotoRestService extends AbstractRestService {
 
 		User me = UserUtil.getCurrentUser(userManager);
 
-		Photo photo = photoService.getPhoto(id);
+		Photo photo = photoService.get(id);
 		if (photo.getOwner().equals(me)) {
 			response.setProp(photoService.properties(id, properties));
 		} else {
@@ -175,7 +175,7 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 		Photo photo = null;
 		try {
-			photo = photoService.getPhoto(id);
+			photo = photoService.get(id);
 		} catch (DataAccessException ex) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -208,7 +208,7 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 		Photo photo = null;
 		try {
-			photo = photoService.getPhoto(id);
+			photo = photoService.get(id);
 		} catch (DataAccessException ex) {
 			return null;
 		}

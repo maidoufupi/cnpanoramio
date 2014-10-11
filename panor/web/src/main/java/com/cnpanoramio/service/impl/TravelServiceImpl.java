@@ -13,10 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.dao.TravelSpotDao;
+import com.cnpanoramio.domain.Message;
+import com.cnpanoramio.domain.Message.MessageType;
 import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.TravelResponse.Travel;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
+import com.cnpanoramio.service.MessageManager;
 import com.cnpanoramio.service.PhotoManager;
+import com.cnpanoramio.service.PhotoService;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.utils.PhotoUtil;
@@ -36,11 +41,23 @@ public class TravelServiceImpl implements TravelService {
 	private TravelSpotDao travelSpotDao;
 	
 	@Autowired
+	private PhotoService photoService;
+	
+	@Autowired
 	private PhotoManager photoManager;
+	
+	@Autowired
+	private MessageManager messageManager;
 	
 	@Override
 	public Travel getTravel(Long travelId) {
-		return convertTravel(travelManager.getTravel(travelId));
+		Travel travel = convertTravel(travelManager.getTravel(travelId));
+		Message message = messageManager.getMessage(MessageType.travel, travelId);
+		if(null != message) {
+			travel.setMessageId(message.getId());
+		}	
+				
+		return travel;
 	}
 
 	@Override
@@ -59,7 +76,7 @@ public class TravelServiceImpl implements TravelService {
 		return convertTravel(tra);
 	}
 	
-	public static List<Travel> convertTravels(List<com.cnpanoramio.domain.Travel> travels) {
+	public List<Travel> convertTravels(List<com.cnpanoramio.domain.Travel> travels) {
 		List<Travel> ts = new ArrayList<Travel>();
 		for(com.cnpanoramio.domain.Travel t : travels) {
 			ts.add(convertTravel(t));
@@ -67,7 +84,7 @@ public class TravelServiceImpl implements TravelService {
 		return ts;
 	}
 
-	public static Travel convertTravel(com.cnpanoramio.domain.Travel travel) {
+	public Travel convertTravel(com.cnpanoramio.domain.Travel travel) {
 		Travel t = new Travel();
 		BeanUtils.copyProperties(travel, t, new String[]{"spots", "user", "spot", "albumCover"});
 		if(null != travel.getUser()) {
@@ -109,14 +126,14 @@ public class TravelServiceImpl implements TravelService {
 		return t;
 	}
 	
-	public static TravelSpot convertTravelSpot(com.cnpanoramio.domain.TravelSpot travelSpot) {
+	public TravelSpot convertTravelSpot(com.cnpanoramio.domain.TravelSpot travelSpot) {
 		TravelSpot tSpot = new TravelSpot();
 		BeanUtils.copyProperties(travelSpot, tSpot, new String[]{"travel", "photos"});
 		tSpot.setTravelId(travelSpot.getTravel().getId());
 		for(Photo photo : travelSpot.getPhotos()) {
 			// 过滤掉被标记删除的图片
 			if(!photo.isDeleted()) {
-				tSpot.getPhotos().add(PhotoUtil.transformProperties(photo));
+				tSpot.getPhotos().add(photoService.transform(photo));
 			}			
 		}
 		return tSpot;
@@ -136,6 +153,23 @@ public class TravelServiceImpl implements TravelService {
 		travelSpot.setTimeStart(spot.getTimeStart());
 		travelSpot = travelManager.changeSpot(id, travelSpot);
 		return convertTravelSpot(travelSpot);
+	}
+	
+	@Override
+	public void changeSpotPhotoPostion(Long id, TravelSpot spot) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.TravelSpot travelSpot = travelSpotDao.get(id);
+		checkMyTravel(travelSpot.getTravel(), me);
+		
+		for(PhotoProperties photo : spot.getPhotos()) {
+			Photo p = photoManager.get(photo.getId());
+			if(!travelSpot.equals(p.getTravelSpot())) {
+				throw new AccessDeniedException("Photo " + p.getId() + " 不属于TravelSpot " + travelSpot.getId());
+			}
+			
+			photoManager.properties(photo.getId(), photo);
+		}
+		
 	}
 
 	@Override
@@ -167,7 +201,7 @@ public class TravelServiceImpl implements TravelService {
 		checkMyTravel(travel, me);
 		Photo photo = null;
 		for (Long photoId : photos) {
-			photo = photoManager.getPhoto(photoId);
+			photo = photoManager.get(photoId);
 			PhotoUtil.checkMyPhoto(photo, me);
 		}
 		
@@ -204,7 +238,7 @@ public class TravelServiceImpl implements TravelService {
 		checkMyTravel(spot.getTravel(), me);
 		Photo photo = null;
 		for (Long photoId : photos) {
-			photo = photoManager.getPhoto(photoId);
+			photo = photoManager.get(photoId);
 			PhotoUtil.checkMyPhoto(photo, me);
 		}
 		return convertTravel(travelManager.addSpotPhotos(id, photos));
@@ -263,5 +297,4 @@ public class TravelServiceImpl implements TravelService {
 		travel.setPhotoSize(photos.size());
 		return travel;
 	}
-
 }

@@ -45,6 +45,8 @@ public class GPSRestServiceTest {
 	public void testConvert() {
 		Point p = gpsService.convert("34.836669916666665", "116.39122772222223", "gps", "mars");
 		
+		p = gpsService.convert("34.836669916666665", "116.39122772222223", "mars", "baidu");
+		
 		log.info(p.getLat());
 		log.info(p.getLng());
 	}

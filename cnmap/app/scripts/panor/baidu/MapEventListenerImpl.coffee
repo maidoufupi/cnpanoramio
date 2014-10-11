@@ -1,6 +1,6 @@
 
 $window = window
-BMap = $window.BMap
+#BMap = $window.BMap
 class MapEventListener extends window.cnmap.IMapEventListener
   addLocationHashListener: (map, callback) ->
     listeners = []
@@ -13,10 +13,10 @@ class MapEventListener extends window.cnmap.IMapEventListener
     listeners
 
   addToolBar: (map) ->
-    map.addControl(new BMap.NavigationControl());
-    map.addControl(new BMap.ScaleControl());
-    map.addControl(new BMap.OverviewMapControl());
-    map.addControl(new BMap.MapTypeControl());
+    map.addControl(new window.BMap.NavigationControl());
+    map.addControl(new window.BMap.ScaleControl());
+    map.addControl(new window.BMap.OverviewMapControl());
+    map.addControl(new window.BMap.MapTypeControl());
 
   setCenter: (map, lat, lng) ->
     map.setCenter new BMap.Point lng, lat
@@ -57,22 +57,32 @@ class MapEventListener extends window.cnmap.IMapEventListener
 
   activeMarker: (marker) ->
     if marker
-      marker.setIcon new BMap.Icon "images/marker.png", new BMap.Size(20, 30)
+      marker.defaultIcon = marker.getIcon()
+      marker.setIcon new BMap.Icon "images/marker.png", new BMap.Size(20, 30), {anchor: new BMap.Size(10, 30)}
+      marker.setZIndex 2
 
   deactiveMarker: (marker) ->
-    if marker
-      marker.setIcon ""
+    if marker and marker.defaultIcon
+      marker.setIcon marker.defaultIcon
+      marker.setZIndex 1
 
   addMarkerActiveListener: (marker, callback) ->
+    ActiveListener = (e) ->
+      callback.apply marker, []
+
     marker.addEventListener "click", ActiveListener
     marker.addEventListener "dragend", ActiveListener
     marker.addEventListener "rightclick", ActiveListener
-    ActiveListener = (e) ->
-      callback.apply marker, []
+
 
   addDragendListener: (marker, callback) ->
     marker.addEventListener "dragend", (e) ->
       callback.apply marker, [e.point.lat, e.point.lng]
+
+  removeMarker: (marker) ->
+    map = marker.getMap()
+    if map
+      map.removeOverlay marker
 
   addMapClickListener: (map, callback)  ->
     map.addEventListener "click", (e) ->

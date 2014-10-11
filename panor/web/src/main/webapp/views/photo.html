@@ -1,4 +1,5 @@
 <div class="photo-modal-container">
+    <div>
     <nav class="navbar navbar-inverse photo-container-header" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -95,11 +96,47 @@
         <!-- /.container-fluid -->
     </nav>
 
-    <div class="photo-info">
+    <div class="photo-travel-album" photo-travel-album>
+        <div class="travel-album-background" ng-click="show=false"
+             ng-class="{show: show}"></div>
+        <div class="travel-album-container"
+             ng-class="{show: show}">
+            <div class="header">
+                旅行中的所有照片（{{travel.totalPhoto || 0}}）
+                <a href="" class="close" aria-hidden="true"
+                        data-ng-click="closeTravelAlbum()">×</a>
+            </div>
+            <div class="body">
+                <a href="" class="image"
+                   data-ng-repeat="photo in travel.photos"
+                   data-ng-click="openPhoto(photo)"
+                   data-ng-class="{'thumbnail': photo.active}">
+                    <img ng-src="{{staticCtx}}/{{photo.oss_key}}@!album-thumbnail" alt="{{photo.title}}">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="photo-recommend-album" photo-recommend-album>
+        <div class="recommend-album-background" ng-click="recommendAlbumShow=false"
+                ng-class="{show:recommendAlbumShow}">
+
+        </div>
+        <div class="recommend-album" ng-class="{show:recommendAlbumShow}">
+
+        </div>
+    </div>
+    </div>
+
+    <perfect-scrollbar class="photo-info scroller"
+                       wheel-propagation="false"
+                       wheel-speed="50"
+                       refresh-on-change="photoDetailCollapsed">
+
         <div class="info-container">
             <div class="user-container">
                 <div class="media user-info">
-                    <a class="pull-left" href="{{ctx}}/#/photos/{{userOpenInfo.id}}/albums"
+                    <a class="pull-left" href="{{ctx}}/#/user/{{userOpenInfo.id}}"
                        user-card owner="{id:ponmCtxConfig.userId}" user-id="userOpenInfo.id">
                         <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{userOpenInfo.avatar || 1}}.png">
                     </a>
@@ -151,90 +188,90 @@
                     <div class="detail-well">
                         <table>
                             <tbody>
-                                <tr>
-                                    <td class="name">地址</td>
-                                    <td  class="value"
-                                         ng-switch="login">
-                                        <a ng-switch-when="true"
-                                           href=""
-                                           ng-click="openMapPhoto()"
-                                           tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top">{{photo.point.address}}</a>
-                                        <span ng-switch-default>{{photo.point.address}}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="name">位置</td>
-                                    <td  class="value"
-                                         ng-switch="login">
-                                        <a ng-switch-when="true"
-                                           href=""
-                                           ng-click="openMapPhoto()"
-                                           tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
-                                           tooltip-trigger="mouseenter"
-                                           tooltip-placement="top">
-                                            {{(photo.point&&((photo.point.lat | number) +', ' + (photo.point.lng | number))) || '添加位置'}}</a>
-                                        <span ng-switch-default>{{photo.point.lat && ((photo.point.lat | number) + ',')}}{{photo.point.lng | number}}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="name">拍摄日期</td>
-                                    <td  class="value">
-                                        {{cameraInfo.date_time_original | calculatetime | date:'yyyy-MM-dd'}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">尺寸</td>
-                                    <td class="value">{{photo.width}}×{{photo.height}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">文件名</td>
-                                    <td class="value">{{photo.file_name}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">文件大小</td>
-                                    <td class="value">{{photo.file_size | bytes}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">相机</td>
-                                    <td class="value">{{cameraInfo.model}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">镜头</td>
-                                    <td class="name">{{cameraInfo.jt}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">焦距</td>
-                                    <td class="value">{{cameraInfo.focal_length}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">曝光</td>
-                                    <td class="value">{{cameraInfo.exposure_time}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">F 值</td>
-                                    <td class="value">{{cameraInfo.fnumber}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">ISO</td>
-                                    <td class="value">{{cameraInfo.iso}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">相机品牌</td>
-                                    <td class="value">{{cameraInfo.make}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">闪光灯</td>
-                                    <td class="value">{{cameraInfo.flash}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">曝光偏差</td>
-                                    <td class="value">{{cameraInfo.exposure_bias}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="name">查看次数</td>
-                                    <td class="value">{{photo.views}}</td>
-                                </tr>
+                            <tr>
+                                <td class="name">地址</td>
+                                <td  class="value"
+                                     ng-switch="login">
+                                    <a ng-switch-when="true"
+                                       href=""
+                                       ng-click="openMapPhoto()"
+                                       tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top">{{photo.point.address}}</a>
+                                    <span ng-switch-default>{{photo.point.address}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="name">位置</td>
+                                <td  class="value"
+                                     ng-switch="login">
+                                    <a ng-switch-when="true"
+                                       href=""
+                                       ng-click="openMapPhoto()"
+                                       tooltip="{{photoEditable ? '更改位置' : '位置错误？建议新位置'}}"
+                                       tooltip-trigger="mouseenter"
+                                       tooltip-placement="top">
+                                        {{(photo.point&&((photo.point.lat | number) +', ' + (photo.point.lng | number))) || '添加位置'}}</a>
+                                    <span ng-switch-default>{{photo.point.lat && ((photo.point.lat | number) + ',')}}{{photo.point.lng | number}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="name">拍摄日期</td>
+                                <td  class="value">
+                                    {{cameraInfo.date_time_original | calculatetime | date:'yyyy-MM-dd'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">尺寸</td>
+                                <td class="value">{{photo.width}}×{{photo.height}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">文件名</td>
+                                <td class="value">{{photo.file_name}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">文件大小</td>
+                                <td class="value">{{photo.file_size | bytes}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">相机</td>
+                                <td class="value">{{cameraInfo.model}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">镜头</td>
+                                <td class="name">{{cameraInfo.jt}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">焦距</td>
+                                <td class="value">{{cameraInfo.focal_length}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">曝光</td>
+                                <td class="value">{{cameraInfo.exposure_time}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">F 值</td>
+                                <td class="value">{{cameraInfo.fnumber}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">ISO</td>
+                                <td class="value">{{cameraInfo.iso}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">相机品牌</td>
+                                <td class="value">{{cameraInfo.make}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">闪光灯</td>
+                                <td class="value">{{cameraInfo.flash}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">曝光偏差</td>
+                                <td class="value">{{cameraInfo.exposure_bias}}</td>
+                            </tr>
+                            <tr>
+                                <td class="name">查看次数</td>
+                                <td class="value">{{photo.views}}</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -262,36 +299,6 @@
             </div>
         </div>
 
-    </div>
-
-    <div class="photo-travel-album" photo-travel-album>
-        <div class="travel-album-background" ng-click="show=false"
-             ng-class="{show: show}"></div>
-        <div class="travel-album-container"
-             ng-class="{show: show}">
-            <div class="header">
-                旅行中的所有照片（{{travel.totalPhoto || 0}}）
-                <a href="" class="close" aria-hidden="true"
-                        data-ng-click="closeTravelAlbum()">×</a>
-            </div>
-            <div class="body">
-                <a href="" class="image"
-                   data-ng-repeat="photo in travel.photos"
-                   data-ng-click="openPhoto(photo)"
-                   data-ng-class="{'thumbnail': photo.active}">
-                    <img ng-src="{{staticCtx}}/{{photo.oss_key}}@!album-thumbnail" alt="{{photo.title}}">
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="photo-recommend-album" photo-recommend-album>
-        <div class="recommend-album-background" ng-click="recommendAlbumShow=false"
-                ng-class="{show:recommendAlbumShow}">
-
-        </div>
-        <div class="recommend-album" ng-class="{show:recommendAlbumShow}">
-
-        </div>
-    </div>
+    </perfect-scrollbar>
 </div>
+

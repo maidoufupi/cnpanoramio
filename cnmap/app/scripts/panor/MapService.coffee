@@ -46,5 +46,13 @@ class IMapService
   #/
   getLocPois:   (address, callback) ->
 
+  ##
+  # 转换gps坐标
+  #
+  # @param address
+  # @param callback
+  #/
+  translate: (lat, lng, callback) ->
+
 window.cnmap = window.cnmap || {}
 window.cnmap.IMapService = IMapService

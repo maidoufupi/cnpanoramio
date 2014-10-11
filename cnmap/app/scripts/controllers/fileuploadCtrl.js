@@ -7,7 +7,8 @@ angular.module('fileuploadApp', [
     'blueimp.fileupload',
     'ui.map',
     'ponmApp',
-    'xeditable'
+    'xeditable',
+    'duScroll'
 ])
     .config([
         '$httpProvider', 'fileUploadProvider', '$logProvider',
@@ -22,7 +23,7 @@ angular.module('fileuploadApp', [
 //                    // Demo settings:
             angular.extend(fileUploadProvider.defaults, {
 //                autoUpload: false,
-                autoUpload: !window.dev,
+//                autoUpload: !window.dev,
 
                 // Enable image resizing, except for Android and Opera,
                 // which actually support image resizing, but fail to
@@ -75,6 +76,8 @@ angular.module('fileuploadApp', [
 
             $scope.options = {
 
+                autoUpload: !!ponmCtxConfig.settings.autoUpload,
+
                 url: $scope.apirest+"/photo/upload",
 
                 formData: function () {
@@ -110,9 +113,13 @@ angular.module('fileuploadApp', [
                         data.files[0].$endestroy = true;
                         extractProps(data.files[0], photo);
 
+                        // 保存图片属性
                         data.files[0].saveProperties();
                         data.files[0].saveTags();
-                        updateTravelPhotos();
+                        // 如果设置了旅行，则加入旅行
+                        if($scope.travel) {
+                            updateTravelPhotos($scope.travel);
+                        }
                     } else if (data.result.status == "NO_AUTHORIZE") {
                         data.files[0].error = "请重新登录";
                         data.files[0].$endestroy = false;
@@ -138,7 +145,7 @@ angular.module('fileuploadApp', [
                 }
             };
 
-            $scope.photos = [];
+//            $scope.photos = [];
             /**
              * 从server返回的图片属性中抽取信息给file
              *
@@ -157,13 +164,15 @@ angular.module('fileuploadApp', [
                     file.lngPritty = cnmap.GPS.convert(file.lng);
                 }
 
-                $scope.$emit('photoAdd', photo);
+                angular.extend(file.photo, photo);
 
-                angular.forEach($scope.queue, function(qFile, key) {
-                    if(qFile === file) {
-                        $scope.photos[key] = photo;
-                    }
-                });
+                $scope.$emit('photoAdd', file.photo);
+
+//                angular.forEach($scope.queue, function(qFile, key) {
+//                    if(qFile === file) {
+//                        $scope.photos[key] = file.photo;
+//                    }
+//                });
             }
 
             if(!fileUpload.defaults.autoUpload) {
@@ -177,6 +186,12 @@ angular.module('fileuploadApp', [
                         fileUpload.defaults.add(e, data);
                         // load image's gps info
                         var file = data.files[0];
+                        file.uuid = jsUtils.uuid();
+                        file.photo = {
+                            id: file.uuid,
+                            uuid: file.uuid
+                        };
+
                         loadImage.parseMetaData(file, function (data) {
                             if (data.exif) {
                                 var lat = data.exif.getText('GPSLatitude');
@@ -198,39 +213,56 @@ angular.module('fileuploadApp', [
 
                                 // 转换坐标体系
                                 if (file.lng || file.lat) {
-                                    GPSConvertService.convert({
-                                        'lat': file.lat,
-                                        'lng': file.lng
-                                    }, function (data) {
-                                        file.lat = data.lat;
-                                        file.lng = data.lng;
-                                        file.vendor = "gaode";
-                                        file.latPritty = cnmap.GPS.convert(file.lat);
-                                        file.lngPritty = cnmap.GPS.convert(file.lng);
+                                    if(ponmCtxConfig.getCoordSS()=="baidu") {
+                                        BMap.Convertor.translate({lat: file.lat, lng: file.lng}, 0, function(point) {
+                                            file.lat = point.lat;
+                                            file.lng = point.lng;
+                                            file.latPritty = cnmap.GPS.convert(file.lat);
+                                            file.lngPritty = cnmap.GPS.convert(file.lng);
 
-//                                            mapService.getAddress(file.lat, file.lng, function(res) {
-//                                                file.address = res;
-//                                            });
+                                            file.photo.point = {
+                                                lat: file.lat,
+                                                lng: file.lng
+                                            };
 
-//                                            GeocodeService.regeo({lat: file.lat, lng: file.lng}, function(regeocode) {
-//                                                file.address = regeocode.formatted_address;
-//                                            });
+                                            $scope.$emit('photoAdd', file.photo);
+                                        });
+                                    }else {
+                                        GPSConvertService.convert({
+                                            'lat': file.lat,
+                                            'lng': file.lng,
+                                            dest: ponmCtxConfig.getCoordSS()=="baidu"?"baidu":"mars"
+                                        }, function (data) {
+                                            file.lat = data.lat;
+                                            file.lng = data.lng;
+//                                        file.vendor = "gaode";
+                                            file.latPritty = cnmap.GPS.convert(file.lat);
+                                            file.lngPritty = cnmap.GPS.convert(file.lng);
 
-                                        // TODO DEBUG
-                                        $scope.$emit('photoAdd', {id: file.photoId, point: {lat: file.lat, lng: file.lng}});
-                                    });
+                                            file.photo.point = {
+                                                lat: file.lat,
+                                                lng: file.lng
+                                            };
+
+//                                        $scope.photos.push(file.photo);
+                                            $scope.$emit('photoAdd', file.photo);
+
+                                            // TODO DEBUG
+//                                        $scope.$emit('photoAdd', {id: file.photoId, point: {lat: file.lat, lng: file.lng}});
+                                        });
+                                    }
                                 }
                             }
                         });
 
                         // TODO DEBUG
-                        $scope.photoCount = $scope.photoCount || 0;
-                        $scope.photoCount += 1;
-                        if($scope.photoCount % 2 == 1) {
-                            file.photoId = $scope.photoCount;
-                            $scope.$emit('photoAdd', {id: $scope.photoCount});
-                        }
-                        $scope.photos.push({id: $scope.photoCount});
+//                        $scope.photoCount = $scope.photoCount || 0;
+//                        $scope.photoCount += 1;
+//                        if($scope.photoCount % 2 == 1) {
+//                            file.photoId = $scope.photoCount;
+//                            $scope.$emit('photoAdd', {id: $scope.photoCount});
+//                        }
+//                        $scope.photos.push({id: $scope.photoCount});
                     }
             }
 
@@ -242,7 +274,7 @@ angular.module('fileuploadApp', [
             $scope.$on("photoReverseAddress", function(e, photo) {
                 $log.debug("photoReverseAddress : " + photo.id);
                 angular.forEach($scope.queue, function(file, key) {
-                    if(file.photoId == photo.id) {
+                    if(file.photo.uuid == photo.uuid) {
                         safeApply($scope, function() {
                             file.mapVendor = photo.mapVendor;
                             file.address = photo.mapVendor.address;
@@ -255,32 +287,6 @@ angular.module('fileuploadApp', [
                     }
                 });
             });
-
-            /**
-             * change image's gps location
-             *
-             * @param file
-             */
-//            $scope.changeLocation = function (files) {
-//                var modalInstance = $modal.open({
-//                    templateUrl: 'views/changeLocationModal.html',
-//                    controller: "ChLocModalCtrl",
-//                    windowClass: 'map-photo-modal',
-//                    resolve: {
-//                        'files': function () {
-//                            return files;
-//                        }
-//                    }
-//                });
-//
-//                modalInstance.result.then(function (selectedItem) {
-//                    angular.forEach(selectedItem, function (file, key) {
-//                        file.saveProperties();
-//                    });
-//                }, function () {
-//                    $log.info('Modal dismissed at: ' + new Date());
-//                });
-//            };
 
             // 异步加载用户travels数据
             $scope.loadTravelData = function (callback) {
@@ -373,6 +379,10 @@ angular.module('fileuploadApp', [
                         jsUtils.param({photos: photos.join(",")}), function (res) {
                             if (res.status == "OK") {
                                 $scope.alertService.add("success", "更新成功");
+                                if(!travel.message) {
+                                    createTravelMessage(travel);
+                                }
+
                             }else {
                                 $scope.alertService.add("danger", "更新失败:" + res.info, {ttl: 3000});
                             }
@@ -381,6 +391,25 @@ angular.module('fileuploadApp', [
                         });
                 }
 
+            }
+
+            /**
+             * 分享旅行
+             *
+             * @param id
+             */
+            function createTravelMessage(travel) {
+                MessageService.save({}, {
+                        "type": "travel",
+                        "travel": {
+                            "id": travel.id
+                        }
+                    }, function(res) {
+                        if(res.status == "OK") {
+                            travel.message = res.message;
+                        }
+                    },function(error) {
+                    });
             }
 
             // 当抬头tag值有变化时，更新所有photo的tags
@@ -413,34 +442,36 @@ angular.module('fileuploadApp', [
                         });
                     }
                 });
-
             };
         }
     ])
     .controller('PhotoUploadRowCtrl', [
-        '$scope', '$http', '$q', '$log', 'PhotoService', 'jsUtils',
-        function ($scope, $http, $q, $log, PhotoService, jsUtils) {
+        '$scope', '$document', '$q', '$log', '$timeout', 'PhotoService', 'jsUtils',
+        function ($scope, $document, $q, $log, $timeout, PhotoService, jsUtils) {
 
             $scope.activePhoto = function(file) {
-                $scope.$emit('photoActive', {id: file.photoId});
+                $scope.$emit('photoActive', file.photo);
                 $scope.activeFile && ($scope.activeFile.active = false);
                 $scope.activeFile = null;
-                if(file.photoId) {
+                if(file.photo) {
                     file.active = true;
                     $scope.activeFile = file;
                 }
-
             };
 
             $scope.$on("photoReverseActive", function(e, photo) {
-                if($scope.activeFile && $scope.activeFile.photoId == photo.id) {
-                    return;
-                }
+//                if($scope.activeFile && $scope.activeFile.photoId == photo.id) {
+//                    return;
+//                }
                 $scope.activeFile && ($scope.activeFile.active = false);
                 angular.forEach($scope.queue, function(file, key) {
-                    if(file.photoId == photo.id) {
+                    if(file.photo.uuid == photo.uuid) {
                         file.active = true;
                         $scope.activeFile = file;
+
+                        // scroll to photo's element when photo is clicked
+                        var photoRow = angular.element(document.getElementById('upload-photo-'+photo.uuid));
+                        $document.scrollToElementAnimated(photoRow, 160);
                     }
                 });
             });
@@ -488,13 +519,14 @@ angular.module('fileuploadApp', [
                         }
                     });
                 }else {
-                    $timeout(function() {
+//                    $timeout(function() {
                         if(type == "address") {
-                            $scope.file.point[type] = data;
+                            $scope.file.point && ($scope.file.point[type] = data);
                         }else {
                             $scope.file[type] = data;
                         }
-                    }, 500);
+                        d.resolve()
+//                    }, 500);
                 }
                 return d.promise;
             };
@@ -528,7 +560,7 @@ angular.module('fileuploadApp', [
                         }
                     },function(error) {
                         $scope.alertService.add("danger", "更新失败", {ttl: 3000});
-                    })
+                    });
                 }
             };
 
@@ -602,10 +634,6 @@ angular.module('fileuploadApp', [
 
             };
 
-//                file.$cancel = function () {
-//                    data.abort();
-//                    $scope.clear(file);
-//                };
             if (!file.$cancel && !file._index) {
                 file.$cancel = function () {
                     $scope.clear(file);
@@ -626,7 +654,7 @@ angular.module('fileuploadApp', [
                 }else {
                     file.$cancel();
                 }
-                $scope.$emit('photoDelete', {id: file.photoId});
+                $scope.$emit('photoDelete', file.photo);
             }
         }
     ])

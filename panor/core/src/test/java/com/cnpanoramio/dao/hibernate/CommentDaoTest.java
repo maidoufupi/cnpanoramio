@@ -79,7 +79,7 @@ public class CommentDaoTest {
 
 	@Test
 	public void testGetPhotoComments() {
-		List<Comment> comments = commentDao.getComments(photo.getId());
+		List<Comment> comments = commentDao.getComments(photo);
 		Assert.assertTrue(comments.size() == 1);
 		log.info(comments.get(0).getComment());
 //		log.info(comments.get(0).getPhoto().getOwner().getUsername());
@@ -89,7 +89,7 @@ public class CommentDaoTest {
 	@Test
 	public void testGetCommentsPager() {
 		Assert.assertEquals(commentDao.getCommentSize(photo.getId()).intValue(), 2);
-		List<Comment> comments = commentDao.getComments(photo.getId());
+		List<Comment> comments = commentDao.getComments(photo);
 		Assert.assertTrue(comments.size() == 1);
 //		log.info(comments.get(0).getCreateTime().get(Calendar.YEAR));
 //		log.info(comments.get(0).getCreateTime().get(Calendar.MONTH));

@@ -3,14 +3,17 @@ package com.cnpanoramio.dao.impl.hibernate;
 import java.util.List;
 
 import org.appfuse.dao.hibernate.GenericDaoHibernate;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.dao.CommentDao;
+import com.cnpanoramio.domain.Circle;
 import com.cnpanoramio.domain.Comment;
-import com.cnpanoramio.domain.Message;
+import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.domain.Comment.CommentType;
 
 @Repository("commentDao")
 public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long> 
@@ -28,27 +31,28 @@ public class CommentDaoImpl extends GenericDaoHibernate<Comment, Long>
 	}
 	
 	@Override
-	public List<Comment> getComments(Long photoId) {
-		Query photoListQuery = getSession().createQuery("select c from Comment as c left join c.photo as p "
-				+ "where p.id = :photoid order by create_date desc");
+	public List<Comment> getComments(Photo photo) {
 		
-		photoListQuery.setParameter("photoid", photoId);
-		List<Comment> res = photoListQuery.list();
-        return res;
+		Criteria criteria = getSession().createCriteria(Comment.class)
+				.add(Restrictions.eq("type", CommentType.photo))
+				.add(Restrictions.eq("photo", photo))
+				.addOrder(Order.desc("modifyDate"));
+		
+		return criteria.list();
 	}
 
-//	@Override
-//	public List<Comment> getCommentPager(Long photoId, int pageSize, int pageNo) {
-//		Query query = getSession().createQuery("select c from Comment as c left join c.photo as p "
-//				+ "where p.id = :photoid order by create_date desc");
-//		
-//		query.setParameter("photoid", photoId);
-//		query.setFirstResult((pageNo - 1) * pageSize);  
-//        query.setMaxResults(pageSize);  
-//  
-//		List<Comment> res = query.list();
-//		return res;
-//	}
+	@Override
+	public List<Comment> getComments(Photo photo, int pageSize, int pageNo) {
+		
+		Criteria criteria = getSession().createCriteria(Comment.class)
+				.add(Restrictions.eq("type", CommentType.photo))
+				.add(Restrictions.eq("photo", photo))
+				.addOrder(Order.desc("modifyDate"));
+		
+		criteria.setFirstResult((pageNo - 1) * pageSize).setMaxResults(pageSize);
+		
+		return criteria.list();
+	}
 
 	@Override
 	public Long getCommentSize(Long photoId) {

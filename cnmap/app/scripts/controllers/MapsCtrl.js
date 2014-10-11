@@ -10,7 +10,8 @@ angular.module('ponmApp.maps', [
     'ui.router',
     'xeditable',
     'fileuploadApp',
-    'ngDragDrop'
+    'ngDragDrop',
+    'ui.bootstrap.datetimepicker'
 ])
     .config([   '$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
@@ -147,10 +148,10 @@ angular.module('ponmApp.maps', [
     .controller('MapsCtrl',
     [        '$window', '$location', '$rootScope', '$scope', '$q', 'PhotoService', 'UserService', 'PanoramioService',
                 '$modal', 'ponmCtxConfig', '$log', '$state', '$stateParams', '$timeout', 'safeApply', 'jsUtils',
-                'HashStateManager',
+                'HashStateManager', 'alertService',
         function ($window, $location, $rootScope, $scope, $q, PhotoService, UserService, PanoramioService,
                   $modal, ponmCtxConfig, $log, $state, $stateParams, $timeout, safeApply, jsUtils,
-                  HashStateManager) {
+                  HashStateManager, alertService) {
 
             $scope.ctx = ponmCtxConfig.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -180,6 +181,11 @@ angular.module('ponmApp.maps', [
             $scope.$state = $state;
             $scope.$location = $location;
             $scope.$stateParams = $stateParams;
+
+            // copy a local message service
+            $scope.alertService = angular.copy(alertService);
+            $scope.alertService.options.alone = true;
+            $scope.alertService.options.ttl = 1000;
 
             // 编辑视图
             $scope.editableView = true;
@@ -221,13 +227,18 @@ angular.module('ponmApp.maps', [
                 }
             );
 
-            $scope.contentLayouts = ['right-fixed', 'left-fixed', 'right-full', 'left-full'];
+            $scope.contentLayouts = ['maps-right-fixed', 'maps-left-fixed', 'maps-right-full', 'maps-left-full'];
             $scope.contentLayouts.index = 0;
             $scope.changeContentLayout = function() {
                 $scope.contentLayouts.index = ($scope.contentLayouts.index + 1) % 4;
             };
 
             $scope.mapOptions = {
+//                center: {
+//                    lat: 35,
+//                    lng: 116
+//                },
+                zoom: 8,
                 // map plugin config
 //            toolbar: true,
                 scrollzoom: true,
@@ -281,7 +292,28 @@ angular.module('ponmApp.maps', [
                 $scope.mapEventListener.addToolBar(mapObj);
                 $scope.mapService.init(mapObj);
                 locationHash(mapObj);
+                if(!$scope.hashStateManager.get("lat")) {
+                    getCurrentPostion(map);
+                }
             });
+
+            function getCurrentPostion(map) {
+                // Try HTML5 geolocation
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        $scope.mapEventListener.setCenter(map, position.coords.latitude,
+                            position.coords.longitude);
+                    }, function(e) {
+                        $log.error('Error: Your browser doesn\'t support geolocation.');
+                        $log.debug(e);
+//                        handleNoGeolocation(true);
+                    });
+                } else {
+                    // Browser doesn't support Geolocation
+                    $log.error('Error: Your browser doesn\'t support geolocation.');
+//                    handleNoGeolocation(false);
+                }
+            }
 
             /**
              * state 参数说明打开图片是由地址栏photoid状态变化引起，不需要重新设置为photoid状态值
@@ -385,7 +417,7 @@ angular.module('ponmApp.maps', [
 
                 listeners = $scope.mapEventListener.addLocationHashListener(map,
                     function(lat ,lng, zoom) {
-                        $log.debug("locationHashListener");
+//                        $log.debug("locationHashListener");
 
                         if ($scope.setState) {
                             $timeout.cancel($scope.setState);
@@ -660,9 +692,9 @@ angular.module('ponmApp.maps', [
             });
         }])
     .controller('MapsTravelCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modal',
+    [        '$window', '$scope', 'TravelService', 'UserService', '$modal', 'MessageService',
         'ponmCtxConfig', '$log', '$state', '$stateParams', '$q', 'jsUtils',
-        function ($window, $location, $rootScope, $scope, TravelService, UserService, $modal,
+        function ($window, $scope, TravelService, UserService, $modal, MessageService,
                   ponmCtxConfig, $log, $state, $stateParams, $q, jsUtils) {
 
             $scope.clearSearch();
@@ -675,16 +707,21 @@ angular.module('ponmApp.maps', [
                         $scope.stateStatus.name = res.travel.title;
                         $scope.setTravel(res.travel);
 
-                        if($scope.travel.spots[0]) {
-                            $scope.activeSpot($scope.travel.spots[0]);
-                        }
-
                         // 获取图片的用户信息
                         UserService.getOpenInfo({'userId': $scope.travel.user_id}, function (data) {
                             if (data.status == "OK") {
                                 $scope.userOpenInfo = data.open_info;
                             }
                         });
+
+                        if(res.travel.message_id) {
+                            MessageService.get({id: res.travel.message_id}, function(res) {
+                                if(res.status == "OK") {
+                                    $scope.message = res.message;
+                                }
+                            });
+                        }
+
                     }
                 });
             }
@@ -712,8 +749,10 @@ angular.module('ponmApp.maps', [
                 });
                 if($scope.travelLayer) {
                     $scope.travelLayer.clearMap();
+                    $scope.travelLayer.setEditable($scope.travelEnedit);
                     $scope.travelLayer.setTravel($scope.travel);
                     $scope.travelLayer.initMap();
+                    $scope.activeSpot($scope.travel.spots[0]);
                 }
             };
 
@@ -744,47 +783,32 @@ angular.module('ponmApp.maps', [
             });
 
             $scope.$on("mapChanged", function(e) {
-                initTravelLayer($scope.map)
+                if(!$scope.travelLayer) {
+                    initTravelLayer($scope.map)
+                }
             });
             $scope.$on("editableViewChanged", function(e, editableView) {
                 // 设置此travel是否可以被登录者编辑
                 if($scope.travel) {
                     $scope.travelEnedit = ($scope.userId == $scope.travel.user_id) && editableView;
+                    $scope.travelLayer && $scope.travelLayer.setEditable($scope.travelEnedit);
                 }
             });
 
-            $scope.$on('photoDeleteEvent', function(e, data) {
-                $log.debug("photo delete event: photoId = " + data);
+            $scope.$on('photoDeleteEvent', function(e, photoId) {
+                $log.debug("photo delete event: photoId = " + photoId);
                 e.preventDefault();
                 e.stopPropagation();
 
-                // remove travel photo on server
-                TravelService.deletePhoto({travelId: $scope.travel.id, typeId: data}, function(res) {
-                    if(res.status == "OK") {
-                        angular.forEach($scope.travel.spots, function (spot, key) {
-                            angular.forEach(spot.photos, function (photo, key) {
-                                if (photo.id == data) {
-                                    delete spot.photos.splice(key, 1);
-                                }
-                            });
-
-                            if(!spot.photos.length) {
-                                delete $scope.travel.spots.splice(key, 1);
-                            }
-                        });
-
-                        $scope.$broadcast('ponmPhotoFluidResize');
-                    }
-                });
             });
-
 
             function initTravelLayer(map) {
                 $scope.travelLayer = new $window.cnmap.TravelLayer({
                     ctx: $scope.ctx,
                     staticCtx: $scope.staticCtx,
-                    travel: $scope.travel,
-                    clickable: true
+//                    travel: $scope.travel,
+                    clickable: true,
+                    editable: !!$scope.travelEnedit
                 });
 
                 jQuery($scope.travelLayer).bind("data_clicked", function (e, photoId) {
@@ -795,7 +819,14 @@ angular.module('ponmApp.maps', [
                 if($scope.travel) {
                     $scope.travelLayer.setTravel($scope.travel);
                     $scope.travelLayer.initMap();
+                    if($scope.travel.spots[0]) {
+                        $scope.activeSpot($scope.travel.spots[0]);
+                    }
                 }
+
+                jQuery($scope.travelLayer).bind("spot.edited", function (e, spotId) {
+                    $scope.$broadcast("spot.edited."+spotId);
+                });
             }
 
             function clearTravelLayer() {
@@ -864,9 +895,9 @@ angular.module('ponmApp.maps', [
             });
         }])
     .controller('MapsTravelSpotCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', '$q', 'TravelService', 'UserService', '$modal',
+    [        '$window', '$location', '$rootScope', '$scope', '$q', 'TravelService', 'UserService', 'PhotoService', '$modal',
         'ponmCtxConfig', '$log', '$state', '$stateParams', '$filter', 'jsUtils',
-        function ($window, $location, $rootScope, $scope, $q, TravelService, UserService, $modal,
+        function ($window, $location, $rootScope, $scope, $q, TravelService, UserService, PhotoService, $modal,
                   ponmCtxConfig, $log, $state, $stateParams, $filter, jsUtils) {
 
             $scope.$watch('spot.timeStart', function(timeStart) {
@@ -931,6 +962,13 @@ angular.module('ponmApp.maps', [
 
             $scope.removePhoto = function(photo) {
                 $scope.$emit('photoDeleteEvent', photo.id);
+                // remove travel photo on server
+                TravelService.deletePhoto({travelId: $scope.spot.travel_id, typeId: photo.id}, function(res) {
+                    if(res.status == "OK") {
+                        $scope.travelLayer.removePhoto(photo);
+                        $scope.$broadcast('ponmPhotoFluidResize');
+                    }
+                });
             };
 
             $scope.deleteSpot = function(spot) {
@@ -942,15 +980,106 @@ angular.module('ponmApp.maps', [
                 });
             };
 
+            $scope.saveSpotPhotoPoint = function(spot) {
+                var deferred = $q.defer();
+                var spotPosition = {
+                    id: spot.id,
+                    photos: []
+                };
+                angular.forEach(spot.photos, function(photo, key) {
+                    if(photo.oPoint) {
+                        spotPosition.photos.push({
+                            id: photo.id,
+                            point: angular.copy(photo.point),
+                            vendor: ponmCtxConfig.getCoordSS()
+                        });
+                    }
+                });
+                TravelService.changeSpotPhotoPosition({travelId: spot.travel_id, typeId: spot.id},
+                    spotPosition, function(res) {
+                        if(res.status == "OK") {
+                            // 保存后删除备份的point， 没有oPoint则说明本地与服务器point属性一致
+                            angular.forEach(spot.photos, function(photo, key) {
+                                delete photo.oPoint;
+                            });
+                            deferred.resolve();
+                        }else {
+                            deferred.reject();
+                        }
+                    },function(error) {
+                        deferred.reject();
+
+                    });
+                return deferred.promise;
+            };
+
+            $scope.editAndSave = function(spotLine) {
+                if(spotLine.edit) {
+                    if(spotLine.save) {
+                        $scope.saveSpotPhotoPoint($scope.spot).then(function() {
+
+                            $scope.alertService.add("success", "更新成功");
+                            spotLine.save = false;
+                        }, function() {
+                            $scope.alertService.add("danger", "更新失败", {ttl: 3000});
+                        });
+
+                    }else {
+                        spotLine.edit = false;
+                        spotLine.save = false;
+                    }
+                }else {
+                    spotLine.edit = true;
+                    spotLine.save = false;
+                }
+                if($scope.travelLayer) {
+                    $scope.travelLayer.setSpotEditable($scope.spot, spotLine.edit);
+                }
+            };
+
+            $scope.cancelEdit = function(spotLine) {
+                if($scope.travelLayer) {
+                    $scope.travelLayer.cancelSpotEdit($scope.spot);
+                }
+                spotLine.save = false;
+            };
+
+            $scope.$on("spot.edited."+$scope.spot.id, function(e) {
+                $scope.spotLine.save = true;
+            });
+
             // 默认显示旅行的线
-            $scope.displayLine = true;
-            $scope.$watch("displayLine", function(displayLine) {
-                $scope.travelLayer.toggleSpotLine($scope.spot, !!displayLine);
+            $scope.spotLine = {disp: true};
+            $scope.$watch("spotLine.disp", function(displayLine) {
+                if($scope.travelLayer) {
+                    $scope.travelLayer.toggleSpotLine($scope.spot, !!displayLine);
+                }
             });
 
             $scope.$on("ponm-photo-fluid-resized", function() {
                 $scope.$broadcast("waypoint-refresh");
             });
+        }])
+    .controller('MapsTravelSpotPhotoCtrl',
+    [        '$scope', '$q',
+        function($scope, $q) {
+
+            $scope.setPhotoDateTime = function(dateTime) {
+                if($scope.photo.date_time == dateTime) {
+                    return;
+                }
+                // 设置新时间
+                $scope.photo.date_time = dateTime;
+                // 图片重新排序
+                $scope.travelLayer.calcSpotTime();
+                // 线路重新绘制
+                $scope.travelLayer.updateSpotLine($scope.spot);
+                // 图片布局重新计算
+                $scope.$emit('ponmPhotoFluidResize');
+                //
+                $scope.spotLine.save = true;
+            };
+
         }])
     .controller('MapsUserCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
@@ -1097,10 +1226,11 @@ angular.module('ponmApp.maps', [
 
             var photos = {};
             $scope.$on("photoAdd", function(e, photo) {
-                $log.debug(photo.id);
+                $log.debug("add marker of photo : ");
+                $log.debug(photo);
                 photo.mapVendor = photo.mapVendor || {};
-                photos[photo.id] = photos[photo.id] || photo;
-                photo = photos[photo.id];
+                photos[photo.uuid] = photos[photo.uuid] || photo;
+                photo = photos[photo.uuid];
 
                 if(photo.point) {
                     addOrUpdateMarker(photo, photo.point.lat, photo.point.lng);
@@ -1109,19 +1239,19 @@ angular.module('ponmApp.maps', [
             });
 
             $scope.$on("photoDelete", function(e, photo) {
-                $log.debug("photo delete: " + photo.id);
-                photo = photos[photo.id];
+                $log.debug("photo delete: " + photo.uuid);
+                photo = photos[photo.uuid];
                 if(photo) {
                     if(photo.mapVendor.marker) {
                         mapEventListener.removeMarker(photo.mapVendor.marker);
                     }
-                    delete photos[photo.id];
+                    delete photos[photo.uuid];
                 }
             });
 
             $scope.$on("photoActive", function(e, photo) {
-                $log.debug("active: " + photo.id);
-                photo = photos[photo.id];
+                $log.debug("active: " + photo.uuid);
+                photo = photos[photo.uuid];
                 $scope.activePhoto(photo);
             });
 
@@ -1172,6 +1302,7 @@ angular.module('ponmApp.maps', [
                 });
 
                 mapEventListener.addDragendListener(file.mapVendor.marker, function (lat, lng) {
+//                    $scope.activePhoto(this.photo_file);
                     $scope.setPlace(this.photo_file, lat, lng);
                 })
 
@@ -1255,9 +1386,10 @@ angular.module('ponmApp.maps', [
                 }else {
                     photo = {
                         id: drop.id,
+                        uuid: drop.id,
                         mapVendor: {}
                     };
-                    photos[photo.id] = photo;
+                    photos[photo.uuid] = photo;
                 }
                 var point = mapEventListener.pixelToPoint($scope.map, {x: (drop.ui.offset.left + drop.event.offsetX), y: (drop.event.clientY - 103)});
                 addOrUpdateMarker(photo, point.lat, point.lng);

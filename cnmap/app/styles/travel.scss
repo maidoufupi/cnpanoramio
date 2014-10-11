@@ -23,6 +23,7 @@
     }
 
     .media.user-info {
+      position: relative;
       .media-heading {
         font-family: $headings-font-family;
         @include transition-linear(all);
@@ -45,14 +46,20 @@
           color: white;
         }
       }
+
+      .bd-share {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
     }
   }
 
   .travel-header.navbar-third {
     padding: 10px;
-    height: 51px;
+    @include box-shadow(0 0 0 rgba(0, 0, 0, 0.57));
     .media.user-info {
-      line-height: 30px;
+//      line-height: 30px;
       .media-body {
         .media-heading {
           display: inline;
@@ -60,7 +67,7 @@
           margin: 0 5px;
         }
         .media-footer {
-          display: inline;
+          display: none;
         }
       }
       .pull-left img.media-object {
@@ -95,41 +102,31 @@
 
       .panel-heading {
         padding: 5px;
+        background-color: whitesmoke;
       }
+      .panel-heading.navbar-forth {
+        border-radius: 0;
+        padding: 0 5px;
+        border-bottom: 1px solid #00bcd4;
+        .spot-description {
+          display: none;
+        }
+        .travel-spot-header {
+          .spot-date {
+            border-color: #00bcd4;
+            a {
+              color: #00bcd4;
+            }
+            .spot-date-flag {
+              color: #00bcd4;
+            }
+          }
+        }
+      }
+
       .panel-body {
         padding: 0;
         margin: 0 -1px;
-
-        /* 旅行相册中的图片 */
-        .photo {
-
-          .ponm-photo-remove {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            color: white;
-            .glyphicon {
-              font-size: 12px;
-            }
-          }
-
-          .ponm-photo-remove:hover {
-            color: red;
-          }
-
-          .ponm-photo-option {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            .btn.dropdown-toggle {
-              margin: 0;
-            }
-          }
-
-          .action.ponm-show {
-            opacity: 1;
-          }
-        }
       }
 
       .spot-date.navbar-forth {
@@ -154,11 +151,10 @@
   }
 }
 
-.travel-circle-header {
+.travel-spot-header {
   position: relative;
   padding: 5px 5px 5px 95px;
   min-height: 100px;
-  background-color: whitesmoke;
 
   .spot-date {
     position: absolute;
@@ -169,6 +165,12 @@
 //    background-color: orange;
     text-align: center;
     padding: 0;
+    border: 1px solid grey;
+    border-radius: 50px;
+
+    a {
+      color: grey;
+    }
 
     >a:hover {
       text-decoration: none;
@@ -197,6 +199,39 @@
 
 .control-label {
   text-align: right;
+}
+
+/* 旅行相册中的图片 */
+.photo {
+  .action.datetime-picker {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+
+  .ponm-photo-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: white;
+    .glyphicon {
+      font-size: 12px;
+    }
+  }
+
+  .ponm-photo-remove:hover {
+    color: red;
+  }
+
+  .ponm-photo-option {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+
+  .action.ponm-show {
+    opacity: 1;
+  }
 }
 
 /** date picker */

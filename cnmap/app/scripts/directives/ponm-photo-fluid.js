@@ -67,7 +67,7 @@ angular.module('ponmApp.directives')
 
                     function calculateHeight() {
 
-                        var containerWidth = element.innerWidth();
+                        var containerWidth = element.innerWidth() - 10;
 
                         var items = element.find(options.itemSelector);
                         if(options.size == "maxi") {
@@ -86,7 +86,7 @@ angular.module('ponmApp.directives')
                         var border = Number(options.itemBorder);
                         var itemMargin = Number(options.itemMargin);
                         height -= (2*itemMargin + 1);
-//                        height = Math.round(height) - 1;
+//                        height = Math.ceil(height) - 1;
                         angular.forEach(items, function (item, key) {
                             var img = item.find("img");
                             item.css("height", height + "px");
@@ -130,11 +130,11 @@ angular.module('ponmApp.directives')
                             var itemLineWidthTemp = itemLineWidth + (itemWidth * options.lineMinHeight / itemHeight);
                             if (itemLineWidthTemp > containerWidth) {
 //                                $log.debug("itemLineWidth: " + itemLineWidth);
-//                                setWidthHeight(itemLine, Math.round(containerWidth / itemLineWidth * options.lineMinHeight));
-                                setWidthHeight(itemLine, (containerWidth / itemLineWidth * options.lineMinHeight));
+                                setWidthHeight(itemLine, Math.ceil(containerWidth / itemLineWidth * options.lineMinHeight));
+//                                setWidthHeight(itemLine, (containerWidth / itemLineWidth * options.lineMinHeight));
                                 itemLine = [item];
-//                                itemLineWidth = Math.round(options.lineMinHeight * itemWidth / itemHeight);
-                                itemLineWidth = (options.lineMinHeight * itemWidth / itemHeight);
+//                                itemLineWidth = Math.ceil(options.lineMinHeight * itemWidth / itemHeight);
+                                itemLineWidth = (itemWidth * options.lineMinHeight / itemHeight);
                             } else {
                                 itemLine.push(item);
                                 itemLineWidth = itemLineWidthTemp;
@@ -142,8 +142,8 @@ angular.module('ponmApp.directives')
                         });
                         if (itemLine.length) {
 //                            $log.debug("itemLineWidth: " + itemLineWidth);
-//                            setWidthHeight(itemLine, Math.round(containerWidth / itemLineWidth * options.lineMinHeight));
-                            setWidthHeight(itemLine, (containerWidth / itemLineWidth * options.lineMinHeight));
+//                            setWidthHeight(itemLine, Math.ceil(containerWidth / itemLineWidth * options.lineMinHeight));
+                            setWidthHeight(itemLine, Math.ceil(containerWidth / itemLineWidth * options.lineMinHeight));
                         }
                     }
 
@@ -167,13 +167,13 @@ angular.module('ponmApp.directives')
                             itemLine.push(item);
                             itemLineWidth = itemLineWidth + ((itemWidth / itemHeight) * options.lineMaxHeight);
                             if (itemLineWidth >= containerWidth) {
-                                setWidthHeight(itemLine, (containerWidth * (options.lineMaxHeight / itemLineWidth)));
+                                setWidthHeight(itemLine, Math.ceil(containerWidth * (options.lineMaxHeight / itemLineWidth)));
                                 itemLine = [];
                                 itemLineWidth = 0;
                             }
                         });
                         if (itemLine.length) {
-                            setWidthHeight(itemLine, (containerWidth * (options.lineMaxHeight / itemLineWidth)));
+                            setWidthHeight(itemLine, Math.ceil(containerWidth * (options.lineMaxHeight / itemLineWidth)));
                         }
                     }
                 }

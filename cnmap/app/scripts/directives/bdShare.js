@@ -4,62 +4,49 @@
 'use strict';
 
 angular.module('ponmApp.directives')
-    .directive('bdShare', ['$window', '$animate', '$log', 'param', '$q', '$sce', '$timeout',
-        function ($window, $animate, $log, param, $q, $sce, $timeout) {
+    .directive('bdShare', ['$window', '$animate', '$log', 'jsUtils', '$q', '$sce', '$location',
+        function ($window, $animate, $log, jsUtils, $q, $sce, $location) {
             return {
-                restrict: 'A',
+                restrict: 'EA',
+                scope: {
+                    bdText: "@text",
+                    bdDesc: "@desc",
+                    bdComment: "@comment",
+                    bdUrl: "@url",
+                    bdPic: "@pic",
+                    bdBind: "@bdBind"
+                },
                 templateUrl: "views/bdShare.html",
                 link: function (scope, element, attrs) {
+
+                    scope.$watch(function() {
+                        return $location.absUrl();
+                    }, function(url) {
+                        if(url.indexOf("&")>0) {
+                            scope.url = url+"&d";
+                        }else {
+                            scope.url = url;
+                        }
+                    });
 
                     $window._bd_share_config = {
                         "common": {
                             "bdSnsKey": {},
-                            "bdText": "",
                             "bdMini": "2",
                             "bdMiniList": false,
-                            "bdPic": "",
                             "bdStyle": "1",
                             "bdSize": "16"},
                         "share": {
                             "bdSize": 16}
-//                        ,
-//                        "image": {
-//                            "viewList": ["qzone", "tsina", "tqq", "renren", "weixin"],
-//                            "viewText": "分享到：",
-//                            "viewSize": "16"}
-//                        ,
-//                        "slide":{
-//                            "type":"slide",
-//                            "bdImg":"2",
-//                            "bdPos":"right",
-//                            "bdTop":"100"}
                     };
-                    if(attrs.bdImage && attrs.bdImage!="false") {
-                        $window._bd_share_config.image = {
-                            "viewList": ["qzone", "tsina", "tqq", "renren", "weixin"],
-                            "viewText": "分享到：",
-                            "viewSize": "16"
-                        }
-                    }
-                    scope.scriptSrc = "http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion="+~(-new Date()/36e5);
 
-                    document.getElementById("bdshell_js").src = scope.scriptSrc;
+//                    scope.scriptSrc = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + new Date().getHours();
 
-                    element.on("mouseenter", function(e) {
-                        if(scope.mouseLeaveTimer) {
-                            $timeout.cancel(scope.mouseLeaveTimer);
-                        }
-                        scope.$apply(function() {
-                            scope.mouseEnter = true;
-                        });
-                    });
-                    element.on("mouseleave", function(e) {
-                        scope.mouseLeaveTimer = $timeout(function() {
-                            scope.$apply(function () {
-                                scope.mouseEnter = false;
-                            });
-                        }, 1000);
-                    });
+//                    document.getElementById("bdshell_js").src = scope.scriptSrc;
+                    var s = document.createElement("script");
+                    s.type="text/javascript";
+                    s.src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + new Date().getHours();
+                    document.getElementsByTagName("body")[0].appendChild(s);
                 }
             };
         }])

@@ -1,11 +1,10 @@
 
 $window = window
-BMap = $window.BMap
 class MapService extends window.cnmap.IMapService
   constructor: (@map) ->
 
   init: (map, callback) ->
-    @geocoder = new BMap.Geocoder();
+    @geocoder = new window.BMap.Geocoder();
     if callback
       callback.apply @geocoder, [@geocoder]
 
@@ -13,13 +12,13 @@ class MapService extends window.cnmap.IMapService
     if !@geocoder
       @init()
     # 根据坐标得到地址描述
-    @geocoder.getLocation new BMap.Point(lng, lat), (result) ->
+    @geocoder.getLocation new window.BMap.Point(lng, lat), (result) ->
         if result
           callback.apply undefined, [result.address]
 
   getAddrPois: (lat, lng, callback) ->
     deferred = jQuery.Deferred()
-    @geocoder.getLocation new BMap.Point(lng, lat), (result) ->
+    @geocoder.getLocation new window.BMap.Point(lng, lat), (result) ->
       console.log(result)
       addresses = {}
       if result
@@ -62,6 +61,9 @@ class MapService extends window.cnmap.IMapService
       deferred.resolve addresses
 
     deferred.promise()
+
+  translate: (lat, lng, callback) ->
+    
 
 MapService.factory = () ->
   return new window.cnmap.MapService

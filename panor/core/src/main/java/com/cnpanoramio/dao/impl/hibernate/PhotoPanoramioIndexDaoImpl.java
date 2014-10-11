@@ -89,6 +89,7 @@ public class PhotoPanoramioIndexDaoImpl extends
 	public List<Photo> getPhotoList(int level, Double west, Double south, Double measure) {
 		Criteria criteria = getSession()
 				.createCriteria(Photo.class, "photo")
+				.add(Restrictions.eq("deleted", false))
 				.add(Restrictions.ge("gpsPoint.lat", south))
 				.add(Restrictions.lt("gpsPoint.lat", south+measure))
 				.add(Restrictions.ge("gpsPoint.lng", west))
@@ -118,6 +119,7 @@ public class PhotoPanoramioIndexDaoImpl extends
 				.createCriteria(Photo.class, "photo")
 				.add(Restrictions.ge("gpsPoint.lat", sw.getLat()))
 				.add(Restrictions.le("gpsPoint.lat", ne.getLat()))
+				.add(Restrictions.eq("deleted", false))
 				;
 		if(favorite) {
 			criteria.createAlias("photo.favorites", "favorite")

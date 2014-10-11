@@ -4,24 +4,63 @@
     <title></title>
     <link rel="stylesheet" href="bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css"/>
     <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css"/>
-    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css">
+    <!--<link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css">
     <link rel="stylesheet" href="bower_components/Jcrop/css/jquery.Jcrop.css">
-    <link rel="stylesheet" href="bower_components/perfect-scrollbar/src/perfect-scrollbar.css">
+    <link rel="stylesheet" href="bower_components/perfect-scrollbar/src/perfect-scrollbar.css">-->
+    <link rel="stylesheet" href="http://cdn.staticfile.org/jquery.perfect-scrollbar/0.4.10/perfect-scrollbar.min.css">
+    <link rel="stylesheet" href="http://cdn.staticfile.org/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css">
+    <link rel="stylesheet" href="http://cdn.staticfile.org/blueimp-file-upload/9.5.7/css/jquery.fileupload.min.css">
 
     <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery.css">
     <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css">
+
+    <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css">
 
     <link rel="stylesheet" type="text/css" href="styles/main.css"/>
     <!--<link rel="stylesheet" type="text/css" href="styles/main.min.css"/>-->
 </head>
 <body>
-<script type="text/javascript" src="scripts/ponmApp.vendor.min.js"></script>
-<script type="text/javascript" src="scripts/blueimp-file-upload.min.js"></script>
-<!--<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+<!--<script type="text/javascript" src="scripts/ponmApp.vendor.min.js"></script>-->
+<!--<script type="text/javascript" src="scripts/blueimp-file-upload.min.js"></script>-->
+<!--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/.jsponmApp.vendor.min.js"></script>-->
+<!--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/blueimp-file-upload.min.js" charset="GBK"></script>-->
+<!--<script type="text/javascript" src="http://cdn.staticfile.org/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+<script type="text/javascript" src="//cdn.staticfile.org/jquery.rest/1.0.2/jquery.rest.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="http://cdn.staticfile.org/angular-cookies/1.2.16/angular-cookies.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/angular-resource/1.2.16/angular-resource.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/angular.js/1.2.18/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/angular-animate/1.2.16/angular-animate.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+<script type="text/javascript" src="bower_components/eventie/eventie.js"></script>
+<script type="text/javascript" src="bower_components/eventEmitter/EventEmitter.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/imagesloaded/3.0.4/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/waypoints/2.0.4/waypoints.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
+<script type="text/javascript" src="bower_components/matchmedia/matchMedia.js"></script>
+<script type="text/javascript" src="bower_components/angular-local-storage/angular-local-storage.js"></script>
+<script type="text/javascript" src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
+<script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/jquery.perfect-scrollbar/0.4.10/jquery.perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
+
+<script type="text/javascript" src="http://cdn.staticfile.org/jquery-mousewheel/3.1.11/jquery.mousewheel.min.js"></script>
+<script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/three.js/r67/three.min.js"></script>
+
+<script type="text/javascript" src="scripts/blueimp-file-upload.min.js"></script>-->
+
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
 <script type="text/javascript" src="bower_components/jquery.rest/dist/jquery.rest.js"></script>
 <script type="text/javascript" src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-<script type="text/javascript" src="scripts/blueimp-file-upload.min.js"></script>
+
 <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
 <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -29,7 +68,6 @@
 <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
 <script type="text/javascript" src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
-<script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
 <script type="text/javascript" src="bower_components/eventie/eventie.js"></script>
 <script type="text/javascript" src="bower_components/eventEmitter/EventEmitter.js"></script>
 <script type="text/javascript" src="bower_components/imagesloaded/imagesloaded.js"></script>
@@ -38,9 +76,12 @@
 <script type="text/javascript" src="bower_components/jquery-backstretch/src/jquery.backstretch.js"></script>
 <script type="text/javascript" src="bower_components/jquery-waypoints/waypoints.js"></script>
 <script type="text/javascript" src="bower_components/Jcrop/js/jquery.Jcrop.min.js"></script>
-<script type="text/javascript" src="bower_components/matchmedia/matchMedia.js"></script>-->
+<script type="text/javascript" src="bower_components/matchmedia/matchMedia.js"></script>
 <script type="text/javascript" src="bower_components/angular-local-storage/angular-local-storage.js"></script>
-<!--
+<script type="text/javascript" src="bower_components/angular-scroll/angular-scroll.js"></script>
+<script type="text/javascript" src="bower_components/moment/moment.js"></script>
+<script type="text/javascript" src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+
 <script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-helper.js"></script>
 <script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-gallery.js"></script>
 <script type="text/javascript" src="bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js"></script>
@@ -53,7 +94,18 @@
 
 <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
-<script type="text/javascript" src="scripts/panor/js/three.min.js"></script>-->
+<script type="text/javascript" src="scripts/panor/js/three.min.js"></script>
+
+<script type="text/javascript" src="bower_components/blueimp-load-image/js/load-image.min.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload-ui.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload-angular.js"></script>
+
+<script type="text/javascript" id="bdshare_js" data="type=tools&mini=1" ></script>
+<script id="bdshell_js"></script>
 
 <!--<script type="text/javascript" src="scripts/ponmApp.min.js"></script>-->
 <!--<script type="text/javascript" src="scripts/ponmApp.controllers.min.js"></script>-->
@@ -99,6 +151,7 @@
 <script type="text/javascript" src="scripts/directives/ponm-who-to-follow.js"></script>
 <script type="text/javascript" src="scripts/directives/user-card.js"></script>
 <script type="text/javascript" src="scripts/directives/ponm-travel-album.js"></script>
+<script type="text/javascript" src="scripts/directives/bdShare.js"></script>
 
 <!--<script type="text/javascript" src="scripts/panor/scripts.min.js"></script>-->
 <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
@@ -108,48 +161,57 @@
 <script type="text/javascript" src="scripts/panor/MapTravel.js"></script>
 <script type="text/javascript" src="scripts/panor/MapEvent.js"></script>
 
-<!--<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f"></script>
+<!--<script type="text/javascript" src="bower_components/angular-ui-map-google/src/ui-map.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.google.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/google/MapEventListenerImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/google/MapServiceImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/google/MapTravelImpl.js"></script>-->
+
 <script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
 <script type="text/javascript" src="scripts/panor/panoramio/cnmap.gaode.js"></script>
 <script type="text/javascript" src="scripts/panor/gaode/MapEventListenerImpl.js"></script>
 <script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>-->
+<script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>
 
-<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=kp3ODQt4pkpHMW2Yskl2Lwee"></script>
-<script type="text/javascript" src="bower_components/angular-ui-map-baidu/ui-map.js"></script>
-<script type="text/javascript" src="scripts/panor/panoramio/cnmap.baidu.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapEventListenerImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapTravelImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>-->
+<!--<script type="text/javascript" src="bower_components/angular-ui-map-baidu/ui-map.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.baidu.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapEventListenerImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapServiceImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapTravelImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapConvertor.js"></script>-->
 
-<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
-<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
+<!--<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>-->
+<!--<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
 <script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>
 <script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>
 <script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>-->
 
 <!--<script charset="utf-8" src="http://union.mapbar.com/apis/maps/free?f=mapi&v=31.3&k=aCW9cItqL7sqT7AxaB0zdHZoZSWmbBsuT7JhMHTsMeD6ZIl9NzFsZHT=@JBL979@Iu7lJJZWWq0IDu9xZMzMxq7I9AhH7LAAA6hqzZHZZLTbZZauxlDz7C7DD9ZCFGT="></script>
 <script type="text/javascript" src="scripts/panor/js/cnmap.mapbar.js"></script>-->
 
 <script>
     var map;
-//    var ctx = "http://127.0.0.1:8080/panor-web";
-//    window.ctx = "http://www.photoshows.cn";
-    window.ctx = "http://127.0.0.1:8080";
+//    window.ctx = "http://127.0.0.1:8080";
+//    window.staticCtx = "http://test.photoshows.cn";
+//    window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
+    window.ctx = "http://www.photoshows.cn";
+    window.staticCtx = "http://static.photoshows.cn";
+    window.corsproxyCtx = "http://www.corsproxy.com/static.photoshows.cn";
+//    window.staticCtx = "http://static.photoshows.cn.w.alikunlun.com";
+
     window.apirest = window.ctx + "/api/rest";
-    window.staticCtx = "http://test.photoshows.cn";
-//    window.staticCtx = "http://static.photoshows.cn";
-    window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
-//    window.user = {
-//            id: 3,
-//            name: "暗梅幽闻花"
-//            };
-//    window.login = true;
+    window.user = {
+            id: 3,
+            name: "暗梅幽闻花"
+            };
+    window.login = true;
+
+    window.mapVendor = "gaode";
     window.dev = true;
 </script>
-<div ng-app="ponmApp.Index">
+<div ng-app="ponmApp.Index" ui-map-async-load>
     <div ui-view="navbar">
         <i>Some content will load here!</i>
     </div>

@@ -24,10 +24,7 @@ import com.cnpanoramio.MapVendor;
 @Table(name = "photo_gps")
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class PhotoGps {
-	
-//	@EmbeddedId
-//	private PhotoGpsPK pk;
-	
+		
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

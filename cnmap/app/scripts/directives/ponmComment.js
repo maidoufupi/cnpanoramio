@@ -167,7 +167,7 @@ angular.module('ponmApp.directives')
                                 } else {
                                     d.reject('Server error!');
                                 }
-                            })
+                            });
                         }else {
                             d.resolve(false);
                         }

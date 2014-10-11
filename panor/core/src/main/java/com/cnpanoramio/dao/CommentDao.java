@@ -5,7 +5,7 @@ import java.util.List;
 import org.appfuse.dao.GenericDao;
 
 import com.cnpanoramio.domain.Comment;
-import com.cnpanoramio.domain.Message;
+import com.cnpanoramio.domain.Photo;
 
 public interface CommentDao extends GenericDao<Comment, Long> {
 
@@ -13,8 +13,22 @@ public interface CommentDao extends GenericDao<Comment, Long> {
 	
 	public Long getCommentSize(Long photoId);
 	
-	public List<Comment> getComments(Long photoId);
+	/**
+	 * 图片的全部评论
+	 * 
+	 * @param photo
+	 * @return
+	 */
+	public List<Comment> getComments(Photo photo);
 	
-//	public List<Comment> getCommentPager(Long photoId, int pageSize, int pageNo);
+	/**
+	 * 分页获取图片的评论
+	 * 
+	 * @param photo
+	 * @param pageSize
+	 * @param pageNo
+	 * @return
+	 */
+	public List<Comment> getComments(Photo photo, int pageSize, int pageNo);
 	
 }

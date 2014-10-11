@@ -1,0 +1,64 @@
+<div id="mapsel" class="panel panel-default">
+    <div class="panel-heading">
+        <h2>照片和视频</h2>
+        <p>设置图片和视频</p>
+    </div>
+    <div class="panel-body">
+
+        <form class="form-horizontal" role="form" name="photoForm" ng-submit="changePhotoForm()">
+            <div class="form-group">
+                <div class="checkbox col-sm-10">
+                    <label>
+                        <input type="checkbox" name="autoUpload"
+                                ng-model="photo.autoUpload"> 添加照片后就自动上传。
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox col-sm-10">
+                    <label>
+                        <input type="checkbox" name="completeSize"
+                               ng-model="photo.completeSize"> 以完整尺寸上传我的照片。
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-12" style="padding: 10px;">
+
+                <progress>
+                    <bar ng-repeat="bar in capacity.stacked track by $index" value="bar.value" type="{{bar.type}}">
+                        <span ng-hide="bar.type!=capacity.type">{{capacity.value}}%</span>
+                    </bar>
+                </progress>
+
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" style="width: 35%">
+                        <span>35%</span>
+                    </div>
+                    <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 20%">
+                        <span>20%</span>
+                    </div>
+                    <div class="progress-bar progress-bar-danger" style="width: 10%">
+                        <span class="sr-only">10% Complete (danger)</span>
+                    </div>
+                </div>
+                <div>
+                    已用存储空间：3.33 GB，占总容量 15 GB 的 22.22%。
+                </div>
+                <div>
+                    打开完整尺寸上传会降低上传速度。
+                </div>
+            </div>
+
+
+            <hr>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input class="btn btn-primary" type="submit" value="保存更改"
+                           ng-disabled="saving||!photoForm.$dirty">
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

@@ -9,6 +9,7 @@
     /* hide back of pane during swap */
     .front, .back {
       @include transition(transform 0.6s);
+      @include transition(-webkit-transform 0.6s);
 //      @include transition-transform(preserve-3d);
       -webkit-transform-style: preserve-3d; /* Chrome, Safari, Opera */
       transform-style: preserve-3d;
@@ -34,6 +35,7 @@
       top: 0;
       bottom: 0;
       width: 100%;
+      display: none;
 
       @include rotateY(180deg);
 
@@ -77,6 +79,7 @@
       @include rotateY(-179.9deg);
     }
     .back {
+      display: block;
       @include rotateY(0deg);
       .message-dynamic-card {
         opacity: 1;

@@ -11,6 +11,15 @@ import com.cnpanoramio.domain.Message;
 public interface MessageManager extends GenericManager<Message, Long> {
 	
 	/**
+	 * 获取不同对象的消息
+	 * 
+	 * @param type
+	 * @param id
+	 * @return
+	 */
+	public Message getMessage(Message.MessageType type, Long id);
+	
+	/**
 	 * 新增或更新动态消息
 	 * 
 	 * @param userId

@@ -82,7 +82,6 @@
 
             var getDataTimeoutHander;
             function mapChangedListener(e) {
-                console.log(e);
                 if(getDataTimeoutHander) {
                     clearTimeout(getDataTimeoutHander);
                 }

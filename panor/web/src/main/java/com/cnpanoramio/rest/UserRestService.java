@@ -5,14 +5,11 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.appfuse.model.LabelValue;
 import org.appfuse.model.User;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +33,6 @@ import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
 import com.cnpanoramio.json.UserResponse;
 import com.cnpanoramio.json.UserSettings;
-import com.cnpanoramio.json.UserTransfer;
 import com.cnpanoramio.service.CircleManager;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.MessageManager;
@@ -102,14 +98,16 @@ public class UserRestService extends AbstractRestService {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public UserTransfer getMe() {
-
+	public UserResponse getMe() {
+		UserResponse response = new UserResponse();
+		
 		User me = UserUtil.getCurrentUser(userManager);
-		Map<String, Boolean> roles = new HashMap<String, Boolean>();
-		for (LabelValue labelValue : me.getRoleList()) {
-			roles.put(labelValue.getValue(), Boolean.TRUE);
-		}
-		return new UserTransfer(me.getId(), me.getUsername(), true, roles);
+		UserOpenInfo openInfo = userSettingsService.getOpenInfo(me, null);
+		
+		response.setStatus(UserResponse.Status.OK.name());
+		response.setOpenInfo(openInfo);
+
+		return response;
 	}
 	
 	@RequestMapping(value = "/{userId}/settings", method = RequestMethod.POST)

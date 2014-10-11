@@ -17,6 +17,8 @@
 
     IMapService.prototype.getLocPois = function(address, callback) {};
 
+    IMapService.prototype.translate = function(lat, lng, callback) {};
+
     return IMapService;
 
   })();

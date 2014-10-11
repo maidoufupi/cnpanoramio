@@ -2,41 +2,44 @@ class TravelLayer extends window.cnmap.ITravelLayer
 
   initMap: (map) ->
     @map = map if map
-#    @mapEventListener.setMap @marker, @map
-
     @calcSpotTime()
-
     point = []
     if @travel
       for spot in @travel.spots
-        @createLabel photo for photo in spot.photos
+        @createMarker photo for photo in spot.photos
         point = []
         point.push @createPoint photo for photo in spot.photos
         spot.polyline = new AMap.Polyline {
             map: @map
             path: point
-            strokeStyle: 'dashed'
+            strokeWeight: 2
+#            strokeStyle: 'dashed'
           }
 
   createPoint: (photo) ->
     new AMap.LngLat(photo.point.lng, photo.point.lat)
 
-  createLabel: (photo) ->
+  createMarker: (photo) ->
     that = this
-    label = new AMap.Marker({
+    marker = new AMap.Marker({
       map: @map
       position: new AMap.LngLat(photo.point.lng, photo.point.lat) ##基点位置
       offset: new AMap.Pixel(-15, -15) ##相对于基点的偏移位置
       content: @getLabelContent(photo.oss_key)  ##自定义点标记覆盖物内容
+      topWhenClick: true
     })
-    label.photoId = photo.id
+    marker.photo = photo
     if @opts.clickable
-      AMap.event.addListener(label, 'click',
+      AMap.event.addListener(marker, 'click',
         () ->
-          jQuery(that).trigger("data_clicked", [this.photoId]))
+          jQuery(that).trigger("data_clicked", [this.photo.id]))
+    photo.marker = marker
+    marker
 
-    label.photoId = photo.id
-    label.setMap(@map)
+  removeMarker: (photo) ->
+    if photo.marker
+      photo.marker.setMap null
+      delete photo.marker
 
   toggleSpotLine: (spot, visible) ->
     if spot.polyline
@@ -44,6 +47,37 @@ class TravelLayer extends window.cnmap.ITravelLayer
         spot.polyline.show()
       else
         spot.polyline.hide()
+
+  setSpotEditable: (spot, editable) ->
+    editable = !!editable
+    that = this
+    editMarker = (marker) ->
+      if marker
+        marker.setDraggable editable
+        if that.opts.editable and editable
+          marker.dragListener = AMap.event.addListener marker, 'dragend',
+            (e) ->
+              if not this.photo.oPoint
+                this.photo.oPoint = $.extend {}, this.photo.point
+              this.photo.point.lat = e.lnglat.getLat()
+              this.photo.point.lng = e.lnglat.getLng()
+              that.updateSpotLine spot
+              $(that).trigger("spot.edited", [spot.id]);
+        else if marker.dragListener
+          AMap.event.removeListener marker.dragListener
+          marker.dragListener = null
+    if @opts.editable
+      editMarker photo.marker for photo in spot.photos
+
+  cancelSpotEdit: (spot) ->
+    cancelMarker = (photo) ->
+      if photo.oPoint
+        photo.point = photo.oPoint
+        delete photo.oPoint
+      if photo.marker
+        photo.marker.setPosition new AMap.LngLat(photo.point.lng, photo.point.lat)
+    cancelMarker photo for photo in spot.photos
+    @updateSpotLine spot
 
   updateSpotLine: (spot) ->
     point = []
@@ -54,7 +88,8 @@ class TravelLayer extends window.cnmap.ITravelLayer
       spot.polyline = new AMap.Polyline {
           map: @map
           path: point
-          strokeStyle: 'dashed'
+          strokeWeight: 2
+#          strokeStyle: 'dashed'
         }
 
   createSpot: (spot) ->
@@ -74,21 +109,14 @@ class TravelLayer extends window.cnmap.ITravelLayer
       fillOpacity: 0.2
     }
 
-  createLine: (spots) ->
-    path = for spot, i in spots
-      do (spot, i) ->
-        new AMap.LngLat(spot.center_lng, spot.center_lat)
-    new AMap.Polyline {
-        map: @map
-        path: path
-        strokeStyle: 'dashed'
-      }
-
-  createMarker: () ->
-#    if window.AMap
-#      new AMap.Marker {
+#  createLine: (spots) ->
+#    path = for spot, i in spots
+#      do (spot, i) ->
+#        new AMap.LngLat(spot.center_lng, spot.center_lat)
+#    new AMap.Polyline {
 #        map: @map
-#        icon: "images/marker.png"
-#        animation: "AMAP_ANIMATION_BOUNCE"
+#        path: path
+#        strokeStyle: 'dashed'
 #      }
+
 window.cnmap.TravelLayer = TravelLayer

@@ -21,15 +21,12 @@ import com.cnpanoramio.dao.TravelSpotDao;
 import com.cnpanoramio.dao.UserSettingsDao;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
-import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Travel;
 import com.cnpanoramio.domain.TravelSpot;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.RecycleManager;
 import com.cnpanoramio.service.TravelManager;
-import com.cnpanoramio.utils.PhotoUtil;
-import com.cnpanoramio.utils.UserUtil;
 
 @Service
 @Transactional
@@ -220,7 +217,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		log.debug("add photos size: " + photos.size());
 		Photo photo = null;
 		for (Long photoId : photos) {
-			photo = photoManager.getPhoto(photoId);
+			photo = photoManager.get(photoId);
 			addTravelPhoto(travel, photo);
 		}
 		return travel;
@@ -233,7 +230,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		
 		Photo photo = null;
 		for (Long photoId : photos) {
-			photo = photoManager.getPhoto(photoId);
+			photo = photoManager.get(photoId);
 			removePhoto(travel, photo);
 		}
 		return travel;
@@ -256,14 +253,6 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		
 	}
 	
-//	private void checkMyTravel(Travel travel, User me) {
-//
-//		if (!travel.getUser().getId().equals(me.getId())) {
-//			throw new AccessDeniedException("Travel (id=" + travel.getId()
-//					+ ") is not belong to you");
-//		}
-//	}
-
 	@Override
 	public TravelSpot createTravelSpot(Long id, TravelSpot spot) {
 
@@ -290,7 +279,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		TravelSpot spot = travelSpotDao.get(id);
 		Photo photo = null;
 		for(Long photoId : photos) {
-			photo = photoManager.getPhoto(photoId);
+			photo = photoManager.get(photoId);
 			addSpotPhoto(spot, photo);
 		}
 		return spot.getTravel();

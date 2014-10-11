@@ -10,9 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.TravelResponse.Travel;
-
 
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)

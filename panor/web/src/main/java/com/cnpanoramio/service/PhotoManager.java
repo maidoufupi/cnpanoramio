@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.imaging.ImageReadException;
 import org.appfuse.model.User;
+import org.appfuse.service.GenericManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cnpanoramio.MapVendor;
@@ -17,7 +18,7 @@ import com.cnpanoramio.json.PhotoCameraInfo;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.Tags;
 
-public interface PhotoManager {
+public interface PhotoManager extends GenericManager<Photo, Long> {
 	
 	/**
 	 * 上传图片
@@ -43,14 +44,6 @@ public interface PhotoManager {
 	 * @throws ImageReadException
 	 */
 	public Photo save(Photo photo, MultipartFile file) throws ImageReadException, IOException;
-
-	/**
-	 * 根据ID获取图片
-	 * 
-	 * @param id
-	 * @return
-	 */
-	public Photo getPhoto(Long id);
 
 	/**
 	 * Load the photos for the user.

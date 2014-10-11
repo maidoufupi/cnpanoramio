@@ -1,7 +1,3 @@
-//window.staticCtx = "http://test.photoshows.cn";
-//window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
-window.staticCtx = "http://static.photoshows.cn";
-window.corsproxyCtx = "http://www.corsproxy.com/static.photoshows.cn";
 
 //$("document").ready(function() {
 //	$(window).on('resize', windowresize);

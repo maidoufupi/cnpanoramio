@@ -3,9 +3,9 @@
  */
 'use strict';
 angular.module('ponmApp.test', ['ponmApp', 'ui.bootstrap'])
-    .controller('photoFluidContainerCtrl', ['$scope', '$http', '$log', 'TravelService', 'deparam', '$location',
+    .controller('photoFluidContainerCtrl', ['$scope', '$http', '$log', 'TravelService', 'jsUtils', '$location',
         'ponmCtxConfig',
-        function($scope, $http, $log, TravelService, deparam, $location, ponmCtxConfig) {
+        function($scope, $http, $log, TravelService, jsUtils, $location, ponmCtxConfig) {
 
             $scope.apirest = window.apirest;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -15,7 +15,7 @@ angular.module('ponmApp.test', ['ponmApp', 'ui.bootstrap'])
             $scope.$watch(function () {
                 return $location.search();
             }, function (searchObject) {
-                $log.debug(deparam("id=12"));
+                $log.debug(jsUtils.deparam("id=12"));
                 if(searchObject.id) {
                     $scope.travelId = searchObject.id;
                     getTravel(searchObject.id);
@@ -58,9 +58,9 @@ angular.module('ponmApp.test', ['ponmApp', 'ui.bootstrap'])
             });
         }])
 
-    .controller('spotCtrl', ['$scope', '$http', '$log', 'TravelService', 'deparam', '$location',
+    .controller('spotCtrl', ['$scope', '$http', '$log', 'TravelService', '$location',
         'ponmCtxConfig',
-        function($scope, $http, $log, TravelService, deparam, $location, ponmCtxConfig) {
+        function($scope, $http, $log, TravelService, $location, ponmCtxConfig) {
 
         }])
 ;

@@ -29,17 +29,14 @@
 	<script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=kp3ODQt4pkpHMW2Yskl2Lwee"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-baidu/ui-map.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.baidu.min.js'/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
-    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
-    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
   </c:when>
@@ -47,13 +44,16 @@
   
   </c:when>
   <c:otherwise>
-    <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
   </c:otherwise>
 </c:choose>
 
 	<script>
+	window.staticCtx = "http://test.photoshows.cn";
+	window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
+	//window.staticCtx = "http://static.photoshows.cn";
+	//window.corsproxyCtx = "http://www.corsproxy.com/static.photoshows.cn";
 	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径
 	    /* window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录 */
 	    window.userId = "${sessionScope.userId}"; // 用户ID
@@ -64,12 +64,7 @@
 	            };
     </script>
     
-<script>
-	$(document).ready(function () {
-			angular.bootstrap(document.getElementById("ponmAppIndex"), ['ponmApp.Index']);
-	})
-</script>
-	<div id="ponmAppIndex">
+<div ng-app="ponmApp.Index" ui-map-async-load>
     <div ui-view="navbar">
         <i>Some content will load here!</i>
     </div>

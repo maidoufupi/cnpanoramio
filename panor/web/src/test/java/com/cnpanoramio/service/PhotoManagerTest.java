@@ -146,7 +146,7 @@ public class PhotoManagerTest {
 		log.info(file.getName());
 		log.info(file.getOriginalFilename());
 		PhotoProperties pp = photoManager.upload("", "", "", null, file);
-		Photo photo = photoManager.getPhoto(pp.getId());
+		Photo photo = photoManager.get(pp.getId());
 		Assert.notNull(photo.getDetails());
 		Assert.isTrue(photo.getDetails().getGPSLatitude() != 0);
 		log.info(photo.getDetails().getGPSLatitude());
