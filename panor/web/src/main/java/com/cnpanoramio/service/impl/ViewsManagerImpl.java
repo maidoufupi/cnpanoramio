@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cnpanoramio.dao.IndexPhotoDao;
 import com.cnpanoramio.dao.ViewsDao;
+import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Views;
 import com.cnpanoramio.service.ViewsManager;
 
@@ -58,6 +58,12 @@ public class ViewsManagerImpl implements ViewsManager {
 	@Override
 	public int getViewsCount(Long photoId, Date date) {
 		return viewsDao.getViewsCount(photoId, date);
+	}
+
+	@Override
+	public void removePhotoViews(Photo photo) {
+		viewsDao.removePhotoViews(photo);
+		
 	}
 
 }

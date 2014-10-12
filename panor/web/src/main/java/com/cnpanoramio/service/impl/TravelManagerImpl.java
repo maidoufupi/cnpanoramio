@@ -285,10 +285,10 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		return spot.getTravel();
 	}
 
-	private boolean addSpotPhoto(TravelSpot spot, Photo photo) {
+	public void addSpotPhoto(TravelSpot spot, Photo photo) {
 		if(null != photo.getTravelSpot()) {
 			if(spot.equals(photo.getTravelSpot())) {
-				return true;
+				
 			}else {
 				photo.getTravelSpot().getPhotos().remove(photo);
 				photoDao.save(photo);
@@ -296,7 +296,6 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		}
 		photo.setTravelSpot(spot);
 		spot.getPhotos().add(photo);
-		return true;
 	}
 
 	@Override

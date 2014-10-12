@@ -445,7 +445,6 @@ angular.module('ponmApp.photos', [
                 bodyText: '这么做会删除该相册及其中的照片。'
             };
 
-
             $scope.deleteTravel = function(travel) {
                 delTravelModalOptions.headerText = '删除 ' + travel.title + '?';
                 dialogService.showModal({}, delTravelModalOptions).then(function (result) {
@@ -461,6 +460,8 @@ angular.module('ponmApp.photos', [
                 angular.forEach($scope.travel.spots, function(spot, key) {
                     jsUtils.Array.removeItem(spot.photos, "id", photoId);
                 });
+                // 删除图片后，发出重新布局事件
+                $scope.$broadcast("ponm.photo.fluid.resize");
             });
         }])
     .controller('PhotosTrashCtrl',

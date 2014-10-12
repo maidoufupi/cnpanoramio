@@ -27,7 +27,7 @@
           _ref1 = spot.photos;
           for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
             photo = _ref1[_j];
-            this.labels.push(this.createMarker(photo));
+            this.createMarker(photo);
           }
           point = [];
           _ref2 = spot.photos;
@@ -65,6 +65,7 @@
         });
       }
       photo.marker = marker;
+      this.labels.push(marker);
       return marker;
     };
 
@@ -81,13 +82,12 @@
       }
     };
 
-    TravelLayer.prototype.setSpotEditable = function(spot, editable) {
+    TravelLayer.prototype.spotEditable = function(spot, editable) {
       var editMarker, photo, that, _i, _len, _ref, _results;
-      editable = !!editable;
       that = this;
       editMarker = function(marker) {
         if (marker) {
-          marker.setDraggable(editable);
+          marker.setDraggable(that.opts.editable && editable);
           if (that.opts.editable && editable) {
             return marker.dragListener = google.maps.event.addListener(marker, 'dragend', function(e) {
               if (!this.photo.oPoint) {
@@ -104,15 +104,13 @@
           }
         }
       };
-      if (this.opts.editable) {
-        _ref = spot.photos;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          photo = _ref[_i];
-          _results.push(editMarker(photo.marker));
-        }
-        return _results;
+      _ref = spot.photos;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        _results.push(editMarker(photo.marker));
       }
+      return _results;
     };
 
     TravelLayer.prototype.cancelSpotEdit = function(spot) {

@@ -22,7 +22,7 @@
                     </div>
                 </div>
 
-                <div photo-fluid-container="{'size': 'mini', 'itemSelector': '.travel-photo', itemMargin: 1}"
+                <div photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
                      class="photo-wall">
                     <div ng-repeat="photo in travel.photos"
                          ng-controller="PhotosPhotoCtrl"
@@ -30,6 +30,7 @@
                         <a ng-click="activePhoto(photo)"
                            href="">
                             <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                                 data-width="{{photo.width}}" data-height="{{photo.height}}"
                                  ng-class="{'selectable': selectable&&!photo.actionSelected,
                             'selected': photo.actionSelected}">
                         </a>
@@ -52,7 +53,7 @@
                     </div>
                 </div>
 
-                <div photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}"
+                <div photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
                      class="photo-wall">
                     <div ng-repeat="photo in travel.photos"
                          ng-controller="PhotosPhotoCtrl"
@@ -60,6 +61,7 @@
                         <a ng-click="activePhoto(photo)"
                            href="">
                             <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                                 data-width="{{photo.width}}" data-height="{{photo.height}}"
                                  ng-class="{'selectable': selectable&&!photo.actionSelected,
                             'selected': photo.actionSelected}">
                         </a>

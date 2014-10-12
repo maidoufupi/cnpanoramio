@@ -1,6 +1,6 @@
-.modal-open .modal {
-  background-color: #ececec;
-}
+//.modal-open .modal {
+//  background-color: #ececec;
+//}
 
 .photo-modal-fullscreen {
   overflow: hidden;
@@ -9,6 +9,9 @@
     margin: 0;
     padding: 0;
     width: auto;
+    .photo-modal-container {
+      background: lightgray;
+    }
   }
 }
 
@@ -90,8 +93,8 @@
     padding: 0;
     box-shadow: 0 0 20px 1px #777;
     .modal-content {
-      border-radius: initial;
-      border: initial;
+//      border-radius: initial;
+//      border: initial;
       .modal-header {
         //        color: white;
       }

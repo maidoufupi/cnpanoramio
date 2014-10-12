@@ -271,7 +271,7 @@ angular.module('ponmApp.maps', [
                     $scope.$apply(function (scope) {
                         $scope.photos = jsUtils.Array.mergeRightist($scope.photos || [], data, "id");
 //                        $scope.photos = data;
-                        $scope.$broadcast("ponmPhotoFluidResize", {});
+                        $scope.$broadcast("ponm.photo.fluid.resize", {});
                     });
                 }
             });
@@ -787,6 +787,7 @@ angular.module('ponmApp.maps', [
                     initTravelLayer($scope.map)
                 }
             });
+
             $scope.$on("editableViewChanged", function(e, editableView) {
                 // 设置此travel是否可以被登录者编辑
                 if($scope.travel) {
@@ -842,6 +843,11 @@ angular.module('ponmApp.maps', [
                 }
             };
 
+            /**
+             * 激活spot在地图上显示
+             *
+             * @param spot
+             */
             $scope.activeSpot = function(spot) {
                 var spotId = 0;
                 if(angular.isObject(spot)) {
@@ -862,6 +868,25 @@ angular.module('ponmApp.maps', [
                     }
                 });
                 $scope.travelLayer.activeSpot(spot);
+            };
+
+            /**
+             * 将photo移动到spot
+             *
+             * @param photo
+             * @param spot
+             */
+            $scope.addSpotPhoto = function(photo, spot) {
+                var photos = {photos: photo.id};
+                TravelService.addSpotPhoto({travelId: spot.travel_id, typeId: spot.id},
+                    jsUtils.param(photos), function(res) {
+                        if(res.status == "OK") {
+                            $scope.travelLayer.removePhoto(photo);
+                            $scope.travelLayer.addPhoto(spot, photo);
+                            $scope.$broadcast('ponm.photo.fluid.resize');
+                            $scope.alertService.add("success", "更新成功");
+                        }
+                    });
             };
 
             $scope.showSpotAddress = function(spot) {
@@ -886,6 +911,10 @@ angular.module('ponmApp.maps', [
             if($stateParams.travelId) {
                 getTravel($stateParams.travelId);
             }
+
+            $scope.$on("ponm.photo.fluid.resized", function() {
+                $scope.$broadcast("waypoint-refresh");
+            });
 
             $scope.$on("$destroy", function() {
                 if($scope.travelLayer) {
@@ -912,70 +941,90 @@ angular.module('ponmApp.maps', [
                 }
             });
 
+            /**
+             * 更新景点信息
+             *
+             * @param spot
+             * @param type
+             * @param $data
+             * @returns {*}
+             */
             $scope.updateSpot = function(spot, type, $data) {
                 var d = $q.defer();
-                var params = {
+                var travelSpot = {
+                    id: spot.id,
                     title: spot.title,
                     description: spot.description,
                     address: spot.address
                 };
-                params[type] = $data;
+                travelSpot[type] = $data;
                 TravelService.changeSpot({travelId: spot.travel_id, typeId: spot.id},
-                    jsUtils.param(params),
+                    travelSpot,
                     function(res) {
                         res = res || {};
                         if(res.status === 'OK') { // {status: "OK"}
+                            $scope.alertService.add("success", "更新成功");
                             d.resolve()
                         } else { // {status: "error", msg: "Username should be `awesome`!"}
+                            $scope.alertService.add("danger", "更新失败 " + res.info, {ttl: 2000});
                             d.resolve(res.info);
                         }
                     }, function(error) {
                         if(error.data) {
+                            $scope.alertService.add("danger", "更新失败 " + error.data.info, {ttl: 2000});
                             d.reject(error.data.info);
                         }else {
+                            $scope.alertService.add("danger", "更新失败", {ttl: 2000});
                             d.reject('Server error!');
                         }
                     });
                 return d.promise;
             };
 
+            /**
+             * 把这张图片创建新的景点
+             *
+             * @param photo
+             */
             $scope.createSpot = function(photo) {
                 TravelService.createSpot({travelId: $scope.spot.travel_id}, jsUtils.param({}), function(res) {
                     if(res.status == "OK") {
                         $scope.travelLayer.addSpot(res.spot);
                         $scope.addSpotPhoto(photo, res.spot);
+                        $scope.alertService.add("success", "创建成功");
+                        $scope.$broadcast('ponm.photo.fluid.resize');
                     }
                 });
             };
 
-            $scope.addSpotPhoto = function(photo, spot) {
-                var photos = {photos: photo.id};
-                TravelService.addSpotPhoto({travelId: spot.travel_id, typeId: spot.id},
-                    jsUtils.param(photos), function(res) {
-                        if(res.status == "OK") {
-                            $scope.travelLayer.removePhoto(photo);
-                            $scope.travelLayer.addPhoto(spot, photo);
-//                            $scope.setTravel(res.travel);
-                        }
-                    });
-            };
-
+            /**
+             * 从相册中删除图片
+             *
+             * @param photo
+             */
             $scope.removePhoto = function(photo) {
                 $scope.$emit('photoDeleteEvent', photo.id);
                 // remove travel photo on server
                 TravelService.deletePhoto({travelId: $scope.spot.travel_id, typeId: photo.id}, function(res) {
                     if(res.status == "OK") {
                         $scope.travelLayer.removePhoto(photo);
-                        $scope.$broadcast('ponmPhotoFluidResize');
+                        $scope.alertService.add("success", "删除成功");
+                        $scope.$broadcast('ponm.photo.fluid.resize');
                     }
                 });
             };
 
+            /**
+             * 删除景点
+             *
+             * @param spot
+             */
             $scope.deleteSpot = function(spot) {
                 TravelService.deleteSpot({travelId: spot.travel_id, typeId: spot.id}, function(res) {
                     if(res.status == "OK") {
                         $scope.travelLayer.removeSpot(spot);
-//                        $scope.setTravel(res.travel);
+                        $scope.alertService.add("success", "删除成功");
+                        $scope.$emit("ponm.photo.fluid.resized");
                     }
                 });
             };
@@ -987,20 +1036,24 @@ angular.module('ponmApp.maps', [
                     photos: []
                 };
                 angular.forEach(spot.photos, function(photo, key) {
+                    var p = {id: photo.id};
+                    // 如果旧值存在，则说明有改动； 成功后删除旧值
                     if(photo.oPoint) {
-                        spotPosition.photos.push({
-                            id: photo.id,
-                            point: angular.copy(photo.point),
-                            vendor: ponmCtxConfig.getCoordSS()
-                        });
+                        p.point = angular.copy(photo.point);
+                        p.vendor = ponmCtxConfig.getCoordSS();
                     }
+                    if(photo.oDate_time) {
+                        p.date_time = photo.date_time;
+                    }
+                    spotPosition.photos.push(p);
                 });
-                TravelService.changeSpotPhotoPosition({travelId: spot.travel_id, typeId: spot.id},
+                TravelService.changeSpot({travelId: spot.travel_id, typeId: spot.id},
                     spotPosition, function(res) {
                         if(res.status == "OK") {
                             // 保存后删除备份的point， 没有oPoint则说明本地与服务器point属性一致
                             angular.forEach(spot.photos, function(photo, key) {
                                 delete photo.oPoint;
+                                delete photo.oDate_time;
                             });
                             deferred.resolve();
                         }else {
@@ -1038,8 +1091,20 @@ angular.module('ponmApp.maps', [
             };
 
             $scope.cancelEdit = function(spotLine) {
+                angular.forEach($scope.spot.photos, function(photo, key) {
+                    if(photo.oDate_time) {
+                        photo.date_time = photo.oDate_time;
+                    }
+                    delete photo.oDate_time;
+                });
                 if($scope.travelLayer) {
+                    // 图片重新排序
+                    $scope.travelLayer.calcSpotTime();
+                    // 线路重新绘制
+                    $scope.travelLayer.updateSpotLine($scope.spot);
                     $scope.travelLayer.cancelSpotEdit($scope.spot);
+                    // 图片布局重新计算
+                    $scope.$emit('ponm.photo.fluid.resize');
                 }
                 spotLine.save = false;
             };
@@ -1055,29 +1120,30 @@ angular.module('ponmApp.maps', [
                     $scope.travelLayer.toggleSpotLine($scope.spot, !!displayLine);
                 }
             });
-
-            $scope.$on("ponm-photo-fluid-resized", function() {
-                $scope.$broadcast("waypoint-refresh");
-            });
         }])
     .controller('MapsTravelSpotPhotoCtrl',
     [        '$scope', '$q',
         function($scope, $q) {
 
-            $scope.setPhotoDateTime = function(dateTime) {
-                if($scope.photo.date_time == dateTime) {
+            $scope.setPhotoDateTime = function(nDateTime, oDateTime) {
+                if(oDateTime == nDateTime) {
                     return;
                 }
                 // 设置新时间
-                $scope.photo.date_time = dateTime;
+                $scope.photo.oDate_time = oDateTime;
+                $scope.photo.date_time = nDateTime;
                 // 图片重新排序
                 $scope.travelLayer.calcSpotTime();
                 // 线路重新绘制
                 $scope.travelLayer.updateSpotLine($scope.spot);
                 // 图片布局重新计算
-                $scope.$emit('ponmPhotoFluidResize');
+                $scope.$emit('ponm.photo.fluid.resize');
                 //
+                $scope.spotLine.edit = true;
                 $scope.spotLine.save = true;
+                if($scope.travelLayer) {
+                    $scope.travelLayer.setSpotEditable($scope.spot, true);
+                }
             };
 
         }])
@@ -1131,12 +1197,10 @@ angular.module('ponmApp.maps', [
                                 $scope.photos = jsUtils.Array.append($scope.photos || [], data.photos, "id");
                             }
                             $scope.photo.currentPage++;
-                            $scope.$broadcast("ponmPhotoFluidResize", {});
+                            $scope.$broadcast("ponm.photo.fluid.resize", {});
                             $scope.loadBusy = false;
                         }
                     });
-
-
             }
 
             $($scope.panoramioLayer).bind("map_changed", function (e, bounds, level, size) {

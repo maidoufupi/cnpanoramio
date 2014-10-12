@@ -100,6 +100,9 @@ public class PhotoPanoramioIndexServiceImpl implements
 		List<PhotoProperties> pps = new ArrayList<PhotoProperties>();
 		PhotoProperties pp;
 		for (Photo photo : photos) {
+			if(photo.isDeleted()) {
+				continue;
+			}
 			pp = PhotoUtil.transformProperties(photo);
 			if (null != pp) {
 				if(vendor == MapVendor.baidu) {
@@ -123,143 +126,143 @@ public class PhotoPanoramioIndexServiceImpl implements
 		return new Point(p.lat, p.lng);
 	}
 	
-	public boolean updatePhotoIndex() {
-		int lLevel = 0;
-		double lMeasure = 0;
-		Double lSouth, lWest;
+//	public boolean updatePhotoIndex() {
+//		int lLevel = 0;
+//		double lMeasure = 0;
+//		Double lSouth, lWest;
+//
+//		panorIndexDao.clearPhotoIndex();
+//
+//		/** 更新最底层photo */
+//		lLevel = 19;
+//		lMeasure = conMeasure / Math.pow(2D, lLevel);
+//		lSouth = -90D;
+//		lWest = -180D;
+//		while (lWest < 180D) {
+//			log.debug("lLevel 19 lWest = " + lWest);
+//			while (lSouth < 90D) {
+//				log.debug("lLevel 19 lSouth = " + lSouth);
+//				updatePhotoRegion(lLevel, lSouth, lWest, lMeasure);
+//				lSouth += lMeasure;
+//			}
+//			lWest += lMeasure;
+//		}
+//
+//		/** 根据索引表逐级往上更新 */
+//		lLevel -= 1;
+//		while (lLevel > 2) {
+//			log.debug("lLevel = " + lLevel);
+//			lMeasure = conMeasure / Math.pow(2D, lLevel);
+//			lSouth = -90D;
+//			lWest = -180D;
+//			while (lWest < 180D) {
+//				log.debug("lWest = " + lWest);
+//				while (lSouth < 90D) {
+//					log.debug("lSouth = " + lSouth);
+//					updateIndexRegion(lLevel, lSouth, lWest, lMeasure);
+//					lSouth += lMeasure;
+//				}
+//				lWest += lMeasure;
+//			}
+//			lLevel -= 1;
+//		}
+//
+//		return true;
+//	}
+//
+//	private void updateIndexRegion(int level, Double west, Double south,
+//			Double measure) {
+//
+//		List<PhotoPanoramioIndex> ppiList = panorIndexDao
+//				.getPhotoPanoramioIndexList(level, west, south, measure);
+//		if (ppiList.size() > 0) {
+//			PhotoPanoramioIndex maxPPI = ppiList.get(0);
+//			PhotoPanoramioIndex[] ppis = new PhotoPanoramioIndex[] {};
+//			PhotoPanoramioIndex photoIndex = new PhotoPanoramioIndex();
+//			photoIndex.setPk(new PhotoPanoramioIndexPK(level, maxPPI.getPk()
+//					.getSouth(), maxPPI.getPk().getWest()));
+//			photoIndex.setPhotoRating(maxPPI.getPhotoRating());
+//			photoIndex.setBigPhoto(true);
+//			photoIndex = photoPanoramioIndexDao.save(photoIndex);
+//			ppis[ppis.length] = photoIndex;
+//
+//			boolean allow = true;
+//			for (PhotoPanoramioIndex ppi : ppiList) {
+//				allow = true;
+//				for (PhotoPanoramioIndex ppi2 : ppis) {
+//					if (Math.abs(ppi.getPk().getSouth()
+//							- ppi2.getPk().getSouth()) < measure / 3
+//							&& Math.abs(ppi.getPk().getWest()
+//									- ppi2.getPk().getWest()) < measure / 3) {
+//						allow = false;
+//						break;
+//					}
+//				}
+//				if (allow) {
+//					PhotoPanoramioIndex ppi2 = new PhotoPanoramioIndex();
+//					ppi2.setPk(new PhotoPanoramioIndexPK(level, ppi.getPk()
+//							.getSouth(), ppi.getPk().getWest()));
+//					ppi2.setPhotoRating(ppi.getPhotoRating());
+//					ppi2 = photoPanoramioIndexDao.save(ppi2);
+//					ppis[ppis.length] = ppi2;
+//				}
+//			}
+//		}
+//	}
 
-		panorIndexDao.clearPhotoIndex();
-
-		/** 更新最底层photo */
-		lLevel = 19;
-		lMeasure = conMeasure / Math.pow(2D, lLevel);
-		lSouth = -90D;
-		lWest = -180D;
-		while (lWest < 180D) {
-			log.debug("lLevel 19 lWest = " + lWest);
-			while (lSouth < 90D) {
-				log.debug("lLevel 19 lSouth = " + lSouth);
-				updatePhotoRegion(lLevel, lSouth, lWest, lMeasure);
-				lSouth += lMeasure;
-			}
-			lWest += lMeasure;
-		}
-
-		/** 根据索引表逐级往上更新 */
-		lLevel -= 1;
-		while (lLevel > 2) {
-			log.debug("lLevel = " + lLevel);
-			lMeasure = conMeasure / Math.pow(2D, lLevel);
-			lSouth = -90D;
-			lWest = -180D;
-			while (lWest < 180D) {
-				log.debug("lWest = " + lWest);
-				while (lSouth < 90D) {
-					log.debug("lSouth = " + lSouth);
-					updateIndexRegion(lLevel, lSouth, lWest, lMeasure);
-					lSouth += lMeasure;
-				}
-				lWest += lMeasure;
-			}
-			lLevel -= 1;
-		}
-
-		return true;
-	}
-
-	private void updateIndexRegion(int level, Double west, Double south,
-			Double measure) {
-
-		List<PhotoPanoramioIndex> ppiList = panorIndexDao
-				.getPhotoPanoramioIndexList(level, west, south, measure);
-		if (ppiList.size() > 0) {
-			PhotoPanoramioIndex maxPPI = ppiList.get(0);
-			PhotoPanoramioIndex[] ppis = new PhotoPanoramioIndex[] {};
-			PhotoPanoramioIndex photoIndex = new PhotoPanoramioIndex();
-			photoIndex.setPk(new PhotoPanoramioIndexPK(level, maxPPI.getPk()
-					.getSouth(), maxPPI.getPk().getWest()));
-			photoIndex.setPhotoRating(maxPPI.getPhotoRating());
-			photoIndex.setBigPhoto(true);
-			photoIndex = photoPanoramioIndexDao.save(photoIndex);
-			ppis[ppis.length] = photoIndex;
-
-			boolean allow = true;
-			for (PhotoPanoramioIndex ppi : ppiList) {
-				allow = true;
-				for (PhotoPanoramioIndex ppi2 : ppis) {
-					if (Math.abs(ppi.getPk().getSouth()
-							- ppi2.getPk().getSouth()) < measure / 3
-							&& Math.abs(ppi.getPk().getWest()
-									- ppi2.getPk().getWest()) < measure / 3) {
-						allow = false;
-						break;
-					}
-				}
-				if (allow) {
-					PhotoPanoramioIndex ppi2 = new PhotoPanoramioIndex();
-					ppi2.setPk(new PhotoPanoramioIndexPK(level, ppi.getPk()
-							.getSouth(), ppi.getPk().getWest()));
-					ppi2.setPhotoRating(ppi.getPhotoRating());
-					ppi2 = photoPanoramioIndexDao.save(ppi2);
-					ppis[ppis.length] = ppi2;
-				}
-			}
-		}
-	}
-
-	private void updatePhotoRegion(int level, Double west, Double south,
-			Double measure) {
-		List<Photo> photos = panorIndexDao.getPhotoList(level, west, south,
-				measure);
-		if (photos.size() > 0) {
-
-			Photo maxPhoto = null;
-			for (Photo photo : photos) {
-				int rating = photo.getComments().size()
-						+ photo.getLikes().size() + photo.getViews().size()
-						+ photo.getFavorites().size();
-				photo.setRating(rating);
-				if (null == maxPhoto || maxPhoto.getRating() < rating) {
-					maxPhoto = photo;
-				}
-			}
-			Photo[] ps = new Photo[] {};
-			photos.toArray(ps);
-			Arrays.sort(ps);
-
-			PhotoPanoramioIndex[] ppis = new PhotoPanoramioIndex[] {};
-			PhotoPanoramioIndex photoIndex = new PhotoPanoramioIndex();
-			photoIndex.setPk(new PhotoPanoramioIndexPK(level, maxPhoto
-					.getGpsPoint().getLat(), maxPhoto.getGpsPoint().getLng()));
-			photoIndex.setPhotoRating(maxPhoto.getRating());
-			photoIndex.setBigPhoto(true);
-			photoIndex = photoPanoramioIndexDao.save(photoIndex);
-			ppis[ppis.length] = photoIndex;
-
-			boolean allow = true;
-			for (Photo photo : ps) {
-				allow = true;
-				for (PhotoPanoramioIndex ppi : ppis) {
-					if (Math.abs(photo.getGpsPoint().getLat()
-							- ppi.getPk().getSouth()) < measure / 3
-							&& Math.abs(photo.getGpsPoint().getLng()
-									- ppi.getPk().getWest()) < measure / 3) {
-						allow = false;
-						break;
-					}
-				}
-				if (allow) {
-					PhotoPanoramioIndex ppi = new PhotoPanoramioIndex();
-					ppi.setPk(new PhotoPanoramioIndexPK(level, photo
-							.getGpsPoint().getLat(), photo.getGpsPoint()
-							.getLng()));
-					ppi.setPhotoRating(photo.getRating());
-					ppi = photoPanoramioIndexDao.save(ppi);
-					ppis[ppis.length] = ppi;
-				}
-			}
-		}
-	}
+//	private void updatePhotoRegion(int level, Double west, Double south,
+//			Double measure) {
+//		List<Photo> photos = panorIndexDao.getPhotoList(level, west, south,
+//				measure);
+//		if (photos.size() > 0) {
+//
+//			Photo maxPhoto = null;
+//			for (Photo photo : photos) {
+//				int rating = photo.getComments().size()
+//						+ photo.getLikes().size() + photo.getViews().size()
+//						+ photo.getFavorites().size();
+//				photo.setRating(rating);
+//				if (null == maxPhoto || maxPhoto.getRating() < rating) {
+//					maxPhoto = photo;
+//				}
+//			}
+//			Photo[] ps = new Photo[] {};
+//			photos.toArray(ps);
+//			Arrays.sort(ps);
+//
+//			PhotoPanoramioIndex[] ppis = new PhotoPanoramioIndex[] {};
+//			PhotoPanoramioIndex photoIndex = new PhotoPanoramioIndex();
+//			photoIndex.setPk(new PhotoPanoramioIndexPK(level, maxPhoto
+//					.getGpsPoint().getLat(), maxPhoto.getGpsPoint().getLng()));
+//			photoIndex.setPhotoRating(maxPhoto.getRating());
+//			photoIndex.setBigPhoto(true);
+//			photoIndex = photoPanoramioIndexDao.save(photoIndex);
+//			ppis[ppis.length] = photoIndex;
+//
+//			boolean allow = true;
+//			for (Photo photo : ps) {
+//				allow = true;
+//				for (PhotoPanoramioIndex ppi : ppis) {
+//					if (Math.abs(photo.getGpsPoint().getLat()
+//							- ppi.getPk().getSouth()) < measure / 3
+//							&& Math.abs(photo.getGpsPoint().getLng()
+//									- ppi.getPk().getWest()) < measure / 3) {
+//						allow = false;
+//						break;
+//					}
+//				}
+//				if (allow) {
+//					PhotoPanoramioIndex ppi = new PhotoPanoramioIndex();
+//					ppi.setPk(new PhotoPanoramioIndexPK(level, photo
+//							.getGpsPoint().getLat(), photo.getGpsPoint()
+//							.getLng()));
+//					ppi.setPhotoRating(photo.getRating());
+//					ppi = photoPanoramioIndexDao.save(ppi);
+//					ppis[ppis.length] = ppi;
+//				}
+//			}
+//		}
+//	}
 	
 	public List<PhotoProperties> search(LatLng sw, LatLng ne, int level, MapVendor vendor, 
 			int width, int height, String term, String type) {

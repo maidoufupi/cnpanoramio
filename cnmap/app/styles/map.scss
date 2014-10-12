@@ -69,7 +69,7 @@
     .maps-right {
       width: 600px;
       margin: 0;
-      .navbar-third, .navbar-forth {
+      .navbar-third, .navbar-forth, .message {
         width: 600px;
       }
     }
@@ -82,7 +82,8 @@
     .maps-right {
       left: 0;
       margin: 0 0 0 600px;
-      .navbar-third, .navbar-forth {
+      min-width: 600px;
+      .navbar-third, .navbar-forth, .message {
         left: 600px;
         right: 0;
       }
@@ -96,7 +97,7 @@
     .maps-right {
       width: 100%;
       margin: 0;
-      .navbar-third, .navbar-forth {
+      .navbar-third, .navbar-forth, .message {
         width: 100%;
       }
     }
@@ -106,7 +107,7 @@
     .maps-left {
       width: 100%;
     }
-    .maps-right {
+    .maps-right, .message {
       width: 0;
       display: none;
     }

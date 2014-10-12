@@ -34,3 +34,16 @@
     max-width: 500px;
   }
 }
+
+// maps page message
+.maps-container {
+  .maps-content {
+    .maps-right {
+      .message {
+        position: fixed;
+        z-index: 1028;
+        text-align: center;
+      }
+    }
+  }
+}

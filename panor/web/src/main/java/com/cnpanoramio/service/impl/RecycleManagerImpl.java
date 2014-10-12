@@ -1,5 +1,6 @@
 package com.cnpanoramio.service.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.appfuse.model.User;
@@ -80,15 +81,15 @@ public class RecycleManagerImpl extends GenericManagerImpl<Recycle, Long> implem
 	public void removeRecycle(Long id) {
 		Recycle recycle = recycleDao.get(id);
 		if(recycle.getRecyType() == RecycleType.photo) {
-			try {
+//			try {
 				photoService.removePhoto(recycle.getRecyId());
-			}catch(DataAccessException ex) {
-			}				
+//			}catch(DataAccessException ex) {
+//			}				
 		}else if(recycle.getRecyType() == RecycleType.travel) {
-			try {
+//			try {
 				travelService.removeTravel(recycle.getRecyId());
-			}catch(DataAccessException ex) {
-			}
+//			}catch(DataAccessException ex) {
+//			}
 		}
 		recycleDao.remove(recycle);
 	}
@@ -97,10 +98,13 @@ public class RecycleManagerImpl extends GenericManagerImpl<Recycle, Long> implem
 	public void emptyRecycleBin(Long id) {
 		
 		UserSettings settings = userSettingsManager.get(id);
-		for(Recycle recycle : settings.getRecycle()) {
+		Iterator<Recycle> iter = settings.getRecycle().iterator();
+		while(iter.hasNext()) {
+			Recycle recycle = iter.next();
 			removeRecycle(recycle.getId());
-		}
-		
+			// 要从userSettings中删除级联 问题， 待研究
+			iter.remove();
+		}		
 	}
 
 }

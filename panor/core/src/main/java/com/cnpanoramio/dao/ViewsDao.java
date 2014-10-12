@@ -6,6 +6,7 @@ import java.util.List;
 import org.appfuse.dao.GenericDao;
 import org.appfuse.model.User;
 
+import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Views;
 import com.cnpanoramio.domain.ViewsPK;
 
@@ -87,4 +88,11 @@ public interface ViewsDao extends GenericDao<Views, ViewsPK> {
 	 * @return
 	 */
 	public Long getUserPhotoViewCount(User user);
+	
+	/**
+	 * 删除图片的view
+	 * 
+	 * @param photo
+	 */
+	public void removePhotoViews(Photo photo);
 }

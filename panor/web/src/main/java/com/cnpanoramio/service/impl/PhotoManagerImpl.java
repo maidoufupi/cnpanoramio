@@ -50,6 +50,7 @@ import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.RecycleManager;
+import com.cnpanoramio.service.ViewsManager;
 import com.cnpanoramio.service.imaging.ImageInfoExtractor;
 import com.cnpanoramio.service.lbs.BDConverter;
 import com.cnpanoramio.service.lbs.GpsConverter;
@@ -89,6 +90,9 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 	
 	@Autowired
 	private RecycleManager recycleManager;
+	
+	@Autowired
+	private ViewsManager viewsManager;
 	
 	@Autowired
 	public void setUserManager(UserManager userManager) {
@@ -641,7 +645,7 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 		List<Photo> photos = photoDao.getUserPhotoPageByTag(user, tag,
 				pageSize, pageNo);
 		Collection<PhotoProperties> pps = new ArrayList<PhotoProperties>();
-		;
+		
 		for (Photo photo : photos) {
 			PhotoProperties pp = PhotoUtil.transformProperties(photo);
 			pps.add(pp);
@@ -687,9 +691,19 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 	@Override
 	public void removePhoto(Long id) {
 		Photo photo = this.get(id);
-		// 删除oss图片文件
+		
+		// 删除oss图片文件 TODO DEBUG
 		fileService.deleteFile(FileService.TYPE_IMAGE, photo.getId(), photo.getFileType());
 
+		// 删除对应的views
+		viewsManager.removePhotoViews(photo);
+		
+		// 删除对应的gps
+		List<PhotoGps> gpss = photoGpsDao.getAll(id);
+		for(PhotoGps gps : gpss) {
+			photoGpsDao.remove(gps);
+		}
+				
 		// 删除数据库记录
 		photoDao.remove(photo);
 	}

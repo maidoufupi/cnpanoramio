@@ -31,6 +31,15 @@
                     <span> {{travel.spots.length}} 个景点</span>
                 </div>
 
+                <button type="button"
+                        class="btn btn-xs"
+                        ng-if="login&&(userId == travel.user_id)"
+                        ng-class="{'btn-default':!travelEnedit, 'btn-primary':travelEnedit}"
+                        ng-click="changeEditableView()">
+                    <span ng-show="travelEnedit">更改试图</span>
+                    <span ng-show="!travelEnedit">显示试图</span>
+                </button>
+
                 <bd-share ng-if="travel" class="bd-share"
                           text="{{travel.title}}"
                           desc=""
@@ -162,14 +171,15 @@
 
             </div>
             <div class="panel-body">
-                <div photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}"
+                <div photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
                      class="photo-wall">
                     <div ng-repeat="photo in spot.photos"
                          ng-controller="MapsTravelSpotPhotoCtrl"
                          class="photo">
                         <a ng-click="activePhoto(photo)"
                            href="">
-                            <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}">
+                            <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                                 data-width="{{photo.width}}" data-height="{{photo.height}}">
                             <div ng-if="photo.is360">
                                 <div class="icon-photo-p360"></div>
                             </div>

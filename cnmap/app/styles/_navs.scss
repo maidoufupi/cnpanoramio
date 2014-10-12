@@ -30,3 +30,62 @@
 .nav-list.active {
   border-left: 3px solid #00bcd4;
 }
+
+// steps
+.steps {
+  display: table;
+  margin: 30px auto 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  width: 750px;
+
+  li {
+    display: table-cell;
+    width: 33.3%;
+    padding: 10px 15px;
+    color: #ccc;
+    cursor: default;
+    border-left: 1px solid #ddd;
+    background-color: #fafafa;
+    .mega-octicon {
+      float: left;
+      margin-right: 15px;
+      padding-bottom: 5px;
+    }
+    .step {
+      display: block;
+    }
+  }
+  li:first-child {
+    border-left: 0;
+  }
+  li.current {
+    background-color: #fff;
+    color: #333;
+  }
+  li.current {
+    .mega-octicon {
+      color: #4183c4;
+    }
+  }
+}
+
+.mega-octicon {
+  font: normal normal 32px octicons;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+b, strong {
+  font-weight: bold;
+}

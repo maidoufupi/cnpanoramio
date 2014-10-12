@@ -33,38 +33,40 @@ public class TravelServiceImpl implements TravelService {
 
 	@Autowired
 	private UserManager userManager;
-	
+
 	@Autowired
 	private TravelManager travelManager;
-	
+
 	@Autowired
 	private TravelSpotDao travelSpotDao;
-	
+
 	@Autowired
 	private PhotoService photoService;
-	
+
 	@Autowired
 	private PhotoManager photoManager;
-	
+
 	@Autowired
 	private MessageManager messageManager;
-	
+
 	@Override
 	public Travel getTravel(Long travelId) {
 		Travel travel = convertTravel(travelManager.getTravel(travelId));
-		Message message = messageManager.getMessage(MessageType.travel, travelId);
-		if(null != message) {
+		Message message = messageManager.getMessage(MessageType.travel,
+				travelId);
+		if (null != message) {
 			travel.setMessageId(message.getId());
-		}	
-				
+		}
+
 		return travel;
 	}
 
 	@Override
 	public List<Travel> getTravels(User user) {
-		List<com.cnpanoramio.domain.Travel> travels = travelManager.getTravels(user);
+		List<com.cnpanoramio.domain.Travel> travels = travelManager
+				.getTravels(user);
 		List<Travel> ts = convertTravels(travels);
-		for(Travel travel : ts) {
+		for (Travel travel : ts) {
 			travel.setSpots(null);
 		}
 		return ts;
@@ -72,13 +74,15 @@ public class TravelServiceImpl implements TravelService {
 
 	@Override
 	public Travel createMyTravel(User user, String travel) {
-		com.cnpanoramio.domain.Travel tra = travelManager.createMyTravel(user, travel);
+		com.cnpanoramio.domain.Travel tra = travelManager.createMyTravel(user,
+				travel);
 		return convertTravel(tra);
 	}
-	
-	public List<Travel> convertTravels(List<com.cnpanoramio.domain.Travel> travels) {
+
+	public List<Travel> convertTravels(
+			List<com.cnpanoramio.domain.Travel> travels) {
 		List<Travel> ts = new ArrayList<Travel>();
-		for(com.cnpanoramio.domain.Travel t : travels) {
+		for (com.cnpanoramio.domain.Travel t : travels) {
 			ts.add(convertTravel(t));
 		}
 		return ts;
@@ -86,90 +90,122 @@ public class TravelServiceImpl implements TravelService {
 
 	public Travel convertTravel(com.cnpanoramio.domain.Travel travel) {
 		Travel t = new Travel();
-		BeanUtils.copyProperties(travel, t, new String[]{"spots", "user", "spot", "albumCover"});
-		if(null != travel.getUser()) {
+		BeanUtils.copyProperties(travel, t, new String[] { "spots", "user",
+				"spot", "albumCover" });
+		if (null != travel.getUser()) {
 			t.setUserId(travel.getUser().getId());
 			t.setUsername(travel.getUser().getName());
 			t.setUser(UserUtil.getSimpleOpenInfo(travel.getUser()));
 		}
-		if(null != travel.getSpot()) {
+		if (null != travel.getSpot()) {
 			t.setSpot(convertTravelSpot(travel.getSpot()));
 		}
-		for(com.cnpanoramio.domain.TravelSpot travelSpot : travel.getSpots()) {
+		for (com.cnpanoramio.domain.TravelSpot travelSpot : travel.getSpots()) {
 			t.getSpots().add(convertTravelSpot(travelSpot));
 		}
-		
+
 		// set album cover photo
-		if(null != travel.getAlbumCover()) {
+		if (null != travel.getAlbumCover()) {
 			t.setAlbumCover(PhotoUtil.getPhotoOssKey(travel.getAlbumCover()));
-		}else {
-			Iterator<com.cnpanoramio.domain.TravelSpot> iter = travel.getSpots().iterator();
-			if(iter.hasNext()) {
+		} else {
+			Iterator<com.cnpanoramio.domain.TravelSpot> iter = travel
+					.getSpots().iterator();
+			if (iter.hasNext()) {
 				com.cnpanoramio.domain.TravelSpot spot = iter.next();
 				Iterator<Photo> iterPhotos = spot.getPhotos().iterator();
-				if(iterPhotos.hasNext()) {
+				if (iterPhotos.hasNext()) {
 					Photo photo = iterPhotos.next();
-					t.setAlbumCover(PhotoUtil.getPhotoOssKey(photo));					
+					t.setAlbumCover(PhotoUtil.getPhotoOssKey(photo));
 				}
-				
+
 			}
-					
+
 		}
-		
+
 		// photo size
 		Integer photoSize = 0;
-		for(com.cnpanoramio.domain.TravelSpot spot : travel.getSpots()) {
+		for (com.cnpanoramio.domain.TravelSpot spot : travel.getSpots()) {
 			photoSize += spot.getPhotos().size();
 		}
 		t.setPhotoSize(photoSize);
-		
+
 		return t;
 	}
-	
-	public TravelSpot convertTravelSpot(com.cnpanoramio.domain.TravelSpot travelSpot) {
+
+	public TravelSpot convertTravelSpot(
+			com.cnpanoramio.domain.TravelSpot travelSpot) {
 		TravelSpot tSpot = new TravelSpot();
-		BeanUtils.copyProperties(travelSpot, tSpot, new String[]{"travel", "photos"});
+		BeanUtils.copyProperties(travelSpot, tSpot, new String[] { "travel",
+				"photos" });
 		tSpot.setTravelId(travelSpot.getTravel().getId());
-		for(Photo photo : travelSpot.getPhotos()) {
+		for (Photo photo : travelSpot.getPhotos()) {
 			// 过滤掉被标记删除的图片
-			if(!photo.isDeleted()) {
+			if (!photo.isDeleted()) {
 				tSpot.getPhotos().add(photoService.transform(photo));
-			}			
+			}
 		}
 		return tSpot;
 	}
 
 	@Override
 	public TravelSpot changeSpot(Long id, TravelSpot spot) {
-		
+
 		User me = UserUtil.getCurrentUser(userManager);
 		com.cnpanoramio.domain.TravelSpot travelSpot = travelSpotDao.get(id);
 		checkMyTravel(travelSpot.getTravel(), me);
 		
-		travelSpot = new com.cnpanoramio.domain.TravelSpot();
-		travelSpot.setAddress(spot.getAddress());
-		travelSpot.setTitle(spot.getTitle());
-		travelSpot.setDescription(spot.getDescription());
-		travelSpot.setTimeStart(spot.getTimeStart());
-		travelSpot = travelManager.changeSpot(id, travelSpot);
+		if (null != spot.getAddress()) {
+			travelSpot.setAddress(spot.getAddress());
+		}
+
+		if (null != spot.getTitle()) {
+			travelSpot.setTitle(spot.getTitle());
+		}
+
+		if (null != spot.getDescription()) {
+			travelSpot.setDescription(spot.getDescription());
+		}
+
+		if (null != spot.getTimeStart()) {
+			travelSpot.setTimeStart(spot.getTimeStart());
+		}
+
+		for (PhotoProperties photo : spot.getPhotos()) {
+			Photo p = photoManager.get(photo.getId());
+			// 添加到景点
+			if (!travelSpot.equals(p.getTravelSpot())) {
+				travelManager.addSpotPhoto(travelSpot, p);
+			}
+
+			// 更新位置
+			if(null != photo.getPoint()) {
+				photoManager.properties(photo.getId(), photo);
+			}
+			
+			// 更新拍摄日期
+			if(null != photo.getDateTime()) {
+				p.getDetails().setDateTime(photo.getDateTime());
+			}
+		}
 		return convertTravelSpot(travelSpot);
 	}
-	
+
 	@Override
 	public void changeSpotPhotoPostion(Long id, TravelSpot spot) {
 		User me = UserUtil.getCurrentUser(userManager);
 		com.cnpanoramio.domain.TravelSpot travelSpot = travelSpotDao.get(id);
 		checkMyTravel(travelSpot.getTravel(), me);
-		
-		for(PhotoProperties photo : spot.getPhotos()) {
+
+		for (PhotoProperties photo : spot.getPhotos()) {
 			Photo p = photoManager.get(photo.getId());
-			if(!travelSpot.equals(p.getTravelSpot())) {
-				throw new AccessDeniedException("Photo " + p.getId() + " 不属于TravelSpot " + travelSpot.getId());
+			if (!travelSpot.equals(p.getTravelSpot())) {
+				throw new AccessDeniedException("Photo " + p.getId()
+						+ " 不属于TravelSpot " + travelSpot.getId());
 			}
-			
+
 			photoManager.properties(photo.getId(), photo);
 		}
-		
+
 	}
 
 	@Override
@@ -179,13 +215,13 @@ public class TravelServiceImpl implements TravelService {
 		checkMyTravel(travel, me);
 		return convertTravel(travelManager.changeTravelDesc(id, description));
 	}
-	
+
 	@Override
 	public Travel changeTravelName(Long id, String name) {
 		com.cnpanoramio.domain.Travel travel = travelManager.getTravel(id);
 		User me = UserUtil.getCurrentUser(userManager);
 		checkMyTravel(travel, me);
-		
+
 		return convertTravel(travelManager.changeTravelName(id, name));
 	}
 
@@ -204,7 +240,7 @@ public class TravelServiceImpl implements TravelService {
 			photo = photoManager.get(photoId);
 			PhotoUtil.checkMyPhoto(photo, me);
 		}
-		
+
 		return convertTravel(travelManager.addTravelPhotos(id, photos));
 	}
 
@@ -213,7 +249,7 @@ public class TravelServiceImpl implements TravelService {
 		User me = UserUtil.getCurrentUser(userManager);
 		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
 		checkMyTravel(travel, me);
-		
+
 		return convertTravel(travelManager.removeTravelPhotos(id, photos));
 	}
 
@@ -222,7 +258,7 @@ public class TravelServiceImpl implements TravelService {
 		User me = UserUtil.getCurrentUser(userManager);
 		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
 		checkMyTravel(travel, me);
-		
+
 		com.cnpanoramio.domain.TravelSpot travelSpot = new com.cnpanoramio.domain.TravelSpot();
 		travelSpot.setAddress(spot.getAddress());
 		travelSpot.setTitle(spot.getTitle());
@@ -265,7 +301,7 @@ public class TravelServiceImpl implements TravelService {
 		User me = UserUtil.getCurrentUser(userManager);
 		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
 		checkMyTravel(travel, me);
-		travelManager.removeTravel(id);		
+		travelManager.removeTravel(id);
 	}
 
 	@Override
@@ -273,7 +309,7 @@ public class TravelServiceImpl implements TravelService {
 		User me = UserUtil.getCurrentUser(userManager);
 		com.cnpanoramio.domain.Travel travel = travelManager.get(id);
 		checkMyTravel(travel, me);
-		travelManager.cancelDeleteTravel(id);		
+		travelManager.cancelDeleteTravel(id);
 	}
 
 	private void checkMyTravel(com.cnpanoramio.domain.Travel travel, User me) {
@@ -290,7 +326,7 @@ public class TravelServiceImpl implements TravelService {
 		List<Photo> photos = photoManager.getNoTravel(me);
 		TravelSpot spot = new TravelSpot();
 		Travel travel = new Travel();
-		
+
 		spot.setPhotos(PhotoUtil.transformPhotos(photos));
 		travel.setId(0L);
 		travel.getSpots().add(spot);

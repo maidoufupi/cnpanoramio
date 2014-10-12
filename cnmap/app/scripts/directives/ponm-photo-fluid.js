@@ -34,8 +34,8 @@ angular.module('ponmApp.directives')
                         scope.updateFluid();
                     });
 
-                    scope.$on('ponmPhotoFluidResize', function (e) {
-                        $log.debug("ponmPhotoFluidResize");
+                    scope.$on('ponm.photo.fluid.resize', function (e) {
+                        $log.debug("ponm.photo.fluid.resize");
                         scope.updateFluid();
                     });
 
@@ -67,7 +67,7 @@ angular.module('ponmApp.directives')
 
                     function calculateHeight() {
 
-                        var containerWidth = element.innerWidth() - 10;
+                        var containerWidth = element.innerWidth();
 
                         var items = element.find(options.itemSelector);
                         if(options.size == "maxi") {
@@ -85,8 +85,8 @@ angular.module('ponmApp.directives')
                         }
                         var border = Number(options.itemBorder);
                         var itemMargin = Number(options.itemMargin);
-                        height -= (2*itemMargin + 1);
-//                        height = Math.ceil(height) - 1;
+                        height -= 2*itemMargin;
+//                        height = Math.floor(height) - 1;
                         angular.forEach(items, function (item, key) {
                             var img = item.find("img");
                             item.css("height", height + "px");
@@ -130,10 +130,10 @@ angular.module('ponmApp.directives')
                             var itemLineWidthTemp = itemLineWidth + (itemWidth * options.lineMinHeight / itemHeight);
                             if (itemLineWidthTemp > containerWidth) {
 //                                $log.debug("itemLineWidth: " + itemLineWidth);
-                                setWidthHeight(itemLine, Math.ceil(containerWidth / itemLineWidth * options.lineMinHeight));
-//                                setWidthHeight(itemLine, (containerWidth / itemLineWidth * options.lineMinHeight));
+//                                setWidthHeight(itemLine, Math.floor(containerWidth / itemLineWidth * options.lineMinHeight));
+                                setWidthHeight(itemLine, (containerWidth / itemLineWidth * options.lineMinHeight));
                                 itemLine = [item];
-//                                itemLineWidth = Math.ceil(options.lineMinHeight * itemWidth / itemHeight);
+//                                itemLineWidth = Math.floor(options.lineMinHeight * itemWidth / itemHeight);
                                 itemLineWidth = (itemWidth * options.lineMinHeight / itemHeight);
                             } else {
                                 itemLine.push(item);
@@ -141,9 +141,9 @@ angular.module('ponmApp.directives')
                             }
                         });
                         if (itemLine.length) {
-//                            $log.debug("itemLineWidth: " + itemLineWidth);
-//                            setWidthHeight(itemLine, Math.ceil(containerWidth / itemLineWidth * options.lineMinHeight));
-                            setWidthHeight(itemLine, Math.ceil(containerWidth / itemLineWidth * options.lineMinHeight));
+
+//                            setWidthHeight(itemLine, Math.floor(containerWidth / itemLineWidth * options.lineMinHeight));
+                            setWidthHeight(itemLine, (containerWidth / itemLineWidth * options.lineMinHeight));
                         }
                     }
 
@@ -167,13 +167,13 @@ angular.module('ponmApp.directives')
                             itemLine.push(item);
                             itemLineWidth = itemLineWidth + ((itemWidth / itemHeight) * options.lineMaxHeight);
                             if (itemLineWidth >= containerWidth) {
-                                setWidthHeight(itemLine, Math.ceil(containerWidth * (options.lineMaxHeight / itemLineWidth)));
+                                setWidthHeight(itemLine, Math.floor(containerWidth * (options.lineMaxHeight / itemLineWidth)));
                                 itemLine = [];
                                 itemLineWidth = 0;
                             }
                         });
                         if (itemLine.length) {
-                            setWidthHeight(itemLine, Math.ceil(containerWidth * (options.lineMaxHeight / itemLineWidth)));
+                            setWidthHeight(itemLine, Math.floor(containerWidth * (options.lineMaxHeight / itemLineWidth)));
                         }
                     }
                 }

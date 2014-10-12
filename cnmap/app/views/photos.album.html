@@ -21,7 +21,7 @@
             <div class="item"><pre class="description"><span class="footnotes">{{spot.description}}</span></pre></div>
         </div>
 
-        <div photo-fluid-container="{'size': 'maxi', 'itemSelector': '.photo', itemMargin: 1}"
+        <div photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
              class="photo-wall photo-selectable-container">
             <div ng-repeat="photo in spot.photos"
                  ng-controller="PhotosPhotoCtrl"
@@ -30,6 +30,7 @@
                 <a ng-click="displayPhoto(photo.id)"
                    href="">
                     <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                         data-width="{{photo.width}}" data-height="{{photo.height}}"
                          ng-class="{'selectable': selectable&&!photo.actionSelected,
                         'selected': photo.actionSelected}">
                     <div ng-if="photo.is360">

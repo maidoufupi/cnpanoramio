@@ -3,6 +3,7 @@ package com.cnpanoramio.service;
 import java.util.Date;
 import java.util.List;
 
+import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Views;
 
 public interface ViewsManager {
@@ -75,4 +76,11 @@ public interface ViewsManager {
 	 * @return
 	 */
 	public int getViewsCount(Long photoId, Date date);
+	
+	/**
+	 * 删除图片的view
+	 * 
+	 * @param photo
+	 */
+	public void removePhotoViews(Photo photo);
 }

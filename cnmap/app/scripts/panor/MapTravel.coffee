@@ -70,6 +70,7 @@ class ITravelLayer
 
   addPhoto: (spot, photo) ->
     spot.photos.push photo
+    @createMarker photo
     @calcSpotTime()
     @updateSpotLine(spot)
 
@@ -126,11 +127,17 @@ class ITravelLayer
   setEditable: (editable) ->
     if not editable and @travel
       for spot in @travel.spots
-        @setSpotEditable spot, false
+        @spotEditable spot, false
     @opts.editable = editable
     if editable and @travel
       for spot in @travel.spots
-        @setSpotEditable spot, true
+        if spot.editable
+          @spotEditable spot, true
+
+  setSpotEditable: (spot, editable) ->
+    editable = !!editable
+    spot.editable = editable
+    @spotEditable(spot, editable)
 
   getEditable: () ->
     @opts.editable

@@ -78,7 +78,7 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	@Column(name = "mark_best", nullable = true)
 	private boolean markBest;
 
-	@OneToMany(mappedBy="photo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="photo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@MapKey(name="vendor")
 	private Map<MapVendor, PhotoGps> gps = new HashMap<MapVendor, PhotoGps>();
 
@@ -87,18 +87,18 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	@IndexedEmbedded
 	private PhotoDetails details;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "photo_id")
-	private Set<Views> views = new HashSet<Views>(0);
+//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@JoinColumn(name = "photo_id")
+//	private Set<Views> views = new HashSet<Views>(0);
 
-	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="photo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@MapKey(name="user")
 	private Map<User, Favorite> favorites = new HashMap<User, Favorite>(0);
 
 	@Column(name = "rating")
 	private Integer Rating;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	@JoinTable(name="photo_tags", 
 		joinColumns = @JoinColumn(name = "photo_id"),
 		inverseJoinColumns = @JoinColumn(name = "tag_id"),
@@ -106,9 +106,8 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 			columnNames = {"photo_id", "tag_id"}))
 	private Set<Tag> tags = new HashSet<Tag>(0);
 		
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "travel_spot_id")
-	@IndexedEmbedded
 	private TravelSpot travelSpot;
 	
 	@Field
@@ -118,8 +117,14 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<Like> likes = new HashSet<Like>(0);
 	
-	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Comment> comments = new ArrayList<Comment>(0);
+	
+	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private Set<PhotoPanoramioIndex> panoramioIndex = new HashSet<PhotoPanoramioIndex>(0);
+	
+	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private Set<PhotoLatestIndex> latestIndex = new HashSet<PhotoLatestIndex>(0);
 	
 	public final Long getId() {
 		return id;
@@ -239,13 +244,13 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 		}
 	}
 
-	public Set<Views> getViews() {
-		return views;
-	}
-
-	public void setViews(Set<Views> views) {
-		this.views = views;
-	}
+//	public Set<Views> getViews() {
+//		return views;
+//	}
+//
+//	public void setViews(Set<Views> views) {
+//		this.views = views;
+//	}
 
 	public Map<User, Favorite> getFavorites() {
 		return favorites;
@@ -318,6 +323,22 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 
 	public void setTravelSpot(TravelSpot travelSpot) {
 		this.travelSpot = travelSpot;
+	}
+
+	public Set<PhotoPanoramioIndex> getPanoramioIndex() {
+		return panoramioIndex;
+	}
+
+	public void setPanoramioIndex(Set<PhotoPanoramioIndex> panoramioIndex) {
+		this.panoramioIndex = panoramioIndex;
+	}
+
+	public Set<PhotoLatestIndex> getLatestIndex() {
+		return latestIndex;
+	}
+
+	public void setLatestIndex(Set<PhotoLatestIndex> latestIndex) {
+		this.latestIndex = latestIndex;
 	}
 
 	@Override

@@ -85,13 +85,13 @@
       }
     };
 
-    TravelLayer.prototype.setSpotEditable = function(spot, editable) {
+    TravelLayer.prototype.spotEditable = function(spot, editable) {
       var editMarker, photo, that, _i, _len, _ref, _results;
       editable = !!editable;
       that = this;
       editMarker = function(marker) {
         if (marker) {
-          marker.setDraggable(editable);
+          marker.setDraggable(that.opts.editable && editable);
           if (that.opts.editable && editable) {
             return marker.dragListener = AMap.event.addListener(marker, 'dragend', function(e) {
               if (!this.photo.oPoint) {
@@ -108,15 +108,13 @@
           }
         }
       };
-      if (this.opts.editable) {
-        _ref = spot.photos;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          photo = _ref[_i];
-          _results.push(editMarker(photo.marker));
-        }
-        return _results;
+      _ref = spot.photos;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        _results.push(editMarker(photo.marker));
       }
+      return _results;
     };
 
     TravelLayer.prototype.cancelSpotEdit = function(spot) {

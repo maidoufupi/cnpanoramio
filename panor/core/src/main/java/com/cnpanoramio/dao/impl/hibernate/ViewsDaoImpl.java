@@ -14,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.cnpanoramio.dao.ViewsDao;
+import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Views;
 import com.cnpanoramio.domain.ViewsPK;
 
@@ -137,6 +138,14 @@ public class ViewsDaoImpl extends GenericDaoHibernate<Views, ViewsPK>
 			return 0L;
 		}else {
 			return count.longValue();			
+		}
+	}
+
+	@Override
+	public void removePhotoViews(Photo photo) {
+		List<Views> views = getViewsList(photo.getId());
+		for(Views v : views) {
+			remove(v);
 		}
 	}
 

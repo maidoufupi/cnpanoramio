@@ -68,7 +68,11 @@ public class PhotoServiceImpl implements PhotoService {
 		if(null != details) {
 			pp.setWidth(details.getPixelXDimension());
 			pp.setHeight(details.getPixelYDimension());
-			pp.setDateTime(details.getDateTimeOriginal());
+			if(null != details.getDateTime()) {
+				pp.setDateTime(details.getDateTime());
+			}else {
+				pp.setDateTime(details.getDateTimeOriginal());
+			}			
 		}
 		return pp;
 	}

@@ -91,6 +91,8 @@
 <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
 <script type="text/javascript" src="bower_components/perfect-scrollbar/src/perfect-scrollbar.js"></script>
 <script type="text/javascript" src="bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
+<script type="text/javascript" src="bower_components/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js"></script>
+<script type="text/javascript" src="bower_components/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js"></script>
 
 <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
@@ -139,7 +141,8 @@
 <script type="text/javascript" src="scripts/directives/filters.js"></script>
 <script type="text/javascript" src="scripts/directives/ponmPhotoContainer.js"></script>
 <script type="text/javascript" src="scripts/directives/ponmRectMultiSelect.js"></script>
-<script type="text/javascript" src="scripts/directives/ponm-photo-fluid.js"></script>
+<!--<script type="text/javascript" src="scripts/directives/ponm-photo-fluid.js"></script>-->
+<script type="text/javascript" src="scripts/directives/photo-container-fluid.js"></script>
 <script type="text/javascript" src="scripts/directives/waypoint.js"></script>
 <script type="text/javascript" src="scripts/directives/backstretch.js"></script>
 <script type="text/javascript" src="scripts/directives/infinite-scroll.js"></script>
@@ -193,20 +196,20 @@
 
 <script>
     var map;
-//    window.ctx = "http://127.0.0.1:8080";
-//    window.staticCtx = "http://test.photoshows.cn";
-//    window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
-    window.ctx = "http://www.photoshows.cn";
-    window.staticCtx = "http://static.photoshows.cn";
-    window.corsproxyCtx = "http://www.corsproxy.com/static.photoshows.cn";
+    window.ctx = "http://127.0.0.1:8080";
+    window.staticCtx = "http://test.photoshows.cn";
+    window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
+//    window.ctx = "http://www.photoshows.cn";
+//    window.staticCtx = "http://static.photoshows.cn";
+//    window.corsproxyCtx = "http://www.corsproxy.com/static.photoshows.cn";
 //    window.staticCtx = "http://static.photoshows.cn.w.alikunlun.com";
 
     window.apirest = window.ctx + "/api/rest";
-    window.user = {
-            id: 3,
-            name: "暗梅幽闻花"
-            };
-    window.login = true;
+//    window.user = {
+//            id: 3,
+//            name: "暗梅幽闻花"
+//            };
+//    window.login = true;
 
     window.mapVendor = "gaode";
     window.dev = true;

@@ -218,6 +218,12 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td class="name">海拔高度</td>
+                                <td  class="value">
+                                    {{photo.point.alt | number}}
+                                </td>
+                            </tr>
+                            <tr>
                                 <td class="name">拍摄日期</td>
                                 <td  class="value">
                                     {{cameraInfo.date_time_original | calculatetime | date:'yyyy-MM-dd'}}</td>
@@ -239,6 +245,10 @@
                                 <td class="value">{{cameraInfo.model}}</td>
                             </tr>
                             <tr>
+                                <td class="name">相机品牌</td>
+                                <td class="value">{{cameraInfo.make}}</td>
+                            </tr>
+                            <tr>
                                 <td class="name">镜头</td>
                                 <td class="name">{{cameraInfo.jt}}</td>
                             </tr>
@@ -258,10 +268,7 @@
                                 <td class="name">ISO</td>
                                 <td class="value">{{cameraInfo.iso}}</td>
                             </tr>
-                            <tr>
-                                <td class="name">相机品牌</td>
-                                <td class="value">{{cameraInfo.make}}</td>
-                            </tr>
+
                             <tr>
                                 <td class="name">闪光灯</td>
                                 <td class="value">{{cameraInfo.flash}}</td>

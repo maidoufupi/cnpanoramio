@@ -33,7 +33,7 @@
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#/maps/dynamic">你的动态</a></li>
+                            <li><a href="#/maps/dynamic">好友动态</a></li>
                             <li ng-class="{'active': stateStatus.travels}">
                                 <a href="#/maps/travels">热门旅行</a></li>
                         </ul>
@@ -67,11 +67,7 @@
                 </script>
 
                 <ul class="navbar-nav navbar-right nav">
-                    <li ng-if="login && (stateStatus.travel || stateStatus.upload)">
-                        <button type="button"
-                                class="btn btn-default btn-sm navbar-btn"
-                                ng-click="changeEditableView()">更改试图</button>
-                    </li>
+
                     <!--<li><button type="button" class="btn btn-default navbar-btn"
                                 ng-click="changeContentLayout()">更改布局</button></li>-->
                     <li

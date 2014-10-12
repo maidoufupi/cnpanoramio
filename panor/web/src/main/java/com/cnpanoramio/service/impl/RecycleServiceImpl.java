@@ -43,11 +43,11 @@ public class RecycleServiceImpl implements RecycleService {
 	}
 
 	@Override
-	public void emptyRecycleBin(User user, Long id) {
-		com.cnpanoramio.domain.Recycle recycle = recycleManager.get(id);
-		checkMyRecycle(user, recycle);
+	public void emptyRecycleBin(User user) {
+//		com.cnpanoramio.domain.Recycle recycle = recycleManager.get(id);
+//		checkMyRecycle(user, recycle);
 		
-		recycleManager.emptyRecycleBin(id);
+		recycleManager.emptyRecycleBin(user.getId());
 	}
 	
 	@Override

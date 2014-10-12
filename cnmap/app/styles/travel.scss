@@ -2,6 +2,10 @@
   width: 100%;
   height: 100%;
 
+  pre.description {
+    white-space: pre-wrap; //pre-wrap; // firefox
+  }
+
   .travel-header {
 //    position: absolute;
 //    top: 0;
@@ -9,7 +13,7 @@
 //    height: 250px;
     background-color: #00bcd4;
     padding: 50px 10px 10px;
-    z-index: 1028;
+//    z-index: 1027;
     color: white;
     font-family: $headings-font-family;
 

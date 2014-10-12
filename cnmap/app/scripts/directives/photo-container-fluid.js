@@ -3,163 +3,83 @@
  */
 'use strict';
 angular.module('ponmApp.directives')
-    .directive('photoContainerFluid', ['$window', '$parse', '$animate', '$log', '$timeout',
-        function ($window, $parse, $animate, $log, $timeout) {
+    .directive('photoContainerFluid', ['$window', '$animate', '$log', '$timeout',
+        function ($window, $animate, $log, $timeout) {
+
+            var defaultOptions = {
+                // the ideal height you want your images to be
+                'targetHeight'          : 400,
+                // how quickly you want images to fade in once ready can be in ms, "slow" or "fast"
+                'fadeSpeed'             : "fast",
+                // how the resized block should be displayed. inline-block by default so that it doesn't break the row
+                'display'               : "inline-block",
+                // which effect you want to use for revealing the images (note CSS3 browsers only),
+                'effect'                : 'default',
+                // effect delays can either be applied per row to give the impression of descending appearance
+                // or horizontally, so more like a flock of birds changing direction
+                'direction'             : 'vertical',
+                // Sometimes there is just one image on the last row and it gets blown up to a huge size to fit the
+                // parent div width. To stop this behaviour, set this to true
+                'allowPartialLastRow'   : false,
+                // 是否使用imagesLoaded插件
+                'imagesLoaded': false,
+                // 延迟计算事件（等待ng-repeat完成）
+                'delayTime': 500
+            };
+
             return {
                 restrict: 'EA',
-                scope: {
-                    photos: "=photos"
-                },
                 link: function (scope, element, attrs, controller) {
 
-                    var options = {
-                            size: "maxi",
-                            lineMaxHeight: 200,
-                            lineMinHeight: 100,
-                            itemSelector: ".fluid-brick",
-                            itemMargin: 0,
-                            itemBorder: 0 },
-
+                    var options = {},
                         opt;
 
                     opt = scope.$eval(attrs.photoContainerFluid || "{}");
 
-                    angular.extend(options, opt);
+                    angular.extend(options, defaultOptions, opt);
 
-                    scope.$watch(function() {
+                    // 图片容器大小变化时更新布局
+                    scope.$watch(function () {
                         return element.innerWidth && element.innerWidth();
-                    }, function() {
+                    }, function () {
                         $log.debug("container width changed");
                         scope.updateFluid();
                     });
 
+                    // 浏览器窗口大小变化时更新布局
                     angular.element($window).bind("resize", function (e) {
                         scope.updateFluid();
                     });
 
-                    scope.$on('ponmPhotoFluidResize', function (e) {
-                        $log.debug("ponmPhotoFluidResize");
+                    // 收到指定事件时更新布局
+                    scope.$on('ponm.photo.fluid.resize', function (e) {
+                        $log.debug("ponm.photo.fluid.resize");
                         scope.updateFluid();
                     });
 
-                    scope.updateFluid = function() {
-                        $log.debug("updateFluid");
-                        if(scope.updatePromise) {
-                            $timeout.cancel(scope.updatePromise);
-                        }
+                    scope.updateFluid = function () {
+                        $log.debug("collage images");
+
                         scope.updatePromise = $timeout(function () {
-                            calculateHeight();
-                            $timeout(function () {
-                                scope.$apply(function(){});
-                            },500);
-                        }, 500);
+                            if (options.imagesLoaded && $window.imagesLoaded) {
+                                var imgLoad = $window.imagesLoaded && $window.imagesLoaded(element);
+                                imgLoad.on('always', function (e) {
+                                    collage();
+                                    $timeout(function () {
+                                        scope.$apply(function(){});
+                                    }, options.delayTime);
+                                });
+                            }else {
+                                collage();
+                            }
+                        }, options.delayTime);
                     };
 
-                    function calculateHeight() {
-
-                        var containerWidth = element.innerWidth() - 5;
-
-                        if(options.size == "maxi") {
-                            maximumAlgorithm(scope.photos, containerWidth);
-                        }else if(options.size == "mini") {
-                            minimizationAlgorithm(scope.photos, containerWidth);
-                        }
-
-                        scope.$emit("ponm-photo-fluid-resized");
-                    }
-
-                    function setWidthHeight(photos, height, containerWidth) {
-                        if (height > options.lineMaxHeight) {
-                            height = options.lineMaxHeight;
-                        }
-
-                        var border = Number(options.itemBorder);
-                        var itemMargin = Number(options.itemMargin);
-                        height -= 2*itemMargin;
-                        var lineWidth = 0;
-                        angular.forEach(photos, function (photo, key) {
-                            photo.fluid = {
-                                height: height,
-                                width: Math.ceil(height * (photo.width/photo.height))
-                            };
-                            lineWidth += (photo.fluid.width+2*itemMargin);
-                            photo.fluid.lineWidth = lineWidth;
-                        });
-                        if(lineWidth < containerWidth) {
-                            $log.debug("containerWidth="+containerWidth+"; lineWidth="+lineWidth);
-                            $log.debug("photo id=" + photos[photos.length-1].id + " width="+photos[photos.length-1].width);
-                            $log.debug("photo height="+photos[photos.length-1].height);
-                            photos[photos.length-1].fluid.width += (containerWidth - lineWidth);
-                            $log.debug("photo width="+photos[photos.length-1].fluid.width);
-                        }
-                    }
-
-                    scope.$watch(attrs.photoFluidContainer, function() {
-//                        $log.debug("photoFluidContainer changed");
-                        if(scope.updatePromise) {
-                            $timeout.cancel(scope.updatePromise);
-                        }
-                        scope.updatePromise = $timeout(function () {
-                            scope.updateFluid();
-                            scope.updatePromise = null;
-                        }, 1000);
-                    });
-
-                    function minimizationAlgorithm(photos, containerWidth) {
-                        var itemLine = [],
-                            itemLineWidth = 0;
-                        angular.forEach(photos, function (photo, key) {
-                            var itemWidth = photo.width + 2*options.itemMargin,
-                                itemHeight = photo.height + 2*options.itemMargin;
-
-                            var itemLineWidthTemp = itemLineWidth + (itemWidth * options.lineMinHeight / itemHeight);
-                            if (itemLineWidthTemp > containerWidth) {
-//                                $log.debug("itemLineWidth: " + itemLineWidth);
-                                setWidthHeight(itemLine, Math.ceil(containerWidth / itemLineWidth * options.lineMinHeight),
-                                    containerWidth);
-                                itemLine = [photo];
-                                itemLineWidth = (itemWidth * options.lineMinHeight / itemHeight);
-                            } else {
-                                itemLine.push(photo);
-                                itemLineWidth = itemLineWidthTemp;
-                            }
-                        });
-                        if (itemLine.length) {
-//                            $log.debug("itemLineWidth: " + itemLineWidth);
-                            setWidthHeight(itemLine, Math.ceil(containerWidth / itemLineWidth * options.lineMinHeight),
-                                containerWidth);
-                        }
-                    }
-
-                    function maximumAlgorithm(items, containerWidth) {
-                        var itemLine = [],
-                            itemLineWidth = 0;
-                        angular.forEach(items, function (item, key) {
-                            item = angular.element(item);
-                            if(item.scope && item.scope() &&
-                                item.scope().photo &&
-                                item.scope().photo.width &&
-                                item.scope().photo.height) {
-
-                                var itemWidth = item.scope().photo.width + 2 * options.itemMargin,
-                                    itemHeight = item.scope().photo.height + 2 * options.itemMargin;
-                            }else {
-                                var itemWidth = item.outerWidth() + 2*options.itemMargin,
-                                    itemHeight = item.outerHeight() + 2*options.itemMargin;
-                            }
-
-                            itemLine.push(item);
-                            itemLineWidth = itemLineWidth + ((itemWidth / itemHeight) * options.lineMaxHeight);
-                            if (itemLineWidth >= containerWidth) {
-                                setWidthHeight(itemLine, Math.round(containerWidth * (options.lineMaxHeight / itemLineWidth)));
-                                itemLine = [];
-                                itemLineWidth = 0;
-                            }
-                        });
-                        if (itemLine.length) {
-                            setWidthHeight(itemLine, Math.round(containerWidth * (options.lineMaxHeight / itemLineWidth)));
-                        }
-                    }
+                    // Here we apply the actual CollagePlus plugin
+                    function collage() {
+                        element.removeWhitespace().collagePlus(options);
+                        scope.$emit("ponm.photo.fluid.resized");
+                    };
                 }
             };
         }])

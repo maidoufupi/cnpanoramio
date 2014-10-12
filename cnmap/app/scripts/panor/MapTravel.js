@@ -96,6 +96,7 @@
 
     ITravelLayer.prototype.addPhoto = function(spot, photo) {
       spot.photos.push(photo);
+      this.createMarker(photo);
       this.calcSpotTime();
       return this.updateSpotLine(spot);
     };
@@ -219,7 +220,7 @@
         _ref = this.travel.spots;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           spot = _ref[_i];
-          this.setSpotEditable(spot, false);
+          this.spotEditable(spot, false);
         }
       }
       this.opts.editable = editable;
@@ -228,10 +229,20 @@
         _results = [];
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           spot = _ref1[_j];
-          _results.push(this.setSpotEditable(spot, true));
+          if (spot.editable) {
+            _results.push(this.spotEditable(spot, true));
+          } else {
+            _results.push(void 0);
+          }
         }
         return _results;
       }
+    };
+
+    ITravelLayer.prototype.setSpotEditable = function(spot, editable) {
+      editable = !!editable;
+      spot.editable = editable;
+      return this.spotEditable(spot, editable);
     };
 
     ITravelLayer.prototype.getEditable = function() {

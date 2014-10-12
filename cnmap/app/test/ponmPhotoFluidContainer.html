@@ -5,6 +5,7 @@
     <title></title>
     <!-- Bootstrap styles -->
     <link rel="stylesheet" href="../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="../bower_components/jquery-plugins/jquery-collagePlus/css/transitions.css">
     <link rel="stylesheet" href="../styles/main.css">
 
     <script type="text/javascript" src="../scripts/ponmApp.vendor.min.js"></script>
@@ -16,6 +17,9 @@
     <script type="text/javascript" src="../scripts/directives/photo-container-fluid.js"></script>
     <script type="text/javascript" src="ponmPhotoFluidContainer.js"></script>
     <script type="text/javascript" src="../scripts/panor/scripts.min.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery-plugins/jquery-collagePlus/extras/jquery.collageCaption.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js"></script>
 
     <!-- Map vendor -->
     <script src="http://webapi.amap.com/maps?v=1.2&key=53f7e239ddb8ea62ba552742a233ed1f" type="text/javascript"></script>
@@ -36,8 +40,7 @@
     <div class="" ng-controller="photoFluidContainerCtrl">
         <div ng-repeat="spot in travel.spots">
             <div style="clear: both;"></div>
-            <div photo-container-fluid="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}"
-                 photos="spot.photos"
+            <div photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
                  class="photo-wall">
                 <div ng-repeat="photo in spot.photos"
                      class="fluid-brick photo"
@@ -49,6 +52,11 @@
                         <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
                                 ng-style="{width: photo.fluid.width+'px', height: photo.fluid.height+'px'}">
                     </a>
+                    <div class="action ponm-photo-footer">
+                        <div>{{photo.date_time | date:'yyyy/MM/dd-HH:mm:ss'}}</div>
+                        <p>{{photo.point.address}}</p>
+                        <pre class="description">{{photo.description}}</pre>
+                    </div>
                 </div>
 
             </div>

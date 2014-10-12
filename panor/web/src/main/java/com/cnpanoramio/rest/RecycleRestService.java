@@ -47,11 +47,11 @@ public class RecycleRestService extends AbstractRestService {
 	
 	@RequestMapping(value = "", method = RequestMethod.DELETE)
 	@ResponseBody
-	public RecycleResponse emptyRecycleBin(@PathVariable String userId) {
+	public RecycleResponse emptyRecycleBin() {
 		RecycleResponse response = new RecycleResponse();
 
 		User me = UserUtil.getCurrentUser(userManager);
-		recycleService.emptyRecycleBin(me, Long.parseLong(userId));
+		recycleService.emptyRecycleBin(me);
 		
 		response.setStatus(RecycleResponse.Status.OK);
 		return response;

@@ -27,8 +27,8 @@ public interface RecycleService {
 	/**
 	 * 清空用户的回收站
 	 * 
-	 * @param id 用户id
+	 * @param user
 	 */
-	public void emptyRecycleBin(User user, Long id);
+	public void emptyRecycleBin(User user);
 	
 }

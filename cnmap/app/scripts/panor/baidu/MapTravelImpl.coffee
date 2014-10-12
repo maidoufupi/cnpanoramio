@@ -50,12 +50,12 @@ class TravelLayer extends window.cnmap.ITravelLayer
       else
         spot.polyline.hide()
 
-  setSpotEditable: (spot, editable) ->
+  spotEditable: (spot, editable) ->
     editable = !!editable
     that = this
     editMarker = (marker) ->
       if marker
-        if editable
+        if that.opts.editable and editable
           marker.enableDragging()
         else
           marker.disableDragging()
@@ -70,8 +70,7 @@ class TravelLayer extends window.cnmap.ITravelLayer
             $(that).trigger("spot.edited", [spot.id]);
         else
           marker.removeEventListener 'dragend'
-    if @opts.editable
-      editMarker photo.marker for photo in spot.photos
+    editMarker photo.marker for photo in spot.photos
 
   cancelSpotEdit: (spot) ->
     that = this

@@ -349,7 +349,7 @@ angular.module('ponmApp.services', [
                     method: 'POST',
                     params: {'type': 'spot'},
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     }
                 },

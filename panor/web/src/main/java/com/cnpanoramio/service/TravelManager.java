@@ -115,6 +115,15 @@ public interface TravelManager extends GenericManager<Travel, Long> {
 	public Travel addSpotPhotos(Long id, List<Long> photos);
 	
 	/**
+	 * 往景点中添加图片
+	 * 
+	 * @param id
+	 * @param photo
+	 * @return
+	 */
+	public void addSpotPhoto(TravelSpot spot, Photo photo);
+	
+	/**
 	 * 删除景点
 	 * 
 	 * @param id

@@ -7,7 +7,7 @@ class TravelLayer extends window.cnmap.ITravelLayer
     point = []
     if @travel
       for spot in @travel.spots
-        @labels.push @createMarker photo for photo in spot.photos
+        @createMarker photo for photo in spot.photos
         point = []
         point.push @createPoint photo for photo in spot.photos
         spot.polyline = new google.maps.Polyline {
@@ -34,6 +34,7 @@ class TravelLayer extends window.cnmap.ITravelLayer
         (e) ->
           jQuery(that).trigger("data_clicked", [this.photo.id]))
     photo.marker = marker
+    @labels.push marker
     marker
 
   removeMarker: (photo) ->
@@ -45,12 +46,11 @@ class TravelLayer extends window.cnmap.ITravelLayer
     if spot.polyline
       spot.polyline.setVisible visible
 
-  setSpotEditable: (spot, editable) ->
-    editable = !!editable
+  spotEditable: (spot, editable) ->
     that = this
     editMarker = (marker) ->
       if marker
-        marker.setDraggable editable
+        marker.setDraggable(that.opts.editable and editable)
         if that.opts.editable and editable
           marker.dragListener = google.maps.event.addListener marker, 'dragend',
           (e) ->
@@ -63,8 +63,7 @@ class TravelLayer extends window.cnmap.ITravelLayer
         else if marker.dragListener
           google.maps.event.removeListener marker.dragListener
           marker.dragListener = null
-    if @opts.editable
-      editMarker photo.marker for photo in spot.photos
+    editMarker photo.marker for photo in spot.photos
 
   cancelSpotEdit: (spot) ->
     that = this

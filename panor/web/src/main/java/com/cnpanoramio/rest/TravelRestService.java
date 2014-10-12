@@ -132,22 +132,34 @@ public class TravelRestService extends AbstractRestService {
 	@ResponseBody
 	public TravelResponse changeTravelSpot(@PathVariable String travelId, 
 			@PathVariable String spotId, 
-			@RequestParam(value="address", required=false) String address,
-			@RequestParam(value="title", required=false) String title,
-			@RequestParam(value="description", required=false) String description,
-			@RequestParam(value="time_start", required=false) @DateTimeFormat(pattern = "yyyy/MM/dd") Date timeStart) {
-		
-		log.debug("spot attrs update " + address + title + description + timeStart);
+			@RequestBody final TravelSpot spot) {
 		
 		TravelResponse response = responseFactory();
-		TravelSpot travelSpot = new TravelSpot();
-		travelSpot.setAddress(address);
-		travelSpot.setTitle(title);
-		travelSpot.setDescription(description);
-		travelSpot.setTimeStart(timeStart);
-		response.setSpot(travelService.changeSpot(Long.parseLong(spotId), travelSpot));;
+		
+		response.setSpot(travelService.changeSpot(Long.parseLong(spotId), spot));
+		
 		return response;
 	}
+//	@RequestMapping(value = "/{travelId}/spot/{spotId}", method = RequestMethod.POST)
+//	@ResponseBody
+//	public TravelResponse changeTravelSpot(@PathVariable String travelId, 
+//			@PathVariable String spotId, 
+//			@RequestParam(value="address", required=false) String address,
+//			@RequestParam(value="title", required=false) String title,
+//			@RequestParam(value="description", required=false) String description,
+//			@RequestParam(value="time_start", required=false) @DateTimeFormat(pattern = "yyyy/MM/dd") Date timeStart) {
+//		
+//		log.debug("spot attrs update " + address + title + description + timeStart);
+//		
+//		TravelResponse response = responseFactory();
+//		TravelSpot travelSpot = new TravelSpot();
+//		travelSpot.setAddress(address);
+//		travelSpot.setTitle(title);
+//		travelSpot.setDescription(description);
+//		travelSpot.setTimeStart(timeStart);
+//		response.setSpot(travelService.changeSpot(Long.parseLong(spotId), travelSpot));;
+//		return response;
+//	}
 	
 	@RequestMapping(value = "/{travelId}/spot/{spotId}", method = RequestMethod.DELETE)
 	@ResponseBody
