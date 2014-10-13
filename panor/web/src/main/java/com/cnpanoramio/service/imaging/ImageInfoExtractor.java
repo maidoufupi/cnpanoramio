@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
@@ -20,6 +21,7 @@ import org.apache.commons.imaging.ImageParser;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.IImageMetadata;
+import org.apache.commons.imaging.common.IImageMetadata.IImageMetadataItem;
 import org.apache.commons.imaging.common.RationalNumber;
 import org.apache.commons.imaging.common.bytesource.ByteSourceInputStream;
 import org.apache.commons.imaging.formats.bmp.BmpImageParser;
@@ -111,24 +113,6 @@ public class ImageInfoExtractor {
 	}
 
 	public void extraImageInfo(ImageParser parser) {
-
-//		try {
-//			ImageInfo iInfo = parser.getImageInfo(bsIns);
-//
-//			log.debug("Parser Image Info start:");
-//			log.debug(iInfo.getFormat());
-//			photo.setFileType(iInfo.getFormat().toString());
-//
-//			log.debug(iInfo.getColorTypeDescription());
-//			log.debug("Parser Image Info end!");
-//
-//		} catch (ImageReadException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		
 		try {
 			extraExifInfo(parser);
@@ -145,8 +129,19 @@ public class ImageInfoExtractor {
 //		if(null == detail.getPixelXDimension()) {
 			try {
 				Dimension size = parser.getImageSize(bsIns.getAll());
-				detail.setPixelXDimension((int)Math.round(size.getWidth()));
-				detail.setPixelYDimension((int)Math.round(size.getHeight()));
+				
+				if(detail.getOrientation() == 5 ||
+						detail.getOrientation() == 6 ||
+						detail.getOrientation() == 7 ||
+						detail.getOrientation() == 8) {
+					// 根据图片附加信息进行大小旋转
+					detail.setPixelYDimension((int)Math.round(size.getWidth()));
+					detail.setPixelXDimension((int)Math.round(size.getHeight()));
+				}else {
+					detail.setPixelXDimension((int)Math.round(size.getWidth()));
+					detail.setPixelYDimension((int)Math.round(size.getHeight()));
+				}
+				
 			} catch (ImageReadException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -185,10 +180,10 @@ public class ImageInfoExtractor {
 		if (metadata instanceof JpegImageMetadata) {
 			final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
 
-//			List<IImageMetadataItem> items = jpegMetadata.getItems();
-//			for (IImageMetadataItem item : items) {
-//				log.debug(item.toString("PhotoDetail IImageMetadataItem: "));
-//			}
+			List<IImageMetadataItem> items = jpegMetadata.getItems();
+			for (IImageMetadataItem item : items) {
+				log.debug(item.toString("PhotoDetail IImageMetadataItem: "));
+			}
 
 			/* Origin */
 			final TiffField dateTimeOriginalField = jpegMetadata
@@ -288,6 +283,15 @@ public class ImageInfoExtractor {
 					photoDetails.setModel((String) out);
 				} else if (out instanceof String[]) {
 					photoDetails.setModel(((String[]) out)[0]);
+				}
+			}
+			
+			final TiffField orientationField = jpegMetadata
+					.findEXIFValueWithExactMatch(TiffTagConstants.TIFF_TAG_ORIENTATION);
+			if (null != orientationField) {
+				Object out = orientationField.getFieldType().getValue(orientationField);
+				if (out instanceof Short) {
+					photoDetails.setOrientation((Short) out);
 				}
 			}
 

@@ -45,9 +45,10 @@ function (ponmCtxConfig, MessageService, alertService) {
             scope.photoClick = function(photoId) {
                 scope.$emit('photo.click', photoId);
             };
+
             scope.pointClick = function() {
                 if(scope.message.point) {
-                    scope.$emit('message.point', scope.message);
+                    scope.$emit('message.point.click', scope.message);
                 }
             };
 
@@ -62,7 +63,11 @@ function (ponmCtxConfig, MessageService, alertService) {
             scope.onWaypoint = function(element, direction) {
                 if(direction == "down") {
                     element.addClass("shown");
-//                    scope.pointClick();
+                    if(!scope.active) {
+                        scope.$emit("message.actived", angular.copy(scope.message));
+                        scope.active = true;
+                    }
+
                 }
             };
 

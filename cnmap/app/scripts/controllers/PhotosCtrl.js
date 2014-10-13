@@ -72,12 +72,6 @@ angular.module('ponmApp.photos', [
                         // the main template will be placed here (relatively named)
                         '': { templateUrl: 'views/photos.html',
                               controller: 'PhotosCtrl'},
-
-                        // for column two, we'll define a separate controller
-                        'alerts@photos': {
-                            templateUrl: 'views/photos.alerts.html',
-                            controller: 'PhotosAlertsCtrl'
-                        },
                         'navbar': {
                             templateUrl: 'views/ponm.navbar.html',
                             controller: 'NavbarCtrl'
@@ -107,7 +101,7 @@ angular.module('ponmApp.photos', [
                     templateUrl: 'views/photos.all.html',
                     resolve: {
                     },
-                    controller: "PhotosAllCtrl"
+                    controller: "PhotosRecentCtrl"
                 })
                 .state('photos.albums', {
                     url: '/albums',
@@ -137,9 +131,9 @@ angular.module('ponmApp.photos', [
     }])
     .controller('PhotosCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'PhotoService', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams', 'safeApply', 'jsUtils', 'HashStateManager',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', 'safeApply', 'jsUtils', 'HashStateManager', 'alertService',
         function ($window, $location, $rootScope, $scope, PhotoService, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams, safeApply, jsUtils, HashStateManager) {
+                  ponmCtxConfig, $log, $state, $stateParams, safeApply, jsUtils, HashStateManager, alertService) {
 
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -152,6 +146,11 @@ angular.module('ponmApp.photos', [
             $scope.navbarFixedTop = false;
 
             $scope.hashStateManager = new HashStateManager($scope, $location);
+
+            // copy a local message service
+            $scope.alertService = angular.copy(alertService);
+            $scope.alertService.options.alone = true;
+            $scope.alertService.options.ttl = 2000;
 
             $log.debug($state);
 
@@ -208,10 +207,13 @@ angular.module('ponmApp.photos', [
                 }
             };
 
-            $scope.displayPhoto = function(photoId) {
-                $scope.hashStateManager.set("photoid", photoId);
+            $scope.displayPhoto = function(photoId, state) {
+                if(!state) {
+                    $scope.hashStateManager.set("d", 'd');
+                    $scope.hashStateManager.set("photoid", photoId);
+                }
 
-                var modalInstance = $modal.open({
+                $scope.photoDisplayModal = $modal.open({
                     templateUrl: 'views/photo.html',
                     controller: 'PhotoModalCtrl',
                     windowClass: 'photo-modal-fullscreen',
@@ -225,16 +227,20 @@ angular.module('ponmApp.photos', [
                     }
                 });
 
-                modalInstance.result.then(function (selectedItem) {
+                $scope.photoDisplayModal.result.then(function (selectedItem) {
                     $scope.hashStateManager.set("photoid", "");
+                    $scope.photoDisplayModal = null;
                 }, function () {
                     $scope.hashStateManager.set("photoid", "");
+                    $scope.photoDisplayModal = null;
                 });
             };
 
+            // 当地址栏photoid变化时，显示相应图片
             $scope.hashStateManager.watch("photoid", function(photoId) {
+                $scope.photoDisplayModal && $scope.photoDisplayModal.dismiss('cancel');
                 if(photoId) {
-                    $scope.displayPhoto(photoId);
+                    $scope.displayPhoto(photoId, true);
                 }
             });
 
@@ -268,6 +274,7 @@ angular.module('ponmApp.photos', [
                         if(res.status == "OK") {
                             $scope.selectPhoto(null, photo);
                             $scope.$broadcast("removePhotoDo", photo.id);
+                            $scope.alertService.add("success", "删除成功");
                         }
                     })
                 });
@@ -278,6 +285,7 @@ angular.module('ponmApp.photos', [
                 angular.forEach(photos, function(photo, key) {
                     $scope.selectPhoto(null, photo);
                     $scope.$broadcast("removePhotoDo", photo.id);
+                    $scope.alertService.add("success", "移动成功");
                 });
             }
 
@@ -295,13 +303,13 @@ angular.module('ponmApp.photos', [
             };
 
         }])
-    .controller('PhotosAlertsCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams',
-        function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams) {
-
-        }])
+//    .controller('PhotosAlertsCtrl',
+//    [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
+//        'ponmCtxConfig', '$log', '$state', '$stateParams',
+//        function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
+//                  ponmCtxConfig, $log, $state, $stateParams) {
+//
+//        }])
     .controller('PhotosAllCtrl',
     [        '$window', '$location', '$rootScope', '$scope', '$q', '$timeout', 'UserPhoto', 'UserService', '$modal',
         'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils', 'safeApply',
@@ -334,9 +342,7 @@ angular.module('ponmApp.photos', [
                 var d = $q.defer();
 
                 if ($scope.photo.currentPage > $scope.photo.numPages) {
-                    $timeout(function() {
-                        d.resolve();
-                    }, 500);
+                    d.resolve();
                     return d.promise;
                 }
 
@@ -346,6 +352,9 @@ angular.module('ponmApp.photos', [
                     function (data) {
                         if (data.status == "OK") {
                             $scope.photos = $scope.photos.concat(data.photos);
+                            $scope.photos.sort(function(a, b) {
+                                return b.create_time - a.create_time;
+                            });
                         }
                         d.resolve();
                     }, function (error) {
@@ -376,9 +385,64 @@ angular.module('ponmApp.photos', [
         }])
     .controller('PhotosRecentCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
-        'ponmCtxConfig', '$log', '$state', '$stateParams',
+        'jsUtils', '$log', 'safeApply', '$q',
         function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
-                  ponmCtxConfig, $log, $state, $stateParams) {
+                  jsUtils, $log, safeApply, $q) {
+
+            // 用户图片分页属性
+            $scope.photo = {
+                pageSize: 30,
+                totalItems: 0,
+                numPages: 4,
+                currentPage: 1,
+                maxSize: 10
+            };
+
+            $scope.photos = [];
+            function getUserPhotos() {
+                var d = $q.defer();
+
+                if ($scope.photo.currentPage > $scope.photo.numPages) {
+                    d.resolve();
+                    return d.promise;
+                }
+
+                UserPhoto.get({userId: $scope.userId, pageSize: $scope.photo.pageSize, pageNo: $scope.photo.currentPage},
+                    function (data) {
+                        if (data.status == "OK") {
+                            if(data.photos.length < $scope.photo.pageSize) {
+                                $scope.photo.numPages = $scope.photo.currentPage-1;
+                            }
+                            $scope.photos = $scope.photos.concat(data.photos);
+                            $scope.photos.sort(function(a, b) {
+                                return b.create_time - a.create_time;
+                            });
+                        }
+                        d.resolve();
+                    }, function (error) {
+                        $scope.photoLoading = false;
+                    });
+                $scope.photo.currentPage += 1;
+
+                return d.promise;
+            }
+
+            $scope.getUserPhotos = getUserPhotos;
+            getUserPhotos();
+
+            // timeline widget for photos in wall, reached event
+            $scope.$on('waypointEvent', function(e, dir, id) {
+                if(id.date) {
+                    safeApply($scope, function() {
+                        $scope.timelineDate = id.date;
+                    });
+                }
+            });
+
+            // when a photo be removed
+            $scope.$on('removePhotoDo', function (e, photoId) {
+                jsUtils.Array.removeItem($scope.photos, "id", photoId);
+            });
 
         }])
     .controller('PhotosAlbumsCtrl',
@@ -451,6 +515,7 @@ angular.module('ponmApp.photos', [
                     TravelService.delete({travelId: travel.id}, function(res) {
                         if(res.status == "OK") {
                             $state.go("photos.albums");
+                            $scope.alertService.add("success", "删除成功");
                         }
                     });
                 });
@@ -534,6 +599,7 @@ angular.module('ponmApp.photos', [
                         function(res) {
                             if(res.status == "OK") {
                                 removePhoto(photo);
+                                $scope.alertService.add("success", "已恢复");
                             }
                         });
                 });
@@ -545,6 +611,7 @@ angular.module('ponmApp.photos', [
                         function(res) {
                             if(res.status == "OK") {
                                 removePhoto(photo);
+                                $scope.alertService.add("success", "已彻底删除");
                             }
                         });
                 });
@@ -573,6 +640,7 @@ angular.module('ponmApp.photos', [
                     function(res) {
                         if(res.status == "OK") {
                             delete $scope.travels;
+                            $scope.alertService.add("success", "已清空");
                         }
                     });
             });

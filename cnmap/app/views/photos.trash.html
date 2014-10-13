@@ -1,4 +1,9 @@
-
+<div class="alerts">回收站中的内容将在 60 天后被永久删除。
+    <span ng-click="selectAll()"
+          class="clickable">全选</span>
+    <span ng-click="emptyRecycleBin()"
+          class="clickable">立即清除回收站</span>
+</div>
 <div class="photo-trash-container photo-selectable-container">
     <div ng-repeat="travel in travels"
          class="photo-trash">

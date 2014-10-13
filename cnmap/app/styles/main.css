@@ -481,7 +481,7 @@
 .travel-spot-header {
   position: relative;
   padding: 5px 5px 5px 95px;
-  min-height: 100px; }
+  min-height: 85px; }
   .travel-spot-header .spot-date {
     position: absolute;
     left: 0;
@@ -507,6 +507,8 @@
       font-weight: bold; }
   .travel-spot-header .info {
     margin: 5px 0; }
+    .travel-spot-header .info address {
+      margin: 0; }
 
 .travel-circle-header.navbar-forth {
   right: 0; }
@@ -835,7 +837,7 @@
 .maps-container .maps-content.maps-right-fixed .maps-right {
   width: 600px;
   margin: 0; }
-  .maps-container .maps-content.maps-right-fixed .maps-right .navbar-third, .maps-container .maps-content.maps-right-fixed .maps-right .navbar-forth, .maps-container .maps-content.maps-right-fixed .maps-right .message {
+  .maps-container .maps-content.maps-right-fixed .maps-right .navbar-third, .maps-container .maps-content.maps-right-fixed .maps-right .navbar-forth, .maps-container .maps-content.maps-right-fixed .maps-right .messages {
     width: 600px; }
 .maps-container .maps-content.maps-left-fixed .maps-left {
   width: 600px; }
@@ -843,7 +845,7 @@
   left: 0;
   margin: 0 0 0 600px;
   min-width: 600px; }
-  .maps-container .maps-content.maps-left-fixed .maps-right .navbar-third, .maps-container .maps-content.maps-left-fixed .maps-right .navbar-forth, .maps-container .maps-content.maps-left-fixed .maps-right .message {
+  .maps-container .maps-content.maps-left-fixed .maps-right .navbar-third, .maps-container .maps-content.maps-left-fixed .maps-right .navbar-forth, .maps-container .maps-content.maps-left-fixed .maps-right .messages {
     left: 600px;
     right: 0; }
 .maps-container .maps-content.maps-right-full .maps-left {
@@ -851,11 +853,11 @@
 .maps-container .maps-content.maps-right-full .maps-right {
   width: 100%;
   margin: 0; }
-  .maps-container .maps-content.maps-right-full .maps-right .navbar-third, .maps-container .maps-content.maps-right-full .maps-right .navbar-forth, .maps-container .maps-content.maps-right-full .maps-right .message {
+  .maps-container .maps-content.maps-right-full .maps-right .navbar-third, .maps-container .maps-content.maps-right-full .maps-right .navbar-forth, .maps-container .maps-content.maps-right-full .maps-right .messages {
     width: 100%; }
 .maps-container .maps-content.maps-left-full .maps-left {
   width: 100%; }
-.maps-container .maps-content.maps-left-full .maps-right, .maps-container .maps-content.maps-left-full .message {
+.maps-container .maps-content.maps-left-full .maps-right, .maps-container .maps-content.maps-left-full .messages {
   width: 0;
   display: none; }
 
@@ -1499,7 +1501,7 @@ span.clickable:hover {
 
 .editable-empty, .editable-empty:hover, .editable-empty:focus, a.editable-empty, a.editable-empty:hover, a.editable-empty:focus {
   font-style: italic;
-  color: initial;
+  color: #428bca;
   text-decoration: none; }
 
 .navbar.navbar-default .navbar-collapse {
@@ -2023,10 +2025,12 @@ b, strong {
     min-width: 200px;
     max-width: 500px; }
 
-.maps-container .maps-content .maps-right .message {
-  position: fixed;
-  z-index: 1028;
+.messages {
   text-align: center; }
+
+.maps-container .maps-content .maps-right .messages {
+  position: fixed;
+  z-index: 1028; }
 
 /** comments */
 .comments {

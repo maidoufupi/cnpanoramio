@@ -56,6 +56,14 @@ public interface TravelService {
 	public Travel removeTravelPhotos(Long id, List<Long> photos);
 	
 	/**
+	 * 修改旅行属性
+	 * 
+	 * @param travel
+	 * @return
+	 */
+	public Travel changeTravel(Travel travel);
+	
+	/**
 	 * 更改travel描述
 	 * 
 	 * @param id

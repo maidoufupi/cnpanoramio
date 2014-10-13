@@ -326,13 +326,14 @@ module.exports = function (grunt) {
            '<%= yeoman.app %>/styles/main.min.css': [
              '<%= yeoman.app %>/styles/main.css'
            ]
-//           ,'<%= yeoman.app %>/styles/vendor.min.css': [
-//                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/css/xeditable.css',
-//                 '<%= yeoman.app %>/bower_components/blueimp-file-upload/css/jquery.fileupload.css',
-//                 '<%= yeoman.app %>/bower_components/Jcrop/css/jquery.Jcrop.css',
-//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css'
-//                 ,'<%= yeoman.app %>/bower_components/perfect-scrollbar/src/perfect-scrollbar.css'
-//             ]
+           ,'<%= yeoman.app %>/styles/vendor.min.css': [
+                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/css/xeditable.css',
+                 '<%= yeoman.app %>/bower_components/blueimp-file-upload/css/jquery.fileupload.css',
+                 '<%= yeoman.app %>/bower_components/Jcrop/css/jquery.Jcrop.css',
+                 '<%= yeoman.app %>/bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css'
+                 ,'<%= yeoman.app %>/bower_components/perfect-scrollbar/src/perfect-scrollbar.css'
+                 ,'<%= yeoman.app %>/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
+             ]
          }
        }
     },
@@ -364,6 +365,10 @@ module.exports = function (grunt) {
                '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.comm.js',
                '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.Panoramio.js'
              ],
+           '<%= yeoman.app %>/scripts/panor/scripts.google.min.js': [
+             '<%= yeoman.app %>/scripts/panor/google/Map*.js',
+             '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.google.js'
+           ],
            '<%= yeoman.app %>/scripts/panor/scripts.gaode.min.js': [
              '<%= yeoman.app %>/scripts/panor/gaode/Map*.js',
              '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.gaode.js'
@@ -414,6 +419,9 @@ module.exports = function (grunt) {
 //                 '<%= yeoman.app %>/bower_components/angular-dragdrop/src/angular-dragdrop.js',
 //                 '<%= yeoman.app %>/bower_components/jquery-ui/jquery-ui.js',
 //                 '<%= yeoman.app %>/bower_components/angular-local-storage/angular-local-storage.js',
+//                 '<%= yeoman.app %>/bower_components/angular-scroll/angular-scroll.js',
+//                 '<%= yeoman.app %>/bower_components/moment/moment.js',
+//                 '<%= yeoman.app %>/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
 //
 ////                 '<%= yeoman.app %>/bower_components/jquery-bridget/jquery.bridget.js',
 ////                 '<%= yeoman.app %>/bower_components/get-style-property/get-style-property.js',
@@ -433,6 +441,8 @@ module.exports = function (grunt) {
 //                 '<%= yeoman.app %>/bower_components/Jcrop/js/jquery.Jcrop.min.js',
 //                 '<%= yeoman.app %>/bower_components/perfect-scrollbar/src/perfect-scrollbar.js',
 //                 '<%= yeoman.app %>/bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js',
+//                 '<%= yeoman.app %>/bower_components/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js',
+//                 '<%= yeoman.app %>/bower_components/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js',
 //                 // image gallery
 //                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-helper.js',
 //                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery.js',

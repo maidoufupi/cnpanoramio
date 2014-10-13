@@ -1,7 +1,7 @@
+<div class="messages">
+    <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
+</div>
 <div class="maps-travel">
-    <div class="message">
-        <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
-    </div>
     <div class="travel-header" waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '101'}">
         <div class="media user-info">
             <a class="pull-left" href="{{ctx}}/#/photos/{{userOpenInfo.id}}/albums"
@@ -210,6 +210,7 @@
                                     <span class="glyphicon glyphicon-cog"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="" ng-click="setAlbumCover(photo)">设为封面</a></li>
                                     <li><a href="" ng-click="createSpot(photo)">创建新景点</a></li>
                                     <li ng-repeat="spot in travel.spots">
                                         <a href="" ng-click="addSpotPhoto(photo, spot)">移动到第{{spot.day}}天{{spot.title}}</a>
@@ -226,7 +227,7 @@
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid" style="max-width: 400px;">
         <div ng-if="message" dynamic-message message="message" owner="owner"></div>
     </div>
 

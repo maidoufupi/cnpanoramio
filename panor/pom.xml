@@ -6,7 +6,7 @@
 	<groupId>com.cnpanoramio</groupId>
 	<artifactId>panor</artifactId>
 	<packaging>pom</packaging>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 	<name>Photo on map Modular Application</name>
 	<url>http://www.photoshows.cn</url>
 

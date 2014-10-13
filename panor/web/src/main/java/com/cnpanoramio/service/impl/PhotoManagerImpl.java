@@ -51,7 +51,7 @@ import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.RecycleManager;
 import com.cnpanoramio.service.ViewsManager;
-import com.cnpanoramio.service.imaging.ImageInfoExtractor;
+import com.cnpanoramio.service.imaging.ImageMetadataExtractor;
 import com.cnpanoramio.service.lbs.BDConverter;
 import com.cnpanoramio.service.lbs.GpsConverter;
 import com.cnpanoramio.service.lbs.LatLng;
@@ -198,8 +198,7 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 		// 第三、获取图片exif详细信息
 		is1 = new ByteArrayInputStream(content);
 		try {
-//			fillPhotoDetail(is1, photo);
-			new ImageInfoExtractor(is1, photo).process();
+			new ImageMetadataExtractor(is1, photo).process();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -374,16 +373,19 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 	private void updatePhotoGps(Photo photo, Double latDouble,
 			Double lngDouble, String address, MapVendor vendor) {
 
-		PhotoGps gps = null;
-
 		PhotoDetails detail = photo.getDetails();
+		// 高度
+		Double alt = 0D;
+		if(null != detail) {
+			alt = detail.getGPSAltitude();
+		}
 		Point point = null;
 		if ((null != latDouble && latDouble != 0) || (null!=lngDouble && lngDouble != 0)) {
 			if (vendor == MapVendor.gps) {
 				// 用户设置GPS为标准GPS坐标
 				// 转化GPS坐标为火星坐标
 				LatLng p = gpsc.getEncryPoint(lngDouble, latDouble);
-				point = new Point(p.getLat(), p.getLng(), 0D);
+				point = new Point(p.getLat(), p.getLng(), alt);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
@@ -394,14 +396,14 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 				
 				// 转化火星坐标到百度摩卡拖坐标
 				p = BDConverter.bd_encrypt(p.lat, p.lng);
-				point = new Point(p.getLat(), p.getLng(), 0D);
+				point = new Point(p.getLat(), p.getLng(), alt);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
 				saveOrUpdatePhotoGps(photo, MapVendor.baidu, point);
 
 				// 保存原始GPS坐标
-				point = new Point(latDouble, lngDouble);
+				point = new Point(latDouble, lngDouble, alt);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
@@ -409,7 +411,7 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 
 			} else if(vendor == MapVendor.baidu) {
 				// 用户设置为baidu，则默认为baidu坐标
-				point = new Point(latDouble, lngDouble, 0D);
+				point = new Point(latDouble, lngDouble, alt);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
@@ -417,7 +419,7 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 				
 				// 转化百度摩卡拖坐标 为 火星坐标
 				LatLng p = BDConverter.bd_decrypt(latDouble, lngDouble);
-				point = new Point(p.lat, p.lng);
+				point = new Point(p.lat, p.lng, alt);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
@@ -439,7 +441,7 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 				
 			}else {
 				// 用户设置位置不为GPS和baidu，则默认为火星坐标
-				point = new Point(latDouble, lngDouble);
+				point = new Point(latDouble, lngDouble, alt);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
@@ -450,7 +452,7 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 				
 				// 转化火星坐标到百度摩卡拖坐标
 				LatLng p = BDConverter.bd_encrypt(latDouble, lngDouble);
-				point = new Point(p.getLat(), p.getLng(), 0D);
+				point = new Point(p.getLat(), p.getLng(), alt);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
@@ -479,7 +481,7 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 
 				// 转化GPS坐标为火星坐标
 				LatLng p = gpsc.getEncryPoint(lngDouble, latDouble);
-				point = new Point(p.lat, p.lng);
+				point = new Point(p.lat, p.lng, alt);
 				photo.setGpsPoint(point);
 				photoDao.save(photo);
 
@@ -487,14 +489,14 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 				
 				// 转化火星坐标到百度摩卡拖坐标
 				p = BDConverter.bd_encrypt(p.lat, p.lng);
-				point = new Point(p.getLat(), p.getLng(), 0D);
+				point = new Point(p.getLat(), p.getLng(), alt);
 				if (StringUtils.hasText(address)) {
 					point.setAddress(address.trim());
 				}
 				saveOrUpdatePhotoGps(photo, MapVendor.baidu, point);
 
 				// 保存原始GPS坐标
-				point = new Point(latDouble, lngDouble);
+				point = new Point(latDouble, lngDouble, alt);
 				saveOrUpdatePhotoGps(photo, MapVendor.gps, point);
 			}
 		}

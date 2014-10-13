@@ -137,17 +137,17 @@ angular.module('ponmApp.controllers')
                     return $scope.staticCtx + '/' + photo.oss_key;
                 }else {
                     var extension = "@";
-                    if(photo.width > 2000 || photo.height > 2000) {
-                        extension = extension + "0e_2000w_2000h";
-                    }
-                    if(photo.file_size > 1024*1024*4) {
-                        extension = extension + "_50Q";
-                    }else if(photo.file_size > 1024*1024*2) {
-                        extension = extension + "_80Q";
-                    }else if(photo.file_size > 1024*1024) {
-                        extension = extension + "_90Q";
-                    }
-                    extension = extension + ".jpg";
+//                    if(photo.width > 2000 || photo.height > 2000) {
+                        extension = extension + "!photo-preview-lg";
+//                    }
+//                    if(photo.file_size > 1024*1024*4) {
+//                        extension = extension + "_1o_50Q.jpg";
+//                    }else if(photo.file_size > 1024*1024*2) {
+//                        extension = extension + "_1o_80Q.jpg";
+//                    }else if(photo.file_size > 1024*1024) {
+//                        extension = extension + "_1o_90Q.jpg";
+//                    }
+
                     return $scope.staticCtx + '/' + photo.oss_key + extension;
                 }
 

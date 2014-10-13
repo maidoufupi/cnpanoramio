@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cnpanoramio.ParameterException;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.TravelResponse;
+import com.cnpanoramio.json.TravelResponse.Travel;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
 import com.cnpanoramio.service.LikeManager;
 import com.cnpanoramio.service.PhotoManager;
@@ -81,17 +82,28 @@ public class TravelRestService extends AbstractRestService {
 	@RequestMapping(value = "/{travelId}", method = RequestMethod.POST)
 	@ResponseBody
 	public TravelResponse changeTravel(@PathVariable String travelId, 
-			@RequestParam(value="name", required=false) String name,
-			@RequestParam(value="description", required=false) String description) {
+			@RequestBody final Travel travel) {
 		TravelResponse response = responseFactory();
-		if(null != name) {
-			response.setTravel(travelService.changeTravelName(Long.parseLong(travelId), name));
-		}
-		if(null != description) {
-			response.setTravel(travelService.changeTravelDesc(Long.parseLong(travelId), description));
-		}
+		
+		response.setTravel(travelService.changeTravel(travel));
+		
 		return response;
 	}
+	
+//	@RequestMapping(value = "/{travelId}", method = RequestMethod.POST)
+//	@ResponseBody
+//	public TravelResponse changeTravel(@PathVariable String travelId, 
+//			@RequestParam(value="name", required=false) String name,
+//			@RequestParam(value="description", required=false) String description) {
+//		TravelResponse response = responseFactory();
+//		if(null != name) {
+//			response.setTravel(travelService.changeTravelName(Long.parseLong(travelId), name));
+//		}
+//		if(null != description) {
+//			response.setTravel(travelService.changeTravelDesc(Long.parseLong(travelId), description));
+//		}
+//		return response;
+//	}
 	
 	@RequestMapping(value = "/{travelId}", method = RequestMethod.DELETE)
 	@ResponseBody

@@ -4,17 +4,21 @@
 'use strict';
 
 angular.module('ponmApp.directives')
-.directive('dynamicMessagesLayout', ['$timeout', '$filter', '$log', '$q', 'ponmCtxConfig', 'jsUtils',
-    function ($timeout, $filter, $log, $q, ponmCtxConfig, jsUtils) {
+.directive('dynamicMessagesLayout', ['$window', '$timeout', '$filter', '$log', '$q', 'ponmCtxConfig', 'jsUtils',
+    function ($window, $timeout, $filter, $log, $q, ponmCtxConfig, jsUtils) {
 
         var defaults = {
-            type: "photo"
+            type: "photo",
+            rules: {
+                phone : 767,
+                tablet : 979,
+                desktop : 1200
+            }
         };
 
         return {
             restrict: 'A',
             scope: {
-//                messages: "=messages",
                 columnWidth: "=columnWidth",
                 columnSize: "=columnSize"
             },
@@ -22,17 +26,13 @@ angular.module('ponmApp.directives')
             link: function (scope, element, attrs) {
                 var opts, options;
 
-                options = scope.$eval(attrs.ponmMessageLayout || "{}");
+                options = scope.$eval(attrs.dynamicMessagesLayout || "{}");
 
                 opts = angular.extend({}, defaults, options);
 
                 scope.owner = ponmCtxConfig;
 
                 var elemCols;
-
-//                scope.$watch("messages.length", function() {
-//
-//                });
 
                 scope.cols = [{
                         messages: [],
@@ -64,6 +64,10 @@ angular.module('ponmApp.directives')
                         if(message) {
                             if(!elemCols) {
                                 elemCols = element.find(".messages-col");
+                                elemCols.removeClass("col-md-3");
+                                elemCols.removeClass("col-md-4");
+                                elemCols.removeClass("col-md-6");
+                                elemCols.removeClass("col-md-12");
                                 switch(scope.columnSize) {
                                     case 4:
                                         elemCols.addClass("col-md-3");
@@ -102,17 +106,46 @@ angular.module('ponmApp.directives')
                     }
                 }
 
-                scope.onWaypoint = function(element, direction) {
-                    if(direction == "down") {
-                        element.addClass("shown");
+                scope.updateLayout = function(width) {
+                    var layout;
+                    if(width > opts.rules.phone) {
+                        if(width > opts.rules.tablet) {
+                            if(width > opts.rules.desktop) {
+
+                            }else {
+                                layout = "desktop";
+                            }
+
+                        }else {
+                            layout = "tablet";
+                        }
+
+                    }else {
+                        layout = "phone";
+                    }
+
+                    if(scope.layout != layout) {
+                        scope.layout = layout;
+                        if(layout == "phone") {
+                            scope.columnSize = 1;
+                        }else if(layout == "tablet") {
+                            scope.columnSize = 2;
+                        }else if(layout == "desktop") {
+                            scope.columnSize = 3;
+                        }else {
+                            scope.columnSize = 4;
+                        }
+                        $log.debug("layout changed columnSize = " + scope.columnSize);
+                        relayout(scope.columnSize);
                     }
                 };
 
-                scope.$watch("columnSize", function(columnSize) {
+                function relayout(columnSize) {
                     if(scope.layoutHander) {
                         $timeout.cancel(scope.layoutHander);
                     }
                     if(columnSize > 0) {
+                        $log.debug("layout changed layout");
                         scope.cursor = 0;
                         angular.forEach(scope.cols, function(col, key) {
                             col.messages = [];
@@ -120,6 +153,10 @@ angular.module('ponmApp.directives')
                         elemCols = null;
                         addMessage();
                     }
+                }
+
+                scope.$watch("columnSize", function(columnSize) {
+                    relayout(columnSize);
                 });
 
                 scope.$on("message.insert", function(e, message) {
@@ -140,6 +177,19 @@ angular.module('ponmApp.directives')
                     });
                     jsUtils.Array.removeItem(scope.messages, "id", message.id);
                 });
+
+                scope.$watch(function () {
+                    return element.innerWidth && element.innerWidth();
+                }, function (width) {
+                    $log.debug("container width changed");
+                    scope.updateLayout(width);
+                });
+
+                angular.element($window).bind("resize", function (e) {
+                    var width = element.innerWidth && element.innerWidth();
+                    width && scope.updateLayout(width);
+                });
+
             }
         };
 

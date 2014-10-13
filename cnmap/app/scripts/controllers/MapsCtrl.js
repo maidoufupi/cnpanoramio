@@ -293,7 +293,7 @@ angular.module('ponmApp.maps', [
                 $scope.mapService.init(mapObj);
                 locationHash(mapObj);
                 if(!$scope.hashStateManager.get("lat")) {
-                    getCurrentPostion(map);
+                    getCurrentPostion(mapObj);
                 }
             });
 
@@ -758,9 +758,12 @@ angular.module('ponmApp.maps', [
 
             $scope.updateTravel = function(travel, propName, $data) {
                 var d = $q.defer();
-                var params = {};
-                params[propName] = $data;
-                TravelService.changeTravel({travelId: travel.id}, jsUtils.param(params),
+                var t = {
+                    id: travel.id
+                };
+                t[propName] = $data;
+
+                TravelService.changeTravel({travelId: travel.id}, t,
                     function(res) {
                         res = res || {};
                         if(res.status === 'OK') { // {status: "OK"}
@@ -979,6 +982,20 @@ angular.module('ponmApp.maps', [
                         }
                     });
                 return d.promise;
+            };
+
+            /**
+             * 设为相册封面
+             *
+             * @param photo
+             */
+            $scope.setAlbumCover = function(photo) {
+                $scope.updateTravel($scope.travel, "album_cover", photo.id)
+                    .then(function() {
+                        $scope.alertService.add("success", "更新成功");
+                    }, function(error) {
+                        $scope.alertService.add("danger", "更新失败 " + error, {ttl: 3000});
+                    });
             };
 
             /**
@@ -1498,9 +1515,15 @@ angular.module('ponmApp.maps', [
 
         };
 
+        $scope.$on("message.actived", function(e, message) {
+            if(message.point) {
+                $scope.$broadcast('message.point.click', message);
+            }
+        });
+
         var messagePoints = [],
             currentPoint;
-        $scope.$on('message.point', function(e, message) {
+        $scope.$on('message.point.click', function(e, message) {
 
             var messagePoint = messagePoints[message.id],
                 point = message.point;

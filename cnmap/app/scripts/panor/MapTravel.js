@@ -25,6 +25,9 @@
           });
           if (spot.time_start) {
             spot.spotDate = new Date(spot.time_start);
+          } else if (spot.photos[0]) {
+            spot.spotDate = spot.photos[0].date_time;
+            spot.time_start = spot.spotDate;
           }
           if (spot.spotDate) {
             if (!spotMinDate || spotMinDate > spot.spotDate) {

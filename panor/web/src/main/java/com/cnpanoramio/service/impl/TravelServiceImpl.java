@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.cnpanoramio.dao.TravelSpotDao;
 import com.cnpanoramio.domain.Message;
@@ -207,6 +208,44 @@ public class TravelServiceImpl implements TravelService {
 		}
 
 	}
+	
+	@Override
+	public Travel changeTravel(Travel travel) {
+		User me = UserUtil.getCurrentUser(userManager);
+		com.cnpanoramio.domain.Travel travelD = travelManager.get(travel.getId());
+		checkMyTravel(travelD, me);
+		
+		// 地址
+		if(null != travel.getAddress()) {
+			travelD.setAddress(travel.getAddress());
+		}
+		
+		// title
+		if(null != travel.getTitle()) {
+			travelD.setTitle(travel.getTitle());
+		}
+		
+		// 描述
+		if(null != travel.getDescription()) {
+			travelD.setDescription(travel.getDescription());
+		}
+		
+		// 开始时间
+		if(null != travel.getTimeStart()) {
+			travelD.setTimeStart(travel.getTimeStart());
+		}
+		
+		// 旅行相册封面
+		if(null != travel.getAlbumCover()) {
+			if(StringUtils.hasLength(travel.getAlbumCover())) {
+				travelD.setAlbumCover(photoManager.get(Long.parseLong(travel.getAlbumCover())));
+			}else {
+				travelD.setAlbumCover(null);
+			}
+		}
+		
+		return convertTravel(travelD);
+	}
 
 	@Override
 	public Travel changeTravelDesc(Long id, String description) {
@@ -333,4 +372,6 @@ public class TravelServiceImpl implements TravelService {
 		travel.setPhotoSize(photos.size());
 		return travel;
 	}
+
+	
 }

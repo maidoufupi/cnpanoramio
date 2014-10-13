@@ -29,6 +29,11 @@ angular.module('ponmApp.services')
                         spot.time_end = photo.date_time;
                     }
                 });
+                // 图片按拍摄时间排序
+                spot.photos.sort(function(a, b) {
+                    return a.date_time-b.date_time;
+                });
+
                 travel.photo_size += spot.photos.length;
                 travel.time_start = travel.time_start || spot.time_start;
                 if(spot.time_start < travel.time_start) {
@@ -41,9 +46,16 @@ angular.module('ponmApp.services')
                 }
             });
 
+            // 旅行景点按景点开始时间排序
+            travel.spots.sort(function(a, b) {
+                return a.time_start-b.time_start;
+            });
+
             angular.forEach(travel.spots, function(spot, key) {
                 spot.day = Math.ceil((spot.time_start - travel.time_start) / (1000 * 60 * 60 * 24)) + 1;
             });
+
+
         };
     }
 

@@ -41,6 +41,10 @@ public class PhotoDetails {
 	private String resolutionUnit;
 
 	private String compressedBitsPerPixel;
+
+	// 方向
+	@Column(length=1)
+	private short Orientation;
     
 	
 /* Camera */
@@ -74,17 +78,25 @@ public class PhotoDetails {
 	private Double focalLengthIn35mmFilm;
 	
 /* Advanced photo */
+	// 对比度
 	private String contrast;
+	// 亮度
 	private Double brightnessValue;
+	// 光源 指白平衡设置
 	private String lightSource;
+	// 曝光程序
 	private String exposureProgram;
+	// 饱和度
 	private String saturation;
+	// 锐化
 	private String sharpness;
+	// 白平衡
 	private String whiteBalance;
 	
 	// 感光度 (called ISOSpeedRatings by EXIF 2.2, then PhotographicSensitivity by the EXIF 2.3 spec.)
 	private String ISO;
 
+	// 数字变焦比率
 	private Integer digitalZoomRatio;
 	private String ExifVersion;
 	
@@ -500,6 +512,12 @@ public class PhotoDetails {
 	public void setgPanoLargestValidInteriorRectHeight(
 			String gPanoLargestValidInteriorRectHeight) {
 		this.gPanoLargestValidInteriorRectHeight = gPanoLargestValidInteriorRectHeight;
+	}
+	public short getOrientation() {
+		return Orientation;
+	}
+	public void setOrientation(short orientation) {
+		Orientation = orientation;
 	}	
 
 }

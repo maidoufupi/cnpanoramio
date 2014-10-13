@@ -96,16 +96,16 @@
                 </div>
             </div>
         </nav>
+
+        <div class="messages">
+            <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
+        </div>
     </div>
 
-    <div ui-view="alerts">
-
-    </div>
     <div class="select-pane"
          ponm-rect-multi-select="{'selector': '.photo', 'moveselect': true, 'offsetY': -110}"
          ponm-rect-selector="rectSelected">
         <div class="container container-photos">
-
             <div ui-view>
                 <i>Some content will load here!</i>
             </div>

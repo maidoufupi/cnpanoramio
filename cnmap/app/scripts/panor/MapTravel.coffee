@@ -15,6 +15,9 @@ class ITravelLayer
         spot.photos.sort((a,b) -> return a.date_time-b.date_time)
         if spot.time_start
           spot.spotDate = new Date spot.time_start
+        else if spot.photos[0]
+          spot.spotDate = spot.photos[0].date_time
+          spot.time_start = spot.spotDate
         if spot.spotDate
           if !spotMinDate or spotMinDate > spot.spotDate
             spotMinDate = spot.spotDate

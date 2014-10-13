@@ -15,11 +15,14 @@
 	<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload-ui.css"/>">
 	<link rel="stylesheet" href='<c:url value="bower_components/Jcrop/css/jquery.Jcrop.css"/>'/> --%>
 	
-    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/main.min.css'/>" />
     <link rel="stylesheet" type="text/css" href="<c:url value='/styles/vendor.min.css'/>" />
+    <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/main.min.css'/>" />
     
 </head>
 <body>
+	<script type="text/javascript" id="bdshare_js" data="type=tools&mini=1" ></script>
+	<script id="bdshell_js"></script>
+	
 	<script type="text/javascript" src="<c:url value="/scripts/ponmApp.vendor.min.js"/>"></script>
 	<script type="text/javascript" src="<c:url value="/scripts/blueimp-file-upload.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.min.js"/>"></script>
@@ -28,6 +31,10 @@
     <script type="text/javascript" src="<c:url value="/scripts/panor/scripts.min.js"/>"></script>
 	<script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
 <c:choose>
+  <c:when test='${sessionScope.mapVendor eq "google"}'>
+    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-google/src/ui-map.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.google.min.js'/>"></script>
+  </c:when>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
     <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-baidu/ui-map.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.baidu.min.js'/>"></script>
@@ -54,6 +61,7 @@
 	window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
 	//window.staticCtx = "http://static.photoshows.cn";
 	//window.corsproxyCtx = "http://www.corsproxy.com/static.photoshows.cn";
+	
 	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径
 	    /* window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录 */
 	    window.userId = "${sessionScope.userId}"; // 用户ID
@@ -71,7 +79,7 @@
     <div ui-view="alert">
         alert
     </div>
-    <div ui-view style="position: absolute;
+    <div ui-view class="main-view-page" style="position: absolute;
                         bottom: 0;
                         top: 51px;
                         width: 100%;">

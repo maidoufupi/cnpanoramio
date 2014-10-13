@@ -16,8 +16,6 @@ angular.module('ponmApp.directives')
             restrict: 'A',
             link: function (scope, element, attrs) {
 
-//                $log.debug("waypoint...");
-
                 var options;
                 var opt = scope.$eval(attrs.waypoint || "{}");
                 options = angular.extend({}, $.fn.waypoint.defaults, defaults, opt);
@@ -25,7 +23,6 @@ angular.module('ponmApp.directives')
                 var onWaypoint = $parse(attrs.onWaypoint);
 
                 $timeout( function() {
-//                    $log.debug("set waypoint");
 
                     $( element ).waypoint(function(direction) {
                         if(onWaypoint) {
@@ -33,7 +30,7 @@ angular.module('ponmApp.directives')
                                 onWaypoint(scope, {$direction: direction, $element: element});
                             });
                         }
-                        scope.$emit('waypointEvent', direction, opt.id);
+                        scope.$emit('waypointEvent', direction, opt.target);
                     }, options);
                 }, 500);
 

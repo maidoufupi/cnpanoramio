@@ -22,7 +22,7 @@
 
                     <li ng-if="stateStatus.travel"
                         ng-class="{'active': stateStatus.travel}">
-                        <a href="#/maps/travel">旅行<span class="footnote">{{stateStatus.name}}</span></a></li>
+                        <a href="#/maps/travel"><span class="footnote">{{stateStatus.name}}</span></a></li>
                     <li ng-if="user.id"
                         ng-class="{'active': stateStatus.user}">
                         <a href="#/maps/user/{{user.id}}">{{user.name}}<span class="footnote">的照片</span></a></li>

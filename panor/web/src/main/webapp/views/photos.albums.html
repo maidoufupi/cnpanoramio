@@ -3,7 +3,10 @@
          class="travel">
         <a ng-href="#/photos/{{$stateParams.userId}}/albums/{{travel.id}}">
             <div class="thumbnail">
-                <img ng-src="{{travel.album_cover ? staticCtx+'/'+travel.album_cover+'@1e_200w_200h_1c.jpg' : ctx+'/images/travel-album-cover.jpg'}} " alt="">
+                <div class="album-cover">
+                    <img ng-src="{{travel.album_cover ? staticCtx+'/'+travel.album_cover+'@1e_200w_200h_1c_1o.jpg' : ctx+'/images/travel-album-cover.jpg'}} " alt="">
+                </div>
+
                 <div class="caption">
                     <h5>{{travel.title}}</h5>
                     <div><span class="footnotes">{{travel.photo_size}} 张照片</span></div>

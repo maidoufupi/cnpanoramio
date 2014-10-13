@@ -1,28 +1,27 @@
 <div class="photo-modal-container">
-    <div>
+    <div class="photo-main">
     <nav class="navbar navbar-inverse photo-container-header" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <!--<div class="navbar-header">
+            <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1">
+                        data-target="#bs-photo-header-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="">Brand</a>
-            </div>-->
+                <!--<a class="navbar-brand" href="">{{photo.title}}</a>-->
+            </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav center-block">
+            <div class="collapse navbar-collapse" id="bs-photo-header-navbar-collapse-1">
+                <ul class="nav navbar-nav">
                     <!--<li><a href="">分享</a></li>-->
                     <li><a href="" ng-click="displayGallery()">幻灯片</a></li>
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle">更多<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">设为旅行相册封面</a></li>
                             <li><a href="">下载图片</a></li>
                             <li><a href="">举报非法图片</a></li>
                             <!--<li><a href="">Something else here</a></li>
@@ -34,15 +33,17 @@
                     </li>
                 </ul>
 
-                <ul class="nav navbar-nav navbar-right">
+                <!--<ul class="nav navbar-nav navbar-right">
                     <li ng-click="cancel()"
                         class="cancel">
                         <div class="photos-lightbox-close"></div>
-                        <!--<a href="" class="close" aria-hidden="true">&times;</a>-->
                     </li>
-                </ul>
+                </ul>-->
             </div>
             <!-- /.navbar-collapse -->
+            <div class="cancel" ng-click="cancel()">
+                <div class="photos-lightbox-close"></div>
+            </div>
         </div>
         <!-- /.container-fluid -->
     </nav>
@@ -216,6 +217,12 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td class="name">海拔高度</td>
+                                <td  class="value">
+                                    {{photo.point.alt | number}} m
+                                </td>
+                            </tr>
+                            <tr>
                                 <td class="name">拍摄日期</td>
                                 <td  class="value">
                                     {{cameraInfo.date_time_original | calculatetime | date:'yyyy-MM-dd'}}</td>
@@ -237,6 +244,10 @@
                                 <td class="value">{{cameraInfo.model}}</td>
                             </tr>
                             <tr>
+                                <td class="name">相机品牌</td>
+                                <td class="value">{{cameraInfo.make}}</td>
+                            </tr>
+                            <tr>
                                 <td class="name">镜头</td>
                                 <td class="name">{{cameraInfo.jt}}</td>
                             </tr>
@@ -246,7 +257,7 @@
                             </tr>
                             <tr>
                                 <td class="name">曝光</td>
-                                <td class="value">{{cameraInfo.exposure_time}}</td>
+                                <td class="value">{{cameraInfo.exposure_time | number}}</td>
                             </tr>
                             <tr>
                                 <td class="name">F 值</td>
@@ -256,10 +267,7 @@
                                 <td class="name">ISO</td>
                                 <td class="value">{{cameraInfo.iso}}</td>
                             </tr>
-                            <tr>
-                                <td class="name">相机品牌</td>
-                                <td class="value">{{cameraInfo.make}}</td>
-                            </tr>
+
                             <tr>
                                 <td class="name">闪光灯</td>
                                 <td class="value">{{cameraInfo.flash}}</td>
@@ -290,6 +298,13 @@
                                 class="btn btn-default btn-sm"
                                 title="分享"
                                 ng-click="share()"><span class="glyphicon glyphicon-share-alt"></span></button>
+                        <bd-share ng-if="photo" class="btn btn-sm bd-share"
+                                  text="{{photo.title}}"
+                                  desc=""
+                                  comment="{{photo.description}}"
+                                  url=""
+                                  pic="{{getPhotoSrc(photo)}}"
+                                  bd-bind=""></bd-share>
                     </div>
                 </div>
                 <div ponm-comments

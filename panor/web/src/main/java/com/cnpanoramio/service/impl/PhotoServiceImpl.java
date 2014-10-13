@@ -2,16 +2,22 @@ package com.cnpanoramio.service.impl;
 
 import javax.servlet.http.HttpSession;
 
+import org.appfuse.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.MapVendor;
+import com.cnpanoramio.dao.FavoriteDao;
+import com.cnpanoramio.domain.Favorite;
+import com.cnpanoramio.domain.Like;
 import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.PhotoDetails;
 import com.cnpanoramio.domain.PhotoGps;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.PhotoProperties;
+import com.cnpanoramio.service.LikeManager;
+import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.PhotoService;
 
 @Service
@@ -20,6 +26,15 @@ public class PhotoServiceImpl implements PhotoService {
 
 	@Autowired
 	private HttpSession httpSession;
+	
+	@Autowired
+	private PhotoManager photoManager;
+	
+	@Autowired
+	private LikeManager likeManager;
+	
+	@Autowired
+	private FavoriteDao favoriteDao;
 	
 	@Override
 	public PhotoProperties transform(Photo photo) {
@@ -75,6 +90,24 @@ public class PhotoServiceImpl implements PhotoService {
 			}			
 		}
 		return pp;
+	}
+	
+	@Override
+	public PhotoProperties getPhotoProperties(Long id, User user) {
+		Photo photo = photoManager.get(id);
+		PhotoProperties prop = transform(photo);
+		// 返回此图片是否被他 收藏 赞
+		if(null != user) {
+			Like like = likeManager.getLikePhoto(user, photo);
+			if(null != like) {
+				prop.setLike(true);
+			}
+			Favorite f = favoriteDao.get(id, user.getId());
+			if (null != f) {
+				prop.setFavorite(true);
+			}
+		}
+		return prop;
 	}
 	
 	@Override

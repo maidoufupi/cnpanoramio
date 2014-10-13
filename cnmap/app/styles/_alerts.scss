@@ -35,14 +35,19 @@
   }
 }
 
+// messages container
+.messages {
+
+  text-align: center;
+}
+
 // maps page message
 .maps-container {
   .maps-content {
     .maps-right {
-      .message {
+      .messages {
         position: fixed;
         z-index: 1028;
-        text-align: center;
       }
     }
   }

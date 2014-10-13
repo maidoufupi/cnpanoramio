@@ -11,7 +11,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="">{{photo.title}}</a>
+                <!--<a class="navbar-brand" href="">{{photo.title}}</a>-->
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -22,7 +22,6 @@
                     <li class="dropdown">
                         <a href="" class="dropdown-toggle">更多<b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">设为旅行相册封面</a></li>
                             <li><a href="">下载图片</a></li>
                             <li><a href="">举报非法图片</a></li>
                             <!--<li><a href="">Something else here</a></li>
@@ -220,7 +219,7 @@
                             <tr>
                                 <td class="name">海拔高度</td>
                                 <td  class="value">
-                                    {{photo.point.alt | number}}
+                                    {{photo.point.alt | number}} m
                                 </td>
                             </tr>
                             <tr>
@@ -258,7 +257,7 @@
                             </tr>
                             <tr>
                                 <td class="name">曝光</td>
-                                <td class="value">{{cameraInfo.exposure_time}}</td>
+                                <td class="value">{{cameraInfo.exposure_time | number}}</td>
                             </tr>
                             <tr>
                                 <td class="name">F 值</td>

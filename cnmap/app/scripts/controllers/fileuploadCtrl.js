@@ -435,6 +435,7 @@ angular.module('fileuploadApp', [
                             }
                         }, function(res) {
                             if(res.status == "OK") {
+                                $scope.alertService.add("success", "发布成功");
                                 file.messageId = res.message.id;
                             }
                         },function(error) {

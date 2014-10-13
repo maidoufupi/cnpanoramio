@@ -1,6 +1,5 @@
 <div infinite-scroll="loadMorePhotos()"
      infinite-scroll-distance="1"
-     infinite-scroll-parent="true"
      infinite-scroll-disabled="loadMoreDisabled"
      infinite-scroll-immediate-check="false"
      class="maps-user">
@@ -20,12 +19,12 @@
 
     </div>
     <div class="photo-wall photo-fluid-container"
-         photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}">
+         photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}">
         <div ng-repeat="photo in photos"
              class="photo">
             <a href=""
                ng-click="displayPhoto(photo.id)">
-                <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_100w_100h.jpg">
+                <img ng-src="{{staticCtx}}/{{photo.oss_key}}@!photo-preview-sm" data-width="{{photo.width}}" data-height="{{photo.height}}">
 
     <!--        <div class="action-select"
                  ng-class="{'action': !selectable, 'ponm-show': selectable}"

@@ -45,6 +45,7 @@ import com.cnpanoramio.service.CommentService;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.LikeManager;
 import com.cnpanoramio.service.PhotoManager;
+import com.cnpanoramio.service.PhotoService;
 import com.cnpanoramio.service.ViewsManager;
 import com.cnpanoramio.utils.PhotoUtil;
 import com.cnpanoramio.utils.UserUtil;
@@ -59,7 +60,10 @@ public class PhotoRestService extends AbstractRestService {
 	private UserManager userManager = null;
 
 	@Autowired
-	private PhotoManager photoService;
+	private PhotoManager photoManager;
+	
+	@Autowired
+	private PhotoService photoService;
 
 	@Autowired
 	private FileService fileService;
@@ -90,7 +94,7 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 
 		try {
-			photoService.markBest(id, me.getId(), true);
+			photoManager.markBest(id, me.getId(), true);
 			response.setStatus(PhotoResponse.Status.OK.name());
 		} catch (DataAccessException ex) {
 			response.setStatus(PhotoResponse.Status.NO_ENTITY.name());
@@ -105,7 +109,7 @@ public class PhotoRestService extends AbstractRestService {
 		User me = UserUtil.getCurrentUser(userManager);
 		Long id = Long.parseLong(photoId);
 		try {
-			photoService.markBest(id, me.getId(), false);
+			photoManager.markBest(id, me.getId(), false);
 			response.setStatus(PhotoResponse.Status.OK.name());
 		} catch (DataAccessException ex) {
 			response.setStatus(PhotoResponse.Status.NO_ENTITY.name());
@@ -140,9 +144,9 @@ public class PhotoRestService extends AbstractRestService {
 
 		User me = UserUtil.getCurrentUser(userManager);
 
-		Photo photo = photoService.get(id);
+		Photo photo = photoManager.get(id);
 		if (photo.getOwner().equals(me)) {
-			response.setProp(photoService.properties(id, properties));
+			response.setProp(photoManager.properties(id, properties));
 		} else {
 			throw new AccessDeniedException("Access Denied! Photo Id: "
 					+ photo.getId());
@@ -157,7 +161,7 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 		PhotoResponse response = new PhotoResponse();
 
-		PhotoCameraInfo camerainfo = photoService.getCameraInfo(id);
+		PhotoCameraInfo camerainfo = photoManager.getCameraInfo(id);
 
 		// 图片被查看
 		viewsManager.view(id, Constant.C_APP_MAIN);
@@ -175,7 +179,7 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 		Photo photo = null;
 		try {
-			photo = photoService.get(id);
+			photo = photoManager.get(id);
 		} catch (DataAccessException ex) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -208,7 +212,7 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 		Photo photo = null;
 		try {
-			photo = photoService.get(id);
+			photo = photoManager.get(id);
 		} catch (DataAccessException ex) {
 			return null;
 		}
@@ -241,7 +245,7 @@ public class PhotoRestService extends AbstractRestService {
 		Long id = Long.parseLong(photoId);
 		PhotoResponse response = new PhotoResponse();
 
-		PhotoProperties prop = photoService.delete(id);
+		PhotoProperties prop = photoManager.delete(id);
 		response.setStatus(PhotoResponse.Status.OK.name());
 		response.setProp(prop);
 
@@ -268,7 +272,6 @@ public class PhotoRestService extends AbstractRestService {
 		} catch (UsernameNotFoundException ex) {
 		}
 
-		// try {
 		PhotoProperties prop = photoService.getPhotoProperties(id, me);
 
 		// 设置图片总访问量
@@ -276,9 +279,7 @@ public class PhotoRestService extends AbstractRestService {
 
 		response.setStatus(PhotoResponse.Status.OK.name());
 		response.setProp(prop);
-		// } catch (DataAccessException ex) {
-		// response.setStatus(PhotoResponse.Status.NO_ENTITY.name());
-		// }
+
 		return response;
 	}
 
@@ -302,7 +303,7 @@ public class PhotoRestService extends AbstractRestService {
 		User me = UserUtil.getCurrentUser(userManager);
 
 		if (!file.isEmpty()) {
-			PhotoProperties prop = photoService.upload(lat, lng, address,
+			PhotoProperties prop = photoManager.upload(lat, lng, address,
 					mVendor, file);
 			response.setProp(prop);
 			response.setStatus(PhotoResponse.Status.OK.name());
@@ -321,7 +322,7 @@ public class PhotoRestService extends AbstractRestService {
 		log.info("add " + tags.size() + " tags to " + photoId);
 		PhotoResponse response = responseFactory();
 		Long id = Long.parseLong(photoId);
-		photoService.addTags(id, tags);
+		photoManager.addTags(id, tags);
 		return response;
 	}
 
@@ -337,7 +338,7 @@ public class PhotoRestService extends AbstractRestService {
 			mVendor = MapVendor.gaode;
 		}
 		PhotoResponse response = new PhotoResponse();
-		PhotoGps gps = photoService.getGPSInfo(Long.parseLong(photoId), mVendor);
+		PhotoGps gps = photoManager.getGPSInfo(Long.parseLong(photoId), mVendor);
 		if(null != gps) {
 			gps.setPhoto(null);
 			response.setGps(gps);

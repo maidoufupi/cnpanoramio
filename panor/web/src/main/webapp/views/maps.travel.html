@@ -1,3 +1,6 @@
+<div class="messages">
+    <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
+</div>
 <div class="maps-travel">
     <div class="travel-header" waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '101'}">
         <div class="media user-info">
@@ -10,7 +13,7 @@
                 <h4 class="media-heading">{{travel.username}}</h4>
                 <span ng-switch="travelEnedit">
                     <h5 class="media-heading"
-                        ng-switch-default>旅行：{{travel.title}}</h5>
+                        ng-switch-default>{{travel.title}}</h5>
                     <a ng-switch-when="true"
                        href=""
                        class="editable"
@@ -27,7 +30,26 @@
                     <span>共 {{travel.photo_size}} 张图片</span>
                     <span> {{travel.spots.length}} 个景点</span>
                 </div>
+
+                <button type="button"
+                        class="btn btn-xs"
+                        ng-if="login&&(userId == travel.user_id)"
+                        ng-class="{'btn-default':!travelEnedit, 'btn-primary':travelEnedit}"
+                        ng-click="changeEditableView()">
+                    <span ng-show="travelEnedit">更改试图</span>
+                    <span ng-show="!travelEnedit">显示试图</span>
+                </button>
+
+                <bd-share ng-if="travel" class="bd-share"
+                          text="{{travel.title}}"
+                          desc=""
+                          comment="{{travel.description||travel.spots[0].description}}"
+                          url=""
+                          pic="{{staticCtx + '/' + travel.album_cover + '@!photo-preview-big'}}"
+                          bd-bind=""></bd-share>
             </div>
+
+
         </div>
 
         <div class="travel-desc">
@@ -48,7 +70,6 @@
     <div class="travel-content">
         <div class="panel panel-default travel-spot"
              ng-repeat="spot in travel.spots"
-             ng-class="{'active': spot.active}"
              ng-controller="MapsTravelSpotCtrl">
             <div ng-if="travelEnedit"
                  class="action spot-remove">
@@ -58,8 +79,8 @@
                 </a>
             </div>
             <!-- Default panel contents -->
-            <div class="panel-heading" >
-                <div class="travel-circle-header" waypoint-sticky="{'stuckClass': 'navbar-forth', 'offset': '152'}">
+            <div class="panel-heading" waypoint-sticky="{'stuckClass': 'navbar-forth', 'offset': '152'}">
+                <div class="travel-spot-header" >
                     <a href="" ng-click="activeSpot(spot)">
                         <div class="spot-date" >
                             <span class="spot-date-txt ">{{spot.day || '某'}}</span>
@@ -85,7 +106,7 @@
                             </div>
                         </div>
                     </a>
-                    <div>
+                    <div class="">
                         <div ng-switch="travelEnedit">
                             <a ng-switch-when="true"
                                href="" editable-text="spot.title"
@@ -106,15 +127,35 @@
                         </div>
                     </div>
 
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" value="true" ng-model="displayLine">
-                            显示路线
-                        </label>
+                    <div>
+                        <button type="button" class="btn btn-xs"
+                                ng-class="{'btn-primary':spotLine.disp, 'btn-default': !spotLine.disp}"
+                                ng-mouseover="spotLine.mouseover=true"
+                                ng-mouseleave="spotLine.mouseover=false"
+                                ng-click="spotLine.disp=!spotLine.disp">
+                            <span class="button-text" ng-show="!spotLine.disp||spotLine.disp&&!spotLine.mouseover">显示路线</span>
+                            <span class="button-text" ng-show="spotLine.disp&&spotLine.mouseover">隐藏路线</span>
+                        </button>
+                        <div ng-show="travelEnedit" style="display: inline-block">
+                            <button type="button" class="btn btn-xs"
+                                    ng-class="{'btn-primary':spotLine.edit, 'btn-default': !spotLine.edit}"
+                                    ng-mouseover="spotLine.editOver=true"
+                                    ng-mouseleave="spotLine.editOver=false"
+                                    ng-click="editAndSave(spotLine)">
+                                <span class="button-text" ng-show="!spotLine.save&&!(spotLine.edit&&spotLine.editOver)">编辑路线</span>
+                                <span class="button-text" ng-show="spotLine.edit&&!spotLine.save&&spotLine.editOver">取消编辑</span>
+                                <span class="button-text" ng-show="spotLine.save">保存路线</span>
+                            </button>
+                            <button type="button" class="btn btn-warning btn-xs"
+                                    ng-show="spotLine.save"
+                                    ng-click="cancelEdit(spotLine)">
+                                <span class="button-text" >撤销更改</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <div>
+                <div class="spot-description">
                     <div ng-switch="travelEnedit">
                         <div class="editable">
                             <a ng-switch-when="true"
@@ -130,33 +171,46 @@
 
             </div>
             <div class="panel-body">
-                <div photo-fluid-container="{'size': 'mini', 'itemSelector': '.photo', itemMargin: 1}"
+                <div photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
                      class="photo-wall">
                     <div ng-repeat="photo in spot.photos"
+                         ng-controller="MapsTravelSpotPhotoCtrl"
                          class="photo">
                         <a ng-click="activePhoto(photo)"
                            href="">
-                            <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}">
+                            <img ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-big'}}"
+                                 data-width="{{photo.width}}" data-height="{{photo.height}}">
+                            <div ng-if="photo.is360">
+                                <div class="icon-photo-p360"></div>
+                            </div>
                         </a>
                         <div class="action ponm-photo-footer">
+                            <div>{{photo.date_time | date:'yyyy/MM/dd-HH:mm:ss'}}</div>
                             <p>{{photo.point.address}}</p>
                             <pre class="description">{{photo.description}}</pre>
                         </div>
                         <div ng-show="travelEnedit"
-                             class="action ponm-photo-remove">
-                            <a href
-                               class="icon-action-danger"
-                               ng-click="removePhoto(photo)">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </a>
+                             class="action datetime-picker">
+                            <div class="dropdown">
+                                <a data-toggle="dropdown" href=""
+                                        id="dropdown-date{{photo.id}}">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <datetimepicker ng-model="photo.date_time"
+                                                    on-set-time="setPhotoDateTime"
+                                                    datetimepicker-config="{ dropdownSelector: '#dropdown-date{{photo.id}}' }"></datetimepicker>
+                                </ul>
+                            </div>
                         </div>
                         <div ng-if="travelEnedit" class="action ponm-photo-option">
                             <!-- Single button -->
-                            <div class="btn-group" dropdown is-open="isopen">
-                                <button type="button" class="btn dropdown-toggle" ng-disabled="disabled">
-                                    <span class="caret"></span>
-                                </button>
+                            <div class="dropdown">
+                                <a data-toggle="dropdown" href="">
+                                    <span class="glyphicon glyphicon-cog"></span>
+                                </a>
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="" ng-click="setAlbumCover(photo)">设为封面</a></li>
                                     <li><a href="" ng-click="createSpot(photo)">创建新景点</a></li>
                                     <li ng-repeat="spot in travel.spots">
                                         <a href="" ng-click="addSpotPhoto(photo, spot)">移动到第{{spot.day}}天{{spot.title}}</a>
@@ -172,4 +226,9 @@
             </div>
         </div>
     </div>
+
+    <div class="container-fluid" style="max-width: 400px;">
+        <div ng-if="message" dynamic-message message="message" owner="owner"></div>
+    </div>
+
 </div>

@@ -1,7 +1,7 @@
 <div class="maps-dynamic">
-    <div dynamic-messages-layout
+    <div dynamic-messages-layout="{rules: {phone: 601, tablet: 900, desktop: 1200}}"
          column-width="250"
-         column-size="3"
+         column-size="columnSize"
          class="dynamic-container"></div>
     <div class="btn btn-default btn-block loadmore"
          ng-if="!messageManager.ended"
