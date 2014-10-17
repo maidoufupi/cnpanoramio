@@ -80,6 +80,9 @@ public class PhotoProperties {
 	
 	@JsonProperty("oss_key")
 	private String ossKey;
+
+	// 图片主颜色
+	private String color;
 	
 	public String getTitle() {
 		return title;
@@ -279,6 +282,14 @@ public class PhotoProperties {
 
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
 	}	
 	
 }

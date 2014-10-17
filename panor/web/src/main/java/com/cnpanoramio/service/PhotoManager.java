@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.imaging.ImageReadException;
 import org.appfuse.model.User;
 import org.appfuse.service.GenericManager;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +42,7 @@ public interface PhotoManager extends GenericManager<Photo, Long> {
 	 * @return
 	 * @throws ImageReadException
 	 */
-	public Photo save(Photo photo, MultipartFile file) throws ImageReadException, IOException;
+	public Photo save(Photo photo, MultipartFile file) throws IOException;
 
 	/**
 	 * Load the photos for the user.

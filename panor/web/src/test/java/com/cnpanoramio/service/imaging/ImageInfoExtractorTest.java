@@ -5,12 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 
-import org.apache.commons.imaging.common.IImageMetadata;
-import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
-import org.apache.commons.imaging.formats.tiff.TiffField;
-import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
-import org.apache.commons.imaging.formats.tiff.constants.GpsTagConstants;
-import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,7 +37,7 @@ public class ImageInfoExtractorTest {
 
 	protected transient final Log log = LogFactory.getLog(getClass());
 	private InputStream ins;
-	private ImageInfoExtractor iier;
+	private ImageMetadataExtractor iier;
 
 	@Before
 	public void preMethodSetup() {
@@ -51,7 +45,8 @@ public class ImageInfoExtractorTest {
 		// ins = getClass().getResourceAsStream("/image/IMAG2534.jpg");
 		// ins =
 		// getClass().getResourceAsStream("/image/PANO_20140508_135045.jpg");
-		ins = getClass().getResourceAsStream("/image/PANO_20131004_142351.jpg");
+//		ins = getClass().getResourceAsStream("/image/PANO_20131004_142351.jpg");
+		ins = getClass().getResourceAsStream("/image/281.jpg");
 		// ins =
 		// getClass().getResourceAsStream("/image/IMG_20140531_120150.jpg");
 		// ins =
@@ -61,7 +56,7 @@ public class ImageInfoExtractorTest {
 		// ins = getClass().getResourceAsStream("/image/17061_1314362667.jpg");
 		// ins =
 		// getClass().getResourceAsStream("/image/IMG_20141004_160248.jpg");
-		// iier = new ImageInfoExtractor(ins);
+		 iier = new ImageMetadataExtractor(ins);
 	}
 
 	@After
@@ -96,6 +91,12 @@ public class ImageInfoExtractorTest {
 		log.info(detail.getOrientation());
 
 	}
+	
+	@Test
+	public void testJpgMetadataExtractor() {
+		Photo photo = iier.process();
+		displayPhotoDetails(photo);
+	}
 
 	@Test
 	public void testMetadataExtractor() throws ImageProcessingException,
@@ -113,7 +114,54 @@ public class ImageInfoExtractorTest {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void displayPhotoDetails(Photo photo) {
+		PhotoDetails detail = photo.getDetails();
+		log.info("Date/Time : " + detail.getDateTime());
+		log.info("Date/Time Original : " + detail.getDateTimeOriginal());
+		log.info("Date/Time Digitized : " + detail.getDateTimeDigitized());
+		log.info("X Resolution : " + detail.getxResolution());
+		log.info("Y Resolution : " + detail.getyResolution());
+		log.info("Resolution Unit : " + detail.getResolutionUnit());
+		log.info("Compressed Bits Per Pixel : "
+				+ detail.getCompressedBitsPerPixel());
+		log.info("Make : " + detail.getMake());
+		log.info("Model : " + detail.getModel());
+		log.info("Orientation : " + detail.getOrientation());
+		log.info("Exposure Time : " + detail.getExposureTime());
+		log.info("光圈 F-Number : " + detail.getFNumber());
+		log.info("曝光程序 Exposure Program : " + detail.getExposureProgram());
+		log.info("Exposure Bias Value : " + detail.getExposureBias());
+		log.info("Flash : " + detail.getFlash());
+		log.info("Focal Length : " + detail.getFocalLength());
+		log.info("Max Aperture Value : " + detail.getMaxApertureValue());
+		log.info("测光模式 Metering Mode : " + detail.getMeteringMode());
+		log.info("35mm等效焦距 Focal Length 35 : "
+				+ detail.getFocalLengthIn35mmFilm());
+		log.info("对比度 Contrast : " + detail.getContrast());
+		log.info("亮度 Brightness Value : " + detail.getBrightnessValue());
+		log.info("锐化 Sharpness : " + detail.getSharpness());
+		log.info("光源 Light Source : " + detail.getLightSource());
+		log.info("饱和度 Saturation : " + detail.getSaturation());
+		log.info("白平衡 White Balance : " + detail.getWhiteBalance());
+		log.info("数字变焦比率 Digital Zoom Ratio : " + detail.getDigitalZoomRatio());
+		log.info("Exif Version : " + detail.getExifVersion());
+		log.info("ISO : " + detail.getISO());
+		log.info("GPSinfo : " + detail.getGPSInfo());
+		log.info("GPS Date Stamp : " + detail.getGPSDateStamp());
+		log.info("GPS Time Stamp : " + detail.getGPSTimeStamp());
+		log.info("GPS Lat : " + detail.getGPSLatitude());
+		log.info("GPS Lat Ref : " + detail.getGPSLatitudeRef());
+		log.info("GPS Lng : " + detail.getGPSLongitude());
+		log.info("GPS Lng Ref : " + detail.getGPSLongitudeRef());
+		log.info("GPS Alt : " + detail.getGPSAltitude());
+		log.info("GPS Alt Ref : " + detail.getGPSAltitudeRef());
+		log.info("Width : " + detail.getPixelXDimension());
+		log.info("Height : " + detail.getPixelYDimension());
+		
+		log.info("PanoramaViewer : " + detail.getgPanoUsePanoramaViewer());
+	}
+	
 	public Photo extract(Metadata metadata) throws MetadataException {
 		Photo photo = new Photo();
 		PhotoDetails detail = new PhotoDetails();
@@ -418,118 +466,5 @@ public class ImageInfoExtractorTest {
 		log.info("PanoramaViewer : " + detail.getgPanoUsePanoramaViewer());
 
 		return photo;
-	}
-
-	private SimpleDateFormat format = new SimpleDateFormat(
-			"yyyy:MM:dd HH:mm:ss");
-
-	public void extraExifInfo() throws Exception {
-
-		PhotoDetails photoDetails = new PhotoDetails();
-		Point point = null;
-
-		IImageMetadata metadata = null;
-		if (metadata instanceof JpegImageMetadata) {
-			final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
-
-			/* Camera */
-
-			/* Advanced photo */
-
-			/* GPS */
-
-			/********************************************************************************************/
-
-			// Jpeg EXIF metadata is stored in a TIFF-based directory structure
-			// and is identified with TIFF tags.
-			// Here we look for the "x resolution" tag, but
-			// we could just as easily search for any other tag.
-			//
-			// see the TiffConstants file for a list of TIFF tags.
-
-			// simple interface to GPS data
-			final TiffImageMetadata exifMetadata = jpegMetadata.getExif();
-			if (null != exifMetadata) {
-
-				try {
-					final TiffImageMetadata.GPSInfo gpsInfo = exifMetadata
-							.getGPS();
-
-					if (null != gpsInfo) {
-						point = new Point();
-						// final String gpsDescription = gpsInfo.toString();
-						final double longitude = gpsInfo
-								.getLongitudeAsDegreesEast();
-						final double latitude = gpsInfo
-								.getLatitudeAsDegreesNorth();
-
-						point.setLat(latitude);
-						point.setLng(longitude);
-
-						photoDetails.setGPSLatitudeRef(gpsInfo.latitudeRef);
-						photoDetails.setGPSLatitude(latitude);
-						photoDetails.setGPSLongitudeRef(gpsInfo.longitudeRef);
-						photoDetails.setGPSLongitude(longitude);
-					}
-				} catch (ClassCastException ex) {
-					// log.warn("photo " + photo.getId() +
-					// " getGPS() Exception: " + ex.getMessage());
-					final TiffField latField = jpegMetadata
-							.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LATITUDE);
-					final TiffField latRefField = jpegMetadata
-							.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LATITUDE_REF);
-					if (null != latField) {
-						photoDetails.setGPSLatitudeRef(latRefField
-								.getValueDescription());
-						log.debug(GPSFormat.convert(latField.getStringValue()));
-						photoDetails.setGPSLatitude(GPSFormat.convert(latField
-								.getStringValue()));
-					}
-
-					final TiffField lngField = jpegMetadata
-							.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LONGITUDE);
-					final TiffField lngRefField = jpegMetadata
-							.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LONGITUDE_REF);
-					if (null != latField) {
-						photoDetails.setGPSLongitudeRef(lngRefField
-								.getValueDescription());
-						log.debug(GPSFormat.convert(lngField.getStringValue()));
-						photoDetails.setGPSLongitude(GPSFormat.convert(lngField
-								.getStringValue()));
-					}
-				}
-
-			}
-
-			// get 海拔高度
-			final TiffField altitudeField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_ALTITUDE);
-			final TiffField altitudeRefField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_ALTITUDE_REF);
-			if (null != altitudeField) {
-				if (null == point) {
-					point = new Point();
-				}
-				point.setAlt(altitudeField.getDoubleValue());
-				if (null != altitudeRefField) {
-					photoDetails.setGPSAltitudeRef(altitudeRefField
-							.getValueDescription());
-				}
-				photoDetails.setGPSAltitude(altitudeField.getDoubleValue());
-			}
-
-			// photo.setGpsPoint(point);
-		}
-
-	}
-
-	public String getTagValue(JpegImageMetadata jpegMetadata, TagInfo tagInfo) {
-		final TiffField field = jpegMetadata
-				.findEXIFValueWithExactMatch(tagInfo);
-		if (field == null) {
-			return "";
-		} else {
-			return field.getValueDescription();
-		}
 	}
 }

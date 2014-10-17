@@ -52,7 +52,7 @@
             };
           });
         }
-        if (result[0]) {
+        if (result && result[0]) {
           return deferred.resolve(addresses, result[0].formatted_address);
         } else {
           return deferred.reject("no result");
@@ -82,15 +82,34 @@
       }
       this.geocoder.geocode({
         address: address
-      }, function(point) {
-        var addresses;
+      }, function(ress) {
+        var addresses, res, _i, _len;
         addresses = [];
-        if (point) {
-          addresses.push({
-            address: address,
-            location: point,
-            similarity: 1
-          });
+        if (ress) {
+          for (_i = 0, _len = ress.length; _i < _len; _i++) {
+            res = ress[_i];
+            address = {
+              address: res.formatted_address,
+              location: {
+                lat: res.geometry.location.lat(),
+                lng: res.geometry.location.lng()
+              },
+              similarity: 1
+            };
+            if (res.geometry.bounds) {
+              address.bounds = {
+                sw: {
+                  lat: res.geometry.bounds.getSouthWest().lat(),
+                  lng: res.geometry.bounds.getSouthWest().lng()
+                },
+                ne: {
+                  lat: res.geometry.bounds.getNorthEast().lat(),
+                  lng: res.geometry.bounds.getNorthEast().lng()
+                }
+              };
+            }
+            addresses.push(address);
+          }
         }
         return deferred.resolve(addresses);
       });

@@ -1,0 +1,54 @@
+@media (max-width: $screen-xs-min) {
+  .photo-upload {
+    .header {
+      .fileupload-buttonbar {
+        padding: 0;
+
+      }
+    }
+  }
+
+  .photo-modal-container {
+    .photo-main {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      .photo-container-header {
+        .navbar-toggle {
+          float: left;
+        }
+      }
+      .photo-container-body {
+        position: absolute;
+        top: 50px;
+        bottom: 50px;
+        width: 100%;
+      }
+      .photo-container-booter {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        z-index: 2;
+      }
+    }
+    .photo-info {
+      width: 100%;
+      position: absolute;
+      top: 100%;
+      z-index: 2;
+    }
+
+  }
+  .photo-modal-container.infoOpen {
+    .photo-container-booter {
+      top: 0;
+      bottom: initial;
+    }
+    .photo-info {
+      top: 50px;
+      bottom: 0;
+    }
+  }
+
+}

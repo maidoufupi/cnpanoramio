@@ -36,7 +36,7 @@
     "angular-material": "~0.0.2",
     "angular-local-storage": "~0.0.7",
     "angular-scroll": "~0.6.2",
-    "angular-ui-map-google": "~0.6.1",
+    "angular-ui-map-google": "~0.6.2",
     "angular-bootstrap-datetimepicker": "~0.2.4"
   },
   "devDependencies": {

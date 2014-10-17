@@ -7,6 +7,7 @@ import java.util.Set;
 import org.appfuse.model.User;
 
 import com.cnpanoramio.domain.Avatar;
+import com.cnpanoramio.domain.Photo;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoProperties;
@@ -162,4 +163,19 @@ public interface UserSettingsManager {
 	 * @return
 	 */
 	public boolean isPasswordValid(User user, String password);
+	
+	/**
+	 * 增加存储空间占用
+	 * 
+	 * @param photo
+	 */
+	public void addStorageSpace(User user, Photo photo);
+	
+	/**
+	 * 减少存储空间占用
+	 * 
+	 * @param user
+	 * @param photo
+	 */
+	public void removeStorageSpace(User user, Photo photo);
 }

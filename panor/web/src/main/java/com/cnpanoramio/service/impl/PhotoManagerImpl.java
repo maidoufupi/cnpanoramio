@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -50,6 +49,7 @@ import com.cnpanoramio.json.Tags;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.RecycleManager;
+import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.service.ViewsManager;
 import com.cnpanoramio.service.imaging.ImageMetadataExtractor;
 import com.cnpanoramio.service.lbs.BDConverter;
@@ -72,6 +72,8 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 
 	@Autowired
 	private UserSettingsDao userSettingsDao = null;
+	@Autowired
+	private UserSettingsManager userSettingsManager = null;
 	
 	@Autowired
 	private TagDao tagDao;
@@ -157,7 +159,7 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 	}
 
 	@Override
-	public Photo save(Photo photo, MultipartFile file) throws ImageReadException, IOException {
+	public Photo save(Photo photo, MultipartFile file) throws IOException {
 
 		InputStream ins = file.getInputStream();
 		
@@ -184,10 +186,6 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 
 		photo.setCreateDate(new Date());
 		
-		User user = UserUtil.getCurrentUser(userManager);
-
-		// 先、保存photo table record
-		photo.setOwner(user);
 		photo = photoDao.save(photo);
 		
 		// 再、保存原始photo file
@@ -256,7 +254,12 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 		// 是否是360°全景照片
 		if(null != properties.isIs360()) {
 			photo.setIs360(properties.isIs360());
-		}		
+		}
+		
+		// 颜色
+		if(null != properties.getColor()) {
+			photo.setColor(properties.getColor());
+		}
 		
 		photoDao.save(photo);
 		return getPhotoProperties(photoId, photo.getOwner());
@@ -314,6 +317,11 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 		// 文件大小
 		photo.setFileSize(file.getSize());
 
+		User user = UserUtil.getCurrentUser(userManager);
+
+		// 先、保存photo table record
+		photo.setOwner(user);
+		
 		photo = this.save(photo, file);
 	
 		updatePhotoGps(photo, lat, lng, address, vendor);
@@ -338,6 +346,9 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 				pp.setPoint(gps.getPoint());
 			}
 		}
+		
+		userSettingsManager.addStorageSpace(user, photo);
+		
 		return pp;
 	}
 
@@ -705,7 +716,10 @@ public class PhotoManagerImpl extends GenericManagerImpl<Photo, Long> implements
 		for(PhotoGps gps : gpss) {
 			photoGpsDao.remove(gps);
 		}
-				
+		
+		// 减去用户存储空间占用值
+		userSettingsManager.removeStorageSpace(photo.getOwner(), photo);
+		
 		// 删除数据库记录
 		photoDao.remove(photo);
 	}

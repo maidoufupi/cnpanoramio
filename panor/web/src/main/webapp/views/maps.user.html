@@ -21,7 +21,8 @@
     <div class="photo-wall photo-fluid-container"
          photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}">
         <div ng-repeat="photo in photos"
-             class="photo">
+             class="photo"
+             ng-style="{'background-color': photo.color}">
             <a href=""
                ng-click="displayPhoto(photo.id)">
                 <img ng-src="{{staticCtx}}/{{photo.oss_key}}@!photo-preview-sm" data-width="{{photo.width}}" data-height="{{photo.height}}">

@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>美丽星球</title>
+    <meta http-equiv="keywords" content="美丽星球,分享,旅行,照片,地图">
+    <meta http-equiv="description" content="美丽星球，是一个致力于在地图上展示您的照片的网站，里面有丰富的地图功能，美观的界面设计，您一定会喜欢上它他。">
+    <meta name="robots" content="all" />
+    <meta name="author" content="http://www.photoshows.cn/#/blog/" />
+    <meta name="copyright" content="© http://www.photoshows.cn/#/blog/" />
+    <!--<meta http-equiv="refresh" content="5; url=http://127.0.0.1:9000/#/maps/user/3" />-->
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
     <link rel="stylesheet" href="bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css"/>
     <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css"/>
-    <!--<link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css">
     <link rel="stylesheet" href="bower_components/Jcrop/css/jquery.Jcrop.css">
-    <link rel="stylesheet" href="bower_components/perfect-scrollbar/src/perfect-scrollbar.css">-->
-    <link rel="stylesheet" href="http://cdn.staticfile.org/jquery.perfect-scrollbar/0.4.10/perfect-scrollbar.min.css">
-    <link rel="stylesheet" href="http://cdn.staticfile.org/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css">
-    <link rel="stylesheet" href="http://cdn.staticfile.org/blueimp-file-upload/9.5.7/css/jquery.fileupload.min.css">
+    <link rel="stylesheet" href="bower_components/perfect-scrollbar/src/perfect-scrollbar.css">
+    <!--<link rel="stylesheet" href="http://cdn.staticfile.org/jquery.perfect-scrollbar/0.4.10/perfect-scrollbar.min.css">-->
+    <!--<link rel="stylesheet" href="http://cdn.staticfile.org/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css">-->
+    <!--<link rel="stylesheet" href="http://cdn.staticfile.org/blueimp-file-upload/9.5.7/css/jquery.fileupload.min.css">-->
 
     <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery.css">
     <link rel="stylesheet" href="bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css">
@@ -60,6 +68,8 @@
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
 <script type="text/javascript" src="bower_components/jquery.rest/dist/jquery.rest.js"></script>
 <script type="text/javascript" src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<!--<script type="text/javascript" src="bower_components/modernizr/Modernizr.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/js/typedarray.js"></script>-->
 
 <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
@@ -93,12 +103,18 @@
 <script type="text/javascript" src="bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
 <script type="text/javascript" src="bower_components/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js"></script>
 <script type="text/javascript" src="bower_components/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js"></script>
+<script type="text/javascript" src="scripts/panor/js/color-thief.js"></script>
 
 <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="scripts/panor/js/jquery.panzoom.js"></script>
 <script type="text/javascript" src="scripts/panor/js/three.min.js"></script>
 
-<script type="text/javascript" src="bower_components/blueimp-load-image/js/load-image.min.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-load-image/js/load-image.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-load-image/js/load-image-meta.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-load-image/js/load-image-exif.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-load-image/js/load-image-exif-map.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-load-image/js/load-image-ios.js"></script>
+<script type="text/javascript" src="bower_components/blueimp-load-image/js/load-image-orientation.js"></script>
 <script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
 <script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
 <script type="text/javascript" src="bower_components/blueimp-file-upload/js/jquery.fileupload-image.js"></script>
@@ -122,6 +138,8 @@
 <script type="text/javascript" src="scripts/services/matchmedia.js"></script>
 <script type="text/javascript" src="scripts/services/travelManager.js"></script>
 <script type="text/javascript" src="scripts/services/dialogService.js"></script>
+<script type="text/javascript" src="scripts/services/rgbHex.js"></script>
+<script type="text/javascript" src="scripts/services/rgbHex.js"></script>
 
 <script type="text/javascript" src="scripts/controllers/ponmAppCtrl.js"></script>
 <script type="text/javascript" src="scripts/controllers/fileuploadCtrl.js"></script>
@@ -155,6 +173,7 @@
 <script type="text/javascript" src="scripts/directives/user-card.js"></script>
 <script type="text/javascript" src="scripts/directives/ponm-travel-album.js"></script>
 <script type="text/javascript" src="scripts/directives/bdShare.js"></script>
+<script type="text/javascript" src="scripts/directives/navigationBar.js"></script>
 
 <!--<script type="text/javascript" src="scripts/panor/scripts.min.js"></script>-->
 <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
@@ -170,11 +189,11 @@
 <!--<script type="text/javascript" src="scripts/panor/google/MapServiceImpl.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/google/MapTravelImpl.js"></script>-->
 
-<script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>
-<script type="text/javascript" src="scripts/panor/panoramio/cnmap.gaode.js"></script>
-<script type="text/javascript" src="scripts/panor/gaode/MapEventListenerImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>
+<!--<script type="text/javascript" src="bower_components/angular-ui-mapgaode/ui-map.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.gaode.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/gaode/MapEventListenerImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>-->
 
 <!--<script type="text/javascript" src="bower_components/angular-ui-map-baidu/ui-map.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.baidu.js"></script>-->
@@ -184,12 +203,11 @@
 <!--<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/baidu/MapConvertor.js"></script>-->
 
-<!--<script charset="utf-8" src="http://map.qq.com/api/js?v=2.0&key=ZYZBZ-WCCHU-ETAVP-4UZUB-RGLDJ-QDF57"></script>-->
-<!--<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
 <script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>
 <script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>
 <script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>-->
+<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>
 
 <!--<script charset="utf-8" src="http://union.mapbar.com/apis/maps/free?f=mapi&v=31.3&k=aCW9cItqL7sqT7AxaB0zdHZoZSWmbBsuT7JhMHTsMeD6ZIl9NzFsZHT=@JBL979@Iu7lJJZWWq0IDu9xZMzMxq7I9AhH7LAAA6hqzZHZZLTbZZauxlDz7C7DD9ZCFGT="></script>
 <script type="text/javascript" src="scripts/panor/js/cnmap.mapbar.js"></script>-->
@@ -211,7 +229,7 @@
             };
     window.login = true;
 
-    window.mapVendor = "gaode";
+    window.mapVendor = "qq";
     window.dev = true;
 </script>
 <div ng-app="ponmApp.Index" ui-map-async-load>

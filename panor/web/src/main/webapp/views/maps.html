@@ -14,47 +14,58 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="maps-navbar-collapse">
-                <ul class="navbar-nav nav nav-tray">
-                    <li ng-class="{'active': stateStatus.popular}">
-                        <a href="#/maps/popular">受欢迎</a></li>
-                    <li ng-class="{'active': stateStatus.recent}">
-                        <a href="#/maps/recent">最新</a></li>
+                    <ponm-dynamic-menu navbar="navbar">
 
-                    <li ng-if="stateStatus.travel"
-                        ng-class="{'active': stateStatus.travel}">
-                        <a href="#/maps/travel"><span class="footnote">{{stateStatus.name}}</span></a></li>
-                    <li ng-if="user.id"
-                        ng-class="{'active': stateStatus.user}">
-                        <a href="#/maps/user/{{user.id}}">{{user.name}}<span class="footnote">的照片</span></a></li>
-                    <li ng-class="{'active': stateStatus.upload}">
-                        <a href="#/maps/upload">上传</a></li>
-                    <!--<li>
-                        <a>搜索{{searchValObject.typeDesc+": "+searchValObject.val}}</a></li>-->
-                    <li class="dropdown">
-                        <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#/maps/dynamic">好友动态</a></li>
-                            <li ng-class="{'active': stateStatus.travels}">
-                                <a href="#/maps/travels">热门旅行</a></li>
-                        </ul>
-                    </li>
-                    <li ng-controller="MapsSearchCtrl">
-                        <div class="searchbox">
-                            <form ng-submit="goLocation(asyncSelected)">
-                                <input type="text"
-                                       ng-model="asyncSelected"
-                                       placeholder="搜索地址"
-                                       typeahead="address as address.address for address in getLocation($viewValue) | filter:$viewValue"
-                                       typeahead-loading="loadingLocations"
-                                       typeahead-template-url="customTemplate.html"
-                                       typeahead-on-select="onSelect($item, $model, $label)"
-                                       class="form-control"
+                    </ponm-dynamic-menu>
+                    <ul class="navbar-nav nav">
+                        <li ng-controller="MapsSearchCtrl">
+                            <div class="searchbox">
+                                <form ng-submit="goLocation(asyncSelected)">
+                                    <input type="text"
+                                           ng-model="asyncSelected"
+                                           placeholder="搜索地址"
+                                           typeahead="address as address.address for address in getLocation($viewValue) | filter:$viewValue"
+                                           typeahead-loading="loadingLocations"
+                                           typeahead-template-url="customTemplate.html"
+                                           typeahead-on-select="onSelect($item, $model, $label)"
+                                           class="form-control"
+                                            >
+                                    <button type="submit" class="searchbutton glyphicon glyphicon-search"></button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav navbar-right nav">
+
+                        <li>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default navbar-btn"
+                                        ng-click="layoutManager.setLayout(layoutManager.leftFull)">
+                                    <span class="glyphicon glyphicon-fullscreen" ></span>
+                                </button>
+                                <button type="button" class="btn btn-default navbar-btn hidden-xs"
+                                        ng-click="layoutManager.setLayout(layoutManager.leftFixed)"
                                         >
-                                <button type="submit" class="searchbutton glyphicon glyphicon-search"></button>
-                            </form>
-                        </div>
-                    </li>
-                </ul>
+                                    <span class="glyphicon glyphicon-align-left" ></span>
+
+                                </button>
+                                <button type="button" class="btn btn-default navbar-btn hidden-xs"
+                                        ng-click="layoutManager.setLayout(layoutManager.rightFixed)"
+                                        >
+                                    <span class="glyphicon glyphicon-align-right" ></span>
+                                </button>
+                                <button type="button" class="btn btn-default navbar-btn"
+                                        ng-click="layoutManager.setLayout(layoutManager.rightFull)"
+                                        >
+                                    <span class="glyphicon glyphicon-align-justify" ></span>
+                                </button>
+                            </div>
+
+                        </li>
+
+                    </ul>
+
+                </div>
 
                 <script type="text/ng-template" id="customTemplate.html">
                     <a href="">
@@ -66,24 +77,6 @@
                     </a>
                 </script>
 
-                <ul class="navbar-nav navbar-right nav">
-
-                    <!--<li><button type="button" class="btn btn-default navbar-btn"
-                                ng-click="changeContentLayout()">更改布局</button></li>-->
-                    <li
-                        class="dropdown">
-                        <a href="" class="dropdown-toggle">
-                            布局<span class="icon icon-dropdown"></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            <li ng-click="contentLayouts.index=3"><a href=""><span class="glyphicon glyphicon-align-justify"></span>只有地图</a></li>
-                            <li ng-click="contentLayouts.index=1"><a href=""><span class="glyphicon glyphicon-align-left"></span>固定地图</a></li>
-                            <li ng-click="contentLayouts.index=0"><a href=""><span class="glyphicon glyphicon-align-right"></span>固定右栏</a></li>
-                            <li ng-click="contentLayouts.index=2"><a href=""><span class="glyphicon glyphicon-list"></span>只有右栏</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                </div>
             </div>
         </nav>
     </div>
@@ -93,7 +86,7 @@
     </div>
 
     <div class="maps-content"
-         ng-class="contentLayouts[contentLayouts.index]">
+         ng-class="layoutManager.getLayout()">
         <div class="maps-left"
              drop="true"
              ng-model='markers'

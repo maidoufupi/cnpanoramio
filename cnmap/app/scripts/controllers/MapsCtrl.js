@@ -148,10 +148,10 @@ angular.module('ponmApp.maps', [
     .controller('MapsCtrl',
     [        '$window', '$location', '$rootScope', '$scope', '$q', 'PhotoService', 'UserService', 'PanoramioService',
                 '$modal', 'ponmCtxConfig', '$log', '$state', '$stateParams', '$timeout', 'safeApply', 'jsUtils',
-                'HashStateManager', 'alertService',
+                'HashStateManager', 'alertService', 'matchmedia',
         function ($window, $location, $rootScope, $scope, $q, PhotoService, UserService, PanoramioService,
                   $modal, ponmCtxConfig, $log, $state, $stateParams, $timeout, safeApply, jsUtils,
-                  HashStateManager, alertService) {
+                  HashStateManager, alertService, matchmedia) {
 
             $scope.ctx = ponmCtxConfig.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -161,20 +161,15 @@ angular.module('ponmApp.maps', [
             $scope.ponmCtxConfig = ponmCtxConfig;
             // 设置二级菜单显示的用户
             $scope.user = {
-                login: $scope.login,
-                id: ponmCtxConfig.userId
             };
-            if(ponmCtxConfig.userId) {
-                $scope.user.name = "您";
-            }
+
             $scope.$watch(function() {
                 return ponmCtxConfig.userId;
             }, function(userId) {
                 $scope.userId = userId;
                 $scope.login = ponmCtxConfig.login;
-                if(!$scope.user.name && userId) {
-                    $scope.user.id = userId;
-                    $scope.user.name = "您";
+                if(!$scope.user.id && userId) {
+                    $scope.setMenu("user", {id: userId, name: "我"})
                 }
             });
 
@@ -203,41 +198,15 @@ angular.module('ponmApp.maps', [
 
             $scope.hashStateManager = new HashStateManager($scope, $location);
 
-            $scope.stateStatus = {
-                popular: $state.current.name == 'maps.popular',
-                recent: $state.current.name == 'maps.recent',
-                travel: $state.current.name == 'maps.travel',
-                upload: $state.current.name == 'maps.upload',
-                camera: $state.current.name == 'maps.camera',
-                user: $state.current.name == 'maps.user',
-                travels: $state.current.name == 'maps.travels'
-            };
-
-            $rootScope.$on('$stateChangeSuccess',
-                function (event, toState, toParams, fromState, fromParams) {
-                    $scope.stateStatus = {
-                        popular: toState.name == 'maps.popular',
-                        recent: toState.name == 'maps.recent',
-                        travel: toState.name == 'maps.travel',
-                        upload: toState.name == 'maps.upload',
-                        camera: toState.name == 'maps.camera',
-                        user: toState.name == 'maps.user',
-                        travels: toState.name == 'maps.travels'
-                    };
-                }
-            );
-
-            $scope.contentLayouts = ['maps-right-fixed', 'maps-left-fixed', 'maps-right-full', 'maps-left-full'];
-            $scope.contentLayouts.index = 0;
-            $scope.changeContentLayout = function() {
-                $scope.contentLayouts.index = ($scope.contentLayouts.index + 1) % 4;
-            };
-
+            /**
+             * map config
+             *
+             */
             $scope.mapOptions = {
-//                center: {
-//                    lat: 35,
-//                    lng: 116
-//                },
+                centerPoint: {
+                    lat: 35,
+                    lng: 116
+                },
                 zoom: 8,
                 // map plugin config
 //            toolbar: true,
@@ -265,7 +234,7 @@ angular.module('ponmApp.maps', [
 //                    auto: false
             );
             $scope.panoramioLayer = panoramioLayer;
-            panoramioLayer.initEnv($window.ctx, $scope.staticCtx );
+            panoramioLayer.initEnv(ponmCtxConfig.ctx, $scope.staticCtx );
             jQuery(panoramioLayer).bind("data_changed", function (e, data) {
                 if(!$scope.stateStatus.user) {
                     $scope.$apply(function (scope) {
@@ -278,6 +247,239 @@ angular.module('ponmApp.maps', [
             jQuery(panoramioLayer).bind("data_clicked", function (e, photoId) {
                 $scope.displayPhoto(photoId);
             });
+
+
+            /**
+             * 设置浏览类型
+             *
+             * @param type
+             * @param userid
+             */
+            $scope.setPanormaioType = function (type, userid) {
+                $scope.tabs = {};
+                $scope.tabs[type] = true;
+
+                // 设置侧边栏显示的用户名
+                if(userid) {
+                    if($scope.login && userid == $scope.userId) {
+                        $scope.setMenu("user", {id: userid, name: "我"});
+                    }else {
+                        $scope.setMenu("user", {id: userid, name: ""});
+                        UserService.getOpenInfo({userId: userid}, function(res) {
+                            if(res.status == "OK") {
+                                res.open_info && $scope.setMenu("user", res.open_info);
+                            }
+                        })
+                    }
+                }
+
+                panoramioLayer.setFavorite(false);
+                panoramioLayer.setUserId('');
+                panoramioLayer.setLatest(false);
+                panoramioLayer.setAuto(true);
+                panoramioLayer.clearMap();
+                switch (type) {
+                    case "user":
+                        panoramioLayer.setFavorite(false);
+                        panoramioLayer.setUserId($scope.user.id);
+                        break;
+                    case "popular":
+                        panoramioLayer.setUserId(undefined);
+                        break;
+                    case "recent":
+                        panoramioLayer.setLatest(true);
+                        break;
+                    case "favorite":
+                        panoramioLayer.setFavorite(true);
+                        panoramioLayer.setUserId($scope.user.id);
+                        break;
+                    case "manual":
+                        panoramioLayer.setAuto(false);
+//                        panoramioLayer.clearMap();
+                        break;
+                    case "auto":
+                        panoramioLayer.setAuto(true);
+                        break;
+                }
+                panoramioLayer.trigger("changed")
+            };
+
+            /**
+             * layout manager
+              */
+            $scope.layoutManager = {
+                index: 0,
+                layouts: ['maps-right-fixed', 'maps-left-fixed', 'maps-right-full', 'maps-left-full'],
+                rightFixed: 0,
+                leftFixed: 1,
+                rightFull: 2,
+                leftFull: 3,
+                getLayout: function() {
+                    return this.layouts[this.index];
+                }
+                ,setLayout: function(index) {
+                    this.index = index
+                }
+                ,small: function() {
+                    switch(this.index) {
+                        case 0:
+                            this.index = 1;
+                            break;
+                        case 1:
+                            this.index = 2;
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            this.index = 0;
+                            break;
+                        default:
+                            this.index = 0;
+                    }
+                }
+                ,largen: function() {
+                    switch(this.index) {
+                        case 0:
+                            this.index = 3;
+                            break;
+                        case 1:
+                            this.index = 0;
+                            break;
+                        case 2:
+                            this.index = 1
+                            break;
+                        case 3:
+                            break;
+                        default:
+                            this.index = 0;
+                    }
+                }
+                ,full: function() {
+                    this.index = this.leftFull;
+                }
+            };
+
+            $scope.$on('$viewContentLoaded',
+                function(event){
+                    var unRegisterOnPhone = matchmedia.onPhone( function(mediaQueryList){
+
+                        if(mediaQueryList.matches) {
+                            if($scope.layoutManager.index === $scope.layoutManager.leftFixed) {
+                                $scope.layoutManager.setLayout($scope.layoutManager.leftFull);
+                            }else if($scope.layoutManager.index === $scope.layoutManager.rightFixed) {
+                                $scope.layoutManager.setLayout($scope.layoutManager.rightFull);
+                            }
+                        }
+
+                    }, $scope);
+                });
+
+            $scope.navbar =[
+                {
+                    name: "popular",
+                    link: "#/maps/popular",
+                    text: "受欢迎",
+                    more: false
+                }
+                ,{
+                    name: "recent",
+                    link: "#/maps/recent",
+                    text: "最新",
+                    more: false
+                }
+                ,{
+                    name: "upload",
+                    link: "#/maps/upload",
+                    text: "上传",
+                    more: false
+                }
+                ,{
+                    name: "user",
+                    link: "#/maps/user/",
+                    text: "我的照片",
+                    more: true
+                }
+                ,{
+                    name: "dynamic",
+                    link: "#/maps/dynamic",
+                    text: "好友动态",
+                    more: true
+                }
+                ,{
+                    name: "travels",
+                    link: "#/maps/travels",
+                    text: "热门旅行",
+                    more: true
+                }
+                ,{
+                    name: "travel",
+                    link: "#/maps/travel",
+                    text: "旅行",
+                    more: true,
+                    hidden: true
+                }
+            ];
+
+            $scope.setMenu = function(type, object) {
+                if(type == "user") {
+                    var user = object;
+                    $scope.user.id = user.id;
+                    $scope.user.name = user.name;
+                    angular.forEach($scope.navbar, function(nav, key) {
+                        if(nav.name == "user") {
+                            nav.link = "#/maps/user/"+user.id,
+                                nav.text = user.name+"的照片";
+                        }
+                    });
+                }else if(type == "travel") {
+                    angular.forEach($scope.navbar, function(nav, key) {
+                        if(nav.name == "travel") {
+                            nav.link = "#/maps/travel/"+object.id,
+                            nav.text = object.name;
+                        }
+                    });
+                }
+
+            };
+            if(ponmCtxConfig.userId) {
+                $scope.setMenu("user", {id: ponmCtxConfig.userId, name: "我"});
+            }
+
+            /**
+             * state status manager
+             *
+             * @param toState
+             */
+            function setStateStatus(toState) {
+                var stateName = toState.name;
+                stateName = stateName.replace("maps.", "");
+                $scope.stateStatus = {};
+                $scope.stateStatus[stateName] = true;
+
+                if($scope.stateStatus.dynamic || $scope.stateStatus.upload) {
+                    if(matchmedia.isPhone()) {
+                        $scope.layoutManager.setLayout($scope.layoutManager.rightFull);
+                        $scope.setPanormaioType('manual');
+                    }else {
+                        $scope.layoutManager.setLayout($scope.layoutManager.leftFixed);
+                        $scope.setPanormaioType('manual');
+                    }
+                }
+                angular.forEach($scope.navbar, function(nav, key) {
+                    nav.active = false;
+                    if(nav.name == stateName) {
+                        nav.active = true;
+                    }
+                });
+
+                $scope.$broadcast("dynamic.menu");
+            }
+            setStateStatus($state.current);
+            $rootScope.$on('$stateChangeSuccess',
+                function (event, toState, toParams, fromState, fromParams) {
+                    setStateStatus(toState);
+                }
+            );
 
             $scope.$watch('myMap', function (mapObj) {
                 if (!$scope.map && mapObj) {
@@ -352,61 +554,6 @@ angular.module('ponmApp.maps', [
             $scope.$on('photo.click', function(e, photoId) {
                 $scope.displayPhoto(photoId);
             });
-
-            /**
-             * 设置浏览类型
-             *
-             * @param type
-             * @param userid
-             */
-            $scope.setPanormaioType = function (type, userid) {
-                $scope.tabs = {};
-                $scope.tabs[type] = true;
-
-                // 设置侧边栏显示的用户名
-                if(userid) {
-                    $scope.user.id = userid;
-                    if($scope.login && userid == $scope.userId) {
-                        $scope.user.name = "您";
-                    }else {
-                        UserService.getOpenInfo({userId: userid}, function(res) {
-                            if(res.status == "OK") {
-                                $scope.user.name = res.open_info && res.open_info.name;
-                            }
-                        })
-                    }
-                }
-
-                panoramioLayer.setFavorite(false);
-                panoramioLayer.setUserId('');
-                panoramioLayer.setLatest(false);
-                panoramioLayer.setAuto(true);
-                panoramioLayer.clearMap();
-                switch (type) {
-                    case "user":
-                        panoramioLayer.setFavorite(false);
-                        panoramioLayer.setUserId($scope.user.id);
-                        break;
-                    case "popular":
-                        panoramioLayer.setUserId(undefined);
-                        break;
-                    case "recent":
-                        panoramioLayer.setLatest(true);
-                        break;
-                    case "favorite":
-                        panoramioLayer.setFavorite(true);
-                        panoramioLayer.setUserId($scope.user.id);
-                        break;
-                    case "manual":
-                        panoramioLayer.setAuto(false);
-//                        panoramioLayer.clearMap();
-                        break;
-                    case "auto":
-                        panoramioLayer.setAuto(true);
-                        break;
-                }
-                panoramioLayer.trigger("changed")
-            };
 
             // changeState状态标志，记录上次动作不超过0.5秒，不能进行state更改的触发
             // 高德地图有setCenter后取getCenter不完全一致问题
@@ -575,16 +722,13 @@ angular.module('ponmApp.maps', [
              */
             $scope.markers = [];
             $scope.onPhotoDrop = function(e, ui) {
-                $log.debug("drop items length = " + $scope.markers.length);
-                $log.debug("drop item is " + $scope.markers[$scope.markers.length-1]);
                 if($scope.markers[$scope.markers.length-1]) {
                     $scope.$broadcast("onDrop", {event: e, ui: ui, id: $scope.markers[$scope.markers.length-1]});
                 }
             };
 
             $scope.onPhotoOver = function(e, ui) {
-                $log.debug(e);
-//                $log.debug(ui.helper.addClass('drag-marker'));
+
             };
         }])
     .controller('PhotosAlertsCtrl',
@@ -638,7 +782,8 @@ angular.module('ponmApp.maps', [
                     var location = search.location;
                     if (location) {
                         $scope.mapEventListener.setCenter($scope.map, location.lat, location.lng);
-                        $scope.mapEventListener.setZoom($scope.map, search.zoom);
+                        search.zoom && $scope.mapEventListener.setZoom($scope.map, search.zoom);
+                        search.bounds && $scope.mapEventListener.setBounds($scope.map, search.bounds.sw, search.bounds.ne);
                     }
                 }
             };
@@ -704,7 +849,7 @@ angular.module('ponmApp.maps', [
             function getTravel(travelId) {
                 TravelService.getTravel({travelId: travelId}, function(res) {
                     if(res.status == "OK") {
-                        $scope.stateStatus.name = res.travel.title;
+                        $scope.setMenu("travel", {id: travelId, name: res.travel.title});
                         $scope.setTravel(res.travel);
 
                         // 获取图片的用户信息
@@ -1292,8 +1437,6 @@ angular.module('ponmApp.maps', [
         function ($window, $location, $rootScope, $scope, UserPhoto, UserService, TravelService, $modal,
                   ponmCtxConfig, $log, $state, $stateParams, AuthService) {
 
-            $scope.setPanormaioType('manual');
-
             AuthService.checkLogin().then(function(){
 
             }, function(){
@@ -1460,7 +1603,8 @@ angular.module('ponmApp.maps', [
 
             // 当拖动放到地图上时
             $scope.$on("onDrop", function(e, drop) {
-                $log.debug(drop.id);
+                $log.debug("on drop left = " );
+                $log.debug(drop.event);
                 var photo;
                 if(photos[drop.id]) {
                     photo = photos[drop.id];
@@ -1472,7 +1616,7 @@ angular.module('ponmApp.maps', [
                     };
                     photos[photo.uuid] = photo;
                 }
-                var point = mapEventListener.pixelToPoint($scope.map, {x: (drop.ui.offset.left + drop.event.offsetX), y: (drop.event.clientY - 103)});
+                var point = mapEventListener.pixelToPoint($scope.map, {x: (drop.event.pageX ), y: (drop.event.clientY - 102)});
                 addOrUpdateMarker(photo, point.lat, point.lng);
 //                $scope.activePhoto(photo);
 //                mapEventListener.activeMarker(photo.mapVendor.marker);
@@ -1490,9 +1634,6 @@ angular.module('ponmApp.maps', [
         }])
     .controller("MapsDynamicCtrl", ['$scope', '$log', '$state', 'MessageManager', 'ponmCtxConfig',
     function($scope, $log, $state, MessageManager, ponmCtxConfig) {
-
-        $scope.contentLayouts.index = 1;
-        $scope.setPanormaioType('manual');
 
         $scope.$watch(function() {
             return ponmCtxConfig.userId;

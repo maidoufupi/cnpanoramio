@@ -16,8 +16,6 @@ import com.cnpanoramio.json.PhotoProperties;
 
 public class PhotoUtil {
 
-//	private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh.mm.ss");
-	
 	public synchronized static PhotoCameraInfo transformCameraInfo(Photo photo) {
 		PhotoCameraInfo cameraInfo = new PhotoCameraInfo();
 		cameraInfo.setId(photo.getId());
@@ -98,12 +96,30 @@ public class PhotoUtil {
 		// 目前默认高德供应商坐标
 		pp.setVendor(MapVendor.gaode.name());
 		pp.setIs360(photo.isIs360());
+		pp.setColor(photo.getColor());
 		
 		PhotoDetails details = photo.getDetails();
 		if(null != details) {
-			pp.setWidth(details.getPixelXDimension());
-			pp.setHeight(details.getPixelYDimension());
-			pp.setDateTime(details.getDateTimeOriginal());
+			if(details.getOrientation() == 5 ||
+					details.getOrientation() == 6 ||
+					details.getOrientation() == 7 ||
+					details.getOrientation() == 8) {
+				// 根据图片附加信息进行大小旋转
+				pp.setWidth(details.getPixelYDimension());
+				pp.setHeight(details.getPixelXDimension());
+			}else {
+				pp.setWidth(details.getPixelXDimension());
+				pp.setHeight(details.getPixelYDimension());
+			}
+			
+			// 优先取DateTimeOriginal 再取DateTimeDigitized，然后再考虑DateTime
+			if(null != details.getDateTimeOriginal()) {
+				pp.setDateTime(details.getDateTimeOriginal());
+			}else if(null != details.getDateTimeDigitized()) {
+				pp.setDateTime(details.getDateTimeDigitized());
+			}else {
+				pp.setDateTime(details.getDateTime());
+			}		
 		}
 		return pp;
 	}
@@ -125,6 +141,8 @@ public class PhotoUtil {
     			mVendor = MapVendor.sogou;
     		} else if (vendor.equalsIgnoreCase("mapbar")) {
     			mVendor = MapVendor.mapbar;
+    		}else if (vendor.equalsIgnoreCase("google")) {
+    			mVendor = MapVendor.google;
     		}else {
     			mVendor = MapVendor.gps;
     		}

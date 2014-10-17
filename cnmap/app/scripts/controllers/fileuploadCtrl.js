@@ -39,7 +39,8 @@ angular.module('fileuploadApp', [
                 //previewMaxWidth: 200,
                 //previewMaxHeight: 200,
                 //previewCrop: true, // Force cropped images,
-                //previewCanvas: false
+                ,previewCanvas: false
+                ,previewCrop: false
 //                        disableImageMetaDataLoad: true,
 //                        imageMinHeight: 1098,
 //                        imageMaxWidth: 5000,
@@ -70,7 +71,7 @@ angular.module('fileuploadApp', [
             // copy a local message service
             $scope.alertService = angular.copy(alertService);
             $scope.alertService.options.alone = true;
-            $scope.alertService.options.ttl = 1000;
+            $scope.alertService.options.ttl = 3000;
 
             var mapService = new $window.cnmap.MapService();
 
@@ -266,27 +267,10 @@ angular.module('fileuploadApp', [
                     }
             }
 
-            function convertPritty(file) {
+            $scope.convertPritty = function convertPritty(file) {
                 file.latPritty = cnmap.GPS.convert(file.lat);
                 file.lngPritty = cnmap.GPS.convert(file.lng);
-            }
-
-            $scope.$on("photoReverseAddress", function(e, photo) {
-                $log.debug("photoReverseAddress : " + photo.id);
-                angular.forEach($scope.queue, function(file, key) {
-                    if(file.photo.uuid == photo.uuid) {
-                        safeApply($scope, function() {
-                            file.mapVendor = photo.mapVendor;
-                            file.address = photo.mapVendor.address;
-                            file.lat = photo.mapVendor.lat;
-                            file.lng = photo.mapVendor.lng;
-                            convertPritty(file);
-
-                            file.saveProperties();
-                        });
-                    }
-                });
-            });
+            };
 
             // 异步加载用户travels数据
             $scope.loadTravelData = function (callback) {
@@ -435,7 +419,7 @@ angular.module('fileuploadApp', [
                             }
                         }, function(res) {
                             if(res.status == "OK") {
-                                $scope.alertService.add("success", "发布成功");
+                                $scope.alertService.add("success", "发表成功");
                                 file.messageId = res.message.id;
                             }
                         },function(error) {
@@ -447,34 +431,45 @@ angular.module('fileuploadApp', [
         }
     ])
     .controller('PhotoUploadRowCtrl', [
-        '$scope', '$document', '$q', '$log', '$timeout', 'PhotoService', 'jsUtils',
-        function ($scope, $document, $q, $log, $timeout, PhotoService, jsUtils) {
+        '$scope', '$document', '$q', '$log', '$timeout', 'PhotoService', 'jsUtils', 'safeApply',
+        function ($scope, $document, $q, $log, $timeout, PhotoService, jsUtils, safeApply) {
 
             $scope.activePhoto = function(file) {
-                $scope.$emit('photoActive', file.photo);
-                $scope.activeFile && ($scope.activeFile.active = false);
-                $scope.activeFile = null;
                 if(file.photo) {
                     file.active = true;
-                    $scope.activeFile = file;
                 }
+                $scope.$emit('photoActive', file.photo);
             };
 
             $scope.$on("photoReverseActive", function(e, photo) {
-//                if($scope.activeFile && $scope.activeFile.photoId == photo.id) {
-//                    return;
-//                }
-                $scope.activeFile && ($scope.activeFile.active = false);
-                angular.forEach($scope.queue, function(file, key) {
-                    if(file.photo.uuid == photo.uuid) {
-                        file.active = true;
-                        $scope.activeFile = file;
+                if($scope.file.photo.uuid == photo.uuid ) {
+                    if(!$scope.file.active) {
+                        $log.debug("photoReverseActive " + photo.uuid);
+                        $scope.file.active = true;
 
                         // scroll to photo's element when photo is clicked
-                        var photoRow = angular.element(document.getElementById('upload-photo-'+photo.uuid));
+                        var photoRow = angular.element(document.getElementById('upload-photo-' + photo.uuid));
                         $document.scrollToElementAnimated(photoRow, 160);
                     }
-                });
+                }else {
+                    $scope.file.active = false;
+                }
+            });
+
+            $scope.$on("photoReverseAddress", function(e, photo) {
+                $log.debug("photoReverseAddress : " + photo.id);
+                var file = $scope.file;
+                if(file.photo.uuid == photo.uuid ) {
+                    safeApply($scope, function() {
+                        file.mapVendor = photo.mapVendor;
+                        file.address = photo.mapVendor.address;
+                        file.lat = photo.mapVendor.lat;
+                        file.lng = photo.mapVendor.lng;
+                        $scope.convertPritty(file);
+
+                        file.saveProperties();
+                    });
+                }
             });
 
             $scope.$on("editableViewChanged", function(e, editableView) {
@@ -508,11 +503,13 @@ angular.module('fileuploadApp', [
                     PhotoService.updateProperties({photoId: $scope.file.photoId}, photoProps,
                         function (res) {
                         if (res.status == "OK") {
-                            d.resolve()
+                            $scope.alertService.add("success", "更新成功");
+                            d.resolve();
                         }else {
                             d.resolve(res.info);
                         }
                     }, function(error) {
+                            $scope.alertService.add("danger", "更新失败", {ttl: 3000});
                         if(error.data) {
                             d.reject(error.data.info);
                         }else {
@@ -520,14 +517,12 @@ angular.module('fileuploadApp', [
                         }
                     });
                 }else {
-//                    $timeout(function() {
-                        if(type == "address") {
-                            $scope.file.point && ($scope.file.point[type] = data);
-                        }else {
-                            $scope.file[type] = data;
-                        }
-                        d.resolve()
-//                    }, 500);
+                    if(type == "address") {
+                        $scope.file.point && ($scope.file.point[type] = data);
+                    }else {
+                        $scope.file[type] = data;
+                    }
+                    d.resolve()
                 }
                 return d.promise;
             };
@@ -553,7 +548,8 @@ angular.module('fileuploadApp', [
                             'address': _this.address
                         },
                         'vendor': _this.vendor,
-                        'is360': _this.is360
+                        'is360': _this.is360,
+                        color: _this.color
                     }, function (data) {
                         if (data) {
                             $scope.alertService.add("success", "更新成功");
@@ -603,7 +599,12 @@ angular.module('fileuploadApp', [
 
             $scope.onDragStart = function(e, ui) {
 //                $log.debug(e);
-                $log.debug("drag photo id = " + file.photoId);
+                var marker = angular.element('<div/>');
+                marker.addClass("marker");
+                marker.css("left", (e.offsetX-10) + "px");
+                marker.css("top", (e.offsetY-25) + "px");
+                angular.element(ui.helper).append(marker);
+                angular.element(ui.helper).addClass("drag-marker");
                 e.photoId = file.photoId;
             };
 
@@ -659,4 +660,34 @@ angular.module('fileuploadApp', [
             }
         }
     ])
+
+    .directive('fileUploadColorPreview',['$log', 'rgbHex', function ($log, rgbHex) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+
+                var colorThief = new ColorThief();
+
+                scope.$watch(
+                        attrs.fileUploadColorPreview + '.preview',
+                    function (preview) {
+                        element.empty();
+                        if (preview) {
+                            element.append(preview);
+                            var image = element.find("img");
+                            if(image&&image.length) {
+                                var color = colorThief.getColor(image[0]);
+                                var palette = colorThief.getPalette(image[0]);
+                                var file = scope.$eval(attrs.fileUploadColorPreview);
+                                file && (file.color = rgbHex(color));
+                                file && (file.palette = palette);
+                                $log.debug(file.color);
+                            }
+                        }
+                    }
+                );
+            }
+        };
+    }])
+
 ;

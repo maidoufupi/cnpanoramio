@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 
-import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.Constants;
@@ -84,14 +83,14 @@ public class PhotoManagerTest {
 	}
 	
 	@Test
-	public void testPhotoStore() throws IOException, ImageReadException {
+	public void testPhotoStore() throws IOException {
 		
 //		photoService.store(new MultipartBody(true));
 		
 	}
 	
 	@Test
-	public void testFillPhotoDetail() throws ImageReadException, IOException {
+	public void testFillPhotoDetail() throws IOException {
 		Photo photo = new Photo();
 		User user = userManager.get(1L);
 		photo.setOwner(user);

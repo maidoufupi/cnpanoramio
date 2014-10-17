@@ -114,6 +114,9 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	@Column(name = "is360")
 	private boolean is360;
 	
+	// 图片主颜色
+	private String color;
+	
 	@OneToMany(mappedBy="photo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<Like> likes = new HashSet<Like>(0);
 	
@@ -294,6 +297,14 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 
 	public void setIs360(boolean is360) {
 		this.is360 = is360;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
 	}
 
 	public Set<Like> getLikes() {

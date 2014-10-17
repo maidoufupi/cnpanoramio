@@ -6,7 +6,8 @@
     <div ng-repeat="photo in photos"
          ng-controller="PhotosPhotoCtrl"
          waypoint="{'offset': 130, target: {id: photo.id, date: photo.create_time}}"
-         class="photo">
+         class="photo"
+         ng-style="{'background-color': photo.color}">
         <a href=""
            ng-click="displayPhoto(photo.id)">
             <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_200w_200h_1c_1o.jpg"

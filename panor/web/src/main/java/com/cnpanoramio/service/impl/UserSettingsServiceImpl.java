@@ -101,32 +101,6 @@ public class UserSettingsServiceImpl implements UserSettingsService {
 		return openInfo;
 	}
 
-//	@Override
-//	public List<Recycle> getRecycleBin(Long id) {
-//		return convertRecycleList(userSettingsManager.getRecycleBin(id));
-//	}
-
-//	private List<Recycle> convertRecycleList(
-//			List<com.cnpanoramio.domain.Recycle> recycles) {
-//		List<Recycle> rs = new ArrayList<Recycle>();
-//		for (com.cnpanoramio.domain.Recycle recycle : recycles) {
-//			Recycle r = new Recycle();
-//			r.setId(recycle.getId());
-//			r.setCreateTime(recycle.getCreateDate());
-//			r.setUserId(recycle.getUser().getId());
-//			r.setRecyType(recycle.getRecyType());
-//			r.setRecyId(recycle.getRecyId());
-//			if (recycle.getRecyType().equalsIgnoreCase(
-//					com.cnpanoramio.domain.Recycle.CON_TYPE_PHOTO)) {
-//				r.setPhoto(PhotoUtil.transformProperties(photoDao.get(recycle
-//						.getRecyId())));
-//			}
-//
-//			rs.add(r);
-//		}
-//		return rs;
-//	}
-
 	@Override
 	public UserSettings getUserSettings(User user) {
 
@@ -209,6 +183,8 @@ public class UserSettingsServiceImpl implements UserSettingsService {
 		settings.setName(userSettings.getName());
 		settings.setPrivateMessages(userSettings.getPrivateMessages());
 		settings.setUrlName(userSettings.getUrlName());
+		settings.setStorageSpace(userSettings.getStorageSpace());
+		settings.setAutoUpload(userSettings.isAutoUpload());
 		return settings;
 	}
 
@@ -228,7 +204,18 @@ public class UserSettingsServiceImpl implements UserSettingsService {
 		settings.setName(userSettings.getName());
 		settings.setPrivateMessages(userSettings.getPrivateMessages());
 		settings.setUrlName(userSettings.getUrlName());
+		settings.setAutoUpload(userSettings.isAutoUpload());
 		return settings;
+	}
+
+	@Override
+	public UserSettings changeUpload(User user, UserSettings userSettings) {
+		com.cnpanoramio.domain.UserSettings settings = userSettingsManager
+				.get(user);
+		
+		settings.setAutoUpload(userSettings.isAutoUpload());
+
+		return transformSettings(settings);
 	}
 
 	

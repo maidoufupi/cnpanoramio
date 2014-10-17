@@ -23,6 +23,7 @@ import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.appfuse.model.User;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.cnpanoramio.MapVendor;
 
@@ -134,6 +135,14 @@ public class UserSettings {
 //	@OneToMany(mappedBy="user", fetch = FetchType.LAZY, orphanRemoval=true)
 //	@JoinTable(name="user_message")
 //	private List<MessageQueue> messageQueue = new ArrayList<MessageQueue>(0);
+	
+	// auto upload
+	@Column(name = "auto_upload")
+	private boolean autoUpload;
+	
+	// 已使用存储空间大小
+	@Column(name = "storage_space")
+	private Double storageSpace = 0D;
 	
 	public User getUser() {
 		return user;
@@ -303,6 +312,22 @@ public class UserSettings {
 	@SuppressWarnings("unused")
 	private void setRecycle(Set<Recycle> recycle) {
 		this.recycle = recycle;
+	}
+
+	public boolean isAutoUpload() {
+		return autoUpload;
+	}
+
+	public void setAutoUpload(boolean autoUpload) {
+		this.autoUpload = autoUpload;
+	}
+
+	public Double getStorageSpace() {
+		return storageSpace;
+	}
+
+	public void setStorageSpace(Double storageSpace) {
+		this.storageSpace = storageSpace;
 	}
 
 	@Override

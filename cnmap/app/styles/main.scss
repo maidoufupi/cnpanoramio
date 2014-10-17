@@ -31,9 +31,10 @@
 @import 'item-picker.scss';
 @import '_card.scss';
 @import 'ponm-travel-album.scss';
+@import '_responsive.scss';
 
 body {
-  background-color: #ececec;
+  background-color: $body-bg;
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -44,7 +45,7 @@ pre.description {
   padding: 0;
   border: 0;
   background-color: initial;
-  white-space: normal; //pre-wrap; // firefox
+  white-space: pre-wrap; // firefox
 }
 
 pre.description.hover {

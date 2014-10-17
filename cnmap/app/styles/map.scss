@@ -215,10 +215,10 @@
     color: white;
   }
 
-  .dropdown-menu {
-    width: 100%;
-    border-radius: 0;
-  }
+//  .dropdown-menu {
+//    width: 100%;
+//    border-radius: 0;
+//  }
 }
 
 .maps-travels {
@@ -229,20 +229,19 @@
   }
 }
 
+// 用户照片页面
 .maps-user {
   .header {
     padding: 30px 20px;
+    border-bottom: 1px solid transparent;
     @include transition-linear(all);
   }
   .header.navbar-third {
     margin: 0;
     padding: 10px;
+    border-bottom: 1px solid $theme-header-bd-color;
     background-color: rgba(255, 255, 255, .9);
     @include box-shadow(0 0 10px rgba(0, 0, 0, 0.3));
     z-index: 1001;
   }
-}
-
-.maps-travel {
-
 }

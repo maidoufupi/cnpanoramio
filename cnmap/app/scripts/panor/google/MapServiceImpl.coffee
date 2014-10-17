@@ -31,7 +31,7 @@ class MapService extends window.cnmap.IMapService
             poiweight: 1
             location: poi.geometry.location
           }
-      if result[0]
+      if result and result[0]
         deferred.resolve addresses, result[0].formatted_address
       else
         deferred.reject "no result"
@@ -50,16 +50,24 @@ class MapService extends window.cnmap.IMapService
 
     if !@geocoder
       @init()
-    @geocoder.geocode {address: address}, (point) ->
+    @geocoder.geocode {address: address}, (ress) ->
       addresses = [];
-      #      console.log(point)
-      if point
-        addresses.push {
-          address: address
-          location: point
-          similarity: 1
-        #        zoom: levelMap[geocode.level] || 4
-        }
+      if ress
+        for res in ress
+          address = {
+            address: res.formatted_address
+            location:{ lat: res.geometry.location.lat(), lng: res.geometry.location.lng()}
+            similarity: 1
+          }
+          if res.geometry.bounds
+            address.bounds = { sw : { lat : res.geometry.bounds.getSouthWest().lat()
+            , lng : res.geometry.bounds.getSouthWest().lng()
+            }
+            , ne : { lat : res.geometry.bounds.getNorthEast().lat()
+              , lng: res.geometry.bounds.getNorthEast().lng()
+              }
+            }
+          addresses.push address
       deferred.resolve addresses
 
     deferred.promise()

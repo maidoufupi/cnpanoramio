@@ -8,7 +8,7 @@ angular.module('ponmApp.services')
         function ($window, $rootScope, $timeout, jsUtils) {
             var alertService;
             return alertService = {
-                options: {},
+                options: {ttl: 3000},
                 add: function (type, message, options) {
                     var that = this;
                     var alert = {

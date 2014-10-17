@@ -932,9 +932,6 @@
     vertical-align: top;
     width: 72px;
     color: white; }
-  .searchbox .dropdown-menu {
-    width: 100%;
-    border-radius: 0; }
 
 .maps-travels .travel {
   width: 214px;
@@ -943,6 +940,7 @@
 
 .maps-user .header {
   padding: 30px 20px;
+  border-bottom: 1px solid transparent;
   -webkit-transition: all linear 0.3s;
   -moz-transition: all linear 0.3s;
   -ms-transition: all linear 0.3s;
@@ -951,6 +949,7 @@
 .maps-user .header.navbar-third {
   margin: 0;
   padding: 10px;
+  border-bottom: 1px solid #00bcd4;
   background-color: rgba(255, 255, 255, 0.9);
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -992,6 +991,8 @@
       position: absolute;
       bottom: 0; }
   .photo-modal-container .photo-container-booter {
+    -webkit-transition: all 218ms;
+    transition: all 218ms;
     margin: 0;
     border: 0; }
     .photo-modal-container .photo-container-booter .collapse.navbar-collapse {
@@ -1008,8 +1009,8 @@
         .photo-modal-container .navbar .container-fluid .collapse.navbar-collapse .nav.navbar-nav.center-block .text-explain span {
           vertical-align: middle; }
   .photo-modal-container .photo-info {
-    -webkit-transition: 218ms;
-    transition: 218ms;
+    -webkit-transition: all 218ms;
+    transition: all 218ms;
     background-color: whitesmoke; }
     .photo-modal-container .photo-info .info-container {
       -webkit-perspective: 3000px;
@@ -1090,7 +1091,7 @@
 .photo-travel-album .travel-album-container {
   position: fixed;
   left: 0;
-  bottom: 51px;
+  bottom: 50px;
   right: 320px;
   background-color: #000;
   overflow: hidden;
@@ -1193,17 +1194,6 @@
     bottom: 0;
     right: 0;
     width: 320px; } }
-@media (max-width: 480px) {
-  .photo-modal-container {
-    overflow-y: auto; }
-    .photo-modal-container .photo-main {
-      width: 100%; }
-      .photo-modal-container .photo-main .photo-container-header .navbar-toggle {
-        float: left; }
-      .photo-modal-container .photo-main .ponm-photo-container .loading {
-        margin: auto; }
-    .photo-modal-container .photo-info {
-      width: 100%; } }
 /** photo modal page ********************************************************************/
 /****************************************************************************************/
 /****************************************************************************************/
@@ -1228,7 +1218,8 @@
   width: 200px;
   height: 200px;
   display: inline-block;
-  float: initial; }
+  float: initial;
+  background-color: lightgrey; }
 
 .photo-travel > .header {
   width: 100%;
@@ -1272,11 +1263,11 @@
     text-decoration: initial; }
   .photo-travels .travel .thumbnail .album-cover {
     width: 190px;
-    height: 190px; }
+    height: 190px;
+    background-color: grey; }
     .photo-travels .travel .thumbnail .album-cover img {
       width: 100%;
-      height: 100%;
-      background-color: grey; }
+      height: 100%; }
 
 .album-selection {
   width: 100%;
@@ -1532,7 +1523,7 @@ span.clickable:hover {
 
 .navbar-third {
   position: fixed !important;
-  top: 102px !important;
+  top: 101px !important;
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
@@ -1540,19 +1531,19 @@ span.clickable:hover {
 
 .navbar-forth {
   position: fixed !important;
-  top: 152px !important;
+  top: 151px !important;
   z-index: 1026; }
 
 .navbar-edit {
-  background-color: #427fed; }
+  background-color: #4387fd; }
   .navbar-edit .nav.navbar-nav {
-    background-color: #427fed; }
+    background-color: #4387fd; }
     .navbar-edit .nav.navbar-nav > li a {
       color: white; }
     .navbar-edit .nav.navbar-nav > li:hover {
-      background-color: #4285f4; }
+      background-color: #5c97fd; }
   .navbar-edit .navbar-left .dropdown .dropdown-toggle {
-    padding: 8px;
+    padding: 7px;
     line-height: 36px; }
     .navbar-edit .navbar-left .dropdown .dropdown-toggle img {
       margin: 1px; }
@@ -1592,7 +1583,7 @@ span.clickable:hover {
   transition: all linear 0.3s; }
 
 .navbar.navbar-edit.ponm-show {
-  height: 54px;
+  height: 52px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1601,7 +1592,9 @@ span.clickable:hover {
 .navbar-second-top .navbar-second {
   position: fixed;
   z-index: 1031;
-  top: 0; }
+  top: 0;
+  border-bottom: 1px solid #00bcd4;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); }
 .navbar-second-top .container-photos {
   margin-top: 61px; }
   .navbar-second-top .container-photos .timeline {
@@ -1657,17 +1650,17 @@ span.clickable:hover {
   -ms-transition: border-bottom-color linear 0.3s;
   -o-transition: border-bottom-color linear 0.3s;
   transition: border-bottom-color linear 0.3s; }
-.nav.nav-tray > li.active > a, .nav.nav-tray > li:hover > a {
+.nav.nav-tray > li.active > a:not(.dropdown-toggle), .nav.nav-tray > li:hover > a:not(.dropdown-toggle) {
   border-bottom-color: #00bcd4;
-  text-shadow: 0 0 10px #00bcd4; }
+  font-weight: bold; }
 
 .nav-list {
   border-left: 3px solid transparent; }
 
-.nav-list:hover {
+.nav-list:not(.dropdown):hover {
   border-left: 3px solid #4dd0e1; }
 
-.nav-list.active {
+.nav-list:not(.dropdown).active {
   border-left: 3px solid #00bcd4; }
 
 .steps {
@@ -1888,13 +1881,13 @@ b, strong {
       transition: all 218ms ease-in-out;
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
-      border: 5px solid transparent; }
+      border: 5px solid #ececec; }
     .photo-selectable-container .photo img.selected {
       -webkit-transition: all 218ms ease-in-out;
       transition: all 218ms ease-in-out;
       -webkit-box-sizing: border-box;
       box-sizing: border-box;
-      border: 5px solid #4a87ee; }
+      border: 5px solid #4387fd; }
 
 .timeline {
   position: fixed;
@@ -1902,7 +1895,7 @@ b, strong {
   right: 10px;
   width: 60px;
   height: 70px;
-  background: #4285f4;
+  background: #4387fd;
   border-radius: 2px;
   color: white;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.57);
@@ -2256,6 +2249,16 @@ body::-webkit-scrollbar-corner {
     cursor: pointer; }
     .photo-upload .table.files .photo .preview canvas {
       max-width: 100%; }
+  .photo-upload .table.files .photo .preview.drag-marker {
+    position: relative; }
+    .photo-upload .table.files .photo .preview.drag-marker .marker {
+      position: absolute;
+      width: 20px;
+      height: 30px;
+      background-image: url("../images/marker.png");
+      background-repeat: no-repeat; }
+    .photo-upload .table.files .photo .preview.drag-marker img {
+      opacity: 0; }
   .photo-upload .table.files .photo .action {
     opacity: 0.3; }
   .photo-upload .table.files .photo p {
@@ -2284,12 +2287,14 @@ body::-webkit-scrollbar-corner {
       display: inline; }
     .photo-upload .table.files .geo-info .location-display-address {
       display: inline; }
+    .photo-upload .table.files .geo-info .have-address .glyphicon {
+      color: #5cb85c; }
   .photo-upload .table.files .status {
     width: 32px;
     text-align: center; }
     .photo-upload .table.files .status .action {
       display: inline-block; }
-    .photo-upload .table.files .status .glyphicon-cloud {
+    .photo-upload .table.files .status .glyphicon-cloud, .photo-upload .table.files .status .glyphicon-share-alt {
       color: #5cb85c; }
     .photo-upload .table.files .status .glyphicon-warning-sign {
       color: #f0ad4e; }
@@ -2346,10 +2351,8 @@ body::-webkit-scrollbar-corner {
     /* front pane, placed above back */
     /* back, initially hidden pane */ }
     .flip-container .flipper .front, .flip-container .flipper .back {
-      -webkit-transition: transform 0.6s;
-      transition: transform 0.6s;
-      -webkit-transition: -webkit-transform 0.6s;
-      transition: -webkit-transform 0.6s;
+      -webkit-transition: all 0.6s;
+      transition: all 0.6s;
       -webkit-transform-style: preserve-3d;
       /* Chrome, Safari, Opera */
       transform-style: preserve-3d;
@@ -2373,8 +2376,9 @@ body::-webkit-scrollbar-corner {
       position: absolute;
       top: 0;
       bottom: 0;
-      width: 100%;
-      display: none;
+      left: 50%;
+      right: 50%;
+      opacity: 0;
       -webkit-transform: rotateY(180deg);
       -ms-transform: rotateY(180deg);
       transform: rotateY(180deg); }
@@ -2412,7 +2416,9 @@ body::-webkit-scrollbar-corner {
   -ms-transform: rotateY(-179.9deg);
   transform: rotateY(-179.9deg); }
 .flip-container.hover .flipper .back {
-  display: block;
+  left: 0;
+  right: 0;
+  opacity: 1;
   -webkit-transform: rotateY(0deg);
   -ms-transform: rotateY(0deg);
   transform: rotateY(0deg); }
@@ -2527,8 +2533,11 @@ body::-webkit-scrollbar-corner {
       overflow: hidden; }
     .message-card .message-body .message-media {
       margin: 0 -14px 0 -14px; }
+      .message-card .message-body .message-media .photo {
+        position: relative; }
       .message-card .message-body .message-media img {
-        width: 100%; }
+        width: 100%;
+        height: auto; }
       .message-card .message-body .message-media .image-border {
         background: repeat-x url(../images/embeds_article_sawtooth.png) 0 0;
         background-position-x: 1px;
@@ -2772,6 +2781,39 @@ item-picker .dropdown.dropdown-picker, *[item-picker] .dropdown.dropdown-picker 
 .travel-album:hover .front-cover .footer:hover {
   background-color: rgba(0, 0, 0, 0.8); }
 
+@media (max-width: 480px) {
+  .photo-upload .header .fileupload-buttonbar {
+    padding: 0; }
+
+  .photo-modal-container .photo-main {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%; }
+    .photo-modal-container .photo-main .photo-container-header .navbar-toggle {
+      float: left; }
+    .photo-modal-container .photo-main .photo-container-body {
+      position: absolute;
+      top: 50px;
+      bottom: 50px;
+      width: 100%; }
+    .photo-modal-container .photo-main .photo-container-booter {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      z-index: 2; }
+  .photo-modal-container .photo-info {
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    z-index: 2; }
+
+  .photo-modal-container.infoOpen .photo-container-booter {
+    top: 0;
+    bottom: initial; }
+  .photo-modal-container.infoOpen .photo-info {
+    top: 50px;
+    bottom: 0; } }
 body {
   background-color: #ececec;
   overflow-x: hidden;
@@ -2783,7 +2825,7 @@ pre.description {
   padding: 0;
   border: 0;
   background-color: initial;
-  white-space: normal; }
+  white-space: pre-wrap; }
 
 pre.description.hover {
   background-color: white; }

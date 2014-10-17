@@ -127,8 +127,17 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 		PhotoDetails detail = photo.getDetails();
 		Date photoDate = null;
 		if (null != detail) {
-			photoDate = detail.getDateTimeOriginal();
+			// 拍摄日期：优先取DateTimeOriginal 再取DateTimeDigitized，然后再考虑DateTime // 与photo输出信息一致
+			if(null != detail.getDateTimeOriginal()) {
+				photoDate = detail.getDateTimeOriginal();
+			}else if(null != detail.getDateTimeDigitized()) {
+				photoDate = detail.getDateTimeDigitized();
+			}else {
+				photoDate = detail.getDateTime();
+			}
+			
 			if (null != photoDate) {
+				// 有拍摄日期：查找同一天的景点
 				String tDate = dateFormat.format(photoDate);
 				for (TravelSpot spot : travel.getSpots()) {
 					if (null != spot.getTimeStart() && dateFormat.format(spot.getTimeStart()).equalsIgnoreCase(tDate)) {
@@ -139,7 +148,8 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 			}
 		}
 		
-		if(null == travelSpot) {
+		// 无拍摄日期：查找没有日期的景点
+		if(null == photoDate) {
 			// 如果没有拍摄日期，则添加到同一个没有日期的spot
 			for (TravelSpot spot : travel.getSpots()) {
 				if (null == spot.getTimeStart()) {
@@ -149,7 +159,7 @@ public class TravelManagerImpl extends GenericManagerImpl<Travel, Long> implemen
 			}
 		}
 
-		// 如果既没有匹配日期的spot，有没有无日期的spot，则创建一个spot
+		// 如果既没有匹配日期的spot，又没有无日期的spot，则创建一个spot
 		if (null == travelSpot) {
 			travelSpot = new TravelSpot();
 			travelSpot.setTimeStart(photoDate);

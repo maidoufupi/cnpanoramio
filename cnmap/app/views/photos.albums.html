@@ -3,7 +3,8 @@
          class="travel">
         <a ng-href="#/photos/{{$stateParams.userId}}/albums/{{travel.id}}">
             <div class="thumbnail">
-                <div class="album-cover">
+                <div class="album-cover"
+                     ng-style="{'background-color': travel.album_cover.color}">
                     <img ng-src="{{travel.album_cover ? staticCtx+'/'+travel.album_cover+'@1e_200w_200h_1c_1o.jpg' : ctx+'/images/travel-album-cover.jpg'}} " alt="">
                 </div>
 

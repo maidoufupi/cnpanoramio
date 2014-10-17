@@ -20,15 +20,7 @@ public interface UserSettingsService {
 	 * @return
 	 */
 	public UserOpenInfo getOpenInfo(User user, User me);
-	
-	/**
-	 * 获取用户回收站内容
-	 * 
-	 * @param id
-	 * @return
-	 */
-//	public List<Recycle> getRecycleBin(Long id);
-	
+		
 	/**
 	 * 获取用户的详细设置
 	 * 
@@ -61,6 +53,15 @@ public interface UserSettingsService {
 	 * @return
 	 */
 	public UserSettings changeAccount(User user, UserSettings settings);
+	
+	/**
+	 * 更改上传设置
+	 * 
+	 * @param user
+	 * @param settings
+	 * @return
+	 */
+	public UserSettings changeUpload(User user, UserSettings settings);
 	
 	/**
 	 * 验证登录用户

@@ -88,6 +88,10 @@ angular.module('ponmApp.settings', [
             $scope.ponmCtxConfig = ponmCtxConfig;
             $scope.$state = $state;
 
+            $scope.alertService = alertService;
+            $scope.alertService.options.alone = true;
+            $scope.alertService.options.ttl = 3000;
+
             AuthService.checkLogin().then(function(){
                 $scope.userId = ponmCtxConfig.userId;
                 getSettings();
@@ -143,9 +147,9 @@ angular.module('ponmApp.settings', [
                 SettingsService.changeAccount({userId: $scope.userId}, $scope.settings, function(res) {
                     $scope.saving = false;
                     if(res.status == "OK") {
-                        alertService.add("success",  "保存成功!", {ttl: 1000});
+                        $scope.alertService.add("success",  "保存成功!", {ttl: 1000});
                     }else {
-                        alertService.add("danger", "保存失败!", {ttl: 1000});
+                        $scope.alertService.add("danger", "保存失败!", {ttl: 1000});
                     }
                 });
             };
@@ -161,15 +165,15 @@ angular.module('ponmApp.settings', [
                     $log.debug(res.status);
                     $scope.saving = false;
                     if(res.status == "OK") {
-                        alertService.add("success",  "保存成功!", {ttl: 1000});
+                        $scope.alertService.add("success",  "更改成功!", {ttl: 1000});
                     }else {
-                        alertService.add("danger", "保存失败 " + res.info, {ttl: 1000});
+                        $scope.alertService.add("danger", "更改失败 " + res.info, {ttl: 1000});
                     }
                 }, function(error) {
                     $log.debug(error);
                     if(error.data) {
                         if(error.data.status == "PARAM_ERROR" && error.data.info == "currentPassword") {
-                            alertService.add("danger", "当前密码错误!", {ttl: 2000});
+                            $scope.alertService.add("danger", "当前密码错误!", {ttl: 2000});
                         }
                     }
                 });
@@ -195,40 +199,93 @@ angular.module('ponmApp.settings', [
     function ($window, $log, $location, $rootScope, $scope, $modal, $state, SettingsService, alertService) {
 
         $scope.changeMapVendor = function() {
-            $log.debug("changeMapVendor");
-            $log.debug($scope.settings);
+//            $log.debug("changeMapVendor");
+//            $log.debug($scope.settings);
             $scope.saving = true;
             SettingsService.changeMapVendor({userId: $scope.userId}, $scope.settings, function(res) {
                 $log.debug(res.status);
                 $scope.saving = false;
                 if(res.status == "OK") {
-                    alertService.add("success",  "保存成功!", {ttl: 1000});
+                    $scope.alertService.add("success",  "保存成功!", {ttl: 1000});
                 }else {
-                    alertService.add("danger", "保存失败!", {ttl: 1000});
+                    $scope.alertService.add("danger", "保存失败!", {ttl: 1000});
                 }
                 });
         };
     }])
     .controller('SettingsPhotoCtrl',
-    ['$window', '$log', '$location', '$rootScope', '$scope', '$modal', '$state', 'UserPhoto', 'UserService',
+    ['$window', '$log', '$filter', '$rootScope', '$scope', '$modal', '$state', 'UserPhoto', 'SettingsService',
         'ponmCtxConfig', 'AuthService', 'alertService',
-        function ($window, $log, $location, $rootScope, $scope, $modal, $state, UserPhoto, UserService,
+        function ($window, $log, $filter, $rootScope, $scope, $modal, $state, UserPhoto, SettingsService,
                   ponmCtxConfig, AuthService, alertService) {
 
-            $scope.capacity = {
-                type: "warning",
-                value: 90,
-                stacked: []
-            };
+            $scope.$watch("settings", function(settings) {
+                if(!settings) {
+                    return;
+                }
+                var storageRate = ( settings.storage_space / (10*1024*1024*1024) ) * 100;
+                $filter('number')(storageRate, 1);
+                if(storageRate < 0.1) {
+                    storageRate = 0.1;
+                }
+                $scope.storageRate = storageRate;
+                $scope.capacity = {
+                    type: "success",
+                    value: storageRate,
+                    stacked: []
+                };
 
-            $scope.capacity.stacked.push({
-                type: "success",
-                value: "70"
+                if(storageRate > 90) {
+                    $scope.capacity.type = 'danger';
+                    $scope.capacity.stacked.push({
+                        type: "success",
+                        value: "70"
+                    });
+                    $scope.capacity.stacked.push({
+                        type: "warning",
+                        value: "20"
+                    });
+                    $scope.capacity.stacked.push({
+                        type: "danger",
+                        value: storageRate-90
+                    });
+                }else if(storageRate > 70 ) {
+                    $scope.capacity.type = 'warning';
+                    $scope.capacity.stacked.push({
+                        type: "success",
+                        value: "70"
+                    });
+                    $scope.capacity.stacked.push({
+                        type: "warning",
+                        value: storageRate-70
+                    });
+                }else {
+                    $scope.capacity.stacked.push({
+                        type: "success",
+                        value: storageRate
+                    });
+                }
+
             });
-            $scope.capacity.stacked.push({
-                type: "warning",
-                value: "20"
-            });
+
+            $scope.changeUpload = function() {
+                $scope.saving = true;
+                SettingsService.changeUpload({userId: $scope.userId}, $scope.settings, function(res) {
+                    $scope.saving = false;
+                    if(res.status == "OK") {
+                        ponmCtxConfig.settings.autoUpload = $scope.settings.auto_upload;
+                        $scope.alertService.add("success",  "保存成功!");
+                    }else {
+                        $scope.alertService.add("danger", "保存失败 " + res.info);
+                    }
+                }, function(error) {
+                    if(error.data) {
+                        if(error.data.status == "PARAM_ERROR" && error.data.info == "currentPassword") {
+                            $scope.alertService.add("danger", "当前密码错误!");
+                        }
+                    }
+                });
+            };
 
         }])
 

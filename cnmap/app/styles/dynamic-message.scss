@@ -8,8 +8,9 @@
 
     /* hide back of pane during swap */
     .front, .back {
-      @include transition(transform 0.6s);
-      @include transition(-webkit-transform 0.6s);
+//      @include transition(transform 0.6s);
+//      @include transition(-webkit-transform 0.6s);
+      @include transition(all 0.6s);
 //      @include transition-transform(preserve-3d);
       -webkit-transform-style: preserve-3d; /* Chrome, Safari, Opera */
       transform-style: preserve-3d;
@@ -34,8 +35,10 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      width: 100%;
-      display: none;
+      left: 50%;
+      right: 50%;
+//      bottom: 0;
+      opacity: 0;
 
       @include rotateY(180deg);
 
@@ -79,7 +82,9 @@
       @include rotateY(-179.9deg);
     }
     .back {
-      display: block;
+      left: 0;
+      right: 0;
+      opacity: 1;
       @include rotateY(0deg);
       .message-dynamic-card {
         opacity: 1;
@@ -239,9 +244,12 @@
 
     .message-media {
       margin: 0 -14px 0 -14px;
-
+      .photo {
+        position: relative;
+      }
       img {
         width: 100%;
+        height: auto;
       }
 
       .image-border {

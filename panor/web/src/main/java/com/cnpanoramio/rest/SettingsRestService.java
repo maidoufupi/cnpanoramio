@@ -106,6 +106,21 @@ public class SettingsRestService extends AbstractRestService {
 		return response;
 	}
 	
+	@RequestMapping(value = "/{userId}/upload", method = RequestMethod.POST)
+	@ResponseBody
+	public UserSettingsResponse changeUpload(@PathVariable String userId,
+			@RequestBody final UserSettings settings) {
+		UserSettingsResponse response = new UserSettingsResponse();
+				
+		// 检查操作的userId是否为登录的用户本人
+		User user = isMy(Long.parseLong(userId), userManager);
+		
+		userSettingsService.changeUpload(user, settings);
+		
+		response.setStatus(UserSettingsResponse.Status.OK.name());
+		return response;
+	}
+	
 	private User isMy(Long userId, UserManager userManager) {
 		User me = UserUtil.getCurrentUser(userManager);
 		if(!me.getId().equals(userId)) {

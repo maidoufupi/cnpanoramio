@@ -2,7 +2,6 @@ package com.cnpanoramio.service;
 
 import java.io.IOException;
 
-import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
@@ -56,7 +55,7 @@ public class UserSettingsServiceTest {
 	}
 
 	@Test
-	public void testGetUserSettings() throws IOException, ImageReadException {
+	public void testGetUserSettings() {
 		User user = userManager.get(userId);
 		UserSettings settings = userSettingsService.getUserSettings(user);
 		Assert.assertNull(settings);

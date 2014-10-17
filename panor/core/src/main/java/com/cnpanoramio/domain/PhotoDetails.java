@@ -43,7 +43,7 @@ public class PhotoDetails {
 	private String compressedBitsPerPixel;
 
 	// 方向
-	@Column(length=1)
+	@Column(length=2)
 	private short Orientation;
     
 	

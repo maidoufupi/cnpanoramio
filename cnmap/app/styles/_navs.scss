@@ -13,9 +13,9 @@
   }
 
   >li.active, >li:hover {
-      > a {
+      > a:not(.dropdown-toggle) {
         border-bottom-color: $nav-item-active-color;
-        text-shadow: 0 0 10px #00bcd4;
+        font-weight: bold;
       }
     }
 }
@@ -24,11 +24,11 @@
   border-left: 3px solid transparent;
 //  @include transition-linear(border-left);
 }
-.nav-list:hover {
-  border-left: 3px solid #4dd0e1;
+.nav-list:not(.dropdown):hover {
+  border-left: 3px solid $nav-item-want-active-color;
 }
-.nav-list.active {
-  border-left: 3px solid #00bcd4;
+.nav-list:not(.dropdown).active {
+  border-left: 3px solid $nav-item-active-color;
 }
 
 // steps

@@ -77,17 +77,33 @@ public class PhotoServiceImpl implements PhotoService {
 			pp.setVendor(MapVendor.gaode.name());
 		}
 		
+		// 360度全景照片
 		pp.setIs360(photo.isIs360());
+		// 图片主颜色
+		pp.setColor(photo.getColor());
 		
 		PhotoDetails details = photo.getDetails();
 		if(null != details) {
-			pp.setWidth(details.getPixelXDimension());
-			pp.setHeight(details.getPixelYDimension());
-			if(null != details.getDateTime()) {
-				pp.setDateTime(details.getDateTime());
+			if(details.getOrientation() == 5 ||
+					details.getOrientation() == 6 ||
+					details.getOrientation() == 7 ||
+					details.getOrientation() == 8) {
+				// 根据图片附加信息进行大小旋转
+				pp.setWidth(details.getPixelYDimension());
+				pp.setHeight(details.getPixelXDimension());
 			}else {
+				pp.setWidth(details.getPixelXDimension());
+				pp.setHeight(details.getPixelYDimension());
+			}
+			
+			// 优先取DateTimeOriginal 再取DateTimeDigitized，然后再考虑DateTime
+			if(null != details.getDateTimeOriginal()) {
 				pp.setDateTime(details.getDateTimeOriginal());
-			}			
+			}else if(null != details.getDateTimeDigitized()) {
+				pp.setDateTime(details.getDateTimeDigitized());
+			}else {
+				pp.setDateTime(details.getDateTime());
+			}		
 		}
 		return pp;
 	}

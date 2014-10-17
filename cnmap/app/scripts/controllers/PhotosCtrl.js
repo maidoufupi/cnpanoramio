@@ -8,7 +8,8 @@ angular.module('ponmApp.photos', [
     'ui.map',
     'ui.router',
     'ponmApp',
-    'xeditable'
+    'xeditable',
+    'duScroll'
 ])
 //angular.module('photosApp')
     .config([   '$stateProvider', '$urlRouterProvider',
@@ -130,9 +131,9 @@ angular.module('ponmApp.photos', [
         editableOptions.theme = 'bs3';
     }])
     .controller('PhotosCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'PhotoService', 'UserService', '$modal',
+    [        '$window', '$location', '$document', '$rootScope', '$scope', 'PhotoService', 'UserService', '$modal',
         'ponmCtxConfig', '$log', '$state', '$stateParams', 'safeApply', 'jsUtils', 'HashStateManager', 'alertService',
-        function ($window, $location, $rootScope, $scope, PhotoService, UserService, $modal,
+        function ($window, $location, $document, $rootScope, $scope, PhotoService, UserService, $modal,
                   ponmCtxConfig, $log, $state, $stateParams, safeApply, jsUtils, HashStateManager, alertService) {
 
             $scope.ctx = $window.ctx;
@@ -188,6 +189,7 @@ angular.module('ponmApp.photos', [
                     $scope.cancelSelect();
                     $scope.navbarType = (toState.name == "photos.trash" ? "trash" : "move");
                     $scope.alertType = (toState.name == "photos.trash" ? "trash" : "move");
+                    $document.scrollTop(0, 500);
                 }
             );
 

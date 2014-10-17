@@ -61,9 +61,11 @@
             <div class="message-body">
                 <div class="message-content" ng-switch="message.type">
                     <div ng-switch-when="photo">
+                        <h4>{{message.title}}</h4>
                         <pre class="description" ng-bind-html="message.content"></pre>
                     </div>
                     <div ng-switch-when="travel">
+                        <h4>{{message.title}}</h4>
                         <pre class="description" ng-bind-html="message.content"></pre>
                     </div>
                     <div ng-switch-when="message">
@@ -89,22 +91,40 @@
                 <div class="message-media">
 
                     <div ng-switch="message.type">
-                        <a ng-switch-when="photo"
-                           href=""
-                           ng-click="photoClick(message.photo.id)">
-                            <img ng-src="{{getPhotoSrc(message.photo)}}">
-                            <div class="image-border"></div>
-                        </a>
-                        <ponm-travel-album travel="message.travel" ng-switch-when="travel"></ponm-travel-album>
-                        <div ng-switch-when="message"
-                             ng-switch="message.share_message.type">
-                            <a ng-switch-when="photo"
-                               href=""
-                               ng-click="photoClick(message.share_message.photo.id)">
-                                <img ng-src="{{getPhotoSrc(message.share_message.photo)}}">
-                                <div class="image-border"></div>
+                        <div ng-switch-when="photo"
+                             class="photo"
+                             ng-style="{'background-color': message.photo.color}">
+                            <a href=""
+                               ng-click="photoClick(message.photo.id)">
+                                <img ng-src="{{getPhotoSrc(message.photo)}}" class="img-responsive"
+                                     width="{{message.photo.width}}"
+                                     height="{{message.photo.height}}">
+                                <div ng-if="message.photo.is360">
+                                    <div class="icon-photo-p360"></div>
+                                </div>
+                                <!--<div class="image-border"></div>-->
                             </a>
-                            <ponm-travel-album travel="message.share_message.travel" ng-switch-when="travel"></ponm-travel-album>
+                        </div>
+
+                        <ponm-travel-album travel="message.travel" ng-switch-when="travel"></ponm-travel-album>
+
+                        <div ng-switch-when="message"
+                             ng-switch="message.share_message.type"
+                             class="photo"
+                             >
+                            <div ng-switch-when="photo"
+                                 class="photo"
+                                 ng-style="{'background-color': message.share_message.photo.color}">
+                                <a href=""
+                                   ng-click="photoClick(message.share_message.photo.id)">
+                                    <img ng-src="{{getPhotoSrc(message.share_message.photo)}}" class="img-responsive"
+                                         width="{{message.share_message.photo.width}}" height="{{message.share_message.photo.height}}">
+                                    <!--<div class="image-border"></div>-->
+                                </a>
+                            </div>
+
+                            <ponm-travel-album travel="message.share_message.travel"
+                                               ng-switch-when="travel"></ponm-travel-album>
                         </div>
 
                     </div>

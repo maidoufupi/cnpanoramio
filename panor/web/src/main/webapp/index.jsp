@@ -4,9 +4,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>美丽星球</title>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-<meta charset="utf-8">
+	<title>美丽星球</title>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<meta http-equiv="keywords" content="美丽星球,分享,旅行,照片,地图">
+    <meta http-equiv="description" content="美丽星球，是一个致力于在地图上展示您的照片的网站，里面有丰富的地图功能，美观的界面设计，您一定会喜欢上它他。">
+    <meta name="robots" content="all" />
+    <meta name="author" content="http://www.photoshows.cn/#/blog/" />
+    <meta name="copyright" content="© http://www.photoshows.cn/#/blog/" />
+    <!--<meta http-equiv="refresh" content="5; url=http://127.0.0.1:9000/#/maps/user/3" />-->
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
 
 	<link rel="stylesheet" href="<c:url value="/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css"/>">
 	<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-gallery/css/blueimp-gallery.css"/>">

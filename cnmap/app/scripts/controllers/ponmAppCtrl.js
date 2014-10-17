@@ -3,12 +3,19 @@
  */
 'use strict';
 
-angular.module('ponmApp.Index', ['ponmApp', 'ponmApp.photos', 'ponmApp.maps', 'ponmApp.settings', 'adminApp', 'indexApp',
+angular.module('ponmApp.Index',
+   ['ponmApp',
+    'ponmApp.photos',
+    'ponmApp.maps',
+    'ponmApp.settings',
+    'adminApp',
+    'indexApp',
     'ponmApp.dynamic',
     'ponmApp.user',
     'ui.router',
     'ui.map',
-    'ui.bootstrap'])
+    'ui.bootstrap',
+    'ponm.Matchmedia'])
     .config([   '$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
 // Use $urlRouterProvider to configure any redirects (when) and invalid urls (otherwise).

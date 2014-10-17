@@ -66,6 +66,13 @@ public class UserSettings {
 	// 是否允许修改？
 	@Column(name = "modify")
 	private Boolean modify;
+	
+	// 已使用存储空间大小
+	@JsonProperty("storage_space")
+	private Double storageSpace;
+	
+	@JsonProperty("auto_upload")
+	private boolean autoUpload;
 
 	public Long getUserId() {
 		return userId;
@@ -177,6 +184,22 @@ public class UserSettings {
 
 	public void setUserAvatar(Long userAvatar) {
 		this.userAvatar = userAvatar;
+	}
+
+	public Double getStorageSpace() {
+		return storageSpace;
+	}
+
+	public void setStorageSpace(Double storageSpace) {
+		this.storageSpace = storageSpace;
+	}
+
+	public boolean isAutoUpload() {
+		return autoUpload;
+	}
+
+	public void setAutoUpload(boolean autoUpload) {
+		this.autoUpload = autoUpload;
 	}	
 	
 }

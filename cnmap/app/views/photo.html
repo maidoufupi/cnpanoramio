@@ -1,132 +1,139 @@
-<div class="photo-modal-container">
+<div class="photo-modal-container" ng-class="{'infoOpen': photoInfoOpen}">
     <div class="photo-main">
-    <nav class="navbar navbar-inverse photo-container-header" role="navigation">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target="#bs-photo-header-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!--<a class="navbar-brand" href="">{{photo.title}}</a>-->
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-photo-header-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <!--<li><a href="">分享</a></li>-->
-                    <li><a href="" ng-click="displayGallery()">幻灯片</a></li>
-                    <li class="dropdown">
-                        <a href="" class="dropdown-toggle">更多<b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="">下载图片</a></li>
-                            <li><a href="">举报非法图片</a></li>
-                            <!--<li><a href="">Something else here</a></li>
-                            <li class="divider"></li>
-                            <li><a href="">Separated link</a></li>
-                            <li class="divider"></li>
-                            <li><a href="">One more separated link</a></li>-->
-                        </ul>
-                    </li>
-                </ul>
-
-                <!--<ul class="nav navbar-nav navbar-right">
-                    <li ng-click="cancel()"
-                        class="cancel">
-                        <div class="photos-lightbox-close"></div>
-                    </li>
-                </ul>-->
-            </div>
-            <!-- /.navbar-collapse -->
-            <div class="cancel" ng-click="cancel()">
-                <div class="photos-lightbox-close"></div>
-            </div>
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
-
-    <div class="photo-container-body">
-        <!-- ponm-photo-src-p360="{{apirest}}/photo/{{photo.id}}/oss" -->
-        <div ponm-photo-container
-             ponm-photo-src-l1="{{getPhotoSrc(photo)}}"
-             ponm-photo-src-p360="{{corsproxyCtx}}/{{photo.oss_key}}@0e_2000w_1000h.jpg"
-             ponm-photo-width="{{2000}}"
-             ponm-photo-height="{{1000}}"
-             ponm-photo-color="{{photo.color}}"
-             ponm-photo-is360="{{!!photo.is360}}"
-                >
-                <!--<div class="flat-image show">
+        <nav class="navbar navbar-inverse photo-container-header" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-photo-header-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!--<a class="navbar-brand" href="">{{photo.title}}</a>-->
                 </div>
-                <div class="p360-image">
-                    <a class="flat-image-button" href=""><div class="icon-pflat"></div></a>
-                </div>-->
-        </div>
-        <!--<div class="buttons">
-            <button class="zoom-in">放大</button>
-            <button class="zoom-out">缩小</button>
-            <input type="range" class="zoom-range">
-            <button class="reset">重置</button>
-        </div>-->
 
-        <image-gallery options="{'galleryData': 'galleryData'}"></image-gallery>
-    </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-photo-header-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <!--<li><a href="">分享</a></li>-->
+                        <li><a href="" ng-click="displayGallery()">幻灯片</a></li>
+                        <li class="dropdown">
+                            <a href="" class="dropdown-toggle">更多<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">下载图片</a></li>
+                                <li><a href="">举报非法图片</a></li>
+                                <!--<li><a href="">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="">Separated link</a></li>
+                                <li class="divider"></li>
+                                <li><a href="">One more separated link</a></li>-->
+                            </ul>
+                        </li>
+                    </ul>
 
-    <nav class="navbar navbar-inverse photo-container-booter" role="navigation">
-        <div class="container-fluid">
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav center-block">
-                    <!--<li><a href="">分享</a></li>
-                    <li><a href="">幻灯片</a></li>-->
-                    <li><a href="" class="glyphicon glyphicon-arrow-left"
-                           ng-click="previous()"></a></li>
-                    <li><a href="" ng-click="openTravelAlbum()">
-                        <span class="glyphicon glyphicon-th"></span>
-                    </a></li>
-                    <li><a href="" class="glyphicon glyphicon-arrow-right"
-                           ng-click="next()"></a></li>
-                    <li class="text-explain"><span>第 {{travel.activePhoto.sortCount || 1}} 张（共 {{travel.totalPhoto || 1}} 张）查看次数：{{photo.views || 0}}</span></li>
-                </ul>
+                    <!--<ul class="nav navbar-nav navbar-right">
+                        <li ng-click="cancel()"
+                            class="cancel">
+                            <div class="photos-lightbox-close"></div>
+                        </li>
+                    </ul>-->
+                </div>
+                <!-- /.navbar-collapse -->
+                <div class="cancel" ng-click="cancel()">
+                    <div class="photos-lightbox-close"></div>
+                </div>
             </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
+            <!-- /.container-fluid -->
+        </nav>
 
-    <div class="photo-travel-album" photo-travel-album>
-        <div class="travel-album-background" ng-click="show=false"
-             ng-class="{show: show}"></div>
-        <div class="travel-album-container"
-             ng-class="{show: show}">
-            <div class="header">
-                旅行中的所有照片（{{travel.totalPhoto || 0}}）
-                <a href="" class="close" aria-hidden="true"
-                        data-ng-click="closeTravelAlbum()">×</a>
+        <div class="photo-container-body">
+            <!-- ponm-photo-src-p360="{{apirest}}/photo/{{photo.id}}/oss" -->
+            <!--ponm-photo-color="{{photo.color}}"-->
+            <div ponm-photo-container
+                 ponm-photo-src-l1="{{getPhotoSrc(photo)}}"
+                 ponm-photo-src-p360="{{corsproxyCtx}}/{{photo.oss_key}}@0e_2000w_1000h.jpg"
+                 ponm-photo-width="{{2000}}"
+                 ponm-photo-height="{{1000}}"
+
+                 ponm-photo-is360="{{!!photo.is360}}"
+                    >
+                    <!--<div class="flat-image show">
+                    </div>
+                    <div class="p360-image">
+                        <a class="flat-image-button" href=""><div class="icon-pflat"></div></a>
+                    </div>-->
             </div>
-            <div class="body">
-                <a href="" class="image"
-                   data-ng-repeat="photo in travel.photos"
-                   data-ng-click="openPhoto(photo)"
-                   data-ng-class="{'thumbnail': photo.active}">
-                    <img ng-src="{{staticCtx}}/{{photo.oss_key}}@!album-thumbnail" alt="{{photo.title}}">
-                </a>
+            <!--<div class="buttons">
+                <button class="zoom-in">放大</button>
+                <button class="zoom-out">缩小</button>
+                <input type="range" class="zoom-range">
+                <button class="reset">重置</button>
+            </div>-->
+
+            <image-gallery options="{'galleryData': 'galleryData'}"></image-gallery>
+        </div>
+
+        <nav class="navbar navbar-inverse photo-container-booter" role="navigation">
+            <div class="container-fluid">
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav center-block">
+                        <!--<li><a href="">分享</a></li>
+                        <li><a href="">幻灯片</a></li>-->
+                        <li><a href="" class="glyphicon glyphicon-arrow-left"
+                               ng-click="previous()"></a></li>
+                        <li><a href="" ng-click="openTravelAlbum()">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </a></li>
+                        <li><a href="" class="glyphicon glyphicon-arrow-right"
+                               ng-click="next()"></a></li>
+                        <li class="text-explain"><span>第 {{travel.activePhoto.sortCount || 1}} 张（共 {{travel.totalPhoto || 1}} 张）查看次数：{{photo.views || 0}}</span></li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+                <p class="navbar-text navbar-right visible-xs-inline-block">
+                    <a href="" ng-click="photoInfoOpen=!photoInfoOpen;photoDetailCollapsed=false;">
+                        <span class="glyphicon glyphicon-chevron-up" ng-show="!photoInfoOpen"></span>
+                        <span class="glyphicon glyphicon-chevron-down" ng-show="photoInfoOpen"></span>
+                        详情</a>
+                </p>
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+
+        <div class="photo-travel-album" photo-travel-album>
+            <div class="travel-album-background" ng-click="show=false"
+                 ng-class="{show: show}"></div>
+            <div class="travel-album-container"
+                 ng-class="{show: show}">
+                <div class="header">
+                    旅行中的所有照片（{{travel.totalPhoto || 0}}）
+                    <a href="" class="close" aria-hidden="true"
+                            data-ng-click="closeTravelAlbum()">×</a>
+                </div>
+                <div class="body">
+                    <a href="" class="image"
+                       data-ng-repeat="photo in travel.photos"
+                       data-ng-click="openPhoto(photo)"
+                       data-ng-class="{'thumbnail': photo.active}">
+                        <img ng-src="{{staticCtx}}/{{photo.oss_key}}@!album-thumbnail" alt="{{photo.title}}">
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="photo-recommend-album" photo-recommend-album>
-        <div class="recommend-album-background" ng-click="recommendAlbumShow=false"
-                ng-class="{show:recommendAlbumShow}">
+        <div class="photo-recommend-album" photo-recommend-album>
+            <div class="recommend-album-background" ng-click="recommendAlbumShow=false"
+                    ng-class="{show:recommendAlbumShow}">
 
+            </div>
+            <div class="recommend-album" ng-class="{show:recommendAlbumShow}">
+
+            </div>
         </div>
-        <div class="recommend-album" ng-class="{show:recommendAlbumShow}">
-
-        </div>
-    </div>
     </div>
 
     <perfect-scrollbar class="photo-info scroller"
@@ -176,7 +183,7 @@
                         <a ng-switch-when="true"
                            href="" editable-textarea="photo.description" e-rows="4" e-cols="40"
                            onbeforesave="updatePhoto(photo, 'description', $data)">
-                            <pre>{{ photo.description || '添加描述' }}</pre>
+                            <pre class="description">{{ photo.description || '添加描述' }}</pre>
                         </a>
                         <pre class="description photo-description"  ng-switch-default>{{ photo.description }}</pre>
                     </div>

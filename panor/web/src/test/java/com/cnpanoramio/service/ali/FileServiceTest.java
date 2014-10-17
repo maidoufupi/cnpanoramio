@@ -3,7 +3,6 @@ package com.cnpanoramio.service.ali;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
@@ -48,7 +47,7 @@ public class FileServiceTest {
 	}
 	
 	@Test
-	public void testSaveFile() throws IOException, ImageReadException {
+	public void testSaveFile() throws IOException {
 		fileService.saveFile(FileService.TYPE_IMAGE, 1L, "jpg", ins);
 	}
 }

@@ -24,10 +24,10 @@ class MapEventListener extends window.cnmap.IMapEventListener
     @setZoom map, Number(zoom)
 
   zoomIn: (map) ->
-    @setZoom map, map.getZoon()+1
+    @setZoom map, map.getZoom()+1
 
   zoomOut: (map) ->
-    @setZoom map, map.getZoon()-1
+    @setZoom map, map.getZoom()-1
 
   setBounds: (map, sw, ne) ->
     map.fitBounds new google.maps.LatLngBounds new google.maps.LatLng(sw.lat, sw.lng), new google.maps.LatLng(ne.lat, ne.lng)
@@ -37,10 +37,19 @@ class MapEventListener extends window.cnmap.IMapEventListener
     map.getBounds().contains(new google.maps.LatLng(lat, lng))
 
   pixelToPoint: (map, pixel) ->
-    map.getProjection().fromPointToLatLng new google.maps.Point(pixel.x, pixel.y)
+    scale = Math.pow 2, map.getZoom()
+    bounds = map.getBounds()
+    sw = bounds.getSouthWest()
+    ne = bounds.getNorthEast()
+    nw = new google.maps.LatLng(ne.lat(), sw.lng())
+    proj = map.getProjection();
+    nwPoint = proj.fromLatLngToPoint(nw)
+    point = proj.fromPointToLatLng new google.maps.Point((nwPoint.x*scale + pixel.x)/scale, (nwPoint.y*scale + pixel.y)/scale)
+    {lat: point.lat()
+      ,lng: point.lng()}
 
   pointToPixel: (map, point) ->
-    map.getProjection().fromLatLngToPoint new google.maps.LatLng(point.lat, point.lng)
+#    map.getProjection().fromLatLngToPoint new google.maps.LatLng(point.lat, point.lng)
 
   addMarker: (map, lat, lng) ->
     new google.maps.Marker({

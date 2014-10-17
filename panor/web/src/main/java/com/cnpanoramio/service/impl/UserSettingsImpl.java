@@ -134,6 +134,7 @@ public class UserSettingsImpl implements UserSettingsManager {
 		settings.setName(userSettings.getName());
 		settings.setPrivateMessages(userSettings.getPrivateMessages());
 		settings.setUrlName(userSettings.getUrlName());
+		settings.setAutoUpload(userSettings.isAutoUpload());
 		
 		settings.setUser(user);
 
@@ -434,6 +435,28 @@ public class UserSettingsImpl implements UserSettingsManager {
             log.warn("PasswordEncoder not set, skipping password encryption...");
             return false;
         }
+	}
+
+	@Override
+	public void addStorageSpace(User user, Photo photo) {
+		
+		UserSettings userSetting = userSettingsDao.get(user.getId());
+		Double space = 0D;
+		if(null != userSetting.getStorageSpace()) {
+			space = userSetting.getStorageSpace();
+		}
+		userSetting.setStorageSpace(space+photo.getFileSize());
+		
+	}
+
+	@Override
+	public void removeStorageSpace(User user, Photo photo) {
+		UserSettings userSetting = userSettingsDao.get(user.getId());
+		Double space = 0D;
+		if(null != userSetting.getStorageSpace()) {
+			space = userSetting.getStorageSpace();
+		}
+		userSetting.setStorageSpace(space-photo.getFileSize());
 	}
 		
 }

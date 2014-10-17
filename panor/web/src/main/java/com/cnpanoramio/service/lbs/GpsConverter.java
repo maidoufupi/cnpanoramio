@@ -261,6 +261,11 @@ public class GpsConverter {
 
 		point = me.wgtochina_lb(1, (int) (x1), (int) (y1), (int) (gpsHeight),
 				(int) (gpsWeek), (int) (gpsWeekTime));
+		
+		// non china 直接返回原值
+		if(null == point) {
+			return new LatLng(y, x);
+		}
 		tempx = point.getX();
 		tempy = point.getY();
 		tempx = tempx / 3686400.0;
@@ -328,6 +333,9 @@ public class GpsConverter {
 		System.out.println("西山区 x:" + p.lng + " y:" + p.lat);
 		p = c.getEncryPoint(103.146517127597, 24.9222445338786);
 		System.out.println("宜良县 x:" + p.lng + " y:" + p.lat);
+		
+		p = c.getEncryPoint(-112, 38);
+		System.out.println("美国 x:" + p.lng + " y:" + p.lat);
 	}
 
 	public class Point {

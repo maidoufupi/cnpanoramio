@@ -1,0 +1,18 @@
+<ul class="navbar-nav nav nav-tray">
+    <li ng-repeat="nav in navbar | filter:normal"
+        ng-class="{'active': nav.active}">
+        <a href="{{nav.link}}">{{nav.text}}</a>
+    </li>
+    <li ng-repeat="nav in navbar | filter:once"
+        ng-class="{'active': nav.active}">
+        <a href="{{nav.link}}">{{nav.text}}</a>
+    </li>
+    <li class="dropdown">
+        <a href="" class="dropdown-toggle">更多 <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li ng-repeat="nav in navbar | filter:more">
+                <a href="{{nav.link}}">{{nav.text}}</a>
+            </li>
+        </ul>
+    </li>
+</ul>

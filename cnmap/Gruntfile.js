@@ -326,14 +326,14 @@ module.exports = function (grunt) {
            '<%= yeoman.app %>/styles/main.min.css': [
              '<%= yeoman.app %>/styles/main.css'
            ]
-           ,'<%= yeoman.app %>/styles/vendor.min.css': [
-                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/css/xeditable.css',
-                 '<%= yeoman.app %>/bower_components/blueimp-file-upload/css/jquery.fileupload.css',
-                 '<%= yeoman.app %>/bower_components/Jcrop/css/jquery.Jcrop.css',
-                 '<%= yeoman.app %>/bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css'
-                 ,'<%= yeoman.app %>/bower_components/perfect-scrollbar/src/perfect-scrollbar.css'
-                 ,'<%= yeoman.app %>/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
-             ]
+//           ,'<%= yeoman.app %>/styles/vendor.min.css': [
+//                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/css/xeditable.css',
+//                 '<%= yeoman.app %>/bower_components/blueimp-file-upload/css/jquery.fileupload.css',
+//                 '<%= yeoman.app %>/bower_components/Jcrop/css/jquery.Jcrop.css',
+//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css'
+//                 ,'<%= yeoman.app %>/bower_components/perfect-scrollbar/src/perfect-scrollbar.css'
+//                 ,'<%= yeoman.app %>/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
+//             ]
          }
        }
     },
@@ -387,7 +387,12 @@ module.exports = function (grunt) {
 //             ,
 //           '<%= yeoman.app %>/scripts/blueimp-file-upload.min.js': [
 //               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image.min.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-meta.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-exif.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-exif-map.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-ios.js',
+//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-orientation.js',
 //               '<%= yeoman.app %>/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js',
 //               '<%= yeoman.app %>/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
 //               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js',
@@ -443,6 +448,7 @@ module.exports = function (grunt) {
 //                 '<%= yeoman.app %>/bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js',
 //                 '<%= yeoman.app %>/bower_components/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js',
 //                 '<%= yeoman.app %>/bower_components/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js',
+//                 '<%= yeoman.app %>/scripts/panor/js/color-thief.js',
 //                 // image gallery
 //                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-helper.js',
 //                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery.js',

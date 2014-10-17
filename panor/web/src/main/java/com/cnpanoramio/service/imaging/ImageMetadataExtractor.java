@@ -4,8 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.imaging.ImageParser;
-
 import com.adobe.xmp.XMPException;
 import com.adobe.xmp.XMPIterator;
 import com.adobe.xmp.XMPMeta;
@@ -68,17 +66,16 @@ public class ImageMetadataExtractor {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		if(detail.getOrientation() == 5 ||
-				detail.getOrientation() == 6 ||
-				detail.getOrientation() == 7 ||
-				detail.getOrientation() == 8) {
-			// 根据图片附加信息进行大小旋转
-			Integer width = detail.getPixelXDimension();
-			detail.setPixelXDimension(detail.getPixelYDimension());
-			detail.setPixelYDimension(width);
-		}
+		// 不在此处转换，detail只存储原始信息，在输出photo信息时进行转换
+//		if(detail.getOrientation() == 5 ||
+//				detail.getOrientation() == 6 ||
+//				detail.getOrientation() == 7 ||
+//				detail.getOrientation() == 8) {
+//			// 根据图片附加信息进行大小旋转
+//			Integer width = detail.getPixelXDimension();
+//			detail.setPixelXDimension(detail.getPixelYDimension());
+//			detail.setPixelYDimension(width);
+//		}
 
 		return this.photo;
 	}

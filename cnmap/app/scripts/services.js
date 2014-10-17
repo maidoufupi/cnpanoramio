@@ -5,8 +5,8 @@
 
 angular.module('ponmApp.services', [
     'ngResource'])
-    .factory('AuthService', ['$window', '$resource', '$cookies', '$log', '$q', 'ponmCtxConfig',
-    function ($window, $resource, $cookies, $log, $q, ponmCtxConfig) {
+    .factory('AuthService', ['$window', '$resource', '$cookies', '$log', '$q', 'ponmCtxConfig', 'SettingsService',
+    function ($window, $resource, $cookies, $log, $q, ponmCtxConfig, SettingsService) {
 
         var loginService = $resource(ponmCtxConfig.apirest + '/auth/login/:type'),
             loginPost = $resource(ponmCtxConfig.ctx+'/login/j_spring_security_check');
@@ -67,6 +67,12 @@ angular.module('ponmApp.services', [
 
                         $log.debug(res.user);
                         deferred.resolve();
+                        SettingsService.get({userId: ponmCtxConfig.userId}, function(res) {
+                            if(res.status == "OK") {
+                                ponmCtxConfig.settings.autoUpload = res.settings.auto_upload;
+                            }
+
+                        });
                     }else if(res.status == "NO_AUTHORIZE") {
                         deferred.reject(1);
                     }
@@ -235,6 +241,10 @@ angular.module('ponmApp.services', [
                 changeAccount: {
                     method: 'POST',
                     params: {'type': 'account'}
+                }
+                ,changeUpload: {
+                    method: 'POST',
+                    params: {'type': 'upload'}
                 }
             });
     }])
@@ -509,7 +519,7 @@ angular.module('ponmApp.services', [
             }
             ,dev: $window.dev
             ,settings: {
-                autoUoload: true
+                autoUpload: true
             }
         }
     }])

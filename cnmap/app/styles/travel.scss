@@ -8,7 +8,7 @@
 
   .travel-header {
     width: 100%;
-    background-color: #00bcd4;
+    background-color: $theme-header-bg-color;
     padding: 50px 10px 10px;
     color: white;
     font-family: $headings-font-family;
@@ -108,18 +108,18 @@
       .panel-heading.navbar-forth {
         border-radius: 0;
         padding: 0 5px;
-        border-bottom: 1px solid #00bcd4;
+        border-bottom: 1px solid $theme-header-bd-color;
         .spot-description {
           display: none;
         }
         .travel-spot-header {
           .spot-date {
-            border-color: #00bcd4;
+            border-color: $theme-header-bd-color;
             a {
-              color: #00bcd4;
+              color: $theme-header-bd-color;
             }
             .spot-date-flag {
-              color: #00bcd4;
+              color: $theme-header-bd-color;
             }
           }
         }

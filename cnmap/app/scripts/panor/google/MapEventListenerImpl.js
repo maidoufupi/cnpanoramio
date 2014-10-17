@@ -43,11 +43,11 @@
     };
 
     MapEventListener.prototype.zoomIn = function(map) {
-      return this.setZoom(map, map.getZoon() + 1);
+      return this.setZoom(map, map.getZoom() + 1);
     };
 
     MapEventListener.prototype.zoomOut = function(map) {
-      return this.setZoom(map, map.getZoon() - 1);
+      return this.setZoom(map, map.getZoom() - 1);
     };
 
     MapEventListener.prototype.setBounds = function(map, sw, ne) {
@@ -60,12 +60,22 @@
     };
 
     MapEventListener.prototype.pixelToPoint = function(map, pixel) {
-      return map.getProjection().fromPointToLatLng(new google.maps.Point(pixel.x, pixel.y));
+      var bounds, ne, nw, nwPoint, point, proj, scale, sw;
+      scale = Math.pow(2, map.getZoom());
+      bounds = map.getBounds();
+      sw = bounds.getSouthWest();
+      ne = bounds.getNorthEast();
+      nw = new google.maps.LatLng(ne.lat(), sw.lng());
+      proj = map.getProjection();
+      nwPoint = proj.fromLatLngToPoint(nw);
+      point = proj.fromPointToLatLng(new google.maps.Point((nwPoint.x * scale + pixel.x) / scale, (nwPoint.y * scale + pixel.y) / scale));
+      return {
+        lat: point.lat(),
+        lng: point.lng()
+      };
     };
 
-    MapEventListener.prototype.pointToPixel = function(map, point) {
-      return map.getProjection().fromLatLngToPoint(new google.maps.LatLng(point.lat, point.lng));
-    };
+    MapEventListener.prototype.pointToPixel = function(map, point) {};
 
     MapEventListener.prototype.addMarker = function(map, lat, lng) {
       return new google.maps.Marker({

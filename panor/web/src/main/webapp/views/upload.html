@@ -14,7 +14,7 @@
              waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-1'}">
             <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
             <div class="row fileupload-buttonbar">
-                <div class="col col-sm-6">
+                <div class="col col-xs-6 col-sm-6">
                     <!-- The fileinput-button span is used to style the file input field as button -->
                     <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
                         <i class="glyphicon glyphicon-plus"></i>
@@ -35,7 +35,7 @@
                     <!-- The global file processing state -->
                     <span class="fileupload-process"></span>
                 </div>
-                <div class="col col-sm-3">
+                <div class="col col-xs-6 col-sm-3">
                     <item-picker ng-model="travel"
                                  load-data="loadTravelData"
                                  new-data="newTravelData"
@@ -43,7 +43,7 @@
                                  options="{'duplicate': false}"
                                  place-holder="添加到旅行"></item-picker>
                 </div>
-                <div class="col col-sm-3">
+                <div class="col col-xs-6 col-sm-3">
                     <span>
                         共 {{queue.length}} 张图片
                     </span>
@@ -81,10 +81,15 @@
                 <td ng-switch on="!!file.thumbnailUrl" class="photo-thumbnail">
                     <div class="preview" ng-switch-when="true">
                         <a ng-href="{{file.url}}" title="{{file.name}}" download="{{file.name}}" gallery>
-                            <img ng-src="{{file.thumbnailUrl}}" alt="">
+                            <img ng-src="{{file.thumbnailUrl}}" alt="" >
                         </a>
                     </div>
-                    <div class="preview" ng-switch-default file-upload-preview="file"></div>
+                    <div class="preview" ng-switch-default file-upload-color-preview="file"
+                         title="拖动放在地图上"
+                         drag="true"
+                         jqyoui-options="{revert: 'invalid', helper: 'clone', scroll: false}"
+                         ng-model="file.photo.uuid"
+                         jqyoui-draggable="{index: {{$index}}, placeholder: 'keep', onStart: 'onDragStart($e, file)' }"></div>
                 </td>
                 <td>
                     <div >
@@ -95,13 +100,14 @@
                                  ng-model="title"
                                  data-place-holder="{{file.name}}"></div>
                         </div>-->
-                        <div ng-switch="editableView">
+                        <div ng-switch="editableView"
+                                ng-class="{'action': !file.title, 'ponm-show': !!file.title}">
                             <a ng-switch-when="true"
                                href=""
                                editable-text="file.title"
                                onbeforesave="saveProperties('title', $data)"
                                buttons="no">{{ file.title || '添加标题' }}</a>
-                            <h4 ng-switch-default>{{spot.title}}</h4>
+                            <h4 ng-switch-default>{{file.title}}</h4>
                         </div>
                         <!--<div>
                             <pre class="description"
@@ -111,7 +117,8 @@
                                  data-place-holder="添加描述"
                                  multiple-line="4">{{description}}</pre>
                         </div>-->
-                        <div ng-switch="editableView">
+                        <div ng-switch="editableView"
+                             ng-class="{'action': !file.description, 'ponm-show': !!file.description}">
                             <div class="editable">
                                 <a ng-switch-when="true"
                                    href=""
@@ -144,7 +151,7 @@
                     <strong ng-show="file.error" class="error text-danger">{{file.error}}</strong>
                 </td>
                 <td class="geo-info">
-                    <div>
+                    <div ng-class="{'have-address': !!file.latPritty}">
                         <div class="palce-marker"
                              ng-class="{action: !file.latPritty, 'ponm-show': !!file.latPritty}"
                              drag="true"
@@ -153,16 +160,7 @@
                              jqyoui-draggable="{index: {{$index}}, animate: true, placeholder: 'keep', onStart: 'onDragStart($e, file)' }">
                             <span class="glyphicon glyphicon-map-marker"></span>
                         </div>
-                        <span class="action" ng-if="!file.latPritty">拖动地理图标放在地图相应位置上</span>
-                        <!--<div ng-if="!file.address"
-                             class="location-display-place">
-                            <a href=""
-                               ng-click="changeLocation([file])">
-                                <span class="lat">{{file.latPritty}} {{file.latPritty && file.latRef}}</span>
-                                <span class="comma">{{file.latPritty && ", "}} </span>
-                                <span class="lng">{{file.lngPritty}} {{file.lngPritty && file.lngRef}}</span>
-                            </a>
-                        </div>-->
+                        <span class="action" ng-if="!file.latPritty">拖动图片放在地图相应地点上</span>
                         <div class="location-display-address"
                              ng-if="file.latPritty">
                             <a href=""
@@ -204,8 +202,8 @@
                     <span class="glyphicon glyphicon-cloud"
                           ng-if="file.photoId"></span>
                     <span class="glyphicon glyphicon-warning-sign"
-                          ng-if="!file.photoId"></span>
-                    <span class="glyphicon glyphicon-send"
+                          ng-if="file.error"></span>
+                    <span class="glyphicon glyphicon-share-alt"
                           ng-show="file.messageId"></span>
                     <span class="glyphicon glyphicon-pushpin"
                           ng-show="file.active"></span>
@@ -215,7 +213,7 @@
 
         <button ng-if="queue.length && !processing() && !loadingFiles"
            ng-click="publishMessages()"
-           type="button" class="btn btn-primary pull-right">发布消息</button>
+           type="button" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-share-alt"></span>发表为动态</button>
     </div>
     <br/>
     <br/>

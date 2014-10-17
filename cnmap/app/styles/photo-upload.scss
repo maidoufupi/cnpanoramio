@@ -76,6 +76,19 @@
           max-width: 100%;
         }
       }
+      .preview.drag-marker {
+        position: relative;
+        .marker {
+          position: absolute;
+          width: 20px;
+          height: 30px;
+          background-image: url("../images/marker.png");
+          background-repeat: no-repeat;
+        }
+        img {
+          opacity: 0;
+        }
+      }
 
       .action {
         opacity: 0.3;
@@ -121,6 +134,11 @@
       .location-display-address {
         display: inline;
       }
+      .have-address {
+        .glyphicon {
+          color: $brand-success;
+        }
+      }
     }
 
     .status {
@@ -129,7 +147,7 @@
       .action {
         display: inline-block;
       }
-      .glyphicon-cloud {
+      .glyphicon-cloud, .glyphicon-share-alt {
         color: $brand-success;
       }
       .glyphicon-warning-sign {
