@@ -64,20 +64,20 @@ public class MessageRestService extends AbstractRestService {
 		User me = UserUtil.getCurrentUser(userManager);
 		
 		// TODO debug
-		ObjectWriter ow = new ObjectMapper().writer()
-				.withDefaultPrettyPrinter();
-		try {
-			log.debug("create message: " + ow.writeValueAsString(message));
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+//		ObjectWriter ow = new ObjectMapper().writer()
+//				.withDefaultPrettyPrinter();
+//		try {
+//			log.debug("create message: " + ow.writeValueAsString(message));
+//		} catch (JsonGenerationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (JsonMappingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}		
 		
 		response.setMessage(messageManager.addOrUpdate(me, message.getType(), message));
 		response.setStatus(MessageResponse.Status.OK.name());

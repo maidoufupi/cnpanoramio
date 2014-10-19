@@ -66,9 +66,9 @@
 
 	<script>
 	window.staticCtx = "http://test.photoshows.cn";
-	window.corsproxyCtx = "http://www.corsproxy.com/test.photoshows.cn";
+	window.corsproxyCtx = "http://www.photoshows.cn:9292/test.photoshows.cn";
 	//window.staticCtx = "http://static.photoshows.cn";
-	//window.corsproxyCtx = "http://www.corsproxy.com/static.photoshows.cn";
+	//window.corsproxyCtx = "http://www.photoshows.cn:9292/static.photoshows.cn";
 	
 	    var ctx = "${pageContext.request.contextPath}"; // 设置全局变量：应用的根路径
 	    /* window.login = "${not empty pageContext.request.remoteUser}"; // 设置全局变量：用户是否登录 */

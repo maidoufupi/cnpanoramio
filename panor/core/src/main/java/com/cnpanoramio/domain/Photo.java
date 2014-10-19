@@ -72,7 +72,7 @@ public class Photo extends BaseEntity implements Comparable<Photo> {
 	@Column
 	private String title;
 	
-	@Column
+	@Column(length=1000)
 	private String description;
 
 	@Column(name = "mark_best", nullable = true)

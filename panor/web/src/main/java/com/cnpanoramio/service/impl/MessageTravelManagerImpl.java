@@ -45,7 +45,7 @@ public class MessageTravelManagerImpl extends AbstractMessageManagerImpl impleme
 	private LikeManager likeManager;
 	
 	@Override
-	public Message addOrUpdate(User user, Long id) {
+	public synchronized Message addOrUpdate(User user, Long id) {
 		
 		user = this.getUser(user.getId());
 		

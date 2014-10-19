@@ -223,11 +223,16 @@ angular.module('ponmApp.settings', [
                 if(!settings) {
                     return;
                 }
+                if(!settings.storage_space) {
+                    settings.storage_space = 0;
+                }
+
                 var storageRate = ( settings.storage_space / (10*1024*1024*1024) ) * 100;
-                $filter('number')(storageRate, 1);
-                if(storageRate < 0.1) {
+                storageRate = $filter('number')(storageRate, 1);
+                if(0 !== storageRate && storageRate < 0.1) {
                     storageRate = 0.1;
                 }
+
                 $scope.storageRate = storageRate;
                 $scope.capacity = {
                     type: "success",

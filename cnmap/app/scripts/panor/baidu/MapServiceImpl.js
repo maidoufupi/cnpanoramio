@@ -42,7 +42,7 @@
           $.each(result.surroundingPois, function(index, poi) {
             var address;
             if (poi.title) {
-              address = poi.address + " / " + poi.title;
+              address = poi.address + " " + poi.title;
             } else {
               address = poi.address;
             }

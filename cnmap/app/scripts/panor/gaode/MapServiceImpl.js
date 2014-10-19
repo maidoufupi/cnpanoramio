@@ -120,7 +120,7 @@
                             $.each(regeocode.pois, function(key, poi) {
                                 var address = baseAddr + poi.address;
                                 if(poi.name) {
-                                    address = address + " / " + poi.name;
+                                    address = address + " " + poi.name;
                                 }
                                 addresses[address] = {
                                     poiweight: poi.poiweight,

@@ -1581,8 +1581,8 @@ angular.module('ponmApp.maps', [
 
                 file.mapVendor.lat = lat;
                 file.mapVendor.lng = lng;
-                file.mapVendor.latPritty = cnmap.GPS.convert(lat);
-                file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
+//                file.mapVendor.latPritty = cnmap.GPS.convert(lat);
+//                file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
 
                 if (address) {
                     file.mapVendor.address = address;

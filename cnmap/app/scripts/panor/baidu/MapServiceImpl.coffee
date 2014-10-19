@@ -24,7 +24,7 @@ class MapService extends window.cnmap.IMapService
       if result
         $.each result.surroundingPois, (index, poi) ->
             if poi.title
-              address = poi.address + " / " + poi.title
+              address = poi.address + " " + poi.title
             else
               address = poi.address
 

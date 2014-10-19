@@ -466,9 +466,9 @@ angular.module('ponmApp.photos', [
             });
         }])
     .controller('PhotosAlbumCtrl',
-    [        '$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', 'dialogService',
+    [        '$scope', 'TravelService', 'UserService', 'dialogService',
                  'ponmCtxConfig', '$log', '$state', '$stateParams', 'TravelManager', 'jsUtils',
-        function ($window, $location, $rootScope, $scope, TravelService, UserService, dialogService,
+        function ( $scope, TravelService, UserService, dialogService,
                   ponmCtxConfig, $log, $state, $stateParams, TravelManager, jsUtils) {
 
             $scope.travelId = $stateParams.travelId;
@@ -487,11 +487,11 @@ angular.module('ponmApp.photos', [
                         travelManager = new TravelManager($scope.travel);
                         travelManager.calculate();
                         // 获取图片的用户信息
-                        UserService.getOpenInfo({'userId': $scope.travel.user_id}, function (data) {
-                            if (data.status == "OK") {
-                                $scope.userOpenInfo = data.open_info;
-                            }
-                        });
+//                        UserService.getOpenInfo({'userId': $scope.travel.user.id}, function (data) {
+//                            if (data.status == "OK") {
+//                                $scope.userOpenInfo = data.open_info;
+//                            }
+//                        });
                     }
                 });
             }

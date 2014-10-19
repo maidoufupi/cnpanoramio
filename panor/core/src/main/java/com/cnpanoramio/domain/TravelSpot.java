@@ -58,7 +58,7 @@ public class TravelSpot extends BaseEntity {
 	@Field
 	private String title;
 	
-	@Column(name="description")
+	@Column(name="description", length=1000)
 	@Field
 	private String description;
 	

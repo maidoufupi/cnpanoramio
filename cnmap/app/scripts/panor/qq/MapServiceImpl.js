@@ -47,10 +47,10 @@
             geocoder.getAddress(point);
         };
 
-        this.getAddrPois = function(lat, lng, callback) {
+        this.getAddrPois = function(lat, lng) {
 
             var deferred = jQuery.Deferred();
-
+            var geocoder = new qq.maps.Geocoder();
             var point = new qq.maps.LatLng(lat, lng);
             geocoder.setComplete(function(res) {
                 var addresses = {};
@@ -61,7 +61,7 @@
                     $.each(regeocode.nearPois, function(key, poi) {
                         var address = "";
                         if(poi.name) {
-                            address = poi.address + " / " + poi.name;
+                            address = poi.address + " " + poi.name;
                         }else {
                             address = poi.address;
                         }
@@ -70,7 +70,6 @@
                             location: poi.latLng
                         };
                     });
-//                    callback.apply(undefined, [addresses, regeocode.address]);
                 }
 
                 deferred.resolve(addresses, regeocode.address);

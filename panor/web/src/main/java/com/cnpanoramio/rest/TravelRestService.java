@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cnpanoramio.ParameterException;
-import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.TravelResponse;
 import com.cnpanoramio.json.TravelResponse.Travel;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
@@ -89,22 +88,7 @@ public class TravelRestService extends AbstractRestService {
 		
 		return response;
 	}
-	
-//	@RequestMapping(value = "/{travelId}", method = RequestMethod.POST)
-//	@ResponseBody
-//	public TravelResponse changeTravel(@PathVariable String travelId, 
-//			@RequestParam(value="name", required=false) String name,
-//			@RequestParam(value="description", required=false) String description) {
-//		TravelResponse response = responseFactory();
-//		if(null != name) {
-//			response.setTravel(travelService.changeTravelName(Long.parseLong(travelId), name));
-//		}
-//		if(null != description) {
-//			response.setTravel(travelService.changeTravelDesc(Long.parseLong(travelId), description));
-//		}
-//		return response;
-//	}
-	
+		
 	@RequestMapping(value = "/{travelId}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public TravelResponse delete(@PathVariable String travelId) {
@@ -152,26 +136,6 @@ public class TravelRestService extends AbstractRestService {
 		
 		return response;
 	}
-//	@RequestMapping(value = "/{travelId}/spot/{spotId}", method = RequestMethod.POST)
-//	@ResponseBody
-//	public TravelResponse changeTravelSpot(@PathVariable String travelId, 
-//			@PathVariable String spotId, 
-//			@RequestParam(value="address", required=false) String address,
-//			@RequestParam(value="title", required=false) String title,
-//			@RequestParam(value="description", required=false) String description,
-//			@RequestParam(value="time_start", required=false) @DateTimeFormat(pattern = "yyyy/MM/dd") Date timeStart) {
-//		
-//		log.debug("spot attrs update " + address + title + description + timeStart);
-//		
-//		TravelResponse response = responseFactory();
-//		TravelSpot travelSpot = new TravelSpot();
-//		travelSpot.setAddress(address);
-//		travelSpot.setTitle(title);
-//		travelSpot.setDescription(description);
-//		travelSpot.setTimeStart(timeStart);
-//		response.setSpot(travelService.changeSpot(Long.parseLong(spotId), travelSpot));;
-//		return response;
-//	}
 	
 	@RequestMapping(value = "/{travelId}/spot/{spotId}", method = RequestMethod.DELETE)
 	@ResponseBody

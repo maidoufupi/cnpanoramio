@@ -1363,58 +1363,6 @@ span.clickable:hover {
   .selected_photo_editor .thumbnail {
     float: left; }
 
-@media (max-width: 767px) {
-  .modal-dialog {
-    margin: 5px;
-    padding: 0; }
-
-  .modal-header {
-    padding: 5px; }
-
-  .modal-body {
-    padding: 5px;
-    position: absolute;
-    top: 33px; }
-
-  .photo_list_and_map .photo_list_panel {
-    position: static;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    margin: 0; }
-
-  #map-photo-list {
-    bottom: 0;
-    margin: 0; }
-
-  .photo_list_and_map .map-panel {
-    position: static;
-    overflow: hidden;
-    float: left;
-    vertical-align: top;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0; }
-
-  .selected_photo_editor {
-    position: static;
-    display: inline-block; }
-
-  .selected_photo_editor .thumbnail {
-    float: none;
-    margin: 0; }
-
-  .map-panel #upload-map, .map-panel .map-photo-map {
-    position: relative;
-    width: 100%;
-    margin: 0;
-    height: 100%;
-    padding: 0;
-    top: 0; }
-
-  .list-group-item {
-    padding: 5px; } }
 /** loading */
 .loader {
   margin: 4em auto;
@@ -1536,12 +1484,12 @@ span.clickable:hover {
 
 .navbar-edit {
   background-color: #4387fd; }
-  .navbar-edit .nav.navbar-nav {
+  .navbar-edit .nav.navbar-nav > li a {
+    color: white; }
+  .navbar-edit .nav.navbar-nav > li:hover {
+    background-color: #5c97fd; }
+  .navbar-edit .navbar-collapse {
     background-color: #4387fd; }
-    .navbar-edit .nav.navbar-nav > li a {
-      color: white; }
-    .navbar-edit .nav.navbar-nav > li:hover {
-      background-color: #5c97fd; }
   .navbar-edit .navbar-left .dropdown .dropdown-toggle {
     padding: 7px;
     line-height: 36px; }
@@ -1581,6 +1529,10 @@ span.clickable:hover {
   -ms-transition: all linear 0.3s;
   -o-transition: all linear 0.3s;
   transition: all linear 0.3s; }
+  .navbar.navbar-edit .navbar-toggle {
+    border-color: white; }
+    .navbar.navbar-edit .navbar-toggle .icon-bar {
+      background-color: white; }
 
 .navbar.navbar-edit.ponm-show {
   height: 52px;
@@ -2781,6 +2733,9 @@ item-picker .dropdown.dropdown-picker, *[item-picker] .dropdown.dropdown-picker 
 .travel-album:hover .front-cover .footer:hover {
   background-color: rgba(0, 0, 0, 0.8); }
 
+/**
+* phone
+*/
 @media (max-width: 480px) {
   .photo-upload .header .fileupload-buttonbar {
     padding: 0; }
@@ -2813,7 +2768,84 @@ item-picker .dropdown.dropdown-picker, *[item-picker] .dropdown.dropdown-picker 
     bottom: initial; }
   .photo-modal-container.infoOpen .photo-info {
     top: 50px;
-    bottom: 0; } }
+    bottom: 0; }
+
+  .map-photo-modal .modal-dialog {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 5px; }
+    .map-photo-modal .modal-dialog .modal-body {
+      padding: 0; }
+
+  .avatar-upload-modal .modal-dialog {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 5px; }
+
+  .photo-wall.photo-wall-fixed-size.photo-all .photo {
+    width: 50%;
+    height: auto;
+    display: inline-block;
+    float: initial;
+    border: 1px solid #ececec;
+    margin: 0; } }
+@media (max-width: 768px) {
+  .modal-dialog {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 5px; }
+
+  .photo_list_and_map .photo_list_panel {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0; }
+
+  #map-photo-list {
+    bottom: 0;
+    margin: 0; }
+
+  .photo_list_and_map .map-panel {
+    position: static;
+    overflow: hidden;
+    float: left;
+    vertical-align: top;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0; }
+
+  .selected_photo_editor {
+    position: static;
+    display: inline-block; }
+
+  .selected_photo_editor .thumbnail {
+    float: none;
+    margin: 0; }
+
+  .map-panel #upload-map, .map-panel .map-photo-map {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    padding: 0;
+    top: 0; }
+
+  .list-group-item {
+    padding: 5px; } }
 body {
   background-color: #ececec;
   overflow-x: hidden;

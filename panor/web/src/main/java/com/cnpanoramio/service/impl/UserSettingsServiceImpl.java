@@ -31,7 +31,7 @@ public class UserSettingsServiceImpl implements UserSettingsService {
 	
 	@Autowired
 	private UserManager userManager;
-
+	
 	@Autowired
 	private UserSettingsManager userSettingsManager;
 	

@@ -157,7 +157,12 @@ angular.module('fileuploadApp', [
                 file.photoId = photo.id;
                 file.is360 = photo.is360;
                 file.vendor = ponmCtxConfig.getCoordSS(photo.vendor);
-                if(photo.point && photo.point.lat != 0 && photo.point.lng != 0) {
+
+                if(!file.lat &&
+                    photo.point &&
+                    photo.point.lat != 0 &&
+                    photo.point.lng != 0) {
+
                     file.lat = photo.point.lat;
                     file.lng = photo.point.lng;
 
@@ -167,13 +172,9 @@ angular.module('fileuploadApp', [
 
                 angular.extend(file.photo, photo);
 
-                $scope.$emit('photoAdd', file.photo);
-
-//                angular.forEach($scope.queue, function(qFile, key) {
-//                    if(qFile === file) {
-//                        $scope.photos[key] = file.photo;
-//                    }
-//                });
+                if(!file.address) {
+                    $scope.$emit('photoAdd', file.photo);
+                }
             }
 
             if(!fileUpload.defaults.autoUpload) {
@@ -457,9 +458,10 @@ angular.module('fileuploadApp', [
             });
 
             $scope.$on("photoReverseAddress", function(e, photo) {
-                $log.debug("photoReverseAddress : " + photo.id);
+
                 var file = $scope.file;
                 if(file.photo.uuid == photo.uuid ) {
+                    $log.debug("photoReverseAddress : " + photo.id);
                     safeApply($scope, function() {
                         file.mapVendor = photo.mapVendor;
                         file.address = photo.mapVendor.address;

@@ -25,6 +25,7 @@ import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.PhotoService;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
+import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.PhotoUtil;
 import com.cnpanoramio.utils.UserUtil;
 
@@ -37,6 +38,9 @@ public class TravelServiceImpl implements TravelService {
 
 	@Autowired
 	private TravelManager travelManager;
+	
+	@Autowired
+	private UserSettingsManager userSettingsManager;
 
 	@Autowired
 	private TravelSpotDao travelSpotDao;
@@ -185,7 +189,7 @@ public class TravelServiceImpl implements TravelService {
 			
 			// 更新拍摄日期
 			if(null != photo.getDateTime()) {
-				p.getDetails().setDateTime(photo.getDateTime());
+				p.getDetails().setDateTimeOriginal(photo.getDateTime());
 			}
 		}
 		return convertTravelSpot(travelSpot);
@@ -370,6 +374,7 @@ public class TravelServiceImpl implements TravelService {
 		travel.setId(0L);
 		travel.getSpots().add(spot);
 		travel.setPhotoSize(photos.size());
+		travel.setUser(userSettingsManager.getOpenInfo(me));
 		return travel;
 	}
 

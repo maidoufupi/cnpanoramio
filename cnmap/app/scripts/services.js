@@ -519,7 +519,7 @@ angular.module('ponmApp.services', [
             }
             ,dev: $window.dev
             ,settings: {
-                autoUpload: true
+                autoUpload: false
             }
         }
     }])
