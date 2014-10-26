@@ -19,11 +19,10 @@
   }
 
   .navbar {
-//    height: 51px;
     border: 0;
     margin-bottom: 0;
     @include border-radius(0);
-    @include box-shadow(0 0 5px rgba(0, 0, 0, 0.57));
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     .nav {
       > li {
         padding: 0 15px;
@@ -34,6 +33,16 @@
       }
     }
   }
+}
+
+.navbar-second-top.navbar-second {
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  .navbar {
+    border-bottom: 1px solid $theme-header-bd-color;
+  }
+
 }
 
 .navbar-third {
@@ -131,24 +140,25 @@
   right: 0;
 }
 
+
+
 // second navbar fix to top
-.navbar-second-top {
-  .navbar-second {
-    position: fixed;
-    z-index: 1031;
-    top: 0;
-    border-bottom: 1px solid $theme-header-bd-color;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  }
-  // photos
-  .container-photos {
-    margin-top: 61px;
-    // waypoint timeline
-    .timeline {
-      top: 60px;
-    }
-  }
-}
+//.navbar-second-top {
+//  .navbar-second {
+//    position: fixed;
+//    z-index: 1031;
+//    top: 0;
+//    border-bottom: 1px solid $theme-header-bd-color;
+//  }
+//  // photos
+//  .container-photos {
+//    margin-top: 61px;
+//    // waypoint timeline
+//    .timeline {
+//      top: 60px;
+//    }
+//  }
+//}
 
 .ponm-navbar-fixed-top {
   position: fixed;

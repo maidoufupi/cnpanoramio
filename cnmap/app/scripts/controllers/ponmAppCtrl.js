@@ -16,8 +16,9 @@ angular.module('ponmApp.Index',
     'ui.map',
     'ui.bootstrap',
     'ponm.Matchmedia'])
-    .config([   '$stateProvider', '$urlRouterProvider',
-        function ($stateProvider, $urlRouterProvider) {
+    .config([   '$stateProvider', '$urlRouterProvider', '$locationProvider',
+        function ($stateProvider, $urlRouterProvider, $locationProvider) {
+
 // Use $urlRouterProvider to configure any redirects (when) and invalid urls (otherwise).
             $urlRouterProvider
 
@@ -68,12 +69,20 @@ angular.module('ponmApp.Index',
                 })
                 ;
         }])
+
     .run(['$rootScope', '$state', 'localStorageService', 'AuthService',
     function($rootScope, $state, localStorageService, AuthService) {
         $rootScope.$on('$stateChangeStart',
             function(event, toState, toParams, fromState, fromParams){
 
                 var unauthStateName = "unauthState";
+
+                if(fromState.name == "login") {
+                    AuthService.checkLogin().then(function(){
+
+                    }, function(){
+                    });
+                }
 
                 // 登录后转到之前未授权的页面
                 var unauthState = localStorageService.get(unauthStateName);
@@ -116,10 +125,12 @@ angular.module('ponmApp.Index',
                   ponmCtxConfig, $log, $state, $stateParams, safeApply, jsUtils, HashStateManager, AuthService) {
 
             $scope.checkLogin = function() {
-                AuthService.checkLogin();
+                return AuthService.checkLogin();
             };
 
-            $scope.checkLogin();
+            $scope.checkLogin().then(function() {
+                $scope.$broadcast("user.login");
+            });
 
             $scope.displayLogin = function(photoId) {
                 var modalInstance = $modal.open({

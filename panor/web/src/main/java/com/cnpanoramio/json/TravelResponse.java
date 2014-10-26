@@ -49,7 +49,7 @@ public class TravelResponse extends ExceptionResponse {
 		
 		// 相册封面图片
 		@JsonProperty("album_cover")
-		private String albumCover;
+		private PhotoProperties albumCover;
 		
 		// 图片数量
 		@JsonProperty("photo_size")
@@ -138,10 +138,11 @@ public class TravelResponse extends ExceptionResponse {
 		public void setLikeCount(Integer likeCount) {
 			this.likeCount = likeCount;
 		}
-		public String getAlbumCover() {
+		
+		public PhotoProperties getAlbumCover() {
 			return albumCover;
 		}
-		public void setAlbumCover(String albumCover) {
+		public void setAlbumCover(PhotoProperties albumCover) {
 			this.albumCover = albumCover;
 		}
 		public UserOpenInfo getUser() {

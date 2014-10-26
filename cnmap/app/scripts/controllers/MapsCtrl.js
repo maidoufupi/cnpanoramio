@@ -418,6 +418,12 @@ angular.module('ponmApp.maps', [
                     more: true,
                     hidden: true
                 }
+                ,{
+                    name: "news",
+                    link: "#/maps/news",
+                    text: "热门新闻",
+                    more: true
+                }
             ];
 
             $scope.setMenu = function(type, object) {
@@ -838,13 +844,12 @@ angular.module('ponmApp.maps', [
         }])
     .controller('MapsTravelCtrl',
     [        '$window', '$scope', 'TravelService', 'UserService', '$modal', 'MessageService',
-        'ponmCtxConfig', '$log', '$state', '$stateParams', '$q', 'jsUtils',
+        'ponmCtxConfig', '$log', '$state', '$stateParams', '$q', 'jsUtils', '$timeout',
         function ($window, $scope, TravelService, UserService, $modal, MessageService,
-                  ponmCtxConfig, $log, $state, $stateParams, $q, jsUtils) {
+                  ponmCtxConfig, $log, $state, $stateParams, $q, jsUtils, $timeout) {
 
             $scope.clearSearch();
             $scope.setPanormaioType('manual');
-//            $scope.panoramioLayer.setAuto(false);
 
             function getTravel(travelId) {
                 TravelService.getTravel({travelId: travelId}, function(res) {
@@ -893,11 +898,14 @@ angular.module('ponmApp.maps', [
                     });
                 });
                 if($scope.travelLayer) {
-                    $scope.travelLayer.clearMap();
-                    $scope.travelLayer.setEditable($scope.travelEnedit);
-                    $scope.travelLayer.setTravel($scope.travel);
-                    $scope.travelLayer.initMap();
-                    $scope.activeSpot($scope.travel.spots[0]);
+                    // 新线程中做地图图形绘制
+                    $timeout(function() {
+                        $scope.travelLayer.clearMap();
+                        $scope.travelLayer.setEditable($scope.travelEnedit);
+                        $scope.travelLayer.setTravel($scope.travel);
+                        $scope.travelLayer.initMap();
+                        $scope.activeSpot($scope.travel.spots[0]);
+                    }, 1000);
                 }
             };
 
@@ -1135,7 +1143,7 @@ angular.module('ponmApp.maps', [
              * @param photo
              */
             $scope.setAlbumCover = function(photo) {
-                $scope.updateTravel($scope.travel, "album_cover", photo.id)
+                $scope.updateTravel($scope.travel, "album_cover", {id: photo.id})
                     .then(function() {
                         $scope.alertService.add("success", "更新成功");
                     }, function(error) {
@@ -1632,13 +1640,11 @@ angular.module('ponmApp.maps', [
                 $scope.clearState();
             });
         }])
-    .controller("MapsDynamicCtrl", ['$scope', '$log', '$state', 'MessageManager', 'ponmCtxConfig',
-    function($scope, $log, $state, MessageManager, ponmCtxConfig) {
+    .controller("MapsDynamicCtrl", ['$scope', '$log', '$state', '$document', 'MessageManager', 'ponmCtxConfig',
+    function($scope, $log, $state, $document, MessageManager, ponmCtxConfig) {
 
-        $scope.$watch(function() {
-            return ponmCtxConfig.userId;
-        }, function(userId) {
-            if(userId) {
+        $scope.$on("user.login", function(e) {
+            if(!$scope.userId || ($scope.userId != ponmCtxConfig.userId)) {
                 $scope.userId = userId;
                 $scope.messageManager = new MessageManager($scope.userId);
                 $scope.onLoadWaypoint();
@@ -1656,6 +1662,11 @@ angular.module('ponmApp.maps', [
 
         };
 
+        if($scope.userId) {
+            $scope.messageManager = new MessageManager($scope.userId);
+            $scope.onLoadWaypoint();
+        }
+
         $scope.$on("message.actived", function(e, message) {
             if(message.point) {
                 $scope.$broadcast('message.point.click', message);
@@ -1671,7 +1682,12 @@ angular.module('ponmApp.maps', [
             if(!messagePoint) {
                 messagePoint = {id: message.id};
                 messagePoint.marker = $scope.mapEventListener.addMarker($scope.map, point.lat, point.lng);
+                messagePoint.marker.message = message;
                 messagePoints[message.id] = messagePoint;
+
+                $scope.mapEventListener.addMarkerActiveListener(messagePoint.marker, function() {
+                    $scope.$broadcast("message.active", this.message);
+                });
             }
             $scope.mapEventListener.setCenter($scope.map, point.lat, point.lng);
             if(currentPoint == message.id) {
@@ -1680,5 +1696,22 @@ angular.module('ponmApp.maps', [
                 currentPoint = message.id;
             }
         });
+
+        $scope.$on("message.active", function(e, message) {
+            // scroll to photo's element when photo is clicked
+            var messageCard = angular.element(document.getElementById('message-' + message.id));
+            $document.scrollToElementAnimated(messageCard, 120);
+        });
+
+        $scope.$on("$destroy", function() {
+            angular.forEach(messagePoints, function(messagePoint, key) {
+                if(messagePoint.marker) {
+                    $scope.mapEventListener.removeMarker(messagePoint.marker);
+                }
+            });
+            $scope.mapEventListener.clearMap();
+            $scope.clearState();
+        });
+
     }])
 ;

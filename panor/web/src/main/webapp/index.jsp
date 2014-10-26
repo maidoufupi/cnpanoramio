@@ -30,37 +30,34 @@
 <body>
 	<script type="text/javascript" id="bdshare_js" data="type=tools&mini=1" ></script>
 	<script id="bdshell_js"></script>
-	
-	<script type="text/javascript" src="<c:url value="/scripts/ponmApp.vendor.min.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="/scripts/blueimp-file-upload.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/ponmApp.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/ponmApp.controllers.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/ponmApp.directives.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/scripts.min.js"/>"></script>
+		
+	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.jquery.min.js"></script>
+	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.angular.min.js"></script>
+	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/blueimp-file-upload.min.js"></script>
+    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.min.js"></script>
+    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.controllers.min.js"></script>
+    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.directives.min.js"></script>
+    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.min.js"></script>
+    
 	<script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "google"}'>
-    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-google/src/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.google.min.js'/>"></script>
+  	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.google.min.js"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "baidu"}'>
-    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-baidu/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.baidu.min.js'/>"></script>
+  	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.baidu.min.js"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "qq"}'>
-    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-map-qq/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.qq.min.js'/>"></script>
+    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.qq.min.js"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
-    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
+    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.gaode.min.js"></script>
   </c:when>
   <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
   
   </c:when>
   <c:otherwise>
-    <script type="text/javascript" src="<c:url value='/bower_components/angular-ui-mapgaode/ui-map.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/scripts/panor/scripts.gaode.min.js'/>"></script>
+    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.gaode.min.js"></script>
   </c:otherwise>
 </c:choose>
 

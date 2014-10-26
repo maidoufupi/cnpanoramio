@@ -54,11 +54,11 @@
     </logger>
   
     <logger name="org.hibernate.SQL">
-        <level value="DEBUG"/>
+        <level value="ERROR"/>
     </logger>
 
     <logger name="org.springframework">
-        <level value="WARN"/>
+        <level value="ERROR"/>
     </logger>
    
     <logger name="org.appfuse">

@@ -43,8 +43,9 @@
 .dynamic-container {
   margin: auto;
   .messages-col{
-//    width: 378px;
     float: left;
+    padding-left: 10px;
+    padding-right: 10px;
 
     .message {
       padding: 10px 0;

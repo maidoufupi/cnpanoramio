@@ -199,14 +199,14 @@ angular.module('ponmApp.settings', [
     function ($window, $log, $location, $rootScope, $scope, $modal, $state, SettingsService, alertService) {
 
         $scope.changeMapVendor = function() {
-//            $log.debug("changeMapVendor");
-//            $log.debug($scope.settings);
+
             $scope.saving = true;
             SettingsService.changeMapVendor({userId: $scope.userId}, $scope.settings, function(res) {
-                $log.debug(res.status);
+
                 $scope.saving = false;
                 if(res.status == "OK") {
                     $scope.alertService.add("success",  "保存成功!", {ttl: 1000});
+                    $window.location.reload();
                 }else {
                     $scope.alertService.add("danger", "保存失败!", {ttl: 1000});
                 }

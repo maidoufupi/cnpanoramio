@@ -2,7 +2,7 @@
     <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
 </div>
 <div class="maps-travel">
-    <div class="travel-header" waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '101'}">
+    <div class="travel-header" waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-55'}">
         <div class="media user-info">
             <a class="pull-left" href="{{ctx}}/#/photos/{{userOpenInfo.id}}/albums"
                user-card owner="{id:userId}" user-id="userOpenInfo.id">

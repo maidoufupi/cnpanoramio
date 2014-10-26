@@ -2,7 +2,8 @@
     <div class="messages-col"
          ng-repeat="col in cols">
         <div ng-repeat="message in col.messages"
-             class="message">
+             class="message"
+             id="message-{{message.id}}">
             <div dynamic-message message="message" owner="owner"></div>
         </div>
     </div>

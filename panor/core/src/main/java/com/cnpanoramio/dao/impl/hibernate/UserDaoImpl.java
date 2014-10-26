@@ -17,8 +17,8 @@ public class UserDaoImpl extends UserDaoHibernate {
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		Pattern p = Pattern.compile("\\w+@(\\w+.)+[a-z]{2,3}");  
-        Matcher m = p.matcher(username);  
+		Pattern pattern = Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+        Matcher m = pattern.matcher(username);  
         boolean email = m.matches();  
         if(email) {
         	List users = getSession().createCriteria(User.class).add(Restrictions.eq("email", username)).list();

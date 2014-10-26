@@ -23,6 +23,9 @@ function (ponmCtxConfig, MessageService, alertService) {
                     scope.message.point = scope.message.photo.point;
                     break;
                 case 'travel':
+                    if(scope.message.travel.album_cover) {
+                        scope.message.point = scope.message.travel.album_cover.point;
+                    }
                     break;
                 case 'message':
                     var shareMesasage = scope.message.share_message;
@@ -36,6 +39,9 @@ function (ponmCtxConfig, MessageService, alertService) {
                                 scope.message.point = shareMesasage.photo.point;
                                 break;
                             case 'travel':
+                                if(shareMesasage.travel.album_cover) {
+                                    scope.message.point = shareMesasage.travel.album_cover.point;
+                                }
                                 break;
                         }
                     }

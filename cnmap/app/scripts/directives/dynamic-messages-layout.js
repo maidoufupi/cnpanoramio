@@ -178,6 +178,30 @@ angular.module('ponmApp.directives')
                     jsUtils.Array.removeItem(scope.messages, "id", message.id);
                 });
 
+                scope.$on("message.point.click", function(e, message) {
+                    activeMessage(message);
+                });
+
+                scope.$on("message.actived", function(e, message) {
+                    activeMessage(message);
+                });
+
+                scope.$on("message.active", function(e, message) {
+                    activeMessage(message);
+                });
+
+                function activeMessage(message) {
+                    if(scope.activeMessage) {
+                        scope.activeMessage.active = false;
+                    }
+                    angular.forEach(scope.messages, function(mess, key) {
+                        if(mess.id == message.id) {
+                            scope.activeMessage = mess;
+                            scope.activeMessage.active = true;
+                        }
+                    });
+                }
+
                 scope.$watch(function () {
                     return element.innerWidth && element.innerWidth();
                 }, function (width) {

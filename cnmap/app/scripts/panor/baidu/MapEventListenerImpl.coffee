@@ -48,7 +48,9 @@ class MapEventListener extends window.cnmap.IMapEventListener
     map.pointToPixel new BMap.Point(point.lng, pixel.lat)
 
   addMarker: (map, lat, lng) ->
-    map.addOverlay new BMap.Marker new BMap.Point lng, lat
+    marker = new BMap.Marker new BMap.Point lng, lat
+    map.addOverlay marker
+    marker
 
   createDraggableMarker: (map, lat, lng) ->
     marker = new BMap.Marker new BMap.Point(lng, lat), {enableDragging: true}

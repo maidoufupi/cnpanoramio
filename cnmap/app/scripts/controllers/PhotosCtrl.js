@@ -151,7 +151,7 @@ angular.module('ponmApp.photos', [
             // copy a local message service
             $scope.alertService = angular.copy(alertService);
             $scope.alertService.options.alone = true;
-            $scope.alertService.options.ttl = 2000;
+            $scope.alertService.options.ttl = 200000;
 
             $log.debug($state);
 

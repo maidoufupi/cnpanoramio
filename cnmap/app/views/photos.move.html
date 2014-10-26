@@ -20,7 +20,7 @@
                  ng-click="select(travel)"
                  ponm-hover>
                 <div class="thumbnail">
-                    <img ng-src="{{travel.album_cover ? staticCtx+'/'+travel.album_cover+'@1e_200w_200h_1c_1o.jpg' : ctx+'/images/travel-album-cover.jpg'}} " alt="">
+                    <img ng-src="{{travel.album_cover ? staticCtx+'/'+travel.album_cover.oss_key+'@1e_200w_200h_1c_1o.jpg' : ctx+'/images/travel-album-cover.jpg'}} " alt="">
                     <div class="caption">
                         <p>{{travel.title}}</p>
                         <span>{{travel.create_time | date:'yyyy年MM月dd日'}}</span>

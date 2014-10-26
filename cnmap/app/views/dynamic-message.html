@@ -2,7 +2,7 @@
      waypoint="{'offset': '98%', target: message}"
      on-waypoint="onWaypoint($element, $direction)">
     <div class="flipper">
-        <div class="front card">
+        <div class="front card" ng-class="{active: message.active}">
             <!-- 前面内容 -->
             <div class="message-header">
                 <div class="card-action">

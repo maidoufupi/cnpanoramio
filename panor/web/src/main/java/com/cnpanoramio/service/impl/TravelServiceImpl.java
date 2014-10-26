@@ -111,7 +111,7 @@ public class TravelServiceImpl implements TravelService {
 
 		// set album cover photo
 		if (null != travel.getAlbumCover()) {
-			t.setAlbumCover(PhotoUtil.getPhotoOssKey(travel.getAlbumCover()));
+			t.setAlbumCover(photoService.transform(travel.getAlbumCover()));
 		} else {
 			Iterator<com.cnpanoramio.domain.TravelSpot> iter = travel
 					.getSpots().iterator();
@@ -120,7 +120,7 @@ public class TravelServiceImpl implements TravelService {
 				Iterator<Photo> iterPhotos = spot.getPhotos().iterator();
 				if (iterPhotos.hasNext()) {
 					Photo photo = iterPhotos.next();
-					t.setAlbumCover(PhotoUtil.getPhotoOssKey(photo));
+					t.setAlbumCover(photoService.transform(photo));
 				}
 
 			}
@@ -241,8 +241,8 @@ public class TravelServiceImpl implements TravelService {
 		
 		// 旅行相册封面
 		if(null != travel.getAlbumCover()) {
-			if(StringUtils.hasLength(travel.getAlbumCover())) {
-				travelD.setAlbumCover(photoManager.get(Long.parseLong(travel.getAlbumCover())));
+			if(null != travel.getAlbumCover() && null != travel.getAlbumCover().getId()) {
+				travelD.setAlbumCover(photoManager.get(travel.getAlbumCover().getId()));
 			}else {
 				travelD.setAlbumCover(null);
 			}

@@ -114,8 +114,7 @@
         margin: 0; }
 .user .navbar-second.navbar-second-top {
   position: fixed;
-  z-index: 1030;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.57); }
+  z-index: 1030; }
   .user .navbar-second.navbar-second-top .ProfileCanopy-card {
     padding-top: 0; }
 .user .container.user {
@@ -1460,14 +1459,19 @@ span.clickable:hover {
     -moz-border-radius: 0;
     -ms-border-radius: 0;
     border-radius: 0;
-    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.57);
-    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.57);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.57); }
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); }
     .navbar-second .navbar .nav > li {
       padding: 0 15px; }
       .navbar-second .navbar .nav > li > a {
         padding: 14px 0;
         background-color: initial !important; }
+
+.navbar-second-top.navbar-second {
+  position: fixed;
+  z-index: 1031;
+  top: 0; }
+  .navbar-second-top.navbar-second .navbar {
+    border-bottom: 1px solid #00bcd4; }
 
 .navbar-third {
   position: fixed !important;
@@ -1540,17 +1544,6 @@ span.clickable:hover {
   top: 0;
   left: 0;
   right: 0; }
-
-.navbar-second-top .navbar-second {
-  position: fixed;
-  z-index: 1031;
-  top: 0;
-  border-bottom: 1px solid #00bcd4;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); }
-.navbar-second-top .container-photos {
-  margin-top: 61px; }
-  .navbar-second-top .container-photos .timeline {
-    top: 60px; }
 
 .ponm-navbar-fixed-top {
   position: fixed;
@@ -2288,7 +2281,9 @@ body::-webkit-scrollbar-corner {
 .dynamic-container {
   margin: auto; }
   .dynamic-container .messages-col {
-    float: left; }
+    float: left;
+    padding-left: 10px;
+    padding-right: 10px; }
     .dynamic-container .messages-col .message {
       padding: 10px 0; }
 
@@ -2312,13 +2307,7 @@ body::-webkit-scrollbar-corner {
       -moz-backface-visibility: hidden;
       backface-visibility: hidden;
       top: 0;
-      left: 0;
-      background-color: white;
-      -webkit-border-radius: 3px;
-      -moz-border-radius: 3px;
-      -ms-border-radius: 3px;
-      border-radius: 3px;
-      border-top-width: 0; }
+      left: 0; }
     .flip-container .flipper .front {
       z-index: 2;
       -webkit-transform: rotateY(0deg);
@@ -2679,14 +2668,24 @@ item-picker .dropdown.dropdown-picker, *[item-picker] .dropdown.dropdown-picker 
       display: inline-block; }
 
 .card {
-  background-color: white;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -ms-border-radius: 2px;
-  border-radius: 2px;
-  -webkit-box-shadow: 0px 3px 10px -2px rgba(50, 50, 50, 0.75);
-  -moz-box-shadow: 0px 3px 10px -2px rgba(50, 50, 50, 0.75);
-  box-shadow: 0px 3px 10px -2px rgba(50, 50, 50, 0.75); }
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid #d8d8d8;
+  border-bottom-width: 2px;
+  border-top-width: 0;
+  vertical-align: top; }
+
+.card.active {
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); }
 
 .travel-album {
   width: 100%;

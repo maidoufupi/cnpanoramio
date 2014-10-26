@@ -74,7 +74,10 @@
     };
 
     MapEventListener.prototype.addMarker = function(map, lat, lng) {
-      return map.addOverlay(new BMap.Marker(new BMap.Point(lng, lat)));
+      var marker;
+      marker = new BMap.Marker(new BMap.Point(lng, lat));
+      map.addOverlay(marker);
+      return marker;
     };
 
     MapEventListener.prototype.createDraggableMarker = function(map, lat, lng) {

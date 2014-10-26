@@ -135,7 +135,7 @@ public class UserFormController extends BaseFormController {
 
                     try {
                         sendUserMessage(user, getText("newuser.email.message", user.getFullName(), locale),
-                                RequestUtil.getAppURL(request));
+                                RequestUtil.getAppURL(request), locale);
                     } catch (MailException me) {
                         saveError(request, me.getCause().getLocalizedMessage());
                     }

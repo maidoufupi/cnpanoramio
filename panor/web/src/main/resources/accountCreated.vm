@@ -1,6 +1,6 @@
-${message}
+ï»¿${message}
 
-ÓÃ»§Ãû: ${user.username}
-ÃÜÂë: ${user.confirmPassword}
+username: ${user.username}
+password: ${user.confirmPassword}
 
-ä¯ÀÀ: ${applicationURL}
+login url: ${applicationURL}

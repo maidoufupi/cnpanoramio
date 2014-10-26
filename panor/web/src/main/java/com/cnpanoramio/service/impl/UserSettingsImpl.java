@@ -1,7 +1,6 @@
 package com.cnpanoramio.service.impl;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,13 +15,9 @@ import org.appfuse.model.User;
 import org.appfuse.service.RoleManager;
 import org.appfuse.service.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,12 +32,10 @@ import com.cnpanoramio.dao.ViewsDao;
 import com.cnpanoramio.domain.Avatar;
 import com.cnpanoramio.domain.Circle;
 import com.cnpanoramio.domain.Photo;
-import com.cnpanoramio.domain.Recycle;
 import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
-import com.cnpanoramio.json.UserResponse;
 import com.cnpanoramio.service.CircleManager;
 import com.cnpanoramio.service.FileService;
 import com.cnpanoramio.service.PhotoManager;
@@ -118,7 +111,6 @@ public class UserSettingsImpl implements UserSettingsManager {
 	@Override
 	public UserSettings save(UserSettings userSettings) {
 
-//		User user = getCurrentUser();
 		User user = UserUtil.getCurrentUser(userManager);
 		UserSettings settings = userSettingsDao.get(user.getId());
 
@@ -310,58 +302,7 @@ public class UserSettingsImpl implements UserSettingsManager {
 	public UserSettings get(Long id) {
 		return userSettingsDao.get(id);
 	}
-	
-//	@Override
-//	public List<Recycle> getRecycleBin(Long id) {
-//		return recycleDao.getUserRecycle(id);		
-//	}
-
-	
-
-//	@Override
-//	public void cancelRecycle(Long userId, Long id) {
-//		UserSettings settings = userSettingsDao.get(userId);
-//		Recycle recycle = recycleDao.get(id);
-//		if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
-//			try {
-//				photoService.cancelDelete(recycle.getRecyId());
-//				settings.getRecycle().remove(recycle);
-//			}catch(DataAccessException ex) {
-//			}				
-//		}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
-//			try {
-//				travelService.cancelDeleteTravel(recycle.getRecyId());
-//				settings.getRecycle().remove(recycle);
-//			}catch(DataAccessException ex) {
-//			}	
-//		}
-//		
-//	}
-
-	
-	
-	/**
-	 * 永久删除垃圾箱记录
-	 * 
-	 * @param settings
-	 * @param recycle
-	 */
-//	private void removeRecycle(UserSettings settings, Recycle recycle) {
-//		if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_PHOTO)) {
-//			try {
-//				photoService.removePhoto(recycle.getRecyId());
-//				settings.getRecycle().remove(recycle);
-//			}catch(DataAccessException ex) {
-//			}				
-//		}else if(recycle.getRecyType().equalsIgnoreCase(Recycle.CON_TYPE_TRAVEL)) {
-//			try {
-//				travelService.removeTravel(recycle.getRecyId());
-//				settings.getRecycle().remove(recycle);
-//			}catch(DataAccessException ex) {
-//			}
-//		}
-//	}
-
+		
 	@Override
 	public List<PhotoProperties> getPhotosForUserBounds(String id,
 			int pageSize, int pageNo, Double swLat, Double swLng, Double neLat,
@@ -372,34 +313,6 @@ public class UserSettingsImpl implements UserSettingsManager {
 		
 		return PhotoUtil.transformPhotos(photos);
 	}
-
-//	@Override
-//	public User signup(User user) {
-//		user.setEnabled(true);
-//
-//        // Set the default user role on this new user
-//        user.addRole(roleManager.getRole(Constants.USER_ROLE));
-//        
-//        // 用户默认详细设置
-//        UserSettings userSettings = new UserSettings();
-//        
-//        try {
-//            user = this.getUserManager().saveUser(user);
-//            this.create(user);
-//        } catch (AccessDeniedException ade) {
-//            // thrown by UserSecurityAdvice configured in aop:advisor userManagerSecurity
-//            log.warn(ade.getMessage());
-//            return null; 
-//        } catch (UserExistsException e) {
-//            // redisplay the unencrypted passwords
-//            user.setPassword(user.getConfirmPassword());
-////            return "signup";
-//        }
-//
-////        saveMessage(request, getText("user.registered", user.getUsername(), locale));
-////        request.getSession().setAttribute(Constants.REGISTERED, Boolean.TRUE);
-//		return null;
-//	}
 
 	@Override
 	public void following(User user, User following, boolean follow) {
