@@ -1,0 +1,4 @@
+http://localhost:8080/panor-web/oauth/token?
+client_id=my-untrusted-client-with-registered-redirect
+&grant_type=authorization_code
+&code=123

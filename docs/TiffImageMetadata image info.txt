@@ -1,0 +1,126 @@
+Make
+TiffField: 271 (0x10f: Make):  = [Ljava.lang.String;@1721e22
+Model
+TiffField: 272 (0x110: Model):  = [Ljava.lang.String;@1187d2f
+Orientation
+TiffField: 274 (0x112: Orientation):  = 1
+XResolution
+TiffField: 282 (0x11a: XResolution):  = 72
+YResolution
+TiffField: 283 (0x11b: YResolution):  = 72
+ResolutionUnit
+TiffField: 296 (0x128: ResolutionUnit):  = 2
+DateTime
+TiffField: 306 (0x132: DateTime):  = 2013:09:15 06:22:14
+YCbCrPositioning
+TiffField: 531 (0x213: YCbCrPositioning):  = 1
+ExifOffset
+TiffField: 34665 (0x8769: ExifOffset):  = 354
+GPSInfo
+TiffField: 34853 (0x8825: GPSInfo):  = 918
+ExposureTime
+TiffField: 33434 (0x829a: ExposureTime):  = 1432/1000000 (0.001)
+FNumber
+TiffField: 33437 (0x829d: FNumber):  = 2
+ExposureProgram
+TiffField: 34850 (0x8822: ExposureProgram):  = 2
+PhotographicSensitivity
+TiffField: 34855 (0x8827: PhotographicSensitivity):  = 125
+ExifVersion
+TiffField: 36864 (0x9000: ExifVersion):  = [B@c2c65b
+DateTimeOriginal
+TiffField: 36867 (0x9003: DateTimeOriginal):  = 2013:09:15 06:22:14
+DateTimeDigitized
+TiffField: 36868 (0x9004: DateTimeDigitized):  = 2013:09:15 06:22:14
+ComponentsConfiguration
+TiffField: 37121 (0x9101: ComponentsConfiguration):  = [B@16cacdd
+CompressedBitsPerPixel
+TiffField: 37122 (0x9102: CompressedBitsPerPixel):  = 4912360/4085760 (1.202)
+ShutterSpeedValue
+TiffField: 37377 (0x9201: ShutterSpeedValue):  = 9447426/1000000 (9.447)
+ApertureValue
+TiffField: 37378 (0x9202: ApertureValue):  = 2
+BrightnessValue
+TiffField: 37379 (0x9203: BrightnessValue):  = 6125498/1000000 (6.125)
+ExposureCompensation
+TiffField: 37380 (0x9204: ExposureCompensation):  = 0
+MaxApertureValue
+TiffField: 37381 (0x9205: MaxApertureValue):  = 2
+MeteringMode
+TiffField: 37383 (0x9207: MeteringMode):  = 255
+LightSource
+TiffField: 37384 (0x9208: LightSource):  = 0
+Flash
+TiffField: 37385 (0x9209: Flash):  = 0
+FocalLength
+TiffField: 37386 (0x920a: FocalLength):  = 382/100 (3.82)
+SubSecTimeOriginal
+TiffField: 37521 (0x9291: SubSecTimeOriginal):  = 344
+FlashpixVersion
+TiffField: 40960 (0xa000: FlashpixVersion):  = [B@fadb88
+ColorSpace
+TiffField: 40961 (0xa001: ColorSpace):  = 1
+ExifImageWidth
+TiffField: 40962 (0xa002: ExifImageWidth):  = 2688
+ExifImageLength
+TiffField: 40963 (0xa003: ExifImageLength):  = 1520
+InteropOffset
+TiffField: 40965 (0xa005: InteropOffset):  = 888
+CustomRendered
+TiffField: 41985 (0xa401: CustomRendered):  = 0
+ExposureMode
+TiffField: 41986 (0xa402: ExposureMode):  = 0
+WhiteBalance
+TiffField: 41987 (0xa403: WhiteBalance):  = 0
+DigitalZoomRatio
+TiffField: 41988 (0xa404: DigitalZoomRatio):  = 0
+FocalLengthIn35mmFormat
+TiffField: 41989 (0xa405: FocalLengthIn35mmFormat):  = 28
+SceneCaptureType
+TiffField: 41990 (0xa406: SceneCaptureType):  = 0
+GainControl
+TiffField: 41991 (0xa407: GainControl):  = 0
+Contrast
+TiffField: 41992 (0xa408: Contrast):  = 0
+Saturation
+TiffField: 41993 (0xa409: Saturation):  = 0
+Sharpness
+TiffField: 41994 (0xa40a: Sharpness):  = 0
+InteroperabilityIndex
+TiffField: 1 (0x1: InteroperabilityIndex):  = R98
+InteroperabilityVersion
+TiffField: 2 (0x2: InteroperabilityVersion):  = [B@162c87a
+GPSLatitudeRef
+TiffField: 1 (0x1: GPSLatitudeRef):  = N
+GPSLatitude
+TiffField: 2 (0x2: GPSLatitude):  = [Lorg.apache.commons.imaging.common.RationalNumber;@57f389
+GPSLongitudeRef
+TiffField: 3 (0x3: GPSLongitudeRef):  = E
+GPSLongitude
+TiffField: 4 (0x4: GPSLongitude):  = [Lorg.apache.commons.imaging.common.RationalNumber;@35b5e8
+GPSAltitudeRef
+TiffField: 5 (0x5: GPSAltitudeRef):  = 0
+GPSAltitude
+TiffField: 6 (0x6: GPSAltitude):  = 808599/1000 (808.599)
+GPSTimeStamp
+TiffField: 7 (0x7: GPSTimeStamp):  = [Lorg.apache.commons.imaging.common.RationalNumber;@39bc82
+GPSProcessingMethod
+TiffField: 27 (0x1b: GPSProcessingMethod):  = ASCII
+GPSDateStamp
+TiffField: 29 (0x1d: GPSDateStamp):  = 2013:09:14
+ImageWidth
+TiffField: 256 (0x100: ImageWidth):  = 512
+ImageLength
+TiffField: 257 (0x101: ImageLength):  = 288
+Compression
+TiffField: 259 (0x103: Compression):  = 6
+XResolution
+TiffField: 282 (0x11a: XResolution):  = 72
+YResolution
+TiffField: 283 (0x11b: YResolution):  = 72
+ResolutionUnit
+TiffField: 296 (0x128: ResolutionUnit):  = 2
+JpgFromRawStart
+TiffField: 513 (0x201: JpgFromRawStart):  = 1254
+JpgFromRawLength
+TiffField: 514 (0x202: JpgFromRawLength):  = 9712

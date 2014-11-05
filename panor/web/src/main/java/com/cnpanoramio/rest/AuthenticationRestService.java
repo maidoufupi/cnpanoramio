@@ -109,25 +109,14 @@ public class AuthenticationRestService extends AbstractRestService {
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public AuthResponse isLogin(HttpServletRequest request, HttpServletResponse httpResponse) {
 		AuthResponse response = new AuthResponse();
-		
-		try {
-			SecurityContext securityContext = SecurityContextHolder.getContext();
-			Authentication auth = securityContext.getAuthentication();
-			String name = auth.getName(); //get logged in username
-			User user = userSettingsManager.getUser(name);
-	        response.setUser(userSettingsManager.getOpenInfo(user));
-			response.setStatus(AuthResponse.Status.OK.name());
-			
-			for(Cookie cook : request.getCookies()) {
-				log.debug(cook.getValue());
-			}
-		}catch(UsernameNotFoundException e) {
-			response.setStatus(AuthResponse.Status.NO_AUTHORIZE.name()); 
-		}catch (Exception e) {
-	    	e.printStackTrace();
-	    	response.setStatus(AuthResponse.Status.EXCEPTION.name()); 
-	    	log.debug("check login exception");
-	    }
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication auth = securityContext.getAuthentication();
+        String name = auth.getName(); //get logged in username
+        User user = userSettingsManager.getUser(name);
+        response.setUser(userSettingsManager.getOpenInfo(user));
+        response.setStatus(AuthResponse.Status.OK.name());
+
 		return response;
 	}
 		

@@ -1,0 +1,10 @@
+ALTER TABLE `user_settings` 
+CHANGE COLUMN `map_vendor` `map_vendor` VARCHAR(255) NULL DEFAULT NULL ;
+
+update `ponmdb`.`user_settings`
+   set map_vendor= 'gaode' ;
+
+ALTER TABLE `photo_details` 
+ADD COLUMN `Orientation` INT(2) NULL DEFAULT NULL AFTER `yResolution`;
+
+update photo_details set Orientation = 0;

@@ -1,0 +1,6 @@
+styleName:album-thumbnail,styleBody:1e_100w_100h_1c_0i_0o_90Q_1x.jpg
+styleName:photo-360,styleBody:0e_4000w_4000h_0c_0i_1o_90Q_1x.jpg
+styleName:panor-lg,styleBody:1e_34w_34h_1c_0i_0o_1x.jpg
+styleName:photo-preview-loc,styleBody:150h_90Q_1x.jpg
+styleName:photo-preview-big,styleBody:0e_400w_400h_0c_0i_1o_90Q_1x.jpg
+styleName:photo-preview-lg,styleBody:0e_1500w_1500h_0c_0i_1o_90Q_1x.jpg

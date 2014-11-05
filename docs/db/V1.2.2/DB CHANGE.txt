@@ -1,0 +1,10 @@
+ALTER TABLE `panornew`.`photo` 
+ADD COLUMN `color` VARCHAR(45) NULL DEFAULT NULL AFTER `is360`;
+
+ALTER TABLE `panornew`.`user_settings` 
+ADD COLUMN `storage_space` DOUBLE NULL DEFAULT NULL AFTER `avatar`;
+
+ALTER TABLE `panornew`.`user_settings` 
+ADD COLUMN `auto_upload` BIT(1) NULL DEFAULT NULL AFTER `storage_space`;
+
+update panornew.user_settings set auto_upload = 0; 

@@ -1,0 +1,25 @@
+update travel set create_date = '2014-09-09 00:00:00' where create_date = '0000-00-00 00:00:00';
+update travel set modify_date = '2014-09-09 00:00:00' where modify_date = '0000-00-00 00:00:00';
+update travel_spot set create_date = '2014-09-09 00:00:00' where create_date = '0000-00-00 00:00:00';
+update travel_spot set modify_date = '2014-09-09 00:00:00' where modify_date = '0000-00-00 00:00:00';
+update photo set create_date = '2014-09-09 00:00:00' where create_date = '0000-00-00 00:00:00';
+update photo set modify_date = '2014-09-09 00:00:00' where modify_date = '0000-00-00 00:00:00';
+update comment set create_date = '2014-09-09 00:00:00' where create_date = '0000-00-00 00:00:00';
+update comment set modify_date = '2014-09-09 00:00:00' where modify_date = '0000-00-00 00:00:00';
+update message_queue set create_date = '2014-09-09 00:00:00' where create_date = '0000-00-00 00:00:00';
+update message_queue set modify_date = '2014-09-09 00:00:00' where modify_date = '0000-00-00 00:00:00';
+update message set create_date = '2014-09-09 00:00:00' where create_date = '0000-00-00 00:00:00';
+update message set modify_date = '2014-09-09 00:00:00' where modify_date = '0000-00-00 00:00:00';
+update circle set create_date = '2014-09-09 00:00:00' where create_date = '0000-00-00 00:00:00';
+update circle set modify_date = '2014-09-09 00:00:00' where modify_date = '0000-00-00 00:00:00';
+update recycle set create_date = '2014-09-09 00:00:00' where create_date = '0000-00-00 00:00:00';
+update recycle set modify_date = '2014-09-09 00:00:00' where modify_date = '0000-00-00 00:00:00';
+
+update travel set deleted = 0 where deleted is null;
+update travel_spot set deleted = 0 where deleted is null;
+update photo set deleted = 0 where deleted is null;
+update comment set deleted = 0 where deleted is null;
+update message_queue set deleted = 0 where deleted is null;
+update message set deleted = 0 where deleted is null;
+update circle set deleted = 0 where deleted is null;
+update recycle set deleted = 0 where deleted is null;

@@ -101,8 +101,12 @@
 		<filter-name>simpleCORS</filter-name>
 		<filter-class>com.cnpanoramio.webapp.filter.SimpleCORSFilter</filter-class>
 	</filter>
-	
-	<filter-mapping>
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
@@ -139,8 +143,12 @@
 		<filter-name>simpleCORS</filter-name>
 		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-	<listener>
+    <listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<listener>

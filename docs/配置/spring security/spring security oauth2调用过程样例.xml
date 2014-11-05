@@ -1,0 +1,26 @@
+curl "http://localhost:8080/panor-web/oauth/token" -d grant_type=implicit -d client_id=my-trusted-client
+curl "http://localhost:8080/panor-web/oauth/token" -d grant_type=password -d client_id=my-trusted-client -d username=user -d password=user
+或者
+curl -X POST -v --data "grant_type=password&username=user&password=user&client_id=my-trusted-client" http://localhost:8080/panor-web/oauth/token
+
+token return：
+{"access_token":"acd5d7b3-71f9-4756-993d-bb55a845feb0","token_type":"bearer","refresh_token":"b20b9d4b-8bde-4d6c-a816-faa2a13f3fa9","expires_in":59,"scope":"read trust write"}
+
+curl "http://localhost:8080/panor-web/oauth/token" -d grant_type=refresh_token -d client_id=my-trusted-client -d refresh_token=daa35bae-d6d1-4e00-aa87-10996c9df57d
+
+curl "http://localhost:8080/panor-web/me" -H "Authorization: Bearer "
+
+curl "http://localhost:8080/panor-web/me/you" -H "Authorization: Bearer e2dd3748-1f06-4257-afb0-fb97835361a3"
+
+
+curl "http://localhost:8080/panor-web/api/rest/user/1/photos/10/1" -H "Authorization: Bearer a3d040af-10f1-470a-8604-dc5b5c139446"
+curl "http://localhost:8080/panor-web/api/rest/user/1" -H "Authorization: Bearer a570c566-f099-4a57-b7d4-d7d40730c9b8"
+
+curl http://127.0.0.1:8080/panor-web/api/rest/user -H "Authorization: Bearer 785880e5-e4f0-40a8-a147-133c16f9c0ae"
+
+
+oauth2调用过程
+http://www.photoshows.cn/oauth/authorize?response_type=code&client_id=my-trusted-client-with-secret&secret=somesecret&scope=read&redirect_uri=http://localhost:8080/web
+curl -X POST -v --data "code=8Md6r5&grant_type=authorization_code&client_id=my-trusted-client-with-secret&secret=somesecret&redirect_uri=http://localhost:8080/web" http://www.photoshows.cn/oauth/token
+
+

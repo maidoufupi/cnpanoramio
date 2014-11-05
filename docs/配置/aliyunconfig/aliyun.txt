@@ -1,0 +1,12 @@
+OSS的青岛 北京 杭州内外网地址？
+
+青岛节点外网地址： oss-cn-qingdao.aliyuncs.com 
+青岛节点内网地址： oss-cn-qingdao-internal.aliyuncs.com
+
+ 北京节点外网地址：oss-cn-beijing.aliyuncs.com
+北京节点内网地址：oss-cn-beijing-internal.aliyuncs.com
+
+杭州节点外网地址： oss-cn-hangzhou.aliyuncs.com
+杭州节点内网地址： oss-cn-hangzhou-internal.aliyuncs.com 
+原地址oss.aliyuncs.com 默认指向杭州节点外网地址。
+原内网地址oss-internal.aliyuncs.com 默认指向杭州节点内网地址。

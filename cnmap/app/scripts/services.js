@@ -4,6 +4,7 @@
 'use strict';
 
 angular.module('ponmApp.services', [
+    'ngCookies',
     'ngResource'])
     .factory('AuthService', ['$window', '$resource', '$cookies', '$log', '$q', 'ponmCtxConfig', 'SettingsService',
     function ($window, $resource, $cookies, $log, $q, ponmCtxConfig, SettingsService) {

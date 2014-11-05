@@ -1,0 +1,6 @@
+id,rating,create_date,deleted,description,file_path,file_size,file_type,address,alt,lat,lng,mark_best,modify_date,name,title,owner_id
+1,0,"2014-01-02 21:17:57",0,NULL,NULL,NULL,jpg,河北省保定市高碑店市泗庄镇樊家庄村,NULL,39.206719,116.087036,0,NULL,Lighthouse.jpg,NULL,1
+2,1,"2014-01-02 21:20:54",0,NULL,NULL,NULL,jpg,河北省张家口市赤城县田家窑镇虎头山,NULL,40.713956,115.697021,0,NULL,Lighthouse.jpg,NULL,1
+4,0,"2014-01-02 21:53:52",0,NULL,NULL,NULL,jpg,新疆维吾尔自治区伊犁哈萨克自治州伊宁市,NULL,43.92186,81.317946,0,NULL,Koala.jpg,NULL,1
+5,1,"2014-01-02 22:14:14",0,NULL,NULL,NULL,jpg,河南省焦作市博爱县柏山镇博爱县肿瘤医院,NULL,35.211466,113.09412,0,NULL,Penguins.jpg,NULL,1
+6,12,"2014-01-02 22:18:34",0,NULL,NULL,NULL,jpg,北京市朝阳区潘家园街道华威西里,NULL,39.87444686111111,116.45521544444445,0,NULL,IMAG0126.jpg,NULL,1

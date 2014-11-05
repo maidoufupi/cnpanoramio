@@ -1,0 +1,8 @@
+ALTER TABLE `panornew`.`photo` 
+CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL ;
+
+ALTER TABLE `panornew`.`travel` 
+CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL ;
+
+ALTER TABLE `panornew`.`travel_spot` 
+CHANGE COLUMN `description` `description` VARCHAR(1000) NULL DEFAULT NULL ;

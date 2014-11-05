@@ -17,13 +17,14 @@
     <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/main.min.css'/>" />
     <decorator:head/>
 
-    <%-- <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/bower_components/jquery/jquery.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/bower_components/sass-bootstrap/dist/js/bootstrap.min.js'/>"></script>
-    
-    <script type="text/javascript" src="<c:url value='/bower_components/jquery.cookie/jquery.cookie.js'/>"></script>
-    
     <script type="text/javascript" src="<c:url value="/bower_components/angular/angular.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-route/angular-route.js"/>"></script>
+    <%-- <script type="text/javascript" src="<c:url value='/bower_components/jquery.cookie/jquery.cookie.js'/>"></script>
+    
+
+
     <script type="text/javascript" src="<c:url value="/bower_components/angular-resource/angular-resource.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-cookies/angular-cookies.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/bower_components/angular-sanitize/angular-sanitize.js"/>"></script>
@@ -45,11 +46,11 @@
     <script type="text/javascript" src="<c:url value="/bower_components/jquery-waypoints/waypoints.js"/>"></script>
     --%>
     
-    <script type="text/javascript" src="<c:url value="/scripts/ponmApp.vendor.min.js"/>"></script>
+    <%--<script type="text/javascript" src="<c:url value="/scripts/ponmApp.vendor.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.controllers.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/scripts/ponmApp.directives.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/scripts/panor/scripts.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/scripts/panor/scripts.min.js"/>"></script>--%>
 
     <script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
     
@@ -100,7 +101,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<c:url value='/'/>"><img src="<c:url value="/images/logo.png"/>" class="navbar-logo"/></a>
+                <a class="navbar-brand" href="<c:url value='/'/>">
+                    <img src="<c:url value="/images/logo.png"/>" class="navbar-logo"/>
+                </a>
                 
                 <%-- <c:if test='${pageContext.request.locale.language ne "en"}'>
                     <div id="switchLocale"><a href="<c:url value='/?locale=en'/>">
@@ -108,7 +111,8 @@
                     </div>
                 </c:if> --%>
             </div>
-            <%@ include file="/common/menu.jsp" %>
+            <%--<%@ include file="/common/menu.jsp" %>--%>
+            <%@ include file="/views/ponm.navbar.html" %>
         </div>
     </div>
 
