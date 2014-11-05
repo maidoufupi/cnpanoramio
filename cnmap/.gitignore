@@ -1,14 +1,5 @@
 node_modules
-
 dist
-
-/.tmp
-/
+.tmp
 .sass-cache
-
-
-/app/bower_components
-
-
-/.idea/workspace.xml
-/.idea/libraries
+app/bower_components
