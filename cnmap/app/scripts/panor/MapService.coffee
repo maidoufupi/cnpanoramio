@@ -1,7 +1,7 @@
-
+## 地图服务接口
 class IMapService
 
-  ## 地图 
+  ## 地图
   map: undefined
 
   ##

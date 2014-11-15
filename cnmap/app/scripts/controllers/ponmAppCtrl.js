@@ -116,7 +116,17 @@ angular.module('ponmApp.Index',
 
                 // transitionTo() promise will be rejected with
                 // a 'transition prevented' error
-            })
+            });
+
+      $rootScope.$on('$stateChangeSuccess',
+        function(event, toState, toParams, fromState, fromParams){
+          // 如果转到maps页面则设置页面为固定页面
+          if(toState.name.indexOf("maps.")>=0) {
+            $rootScope.pageNavMode = "fixed";
+          }else {
+            $rootScope.pageNavMode = "";
+          }
+        });
     }])
     .controller('IndexCtrl',
     [        '$window', '$location', '$rootScope', '$scope', 'PhotoService', 'UserService', '$modal',

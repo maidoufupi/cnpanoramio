@@ -344,13 +344,9 @@
 /****************************************************************************************/
 /** photos page *************************************************************************/
 .photos {
-  position: absolute;
-  top: 52px;
   width: 100%;
   .container-photos {
-    //  width: 80%;
     @include transition-linear(top);
-//    margin: 10px 100px;
     transition: top linear 0.3s;
     position: relative;
   }
@@ -359,13 +355,14 @@
     position: absolute;
     top: 0;
   }
+  .select-pane {
+    position: relative;
+  }
 }
 
 
 // photos all
 .photo-wall.photo-wall-fixed-size.photo-all {
-//  width: 1220px;
-//  margin: auto;
   .photo {
     width: 200px;
     height: 200px;

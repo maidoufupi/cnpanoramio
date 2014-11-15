@@ -482,7 +482,7 @@ angular.module('ponmApp.services', [
                 return $rootScope.user.id;
             };
         }])
-    .factory('safeApply', [function($rootScope) {
+    .factory('safeApply', ['$rootScope', function($rootScope) {
         return function($scope, fn) {
             var phase = $scope.$root && $scope.$root.$$phase;
             if(phase == '$apply' || phase == '$digest') {

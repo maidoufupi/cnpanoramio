@@ -85,13 +85,13 @@
   @extend .ponm-modal;
   .modal-dialog {
     position: absolute;
-    top: 20px;
-    bottom: 20px;
+    top: 0;
+    bottom: 0;
     left: 40px;
     right: 40px;
     width: auto;
     padding: 0;
-    box-shadow: 0 0 20px 1px #777;
+//    box-shadow: 0 0 20px 1px #777;
     .modal-content {
 //      border-radius: initial;
 //      border: initial;

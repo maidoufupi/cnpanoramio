@@ -25,7 +25,7 @@
 
     .maps-left {
       position: fixed;
-      top: 102px;
+      top: 82px;
       left: 0;
       bottom: 0;
       @include transition-linear(all);
@@ -68,7 +68,7 @@
     }
     .maps-right {
       width: 600px;
-      margin: 0;
+      margin: 0 auto;
       .navbar-third, .navbar-forth, .messages {
         width: 600px;
       }

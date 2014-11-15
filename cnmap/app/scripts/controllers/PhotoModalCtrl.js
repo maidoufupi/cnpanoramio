@@ -348,8 +348,8 @@ angular.module('ponmApp.controllers')
                     controller: 'MapPhotoCtrl2',
                     windowClass: 'map-photo-modal',
                     resolve: {
-                        photoId: function () {
-                            return $scope.photoId;
+                        photo: function () {
+                            return $scope.photo;
                         }
                     }
                 });
@@ -433,8 +433,8 @@ angular.module('ponmApp.controllers')
         });
     }])
     .controller('MapPhotoCtrl2', ['$window', '$log', '$timeout', '$scope', '$modalInstance', 'PhotoService',
-        'GeocodeService', 'photoId', 'ponmCtxConfig', 'alertService',
-        function ($window, $log, $timeout, $scope, $modalInstance, PhotoService, GeocodeService, photoId,
+        'GeocodeService', 'photo', 'ponmCtxConfig', 'alertService',
+        function ($window, $log, $timeout, $scope, $modalInstance, PhotoService, GeocodeService, photo,
                   ponmCtxConfig, alertService) {
             $scope.ctx = $window.ctx;
             $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -446,7 +446,8 @@ angular.module('ponmApp.controllers')
             $scope.mapEventListener = mapEventListener;
             $scope.mapService = mapService;
 
-            $scope.photoId = photoId;
+            $scope.photo = photo;
+            $scope.photoId = photo.id;
 
             $scope.alertService = angular.copy(alertService);
 
@@ -468,7 +469,11 @@ angular.module('ponmApp.controllers')
                     if(data.status == "OK") {
                         $log.debug("properties update successful");
                         $scope.alertService.clear();
-                        $scope.alertService.add("success", "保存成功!", {ttl: 3000});
+                        $scope.alertService.add("success", "保存成功!", {ttl: 2000});
+                      $timeout(function() {
+                        $scope.cancel();
+                      }, 2000);
+
                     }else {
                         $scope.alertService.clear();
                         $scope.alertService.add("danger", "保存失败 " + data.status, {ttl: 2000});
@@ -591,17 +596,11 @@ angular.module('ponmApp.controllers')
             };
 
             $scope.mapOptions = {
-                // map plugin config
-                toolbar: true,
-                scrollzoom: true,
-                maptype: true, //'SATELLITE',
-                overview: true,
-//                locatecity: true,
-                // map-self config
-                resizeEnable: true
-                // ui map config
-//            uiMapCache: false
+              zoom: 5
             }
+          if(photo.point) {
+            $scope.mapOptions.centerPoint = photo.point;
+          }
         }])
     .controller('TypeaheadCtrl', ['$scope', '$http', 'GeocodeService', '$q',
         function ($scope, $http, GeocodeService, $q) {
@@ -636,12 +635,13 @@ angular.module('ponmApp.controllers')
 //                    location.lat,
 //                    location.lng,
 //                    address.formatted_address);
-
+                  if(address.bounds) {
+                    $scope.mapEventListener.setBounds($scope.map,
+                      address.bounds.sw,
+                      address.bounds.ne);
+                  }else if(address.zoom) {
                     $scope.mapEventListener.setZoom($scope.map, address.zoom);
-
-//                $scope.mapEventListener.setBounds($scope.map,
-//                    geometry.viewport.southwest,
-//                    geometry.viewport.northeast);
+                  }
                 }
             };
 

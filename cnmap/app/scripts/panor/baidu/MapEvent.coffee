@@ -1,4 +1,3 @@
-
 BMap = window.BMap
 class MapEvent extends window.ponm.IMapEvent
 

@@ -1,4 +1,3 @@
-
 $window = window
 class MapService extends window.cnmap.IMapService
   constructor: (@map) ->
@@ -13,8 +12,8 @@ class MapService extends window.cnmap.IMapService
       @init()
     # 根据坐标得到地址描述
     @geocoder.getLocation new window.BMap.Point(lng, lat), (result) ->
-        if result
-          callback.apply undefined, [result.address]
+      if result
+        callback.apply undefined, [result.address]
 
   getAddrPois: (lat, lng, callback) ->
     deferred = jQuery.Deferred()
@@ -23,15 +22,15 @@ class MapService extends window.cnmap.IMapService
       addresses = {}
       if result
         $.each result.surroundingPois, (index, poi) ->
-            if poi.title
-              address = poi.address + " " + poi.title
-            else
-              address = poi.address
+          if poi.title
+            address = poi.address + " " + poi.title
+          else
+            address = poi.address
 
-            addresses[address] = {
-              poiweight: 1
-              location: poi.point
-            };
+          addresses[address] = {
+            poiweight: 1
+            location: poi.point
+          };
       deferred.resolve addresses, result.address
 
     deferred.promise()
@@ -50,20 +49,20 @@ class MapService extends window.cnmap.IMapService
       @init()
     @geocoder.getPoint address, (point) ->
       addresses = [];
-#      console.log(point)
+      #      console.log(point)
       if point
         addresses.push {
-            address: address
-            location: point
-            similarity: 1
-    #        zoom: levelMap[geocode.level] || 4
-          }
+          address: address
+          location: point
+          similarity: 1
+        #        zoom: levelMap[geocode.level] || 4
+        }
       deferred.resolve addresses
 
     deferred.promise()
 
   translate: (lat, lng, callback) ->
-    
+
 
 MapService.factory = () ->
   return new window.cnmap.MapService

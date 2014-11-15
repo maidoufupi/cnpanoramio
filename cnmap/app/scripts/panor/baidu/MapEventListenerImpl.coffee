@@ -45,7 +45,7 @@ class MapEventListener extends window.cnmap.IMapEventListener
     map.pixelToPoint new BMap.Pixel(pixel.x, pixel.y)
 
   pointToPixel: (map, point) ->
-    map.pointToPixel new BMap.Point(point.lng, pixel.lat)
+    map.pointToPixel new BMap.Point(point.lng, point.lat)
 
   addMarker: (map, lat, lng) ->
     marker = new BMap.Marker new BMap.Point lng, lat

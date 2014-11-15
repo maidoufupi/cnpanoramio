@@ -1,4 +1,4 @@
-
+## 旅行数据层
 class ITravelLayer
   constructor: (@opts) ->
     {@ctx, @staticCtx, @map, @travel} = @opts if @opts

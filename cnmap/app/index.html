@@ -10,7 +10,7 @@
     <!--<meta http-equiv="refresh" content="5; url=http://127.0.0.1:9000/#/maps/user/3" />-->
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="stylesheet" href="bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css"/>
     <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css">
     <link rel="stylesheet" href="bower_components/Jcrop/css/jquery.Jcrop.css">
@@ -67,7 +67,7 @@
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
 <script type="text/javascript" src="bower_components/jquery.rest/dist/jquery.rest.js"></script>
-<script type="text/javascript" src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <!--<script type="text/javascript" src="bower_components/modernizr/Modernizr.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/js/typedarray.js"></script>-->
 
@@ -100,9 +100,9 @@
 <script type="text/javascript" src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
 <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.js"></script>
 <script type="text/javascript" src="bower_components/perfect-scrollbar/src/perfect-scrollbar.js"></script>
-<script type="text/javascript" src="bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
-<script type="text/javascript" src="bower_components/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js"></script>
-<script type="text/javascript" src="bower_components/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js"></script>
+<script type="text/javascript" src="scripts/directives/angular-perfect-scrollbar.js"></script>
+<script type="text/javascript" src="scripts/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js"></script>
+<script type="text/javascript" src="scripts/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js"></script>
 <script type="text/javascript" src="scripts/panor/js/color-thief.js"></script>
 
 <script type="text/javascript" src="scripts/panor/js/jquery.mousewheel.js"></script>
@@ -195,13 +195,13 @@
 <!--<script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>-->
 
-<script type="text/javascript" src="bower_components/angular-ui-map-baidu/ui-map.js"></script>
-<script type="text/javascript" src="scripts/panor/panoramio/cnmap.baidu.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapEventListenerImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapTravelImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>
-<script type="text/javascript" src="scripts/panor/baidu/MapConvertor.js"></script>
+<!--<script type="text/javascript" src="bower_components/angular-ui-map-baidu/ui-map.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.baidu.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapEventListenerImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapServiceImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapTravelImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/baidu/MapConvertor.js"></script>-->
 
 <!--<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>-->
@@ -209,17 +209,22 @@
 <!--<script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>-->
 
+<script type="text/javascript" src="bower_components/angular-ui-map-bing/ui-map.js"></script>
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.bing.js"></script>
+<script type="text/javascript" src="scripts/panor/bing/MapEventListenerImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/bing/MapServiceImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/bing/MapTravelImpl.js"></script>
+
 <!--<script charset="utf-8" src="http://union.mapbar.com/apis/maps/free?f=mapi&v=31.3&k=aCW9cItqL7sqT7AxaB0zdHZoZSWmbBsuT7JhMHTsMeD6ZIl9NzFsZHT=@JBL979@Iu7lJJZWWq0IDu9xZMzMxq7I9AhH7LAAA6hqzZHZZLTbZZauxlDz7C7DD9ZCFGT="></script>
 <script type="text/javascript" src="scripts/panor/js/cnmap.mapbar.js"></script>-->
 
 <script>
-    var map;
-    window.ctx = "http://127.0.0.1:8080";
-    window.staticCtx = "http://test.photoshows.cn";
-    window.corsproxyCtx = "http://www.photoshows.cn:9292/test.photoshows.cn";
-//    window.ctx = "http://www.photoshows.cn";
-//    window.staticCtx = "http://static.photoshows.cn";
-//    window.corsproxyCtx = "http://www.photoshows.cn:9292/static.photoshows.cn";
+//    window.ctx = "http://127.0.0.1:8080";
+//    window.staticCtx = "http://test.photoshows.cn";
+//    window.corsproxyCtx = "http://www.photoshows.cn:9292/test.photoshows.cn";
+    window.ctx = "http://www.photoshows.cn";
+    window.staticCtx = "http://static.photoshows.cn";
+    window.corsproxyCtx = "http://www.photoshows.cn:9292/static.photoshows.cn";
 //    window.corsproxyCtx = "http://www.corsproxy.com/static.photoshows.cn";
 //    window.staticCtx = "http://static.photoshows.cn.w.alikunlun.com";
 
@@ -230,18 +235,17 @@
             };
     window.login = true;
 
-    window.mapVendor = "baidu";
+    window.mapVendor = "bing";
     window.dev = true;
 </script>
-<div ng-app="ponmApp.Index" ui-map-async-load>
-    <div ui-view="navbar">
+<div ng-app="ponmApp.Index" ui-map-async-load ng-class="{'page-nav-fixed':pageNavMode=='fixed'}">
+    <div ui-view="navbar" class="header-navbar">
         <i>Some content will load here!</i>
     </div>
     <div ui-view="alert">
-        alerts
     </div>
 
-    <div ui-view class="main-view-page" style="position: absolute; bottom: 0; top: 51px; width: 100%;">
+    <div ui-view class="main-view-page">
         <i>Some content will load here!</i>
     </div>
 </div>

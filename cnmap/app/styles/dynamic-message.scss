@@ -291,5 +291,5 @@
 }
 
 .message-card.shown {
-  @include animation(popUp .8s ease-in forwards);
+  @include animation(popUp .4s ease-in forwards);
 }

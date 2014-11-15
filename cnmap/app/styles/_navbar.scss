@@ -2,6 +2,47 @@
 // Navbars
 // --------------------------------------------------
 
+.header-navbar {
+  position: relative;
+  z-index: 1030;
+  .navbar {
+    border-radius: 0;
+    min-height: $header-navbar-height;
+    margin-bottom: 0;
+    border: 0;
+    .navbar-logo {
+      height: 100%;
+    }
+
+    .navbar-nav>li>a {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .navbar-brand {
+      padding: 0 5px;
+      height: $header-navbar-height;
+    }
+
+    .navbar-nav.navbar-right {
+      .user {
+        a {
+          padding: 0 15px;
+        }
+
+        img {
+          width: $header-navbar-height;
+        }
+      }
+
+      .btn-group {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+}
+
 .navbar.navbar-default {
   .navbar-collapse {
     background-color: #f8f8f8;
@@ -9,10 +50,11 @@
 }
 
 .navbar-second {
-  position: fixed;
+//  position: fixed;
   width: 100%;
   z-index: 1029;
-  top: 51px;
+  height: 50px;
+//  top: 51px;
 
   .navbar-right {
     margin-right: 15px;
@@ -47,16 +89,37 @@
 
 .navbar-third {
   position: fixed !important;
-  top: 101px !important;
+  top: 81px !important;
   @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
   z-index: 1027;
 }
 
 .navbar-forth {
   position: fixed !important;
-  top: 151px !important;
+  top: $header-navbar-height+101px !important;
   z-index: 1026;
 //  @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
+}
+
+.navbar-second-edit {
+  position: relative;
+  .navbar-edit {
+    position: absolute;
+    top: -104px;
+    height: 0;
+  }
+  .navbar.navbar-edit.ponm-show {
+    height: 52px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+}
+.navbar-second-edit.selectable {
+  .dropdown {
+
+  }
 }
 
 .navbar-edit {
@@ -80,7 +143,7 @@
     .dropdown {
 
       .dropdown-toggle {
-        padding: 7px;
+        padding: 6px;
         line-height: 36px;
         img {
           margin: 1px;
@@ -118,8 +181,7 @@
 }
 
 .navbar.navbar-edit {
-  position: absolute;
-  top: -108px;
+
   left: 0;
   right: 0;
   @include transition-linear(all);
@@ -132,34 +194,6 @@
   }
 }
 
-.navbar.navbar-edit.ponm-show {
-  height: 52px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
-
-
-// second navbar fix to top
-//.navbar-second-top {
-//  .navbar-second {
-//    position: fixed;
-//    z-index: 1031;
-//    top: 0;
-//    border-bottom: 1px solid $theme-header-bd-color;
-//  }
-//  // photos
-//  .container-photos {
-//    margin-top: 61px;
-//    // waypoint timeline
-//    .timeline {
-//      top: 60px;
-//    }
-//  }
-//}
-
 .ponm-navbar-fixed-top {
   position: fixed;
   top: 0;
@@ -170,27 +204,8 @@
 
 /* navbar-start *******************************************************/
 
-//.glyphicon{
-//  font-size: 16px;
-//}
+.navbar {
 
-.navbar.navbar-fixed-top {
-  .navbar-nav.navbar-right {
-    .user {
-      a {
-        line-height: 50px;
-        padding: 0 15px;
-      }
-
-      img {
-        width: 30px;
-      }
-    }
-
-    .btn-group {
-      margin-bottom: 0;
-    }
-  }
 }
 
 .nav {
@@ -200,14 +215,9 @@
 
   .white:hover {
     color: #fff;
+    background-color: #48484c;
   }
 }
-
-//.nav.navbar-nav a.user {
-//  margin-top: 10px;
-//  margin-bottom: 10px;
-//  padding: 0;
-//}
 
 .navbar-profile-image {
   margin-left: 15px;
@@ -217,19 +227,5 @@
   @include border-radius(3px);
   border: 0;
 }
-//
-//#navbar-search {
-//  width: 240px;
-//  margin-top: 8px;
-//  color: #f0ad4e;
-//}
 
-.navbar-brand {
-  padding: 5px;
-  height: 50px;
-}
-.navbar-logo {
-  width: 130px;
-  height: 90%;
-}
 /* navbar-end */

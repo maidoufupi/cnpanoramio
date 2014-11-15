@@ -38,6 +38,12 @@ angular.module('ponmApp', [
           uiMapLoadParamsProvider.setParams({
               key:'AIzaSyA9e11ZRebw8fHsd1ZIi0FLTXsrSQTc490'
           });
+      }else if(window.mapVendor == "bing") {
+        uiMapLoadParamsProvider.setParams({
+          v:'7.0',
+          mkt: 'zh-HK,en-US',
+          key:'AhgYefMukpWZ3Y3MDp_oUztLbpDSGFkiqAgiKD7KNCurMLR2rDmwi9bM8N405mNX'
+        });
       }else {
           uiMapLoadParamsProvider.setParams({
               v: '1.3',

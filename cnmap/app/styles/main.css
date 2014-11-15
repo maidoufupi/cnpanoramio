@@ -12,6 +12,17 @@
 .label-clickable {
   cursor: pointer; }
 
+.page-nav-fixed .header-navbar {
+  position: fixed;
+  width: 100%; }
+.page-nav-fixed .main-view-page {
+  position: absolute;
+  width: 100%;
+  top: 31px;
+  bottom: 0; }
+  .page-nav-fixed .main-view-page .navbar-second {
+    position: fixed; }
+
 /** login page **********************/
 .login-container {
   height: 100%; }
@@ -262,6 +273,14 @@
   .Trends h5 {
     margin: 0;
     display: inline-block; }
+  .Trends .flex-module-header {
+    margin: 0 0 5px; }
+  .Trends .trend-items {
+    padding: 0;
+    margin: 0; }
+    .Trends .trend-items .trend-item {
+      display: inline-block;
+      margin: 0 5px; }
 
 .follow-button .button-text {
   font-weight: bold; }
@@ -798,7 +817,7 @@
   width: 100%; }
   .maps-container .maps-content .maps-left {
     position: fixed;
-    top: 102px;
+    top: 82px;
     left: 0;
     bottom: 0;
     -webkit-transition: all linear 0.3s;
@@ -835,7 +854,7 @@
   margin: 0 600px 0 0; }
 .maps-container .maps-content.maps-right-fixed .maps-right {
   width: 600px;
-  margin: 0; }
+  margin: 0 auto; }
   .maps-container .maps-content.maps-right-fixed .maps-right .navbar-third, .maps-container .maps-content.maps-right-fixed .maps-right .navbar-forth, .maps-container .maps-content.maps-right-fixed .maps-right .messages {
     width: 600px; }
 .maps-container .maps-content.maps-left-fixed .maps-left {
@@ -1198,8 +1217,6 @@
 /****************************************************************************************/
 /** photos page *************************************************************************/
 .photos {
-  position: absolute;
-  top: 52px;
   width: 100%; }
   .photos .container-photos {
     -webkit-transition: top linear 0.3s;
@@ -1212,6 +1229,8 @@
   .photos .container-photos.expand {
     position: absolute;
     top: 0; }
+  .photos .select-pane {
+    position: relative; }
 
 .photo-wall.photo-wall-fixed-size.photo-all .photo {
   width: 200px;
@@ -1338,29 +1357,42 @@ span.clickable:hover {
 
 /** photos page *************************************************************************/
 /****************************************************************************************/
-.map-panel {
+.map-photo-modal .map-media-scroller {
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 300px;
+  float: left;
+  height: 100%; }
+  .map-photo-modal .map-media-scroller .map-media {
+    margin-right: 10px; }
+    .map-photo-modal .map-media-scroller .map-media .thumbnail {
+      height: 158px; }
+.map-photo-modal .map-panel {
   position: relative;
   overflow: hidden;
   vertical-align: top;
   height: 100%;
-  width: 100%; }
-  .map-panel .map-photo-map {
+  margin-left: 300px;
+  padding-left: 10px;
+  border-left: 1px solid lightgrey; }
+  .map-photo-modal .map-panel .selected_photo_editor {
+    position: absolute;
+    background-color: #ececec;
+    height: 70px;
+    padding: 2px;
+    top: 0;
+    z-index: 100; }
+    .map-photo-modal .map-panel .selected_photo_editor .thumbnail {
+      float: left; }
+  .map-photo-modal .map-panel .map-photo-map {
     bottom: 60px; }
-  .map-panel #upload-map, .map-panel .map-photo-map {
+  .map-photo-modal .map-panel #upload-map, .map-photo-modal .map-panel .map-photo-map {
     position: absolute;
     width: 100%;
     margin: 5px 0;
-    top: 170px;
+    top: 80px;
     bottom: 0; }
-
-.selected_photo_editor {
-  background-color: #ececec;
-  height: 160px;
-  padding: 2px;
-  top: 0;
-  z-index: 100; }
-  .selected_photo_editor .thumbnail {
-    float: left; }
 
 /** loading */
 .loader {
@@ -1442,14 +1474,36 @@ span.clickable:hover {
   color: #428bca;
   text-decoration: none; }
 
+.header-navbar {
+  position: relative;
+  z-index: 1030; }
+  .header-navbar .navbar {
+    border-radius: 0;
+    min-height: 30px;
+    margin-bottom: 0;
+    border: 0; }
+    .header-navbar .navbar .navbar-logo {
+      height: 100%; }
+    .header-navbar .navbar .navbar-nav > li > a {
+      padding-top: 5px;
+      padding-bottom: 5px; }
+    .header-navbar .navbar .navbar-brand {
+      padding: 0 5px;
+      height: 30px; }
+    .header-navbar .navbar .navbar-nav.navbar-right .user a {
+      padding: 0 15px; }
+    .header-navbar .navbar .navbar-nav.navbar-right .user img {
+      width: 30px; }
+    .header-navbar .navbar .navbar-nav.navbar-right .btn-group {
+      margin-bottom: 0; }
+
 .navbar.navbar-default .navbar-collapse {
   background-color: #f8f8f8; }
 
 .navbar-second {
-  position: fixed;
   width: 100%;
   z-index: 1029;
-  top: 51px; }
+  height: 50px; }
   .navbar-second .navbar-right {
     margin-right: 15px; }
   .navbar-second .navbar {
@@ -1475,7 +1529,7 @@ span.clickable:hover {
 
 .navbar-third {
   position: fixed !important;
-  top: 101px !important;
+  top: 81px !important;
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
@@ -1483,8 +1537,21 @@ span.clickable:hover {
 
 .navbar-forth {
   position: fixed !important;
-  top: 151px !important;
+  top: 131px !important;
   z-index: 1026; }
+
+.navbar-second-edit {
+  position: relative; }
+  .navbar-second-edit .navbar-edit {
+    position: absolute;
+    top: -104px;
+    height: 0; }
+  .navbar-second-edit .navbar.navbar-edit.ponm-show {
+    height: 52px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0; }
 
 .navbar-edit {
   background-color: #4387fd; }
@@ -1495,7 +1562,7 @@ span.clickable:hover {
   .navbar-edit .navbar-collapse {
     background-color: #4387fd; }
   .navbar-edit .navbar-left .dropdown .dropdown-toggle {
-    padding: 7px;
+    padding: 6px;
     line-height: 36px; }
     .navbar-edit .navbar-left .dropdown .dropdown-toggle img {
       margin: 1px; }
@@ -1524,8 +1591,6 @@ span.clickable:hover {
     background-color: initial; }
 
 .navbar.navbar-edit {
-  position: absolute;
-  top: -108px;
   left: 0;
   right: 0;
   -webkit-transition: all linear 0.3s;
@@ -1538,13 +1603,6 @@ span.clickable:hover {
     .navbar.navbar-edit .navbar-toggle .icon-bar {
       background-color: white; }
 
-.navbar.navbar-edit.ponm-show {
-  height: 52px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0; }
-
 .ponm-navbar-fixed-top {
   position: fixed;
   top: 0;
@@ -1553,18 +1611,11 @@ span.clickable:hover {
   z-index: 1000; }
 
 /* navbar-start *******************************************************/
-.navbar.navbar-fixed-top .navbar-nav.navbar-right .user a {
-  line-height: 50px;
-  padding: 0 15px; }
-.navbar.navbar-fixed-top .navbar-nav.navbar-right .user img {
-  width: 30px; }
-.navbar.navbar-fixed-top .navbar-nav.navbar-right .btn-group {
-  margin-bottom: 0; }
-
 .nav .white {
   color: #7e7e7e; }
 .nav .white:hover {
-  color: #fff; }
+  color: #fff;
+  background-color: #48484c; }
 
 .navbar-profile-image {
   margin-left: 15px;
@@ -1576,14 +1627,6 @@ span.clickable:hover {
   -ms-border-radius: 3px;
   border-radius: 3px;
   border: 0; }
-
-.navbar-brand {
-  padding: 5px;
-  height: 50px; }
-
-.navbar-logo {
-  width: 130px;
-  height: 90%; }
 
 /* navbar-end */
 .nav.nav-tray > li > a {
@@ -1912,13 +1955,12 @@ b, strong {
 
 .map-photo-modal .modal-dialog {
   position: absolute;
-  top: 20px;
-  bottom: 20px;
+  top: 0;
+  bottom: 0;
   left: 40px;
   right: 40px;
   width: auto;
-  padding: 0;
-  box-shadow: 0 0 20px 1px #777; }
+  padding: 0; }
   .map-photo-modal .modal-dialog .modal-content .modal-body .map-panel .map-photo-map {
     bottom: 0;
     margin: 0; }
@@ -2510,9 +2552,9 @@ body::-webkit-scrollbar-corner {
   /* IE10+ and Future Browsers */ }
 
 .message-card.shown {
-  -webkit-animation: popUp 0.8s ease-in forwards;
+  -webkit-animation: popUp 0.4s ease-in forwards;
   /* Safari/Chrome */
-  animation: popUp 0.8s ease-in forwards;
+  animation: popUp 0.4s ease-in forwards;
   /* IE10+ and Future Browsers */ }
 
 /** photo container directive*/
@@ -2835,7 +2877,7 @@ item-picker .dropdown.dropdown-picker, *[item-picker] .dropdown.dropdown-picker 
     float: none;
     margin: 0; }
 
-  .map-panel #upload-map, .map-panel .map-photo-map {
+  .map-panel #upload-map, .map-photo-modal .map-panel .map-photo-map {
     position: relative;
     width: 100%;
     margin: 0;

@@ -181,7 +181,7 @@ class IMapEventListener
   setPosition: (target, lat, lng) ->
 
   ##
-   # 为目标对象设置地图并show
+   # 为目标对象设置地图并显示
    #
    # @param target
    # @param map

@@ -462,15 +462,24 @@ angular.module('ponmApp.maps', [
                 $scope.stateStatus = {};
                 $scope.stateStatus[stateName] = true;
 
+              if(matchmedia.isPhone()) {
                 if($scope.stateStatus.dynamic || $scope.stateStatus.upload) {
-                    if(matchmedia.isPhone()) {
-                        $scope.layoutManager.setLayout($scope.layoutManager.rightFull);
-                        $scope.setPanormaioType('manual');
-                    }else {
-                        $scope.layoutManager.setLayout($scope.layoutManager.leftFixed);
-                        $scope.setPanormaioType('manual');
-                    }
+                  $scope.layoutManager.setLayout($scope.layoutManager.rightFull);
+                  $scope.setPanormaioType('manual');
+                }else {
+                  $scope.layoutManager.setLayout($scope.layoutManager.leftFull);
                 }
+
+              }else {
+                if($scope.stateStatus.dynamic || $scope.stateStatus.upload) {
+                  $scope.layoutManager.setLayout($scope.layoutManager.leftFixed);
+                  $scope.setPanormaioType('manual');
+                }else {
+                  $scope.layoutManager.setLayout($scope.layoutManager.rightFixed);
+                }
+
+              }
+
                 angular.forEach($scope.navbar, function(nav, key) {
                     nav.active = false;
                     if(nav.name == stateName) {

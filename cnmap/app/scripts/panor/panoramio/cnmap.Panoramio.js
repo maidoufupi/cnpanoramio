@@ -150,10 +150,11 @@
         this.getLabelContent = function(photoOssKey) {
             if(this.opts.phone) {
                 return "<img src='" + this.staticCtx + "/"
-                    + photoOssKey + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
+                    + photoOssKey
+                  + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
             }else {
-                return "<img src='" + this.staticCtx + "/" + photoOssKey
-                    + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
+                return "<a href><img src='" + this.staticCtx + "/" + photoOssKey
+                    + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'></a>";
             }
 
         };

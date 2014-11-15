@@ -11,10 +11,10 @@ class TravelLayer extends window.cnmap.ITravelLayer
         point.push @createPoint photo for photo in spot.photos
 
         spot.polyline = new BMap.Polyline point, {
-            map: @map
-            strokeWeight: 2
+          map: @map
+          strokeWeight: 2
 #            strokeStyle: 'dashed'
-          }
+        }
         @map.addOverlay spot.polyline
 
   createPoint: (photo) ->
@@ -27,7 +27,7 @@ class TravelLayer extends window.cnmap.ITravelLayer
         width: 34
         height: 34
       }
-      title: photo.title||''
+      title: photo.title || ''
     }
     marker.photo = photo
     @map.addOverlay marker
@@ -61,13 +61,13 @@ class TravelLayer extends window.cnmap.ITravelLayer
           marker.disableDragging()
         if that.opts.editable and editable
           marker.addEventListener 'dragend',
-          (e) ->
-            if not this.photo.oPoint
-              this.photo.oPoint = $.extend {}, this.photo.point
-            this.photo.point.lat = e.point.lat
-            this.photo.point.lng = e.point.lng
-            that.updateSpotLine spot
-            $(that).trigger("spot.edited", [spot.id]);
+            (e) ->
+              if not this.photo.oPoint
+                this.photo.oPoint = $.extend {}, this.photo.point
+              this.photo.point.lat = e.point.lat
+              this.photo.point.lng = e.point.lng
+              that.updateSpotLine spot
+              $(that).trigger("spot.edited", [spot.id]);
         else
           marker.removeEventListener 'dragend'
     editMarker photo.marker for photo in spot.photos
@@ -90,9 +90,9 @@ class TravelLayer extends window.cnmap.ITravelLayer
       spot.polyline.setPath point
     else
       spot.polyline = new BMap.Polyline point, {
-          map: @map
-          strokeStyle: 'dashed'
-        }
+        map: @map
+        strokeStyle: 'dashed'
+      }
       @map.addOverlay spot.polyline
 
 window.cnmap.TravelLayer = TravelLayer
