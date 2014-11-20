@@ -1,11 +1,9 @@
-@import '_variables.scss';
+@import "../../node_modules/mathsass/dist/_math.scss";
+@import '../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_variables.scss';
+@import "_variables.scss";
 @import '_mixins.scss';
 
 @import 'comm.scss';
-//@import 'style.scss';
-//@import 'modal.scss';
-//@import 'ExploreWorld.scss';
-//@import 'PhotoDisplay.scss';
 @import 'user.scss';
 @import 'settings.scss';
 @import 'travel.scss';
@@ -32,9 +30,11 @@
 @import '_card.scss';
 @import 'ponm-travel-album.scss';
 @import '_responsive.scss';
+@import "_loader.scss";
+@import "_button.scss";
 
 body {
-  background-color: $body-bg;
+  background-color: $body-bg-color;
   overflow-x: hidden;
   overflow-y: scroll;
 }

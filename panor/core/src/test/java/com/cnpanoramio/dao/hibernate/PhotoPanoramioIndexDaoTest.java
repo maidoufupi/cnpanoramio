@@ -117,7 +117,7 @@ public class PhotoPanoramioIndexDaoTest {
 		int level = 19;
 		int width = 1000;
 		int height = 1000;
-		String term = "大  理";
+		String term = "大理";
 		String type = "all";
 		
 		List<Photo> photos = photoPanoramioIndexDao.search(new Point(swLat, swLng), new Point(neLat, neLng), level, width, height, term, type);

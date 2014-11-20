@@ -3,13 +3,13 @@
  */
 'use strict';
 
-angular.module('ponmApp.controllers')
+angular.module('ponmApp.login', ['ponmApp', 'ui.router'])
     .config([   '$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
             $stateProvider
                 // state: login
                 .state('login', {
-                    url: '/login',
+                    url: '',
                     views: {
                         '': { templateUrl: 'views/ponm.login.html',
                             controller: 'LoginCtrl'},
@@ -61,25 +61,9 @@ angular.module('ponmApp.controllers')
                 }
             });
 
-//            $scope.$watch('userForm.$dirty', function($dirty) {
-//                if($dirty) {
-//                    $scope.loginError = false;
-//                }
-//            });
-
             $scope.credentials = {};
 
             $scope.login = function(e, user) {
-//                if(!$scope.credentials.username) {
-//                    e.preventDefault();
-//                    e.stopPropagation();
-//                    $scope.userForm.j_username.$dirty = true;
-//                }
-//                if(!$scope.credentials.password) {
-//                    e.preventDefault();
-//                    e.stopPropagation();
-//                    $scope.userForm.j_password.$dirty = true;
-//                }
 
                 if($scope.userForm.$valid) {
                     AuthService.loginCheck(user).then(function() {
@@ -140,10 +124,6 @@ angular.module('ponmApp.controllers')
             $scope.ponmCtxConfig = ponmCtxConfig;
 
             $scope.user = {};
-
-//            $scope.$watch('user', function(passwordConfirm) {
-//                $log.debug(passwordConfirm);
-//            });
 
         }])
 ;

@@ -33,7 +33,7 @@ angular.module('ponmApp.controllers')
 
             $scope.setPhotoId = function (photoId) {
 
-                $log.debug("photoId" + photoId);
+                $log.debug("$scope id " + $scope.$id + " photoId" + photoId);
                 $scope.photoId = photoId;
 
                 // 获取图片各种信息
@@ -401,6 +401,16 @@ angular.module('ponmApp.controllers')
 
             $scope.share = function() {
             };
+
+          /**
+           * 点击图片事件 打开下一张
+           */
+          $scope.$on('image.click', function(e, photo) {
+            e.stopPropagation();
+            e.preventDefault();
+            $log.debug('image.click ' + $scope.photo.id);
+            $scope.next();
+          });
         }])
     .directive("photoTravelAlbum",
     ['$rootScope', '$animate', '$log', function ($rootScope, $animate, $log) {

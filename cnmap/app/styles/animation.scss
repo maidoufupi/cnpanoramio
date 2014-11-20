@@ -72,20 +72,22 @@
 
 
 @-webkit-keyframes enter_sequence {
-  from { opacity:0; }
+  from { opacity:0; @include scale(0.8);}
   to { opacity:1; }
 }
 @keyframes enter_sequence {
-  from { opacity:0; }
+  from { opacity:0; @include scale(0.8);}
   to { opacity:1; }
 
 }@-webkit-keyframes leave_sequence {
   from { opacity:1;}
-  to { opacity:0;}
+  to { opacity:0;
+      @include scale(0.8);}
 }
 @keyframes leave_sequence {
   from { opacity:1; }
-  to { opacity:0;}
+  to { opacity:0;
+    @include scale(0.8);}
 }
 
 /** view page animation *******************************************************************/

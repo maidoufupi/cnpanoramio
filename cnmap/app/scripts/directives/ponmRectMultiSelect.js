@@ -61,9 +61,7 @@ angular.module('ponmApp.directives')
 
         var defaults = {
             selector: ".photo",
-            moveselect: true,
-            offsetX: 0,
-            offsetY: 0
+            moveselect: true
         };
 
         return {
@@ -86,10 +84,16 @@ angular.module('ponmApp.directives')
 
                 element.append(bigGhost);
 
+                var offsetX = 0,
+                  offsetY = 0;
+
                 element.bind('mousedown', function (e) {
 
-                    var mouseX = e.pageX + options.offsetX,
-                        mouseY = e.pageY + options.offsetY;
+                  offsetX = element.offset().left;
+                  offsetY = element.offset().top;
+
+                    var mouseX = e.pageX - offsetX,
+                        mouseY = e.pageY - offsetY;
 
                     bigGhost.removeClass("ponm-show");
                     ghostSelect.addClass("ponm-show");
@@ -113,8 +117,8 @@ angular.module('ponmApp.directives')
                     }
                     mousedown = false;
 
-                    var w = Math.abs(initialW - e.pageX - options.offsetX);
-                    var h = Math.abs(initialH - e.pageY - options.offsetY);
+                    var w = Math.abs(initialW - e.pageX + offsetX);
+                    var h = Math.abs(initialH - e.pageY + offsetY);
 
                     if(w < 10 && h < 10) {
                         return;
@@ -133,8 +137,8 @@ angular.module('ponmApp.directives')
 
                     e.preventDefault();
 
-                    var mouseX = e.pageX + options.offsetX,
-                        mouseY = e.pageY + options.offsetY;
+                    var mouseX = e.pageX - offsetX,
+                        mouseY = e.pageY - offsetY;
 
 //                    $log.debug("mouseX: " +  mouseX + " mouseY: " +  mouseY);
 
@@ -224,7 +228,7 @@ angular.module('ponmApp.directives')
                             });
 
 
-                        }else {
+                        }else if(!e.shiftKey) {
                             safeApply(scope, function() {
                                 setter(scope, false);
                             });

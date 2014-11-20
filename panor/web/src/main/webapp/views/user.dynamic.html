@@ -6,5 +6,14 @@
          ng-if="!messageManager.ended"
          waypoint="{'offset': 'bottom-in-view'}"
          on-waypoint="onLoadWaypoint($element, $direction)"
-         ng-click="onLoadWaypoint()">loading more</div>
+         ng-click="onLoadWaypoint()">
+      <div class="loader loader-loading">
+        <div class="loading-slide">
+          <div class="slide"></div>
+          <div class="slide"></div>
+          <div class="slide"></div>
+        </div>
+      </div>
+      <span>加载中</span>
+    </div>
 </div>

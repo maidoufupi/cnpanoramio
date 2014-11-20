@@ -88,7 +88,7 @@ angular.module('ponmApp.dynamic', [
 
             this.userId = userId;
 
-            this.pageSize = 20;
+            this.pageSize = 10;
             this.pageNo = 1;
             this.ended = false;
 

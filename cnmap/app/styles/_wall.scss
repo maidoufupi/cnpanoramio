@@ -3,28 +3,42 @@
     position: relative;
     display: inline-block;
     margin: 1px;
+    background-color: grey;
     @include transition-linear(all);
     img {
-//      display: none;
-//      height: 100px;
       @include transition-linear(all);
+    }
+
+    .action-container {
+      position: absolute;
+      bottom: 0;
+      height: 40%;
+      width: 100%;
+      overflow: hidden;
+      @include transition(height $transition-time ease-out);
+      .action {
+        @include translate(0, 100%);
+      }
     }
 
     .ponm-photo-footer {
       position: absolute;
-      bottom: 0;
-      height: 50%;
+      top: 0;
+      height: 100%;
       width: 100%;
-      padding: 5px;
+      border: 5px solid transparent;
       background-color: rgba(128, 128, 128, 0.5);
       color: white;
-      overflow: hidden;
       font-size: 10px;
+      overflow: hidden;
+      @include transition(background-color $transition-time ease-in);
+      .description {
+        color: white;
+      }
     }
 
     .action {
-      opacity: 0;
-      @include transition-linear(opacity);
+      @include transition(transform $transition-time ease-in);
     }
   }
 
@@ -37,7 +51,15 @@
   }
   .photo:hover, .photo.hover {
     .action {
+      @include translate(0, 0);
       opacity: 1;
+    }
+    .action-container:hover, .action-container.hover {
+      height: 100%;
+      .ponm-photo-footer {
+        background-color: rgba(128, 128, 128, 0.8);
+      }
+
     }
   }
 }
@@ -51,32 +73,54 @@
   }
 }
 
+.photo-wall.photo-wall-fixed-size.photo-selectable-container {
+  .photo {
+    margin: 0;
+    border: 1px solid $body-bg-color;
+  }
+}
+
 // photo selectable container
 .photo-selectable-container {
   width: 100%;
   .photo {
     position: relative;
-    margin: 1px;
+    border: 0;
     img {
-      -webkit-transition: all 218ms ease-in-out;
-      transition: all 218ms ease-in-out;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-      border: 0 solid transparent;
+      @include transition(all 218ms ease-in-out);
+      @include box-sizing(border-box);
+      border: 0;
+
     }
     img.selectable {
-      -webkit-transition: all 218ms ease-in-out;
-      transition: all 218ms ease-in-out;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-      border: 5px solid $body-bg;
+      @include transition(all 218ms ease-in-out);
+      @include box-sizing(border-box);
+      border: 5px solid $body-bg-color;
     }
     img.selected {
-      -webkit-transition: all 218ms ease-in-out;
-      transition: all 218ms ease-in-out;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
+      @include transition(all 218ms ease-in-out);
+      @include box-sizing(border-box);
       border: 5px solid $theme-edit-color;
+    }
+
+    .action-select {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      opacity: 0;
+      z-index: 2;
+    }
+
+    .action-container {
+      @include transition(all 218ms ease-in-out);
+    }
+  }
+  .photo.selectable {
+    .action-select {
+      opacity: 1;
+    }
+    .action-container {
+      border: 5px solid transparent;
     }
   }
 }

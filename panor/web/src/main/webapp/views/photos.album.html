@@ -21,7 +21,9 @@
             <div class="item"><pre class="description"><span class="footnotes">{{spot.description}}</span></pre></div>
         </div>
 
-        <div photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
+        <div ng-init="targetHeights={'small': 120, 'medium': 160, 'large': 200}"
+             photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
+             photo-container-fluid-target-height = "{{targetHeights[photoWallMode]}}"
              class="photo-wall photo-selectable-container">
             <div ng-repeat="photo in spot.photos"
                  ng-controller="PhotosPhotoCtrl"

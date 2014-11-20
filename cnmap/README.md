@@ -28,3 +28,7 @@ at compile (..\node_modules\grunt-contrib-compass\tasks\compass.js:37:10)
 npm install -g coffee-script
 ```
 
+关闭chrome安全限制用于测试
+```
+chrome.exe --disable-web-security
+```

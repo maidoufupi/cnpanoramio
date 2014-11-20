@@ -20,25 +20,14 @@
   70% {
     @include scale(1.1);
     @include opacity(.8);
-//    -webkit-transform: scale(1.1);
-//    transform: scale(1.1);
-//    opacity: .8;
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
   }
   100% {
     @include scale(1);
     @include opacity(1);
-//    -webkit-transform: scale(1);
-//    transform: scale(1);
-//    opacity: 1;
   }
 }
-
-//.btn.loadmore {
-//  width: 100%;
-//
-//}
 
 .dynamic-container {
   margin: auto;

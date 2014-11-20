@@ -1,5 +1,6 @@
 
 <div class="photo-wall photo-wall-fixed-size photo-selectable-container photo-all"
+     ng-class="'photo-wall-'+photoWallMode"
      infinite-scroll='getUserPhotos()'
      infinite-scroll-distance='1'
      ><!-- infinite-scroll-parent="" -->
@@ -25,9 +26,18 @@
         </div>
     </div>
     <div ng-show="photo.currentPage <= photo.numPages"
-         class="btn btn-default btn-block load-more"
+         class="btn btn-default btn-block loadmore"
          ng-click="getUserPhotos()"
-            >{{photoLoading?'loading...':'加载更多'}}</div>
+            >
+      <div class="loader loader-loading">
+        <div class="loading-slide">
+          <div class="slide"></div>
+          <div class="slide"></div>
+          <div class="slide"></div>
+        </div>
+      </div>
+      <span ng-hide="photoLoading">加载更多</span>
+    </div>
 </div>
 
 <div class="timeline">
@@ -42,3 +52,7 @@
     </div>
 
 </div>
+
+  <div class="btn btn-backtop btn-circle" ng-click="backtop()">
+    <span class="glyphicon glyphicon-chevron-up"></span>
+  </div>

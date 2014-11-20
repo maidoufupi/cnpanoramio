@@ -73,23 +73,59 @@ class MapService extends window.cnmap.IMapService
   getLocPois: (address) ->
     deferred = jQuery.Deferred()
 
-    if !@geocoder
-      @init()
-    @geocoder.getPoint address, (point) ->
-      addresses = [];
-#      console.log(point)
-      if point
-        addresses.push {
-            address: address
-            location: point
-            similarity: 1
-    #        zoom: levelMap[geocode.level] || 4
+    geocodeCallback = (geocodeResult, userData) ->
+      console.log(geocodeResult)
+      console.log(userData)
+      addresses = []
+      for result in geocodeResult.results
+        address = {
+          address: result.name
+          location: {
+            lat: result.location.latitude
+            lng: result.location.longitude
           }
+          similarity: result.matchConfidence
+        }
+        if result.bestView
+          sw = {
+            lat: result.bestView.center.latitude - result.bestView.height/2
+          }
+          lng = result.bestView.center.longitude - result.bestView.width/2
+          if lng < -179
+            sw.lng = 180 + lng + 180
+          else
+            sw.lng = lng
+          ne = {
+            lat: result.bestView.center.latitude + result.bestView.height/2
+          }
+          lng = result.bestView.center.longitude + result.bestView.width/2
+          if lng > 180
+            ne.lng = lng - 180 - 180
+          else
+            ne.lng = lng
+
+          address.bounds = {
+            sw: sw
+            ne: ne
+          }
+        addresses.push address
       deferred.resolve addresses
+    errCallback = () ->
+
+    geocodeRequest = {where: address, count:10, callback:geocodeCallback, errorCallback:errCallback};
+    @searchManager.geocode geocodeRequest
+#      addresses = [];
+#      if point
+#        addresses.push {
+#            address: address
+#            location: point
+#            similarity: 1
+#    #        zoom: levelMap[geocode.level] || 4
+#          }
+#      deferred.resolve addresses
 
     deferred.promise()
 
-  translate: (lat, lng, callback) ->
 instance = undefined
 MapService.factory = () ->
   if !instance

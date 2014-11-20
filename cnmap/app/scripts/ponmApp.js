@@ -4,7 +4,8 @@
 'use strict';
 
 angular.module('ponmApp', [
-    'ponmApp.services'
+  'ponmApp.directives',
+  'ponmApp.services'
 ])
     .config(['$logProvider',
         function ($logProvider ) {

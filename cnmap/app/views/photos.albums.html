@@ -1,4 +1,4 @@
-<div class="photo-travels">
+<div class="photo-travels" ng-class="'albums-'+photoWallMode">
     <div ng-repeat="travel in travels"
          class="travel">
         <a ng-href="#/photos/{{$stateParams.userId}}/albums/{{travel.id}}">
@@ -10,7 +10,9 @@
 
                 <div class="caption">
                     <h5>{{travel.title}}</h5>
-                    <div><span class="footnotes">{{travel.photo_size}} 张照片</span></div>
+                    <div class="travel-photo-size"><span class="footnotes">{{travel.photo_size}} 张照片</span></div>
+                  <div class="travel-address">{{travel.address}}</div>
+                  <div class="travel-description">{{travel.description}}</div>
                 </div>
             </div>
         </a>

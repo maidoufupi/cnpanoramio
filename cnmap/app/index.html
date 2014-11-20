@@ -11,6 +11,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <!--<link rel="stylesheet" href="bower_components/bootstrap-material-design/dist/css/material.css"/>-->
     <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css"/>
     <link rel="stylesheet" href="bower_components/blueimp-file-upload/css/jquery.fileupload.css">
     <link rel="stylesheet" href="bower_components/Jcrop/css/jquery.Jcrop.css">
@@ -139,7 +140,6 @@
 <script type="text/javascript" src="scripts/services/travelManager.js"></script>
 <script type="text/javascript" src="scripts/services/dialogService.js"></script>
 <script type="text/javascript" src="scripts/services/rgbHex.js"></script>
-<script type="text/javascript" src="scripts/services/rgbHex.js"></script>
 
 <script type="text/javascript" src="scripts/controllers/ponmAppCtrl.js"></script>
 <script type="text/javascript" src="scripts/controllers/fileuploadCtrl.js"></script>
@@ -203,17 +203,17 @@
 <!--<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/baidu/MapConvertor.js"></script>-->
 
-<!--<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>-->
+<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>
+<script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>
 
-<script type="text/javascript" src="bower_components/angular-ui-map-bing/ui-map.js"></script>
-<script type="text/javascript" src="scripts/panor/panoramio/cnmap.bing.js"></script>
-<script type="text/javascript" src="scripts/panor/bing/MapEventListenerImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/bing/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/bing/MapTravelImpl.js"></script>
+<!--<script type="text/javascript" src="bower_components/angular-ui-map-bing/ui-map.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.bing.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/bing/MapEventListenerImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/bing/MapServiceImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/bing/MapTravelImpl.js"></script>-->
 
 <!--<script charset="utf-8" src="http://union.mapbar.com/apis/maps/free?f=mapi&v=31.3&k=aCW9cItqL7sqT7AxaB0zdHZoZSWmbBsuT7JhMHTsMeD6ZIl9NzFsZHT=@JBL979@Iu7lJJZWWq0IDu9xZMzMxq7I9AhH7LAAA6hqzZHZZLTbZZauxlDz7C7DD9ZCFGT="></script>
 <script type="text/javascript" src="scripts/panor/js/cnmap.mapbar.js"></script>-->
@@ -235,7 +235,7 @@
             };
     window.login = true;
 
-    window.mapVendor = "bing";
+    window.mapVendor = "qq";
     window.dev = true;
 </script>
 <div ng-app="ponmApp.Index" ui-map-async-load ng-class="{'page-nav-fixed':pageNavMode=='fixed'}">

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="styles/main.css"/>
+</head>
+<body style="overflow-y: hidden;">
+
+<!-- angularjs -->
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script type="text/javascript" src="bower_components/angular-resource/angular-resource.js"></script>
+<script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+<!-- jQuery plugins-->
+<script type="text/javascript" src="bower_components/jquery-backstretch/src/jquery.backstretch.js"></script>
+
+<!-- custom scripts -->
+<script type="text/javascript" src="scripts/ponmApp.js"></script>
+<script type="text/javascript" src="scripts/controllers.js"></script>
+<script type="text/javascript" src="scripts/directives.js"></script>
+<script type="text/javascript" src="scripts/directives/backstretch.js"></script>
+<script type="text/javascript" src="scripts/services.js"></script>
+<script type="text/javascript" src="scripts/controllers/NavbarCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/LoginCtrl.js"></script>
+
+<script type="text/javascript" src="scripts/services/jsUtils.js"></script>
+
+<div ng-app="ponmApp.login">
+  <div ui-view="navbar" class="header-navbar">
+  </div>
+  <div ui-view="alert">
+  </div>
+  <div ui-view class="main-view-page"
+       style="position: absolute; top: 0; bottom: 0; margin-top: 30px; width: 100%;">
+  </div>
+</div>
+</body>
+</html>

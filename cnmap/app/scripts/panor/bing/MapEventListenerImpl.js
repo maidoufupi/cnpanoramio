@@ -70,7 +70,12 @@
     };
 
     MapEventListener.prototype.pixelToPoint = function(map, pixel) {
-      return map.tryPixelToLocation(new Microsoft.Maps.Point(pixel.x, pixel.y), Microsoft.Maps.PixelReference.control);
+      var loc;
+      loc = map.tryPixelToLocation(new Microsoft.Maps.Point(pixel.x, pixel.y), Microsoft.Maps.PixelReference.control);
+      return {
+        lat: loc.latitude,
+        lng: loc.longitude
+      };
     };
 
     MapEventListener.prototype.pointToPixel = function(map, point) {

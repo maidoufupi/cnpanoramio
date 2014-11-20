@@ -16,7 +16,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
 
-	<link rel="stylesheet" href="<c:url value="/bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap.css"/>">
+	<link rel="stylesheet" href="<c:url value="/bower_components/bootstrap/dist/css/bootstrap.css"/>">
 	<link rel="stylesheet" href="<c:url value="/bower_components/blueimp-gallery/css/blueimp-gallery.css"/>">
     <%-- <link rel="stylesheet" href="<c:url value="/bower_components/angular-xeditable/dist/css/xeditable.css"/>">
     <link rel="stylesheet" href="<c:url value="/bower_components/blueimp-file-upload/css/jquery.fileupload.css"/>">
@@ -31,15 +31,20 @@
 	<script type="text/javascript" id="bdshare_js" data="type=tools&mini=1" ></script>
 	<script id="bdshell_js"></script>
 		
-	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.jquery.min.js"></script>
-	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.angular.min.js"></script>
-	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/blueimp-file-upload.min.js"></script>
-    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.min.js"></script>
-    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.controllers.min.js"></script>
-    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.directives.min.js"></script>
-    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.min.js"></script>
-    
-	<script type="text/javascript" src="<c:url value='/scripts/script.js'/>"></script>
+	<%--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.jquery.min.js"></script>--%>
+	<%--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.angular.min.js"></script>--%>
+	<%--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/blueimp-file-upload.min.js"></script>--%>
+    <%--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.min.js"></script>--%>
+    <%--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.controllers.min.js"></script>--%>
+    <%--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/ponmApp.directives.min.js"></script>--%>
+    <%--<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.min.js"></script>--%>
+
+    <script type="text/javascript" src="scripts/ponmApp.jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.angular.min.js"></script>
+    <script type="text/javascript" src="scripts/blueimp-file-upload.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.min.js"></script>
+    <script type="text/javascript" src="scripts/ponmApp.controllers.min.js"></script>
+    <script type="text/javascript" src="scripts/panor/scripts.min.js"></script>
 <c:choose>
   <c:when test='${sessionScope.mapVendor eq "google"}'>
   	<script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.google.min.js"></script>
@@ -76,20 +81,16 @@
 	            id: window.userId
 	            };
     </script>
-    
-<div ng-app="ponmApp.Index" ui-map-async-load>
-    <div ui-view="navbar">
-        <i>Some content will load here!</i>
+
+    <div ng-app="ponmApp.Index" ui-map-async-load ng-class="{'page-nav-fixed':pageNavMode=='fixed'}">
+        <div ui-view="navbar" class="header-navbar">
+            <i>Some content will load here!</i>
+        </div>
+        <div ui-view="alert">
+        </div>
+        <div ui-view class="main-view-page">
+            <i>Some content will load here!</i>
+        </div>
     </div>
-    <div ui-view="alert">
-        alert
-    </div>
-    <div ui-view class="main-view-page" style="position: absolute;
-                        bottom: 0;
-                        top: 51px;
-                        width: 100%;">
-        <i>Some content will load here!</i>
-    </div>
-</div>
 </body>
 </html>

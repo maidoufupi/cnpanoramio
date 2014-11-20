@@ -12,12 +12,11 @@
     }
 
     TravelLayer.prototype.initMap = function(map) {
-      var photo, point, spot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
+      var photo, points, spot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
       if (map) {
         this.map = map;
       }
       this.calcSpotTime();
-      point = [];
       if (this.travel) {
         _ref = this.travel.spots;
         _results = [];
@@ -28,41 +27,36 @@
             photo = _ref1[_j];
             this.createMarker(photo);
           }
-          point = [];
+          points = [];
           _ref2 = spot.photos;
           for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
             photo = _ref2[_k];
-            point.push(this.createPoint(photo));
+            points.push(this.createPoint(photo));
           }
-          spot.polyline = new BMap.Polyline(point, {
-            map: this.map,
-            strokeWeight: 2
-          });
-          _results.push(this.map.addOverlay(spot.polyline));
+          _results.push(spot.polyline = this.createPolyline(points));
         }
         return _results;
       }
     };
 
     TravelLayer.prototype.createPoint = function(photo) {
-      return new BMap.Point(photo.point.lng, photo.point.lat);
+      return new Microsoft.Maps.Location(photo.point.lat, photo.point.lng);
     };
 
     TravelLayer.prototype.createMarker = function(photo) {
       var marker, that;
       that = this;
-      marker = new BMap.Marker(this.createPoint(photo), {
-        icon: new BMap.Icon(this.getMarkerImage(photo), {
-          width: 34,
-          height: 34
-        }),
-        title: photo.title || ''
+      marker = new Microsoft.Maps.Pushpin(this.createPoint(photo), {
+        icon: this.getMarkerImage(photo),
+        text: photo.title || ''
       });
       marker.photo = photo;
-      this.map.addOverlay(marker);
+      this.map.entities.push(marker);
       if (this.opts.clickable) {
-        marker.addEventListener('click', function(e) {
-          return jQuery(that).trigger("data_clicked", [this.photo.id]);
+        Microsoft.Maps.Events.addHandler(marker, 'click', function(e) {
+          if (!e.mouseMoved) {
+            return jQuery(that).trigger("data_clicked", [e.target.photo.id]);
+          }
         });
       }
       photo.marker = marker;
@@ -71,7 +65,7 @@
 
     TravelLayer.prototype.removeMarker = function(photo) {
       if (photo.marker) {
-        this.map.removeOverlay(photo.marker);
+        this.map.entities.remove(photo.marker);
         return delete photo.marker;
       }
     };
@@ -79,9 +73,13 @@
     TravelLayer.prototype.toggleSpotLine = function(spot, visible) {
       if (spot.polyline) {
         if (visible) {
-          return spot.polyline.show();
+          return spot.polyline.setOptions({
+            visible: true
+          });
         } else {
-          return spot.polyline.hide();
+          return spot.polyline.setOptions({
+            visible: false
+          });
         }
       }
     };
@@ -93,22 +91,29 @@
       editMarker = function(marker) {
         if (marker) {
           if (that.opts.editable && editable) {
-            marker.enableDragging();
+            marker.setOptions({
+              draggable: true
+            });
           } else {
-            marker.disableDragging();
+            marker.setOptions({
+              draggable: false
+            });
           }
           if (that.opts.editable && editable) {
-            return marker.addEventListener('dragend', function(e) {
-              if (!this.photo.oPoint) {
-                this.photo.oPoint = $.extend({}, this.photo.point);
+            return marker.dragListener = Microsoft.Maps.Events.addHandler(marker, 'dragend', function(e) {
+              var loc;
+              if (!e.target.photo.oPoint) {
+                e.target.photo.oPoint = $.extend({}, e.target.photo.point);
               }
-              this.photo.point.lat = e.point.lat;
-              this.photo.point.lng = e.point.lng;
+              loc = e.target.getLocation();
+              e.target.photo.point.lat = loc.latitude;
+              e.target.photo.point.lng = loc.longitude;
               that.updateSpotLine(spot);
               return $(that).trigger("spot.edited", [spot.id]);
             });
           } else {
-            return marker.removeEventListener('dragend');
+            Microsoft.Maps.Events.removeHandler(marker.dragListener);
+            return delete marker.dragListener;
           }
         }
       };
@@ -130,7 +135,7 @@
           delete photo.oPoint;
         }
         if (photo.marker) {
-          return photo.marker.setPosition(that.createPoint(photo));
+          return photo.marker.setLocation(that.createPoint(photo));
         }
       };
       _ref = spot.photos;
@@ -142,22 +147,27 @@
     };
 
     TravelLayer.prototype.updateSpotLine = function(spot) {
-      var photo, point, _i, _len, _ref;
-      point = [];
+      var photo, points, _i, _len, _ref;
+      points = [];
       _ref = spot.photos;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         photo = _ref[_i];
-        point.push(this.createPoint(photo));
+        points.push(this.createPoint(photo));
       }
       if (spot.polyline) {
-        return spot.polyline.setPath(point);
+        return spot.polyline.setLocations(points);
       } else {
-        spot.polyline = new BMap.Polyline(point, {
-          map: this.map,
-          strokeStyle: 'dashed'
-        });
-        return this.map.addOverlay(spot.polyline);
+        return spot.polyline = this.createPolyline(points);
       }
+    };
+
+    TravelLayer.prototype.createPolyline = function(points) {
+      var polyline;
+      polyline = new Microsoft.Maps.Polyline(points, {
+        strokeThickness: 2
+      });
+      this.map.entities.push(polyline);
+      return polyline;
     };
 
     return TravelLayer;

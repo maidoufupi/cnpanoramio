@@ -2,7 +2,7 @@
     <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
 </div>
 <div class="maps-travel">
-    <div class="travel-header" waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-55'}">
+    <div class="travel-header" waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '81'}">
         <div class="media user-info">
             <a class="pull-left" href="{{ctx}}/#/photos/{{userOpenInfo.id}}/albums"
                user-card owner="{id:userId}" user-id="userOpenInfo.id">
@@ -23,23 +23,6 @@
                     </a>
                 </span>
 
-                <div class="media-footer">
-                    <span class="footnotes">{{'  ' + (travel.time_start | date:'yyyy/MM/dd') + ' - ' + (travel.time_end | date:'yyyy/MM/dd') }}</span>
-                </div>
-                <div class="media-footer">
-                    <span>共 {{travel.photo_size}} 张图片</span>
-                    <span> {{travel.spots.length}} 个景点</span>
-                </div>
-
-                <button type="button"
-                        class="btn btn-xs"
-                        ng-if="login&&(userId == travel.user_id)"
-                        ng-class="{'btn-default':!travelEnedit, 'btn-primary':travelEnedit}"
-                        ng-click="changeEditableView()">
-                    <span ng-show="travelEnedit"><span class="glyphicon glyphicon-pencil"></span>更改试图</span>
-                    <span ng-show="!travelEnedit">显示试图</span>
-                </button>
-
                 <bd-share ng-if="travel" class="bd-share"
                           text="{{travel.title}}"
                           desc=""
@@ -48,26 +31,43 @@
                           pic="{{staticCtx + '/' + travel.album_cover + '@!photo-preview-big'}}"
                           bd-bind=""></bd-share>
             </div>
-
-
-        </div>
-
-        <div class="travel-desc">
-            <div ng-switch="travelEnedit">
-                <a ng-switch-when="true"
-                   href=""
-                   class="editable"
-                   editable-textarea="travel.description" e-rows="4" e-cols="40"
-                   onbeforesave="updateTravel(travel, 'description', $data)">
-                    <pre class="description">{{ travel.description || '添加描述' }}</pre>
-                </a>
-                <pre class="description"
-                     ng-switch-default>{{travel.description}}</pre>
-            </div>
         </div>
     </div>
 
     <div class="travel-content">
+      <div class="travel-description">
+        <div>
+          <div class="media-footer">
+            <span class="footnotes">{{'  ' + (travel.time_start | date:'yyyy/MM/dd') + ' - ' + (travel.time_end | date:'yyyy/MM/dd') }}</span>
+          </div>
+          <div class="media-footer">
+            <span>共 {{travel.photo_size}} 张图片</span>
+            <span> {{travel.spots.length}} 个景点</span>
+          </div>
+
+          <button type="button"
+                  class="btn btn-xs"
+                  ng-if="login&&(userId == travel.user_id)"
+                  ng-class="{'btn-default':!travelEnedit, 'btn-primary':travelEnedit}"
+                  ng-click="changeEditableView()">
+            <span ng-show="travelEnedit"><span class="glyphicon glyphicon-pencil"></span>更改试图</span>
+            <span ng-show="!travelEnedit">显示试图</span>
+          </button>
+        </div>
+        <div class="travel-desc">
+          <div ng-switch="travelEnedit">
+            <a ng-switch-when="true"
+               href=""
+               class="editable"
+               editable-textarea="travel.description" e-rows="4" e-cols="40"
+               onbeforesave="updateTravel(travel, 'description', $data)">
+              <pre class="description">{{ travel.description || '添加描述' }}</pre>
+            </a>
+                <pre class="description"
+                     ng-switch-default>{{travel.description}}</pre>
+          </div>
+        </div>
+      </div>
         <div class="panel panel-default travel-spot"
              ng-repeat="spot in travel.spots"
              ng-controller="MapsTravelSpotCtrl">
@@ -79,7 +79,7 @@
                 </a>
             </div>
             <!-- Default panel contents -->
-            <div class="panel-heading" waypoint-sticky="{'stuckClass': 'navbar-forth', 'offset': '152'}">
+            <div class="panel-heading" waypoint-sticky="{'stuckClass': 'navbar-forth4', 'offset': '122'}">
                 <div class="travel-spot-header" >
                     <a href="" ng-click="activeSpot(spot)">
                         <div class="spot-date" >
@@ -185,11 +185,13 @@
                                 <div class="icon-photo-p360"></div>
                             </div>
                         </a>
+                      <div class="action-container">
                         <div class="action ponm-photo-footer">
                             <div>{{photo.date_time | date:'yyyy/MM/dd-HH:mm:ss'}}</div>
-                            <p>{{photo.point.address}}</p>
+                            <h6>{{photo.point.address}}</h6>
                             <pre class="description">{{photo.description}}</pre>
                         </div>
+                      </div>
                         <div ng-show="travelEnedit"
                              class="action datetime-picker">
                             <div class="dropdown">

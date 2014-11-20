@@ -17,7 +17,7 @@
 
                 <li popover="地图" popover-trigger="mouseenter" popover-placement="bottom"
                     class="white">
-                    <a href="#/maps" >
+                    <a href="/#/maps" >
                         <span>浏览地图</span>
                         <span class="glyphicon glyphicon-plane"></span>
                     </a>
@@ -25,7 +25,7 @@
                 <li popover="我的照片" popover-trigger="mouseenter" popover-placement="bottom"
                     ng-show="ponmCtxConfig.login"
                     class="white">
-                    <a href="#/photos/{{ponmCtxConfig.userId}}" >
+                    <a href="/#/photos/{{ponmCtxConfig.userId}}" >
                         <span>我的照片</span>
                         <span class="glyphicon glyphicon-picture"></span>
                     </a>
@@ -33,7 +33,7 @@
                 <li popover="关注的动态" popover-trigger="mouseenter" popover-placement="bottom"
                     ng-show="ponmCtxConfig.login"
                     class="white">
-                    <a href="#/dynamic/my" >
+                    <a href="/#/dynamic/my" >
                         <span>好友动态</span>
                         <span class="glyphicon glyphicon-list-alt"></span>
                     </a>
@@ -41,7 +41,7 @@
                 <li popover="上传图片" popover-trigger="mouseenter" popover-placement="bottom"
                     ng-show="ponmCtxConfig.login"
                     class="white">
-                    <a href="#/maps/upload" >
+                    <a href="/#/maps/upload" >
                         <span>上传</span>
                         <span class="glyphicon glyphicon-camera"></span>
                     </a>
@@ -49,13 +49,14 @@
                 <li ng-switch on="ponmCtxConfig.login"
                     class="user white"
                     ng-class="{'active': !ponmCtxConfig.login}">
-                    <a href="#/user/{{ponmCtxConfig.userId}}"
+                    <a href="/#/user/{{ponmCtxConfig.userId}}"
+                       class="user-avatar"
                        ng-switch-when="true">
                         <span>{{ponmCtxConfig.name}}</span>
                         <span><img ng-src="{{staticCtx}}/avatar{{ponmCtxConfig.avatar || 1}}.png"
                                    class="img-circle"></span>
                     </a>
-                    <a href="#/login" class="active white"
+                    <a href="/login" class="login active white"
                        ng-switch-default>
                         <span>登录</span>
                         <span class="glyphicon glyphicon-user"></span>
@@ -66,7 +67,7 @@
                         <span class="glyphicon glyphicon-th-list white"></span>
                     </a>
                     <ul class="dropdown-menu" >
-                        <li><a href="#/settings"><span class="glyphicon glyphicon-cog"></span> 用户设置</a></li>
+                        <li><a href="/#/settings"><span class="glyphicon glyphicon-cog"></span> 用户设置</a></li>
                         <li><a href="{{ponmCtxConfig.ctx}}/logout"><span class="glyphicon glyphicon-off"></span> 注销</a></li>
                     </ul>
                 </li>

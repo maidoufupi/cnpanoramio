@@ -1,4 +1,3 @@
-
 $window = window
 class MapService extends window.cnmap.IMapService
   constructor: (@map) ->

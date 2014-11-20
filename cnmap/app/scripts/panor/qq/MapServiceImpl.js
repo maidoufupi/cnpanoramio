@@ -112,7 +112,6 @@
                     });
                 }
                 deferred.resolve(addresses);
-//                callback.apply(undefined, [addresses]);
             });
 
             geocoder.getLocation(address);

@@ -21,11 +21,14 @@
             <div class="item"><pre class="description"><span class="footnotes">{{spot.description}}</span></pre></div>
         </div>
 
-        <div photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
+        <div ng-init="targetHeights={'small': 120, 'medium': 160, 'large': 200}"
+             photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}"
+             photo-container-fluid-target-height = "{{targetHeights[photoWallMode]}}"
              class="photo-wall photo-selectable-container">
             <div ng-repeat="photo in spot.photos"
                  ng-controller="PhotosPhotoCtrl"
                  class="photo"
+                 ng-class="{'selectable': selectable}"
                  ng-style="{'background-color': photo.color}">
                 <a ng-click="displayPhoto(photo.id)"
                    href="">
@@ -38,12 +41,18 @@
                     </div>
                 </a>
 
-                <div class="action-select"
-                     ng-class="{'action': !selectable, 'ponm-show': selectable}"
+                <div class="action action-select"
                      ng-click="selectPhoto($event, photo, spot.photos)">
                     <span class="icon-photo-select"
                           ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
                 </div>
+
+              <div class="action-container">
+                <div class="action ponm-photo-footer">
+                  <h6>{{photo.point.address}}</h6>
+                  <pre class="description">{{photo.description}}</pre>
+                </div>
+              </div>
 
             </div>
         </div>

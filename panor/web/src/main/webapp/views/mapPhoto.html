@@ -8,70 +8,88 @@
     <h3 class="modal-title">更改图片位置</h3>
 </div>
 <div class="modal-body">
-<div class="map-panel">
+  <perfect-scrollbar class="map-media-scroller scroller"
+                     wheel-propagation="false"
+                     wheel-speed="50">
+    <div class="map-media">
+      <div id="loc-preview" class="thumbnail" style=": "
+        ng-style="{'background-color': photo.color}">
+        <img class="preview" data-ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-loc'}}">
+      </div>
+      <label class="is360_info">
+        <input type="checkbox" data-ng-model="file.is360">是360°全景照片</label>
 
-    <div id="selected-photo-editor" class="selected_photo_editor">
-        <div class="properties">
-            <div id="loc-preview" class="thumbnail">
-                <img class="preview" data-ng-src="{{photo.oss_key && staticCtx + '/' + photo.oss_key + '@!photo-preview-loc'}}">
-            </div>
-            <form id="geocoder_form" class="form" ng-controller="TypeaheadCtrl" ng-submit="goLocation(asyncSelected)">
-                <div class="col-12">
-                    <!--<div class="input-group input-group-sm">
-                        <input ng-model="address" type="text" class="form-control">
-                                    <span id="location-search-go" class="input-group-btn">
-                                       <button type="submit" class="btn btn-default">Go!</button>
-                                     </span>
-                    </div>-->
-                    <!-- /input-group -->
-                    <div class="input-group input-group-sm">
-                        <input type="text"
-                               ng-model="asyncSelected"
-                               placeholder="搜索地址"
-                               typeahead="address as address.address for address in getLocation($viewValue) | filter:$viewValue"
-                               typeahead-loading="loadingLocations"
-                               typeahead-on-select="onSelect($item, $model, $label)"
-                               class="form-control"
-                                >
-                                <span class="input-group-btn">
-                                   <button type="submit" class="btn btn-default">Go!</button>
-                                 </span>
-                        <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                    </div>
-                </div>
+      <div>
+        点击地图设置拍摄地点
+      </div>
 
-            </form>
+      <hr>
 
-            <div id="the-place" class="no_place disabled place_search_bar">
-                <span class="lat">{{file.mapVendor.latPritty}} {{file.latRef}}</span>
-                <span class="comma">{{((file.mapVendor.lat && file.mapVendor.lng) && ", ") || "[GPS地址]"}}</span>
-                <span class="lng">{{file.mapVendor.lngPritty}} {{file.lngRef}}</span>
-            </div>
-            <div class="coder_place">
-                <a href=""
-                   editable-select="file.mapVendor.address" e-ng-options="addr as addr for (addr, point) in file.mapVendor.addresses"
-                   buttons="no">
-                    {{ file.mapVendor.address || "[解析地址]"}}
-                </a>
-                <!--<div id="the-address" class="original_place_name">{{file.mapVendor.address || "[解析地址]"}}</div>-->
-            </div>
-            <label class="is360_info">
-                <input type="checkbox" data-ng-model="file.is360">是360°全景照片</label>
+      <h4>
+        {{photo.title}}
+      </h4>
 
-            <div>
-                点击地图设置拍摄地点
-            </div>
-        </div>
+      <pre class="description">{{photo.description}}</pre>
     </div>
-    <div class="map-photo-map">
-        <div class="map-container">
-            <div class="map-canvas" ui-map="myMap" ui-options="mapOptions">
-            </div>
-        </div>
-    </div>
-</div>
+
+  </perfect-scrollbar>
+  <div class="map-panel">
+
+      <div id="selected-photo-editor" class="selected_photo_editor">
+          <div class="properties">
+
+              <form id="geocoder_form" class="form" ng-controller="TypeaheadCtrl" ng-submit="goLocation(asyncSelected)">
+                  <div class="col-12">
+                      <!--<div class="input-group input-group-sm">
+                          <input ng-model="address" type="text" class="form-control">
+                                      <span id="location-search-go" class="input-group-btn">
+                                         <button type="submit" class="btn btn-default">Go!</button>
+                                       </span>
+                      </div>-->
+                      <!-- /input-group -->
+                      <div class="input-group input-group-sm">
+                          <input type="text"
+                                 ng-model="asyncSelected"
+                                 placeholder="搜索地址"
+                                 typeahead="address as address.address for address in getLocation($viewValue) | filter:$viewValue"
+                                 typeahead-loading="loadingLocations"
+                                 typeahead-on-select="onSelect($item, $model, $label)"
+                                 class="form-control"
+                                  >
+                                  <span class="input-group-btn">
+                                     <button type="submit" class="btn btn-default">Go!</button>
+                                   </span>
+                          <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                      </div>
+                  </div>
+
+              </form>
+
+              <div id="the-place" class="no_place disabled place_search_bar">
+                  <span class="lat">{{file.mapVendor.latPritty}} {{file.latRef}}</span>
+                  <span class="comma">{{((file.mapVendor.lat && file.mapVendor.lng) && ", ") || "[GPS地址]"}}</span>
+                  <span class="lng">{{file.mapVendor.lngPritty}} {{file.lngRef}}</span>
+              </div>
+              <div class="coder_place">
+                  <a href=""
+                     editable-select="file.mapVendor.address" e-ng-options="addr as addr for (addr, point) in file.mapVendor.addresses"
+                     buttons="no">
+                      {{ file.mapVendor.address || "[解析地址]"}}
+                  </a>
+                  <!--<div id="the-address" class="original_place_name">{{file.mapVendor.address || "[解析地址]"}}</div>-->
+              </div>
+
+          </div>
+      </div>
+      <div class="map-photo-map">
+          <div class="map-container" ui-map="myMap" ui-options="mapOptions">
+              <!--<div class="map-canvas" ui-map="myMap" ui-options="mapOptions">-->
+              <!--</div>-->
+          </div>
+      </div>
+  </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="ok()">保存</button>
-    <button class="btn btn-warning" ng-click="cancel()">取消</button>
+    <button class="btn btn-warning" ng-click="cancel()">关闭</button>
 </div>

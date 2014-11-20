@@ -88,27 +88,62 @@
     };
 
     MapService.prototype.getLocPois = function(address) {
-      var deferred;
+      var deferred, errCallback, geocodeCallback, geocodeRequest;
       deferred = jQuery.Deferred();
-      if (!this.geocoder) {
-        this.init();
-      }
-      this.geocoder.getPoint(address, function(point) {
-        var addresses;
+      geocodeCallback = function(geocodeResult, userData) {
+        var addresses, lng, ne, result, sw, _i, _len, _ref;
+        console.log(geocodeResult);
+        console.log(userData);
         addresses = [];
-        if (point) {
-          addresses.push({
-            address: address,
-            location: point,
-            similarity: 1
-          });
+        _ref = geocodeResult.results;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          result = _ref[_i];
+          address = {
+            address: result.name,
+            location: {
+              lat: result.location.latitude,
+              lng: result.location.longitude
+            },
+            similarity: result.matchConfidence
+          };
+          if (result.bestView) {
+            sw = {
+              lat: result.bestView.center.latitude - result.bestView.height / 2
+            };
+            lng = result.bestView.center.longitude - result.bestView.width / 2;
+            if (lng < -179) {
+              sw.lng = 180 + lng + 180;
+            } else {
+              sw.lng = lng;
+            }
+            ne = {
+              lat: result.bestView.center.latitude + result.bestView.height / 2
+            };
+            lng = result.bestView.center.longitude + result.bestView.width / 2;
+            if (lng > 180) {
+              ne.lng = lng - 180 - 180;
+            } else {
+              ne.lng = lng;
+            }
+            address.bounds = {
+              sw: sw,
+              ne: ne
+            };
+          }
+          addresses.push(address);
         }
         return deferred.resolve(addresses);
-      });
+      };
+      errCallback = function() {};
+      geocodeRequest = {
+        where: address,
+        count: 10,
+        callback: geocodeCallback,
+        errorCallback: errCallback
+      };
+      this.searchManager.geocode(geocodeRequest);
       return deferred.promise();
     };
-
-    MapService.prototype.translate = function(lat, lng, callback) {};
 
     return MapService;
 

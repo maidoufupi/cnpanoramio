@@ -12,7 +12,6 @@ class MapEventListener extends window.cnmap.IMapEventListener
 
   addToolBar: (map) ->
 
-
   setCenter: (map, lat, lng) ->
     map.setCenter new google.maps.LatLng lat, lng
 

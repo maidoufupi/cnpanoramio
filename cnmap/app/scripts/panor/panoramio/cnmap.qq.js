@@ -211,7 +211,8 @@
         };
 
         this.getBounds = function() {
-            var bounds = this.opts.map.getBounds();
+
+            var bounds = this.opts.map&&this.opts.map.getBounds();
             if(bounds) {
                 return {
                     ne: {

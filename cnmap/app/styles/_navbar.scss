@@ -19,6 +19,14 @@
       padding-bottom: 5px;
     }
 
+    .navbar-header {
+      .navbar-toggle {
+        margin-top: 1px;
+        margin-bottom: 1px;
+        padding: 6px 8px;
+      }
+    }
+
     .navbar-brand {
       padding: 0 5px;
       height: $header-navbar-height;
@@ -26,10 +34,9 @@
 
     .navbar-nav.navbar-right {
       .user {
-        a {
+        .user-avatar {
           padding: 0 15px;
         }
-
         img {
           width: $header-navbar-height;
         }
@@ -39,6 +46,7 @@
         margin-bottom: 0;
       }
     }
+
   }
 
 }
@@ -107,6 +115,7 @@
     position: absolute;
     top: -104px;
     height: 0;
+    z-index: 2;
   }
   .navbar.navbar-edit.ponm-show {
     height: 52px;

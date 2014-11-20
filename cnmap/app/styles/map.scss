@@ -9,11 +9,34 @@
   }
 
   .searchbox {
-//    left: 30px;
     vertical-align: middle;
     display: inline-block;
     input {
-      @include activable(#333333, #f8f8f8, #f8f8f8);
+      @include activable(#333333, #f8f8f8, $btn-default-border);
+      min-width: 120px;
+    }
+    input:active, input:focus {
+      min-width: 200px;
+    }
+    .input-group-btn {
+      .btn.btn-default {
+        @include activable(#333333, #f8f8f8, $btn-default-border);
+      }
+    }
+  }
+  .searchbox:focus {
+    input {
+      min-width: 200px;
+    }
+  }
+  .searchbox:hover, .searchbox:focus, .searchbox:active {
+
+    .input-group-btn {
+      .btn.btn-default {
+        color: #333333 !important;
+        background-color: lighten(#f8f8f8, 5%) !important;
+        border-color: darken($btn-default-border, 12%) !important;
+      }
     }
   }
 
@@ -162,19 +185,7 @@
 
 /** map controls */
 .searchbox, .searchbox-shadow {
-  -webkit-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-  -moz-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-  -ms-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-  -o-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-  transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-}
-
-.searchbox, .searchbox-shadow {
-  -webkit-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-  -moz-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-  -ms-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-  -o-transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
-  transition: box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1);
+  @include transition(box-shadow 200ms cubic-bezier(0.52, 0, 0.48, 1));
 }
 
 .searchbox-shadow {
@@ -183,21 +194,20 @@
 
 .searchbox {
   position: relative;
-
   background-color: #fff;
   //  border: 1px solid transparent;
   border-right: 0;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
+  @include box-sizing(border-box);
   height: 32px;
-  outline: none;
   width: 150px;
+  outline: none;
   vertical-align: top;
+  line-height: initial;
 
   input {
     width: 100%;
     height: 100%;
-    border: 0;
+    border: 1px solid transparent;
   }
 
   .searchbutton {
@@ -214,11 +224,6 @@
     width: 72px;
     color: white;
   }
-
-//  .dropdown-menu {
-//    width: 100%;
-//    border-radius: 0;
-//  }
 }
 
 .maps-travels {

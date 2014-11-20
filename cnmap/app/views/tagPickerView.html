@@ -13,7 +13,7 @@
                   ng-class="{'label-default': item.$active, 'label-info': !item.$active}"
                   ng-repeat="item in items"
                   ng-click="setItem(item)">{{item.value}}</span>
-            <div class="icon loading-spinner" ng-show="loading">
+            <div class="loader loading-spinner" ng-show="loading">
                 <div class="bounce1"></div>
                 <div class="bounce2"></div>
                 <div class="bounce3"></div>

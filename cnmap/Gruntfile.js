@@ -148,8 +148,6 @@ module.exports = function (grunt) {
     },
 
 
-
-
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
@@ -272,6 +270,28 @@ module.exports = function (grunt) {
 
     // Copies remaining files to places other tasks can use
     copy: {
+      deploy: {
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.dist %>/styles/',
+            src: ['main.min.css'],
+            dest: '../panor/web/src/main/webapp/styles/'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.dist %>/scripts/',
+            src: ['**'],
+            dest: '../panor/web/src/main/webapp/scripts/'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/views/',
+            src: ['**'],
+            dest: '../panor/web/src/main/webapp/views/'
+          }
+        ]
+      },
       dist: {
         files: [{
           expand: true,
@@ -283,7 +303,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'views/{,*/}*.html',
-            'bower_components/**/*',
+            //'bower_components/**/*',
             'images/{,*/}*.{webp}',
             'fonts/*'
           ]
@@ -321,11 +341,11 @@ module.exports = function (grunt) {
     // minification. These next options are pre-configured if you do not wish
     // to use the Usemin blocks.
     cssmin: {
-       dist: {
-         files: {
-           '<%= yeoman.app %>/styles/main.min.css': [
-             '<%= yeoman.app %>/styles/main.css'
-           ]
+      dist: {
+        files: {
+          '<%= yeoman.dist %>/styles/main.min.css': [
+            '<%= yeoman.app %>/styles/main.css'
+          ]
 //           ,'<%= yeoman.app %>/styles/vendor.min.css': [
 //                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/css/xeditable.css',
 //                 '<%= yeoman.app %>/bower_components/blueimp-file-upload/css/jquery.fileupload.css',
@@ -334,144 +354,157 @@ module.exports = function (grunt) {
 //                 ,'<%= yeoman.app %>/bower_components/perfect-scrollbar/src/perfect-scrollbar.css'
 //                 ,'<%= yeoman.app %>/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
 //             ]
-         }
-       }
+        }
+      }
     },
     uglify: {
+      options: {
+        mangle: {
+          except: ['jQuery', 'Backbone']
+        }
+      },
+      vendor: {
+        files: {
+          '<%= yeoman.dist %>/scripts/blueimp-file-upload.min.js': [
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js',
+            '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image.js',
+            '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-meta.js',
+            '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-exif.js',
+            '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-exif-map.js',
+            '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-ios.js',
+            '<%= yeoman.app %>/scripts/panor/js/load-image-orientation.js',
+            '<%= yeoman.app %>/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js',
+            '<%= yeoman.app %>/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js',
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload.js',
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-process.js',
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-image.js',
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-audio.js',
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-video.js',
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js',
+            '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-angular.js'
+          ]
+          ,
+          '<%= yeoman.dist %>/scripts/ponmApp.jquery.min.js': [
+            '<%= yeoman.app %>/bower_components/jquery/dist/jquery.js',
+            '<%= yeoman.app %>/bower_components/jquery.rest/dist/jquery.rest.min.js',
+            '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
+            '<%= yeoman.app %>/bower_components/jquery-ui/jquery-ui.js',
+//                 '<%= yeoman.app %>/bower_components/jquery-bridget/jquery.bridget.js',
+//                 '<%= yeoman.app %>/bower_components/get-style-property/get-style-property.js',
+//                 '<%= yeoman.app %>/bower_components/get-size/get-size.js',
+            '<%= yeoman.app %>/bower_components/eventie/eventie.js',
+            '<%= yeoman.app %>/bower_components/eventEmitter/EventEmitter.min.js',
+//                 '<%= yeoman.app %>/bower_components/doc-ready/doc-ready.js',
+//                 '<%= yeoman.app %>/bower_components/matches-selector/matches-selector.js',
+//                 '<%= yeoman.app %>/bower_components/outlayer/item.js',
+//                 '<%= yeoman.app %>/bower_components/outlayer/outlayer.js',
+//                 '<%= yeoman.app %>/bower_components/masonry/masonry.js',
+            '<%= yeoman.app %>/bower_components/imagesloaded/imagesloaded.js',
+//                 '<%= yeoman.app %>/bower_components/angular-masonry/angular-masonry.js',
+
+            '<%= yeoman.app %>/bower_components/jquery-backstretch/jquery.backstretch.min.js',
+            '<%= yeoman.app %>/bower_components/jquery-waypoints/waypoints.min.js',
+            '<%= yeoman.app %>/bower_components/Jcrop/js/jquery.Jcrop.min.js',
+            '<%= yeoman.app %>/scripts/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js',
+            '<%= yeoman.app %>/scripts/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js',
+            '<%= yeoman.app %>/scripts/panor/js/color-thief.js',
+            // image gallery
+            '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-helper.js',
+            '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery.js',
+            '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js',
+            '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery-fullscreen.js',
+
+            '<%= yeoman.app %>/scripts/panor/js/jquery.mousewheel.js',
+            '<%= yeoman.app %>/scripts/panor/js/jquery.panzoom.js',
+            '<%= yeoman.app %>/scripts/panor/js/three.min.js'
+          ]
+          ,
+          '<%= yeoman.dist %>/scripts/ponmApp.angular.min.js': [
+            '<%= yeoman.app %>/bower_components/angular/angular.min.js',
+            '<%= yeoman.app %>/bower_components/angular-route/angular-route.min.js',
+            '<%= yeoman.app %>/bower_components/angular-resource/angular-resource.min.js',
+            '<%= yeoman.app %>/bower_components/angular-cookies/angular-cookies.min.js',
+            '<%= yeoman.app %>/bower_components/angular-sanitize/angular-sanitize.min.js',
+            '<%= yeoman.app %>/bower_components/angular-animate/angular-animate.min.js',
+
+            '<%= yeoman.app %>/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+            '<%= yeoman.app %>/bower_components/angular-xeditable/dist/js/xeditable.min.js',
+            '<%= yeoman.app %>/bower_components/angular-ui-utils/ui-utils.min.js',
+            '<%= yeoman.app %>/bower_components/angular-ui-router/release/angular-ui-router.js',
+            '<%= yeoman.app %>/bower_components/angular-dragdrop/src/angular-dragdrop.js',
+
+            '<%= yeoman.app %>/bower_components/angular-local-storage/angular-local-storage.js',
+            '<%= yeoman.app %>/bower_components/angular-scroll/angular-scroll.js',
+            '<%= yeoman.app %>/bower_components/moment/moment.js',
+            '<%= yeoman.app %>/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
+
+            '<%= yeoman.app %>/bower_components/perfect-scrollbar/src/perfect-scrollbar.js',
+            '<%= yeoman.app %>/bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js'
+          ]
+        }
+      },
+      dist: {
         options: {
-            mangle: {
-                except: ['jQuery', 'Backbone']
-            }
-        },
-       dist: {
-           options: {
 //               beautify: true
-           },
-         files: {
-             '<%= yeoman.app %>/scripts/ponmApp.min.js': [
-                 '<%= yeoman.app %>/scripts/app.js',
-                 '<%= yeoman.app %>/scripts/controllers.js',
-                 '<%= yeoman.app %>/scripts/directives.js',
-                 '<%= yeoman.app %>/scripts/services.js',
-                 '<%= yeoman.app %>/scripts/services/*.js'
-             ],
-           '<%= yeoman.app %>/scripts/ponmApp.directives.min.js': [
-               '<%= yeoman.app %>/scripts/directives/*.js'
-               ],
-           '<%= yeoman.app %>/scripts/panor/scripts.min.js': [
+        },
+        files: {
+          //'<%= yeoman.app %>/scripts/ponmApp.min.js': [
+          //    '<%= yeoman.app %>/scripts/app.js',
+          //    '<%= yeoman.app %>/scripts/controllers.js',
+          //    '<%= yeoman.app %>/scripts/directives.js',
+          //    '<%= yeoman.app %>/scripts/services.js',
+          //    '<%= yeoman.app %>/scripts/services/*.js'
+          //],
+          '<%= yeoman.dist %>/scripts/ponmApp.min.js': [
+            '<%= yeoman.app %>/scripts/ponmApp.js',
+            '<%= yeoman.app %>/scripts/directives.js',
+            '<%= yeoman.app %>/scripts/directives/*.js',
+            '<%= yeoman.app %>/scripts/services.js',
+            '<%= yeoman.app %>/scripts/services/*.js'
+          ]
+          ,
+          '<%= yeoman.dist %>/scripts/ponmApp.controllers.min.js': [
+            '<%= yeoman.app %>/scripts/controllers.js',
+            '<%= yeoman.app %>/scripts/controllers/*Ctrl.js'
+          ],
+          '<%= yeoman.dist %>/scripts/panor/scripts.min.js': [
 //               '<%= yeoman.app %>/scripts/panor/MapUtils.js',
 //               '<%= yeoman.app %>/scripts/panor/MapTravel.js',
-               '<%= yeoman.app %>/scripts/panor/Map*.js',
-               '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.comm.js',
-               '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.Panoramio.js'
-             ],
-           '<%= yeoman.app %>/scripts/panor/scripts.google.min.js': [
-               '<%= yeoman.app %>/bower_components/angular-ui-map-google/src/ui-map.js',
-             '<%= yeoman.app %>/scripts/panor/google/Map*.js',
-             '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.google.js'
-           ],
-           '<%= yeoman.app %>/scripts/panor/scripts.gaode.min.js': [
-               '<%= yeoman.app %>/bower_components/angular-ui-mapgaode/ui-map.js',
-             '<%= yeoman.app %>/scripts/panor/gaode/Map*.js',
-             '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.gaode.js'
-           ],
-           '<%= yeoman.app %>/scripts/panor/scripts.qq.min.js': [
-               '<%= yeoman.app %>/bower_components/angular-ui-map-qq/ui-map.js',
-               '<%= yeoman.app %>/scripts/panor/qq/Map*.js',
-               '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.qq.js'
-             ],
-           '<%= yeoman.app %>/scripts/panor/scripts.baidu.min.js': [
-               '<%= yeoman.app %>/bower_components/angular-ui-map-baidu/ui-map.js',
-               '<%= yeoman.app %>/scripts/panor/baidu/*.js',
-               '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.baidu.js'
-             ],
-           '<%= yeoman.app %>/scripts/ponmApp.controllers.min.js': [
-                 '<%= yeoman.app %>/scripts/controllers/*Ctrl.js'
-             ]
-//             ,
-//           '<%= yeoman.app %>/scripts/blueimp-file-upload.min.js': [
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-meta.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-exif.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-exif-map.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-load-image/js/load-image-ios.js',
-//               '<%= yeoman.app %>/scripts/panor/js/load-image-orientation.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-canvas-to-blob/js/canvas-to-blob.min.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-process.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-image.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-audio.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-video.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-validate.js',
-//               '<%= yeoman.app %>/bower_components/blueimp-file-upload/js/jquery.fileupload-angular.js'
-//             ]
-//             ,
-//             '<%= yeoman.app %>/scripts/ponmApp.jquery.min.js': [
-//                 '<%= yeoman.app %>/bower_components/jquery/dist/jquery.js',
-//                 '<%= yeoman.app %>/bower_components/jquery.rest/dist/jquery.rest.min.js',
-//                 '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
-//                 '<%= yeoman.app %>/bower_components/jquery-ui/jquery-ui.js',
-////                 '<%= yeoman.app %>/bower_components/jquery-bridget/jquery.bridget.js',
-////                 '<%= yeoman.app %>/bower_components/get-style-property/get-style-property.js',
-////                 '<%= yeoman.app %>/bower_components/get-size/get-size.js',
-//                 '<%= yeoman.app %>/bower_components/eventie/eventie.js',
-//                 '<%= yeoman.app %>/bower_components/eventEmitter/EventEmitter.min.js',
-////                 '<%= yeoman.app %>/bower_components/doc-ready/doc-ready.js',
-////                 '<%= yeoman.app %>/bower_components/matches-selector/matches-selector.js',
-////                 '<%= yeoman.app %>/bower_components/outlayer/item.js',
-////                 '<%= yeoman.app %>/bower_components/outlayer/outlayer.js',
-////                 '<%= yeoman.app %>/bower_components/masonry/masonry.js',
-//                 '<%= yeoman.app %>/bower_components/imagesloaded/imagesloaded.js',
-////                 '<%= yeoman.app %>/bower_components/angular-masonry/angular-masonry.js',
-//
-//                 '<%= yeoman.app %>/bower_components/jquery-backstretch/jquery.backstretch.min.js',
-//                 '<%= yeoman.app %>/bower_components/jquery-waypoints/waypoints.min.js',
-//                 '<%= yeoman.app %>/bower_components/Jcrop/js/jquery.Jcrop.min.js',
-//                 '<%= yeoman.app %>/bower_components/jquery-plugins/jquery-collagePlus/jquery.collagePlus.js',
-//                 '<%= yeoman.app %>/bower_components/jquery-plugins/jquery-collagePlus/extras/jquery.removeWhitespace.js',
-//                 '<%= yeoman.app %>/scripts/panor/js/color-thief.js',
-//                 // image gallery
-//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-helper.js',
-//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery.js',
-//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js',
-//                 '<%= yeoman.app %>/bower_components/blueimp-gallery/js/blueimp-gallery-fullscreen.js',
-//
-//                 '<%= yeoman.app %>/scripts/panor/js/jquery.mousewheel.js',
-//                 '<%= yeoman.app %>/scripts/panor/js/jquery.panzoom.js',
-//                 '<%= yeoman.app %>/scripts/panor/js/three.min.js'
-//             ]
-//             ,
-//             '<%= yeoman.app %>/scripts/ponmApp.angular.min.js': [
-//                 '<%= yeoman.app %>/bower_components/angular/angular.min.js',
-//                 '<%= yeoman.app %>/bower_components/angular-route/angular-route.min.js',
-//                 '<%= yeoman.app %>/bower_components/angular-resource/angular-resource.min.js',
-//                 '<%= yeoman.app %>/bower_components/angular-cookies/angular-cookies.min.js',
-//                 '<%= yeoman.app %>/bower_components/angular-sanitize/angular-sanitize.min.js',
-//                 '<%= yeoman.app %>/bower_components/angular-animate/angular-animate.min.js',
-//
-//                 '<%= yeoman.app %>/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-//                 '<%= yeoman.app %>/bower_components/angular-xeditable/dist/js/xeditable.min.js',
-//                 '<%= yeoman.app %>/bower_components/angular-ui-utils/ui-utils.min.js',
-//                 '<%= yeoman.app %>/bower_components/angular-ui-router/release/angular-ui-router.js',
-//                 '<%= yeoman.app %>/bower_components/angular-dragdrop/src/angular-dragdrop.js',
-//
-//                 '<%= yeoman.app %>/bower_components/angular-local-storage/angular-local-storage.js',
-//                 '<%= yeoman.app %>/bower_components/angular-scroll/angular-scroll.js',
-//                 '<%= yeoman.app %>/bower_components/moment/moment.js',
-//                 '<%= yeoman.app %>/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
-//
-//                 '<%= yeoman.app %>/bower_components/perfect-scrollbar/src/perfect-scrollbar.js',
-//                 '<%= yeoman.app %>/bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js'
-//
-//             ]
-         }
-       }
+            '<%= yeoman.app %>/scripts/panor/Map*.js',
+            '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.comm.js',
+            '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.Panoramio.js'
+          ],
+          '<%= yeoman.dist %>/scripts/panor/scripts.google.min.js': [
+            '<%= yeoman.app %>/bower_components/angular-ui-map-google/src/ui-map.js',
+            '<%= yeoman.app %>/scripts/panor/google/Map*.js',
+            '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.google.js'
+          ],
+          '<%= yeoman.dist %>/scripts/panor/scripts.gaode.min.js': [
+            '<%= yeoman.app %>/bower_components/angular-ui-mapgaode/ui-map.js',
+            '<%= yeoman.app %>/scripts/panor/gaode/Map*.js',
+            '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.gaode.js'
+          ],
+          '<%= yeoman.dist %>/scripts/panor/scripts.qq.min.js': [
+            '<%= yeoman.app %>/bower_components/angular-ui-map-qq/ui-map.js',
+            '<%= yeoman.app %>/scripts/panor/qq/Map*.js',
+            '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.qq.js'
+          ],
+          '<%= yeoman.dist %>/scripts/panor/scripts.baidu.min.js': [
+            '<%= yeoman.app %>/bower_components/angular-ui-map-baidu/ui-map.js',
+            '<%= yeoman.app %>/scripts/panor/baidu/*.js',
+            '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.baidu.js'
+          ],
+          '<%= yeoman.dist %>/scripts/panor/scripts.bing.min.js': [
+            '<%= yeoman.app %>/bower_components/angular-ui-map-bing/ui-map.js',
+            '<%= yeoman.app %>/scripts/panor/bing/*.js',
+            '<%= yeoman.app %>/scripts/panor/panoramio/cnmap.bing.js'
+          ]
+        }
+      }
     },
     concat: {
-       dist: {}
+      dist: {}
     },
 
     // Test settings

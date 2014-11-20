@@ -1,5 +1,6 @@
 <div class="photos" >
-    <div class="navbar-second" waypoint-sticky="{'stuckClass': 'navbar-second-top', 'offset': '49'}" >
+    <div class="navbar-second navbar-second-edit" ng-class="{'selectable': selectable}"
+         waypoint-sticky="{'stuckClass': 'navbar-second-top', 'offset': '1'}" >
         <nav class="navbar navbar-default"
              role="navigation">
             <div class="container">
@@ -31,6 +32,24 @@
                             </ul>
                         </li>-->
                     </ul>
+                  <ul class="navbar-nav navbar-right nav">
+                    <li>
+                      <div class="btn-group btn-group-sm">
+                        <label class="btn btn-default navbar-btn" ng-model="photoWallMode" btn-radio="'large'"
+                               uncheckable>
+                          <span class="glyphicon glyphicon-picture"></span>
+                        </label>
+                        <label class="btn btn-default navbar-btn" ng-model="photoWallMode" btn-radio="'medium'"
+                               uncheckable>
+                          <span class="glyphicon glyphicon-th-large"></span>
+                        </label>
+                        <label class="btn btn-default navbar-btn" ng-model="photoWallMode" btn-radio="'small'"
+                               uncheckable>
+                          <span class="glyphicon glyphicon-th"></span>
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
             </div>
         </nav>
@@ -102,7 +121,7 @@
     </div>
 
     <div class="select-pane"
-         ponm-rect-multi-select="{'selector': '.photo', 'moveselect': true, 'offsetY': -110}"
+         ponm-rect-multi-select="{'selector': '.photo', 'moveselect': false}"
          ponm-rect-selector="rectSelected">
         <div class="container container-photos">
             <div ui-view>

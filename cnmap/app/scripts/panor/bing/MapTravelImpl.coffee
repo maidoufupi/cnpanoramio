@@ -3,52 +3,49 @@ class TravelLayer extends window.cnmap.ITravelLayer
   initMap: (map) ->
     @map = map if map
     @calcSpotTime()
-    point = []
+
     if @travel
       for spot in @travel.spots
         @createMarker photo for photo in spot.photos
-        point = []
-        point.push @createPoint photo for photo in spot.photos
+        points = []
+        points.push @createPoint photo for photo in spot.photos
 
-        spot.polyline = new BMap.Polyline point, {
-            map: @map
-            strokeWeight: 2
-#            strokeStyle: 'dashed'
-          }
-        @map.addOverlay spot.polyline
+        spot.polyline = @createPolyline points
 
   createPoint: (photo) ->
-    new BMap.Point photo.point.lng, photo.point.lat
+    new Microsoft.Maps.Location photo.point.lat, photo.point.lng
 
   createMarker: (photo) ->
     that = this
-    marker = new BMap.Marker @createPoint(photo), {
-      icon: new BMap.Icon @getMarkerImage(photo), {
-        width: 34
-        height: 34
-      }
-      title: photo.title||''
+    marker = new Microsoft.Maps.Pushpin @createPoint(photo), {
+      icon: @getMarkerImage(photo)
+      text: photo.title||''
     }
     marker.photo = photo
-    @map.addOverlay marker
+    @map.entities.push marker
     if @opts.clickable
-      marker.addEventListener 'click',
+      Microsoft.Maps.Events.addHandler marker, 'click',
         (e) ->
-          jQuery(that).trigger("data_clicked", [this.photo.id])
+          if not e.mouseMoved
+            jQuery(that).trigger("data_clicked", [e.target.photo.id])
     photo.marker = marker
     marker
 
   removeMarker: (photo) ->
     if photo.marker
-      @map.removeOverlay photo.marker
+      @map.entities.remove photo.marker
       delete photo.marker
 
   toggleSpotLine: (spot, visible) ->
     if spot.polyline
       if visible
-        spot.polyline.show()
+        spot.polyline.setOptions {
+          visible: true
+        }
       else
-        spot.polyline.hide()
+        spot.polyline.setOptions {
+          visible: false
+        }
 
   spotEditable: (spot, editable) ->
     editable = !!editable
@@ -56,20 +53,26 @@ class TravelLayer extends window.cnmap.ITravelLayer
     editMarker = (marker) ->
       if marker
         if that.opts.editable and editable
-          marker.enableDragging()
+          marker.setOptions {
+            draggable: true
+          }
         else
-          marker.disableDragging()
+          marker.setOptions {
+            draggable: false
+          }
         if that.opts.editable and editable
-          marker.addEventListener 'dragend',
-          (e) ->
-            if not this.photo.oPoint
-              this.photo.oPoint = $.extend {}, this.photo.point
-            this.photo.point.lat = e.point.lat
-            this.photo.point.lng = e.point.lng
-            that.updateSpotLine spot
-            $(that).trigger("spot.edited", [spot.id]);
+          marker.dragListener = Microsoft.Maps.Events.addHandler marker, 'dragend',
+            (e) ->
+              if not e.target.photo.oPoint
+                e.target.photo.oPoint = $.extend {}, e.target.photo.point
+              loc = e.target.getLocation()
+              e.target.photo.point.lat = loc.latitude
+              e.target.photo.point.lng = loc.longitude
+              that.updateSpotLine spot
+              $(that).trigger("spot.edited", [spot.id]);
         else
-          marker.removeEventListener 'dragend'
+          Microsoft.Maps.Events.removeHandler marker.dragListener
+          delete marker.dragListener
     editMarker photo.marker for photo in spot.photos
 
   cancelSpotEdit: (spot) ->
@@ -79,20 +82,23 @@ class TravelLayer extends window.cnmap.ITravelLayer
         photo.point = photo.oPoint
         delete photo.oPoint
       if photo.marker
-        photo.marker.setPosition that.createPoint(photo)
+        photo.marker.setLocation that.createPoint(photo)
     cancelMarker photo for photo in spot.photos
     @updateSpotLine spot
 
   updateSpotLine: (spot) ->
-    point = []
-    point.push @createPoint photo for photo in spot.photos
+    points = []
+    points.push @createPoint photo for photo in spot.photos
     if spot.polyline
-      spot.polyline.setPath point
+      spot.polyline.setLocations points
     else
-      spot.polyline = new BMap.Polyline point, {
-          map: @map
-          strokeStyle: 'dashed'
-        }
-      @map.addOverlay spot.polyline
+      spot.polyline = @createPolyline points
+
+  createPolyline: (points) ->
+    polyline = new Microsoft.Maps.Polyline points, {
+        strokeThickness: 2
+      }
+    @map.entities.push polyline
+    polyline
 
 window.cnmap.TravelLayer = TravelLayer

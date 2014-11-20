@@ -9,10 +9,12 @@
 
   .loading {
     position: absolute;
-    margin: -70px auto 0 auto;
-    display: inline-block;
-    line-height: initial;
-    top: 50%;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+    .progress {
+      height: 1px;
+    }
   }
 
   .loading.ponm-hide {
@@ -53,12 +55,6 @@
   }
 
   img {
-    //    opacity: 0;
-    //    -moz-transition: opacity 1s; /* Firefox 4 */
-    //    -webkit-transition: opacity 1s; /* Safari and Chrome */
-    //    -o-transition: opacity 1s;
-    //    transition: opacity 1s;
-
     position: static;
     max-width: 100%;
     max-height: 100%;
@@ -93,26 +89,29 @@
     top: 0;
   }
 
+  .icon-hover {
+    @include opacity(0.5);
+    @include transition(opacity 0.5s);
+    &:hover, &.hover {
+      @include opacity(1);
+    }
+  }
   .icon-p360 {
+    @extend .icon-hover;
     width: 65px;
     height: 65px;
     background: url(../images/lightbox.png) no-repeat -63px 0;
-    opacity: 0.5;
-    -moz-transition: opacity 0.5s; /* Firefox 4 */
-    -webkit-transition: opacity 0.5s; /* Safari and Chrome */
-    -o-transition: opacity 0.5s;
-    transition: opacity 0.5s;
+  }
+
+  .icon-p360:hover, .icon-p360.hover {
+    @include opacity(1);
   }
 
   .icon-pflat {
+    @extend .icon-hover;
     width: 65px;
     height: 65px;
     background: url(../images/lightbox.png) no-repeat -63px -94px;
-    opacity: 0.5;
-    -moz-transition: opacity 0.5s; /* Firefox 4 */
-    -webkit-transition: opacity 0.5s; /* Safari and Chrome */
-    -o-transition: opacity 0.5s;
-    transition: opacity 0.5s;
   }
 
   .image-button {
@@ -123,6 +122,8 @@
   }
 
   .p360-image {
+    position: absolute;
+    top: 0;
     width: 100%;
     height: 100%;
     opacity: 0;

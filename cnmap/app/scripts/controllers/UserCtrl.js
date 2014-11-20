@@ -111,7 +111,7 @@ angular.module('ponmApp.user', [
 
             this.userId = userId;
 
-            this.pageSize = 20;
+            this.pageSize = 10;
             this.pageNo = 1;
             this.ended = false;
 

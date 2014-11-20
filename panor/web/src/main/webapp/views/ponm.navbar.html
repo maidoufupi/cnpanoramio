@@ -1,4 +1,4 @@
-<div class="navbar navbar-fixed-top navbar-inverse"
+<div class="navbar navbar-inverse"
      role="navigation" >
     <div class="container">
         <div class="navbar-header">
@@ -50,12 +50,13 @@
                     class="user white"
                     ng-class="{'active': !ponmCtxConfig.login}">
                     <a href="/#/user/{{ponmCtxConfig.userId}}"
+                       class="user-avatar"
                        ng-switch-when="true">
                         <span>{{ponmCtxConfig.name}}</span>
                         <span><img ng-src="{{staticCtx}}/avatar{{ponmCtxConfig.avatar || 1}}.png"
                                    class="img-circle"></span>
                     </a>
-                    <a href="/#/login" class="active white"
+                    <a href="/login" class="login active white"
                        ng-switch-default>
                         <span>登录</span>
                         <span class="glyphicon glyphicon-user"></span>
@@ -66,7 +67,7 @@
                         <span class="glyphicon glyphicon-th-list white"></span>
                     </a>
                     <ul class="dropdown-menu" >
-                        <li><a href="#/settings"><span class="glyphicon glyphicon-cog"></span> 用户设置</a></li>
+                        <li><a href="/#/settings"><span class="glyphicon glyphicon-cog"></span> 用户设置</a></li>
                         <li><a href="{{ponmCtxConfig.ctx}}/logout"><span class="glyphicon glyphicon-off"></span> 注销</a></li>
                     </ul>
                 </li>

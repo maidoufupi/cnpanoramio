@@ -31,10 +31,10 @@
             /WEB-INF/spring-security.xml
         </param-value>
 	</context-param>
-	<context-param>
+	<!--<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>cnpanoramio.root</param-value> <!-- Web 应用根目录以该属性名添加到系统参数中 -->
-	</context-param>
+		<param-value>cnpanoramio.root</param-value> &lt;!&ndash; Web 应用根目录以该属性名添加到系统参数中 &ndash;&gt;
+	</context-param>-->
 	
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -93,10 +93,10 @@
 			<param-value>springSecurityFilterChain</param-value>
 		</init-param>
 	</filter>
-	<filter>
+	<!--<filter>
 		<filter-name>sitemesh</filter-name>
 		<filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
-	</filter>
+	</filter>-->
 	<filter>
 		<filter-name>simpleCORS</filter-name>
 		<filter-class>com.cnpanoramio.webapp.filter.SimpleCORSFilter</filter-class>
@@ -106,12 +106,12 @@
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
 
-    <filter-mapping>
+    <!--<filter-mapping>
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
+	</filter-mapping>-->
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -197,20 +197,20 @@
 		</init-param>
 	</servlet>
 
-	<servlet>
+	<!--<servlet>
 		<servlet-name>CXFServlet</servlet-name>
 		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
-	</servlet>
+	</servlet>-->
 
 	<servlet-mapping>
 		<servlet-name>dwr-invoker</servlet-name>
 		<url-pattern>/dwr/*</url-pattern>
 	</servlet-mapping>
 
-	<servlet-mapping>
+	<!--<servlet-mapping>
 		<servlet-name>CXFServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>

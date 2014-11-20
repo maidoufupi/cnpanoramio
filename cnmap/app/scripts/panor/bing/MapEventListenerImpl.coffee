@@ -43,7 +43,11 @@ class MapEventListener extends window.cnmap.IMapEventListener
     map.getBounds().contains(new Microsoft.Maps.Location(lat, lng))
 
   pixelToPoint: (map, pixel) ->
-    map.tryPixelToLocation new Microsoft.Maps.Point(pixel.x, pixel.y), Microsoft.Maps.PixelReference.control
+    loc = map.tryPixelToLocation new Microsoft.Maps.Point(pixel.x, pixel.y), Microsoft.Maps.PixelReference.control
+    {
+      lat: loc.latitude
+      lng: loc.longitude
+    }
 
   pointToPixel: (map, point) ->
     map.tryLocationToPixel new Microsoft.Maps.Location(point.lat, point.lng), Microsoft.Maps.PixelReference.control

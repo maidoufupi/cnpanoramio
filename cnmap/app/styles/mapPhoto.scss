@@ -28,10 +28,12 @@ $selected_photo_editor_height: 70px;
 
     .selected_photo_editor {
       position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
       background-color: #ececec;
       height: $selected_photo_editor_height;
       padding: 2px;
-      top: 0;
       z-index: 100;
       .thumbnail {
         float: left;

@@ -1,7 +1,130 @@
-/**
-* phone
-*/
-@media (max-width: $screen-xs-min) {
+/****************************************************/
+/* photo modal page
+/****************************************************/
+@media (min-width: $screen-xs-min) {
+  .photo-modal-container {
+    .photo-container-header {
+      left: 0;
+      position: absolute;
+      right: 320px;
+      top: 0;
+    }
+    .navbar {
+      .container-fluid {
+        .collapse.navbar-collapse {
+          text-align: center;
+          .nav {
+            margin-left: auto;
+            margin-right: auto;
+            display: inline-block;
+            float: initial;
+          }
+        }
+      }
+    }
+    .photo-container-body {
+      position: absolute;
+      top: 50px;
+      bottom: 50px;
+      left: 0;
+      right: 320px;
+    }
+    .photo-container-booter {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 320px;
+    }
+    .photo-info {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 320px;
+    }
+  }
+}
+
+// Extra small screen / phone
+@media (max-width: $screen-sm-min ) {
+  .photo-modal-container {
+    .photo-container-header {
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+}
+
+/****************************************************/
+/* login page
+/****************************************************/
+// Extra small screen / phone
+@media (max-width: $screen-sm-min ) {
+  .login-container {
+    .login-form {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      .form-main {
+        padding: 40px 10px;
+      }
+    }
+  }
+}
+
+/****************************************************/
+/*  page
+/****************************************************/
+// Extra small screen / phone
+@media (max-width: $screen-tablet ) {
+  .photo-wall.photo-wall-small.photo-wall-fixed-size {
+    .photo {
+      width: 20%;
+      height: auto;
+    }
+  }
+
+  .photo-wall.photo-wall-medium.photo-wall-fixed-size {
+    .photo {
+      width: 25%;
+      height: auto;
+    }
+  }
+
+  .photo-wall.photo-wall-large.photo-wall-fixed-size  {
+    .photo {
+      width: 50%;
+      height: auto;
+    }
+  }
+
+  // photo travel albums
+  .photo-travels.albums-small {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/8);
+      height: (($container-tablet - $grid-gutter-width)/8);
+    }
+  }
+
+  .photo-travels.albums-medium {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/4);
+      height: (($container-tablet - $grid-gutter-width)/4);
+    }
+  }
+
+  .photo-travels.albums-large {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/3);
+      height: (($container-tablet - $grid-gutter-width)/3);
+    }
+  }
+}
+
+// Extra small screen / phone
+@media (max-width: $screen-sm-min) {
 
   // photo upload page
   .photo-upload {
@@ -86,20 +209,53 @@
     }
   }
 
-  // photo wall photo all
-  .photo-wall.photo-wall-fixed-size.photo-all {
+  .photo-wall.photo-wall-small.photo-wall-fixed-size {
+    .photo {
+      width: 20%;
+      height: auto;
+    }
+  }
+
+  .photo-wall.photo-wall-medium.photo-wall-fixed-size {
+    .photo {
+      width: 25%;
+      height: auto;
+    }
+  }
+
+  .photo-wall.photo-wall-large.photo-wall-fixed-size  {
     .photo {
       width: 50%;
       height: auto;
-      display: inline-block;
-      float: initial;
-      border: 1px solid $body-bg;
-      margin: 0;
+    }
+  }
+
+  // photo travel albums
+  .photo-travels.albums-small {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/8);
+      height: (($container-tablet - $grid-gutter-width)/8);
+    }
+  }
+
+  .photo-travels.albums-medium {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/4);
+      height: (($container-tablet - $grid-gutter-width)/4);
+    }
+  }
+
+  .photo-travels.albums-large {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/3);
+      height: (($container-tablet - $grid-gutter-width)/3);
     }
   }
 }
 
-@media (max-width: $screen-sm-min) {
+// Small screen / tablet
+@media (min-width: $screen-sm-min ) and (max-width: $screen-md-min ) {
+
   .modal-dialog {
     position: absolute;
     top: 0;
@@ -109,16 +265,6 @@
     padding: 0;
     margin: 5px;
   }
-
-//  .modal-header {
-//    padding: 10px;
-//  }
-
-//  .modal-body {
-//    padding: 5px;
-//    position: absolute;
-//    top: 33px;
-//  }
 
   .photo_list_and_map .photo_list_panel {
     position: static;
@@ -165,5 +311,141 @@
 
   .list-group-item {
     padding: 5px;
+  }
+
+  .photo-wall.photo-wall-small {
+    .photo {
+      width: (($container-tablet - $grid-gutter-width)/8);
+      height: (($container-tablet - $grid-gutter-width)/8);
+    }
+  }
+
+  .photo-wall.photo-wall-medium {
+    .photo {
+      width: (($container-tablet - $grid-gutter-width)/4);
+      height: (($container-tablet - $grid-gutter-width)/4);
+    }
+  }
+
+  .photo-wall.photo-wall-large  {
+    .photo {
+      width: (($container-tablet - $grid-gutter-width)/3);
+      height: (($container-tablet - $grid-gutter-width)/3);
+    }
+  }
+
+  // photo travel albums
+  .photo-travels.albums-small {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/8);
+      height: (($container-tablet - $grid-gutter-width)/8);
+    }
+  }
+
+  .photo-travels.albums-medium {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/4);
+      height: (($container-tablet - $grid-gutter-width)/4);
+    }
+  }
+
+  .photo-travels.albums-large {
+    .travel {
+      width: (($container-tablet - $grid-gutter-width)/3);
+      height: (($container-tablet - $grid-gutter-width)/3);
+    }
+  }
+}
+
+// Medium screen / desktop
+@media (min-width: $screen-desktop) {
+  .photo-wall.photo-wall-small {
+    .photo {
+      width: (($container-desktop - $grid-gutter-width)/10);
+      height: (($container-desktop - $grid-gutter-width)/10);
+    }
+  }
+
+  .photo-wall.photo-wall-medium {
+    .photo {
+      width: (($container-desktop - $grid-gutter-width)/5);
+      height: (($container-desktop - $grid-gutter-width)/5);
+    }
+  }
+
+  .photo-wall.photo-wall-large  {
+    .photo {
+      width: (($container-desktop - $grid-gutter-width)/3);
+      height: (($container-desktop - $grid-gutter-width)/3);
+    }
+  }
+
+  // photo travel albums
+  .photo-travels.albums-small {
+    .travel {
+      width: (($container-desktop - $grid-gutter-width)/10);
+      height: (($container-desktop - $grid-gutter-width)/10);
+    }
+  }
+
+  .photo-travels.albums-medium {
+    .travel {
+      width: (($container-desktop - $grid-gutter-width)/5);
+      height: (($container-desktop - $grid-gutter-width)/5);
+    }
+  }
+
+  .photo-travels.albums-large {
+    .travel {
+      width: (($container-desktop - $grid-gutter-width)/3);
+      height: (($container-desktop - $grid-gutter-width)/3);
+    }
+  }
+}
+
+// Large screen / wide desktop
+@media (min-width: $screen-lg-desktop) {
+  // photo all wall
+  .photo-wall.photo-wall-small {
+    .photo {
+      width: (($container-large-desktop - $grid-gutter-width)/10);
+      height: (($container-large-desktop - $grid-gutter-width)/10);
+    }
+  }
+
+  .photo-wall.photo-wall-medium {
+    .photo {
+      width: (($container-large-desktop - $grid-gutter-width)/5);
+      height: (($container-large-desktop - $grid-gutter-width)/5);
+    }
+  }
+
+  .photo-wall.photo-wall-large  {
+    .photo {
+      width: (($container-large-desktop - $grid-gutter-width)/3);
+      height: (($container-large-desktop - $grid-gutter-width)/3);
+    }
+  }
+
+  // photo travel albums
+  .photo-travels.albums-small {
+    .travel {
+      width: (($container-large-desktop - $grid-gutter-width)/10);
+      height: (($container-large-desktop - $grid-gutter-width)/10);
+    }
+  }
+
+  .photo-travels.albums-medium {
+    .travel {
+      width: (($container-large-desktop - $grid-gutter-width)/5);
+      height: (($container-large-desktop - $grid-gutter-width)/5);
+    }
+  }
+
+  .photo-travels.albums-large {
+    .travel {
+      width: (($container-large-desktop - $grid-gutter-width)/3);
+      height: (($container-large-desktop - $grid-gutter-width)/3);
+    }
   }
 }
