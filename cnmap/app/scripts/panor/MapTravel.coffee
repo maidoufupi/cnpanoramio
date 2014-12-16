@@ -59,6 +59,8 @@ class ITravelLayer
     "<img src='#{@staticCtx}/#{photoOssKey}@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
 
   activePhoto: (photo) ->
+    if not photo.point
+      return
 
     if not @mapEventListener.inMapView(photo.point.lat, photo.point.lng, @map)
 #      @mapEventListener.setPosition(@marker, photo.point.lat, photo.point.lng)
@@ -111,7 +113,7 @@ class ITravelLayer
       ne = jQuery.extend {}, spot.photos[0].point
 
     if sw and ne
-      for photo in spot.photos
+      for photo in spot.photos when !!photo.point
         if photo.point.lat < sw.lat
           sw.lat = photo.point.lat
         if photo.point.lng < sw.lng

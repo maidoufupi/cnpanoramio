@@ -42,13 +42,13 @@
 
   .maps-content {
     position: absolute;
-    top: 51px;
+    top: $header-navbar-second-height;
     bottom: 0;
     width: 100%;
 
     .maps-left {
       position: fixed;
-      top: 82px;
+      top: $header-navbar-height+$header-navbar-second-height;
       left: 0;
       bottom: 0;
       @include transition-linear(all);
@@ -61,8 +61,6 @@
       min-height: 100%;
       background-color: #ececec;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.57);
-
-      @include transition-linear(all);
 
       .photo-wall.photo-fluid-container {
         margin: 1px -1px;
@@ -84,55 +82,29 @@
     }
   }
 
-  .maps-content.maps-right-fixed {
-    .maps-left {
-      right: 0;
-      margin: 0 600px 0 0;
-    }
-    .maps-right {
-      width: 600px;
-      margin: 0 auto;
-      .navbar-third, .navbar-forth, .messages {
-        width: 600px;
+  .maps-content {
+
+    &.maps-right-full {
+      .maps-left {
+        width: 0;
+      }
+      .maps-right {
+        width: 100%;
+        margin: 0;
+        .navbar-third, .navbar-forth, .messages {
+          width: 100%;
+        }
       }
     }
-  }
 
-  .maps-content.maps-left-fixed {
-    .maps-left {
-      width: 600px;
-    }
-    .maps-right {
-      left: 0;
-      margin: 0 0 0 600px;
-      min-width: 600px;
-      .navbar-third, .navbar-forth, .messages {
-        left: 600px;
-        right: 0;
-      }
-    }
-  }
-
-  .maps-content.maps-right-full {
-    .maps-left {
-      width: 0;
-    }
-    .maps-right {
-      width: 100%;
-      margin: 0;
-      .navbar-third, .navbar-forth, .messages {
+    &.maps-left-full {
+      .maps-left {
         width: 100%;
       }
-    }
-  }
-
-  .maps-content.maps-left-full {
-    .maps-left {
-      width: 100%;
-    }
-    .maps-right, .messages {
-      width: 0;
-      display: none;
+      .maps-right, .messages {
+        width: 0;
+        display: none;
+      }
     }
   }
 }
@@ -154,6 +126,115 @@
   /** amap style change */
   .amap-maptype-title {
     width: 100%;
+  }
+}
+
+// maps layout buttons group
+.navbar-second {
+  .navbar-nav.navbar-right {
+    .btn-group {
+      .btn {
+        border: 0;
+      }
+    }
+  }
+
+}
+
+
+@media (min-width: $screen-lg-min) {
+  .maps-content {
+    &.maps-right-fixed {
+      .maps-left {
+        right: 0;
+        margin: 0 600px 0 0;
+      }
+      .maps-right {
+        width: 600px;
+        margin: 0 auto;
+        .navbar-third, .navbar-forth, .messages {
+          width: 600px;
+        }
+      }
+    }
+
+    &.maps-left-fixed {
+      .maps-left {
+        right: 0;
+        margin: 0 900px 0 0;
+      }
+      .maps-right {
+        width: 900px;
+        margin: 0 auto;
+        .navbar-third, .navbar-forth, .messages {
+          width: 900px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $screen-md-min) and (max-width: $screen-lg-min) {
+  .maps-content {
+    &.maps-right-fixed {
+      .maps-left {
+        right: 0;
+        margin: 0 400px 0 0;
+      }
+      .maps-right {
+        width: 400px;
+        margin: 0 auto;
+        .navbar-third, .navbar-forth, .messages {
+          width: 400px;
+        }
+      }
+    }
+
+    &.maps-left-fixed {
+      .maps-left {
+        right: 0;
+        margin: 0 600px 0 0;
+      }
+      .maps-right {
+        width: 600px;
+        margin: 0 auto;
+        .navbar-third, .navbar-forth, .messages {
+          width: 600px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $screen-sm-min) and (max-width: $screen-md-min) {
+  .maps-content {
+    &.maps-right-fixed {
+      .maps-left {
+        right: 0;
+        margin: 0 400px 0 0;
+      }
+      .maps-right {
+        width: 400px;
+        margin: 0 auto;
+        .navbar-third, .navbar-forth, .messages {
+          width: 400px;
+        }
+      }
+    }
+
+    &.maps-left-fixed {
+      .maps-left {
+        right: 0;
+        margin: 0 600px 0 0;
+      }
+      .maps-right {
+        width: 600px;
+        margin: 0 auto;
+        .navbar-third, .navbar-forth, .messages {
+          width: 600px;
+        }
+      }
+    }
   }
 }
 

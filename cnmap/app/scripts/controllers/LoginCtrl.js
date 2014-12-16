@@ -3,7 +3,10 @@
  */
 'use strict';
 
-angular.module('ponmApp.login', ['ponmApp', 'ui.router'])
+angular.module('ponmApp.login', [
+  'ponmApp',
+  'ui.router',
+  'ngAnimate'])
     .config([   '$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
             $stateProvider
@@ -12,9 +15,9 @@ angular.module('ponmApp.login', ['ponmApp', 'ui.router'])
                     url: '',
                     views: {
                         '': { templateUrl: 'views/ponm.login.html',
-                            controller: 'LoginCtrl'},
+                            controller: 'LoginCtrl'}
 
-                        'navbar': {
+                        ,'navbar': {
                             templateUrl: 'views/ponm.navbar.html',
                             controller: 'NavbarCtrl'
                         }
@@ -27,9 +30,9 @@ angular.module('ponmApp.login', ['ponmApp', 'ui.router'])
                     url: '/signup',
                     views: {
                         '': { templateUrl: 'views/ponm.signup.html',
-                            controller: 'SignupCtrl'},
+                            controller: 'SignupCtrl'}
 
-                        'navbar': {
+                        ,'navbar': {
                             templateUrl: 'views/ponm.navbar.html',
                             controller: 'NavbarCtrl'
                         }
@@ -51,15 +54,16 @@ angular.module('ponmApp.login', ['ponmApp', 'ui.router'])
                 $state.go("maps.popular", {});
             });
 
-            $scope.$watch(function() {
-                return $location.search().login_error;
-            }, function(login_error) {
-                if(login_error) {
-                    $scope.loginError = true;
-                }else {
-                    $scope.loginError = false;
-                }
-            });
+          $scope.loginError = !!$location.search().login_error;
+            //$scope.$watch(function() {
+            //    return $location.search().login_error;
+            //}, function(login_error) {
+            //    if(login_error) {
+            //        $scope.loginError = true;
+            //    }else {
+            //        $scope.loginError = false;
+            //    }
+            //});
 
             $scope.credentials = {};
 

@@ -3,7 +3,7 @@
      infinite-scroll-disabled="loadMoreDisabled"
      infinite-scroll-immediate-check="false">
     <div class="photo-wall photo-fluid-container"
-         photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}">
+         photo-container-fluid="{targetHeight: 160, fadeSpeed: 0, allowPartialLastRow: true}">
         <div ng-repeat="photo in photos"
              class="photo"
              ng-style="{'background-color': photo.color}">
@@ -22,10 +22,13 @@
                     <div class="icon-photo-p360"></div>
                 </div>
             </a>
+          <div class="action-container">
             <div class="action ponm-photo-footer">
-                <p>{{photo.point.address}}</p>
-                <pre class="description">{{photo.description}}</pre>
+              <h6>{{photo.point.address}}</h6>
+              <pre class="description">{{photo.description}}</pre>
             </div>
+          </div>
+
         </div>
         <!--<div ng-show="photo.currentPage <= photo.numPages"
              class="btn btn-default load-more"

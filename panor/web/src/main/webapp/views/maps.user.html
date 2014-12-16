@@ -4,9 +4,9 @@
      infinite-scroll-immediate-check="false"
      class="maps-user">
     <div class="header"
-         waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '81'}">
+         waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '79'}">
         <div class="media user-info">
-            <a class="pull-left" href="{{ctx}}/#/user/{{user.id}}"
+            <a class="pull-left" href="#/user/{{user.id}}"
                user-card owner="{id:userId}" user-id="user.id">
                 <img class="media-object img-circle" ng-src="{{staticCtx}}/avatar{{user.avatar || 1}}.png">
             </a>
@@ -37,10 +37,12 @@
                     <div class="icon-photo-p360"></div>
                 </div>
             </a>
+          <div class="action-container">
             <div class="action ponm-photo-footer">
-                <p>{{photo.point.address}}</p>
-                <pre class="description">{{photo.description}}</pre>
+              <h6>{{photo.point.address}}</h6>
+              <pre class="description">{{photo.description}}</pre>
             </div>
+          </div>
         </div>
     </div>
 </div>

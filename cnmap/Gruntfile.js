@@ -562,9 +562,9 @@ module.exports = function (grunt) {
     'htmlmin'
   ]);
 
-  grunt.registerTask('default', [
-    'newer:jshint',
-    'test',
-    'build'
+  grunt.registerTask('deploy', [
+    'uglify:dist',
+    'cssmin:dist',
+    'copy:deploy'
   ]);
 };

@@ -151,7 +151,7 @@
 	    </property>
 	    <property name="authenticationFailureHandler">
 	        <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-	            <property name="defaultFailureUrl" value="/#/login?login_error=t" />
+	            <property name="defaultFailureUrl" value="/login?login_error=t" />
 	        </bean>
 	    </property>
 	</bean>

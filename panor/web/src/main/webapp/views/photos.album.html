@@ -28,6 +28,7 @@
             <div ng-repeat="photo in spot.photos"
                  ng-controller="PhotosPhotoCtrl"
                  class="photo"
+                 ng-class="{'selectable': selectable}"
                  ng-style="{'background-color': photo.color}">
                 <a ng-click="displayPhoto(photo.id)"
                    href="">
@@ -42,10 +43,17 @@
 
                 <div class="action-select"
                      ng-class="{'action': !selectable, 'ponm-show': selectable}"
-                     ng-click="selectPhoto($event, photo, spot.photos)">
+                     ng-click="selectPhoto(photo)">
                     <span class="icon-photo-select"
                           ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
                 </div>
+
+              <div class="action-container">
+                <div class="action ponm-photo-footer">
+                  <h6>{{photo.point.address}}</h6>
+                  <pre class="description">{{photo.description}}</pre>
+                </div>
+              </div>
 
             </div>
         </div>

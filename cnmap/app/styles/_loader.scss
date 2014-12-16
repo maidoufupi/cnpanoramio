@@ -395,7 +395,7 @@ $loading-quarter-circle-border: 2px;
   border-radius: 50%;
   border: $loading-quarter-circle-border solid transparent;
   position: relative;
-  animation: spin 1.2s infinite linear;
+  @include animation(loader-spin 1.2s infinite linear);
   &:before {
     content: "";
     width: $loading-quarter-circle-size;
@@ -466,12 +466,16 @@ $loading-quarter-circle-border: 2px;
 }
 
 
-@keyframes spin {
+@keyframes loader-spin {
   100% {
     transform: rotate(360deg);
   }
 }
-
+@-webkit-keyframes loader-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 @keyframes loader-flip {
   0% {

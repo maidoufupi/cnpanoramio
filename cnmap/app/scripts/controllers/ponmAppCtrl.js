@@ -4,7 +4,9 @@
 'use strict';
 
 angular.module('ponmApp.Index',
-  [ 'ponmApp',
+  [ 'ngSanitize',
+    'ponmApp',
+    'ponmApp.controllers',
     'ponmApp.photos',
     'ponmApp.maps',
     'ponmApp.settings',
@@ -104,18 +106,18 @@ angular.module('ponmApp.Index',
       }
     }])
 
-  .run(['$rootScope', '$state', 'localStorageService', 'AuthService',
-    function ($rootScope, $state, localStorageService, AuthService) {
+  .run(['$rootScope', '$state', 'localStorageService', 'AuthService', '$cacheFactory',
+    function ($rootScope, $state, localStorageService, AuthService, $cacheFactory) {
+
+      $rootScope.cache = $cacheFactory('cacheId2');
+
       $rootScope.$on('$stateChangeStart',
         function (event, toState, toParams, fromState, fromParams) {
-
           var unauthStateName = "unauthState";
-
           if (fromState.name == "login") {
             AuthService.checkLogin().then(function () {
-
-            }, function () {
-            });
+              }, function () {
+              });
           }
 
           // 登录后转到之前未授权的页面

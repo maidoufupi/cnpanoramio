@@ -33,16 +33,7 @@ $header-bar-height: 55px;
 
 .page-nav-fixed {
   .header-navbar {
-    position: fixed;
-    width: 100%;
+
   }
-  .main-view-page {
-    position: absolute;
-    width: 100%;
-    top: $header-navbar-height+1px;
-    bottom: 0;
-    .navbar-second {
-      position: fixed;
-    }
-  }
+
 }

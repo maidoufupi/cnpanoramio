@@ -140,10 +140,10 @@ angular.module('ponmApp.maps', [
   .controller('MapsCtrl',
   ['$window', '$location', '$rootScope', '$scope', '$q', 'PhotoService', 'UserService', 'PanoramioService',
     '$modal', 'ponmCtxConfig', '$log', '$state', '$stateParams', '$timeout', 'safeApply', 'jsUtils',
-    'HashStateManager', 'alertService', 'matchmedia',
+    'HashStateManager', 'alertService', 'matchmedia', '$cacheFactory',
     function ($window, $location, $rootScope, $scope, $q, PhotoService, UserService, PanoramioService,
               $modal, ponmCtxConfig, $log, $state, $stateParams, $timeout, safeApply, jsUtils,
-              HashStateManager, alertService, matchmedia) {
+              HashStateManager, alertService, matchmedia, $cacheFactory) {
 
       $scope.ctx = ponmCtxConfig.ctx;
       $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -209,29 +209,21 @@ angular.module('ponmApp.maps', [
         rotateEnable: true,
         resizeEnable: true,
         scaleControl: true
-//            panControl: false,
-//            zoomControl: false
-        // ui map config
-//            uiMapCache: false
       };
 
       $scope.mapEventListener = $window.cnmap.MapEventListener.factory();
       $scope.mapService = $window.cnmap.MapService.factory();
 
-      var panoramioLayer = new cnmap.PanoramioLayer(
-        {
+      var panoramioLayer = new cnmap.PanoramioLayer({
           suppressInfoWindows: false
 //                    ,mapVendor: $window.mapVendor || "gaode"
-        }
-//                    auto: false
-      );
+        });
       $scope.panoramioLayer = panoramioLayer;
       panoramioLayer.initEnv(ponmCtxConfig.ctx, $scope.staticCtx);
       jQuery(panoramioLayer).bind("data_changed", function (e, data) {
         if (!$scope.stateStatus.user) {
           $scope.$apply(function (scope) {
             $scope.photos = jsUtils.Array.mergeRightist($scope.photos || [], data, "id");
-//                        $scope.photos = data;
             $scope.$broadcast("ponm.photo.fluid.resize", {});
           });
         }
@@ -239,7 +231,6 @@ angular.module('ponmApp.maps', [
       jQuery(panoramioLayer).bind("data_clicked", function (e, photoId) {
         $scope.displayPhoto(photoId);
       });
-
 
       /**
        * 设置浏览类型
@@ -489,6 +480,9 @@ angular.module('ponmApp.maps', [
         }
       );
 
+      /**
+       * watch地图
+       */
       $scope.$watch('myMap', function (mapObj) {
         if (!$scope.map && mapObj) {
           $scope.map = mapObj;
@@ -497,16 +491,36 @@ angular.module('ponmApp.maps', [
         }
       });
 
-      $scope.$on("mapChanged", function (e, mapObj) {
-        panoramioLayer.setMap(mapObj);
-        $scope.mapEventListener.addToolBar(mapObj);
-        $scope.mapService.init(mapObj);
-        locationHash(mapObj);
+      /**
+       * 地图实例变化事件
+       */
+      $scope.$on("mapChanged", function (e, map) {
+        panoramioLayer.setMap(map);
+        $scope.mapEventListener.addToolBar(map);
+        $scope.mapService.init(map);
+        locationHash(map);
+
         if (!$scope.hashStateManager.get("lat")) {
-          getCurrentPostion(mapObj);
+          if($rootScope.cache) {
+            // get map location cache
+            var lat = $rootScope.cache.get('map.lat');
+            var lng = $rootScope.cache.get('map.lng');
+            var zoom = $rootScope.cache.get('map.zoom');
+            if(lat && lng & zoom) {
+              $scope.mapEventListener.setZoomAndCenter(map, zoom, lat, lng);
+            }
+          }else {
+            // get brower's location
+            getCurrentPostion(map);
+          }
         }
       });
 
+      /**
+       * 通过浏览器获取当前位置
+       *
+       * @param map
+       */
       function getCurrentPostion(map) {
         // Try HTML5 geolocation
         if (navigator.geolocation) {
@@ -566,14 +580,18 @@ angular.module('ponmApp.maps', [
       // changeState状态标志，记录上次动作不超过0.5秒，不能进行state更改的触发
       // 高德地图有setCenter后取getCenter不完全一致问题
       var changeState = false,
-        listeners = [];
+        listeners = [],
+        mapLat,
+        mapLng,
+        mapZoom;
 
       function locationHash(map) {
 
         listeners = $scope.mapEventListener.addLocationHashListener(map,
           function (lat, lng, zoom) {
-//                        $log.debug("locationHashListener");
-
+            mapLat = lat;
+            mapLng = lng;
+            mapZoom = zoom;
             if ($scope.setState) {
               $timeout.cancel($scope.setState);
             }
@@ -590,22 +608,21 @@ angular.module('ponmApp.maps', [
           });
 
         $scope.hashStateManager.bindingWatch("lat lng zoom bounds", function (lat, lng, zoom, bounds) {
-
-          $log.debug("watch lat lng zoom");
+          //$log.debug("watch lat lng zoom");
           if ($scope.setState) {
             $timeout.cancel($scope.setState);
           }
           changeState = true;
           if (zoom && lat && lng) {
-            $log.debug("setZoomAndCenter");
+            //$log.debug("setZoomAndCenter");
             $scope.mapEventListener.setZoomAndCenter(map, zoom, lat, lng);
           } else {
             if (lat && lng) {
-              $log.debug("setCenter");
+              //$log.debug("setCenter");
               $scope.mapEventListener.setCenter(map, lat, lng);
             }
             if (zoom) {
-              $log.debug("setZoom");
+              //$log.debug("setZoom");
               $scope.mapEventListener.setZoom(map, zoom);
             }
           }
@@ -693,11 +710,6 @@ angular.module('ponmApp.maps', [
       });
 
       $scope.setSearch = function (search, state) {
-        if (search) {
-          $scope.setPanormaioType("manual");
-        } else {
-          $scope.setPanormaioType("auto");
-        }
         $scope.searchVal = search;
         if (!state) {
           $scope.hashStateManager.set("search", search);
@@ -716,8 +728,13 @@ angular.module('ponmApp.maps', [
 
       $scope.$on("$destroy", function () {
         $scope.mapEventListener.removeListener(listeners);
+        $rootScope.cache.put('map.lat', mapLat);
+        $rootScope.cache.put('map.lng', mapLng);
+        $rootScope.cache.put('map.zoom', mapZoom);
+
         $scope.hashStateManager.clear();
         $scope.hashStateManager = null;
+
       });
 
       $scope.clearState = function () {
@@ -839,7 +856,10 @@ angular.module('ponmApp.maps', [
 
       $scope.$on("searchChanged", function (e, val) {
         if(!val) {
+          $scope.setPanormaioType("auto");
           return
+        }else {
+          $scope.setPanormaioType("manual");
         }
         $scope.search(val, "photo").then(function (photos) {
           $scope.photos = jsUtils.Array.mergeRightist($scope.photos || [], photos, "id");
@@ -882,6 +902,8 @@ angular.module('ponmApp.maps', [
       $scope.setPanormaioType('manual');
 
       function getTravel(travelId) {
+        $scope.contentLoading = true;
+
         TravelService.getTravel({travelId: travelId}, function (res) {
           if (res.status == "OK") {
             $scope.setMenu("travel", {id: travelId, name: res.travel.title});
@@ -925,7 +947,7 @@ angular.module('ponmApp.maps', [
         angular.forEach($scope.travel.spots, function (spot, key) {
           spot.addresses = {};
           angular.forEach(spot.photos, function (photo, key) {
-            if (photo.point.address) {
+            if (photo.point&&photo.point.address) {
               spot.addresses[photo.point.address] = photo.point;
             }
           });
@@ -938,10 +960,21 @@ angular.module('ponmApp.maps', [
             $scope.travelLayer.setTravel($scope.travel);
             $scope.travelLayer.initMap();
             $scope.activeSpot($scope.travel.spots[0]);
+            $scope.contentLoading = false;
           }, 100);
+        }else {
+          $scope.contentLoading = false;
         }
       };
 
+      /**
+       * 更新travel属性
+       *
+       * @param travel
+       * @param propName
+       * @param $data
+       * @returns {*}
+       */
       $scope.updateTravel = function (travel, propName, $data) {
         var d = $q.defer();
         var t = {

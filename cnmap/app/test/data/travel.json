@@ -1,0 +1,256 @@
+{
+  "status": "OK",
+  "travel": {
+    "id": 10,
+    "username": "行走江湖多年",
+    "user": {
+      "id": 3,
+      "name": "行走江湖多年",
+      "avatar": 2,
+      "tags": [],
+      "travels": []
+    },
+    "spots": [
+      {
+        "id": 86,
+        "photos": [
+          {
+            "id": 78,
+            "point": {
+              "lat": 22.602388,
+              "lng": 113.64665,
+              "address": "广东省广州市南沙区万顷沙镇十九涌水产品交易码头"
+            },
+            "vendor": "gaode",
+            "width": 4849,
+            "height": 1755,
+            "is360": false,
+            "tags": [],
+            "create_time": 1403965737000,
+            "user_id": 3,
+            "travel_id": 10,
+            "travel_name": "14年在广州南沙",
+            "like_count": 0,
+            "fav_count": 0,
+            "comment_count": 0,
+            "file_size": 2337945,
+            "file_name": "PANO_20140628_122225[1].jpg",
+            "file_type": "jpg",
+            "oss_key": "78.jpg"
+          }
+          ,{
+            "id": 78,
+            "point": {
+              "lat": 22.602388,
+              "lng": 113.64665,
+              "address": "广东省广州市南沙区万顷沙镇十九涌水产品交易码头"
+            },
+            "vendor": "gaode",
+            "width": 4849,
+            "height": 1755,
+            "is360": false,
+            "tags": [],
+            "create_time": 1403965737000,
+            "user_id": 3,
+            "travel_id": 10,
+            "travel_name": "14年在广州南沙",
+            "like_count": 0,
+            "fav_count": 0,
+            "comment_count": 0,
+            "file_size": 2337945,
+            "file_name": "PANO_20140628_122225[1].jpg",
+            "file_type": "jpg",
+            "oss_key": "78.jpg"
+          }
+          ,{
+            "id": 78,
+            "point": {
+              "lat": 22.602388,
+              "lng": 113.64665,
+              "address": "广东省广州市南沙区万顷沙镇十九涌水产品交易码头"
+            },
+            "vendor": "gaode",
+            "width": 4849,
+            "height": 1755,
+            "is360": false,
+            "tags": [],
+            "create_time": 1403965737000,
+            "user_id": 3,
+            "travel_id": 10,
+            "travel_name": "14年在广州南沙",
+            "like_count": 0,
+            "fav_count": 0,
+            "comment_count": 0,
+            "file_size": 2337945,
+            "file_name": "PANO_20140628_122225[1].jpg",
+            "file_type": "jpg",
+            "oss_key": "78.jpg"
+          }
+          ,{
+            "id": 78,
+            "point": {
+              "lat": 22.602388,
+              "lng": 113.64665,
+              "address": "广东省广州市南沙区万顷沙镇十九涌水产品交易码头"
+            },
+            "vendor": "gaode",
+            "width": 4849,
+            "height": 1755,
+            "is360": false,
+            "tags": [],
+            "create_time": 1403965737000,
+            "user_id": 3,
+            "travel_id": 10,
+            "travel_name": "14年在广州南沙",
+            "like_count": 0,
+            "fav_count": 0,
+            "comment_count": 0,
+            "file_size": 2337945,
+            "file_name": "PANO_20140628_122225[1].jpg",
+            "file_type": "jpg",
+            "oss_key": "78.jpg"
+          }
+        ],
+        "travel_id": 10
+      },
+      {
+        "id": 30,
+        "photos": [
+          {
+            "id": 96,
+            "point": {
+              "lat": 22.681105494621736,
+              "lng": 113.53088215554799,
+              "alt": 0.0,
+              "address": "广东省广州市南沙区横沥镇13栋宿舍"
+            },
+            "vendor": "gaode",
+            "width": 2688,
+            "height": 1520,
+            "is360": false,
+            "tags": ["美鱼"],
+            "create_time": 1408176664000,
+            "user_id": 3,
+            "travel_id": 10,
+            "travel_name": "14年在广州南沙",
+            "like_count": 0,
+            "fav_count": 0,
+            "comment_count": 0,
+            "file_size": 2179509,
+            "file_name": "IMG_20140708_104747.jpg",
+            "file_type": "jpg",
+            "date_time": 1404787668000,
+            "oss_key": "96.jpg"
+          },
+          {
+            "id": 95,
+            "point": {
+              "lat": 22.681105085739517,
+              "lng": 113.53089101874515,
+              "alt": 0.0,
+              "address": "广东省广州市南沙区横沥镇13栋宿舍"
+            },
+            "vendor": "gaode",
+            "width": 1520,
+            "height": 2688,
+            "is360": false,
+            "tags": ["美鱼"],
+            "create_time": 1408176650000,
+            "user_id": 3,
+            "travel_id": 10,
+            "travel_name": "14年在广州南沙",
+            "like_count": 0,
+            "fav_count": 0,
+            "comment_count": 0,
+            "file_size": 1904834,
+            "file_name": "IMG_20140708_104812.jpg",
+            "file_type": "jpg",
+            "date_time": 1404787693000,
+            "oss_key": "95.jpg"
+          },
+          {
+            "id": 94,
+            "point": {
+              "lat": 22.68114070720626,
+              "lng": 113.53090430429648,
+              "alt": 0.0,
+              "address": "广东省广州市南沙区横沥镇13栋宿舍"
+            },
+            "vendor": "gaode",
+            "width": 2688,
+            "height": 1520,
+            "is360": false,
+            "tags": ["美鱼"],
+            "create_time": 1408176454000,
+            "user_id": 3,
+            "travel_id": 10,
+            "travel_name": "14年在广州南沙",
+            "like_count": 1,
+            "fav_count": 0,
+            "comment_count": 0,
+            "file_size": 2282130,
+            "file_name": "IMG_20140708_104539.jpg",
+            "file_type": "jpg",
+            "date_time": 1404787539000,
+            "oss_key": "94.jpg"
+          },
+          {
+            "id": 93,
+            "point": {
+              "lat": 22.681143529091386,
+              "lng": 113.53090552070753,
+              "alt": 0.0,
+              "address": "广东省广州市南沙区横沥镇13栋宿舍"
+            },
+            "vendor": "gaode",
+            "width": 2688,
+            "height": 1520,
+            "is360": false,
+            "tags": ["美鱼"],
+            "create_time": 1408176436000,
+            "user_id": 3,
+            "travel_id": 10,
+            "travel_name": "14年在广州南沙",
+            "like_count": 0,
+            "fav_count": 0,
+            "comment_count": 0,
+            "file_size": 2336146,
+            "file_name": "IMG_20140708_104533.jpg",
+            "file_type": "jpg",
+            "date_time": 1404787534000,
+            "oss_key": "93.jpg"
+          }
+        ],
+        "travel_id": 10,
+        "time_start": 1404787534000
+      }
+    ],
+    "title": "14年在广州南沙",
+    "user_id": 3,
+    "album_cover": {
+      "id": 78,
+      "point": {
+        "lat": 22.602388,
+        "lng": 113.64665,
+        "address": "广东省广州市南沙区万顷沙镇十九涌水产品交易码头"
+      },
+      "vendor": "gaode",
+      "width": 4849,
+      "height": 1755,
+      "is360": false,
+      "tags": [],
+      "create_time": 1403965737000,
+      "user_id": 3,
+      "travel_id": 10,
+      "travel_name": "14年在广州南沙",
+      "like_count": 0,
+      "fav_count": 0,
+      "comment_count": 0,
+      "file_size": 2337945,
+      "file_name": "PANO_20140628_122225[1].jpg",
+      "file_type": "jpg",
+      "oss_key": "78.jpg"
+    },
+    "photo_size": 5
+  }
+}

@@ -190,19 +190,8 @@ angular.module('ponmApp.photos', [
       );
 
       $scope.selectedPhotos = [];
-      $scope.selectPhoto = function (e, photo, photos) {
-        e && e.preventDefault();
-        e && e.stopPropagation();
-        photo.actionSelected = !photo.actionSelected;
-        if (photo.actionSelected) {
-          $scope.selectable = true;
-          $scope.selectedPhotos.push(photo);
-        } else {
-          jsUtils.Array.removeItem($scope.selectedPhotos, "id", photo.id);
-          if ($scope.selectedPhotos.length == 0) {
-            $scope.selectable = false;
-          }
-        }
+      $scope.setSelectable = function(selectable) {
+        $scope.selectable = selectable;
       };
 
       $scope.displayPhoto = function (photoId, state) {
@@ -270,7 +259,7 @@ angular.module('ponmApp.photos', [
         angular.forEach($scope.selectedPhotos, function (photo, key) {
           PhotoService.delete({photoId: photo.id}, function (res) {
             if (res.status == "OK") {
-              $scope.selectPhoto(null, photo);
+              //$scope.selectPhoto(null, photo);
               $scope.$broadcast("removePhotoDo", photo.id);
               $scope.alertService.add("success", "删除成功");
             }
@@ -281,7 +270,7 @@ angular.module('ponmApp.photos', [
       function removeSelectedPhotos() {
         var photos = angular.copy($scope.selectedPhotos);
         angular.forEach(photos, function (photo, key) {
-          $scope.selectPhoto(null, photo);
+          //$scope.selectPhoto(null, photo);
           $scope.$broadcast("removePhotoDo", photo.id);
           $scope.alertService.add("success", "移动成功");
         });
@@ -308,58 +297,38 @@ angular.module('ponmApp.photos', [
     }])
   .controller('PhotosAllCtrl',
   ['$window', '$location', '$rootScope', '$scope', '$q', '$timeout', 'UserPhoto', 'UserService', '$modal',
-    'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils', 'safeApply',
+    'ponmCtxConfig', '$log', '$state', '$stateParams', 'jsUtils', 'safeApply', 'PhotosManager',
     function ($window, $location, $rootScope, $scope, $q, $timeout, UserPhoto, UserService, $modal,
-              ponmCtxConfig, $log, $state, $stateParams, jsUtils, safeApply) {
+              ponmCtxConfig, $log, $state, $stateParams, jsUtils, safeApply, PhotosManager) {
 
-      // 用户图片分页属性
-      $scope.photo = {
-        pageSize: 30,
-        totalItems: 0,
-        numPages: 2,
-        currentPage: 1,
-        maxSize: 10
-      };
+      var photosManager = new PhotosManager($scope.userId, 30);
+      $scope.photosManager = photosManager;
 
-      getOpenInfo();
+      //getOpenInfo();
 
       function getOpenInfo() {
         UserService.getOpenInfo({'userId': $scope.userId}, function (data) {
           if (data.status == "OK") {
             $scope.userOpenInfo = data.open_info;
             $scope.editable = ($scope.userOpenInfo.id == $scope.userId);
-            $scope.photo.numPages = Math.ceil($scope.userOpenInfo.photo_count / $scope.photo.pageSize);
+            //$scope.photo.numPages = Math.ceil($scope.userOpenInfo.photo_count / $scope.photo.pageSize);
           }
         });
       }
 
       $scope.photos = [];
       function getUserPhotos() {
-        var d = $q.defer();
-
-        if ($scope.photo.currentPage > $scope.photo.numPages) {
-          d.resolve();
-          return d.promise;
-        }
-
-        $log.debug("load more photos");
         $scope.photoLoading = true;
-        UserPhoto.get({userId: $scope.userId, pageSize: $scope.photo.pageSize, pageNo: $scope.photo.currentPage},
-          function (data) {
-            if (data.status == "OK") {
-              $scope.photos = $scope.photos.concat(data.photos);
-              $scope.photos.sort(function (a, b) {
-                return b.create_time - a.create_time;
-              });
-            }
-            d.resolve();
-            $scope.photoLoading = false;
-          }, function (error) {
-            $scope.photoLoading = false;
+        photosManager.more().then(function(photos, pageNo) {
+          $scope.photos = $scope.photos.concat(photos);
+          $scope.photos.sort(function (a, b) {
+            return b.create_time - a.create_time;
           });
-        $scope.photo.currentPage += 1;
+          $scope.photoLoading = false;
+        },function(error, pageNo) {
+          $scope.photoLoading = false;
+        });
 
-        return d.promise;
       }
 
       $scope.getUserPhotos = getUserPhotos;
@@ -381,47 +350,24 @@ angular.module('ponmApp.photos', [
 
     }])
   .controller('PhotosRecentCtrl',
-  ['$window', '$location', '$rootScope', '$scope', 'UserPhoto', 'UserService', '$modal',
-    'jsUtils', '$log', 'safeApply', '$q',
-    function ($window, $location, $rootScope, $scope, UserPhoto, UserService, $modal,
-              jsUtils, $log, safeApply, $q) {
+  ['$window', '$location', '$rootScope', '$scope', 'PhotosManager', 'jsUtils', '$log', 'safeApply', '$q',
+    function ($window, $location, $rootScope, $scope, PhotosManager, jsUtils, $log, safeApply, $q) {
 
-      // 用户图片分页属性
-      $scope.photo = {
-        pageSize: 30,
-        totalItems: 0,
-        numPages: 4,
-        currentPage: 1,
-        maxSize: 10
-      };
+      var photosManager = new PhotosManager($scope.userId, 30);
+      $scope.photosManager = photosManager;
 
       $scope.photos = [];
       function getUserPhotos() {
-        var d = $q.defer();
-
-        if ($scope.photo.currentPage > $scope.photo.numPages) {
-          d.resolve();
-          return d.promise;
-        }
-
-        UserPhoto.get({userId: $scope.userId, pageSize: $scope.photo.pageSize, pageNo: $scope.photo.currentPage},
-          function (data) {
-            if (data.status == "OK") {
-              if (data.photos.length < $scope.photo.pageSize) {
-                $scope.photo.numPages = $scope.photo.currentPage - 1;
-              }
-              $scope.photos = $scope.photos.concat(data.photos);
-              $scope.photos.sort(function (a, b) {
-                return b.create_time - a.create_time;
-              });
-            }
-            d.resolve();
-          }, function (error) {
-            $scope.photoLoading = false;
+        $scope.photoLoading = true;
+        photosManager.more().then(function(photos, pageNo) {
+          $scope.photos = $scope.photos.concat(photos);
+          $scope.photos.sort(function (a, b) {
+            return b.create_time - a.create_time;
           });
-        $scope.photo.currentPage += 1;
-
-        return d.promise;
+          $scope.photoLoading = false;
+        },function(error, pageNo) {
+          $scope.photoLoading = false;
+        });
       }
 
       $scope.getUserPhotos = getUserPhotos;
@@ -491,13 +437,13 @@ angular.module('ponmApp.photos', [
         });
       }
 
-      $scope.selectAll = function () {
-        angular.forEach($scope.travel.spots, function (spot, key) {
-          angular.forEach(spot.photos, function (photo, key) {
-            $scope.selectPhoto(null, photo);
-          });
-        });
-      };
+      //$scope.selectAll = function () {
+      //  angular.forEach($scope.travel.spots, function (spot, key) {
+      //    angular.forEach(spot.photos, function (photo, key) {
+      //      $scope.selectPhoto(null, photo);
+      //    });
+      //  });
+      //};
 
       var delTravelModalOptions = {
         closeButtonText: '取消',
@@ -645,22 +591,48 @@ angular.module('ponmApp.photos', [
       });
     }])
   .controller('PhotosPhotoCtrl',
-  ['$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modal',
-    'ponmCtxConfig', '$log', '$state', '$stateParams',
-    function ($window, $location, $rootScope, $scope, TravelService, UserService, $modal,
-              ponmCtxConfig, $log, $state, $stateParams) {
+  ['$scope', 'jsUtils', function ($scope, jsUtils) {
 
-      $scope.$watch('rectSelected', function (value) {
-        if ((value && !$scope.photo.actionSelected) || (!value && $scope.photo.actionSelected)) {
-          $scope.selectPhoto(null, $scope.photo);
-        }
-      });
-
-      $scope.$on("photosCancelSelect", function () {
+    $scope.selectPhoto = function (photo) {
+      //e && e.preventDefault();
+      //e && e.stopPropagation();
+      photo.actionSelected = !photo.actionSelected;
+      if (photo.actionSelected) {
+        $scope.rectSelected = true;
+        $scope.setSelectable(true);
+        //$scope.selectable = true;
+        $scope.selectedPhotos.push(photo);
+      } else {
         $scope.rectSelected = false;
-      });
+        jsUtils.Array.removeItem($scope.selectedPhotos, "id", photo.id);
+        if ($scope.selectedPhotos.length == 0) {
+          $scope.setSelectable(false);
+          //$scope.selectable = false;
+        }
+      }
+    };
 
-    }])
+    $scope.$watch('rectSelected', function (value) {
+      if ((value && !$scope.photo.actionSelected) || (!value && $scope.photo.actionSelected)) {
+        $scope.selectPhoto($scope.photo);
+      }
+    });
+
+    $scope.$on("selectAllDo", function(e) {
+      $scope.selectPhoto($scope.photo);
+    });
+
+    $scope.$on('removePhotoDo', function(id) {
+      if($scope.photo.id == id) {
+        $scope.selectPhoto($scope.photo);
+      }
+    });
+
+    $scope.$on("photosCancelSelect", function () {
+      $scope.rectSelected = false;
+    });
+
+  }])
   .controller('PhotosMoveCtrl',
   ['$window', '$location', '$rootScope', '$scope', 'TravelService', 'UserService', '$modalInstance',
     'ponmCtxConfig', '$log', '$q', 'jsUtils', 'operateType', 'photos',

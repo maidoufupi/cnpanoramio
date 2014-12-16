@@ -304,12 +304,14 @@
 /****************************************************************************************/
 /** photos page *************************************************************************/
 .photos {
+  position: absolute;
   width: 100%;
   .container-photos {
     @include transition-linear(top);
     transition: top linear 0.3s;
     position: relative;
     margin-top: 5px;
+    padding: 0;
   }
 
   .container-photos.expand {
@@ -318,16 +320,6 @@
   }
   .select-pane {
     position: relative;
-  }
-}
-
-
-// photos all
-.photo-wall.photo-wall-fixed-size.photo-all {
-  .photo {
-//    display: inline-block;
-//    float: initial;
-//    background-color: $photo-bg;
   }
 }
 
@@ -342,10 +334,10 @@
   .spot {
     clear: both;
     padding: 10px;
+    margin: 5px 0;
     @include activable(initial, $body-bg-color, $body-bg-color);
-  }
-
-  .spot {
+    border: 1px solid lightgrey;
+    border-top-color: $theme-color-primary;
     .header {
       .item {
         margin: 5px;

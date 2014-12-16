@@ -2,8 +2,7 @@
     <div class="dropdown-toggle"
          ng-model="item"
          style="cursor: pointer;">
-        <a href=""
-           ng-hide="selectedItems.length">{{placeHolder}}</a>
+        <span ng-hide="selectedItems.length" ng-transclude></span>
         <span class="label label-info label-clickable" style="margin: 0 1px;"
               ng-repeat="item in selectedItems">{{item.value}}</span>
     </div>

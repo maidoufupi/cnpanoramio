@@ -152,18 +152,6 @@
 //
 //        };
 
-//        this.getInfoWindowContent = function(photoId) {
-//            var infoWindow = document.createElement("div");
-//            $jQuery(infoWindow).css({
-//                'width': '200px',
-//                'height': '200px',
-//                'display': 'inline-block'
-//            }).append(
-//                "<a href='" + this.ctx + "/photo/" + photoId+ "'><img src='" + this.ctx + "/api/rest/photo/" + photoId + "/2' ></a>"
-//            )
-//            return infoWindow;
-//        };
-
         this.getInfoWindowContent = function(photo) {
 
             var date = new Date(photo.create_date),

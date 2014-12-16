@@ -25,9 +25,14 @@
   </div>
   <div ui-view="alert">
   </div>
-  <div ui-view class="main-view-page"
-       style="position: absolute; top: 0; bottom: 0; margin-top: 30px; width: 100%;">
-  </div>
+    <div style="position: absolute;
+                  top: 0;
+                  bottom: 0;
+                  margin-top: 30px;
+                  width: 100%;">
+        <div ui-view class="login-view-page view-in-out">
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -1,12 +1,36 @@
+// *----------------------------------------------
+// view animation
+// *----------------------------------------------
+// view in out
+.view-in-out {
+}
+.view-in-out.ng-enter {
+  position: absolute;
+  @include transform(translate(-50%, -100%) scale(.5));
+  @include opacity(0);
+  @include transition-transform(.5s ease-in-out, opacity .5s ease-in-out);
+}
+.view-in-out.ng-enter.ng-enter-active {
+  @include transform(translate(0, 0) scale(1));
+  @include opacity(1);
+}
+.view-in-out.ng-leave {
+  position: relative;
+  @include transition-transform(.5s ease-in-out, opacity .5s ease-in-out);
+}
+.view-in-out.ng-leave.ng-leave-active {
+  @include transform(translate(50%, -100%) scale(.5));
+  @include opacity(0);
+}
+//
+
 @-webkit-keyframes rotateThis {
   from {
-    -webkit-transform: scale(1) rotate(0deg);
-    transform: scale(1) rotate(0deg);
+    @include transform(scale(1) rotate(0deg));
   }
 
   to {
-    -webkit-transform: scale(1) rotate(360deg);
-    transform: scale(1) rotate(360deg);
+    @include transform(scale(1) rotate(360deg));
   }
 }
 
@@ -55,21 +79,6 @@
     @include scale(1);
   }
 }
-
-//.repeat-enter-setup, .repeat-leave-setup {
-//  -webkit-transition:all linear 0.3s;
-//  -moz-transition:all linear 0.3s;
-//  -ms-transition:all linear 0.3s;
-//  -o-transition:all linear 0.3s;
-//  transition:all linear 0.3s;
-//}
-//
-//.repeat-enter-setup { line-height:0; opacity:0; }
-//.repeat-enter-setup.repeat-enter-start { line-height:20px; opacity:1; }
-//
-//.repeat-leave-setup { opacity:1; line-height:20px; }
-//.repeat-leave-setup.repeat-leave-start { opacity:0; line-height:0; }
-
 
 @-webkit-keyframes enter_sequence {
   from { opacity:0; @include scale(0.8);}
@@ -138,42 +147,116 @@
   from 	{ transform: translateX(100%); }
   to 	{ transform: translateX(0); }
 }
-.maps-view-page.ng-enter {
-  @include animation(scaleUp 0.5s both ease-in);
-}
-.maps-view-page.ng-leave {
-  @include animation(slideOutRight 0.5s both ease-in);
+@-webkit-keyframes slideInRight {
+  from 	{ transform: translateX(100%); }
+  to 	{ transform: translateX(0); }
 }
 
+@keyframes opacityOut {
+  from 	{
+    @include opacity(1);}
+  to 	{
+    @include opacity(0);}
+}
+@-webkit-keyframes opacityOut {
+  from 	{
+    @include opacity(1);}
+  to 	{
+    @include opacity(0);}
+}
+
+@keyframes opacityIn {
+  from 	{
+    @include opacity(0);}
+  to 	{
+    @include opacity(1);}
+}
+@-webkit-keyframes opacityIn {
+  from 	{
+    @include opacity(0);}
+  to 	{
+    @include opacity(1);}
+}
 
 @keyframes hideIn {
   to 	{ @include scale(.5); @include opacity(0.3); }
 }
-//.main-view-page.ng-enter {
-//  z-index: 9999;
-//  animation: slideInRight 1s both ease-in;
-//  .navbar-second {
+
+.ng-enter-opacity {
+  &.ng-enter {
+//    position: relative;
 //    top: 0;
-//  }
-//  .maps-container {
-//    .content.right-fixed {
-//      .left {
-//        top: 51px;
-//      }
-//    }
-//  }
-//}
-//.main-view-page.ng-leave {
-//  z-index: 1111;
-//  animation: hideIn 1s both ease-in;
-//  .navbar-second {
-//    top: 0;
-//  }
-//  .maps-container {
-//    .content.right-fixed {
-//      .left {
-//        top: 51px;
-//      }
-//    }
-//  }
-//}
+    @include transition(opacity .5s ease-out);
+    @include opacity(0);
+  }
+  &.ng-enter.ng-enter-active {
+    @include opacity(1);
+  }
+  &.ng-leave {
+    position: absolute;
+    @include transition(opacity .5s ease-out);
+    @include opacity(1);
+  }
+  &.ng-leave.ng-leave-active {
+    @include opacity(0);
+  }
+}
+
+.ng-enter-leave {
+
+  &.ng-enter {
+    @include transition(opacity .5s ease-out);
+    @include opacity(.2);
+  }
+  &.ng-enter.ng-enter-active {
+    @include opacity(1);
+  }
+  &.ng-leave {
+    position: absolute;
+    // zan wei jiejue bug
+//    z-index: 2000;
+//    @include transition(all .5s ease-out);
+    @include opacity(1);
+  }
+  &.ng-leave.ng-leave-active {
+    @include opacity(.2);
+  }
+}
+
+// maps page right view
+.maps-view-page {
+  @extend .ng-enter-opacity;
+}
+
+// main-view-page
+.main-view-page {
+  position: absolute;
+  top: $header-navbar-height;
+  width: 100%;
+  @extend .ng-enter-leave;
+
+}
+
+// photos-view
+.photos-view {
+  top: 0;
+  right: 0;
+  @extend .ng-enter-opacity;
+}
+
+.users-view {
+  @extend .ng-enter-opacity;
+  top: 0;
+  width: 100%;
+}
+
+.settings-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  @extend .ng-enter-opacity;
+  &.ng-enter {
+    position: absolute;
+  }
+}

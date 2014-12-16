@@ -5,19 +5,18 @@
 .nav.nav-tray {
   > li {
     > a {
-      border-bottom-width: 3px;
-      border-bottom-style: solid;
-      border-bottom-color: transparent;
+      border-bottom: 2px solid transparent;
       @include transition-linear(border-bottom-color);
-    }
-  }
-
-  >li.active, >li:hover {
-      > a:not(.dropdown-toggle) {
+      &:focus {
         border-bottom-color: $nav-item-active-color;
-        font-weight: bold;
       }
     }
+    &.active, &:hover, &:focus {
+      > a {
+        border-bottom-color: $nav-item-active-color;
+      }
+    }
+  }
 }
 
 .nav-list {
@@ -81,10 +80,7 @@
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  @include user-select(none);
 }
 b, strong {
   font-weight: bold;

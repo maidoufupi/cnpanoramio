@@ -9,6 +9,7 @@ angular.module('ponmApp.directives')
 
         return {
             restrict: 'EA',
+          transclude: true,
             require: 'ngModel',
             scope: {
                 loadData: "&",
@@ -23,7 +24,7 @@ angular.module('ponmApp.directives')
                 var dataType = "String";
 
                 scope.itemValueName = scope.itemValueName || "value";
-                scope.placeHolder = attrs.placeHolder || "添加";
+                scope.placeHolder = attrs.placeHolder;
 
                 var items = null;
                 scope.selectedItems = [];

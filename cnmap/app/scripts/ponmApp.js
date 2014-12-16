@@ -4,12 +4,13 @@
 'use strict';
 
 angular.module('ponmApp', [
+  'ngAnimate',
   'ponmApp.directives',
   'ponmApp.services'
 ])
     .config(['$logProvider',
         function ($logProvider ) {
             // enable log debug level
-            $logProvider.debugEnabled = false;
+            $logProvider.debugEnabled = true;
         }])
 ;

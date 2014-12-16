@@ -1,15 +1,15 @@
 .travel-album {
-//  display: inline-block;
-//  cursor: pointer;
   width: 100%;
-  padding-right: 53px;
   position: relative;
 
   .front-cover {
     position: relative;
-    height: 161px;
-    margin-right: 1px;
     overflow: hidden;
+    img {
+      width: 100%;
+      margin-top: -20%;
+      margin-bottom: -20%;
+    }
 
     .header {
       position: absolute;
@@ -25,7 +25,7 @@
 
     .footer {
       position: absolute;
-      bottom: 10px;
+      bottom: 70px;
       left: 10px;
       padding: 10px;
       opacity: 0;
@@ -34,33 +34,39 @@
   }
 
   .auxiliary {
-    width: 53px;
-    float: right;
     position: absolute;
-    right: 0;
-    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    padding: 2px;
+    background-color: rgba(128, 128, 128, 0.45);
+    overflow: hidden;
     .auxiliary-photo {
-      width: 53px;
-      height: 53px;
-      margin-bottom: 1px;
+      margin: 1px 2px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
       display: inline-block;
+      @include transition(all $transition-time ease-in);
+      &:hover {
+        border-color: $theme-color-primary;
+        @include scale(1.1);
+      }
     }
   }
-}
-.travel-album:hover {
-  .front-cover {
-    .header {
 
-//      background-color: rgba(0,0,0,0.8);
-    }
-    .footer {
-      opacity: 1;
-      @include transition(background-color .218s,opacity .75s ease .5s,visibility 0 .5s);
-      background-color: rgba(0,0,0,0.6);
-    }
+  &:hover {
+    .front-cover {
+      .header {
 
-    .footer:hover {
-      background-color: rgba(0,0,0,0.8);
+      }
+      .footer {
+        opacity: 1;
+        @include transition(background-color .218s,opacity .75s ease .5s,visibility 0 .5s);
+        background-color: rgba(0,0,0,0.6);
+      }
+
+      .footer:hover {
+        background-color: rgba(0,0,0,0.8);
+      }
     }
   }
 }

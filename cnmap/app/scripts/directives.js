@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('ponmApp.directives', [
+angular.module('ponmApp.directives', [ 'ponmApp.services',
     'ngResource'])
 
     //.directive('resize', ['$window', function ($window) {

@@ -1,141 +1,98 @@
 <div class="container">
-    <div style="width:750px; margin: 0 auto;">
-        <div class="setup-header setup-org">
-            <h1>加入 美丽星球</h1>
-            <p class="lead">查看照片位置，记录旅行轨迹。</p>
 
-            <!-- Show steps if user is creating an organiation -->
-            <ol class="steps">
-                <li class="current">
-                    <span class="mega-octicon octicon-person"></span>
-                    <strong class="step">Step 1:</strong>
-                    填写账户信息
-                </li>
-                <li>
-                    <span class="mega-octicon octicon-versions"></span>
-                    <strong class="step">Step 2:</strong>
-                    验证邮箱
-                </li>
-                <li>
-                    <span class="mega-octicon octicon-dashboard"></span>
-                    <strong class="step">Step 3:</strong>
-                    上传图片
-                </li>
-            </ol>
-        </div>
-        <div class="signup" style="max-width: 500px;margin: 30px auto;">
-            <form name="signupForm" class="form-horizontal" role="form"
-                  method="post"
-                  action="/signup">
-                <div class="form-group has-feedback"
-                     ng-class="{'has-success': signupForm.email.$dirty&&!signupForm.email.$invalid,
+  <div class="page-header">
+    <h1 class="text-center">注册
+      <small>或已有账号<a href="#">直接登录</a></small>
+    </h1>
+  </div>
+  <div class="col-md-12">
+
+    <form name="signupForm"
+          class="form-horizontal"
+          role="form"
+          method="post"
+          action="/signup">
+      <div class="form-group has-feedback"
+           ng-class="{'has-success': signupForm.email.$dirty&&!signupForm.email.$invalid,
                      'has-error': signupForm.email.$invalid}">
-                    <label class="col-sm-2 control-label">邮箱</label>
-                    <div class="col-sm-7">
-                        <input type="email" name="email" ng-model="user.email" required
-                               ng-remote-validate="{{ponmCtxConfig.apirest}}/auth/signup/check/username"
-                               ng-remote-method="GET"
-                               class="form-control" placeholder="邮箱">
+        <label class="col-sm-3 control-label">邮箱</label>
+        <div class="col-sm-9">
+          <input type="email" name="email" ng-model="user.email" required
+                 ng-remote-validate="{{ponmCtxConfig.apirest}}/auth/signup/check/username"
+                 ng-remote-method="GET"
+                 class="form-control" placeholder="邮箱">
                         <span class="glyphicon glyphicon-warning-sign form-control-feedback"
                               ng-show="signupForm.email.$invalid"></span>
                         <span class="glyphicon glyphicon-ok form-control-feedback"
                               ng-show="signupForm.email.$valid"></span>
-                        <span ng-show="signupForm.email.$dirty && signupForm.email.$error.ngRemoteValidate">邮箱已经被使用</span>
-                    </div>
-                    <div></div>
-                </div>
-                <div class="form-group has-feedback"
-                     ng-class="{'has-success': signupForm.username.$dirty&&signupForm.username.$valid,
+          <span ng-show="signupForm.email.$dirty && signupForm.email.$error.ngRemoteValidate">邮箱已经被使用</span>
+        </div>
+        <div></div>
+      </div>
+      <div class="form-group has-feedback"
+           ng-class="{'has-success': signupForm.username.$dirty&&signupForm.username.$valid,
                      'has-error': signupForm.username.$invalid}">
-                    <label class="col-sm-2 control-label">用户名</label>
-                    <div class="col-sm-7">
-                        <input type="text" name="username" ng-model="user.username" required
-                               ng-remote-validate="{{ponmCtxConfig.apirest}}/auth/signup/check/username"
-                               ng-remote-method="GET"
-                               class="form-control" placeholder="用户名">
+        <label class="col-sm-3 control-label">用户名</label>
+        <div class="col-sm-9">
+          <input type="text" name="username" ng-model="user.username" required
+                 ng-remote-validate="{{ponmCtxConfig.apirest}}/auth/signup/check/username"
+                 ng-remote-method="GET"
+                 class="form-control" placeholder="用户名">
                         <span class="glyphicon glyphicon-remove form-control-feedback"
-                                ng-show="signupForm.username.$invalid"></span>
+                              ng-show="signupForm.username.$invalid"></span>
                         <span class="glyphicon glyphicon-ok form-control-feedback"
                               ng-show="signupForm.username.$valid"></span>
-                        <span ng-show="signupForm.username.$dirty && signupForm.username.$error.ngRemoteValidate">用户名已存在</span>
-                    </div>
-                    <div></div>
-                </div>
-                <div class="form-group has-feedback"
-                     ng-class="{'has-success': signupForm.password.$dirty&&signupForm.password.$valid,
+          <span ng-show="signupForm.username.$dirty && signupForm.username.$error.ngRemoteValidate">用户名已存在</span>
+        </div>
+        <div></div>
+      </div>
+      <div class="form-group has-feedback"
+           ng-class="{'has-success': signupForm.password.$dirty&&signupForm.password.$valid,
                      'has-error': signupForm.password.$invalid}">
-                    <label class="col-sm-2 control-label">密码</label>
-                    <div class="col-sm-7">
-                        <input type="password" name="password" ng-model="user.password" required class="form-control" placeholder="密码">
+        <label class="col-sm-3 control-label">密码</label>
+        <div class="col-sm-9">
+          <input type="password" name="password" ng-model="user.password" required class="form-control" placeholder="密码">
                         <span class="glyphicon glyphicon-warning-sign form-control-feedback"
                               ng-show="signupForm.password.$invalid"></span>
                         <span class="glyphicon glyphicon-ok form-control-feedback"
                               ng-show="signupForm.password.$valid"></span>
-                    </div>
-                    <div><ul class="password-strength" password-strength="user.password"></ul></div>
-                </div>
-                <div class="form-group has-feedback"
-                     ng-class="{'has-success': signupForm.confirmPassword.$dirty&&signupForm.confirmPassword.$valid,
+          <ul class="password-strength" password-strength="user.password"></ul>
+        </div>
+        <div></div>
+      </div>
+      <div class="form-group has-feedback"
+           ng-class="{'has-success': signupForm.confirmPassword.$dirty&&signupForm.confirmPassword.$valid,
                      'has-error': signupForm.confirmPassword.$invalid}">
-                    <label class="col-sm-2 control-label">确认密码</label>
-                    <div class="col-sm-7">
-                        <input type="password"
-                               required
-                               name="confirmPassword"
-                               password-match="user.password"
-                               ng-model="user.confirmPassword"
-                               ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }"
-                               class="form-control" placeholder="确认密码">
+        <label class="col-sm-3 control-label">确认密码</label>
+        <div class="col-sm-9">
+          <input type="password"
+                 required
+                 name="confirmPassword"
+                 password-match="user.password"
+                 ng-model="user.confirmPassword"
+                 ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }"
+                 class="form-control" placeholder="确认密码">
                         <span class="glyphicon glyphicon-warning-sign form-control-feedback"
                               ng-show="signupForm.confirmPassword.$invalid"></span>
                         <span class="glyphicon glyphicon-ok form-control-feedback"
                               ng-show="signupForm.confirmPassword.$valid"></span>
-                        <span ng-show="signupForm.confirmPassword.$dirty && signupForm.confirmPassword.$error.unique">密码不一致</span>
-
-                    </div>
-                    <div>
-                        <ul class="password-strength" password-strength="user.confirmPassword"></ul>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-9">
-                        <button type="submit" class="btn btn-success"
-                                ng-disabled="!signupForm.$valid"
-                                ng-click="check()">创建用户</button>
-                    </div>
-                </div>
-            </form>
-            <!--<pre>username = "{{user.confirmPassword}}"</pre>-->
+          <span ng-show="signupForm.confirmPassword.$dirty && signupForm.confirmPassword.$error.unique">密码不一致</span>
+          <ul class="password-strength" password-strength="user.confirmPassword"></ul>
         </div>
+        <div>
 
-        <hr style="color: grey;">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-9">
+          <button type="submit" class="btn btn-success"
+                  ng-disabled="!signupForm.$valid"
+                  ng-click="check()">创建用户</button>
+        </div>
+      </div>
+    </form>
 
-        <div class="site-footer" role="contentinfo" ng-show="false">
-            <ul class="site-footer-links right">
-                <li><a href="https://status.github.com/">Status</a></li>
-                <li><a href="http://developer.github.com">API</a></li>
-                <li><a href="http://training.github.com">Training</a></li>
-                <li><a href="http://shop.github.com">Shop</a></li>
-                <li><a href="/blog">Blog</a></li>
-                <li><a href="/about">About</a></li>
-
-            </ul>
-
-            <a href="/" aria-label="Homepage">
-                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
-            </a>
-
-            <ul class="site-footer-links">
-                <li>© 2014 <span title="0.07933s from github-fe138-cp1-prd.iad.github.net">美丽星球</span>, Inc.</li>
-                <li><a href="/site/terms">Terms</a></li>
-                <li><a href="/site/privacy">Privacy</a></li>
-                <li><a href="/security">Security</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </div><!-- /.site-footer -->
-
-    </div>
-
+  </div>
+  <!-- Login with Social Buttons - END -->
 
 </div>
-

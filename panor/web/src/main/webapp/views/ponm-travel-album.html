@@ -13,17 +13,11 @@
            class="footer" >{{travel.user.name}} 的照片</a>
     </div>
     <div class="auxiliary">
-        <div class="auxiliary-photo"
-             ng-click="photoClick(travel.photos[1].id)">
-            <img ng-src="{{staticCtx}}/{{travel.photos[1].oss_key}}@1e_53w_53h_1c.jpg">
-        </div>
-        <div class="auxiliary-photo"
-             ng-click="photoClick(travel.photos[2].id)">
-            <img ng-src="{{staticCtx}}/{{travel.photos[2].oss_key}}@1e_53w_53h_1c.jpg">
-        </div>
-        <div class="auxiliary-photo"
-             ng-click="photoClick(travel.photos[3].id)">
-            <img ng-src="{{staticCtx}}/{{travel.photos[3].oss_key}}@1e_53w_53h_1c.jpg">
+        <div class="auxiliary-photo" ng-repeat="photo in travel.photos | limitTo: 20">
+          <a href=""
+             ng-click="photoClick(photo.id)">
+            <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_53w_53h_1c.jpg">
+          </a>
         </div>
     </div>
 </div>

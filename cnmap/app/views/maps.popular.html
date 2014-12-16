@@ -3,7 +3,7 @@
      infinite-scroll-disabled="loadMoreDisabled"
      infinite-scroll-immediate-check="false">
     <div class="photo-wall photo-fluid-container"
-         photo-container-fluid="{targetHeight: 160, fadeSpeed: 2000, allowPartialLastRow: true}">
+         photo-container-fluid="{targetHeight: 160, fadeSpeed: 0, allowPartialLastRow: true}">
         <div ng-repeat="photo in photos"
              class="photo"
              ng-style="{'background-color': photo.color}">

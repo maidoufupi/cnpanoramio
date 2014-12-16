@@ -1,5 +1,6 @@
 @import "../../node_modules/mathsass/dist/_math.scss";
 @import '../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_variables.scss';
+@import '../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_mixins.scss';
 @import "_variables.scss";
 @import '_mixins.scss';
 
@@ -33,10 +34,25 @@
 @import "_loader.scss";
 @import "_button.scss";
 
+//@font-face {
+//  font-family: 'ZhongYaSong';
+//  src: url('fonts/zhongYaSong.ttf') format('truetype');
+//  font-weight: normal;
+//  font-style: normal;
+//}
+//@font-face {
+//  font-family: 'Hiragino Sans GB';
+//  src: url('fonts/Hiragino%20Sans%20GB%20W3.otf');
+//  src: url('fonts/Hiragino%20Sans%20GB%20W3.ttf');
+//  font-weight: normal;
+//  font-style: normal;
+//}
+
 body {
   background-color: $body-bg-color;
   overflow-x: hidden;
   overflow-y: scroll;
+  font-family: "Microsoft YaHei";
 }
 
 /** editable */
@@ -133,14 +149,6 @@ span.footnotes {
 .ponm-show {
   opacity:1 !important;
 }
-
-/** modal */
-//.modal-header {
-//  .modal-title {
-//    float: left;
-//  }
-//}
-
 
 .btn.btn-default.load-more {
   width: 100%;

@@ -6,8 +6,8 @@
   height: 50px;
   padding: 4px;
   border: 4px solid lighten($theme-color-primary, 40%);
-  background-color: lighten($theme-color-primary, 20%);
-  color: $theme-color-primary;
+  background-color: $theme-color-primary;
+  color: #383838;
   text-align: center;
   line-height: 35px;
   @include transition(all $transition-time);

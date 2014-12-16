@@ -6,9 +6,9 @@ class TravelLayer extends window.cnmap.ITravelLayer
     point = []
     if @travel
       for spot in @travel.spots
-        @createMarker photo for photo in spot.photos
+        @createMarker photo for photo in spot.photos when !!photo.point
         point = []
-        point.push @createPoint photo for photo in spot.photos
+        point.push @createPoint photo for photo in spot.photos when !!photo.point
 
         spot.polyline = new BMap.Polyline point, {
           map: @map
@@ -21,6 +21,8 @@ class TravelLayer extends window.cnmap.ITravelLayer
     new BMap.Point photo.point.lng, photo.point.lat
 
   createMarker: (photo) ->
+    if !photo.point
+      return
     that = this
     marker = new BMap.Marker @createPoint(photo), {
       icon: new BMap.Icon @getMarkerImage(photo), {

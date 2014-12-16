@@ -27,26 +27,26 @@
 
                 <div class="module">
                     <ul class="nav nav-links">
-                        <li ng-class="{'active': $state.current.name == 'settings.account'}">
-                            <a href="#/settings/account">账号<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
-                        <li ng-class="{'active': $state.current.name == 'settings.password'}">
-                            <a href="#/settings/password">密码<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="settings.account" >账号<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="settings.password">密码<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
                         <li class="disabled"
-                            ng-class="{'active': $state.current.name == 'settings.security'}">
+                            ui-sref-active="active">
                             <a ref="#/settings/security">安全和隐私<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
                         <li class="disabled"
-                            ng-class="{'active': $state.current.name == 'settings.notifications'}">
+                            ui-sref-active="active">
                             <a ref="#/settings/notifications">电子邮件提醒和私密信息<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
-                        <li ng-class="{'active': $state.current.name == 'settings.map'}">
-                            <a href="#/settings/map">地图<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
-                        <li ng-class="{'active': $state.current.name == 'settings.photo'}">
-                            <a href="#/settings/photo">图片<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="settings.map">地图<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
+                        <li ui-sref-active="active">
+                            <a ui-sref="settings.photo">图片<span class="glyphicon glyphicon-chevron-right pull-right"></span></a></li>
                     </ul>
                 </div>
 
             </div>
             <div class="col-sm-8 col-md-9">
-                <div ui-view></div>
+                <div ui-view class="settings-view"></div>
             <div id="contenido" class="wide" style="height: 34px;">
 
             <form id="settings" method="post" data-ng-submit="submit()" action="">

@@ -86,38 +86,62 @@
           background-repeat: no-repeat;
         }
         img {
-          opacity: 0;
+          @include opacity(0);
         }
       }
 
       .action {
-        opacity: 0.3;
+        @include opacity(.3);
       }
 
       p {
         margin: 0 0 4px;
       }
-    }
 
-    .photo.ng-enter {
-      -webkit-animation: enter_sequence 500ms ease-out; /* Safari/Chrome */
-      animation: enter_sequence 500ms ease-out; /* IE10+ and Future Browsers */
-    }
-
-    .photo.ng-leave {
-      -webkit-animation: leave_sequence 500ms ease-in; /* Safari/Chrome */
-      animation: leave_sequence 500ms ease-in; /* IE10+ and Future Browsers */
-    }
-    
-    .photo:hover, .photo.hover {
-      .action {
-        opacity: 1;
-      }
-      .geo-info {
-        .palce-marker {
-          -webkit-animation: ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1;
-          animation: ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1;
+      &:hover, &.hover, &:active, &.active {
+        .action {
+          @include opacity(1);
         }
+        .geo-info {
+          .palce-marker {
+            @include animation(ttPhotosSelectionOverlayCheckmarkSelectedTransition .3s linear 0s 1);
+          }
+        }
+      }
+    }
+
+    // upload photo row animation
+    .photo {
+//      @include transition(opacity, .5s ease-in);
+      &.ng-enter {
+        @include opacity(0);
+//        @include animation(opacityIn 0.5s ease-in);
+//        @include transition-transform(.5s ease-in);
+//        -webkit-transform: rotateX(40deg) translateZ(100px);
+//        transform: rotateX(40deg) translateZ(100px);
+//        @include scale(.6);
+      }
+      &.ng-enter.ng-enter-active {
+        @include opacity(1);
+//        -webkit-transform: rotateX(0deg) translateZ(100px);
+//        transform: rotateX(0deg) translateZ(100px);
+
+//        @include scale(1);
+      }
+
+      &.ng-leave {
+
+//        @include animation(opacityOut 0.5s ease-out);
+//        @include transition-transform(.5s ease-out);
+//        -webkit-transform: rotateX(0deg) translateZ(100px);
+//        transform: rotateX(0deg) translateZ(100px);
+      }
+      &.ng-leave.ng-leave-active {
+        @include opacity(0);
+//        -webkit-transform: rotateX(0deg) translateZ(100px);
+//        transform: rotateX(0deg) translateZ(100px);
+//        @include scale(.6);
+
       }
     }
 

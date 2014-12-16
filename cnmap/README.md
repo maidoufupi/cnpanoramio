@@ -32,3 +32,14 @@ npm install -g coffee-script
 ```
 chrome.exe --disable-web-security
 ```
+
+### git commands
+```
+git config --global -l  
+```  
+```
+git config --global --unset http.proxy  
+```  
+```
+git config --global http.proxy http://127.0.0.1:8087  
+```

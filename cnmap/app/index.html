@@ -128,7 +128,7 @@
 
 <!--<script type="text/javascript" src="scripts/ponmApp.min.js"></script>-->
 <!--<script type="text/javascript" src="scripts/ponmApp.controllers.min.js"></script>-->
-<script type="text/javascript" src="scripts/app.js"></script>
+<script type="text/javascript" src="scripts/ponmApp.js"></script>
 <script type="text/javascript" src="scripts/controllers.js"></script>
 <script type="text/javascript" src="scripts/directives.js"></script>
 <script type="text/javascript" src="scripts/services.js"></script>
@@ -138,6 +138,7 @@
 <script type="text/javascript" src="scripts/services/alertService.js"></script>
 <script type="text/javascript" src="scripts/services/matchmedia.js"></script>
 <script type="text/javascript" src="scripts/services/travelManager.js"></script>
+<script type="text/javascript" src="scripts/services/photosManager.js"></script>
 <script type="text/javascript" src="scripts/services/dialogService.js"></script>
 <script type="text/javascript" src="scripts/services/rgbHex.js"></script>
 
@@ -238,15 +239,20 @@
     window.mapVendor = "qq";
     window.dev = true;
 </script>
-<div ng-app="ponmApp.Index" ui-map-async-load ng-class="{'page-nav-fixed':pageNavMode=='fixed'}">
-    <div ui-view="navbar" class="header-navbar">
-        <i>Some content will load here!</i>
+<div ng-app="ponmApp.Index" ui-map-async-load>
+  <div >
+
+  </div>
+    <div ui-view="navbar" class="header-navbar"
+         ng-class="{'header-navbar-fixed': pageNavMode=='fixed'}">
+
     </div>
     <div ui-view="alert">
     </div>
 
-    <div ui-view class="main-view-page">
-        <i>Some content will load here!</i>
+    <div ui-view class="main-view-page"
+         ng-class="{'header-navbar-fixed': pageNavMode=='fixed'}">
+
     </div>
 </div>
 </body>

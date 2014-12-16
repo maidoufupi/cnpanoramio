@@ -40,26 +40,26 @@
     .action {
       @include transition(transform $transition-time ease-in);
     }
-  }
 
-  .photo.ng-enter {
-    @include animation(enter_sequence 300ms ease-out);
-  }
-
-  .photo.ng-leave {
-    @include animation(leave_sequence 300ms ease-out);
-  }
-  .photo:hover, .photo.hover {
-    .action {
-      @include translate(0, 0);
-      opacity: 1;
+    &.ng-enter {
+      @include animation(enter_sequence 300ms ease-out);
     }
-    .action-container:hover, .action-container.hover {
-      height: 100%;
-      .ponm-photo-footer {
-        background-color: rgba(128, 128, 128, 0.8);
-      }
 
+    &.ng-leave {
+      @include animation(leave_sequence 300ms ease-out);
+    }
+    &:hover, &.hover {
+      .action {
+        @include translate(0, 0);
+        opacity: 1;
+      }
+      .action-container:hover, .action-container.hover {
+        height: 100%;
+        .ponm-photo-footer {
+          background-color: rgba(128, 128, 128, 0.8);
+        }
+
+      }
     }
   }
 }
@@ -112,6 +112,7 @@
     }
 
     .action-container {
+      border: 0 solid transparent;
       @include transition(all 218ms ease-in-out);
     }
   }

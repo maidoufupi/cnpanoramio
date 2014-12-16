@@ -17,7 +17,7 @@
         </a>
         <div class="action-select"
              ng-class="{'action': !selectable, 'ponm-show': selectable}"
-             ng-click="selectPhoto($event, photo)">
+             ng-click="selectPhoto(photo)">
             <span class="icon-photo-select"
                     ng-class="{'icon-photo-selected': photo.actionSelected}"></span>
         </div>
@@ -25,7 +25,7 @@
             <div class="icon-photo-p360"></div>
         </div>
     </div>
-    <div ng-show="photo.currentPage <= photo.numPages"
+    <div ng-show="!photosManager.ended"
          class="btn btn-default btn-block loadmore"
          ng-click="getUserPhotos()"
             >
@@ -36,7 +36,7 @@
           <div class="slide"></div>
         </div>
       </div>
-      <span ng-hide="photoLoading">加载更多</span>
+      <span>加载中</span>
     </div>
 </div>
 

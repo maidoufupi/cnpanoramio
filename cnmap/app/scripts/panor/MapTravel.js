@@ -85,6 +85,9 @@
     };
 
     ITravelLayer.prototype.activePhoto = function(photo) {
+      if (!photo.point) {
+        return;
+      }
       if (!this.mapEventListener.inMapView(photo.point.lat, photo.point.lng, this.map)) {
         this.mapEventListener.setCenter(this.map, photo.point.lat, photo.point.lng);
         return this.mapEventListener.setZoom(this.map, 18);
@@ -196,6 +199,9 @@
         _ref1 = spot.photos;
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
           photo = _ref1[_j];
+          if (!(!!photo.point)) {
+            continue;
+          }
           if (photo.point.lat < sw.lat) {
             sw.lat = photo.point.lat;
           }

@@ -11,13 +11,13 @@
             <alert ng-repeat="alert in alertService.alerts" type="{{alert.type}}" close="alert.close()">{{alert.message}}</alert>
         </div>
         <div class="container-fluid header"
-             waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '-1'}">
+             waypoint-sticky="{'stuckClass': 'navbar-third', 'offset': '79'}">
             <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
             <div class="row fileupload-buttonbar">
                 <div class="col col-xs-6 col-sm-6">
                     <!-- The fileinput-button span is used to style the file input field as button -->
                     <span class="btn btn-success fileinput-button" ng-class="{disabled: disabled}">
-                        <i class="glyphicon glyphicon-plus"></i>
+                        <i class="glyphicon glyphicon-camera"></i>
                         <span>添加图片...</span>
                         <input type="file" name="files[]" multiple ng-disabled="disabled">
                     </span>
@@ -41,7 +41,9 @@
                                  new-data="newTravelData"
                                  item-value-name="title"
                                  options="{'duplicate': false}"
-                                 place-holder="添加到旅行"></item-picker>
+                                 place-holder="添加到旅行">
+                      <span title="将以下图片添加到旅行相册"><span class="glyphicon glyphicon-send"></span>&nbsp;<span>旅行</span></span>
+                    </item-picker>
                 </div>
                 <div class="col col-xs-6 col-sm-3">
                     <span>
@@ -63,10 +65,13 @@
 
         <div style="margin: 10px;">
             <item-picker ng-model="tags"
-                         load-data="loadTagData"
-                         new-data="newTagData"
-                         multiple-select
-                         place-holder="为下面所有图片添加标签"></item-picker>
+              load-data="loadTagData"
+              new-data="newTagData"
+              multiple-select
+              place-holder="">
+              <span title="为所有图片添加标签"><span class="glyphicon glyphicon-tags"></span>&nbsp;<span>添加</span></span>
+            </item-picker>
+
         </div>
 
         <!-- The table listing the files available for upload/download -->
@@ -178,9 +183,9 @@
                             <item-picker ng-model="file.tags"
                                          load-data="loadTagData"
                                          new-data="newTagData"
-                                         multiple-select
-                                         place-holder="添加标签"
-                                    />
+                                         multiple-select>
+                              <span title="为此图片添加标签"><span class="glyphicon glyphicon-tag"></span>&nbsp;<span>添加</span></span>
+                            </item-picker>
                         </div>
                     </div>
                     <div class="progress progress-striped active fade"

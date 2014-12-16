@@ -65,16 +65,6 @@
             var that = this;
             client.photo.read(params).done(function (data) {
                 if(data.status == "OK" && that.opts.auto) {
-
-//                    for (var i in data.photos) {
-//                        if (!photos[data.photos[i].photoId]) {
-//                            photos[data.photos[i].photoId] = data.photos[i];
-//                        }
-//                    }
-//                    callback.apply(null, [data.photos]);
-
-//                    var thumbs = data.photos;
-
                     var photoIds = [];
                     var photos = {};
                     $.each(data.photos, function(index, photo) {
@@ -125,36 +115,14 @@
          */
         this.createMarker= function(photo){};
 
-//        this.getThumbnail = function (id/*PhotoId*/) {
-//            return client.photos.read(id);
-//        }
-
-//        this.clearVisible = function () {
-//            for (var photo in photos) {
-//                photo.visible = false;
-//            }
-//        }
-
-//        this.setVisible = function (photoId, visible) {
-//            if (!visible) {
-//                photos[photoId].visible = false;
-//            } else {
-//                photos[photoId].visible = true;
-//            }
-//        }
-
-//        this.getVisible = function (photoId) {
-//            return photos[photoId] ? photos[photoId].visible : false;
-//        }
-
         this.getLabelContent = function(photoOssKey) {
             if(this.opts.phone) {
                 return "<img src='" + this.staticCtx + "/"
                     + photoOssKey
                   + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'>";
             }else {
-                return "<a href><img src='" + this.staticCtx + "/" + photoOssKey
-                    + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'></a>";
+                return "<div style='cursor: pointer;'><img src='" + this.staticCtx + "/" + photoOssKey
+                    + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'></div>";
             }
 
         };

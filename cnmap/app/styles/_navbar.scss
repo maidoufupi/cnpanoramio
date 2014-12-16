@@ -1,15 +1,30 @@
 //
 // Navbars
 // --------------------------------------------------
-
+.header-navbar.header-navbar-fixed {
+  position: fixed;
+  width: 100%;
+}
+.main-view-page.header-navbar-fixed {
+  position: absolute;
+  width: 100%;
+  top: $header-navbar-height;
+  bottom: 0;
+  .navbar-second {
+    position: fixed;
+  }
+}
 .header-navbar {
   position: relative;
   z-index: 1030;
   .navbar {
     border-radius: 0;
     min-height: $header-navbar-height;
+    height: $header-navbar-height;
     margin-bottom: 0;
     border: 0;
+//    border-color: white;
+//    background-color: white;
     .navbar-logo {
       height: 100%;
     }
@@ -65,7 +80,7 @@
 //  top: 51px;
 
   .navbar-right {
-    margin-right: 15px;
+//    margin-right: 15px;
   }
 
   .navbar {
@@ -97,7 +112,7 @@
 
 .navbar-third {
   position: fixed !important;
-  top: 81px !important;
+  top: $header-navbar-height+$header-navbar-second-height !important;
   @include box-shadow(0 0 10px rgba(0, 0, 0, 0.57));
   z-index: 1027;
 }
