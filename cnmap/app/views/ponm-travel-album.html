@@ -1,5 +1,6 @@
 <div class="travel-album">
-    <div class="front-cover" ng-click="photoClick(travel.photos[0].id)">
+    <div class="front-cover" ng-click="photoClick(travel.photos[0].id)"
+      ng-style="{'background-color': travel.photos[0].color}">
         <div class="header">
             <a href="#/maps/travel/{{travel.id}}" target="_blank"
                ng-click="$event.stopPropagation();">{{travel.title}}</a>
@@ -13,7 +14,8 @@
            class="footer" >{{travel.user.name}} 的照片</a>
     </div>
     <div class="auxiliary">
-        <div class="auxiliary-photo" ng-repeat="photo in travel.photos | limitTo: 20">
+        <div class="auxiliary-photo" ng-repeat="photo in travel.photos | limitTo: 20"
+          ng-style="{'background-color': photo.color}">
           <a href=""
              ng-click="photoClick(photo.id)">
             <img ng-src="{{staticCtx}}/{{photo.oss_key}}@1e_53w_53h_1c.jpg">

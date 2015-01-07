@@ -111,9 +111,10 @@ angular.module('ponmApp.Index',
 
       $rootScope.cache = $cacheFactory('cacheId2');
 
+      var unauthStateName = "unauthState";
       $rootScope.$on('$stateChangeStart',
         function (event, toState, toParams, fromState, fromParams) {
-          var unauthStateName = "unauthState";
+
           if (fromState.name == "login") {
             AuthService.checkLogin().then(function () {
               }, function () {

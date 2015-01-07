@@ -48,13 +48,14 @@
       that = this;
       marker = new Microsoft.Maps.Pushpin(this.createPoint(photo), {
         icon: this.getMarkerImage(photo),
-        text: photo.title || ''
+        width: 34,
+        height: 34
       });
       marker.photo = photo;
       this.map.entities.push(marker);
       if (this.opts.clickable) {
         Microsoft.Maps.Events.addHandler(marker, 'click', function(e) {
-          if (!e.mouseMoved) {
+          if (!e.target.getDraggable()) {
             return jQuery(that).trigger("data_clicked", [e.target.photo.id]);
           }
         });
@@ -101,13 +102,14 @@
           }
           if (that.opts.editable && editable) {
             return marker.dragListener = Microsoft.Maps.Events.addHandler(marker, 'dragend', function(e) {
-              var loc;
-              if (!e.target.photo.oPoint) {
-                e.target.photo.oPoint = $.extend({}, e.target.photo.point);
+              var loc, photo;
+              photo = e.entity.photo;
+              if (!photo.oPoint) {
+                photo.oPoint = $.extend({}, photo.point);
               }
-              loc = e.target.getLocation();
-              e.target.photo.point.lat = loc.latitude;
-              e.target.photo.point.lng = loc.longitude;
+              loc = e.entity.getLocation();
+              photo.point.lat = loc.latitude;
+              photo.point.lng = loc.longitude;
               that.updateSpotLine(spot);
               return $(that).trigger("spot.edited", [spot.id]);
             });

@@ -11,6 +11,7 @@
   @include transition-transform(.5s ease-in-out, opacity .5s ease-in-out);
 }
 .view-in-out.ng-enter.ng-enter-active {
+  -webkit-backface-visibility: hidden;
   @include transform(translate(0, 0) scale(1));
   @include opacity(1);
 }
@@ -19,6 +20,7 @@
   @include transition-transform(.5s ease-in-out, opacity .5s ease-in-out);
 }
 .view-in-out.ng-leave.ng-leave-active {
+  -webkit-backface-visibility: hidden;
   @include transform(translate(50%, -100%) scale(.5));
   @include opacity(0);
 }
@@ -190,6 +192,7 @@
     @include opacity(0);
   }
   &.ng-enter.ng-enter-active {
+    -webkit-backface-visibility: hidden;
     @include opacity(1);
   }
   &.ng-leave {
@@ -198,6 +201,7 @@
     @include opacity(1);
   }
   &.ng-leave.ng-leave-active {
+    -webkit-backface-visibility: hidden;
     @include opacity(0);
   }
 }
@@ -209,16 +213,18 @@
     @include opacity(.2);
   }
   &.ng-enter.ng-enter-active {
+    -webkit-backface-visibility: hidden;
     @include opacity(1);
   }
   &.ng-leave {
     position: absolute;
     // zan wei jiejue bug
 //    z-index: 2000;
-//    @include transition(all .5s ease-out);
+    @include transition(all .5s ease-out);
     @include opacity(1);
   }
   &.ng-leave.ng-leave-active {
+    -webkit-backface-visibility: hidden;
     @include opacity(.2);
   }
 }
@@ -240,7 +246,7 @@
 // photos-view
 .photos-view {
   top: 0;
-  right: 0;
+  width: 100%;
   @extend .ng-enter-opacity;
 }
 

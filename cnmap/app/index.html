@@ -175,6 +175,7 @@
 <script type="text/javascript" src="scripts/directives/ponm-travel-album.js"></script>
 <script type="text/javascript" src="scripts/directives/bdShare.js"></script>
 <script type="text/javascript" src="scripts/directives/navigationBar.js"></script>
+<script type="text/javascript" src="scripts/directives/ponmMapPanoramio.js"></script>
 
 <!--<script type="text/javascript" src="scripts/panor/scripts.min.js"></script>-->
 <script type="text/javascript" src="scripts/panor/panoramio/cnmap.comm.js"></script>
@@ -196,19 +197,19 @@
 <!--<script type="text/javascript" src="scripts/panor/gaode/MapServiceImpl.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/gaode/MapTravelImpl.js"></script>-->
 
-<!--<script type="text/javascript" src="bower_components/angular-ui-map-baidu/ui-map.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.baidu.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/baidu/MapEventListenerImpl.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/baidu/MapServiceImpl.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/baidu/MapTravelImpl.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>-->
-<!--<script type="text/javascript" src="scripts/panor/baidu/MapConvertor.js"></script>-->
+<script type="text/javascript" src="bower_components/angular-ui-map-baidu/ui-map.js"></script>
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.baidu.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapEventListenerImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapServiceImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapTravelImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>
+<script type="text/javascript" src="scripts/panor/baidu/MapConvertor.js"></script>
 
-<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
-<script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>
-<script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>
+<!--<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>-->
 
 <!--<script type="text/javascript" src="bower_components/angular-ui-map-bing/ui-map.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.bing.js"></script>-->
@@ -236,7 +237,7 @@
             };
     window.login = true;
 
-    window.mapVendor = "qq";
+    window.mapVendor = "baidu";
     window.dev = true;
 </script>
 <div ng-app="ponmApp.Index" ui-map-async-load>

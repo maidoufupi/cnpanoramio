@@ -137,13 +137,119 @@ angular.module('ponmApp.maps', [
       id: $window.userId
     }
   }])
+  .service('MapsConfigService', ['$rootScope', 'localStorageService',
+    function ($rootScope, localStorageService) {
+      // 程序常量
+      var CON_MAPS_CACHE_LAT  = "CON_MAPS_CACHE_LAT";
+      var CON_MAPS_CACHE_LNG  = "CON_MAPS_CACHE_LNG";
+      var CON_MAPS_CACHE_ZOOM = "CON_MAPS_CACHE_ZOOM";
+
+      /**
+       * 获取地图配置
+       *
+       * @returns {{ngCenter: {lat: number, lng: number}, ngZoom: number}
+       */
+      this.getConfig = function() {
+
+        var mapOptions = {
+          ngCenter: {
+            lat: 35,
+            lng: 116
+          },
+          ngZoom: 8,
+          // map plugin config
+//        toolbar: true,
+          scrollzoom: true,
+          maptype: true, //'SATELLITE',
+          overview: true,
+//        locatecity: true,
+          // map-self config
+          rotateEnable: true,
+          resizeEnable: true,
+          scaleControl: true
+        };
+
+        if ($rootScope.cache) {
+          // get map location cache
+          var lat = $rootScope.cache.get(CON_MAPS_CACHE_LAT);
+          var lng = $rootScope.cache.get(CON_MAPS_CACHE_LNG);
+          var zoom = $rootScope.cache.get(CON_MAPS_CACHE_ZOOM);
+          if (lat && lng && zoom) {
+            mapOptions.ngCenter = {
+              lat: lat,
+              lng: lng
+            };
+            mapOptions.ngZoom = zoom;
+          }else {
+            setLocalStorageCache(mapOptions);
+          }
+        }else {
+          setLocalStorageCache(mapOptions);
+        }
+        return mapOptions;
+      };
+
+      function setLocalStorageCache(mapOptions) {
+        var lat = localStorageService.get(CON_MAPS_CACHE_LAT);
+        var lng = localStorageService.get(CON_MAPS_CACHE_LNG);
+        var zoom = localStorageService.get(CON_MAPS_CACHE_ZOOM);
+        if (lat && lng && zoom) {
+          mapOptions.ngCenter = {
+            lat: lat,
+            lng: lng
+          };
+          mapOptions.ngZoom = zoom;
+        }
+      }
+
+      /**
+       *  更新保存地图状态
+       *
+       * @param lat
+       * @param lng
+       * @param zoom
+       */
+      this.updateCenter = function(lat, lng, zoom) {
+        if ($rootScope.cache) {
+          $rootScope.cache.put(CON_MAPS_CACHE_LAT, lat);
+          $rootScope.cache.put(CON_MAPS_CACHE_LNG, lng);
+          $rootScope.cache.put(CON_MAPS_CACHE_ZOOM, zoom);
+        }
+
+        localStorageService.set(CON_MAPS_CACHE_LAT, lat);
+        localStorageService.set(CON_MAPS_CACHE_LNG, lng);
+        localStorageService.set(CON_MAPS_CACHE_ZOOM, zoom);
+      };
+
+      /**
+       * 地图是否已保存状态
+       *
+       * @returns {boolean}
+       */
+      this.hasStatus = function() {
+        if ($rootScope.cache) {
+          // get map location cache
+          var lat = $rootScope.cache.get(CON_MAPS_CACHE_LAT);
+          var lng = $rootScope.cache.get(CON_MAPS_CACHE_LNG);
+          var zoom = $rootScope.cache.get(CON_MAPS_CACHE_ZOOM);
+          if (lat && lng && zoom) {
+
+          }else {
+            lat = localStorageService.get(CON_MAPS_CACHE_LAT);
+            lng = localStorageService.get(CON_MAPS_CACHE_LNG);
+            zoom = localStorageService.get(CON_MAPS_CACHE_ZOOM);
+          }
+          return !!(lat && lng && zoom);
+        }
+      };
+    }])
   .controller('MapsCtrl',
   ['$window', '$location', '$rootScope', '$scope', '$q', 'PhotoService', 'UserService', 'PanoramioService',
     '$modal', 'ponmCtxConfig', '$log', '$state', '$stateParams', '$timeout', 'safeApply', 'jsUtils',
-    'HashStateManager', 'alertService', 'matchmedia', '$cacheFactory',
+    'HashStateManager', 'alertService', 'matchmedia', '$cacheFactory', 'localStorageService', 'MapsConfigService',
     function ($window, $location, $rootScope, $scope, $q, PhotoService, UserService, PanoramioService,
               $modal, ponmCtxConfig, $log, $state, $stateParams, $timeout, safeApply, jsUtils,
-              HashStateManager, alertService, matchmedia, $cacheFactory) {
+              HashStateManager, alertService, matchmedia, $cacheFactory, localStorageService, MapsConfigService) {
 
       $scope.ctx = ponmCtxConfig.ctx;
       $scope.staticCtx = ponmCtxConfig.staticCtx;
@@ -193,30 +299,14 @@ angular.module('ponmApp.maps', [
        * map config
        *
        */
-      $scope.mapOptions = {
-        centerPoint: {
-          lat: 35,
-          lng: 116
-        },
-        zoom: 8,
-        // map plugin config
-//            toolbar: true,
-        scrollzoom: true,
-        maptype: true, //'SATELLITE',
-        overview: true,
-//                locatecity: true,
-        // map-self config
-        rotateEnable: true,
-        resizeEnable: true,
-        scaleControl: true
-      };
+      $scope.mapOptions = MapsConfigService.getConfig();
 
       $scope.mapEventListener = $window.cnmap.MapEventListener.factory();
       $scope.mapService = $window.cnmap.MapService.factory();
 
       var panoramioLayer = new cnmap.PanoramioLayer({
           suppressInfoWindows: false
-//                    ,mapVendor: $window.mapVendor || "gaode"
+//       ,mapVendor: $window.mapVendor || "gaode"
         });
       $scope.panoramioLayer = panoramioLayer;
       panoramioLayer.initEnv(ponmCtxConfig.ctx, $scope.staticCtx);
@@ -503,12 +593,14 @@ angular.module('ponmApp.maps', [
         if (!$scope.hashStateManager.get("lat")) {
           if($rootScope.cache) {
             // get map location cache
-            var lat = $rootScope.cache.get('map.lat');
-            var lng = $rootScope.cache.get('map.lng');
-            var zoom = $rootScope.cache.get('map.zoom');
-            if(lat && lng & zoom) {
-              $scope.mapEventListener.setZoomAndCenter(map, zoom, lat, lng);
-            }
+            //var lat = $rootScope.cache.get('map.lat');
+            //var lng = $rootScope.cache.get('map.lng');
+            //var zoom = $rootScope.cache.get('map.zoom');
+            //if(lat && lng & zoom) {
+            //  $scope.mapEventListener.setZoomAndCenter(map, zoom, lat, lng);
+            //}else {
+            //  getCurrentPostion(map);
+            //}
           }else {
             // get brower's location
             getCurrentPostion(map);
@@ -524,6 +616,7 @@ angular.module('ponmApp.maps', [
       function getCurrentPostion(map) {
         // Try HTML5 geolocation
         if (navigator.geolocation) {
+          $log.debug("navigator.geolocation get current postion");
           navigator.geolocation.getCurrentPosition(function (position) {
             $scope.mapEventListener.setCenter(map, position.coords.latitude,
               position.coords.longitude);
@@ -596,11 +689,12 @@ angular.module('ponmApp.maps', [
               $timeout.cancel($scope.setState);
             }
             changeState = true;
-            $scope.hashStateManager.set({
-              lat: lat,
-              lng: lng,
-              zoom: zoom
-            });
+            if($scope.hashStateManager)
+              $scope.hashStateManager.set({
+                lat: lat,
+                lng: lng,
+                zoom: zoom
+              });
             $scope.setState = $timeout(function () {
               changeState = false;
             }, 500);
@@ -728,9 +822,11 @@ angular.module('ponmApp.maps', [
 
       $scope.$on("$destroy", function () {
         $scope.mapEventListener.removeListener(listeners);
-        $rootScope.cache.put('map.lat', mapLat);
-        $rootScope.cache.put('map.lng', mapLng);
-        $rootScope.cache.put('map.zoom', mapZoom);
+
+        MapsConfigService.updateCenter(mapLat, mapLng, mapZoom);
+        //$rootScope.cache.put('map.lat', mapLat);
+        //$rootScope.cache.put('map.lng', mapLng);
+        //$rootScope.cache.put('map.zoom', mapZoom);
 
         $scope.hashStateManager.clear();
         $scope.hashStateManager = null;

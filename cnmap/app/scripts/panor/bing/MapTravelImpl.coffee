@@ -19,14 +19,15 @@ class TravelLayer extends window.cnmap.ITravelLayer
     that = this
     marker = new Microsoft.Maps.Pushpin @createPoint(photo), {
       icon: @getMarkerImage(photo)
-      text: photo.title||''
+      width: 34
+      height: 34
     }
     marker.photo = photo
     @map.entities.push marker
     if @opts.clickable
       Microsoft.Maps.Events.addHandler marker, 'click',
         (e) ->
-          if not e.mouseMoved
+          if not e.target.getDraggable()
             jQuery(that).trigger("data_clicked", [e.target.photo.id])
     photo.marker = marker
     marker
@@ -63,11 +64,12 @@ class TravelLayer extends window.cnmap.ITravelLayer
         if that.opts.editable and editable
           marker.dragListener = Microsoft.Maps.Events.addHandler marker, 'dragend',
             (e) ->
-              if not e.target.photo.oPoint
-                e.target.photo.oPoint = $.extend {}, e.target.photo.point
-              loc = e.target.getLocation()
-              e.target.photo.point.lat = loc.latitude
-              e.target.photo.point.lng = loc.longitude
+              photo = e.entity.photo
+              if not photo.oPoint
+                photo.oPoint = $.extend {}, photo.point
+              loc = e.entity.getLocation()
+              photo.point.lat = loc.latitude
+              photo.point.lng = loc.longitude
               that.updateSpotLine spot
               $(that).trigger("spot.edited", [spot.id]);
         else

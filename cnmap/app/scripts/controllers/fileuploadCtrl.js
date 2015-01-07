@@ -279,7 +279,7 @@ angular.module('fileuploadApp', [
         var travels = UserService.getTravels({userId: $scope.userId}, function (res) {
           if (res.status == "OK") {
             deferred.resolve(res.open_info.travels);
-//                        callback && callback.apply(undefined, [res.open_info.travels]);
+//          callback && callback.apply(undefined, [res.open_info.travels]);
           }
         });
 //                $log.debug(travels);
@@ -293,7 +293,7 @@ angular.module('fileuploadApp', [
         TravelService.create({}, jsUtils.param({travel: newObj}), function (res) {
           if (res.status == "OK") {
             deferred.resolve(res.travel);
-//                        callback && callback.apply(undefined, [res.travels]);
+//          callback && callback.apply(undefined, [res.travels]);
           } else {
             deferred.reject();
           }
@@ -309,7 +309,7 @@ angular.module('fileuploadApp', [
         UserService.getTags({userId: $scope.userId}, function (res) {
           if (res.status == "OK") {
             deferred.resolve(res.open_info.tags);
-//                        callback && callback.apply(undefined, [res.open_info.tags]);
+//          callback && callback.apply(undefined, [res.open_info.tags]);
           } else {
             deferred.reject();
           }
@@ -326,7 +326,7 @@ angular.module('fileuploadApp', [
           function (res) {
             if (res.status == "OK") {
               deferred.resolve(newObj);
-//                            callback && callback.apply(undefined, [res.open_info.tags]);
+//            callback && callback.apply(undefined, [res.open_info.tags]);
             } else {
               deferred.reject();
             }
@@ -358,7 +358,7 @@ angular.module('fileuploadApp', [
         if (photos.length) {
 
           // todo DEBUG
-//                    $scope.alertService.add("success", "更新成功", {ttl: 1000});
+//        $scope.alertService.add("success", "更新成功", {ttl: 1000});
 
           TravelService.addPhoto({travelId: travel.id},
             jsUtils.param({photos: photos.join(",")}), function (res) {

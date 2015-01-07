@@ -1,4 +1,5 @@
-<div class="message-card flip-container" ng-class="{hover: flipx}"
+<div class="message-card flip-container"
+     ng-class="{hover: flipx}"
      waypoint="{'offset': '98%', target: message}"
      on-waypoint="onWaypoint($element, $direction)">
     <div class="flipper">
@@ -89,10 +90,11 @@
                     </a>
                 </div>
                 <div class="message-media">
-
-                    <div ng-switch="message.type">
+                    <div ng-switch="message.type"
+                      ng-style="{width: '100%', height: mediaHeight}">
                         <div ng-switch-when="photo"
                              class="photo"
+                             style="height: 100%;"
                              ng-style="{'background-color': message.photo.color}">
                             <a href=""
                                ng-click="photoClick(message.photo.id)">

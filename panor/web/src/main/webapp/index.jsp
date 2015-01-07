@@ -58,8 +58,8 @@
   <c:when test='${sessionScope.mapVendor eq "gaode"}'>
     <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.gaode.min.js"></script>
   </c:when>
-  <c:when test='${sessionScope.mapVendor eq "mapbar"}'>
-  
+  <c:when test='${sessionScope.mapVendor eq "bing"}'>
+    <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.bing.min.js"></script>
   </c:when>
   <c:otherwise>
     <script type="text/javascript" src="http://panor-static.oss-cn-qingdao.aliyuncs.com/scripts.gaode.min.js"></script>
@@ -83,11 +83,13 @@
     </script>
 
     <div ng-app="ponmApp.Index" ui-map-async-load>
-        <div ui-view="navbar" class="header-navbar" ng-class="{'header-navbar-fixed': pageNavMode=='fixed'}">
+        <div ui-view="navbar" class="header-navbar"
+             ng-class="{'header-navbar-fixed': pageNavMode=='fixed'}">
         </div>
         <div ui-view="alert">
         </div>
-        <div ui-view class="main-view-page" ng-class="{'header-navbar-fixed': pageNavMode=='fixed'}">
+        <div ui-view class="main-view-page"
+             ng-class="{'header-navbar-fixed': pageNavMode=='fixed'}">
         </div>
     </div>
 </body>

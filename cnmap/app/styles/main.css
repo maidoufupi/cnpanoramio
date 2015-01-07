@@ -486,6 +486,8 @@
       box-shadow: 0px 3px 10px -2px rgba(50, 50, 50, 0.75); }
     .maps-travel .travel-content .travel-spot:hover > .action, .maps-travel .travel-content .travel-spot.hover > .action {
       opacity: 1 !important; }
+  .maps-travel .message-card {
+    opacity: 1; }
 
 .travel-spot-header {
   position: relative;
@@ -571,6 +573,7 @@
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; }
 
 .view-in-out.ng-enter.ng-enter-active {
+  -webkit-backface-visibility: hidden;
   -moz-transform: translate(0, 0) scale(1);
   -o-transform: translate(0, 0) scale(1);
   -ms-transform: translate(0, 0) scale(1);
@@ -587,6 +590,7 @@
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; }
 
 .view-in-out.ng-leave.ng-leave-active {
+  -webkit-backface-visibility: hidden;
   -moz-transform: translate(50%, -100%) scale(0.5);
   -o-transform: translate(50%, -100%) scale(0.5);
   -ms-transform: translate(50%, -100%) scale(0.5);
@@ -798,6 +802,7 @@
   opacity: 0;
   filter: alpha(opacity=0); }
 .ng-enter-opacity.ng-enter.ng-enter-active, .ng-enter.ng-enter-active.maps-view-page, .ng-enter.ng-enter-active.photos-view, .ng-enter.ng-enter-active.users-view, .ng-enter.ng-enter-active.settings-view {
+  -webkit-backface-visibility: hidden;
   opacity: 1;
   filter: alpha(opacity=100); }
 .ng-enter-opacity.ng-leave, .ng-leave.maps-view-page, .ng-leave.photos-view, .ng-leave.users-view, .ng-leave.settings-view {
@@ -807,6 +812,7 @@
   opacity: 1;
   filter: alpha(opacity=100); }
 .ng-enter-opacity.ng-leave.ng-leave-active, .ng-leave.ng-leave-active.maps-view-page, .ng-leave.ng-leave-active.photos-view, .ng-leave.ng-leave-active.users-view, .ng-leave.ng-leave-active.settings-view {
+  -webkit-backface-visibility: hidden;
   opacity: 0;
   filter: alpha(opacity=0); }
 
@@ -816,13 +822,17 @@
   opacity: 0.2;
   filter: alpha(opacity=20); }
 .ng-enter-leave.ng-enter.ng-enter-active, .ng-enter.ng-enter-active.main-view-page {
+  -webkit-backface-visibility: hidden;
   opacity: 1;
   filter: alpha(opacity=100); }
 .ng-enter-leave.ng-leave, .ng-leave.main-view-page {
   position: absolute;
+  -webkit-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out;
   opacity: 1;
   filter: alpha(opacity=100); }
 .ng-enter-leave.ng-leave.ng-leave-active, .ng-leave.ng-leave-active.main-view-page {
+  -webkit-backface-visibility: hidden;
   opacity: 0.2;
   filter: alpha(opacity=20); }
 
@@ -833,7 +843,7 @@
 
 .photos-view {
   top: 0;
-  right: 0; }
+  width: 100%; }
 
 .users-view {
   top: 0;
@@ -986,6 +996,12 @@
     position: absolute;
     top: 0;
     left: 0; }
+  .map-container .panoramio-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px; }
   .map-container .amap-maptype-title {
     width: 100%; }
 
@@ -1620,6 +1636,8 @@ span.clickable:hover {
       width: 30px; }
     .header-navbar .navbar .navbar-nav.navbar-right .btn-group {
       margin-bottom: 0; }
+  .header-navbar .navbar.navbar-inverse .navbar-collapse {
+    background-color: #222; }
 
 .navbar.navbar-default .navbar-collapse {
   background-color: #f8f8f8; }
@@ -2640,7 +2658,7 @@ body::-webkit-scrollbar-corner {
         position: relative; }
       .message-card .message-body .message-media img {
         width: 100%;
-        height: auto; }
+        height: 100%; }
       .message-card .message-body .message-media .image-border {
         background: repeat-x url(../images/embeds_article_sawtooth.png) 0 0;
         background-position-x: 1px;
@@ -2851,10 +2869,12 @@ item-picker .dropdown.dropdown-picker, *[item-picker] .dropdown.dropdown-picker 
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); }
 
 .travel-album {
+  position: relative;
   width: 100%;
-  position: relative; }
+  height: 100%; }
   .travel-album .front-cover {
     position: relative;
+    height: 100%;
     overflow: hidden; }
     .travel-album .front-cover img {
       width: 100%;
@@ -2885,13 +2905,16 @@ item-picker .dropdown.dropdown-picker, *[item-picker] .dropdown.dropdown-picker 
     background-color: rgba(128, 128, 128, 0.45);
     overflow: hidden; }
     .travel-album .auxiliary .auxiliary-photo {
+      width: 55px;
+      height: 55px;
       margin: 1px 2px;
       border: 1px solid rgba(255, 255, 255, 0.9);
       display: inline-block;
-      -webkit-transition: all 0.3s ease-in;
-      transition: all 0.3s ease-in; }
+      -webkit-transition: all 0.1s ease-in;
+      transition: all 0.1s ease-in; }
       .travel-album .auxiliary .auxiliary-photo:hover {
         border-color: #00bcd4;
+        -webkit-backface-visibility: hidden;
         -webkit-transform: scale(1.1);
         -ms-transform: scale(1.1);
         transform: scale(1.1); }

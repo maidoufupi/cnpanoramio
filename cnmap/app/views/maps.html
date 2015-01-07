@@ -141,7 +141,9 @@
              ng-model='markers'
              jqyoui-droppable="{multiple:true, onOver:'onPhotoOver', onDrop:'onPhotoDrop'}">
             <div class="map-container">
-                <div class="map-canvas" ui-map="myMap" ui-options="mapOptions"></div>
+              <div class="map-canvas" ui-map="myMap" ui-options="mapOptions"></div>
+              <ponm-map-panoramio
+                panoramio-layer="panoramioLayer"></ponm-map-panoramio>
                 <!--<div class="map-controls"
                      ponm-map-controls
                      ponm-map="myMap"
