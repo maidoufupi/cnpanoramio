@@ -1,20 +1,20 @@
 class TravelLayer extends window.cnmap.ITravelLayer
 
-  initMap: (map) ->
-    @map = map if map
-    @calcSpotTime()
-    point = []
-    if @travel
-      for spot in @travel.spots
-        @createMarker photo for photo in spot.photos
-        point = []
-        point.push @createPoint photo for photo in spot.photos
-        spot.polyline = new AMap.Polyline {
-            map: @map
-            path: point
-            strokeWeight: 2
-#            strokeStyle: 'dashed'
-          }
+#  initMap: (map) ->
+#    @map = map if map
+#    @calcSpotTime()
+#    point = []
+#    if @travel
+#      for spot in @travel.spots
+#        @createMarker photo for photo in spot.photos
+#        point = []
+#        point.push @createPoint photo for photo in spot.photos
+#        spot.polyline = new AMap.Polyline {
+#            map: @map
+#            path: point
+#            strokeWeight: 2
+##            strokeStyle: 'dashed'
+#          }
 
   createPoint: (photo) ->
     new AMap.LngLat(photo.point.lng, photo.point.lat)
@@ -35,6 +35,17 @@ class TravelLayer extends window.cnmap.ITravelLayer
           jQuery(that).trigger("data_clicked", [this.photo.id]))
     photo.marker = marker
     marker
+
+  createPolyline: (points) ->
+    new AMap.Polyline {
+      map: @map
+      path: points
+      strokeWeight: 2
+#            strokeStyle: 'dashed'
+    }
+
+  setPolylinePath: (polyline, points) ->
+    polyline.setPath points
 
   removeMarker: (photo) ->
     if photo.marker
@@ -78,18 +89,18 @@ class TravelLayer extends window.cnmap.ITravelLayer
     cancelMarker photo for photo in spot.photos
     @updateSpotLine spot
 
-  updateSpotLine: (spot) ->
-    point = []
-    point.push @createPoint photo for photo in spot.photos
-    if spot.polyline
-      spot.polyline.setPath point
-    else
-      spot.polyline = new AMap.Polyline {
-          map: @map
-          path: point
-          strokeWeight: 2
-#          strokeStyle: 'dashed'
-        }
+#  updateSpotLine: (spot) ->
+#    point = []
+#    point.push @createPoint photo for photo in spot.photos
+#    if spot.polyline
+#      spot.polyline.setPath point
+#    else
+#      spot.polyline = new AMap.Polyline {
+#          map: @map
+#          path: point
+#          strokeWeight: 2
+##          strokeStyle: 'dashed'
+#        }
 
   createSpot: (spot) ->
     distance = 0

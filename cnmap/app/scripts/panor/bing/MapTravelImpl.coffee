@@ -1,16 +1,16 @@
 class TravelLayer extends window.cnmap.ITravelLayer
 
-  initMap: (map) ->
-    @map = map if map
-    @calcSpotTime()
-
-    if @travel
-      for spot in @travel.spots
-        @createMarker photo for photo in spot.photos
-        points = []
-        points.push @createPoint photo for photo in spot.photos
-
-        spot.polyline = @createPolyline points
+#  initMap: (map) ->
+#    @map = map if map
+#    @calcSpotTime()
+#
+#    if @travel
+#      for spot in @travel.spots
+#        @createMarker photo for photo in spot.photos
+#        points = []
+#        points.push @createPoint photo for photo in spot.photos
+#
+#        spot.polyline = @createPolyline points
 
   createPoint: (photo) ->
     new Microsoft.Maps.Location photo.point.lat, photo.point.lng
@@ -31,6 +31,16 @@ class TravelLayer extends window.cnmap.ITravelLayer
             jQuery(that).trigger("data_clicked", [e.target.photo.id])
     photo.marker = marker
     marker
+
+  createPolyline: (points) ->
+    polyline = new Microsoft.Maps.Polyline points, {
+      strokeThickness: 2
+    }
+    @map.entities.push polyline
+    polyline
+
+  setPolylinePath: (polyline, points) ->
+    polyline.setLocations points
 
   removeMarker: (photo) ->
     if photo.marker
@@ -88,19 +98,12 @@ class TravelLayer extends window.cnmap.ITravelLayer
     cancelMarker photo for photo in spot.photos
     @updateSpotLine spot
 
-  updateSpotLine: (spot) ->
-    points = []
-    points.push @createPoint photo for photo in spot.photos
-    if spot.polyline
-      spot.polyline.setLocations points
-    else
-      spot.polyline = @createPolyline points
-
-  createPolyline: (points) ->
-    polyline = new Microsoft.Maps.Polyline points, {
-        strokeThickness: 2
-      }
-    @map.entities.push polyline
-    polyline
+#  updateSpotLine: (spot) ->
+#    points = []
+#    points.push @createPoint photo for photo in spot.photos
+#    if spot.polyline
+#      spot.polyline.setLocations points
+#    else
+#      spot.polyline = @createPolyline points
 
 window.cnmap.TravelLayer = TravelLayer

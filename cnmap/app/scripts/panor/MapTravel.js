@@ -12,7 +12,34 @@
       this.mapEventListener = window.cnmap.MapEventListener.factory();
     }
 
-    ITravelLayer.prototype.initMap = function() {};
+    ITravelLayer.prototype.initMap = function(map) {
+      var photo, points, spot, _i, _j, _len, _len1, _ref, _ref1, _results;
+      if (map) {
+        this.map = map;
+      }
+      this.calcSpotTime();
+      this.labels = [];
+      points = [];
+      if (this.travel) {
+        _ref = this.travel.spots;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          spot = _ref[_i];
+          points = [];
+          _ref1 = spot.photos;
+          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+            photo = _ref1[_j];
+            if (photo.point) {
+              this.createMarker(photo);
+              points.push(this.createPoint(photo));
+            }
+          }
+          spot.polyline = this.createPolyline(points);
+          _results.push(this.labels.push(spot.polyline));
+        }
+        return _results;
+      }
+    };
 
     ITravelLayer.prototype.calcSpotTime = function() {
       var spot, spotMinDate, _i, _j, _len, _len1, _ref, _ref1;
@@ -260,6 +287,23 @@
 
     ITravelLayer.prototype.getMarkerImage = function(photo) {
       return "" + this.staticCtx + "/" + photo.oss_key + "@!panor-lg";
+    };
+
+    ITravelLayer.prototype.updateSpotLine = function(spot) {
+      var photo, points, _i, _len, _ref;
+      points = [];
+      _ref = spot.photos;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        photo = _ref[_i];
+        if (!!photo.point) {
+          points.push(this.createPoint(photo));
+        }
+      }
+      if (spot.polyline) {
+        return this.setPolylinePath(spot.polyline, points);
+      } else {
+        return spot.polyline(this.createPolyline(points));
+      }
     };
 
     return ITravelLayer;

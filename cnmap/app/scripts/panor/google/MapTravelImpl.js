@@ -11,41 +11,6 @@
       return TravelLayer.__super__.constructor.apply(this, arguments);
     }
 
-    TravelLayer.prototype.initMap = function(map) {
-      var photo, point, spot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
-      if (map) {
-        this.map = map;
-      }
-      this.calcSpotTime();
-      this.labels = [];
-      point = [];
-      if (this.travel) {
-        _ref = this.travel.spots;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          spot = _ref[_i];
-          _ref1 = spot.photos;
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            photo = _ref1[_j];
-            this.createMarker(photo);
-          }
-          point = [];
-          _ref2 = spot.photos;
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            photo = _ref2[_k];
-            point.push(this.createPoint(photo));
-          }
-          spot.polyline = new google.maps.Polyline({
-            map: this.map,
-            path: point,
-            strokeWeight: 2
-          });
-          _results.push(this.labels.push(spot.polyline));
-        }
-        return _results;
-      }
-    };
-
     TravelLayer.prototype.createPoint = function(photo) {
       return new google.maps.LatLng(photo.point.lat, photo.point.lng);
     };
@@ -67,6 +32,18 @@
       photo.marker = marker;
       this.labels.push(marker);
       return marker;
+    };
+
+    TravelLayer.prototype.createPolyline = function(points) {
+      return new google.maps.Polyline({
+        map: this.map,
+        path: point,
+        strokeWeight: 2
+      });
+    };
+
+    TravelLayer.prototype.setPolylinePath = function(polyline, points) {
+      return polyline.setPath(points);
     };
 
     TravelLayer.prototype.removeMarker = function(photo) {
@@ -131,26 +108,6 @@
         cancelMarker(photo);
       }
       return this.updateSpotLine(spot);
-    };
-
-    TravelLayer.prototype.updateSpotLine = function(spot) {
-      var photo, points, _i, _len, _ref;
-      points = [];
-      _ref = spot.photos;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        photo = _ref[_i];
-        points.push(this.createPoint(photo));
-      }
-      if (spot.polyline) {
-        return spot.polyline.setPath(points);
-      } else {
-        spot.polyline = new google.maps.Polyline({
-          map: this.map,
-          path: points,
-          strokeWeight: 2
-        });
-        return this.labels.push(spot.polyline);
-      }
     };
 
     TravelLayer.prototype.clearMap = function() {

@@ -2,6 +2,7 @@ package com.cnpanoramio.service.impl;
 
 import javax.servlet.http.HttpSession;
 
+import com.cnpanoramio.domain.*;
 import org.appfuse.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,12 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpanoramio.MapVendor;
 import com.cnpanoramio.dao.FavoriteDao;
-import com.cnpanoramio.domain.Favorite;
-import com.cnpanoramio.domain.Like;
-import com.cnpanoramio.domain.Photo;
-import com.cnpanoramio.domain.PhotoDetails;
-import com.cnpanoramio.domain.PhotoGps;
-import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.service.LikeManager;
 import com.cnpanoramio.service.PhotoManager;
@@ -73,8 +68,14 @@ public class PhotoServiceImpl implements PhotoService {
 			pp.setPoint(gps.getPoint());
 			pp.setVendor(mapVendor.name());
 		}else {
-			pp.setPoint(photo.getGpsPoint());
-			pp.setVendor(MapVendor.gaode.name());
+			gps = photo.getGps().get(MapVendor.gaode);
+			if(null != gps) {
+				pp.setPoint(gps.getPoint());
+				pp.setVendor(gps.getVendor().name());
+			}else {
+				pp.setPoint(photo.getGpsPoint());
+//				pp.setVendor(MapVendor.gaode.name());
+			}
 		}
 		
 		// 360度全景照片

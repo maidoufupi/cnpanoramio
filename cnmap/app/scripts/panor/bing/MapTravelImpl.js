@@ -11,34 +11,6 @@
       return TravelLayer.__super__.constructor.apply(this, arguments);
     }
 
-    TravelLayer.prototype.initMap = function(map) {
-      var photo, points, spot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
-      if (map) {
-        this.map = map;
-      }
-      this.calcSpotTime();
-      if (this.travel) {
-        _ref = this.travel.spots;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          spot = _ref[_i];
-          _ref1 = spot.photos;
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            photo = _ref1[_j];
-            this.createMarker(photo);
-          }
-          points = [];
-          _ref2 = spot.photos;
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            photo = _ref2[_k];
-            points.push(this.createPoint(photo));
-          }
-          _results.push(spot.polyline = this.createPolyline(points));
-        }
-        return _results;
-      }
-    };
-
     TravelLayer.prototype.createPoint = function(photo) {
       return new Microsoft.Maps.Location(photo.point.lat, photo.point.lng);
     };
@@ -62,6 +34,19 @@
       }
       photo.marker = marker;
       return marker;
+    };
+
+    TravelLayer.prototype.createPolyline = function(points) {
+      var polyline;
+      polyline = new Microsoft.Maps.Polyline(points, {
+        strokeThickness: 2
+      });
+      this.map.entities.push(polyline);
+      return polyline;
+    };
+
+    TravelLayer.prototype.setPolylinePath = function(polyline, points) {
+      return polyline.setLocations(points);
     };
 
     TravelLayer.prototype.removeMarker = function(photo) {
@@ -146,30 +131,6 @@
         cancelMarker(photo);
       }
       return this.updateSpotLine(spot);
-    };
-
-    TravelLayer.prototype.updateSpotLine = function(spot) {
-      var photo, points, _i, _len, _ref;
-      points = [];
-      _ref = spot.photos;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        photo = _ref[_i];
-        points.push(this.createPoint(photo));
-      }
-      if (spot.polyline) {
-        return spot.polyline.setLocations(points);
-      } else {
-        return spot.polyline = this.createPolyline(points);
-      }
-    };
-
-    TravelLayer.prototype.createPolyline = function(points) {
-      var polyline;
-      polyline = new Microsoft.Maps.Polyline(points, {
-        strokeThickness: 2
-      });
-      this.map.entities.push(polyline);
-      return polyline;
     };
 
     return TravelLayer;

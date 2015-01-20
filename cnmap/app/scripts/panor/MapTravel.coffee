@@ -4,9 +4,28 @@ class ITravelLayer
     {@ctx, @staticCtx, @map, @travel} = @opts if @opts
     @mapEventListener = window.cnmap.MapEventListener.factory()
 
-  initMap: () ->
+  ##
+  # 初始化地图，并创建图片的图标和线
+  # @param map
+  #
+  initMap: (map) ->
+    @map = map if map
+    @calcSpotTime()
+    @labels = []
+    points = []
+    if @travel
+      for spot in @travel.spots
+        points = []
+        for photo in spot.photos
+          if photo.point
+            @createMarker photo
+            points.push @createPoint photo
+        spot.polyline = @createPolyline(points)
+        @labels.push spot.polyline
 
-  ## 计算spot的时间
+  ##
+  # 计算spot的时间
+  #
   calcSpotTime: () ->
     if @travel
       ## 计算出游览景点开始时间的最小值, 为后面计算第几天
@@ -149,6 +168,17 @@ class ITravelLayer
 
   getMarkerImage: (photo) ->
     "#{@staticCtx}/#{photo.oss_key}@!panor-lg"
+
+  ##
+  # 根据图片gps信息更新图标位置和连线
+  #
+  updateSpotLine: (spot) ->
+    points = []
+    points.push @createPoint photo for photo in spot.photos when !!photo.point
+    if spot.polyline
+      @setPolylinePath spot.polyline, points
+    else
+      spot.polyline @createPolyline(points)
 
 window.cnmap = window.cnmap ? {}
 

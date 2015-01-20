@@ -1,37 +1,37 @@
-//package com.cnpanoramio.service;
-//
-//import static org.junit.Assert.*;
-//
+package com.cnpanoramio.service;
+
+import static org.junit.Assert.*;
+
 //import java.awt.image.BufferedImage;
-//import java.io.File;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.net.URL;
-//import java.util.Collection;
-//import java.util.LinkedList;
-//import java.util.List;
-//import java.util.Map;
-//
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
-//import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-//import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
-//import org.appfuse.service.RoleManager;
-//import org.appfuse.service.UserManager;
-//import org.junit.After;
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-//import org.springframework.util.Assert;
-//
-//import com.cnpanoramio.domain.Photo;
-//
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import com.cnpanoramio.domain.Photo;
+import com.cnpanoramio.json.PhotoProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
+import org.appfuse.service.RoleManager;
+import org.appfuse.service.UserManager;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.Assert;
+
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(inheritLocations = true,
-//        locations = { 
+//        locations = {
 //				"classpath:/applicationContext-resources.xml",
 //                "classpath:/applicationContext-service.xml",
 //                "classpath:/applicationContext-dao.xml",
@@ -40,35 +40,42 @@
 //                "/WEB-INF/spring-security.xml",
 //                "/WEB-INF/applicationContext*.xml",
 //                "/WEB-INF/dispatcher-servlet.xml"})
-//public class PhotoServiceTest {
-//	
-//	protected transient final Log log = LogFactory.getLog(getClass());
-//
-//	@Autowired
-//	private RoleManager roleManager;
-//	@Autowired
-//	private UserManager userManager;
-//	@Autowired
-//	private PhotoManager photoService;
-//
-//	private InputStream ins;
+public class PhotoServiceTest extends AbstractServiceTest {
+
+	protected transient final Log log = LogFactory.getLog(getClass());
+
+	@Autowired
+	private RoleManager roleManager;
+	@Autowired
+	private UserManager userManager;
+	@Autowired
+	private PhotoManager photoManager;
+    @Autowired
+	private PhotoService photoService;
+
+	private Long photoId;
 //	URL url;
 //	private Collection<Photo> photosForUser;
 //
-//	@Before
-//	public void preMethodSetup() {
-////		url = getClass().getResource("/image/IMAG1340.jpg");
-//		
-//	}
-//
-//	@After
-//	public void postMethodTearDown() {
-//	}
-//
-//	@Test
-//	public void testPhotoStore() throws IOException, ImageReadException {
-////		photoService.store(getMultipartBody());
-//	}
+	@Before
+	public void preMethodSetup() {
+//		url = getClass().getResource("/image/IMAG1340.jpg");
+
+	}
+
+	@After
+	public void postMethodTearDown() {
+	}
+
+	@Test
+	public void testTransform() {
+        photoId = 415L;
+        login();
+        Photo photo = photoManager.get(photoId);
+        PhotoProperties pp = photoService.transform(photo);
+        log.debug(pp.getVendor());
+        log.debug(pp.getPoint());
+	}
 //
 //	@Test
 //	public void testFillPhotoDetail() throws ImageReadException, IOException {
@@ -185,4 +192,4 @@
 //		atts.add(new Attachment("image", "application/octet-stream", getClass().getResourceAsStream("/image/IMAG1340.jpg")));
 //		return new MultipartBody(atts, true);
 //	}
-//}
+}

@@ -11,43 +11,6 @@
       return TravelLayer.__super__.constructor.apply(this, arguments);
     }
 
-    TravelLayer.prototype.initMap = function(map) {
-      var photo, point, spot, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
-      if (map) {
-        this.map = map;
-      }
-      this.calcSpotTime();
-      point = [];
-      if (this.travel) {
-        _ref = this.travel.spots;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          spot = _ref[_i];
-          _ref1 = spot.photos;
-          for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-            photo = _ref1[_j];
-            if (!!photo.point) {
-              this.createMarker(photo);
-            }
-          }
-          point = [];
-          _ref2 = spot.photos;
-          for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-            photo = _ref2[_k];
-            if (!!photo.point) {
-              point.push(this.createPoint(photo));
-            }
-          }
-          spot.polyline = new BMap.Polyline(point, {
-            map: this.map,
-            strokeWeight: 2
-          });
-          _results.push(this.map.addOverlay(spot.polyline));
-        }
-        return _results;
-      }
-    };
-
     TravelLayer.prototype.createPoint = function(photo) {
       return new BMap.Point(photo.point.lng, photo.point.lat);
     };
@@ -74,6 +37,20 @@
       }
       photo.marker = marker;
       return marker;
+    };
+
+    TravelLayer.prototype.createPolyline = function(points) {
+      var polyline;
+      polyline = new BMap.Polyline(points, {
+        map: this.map,
+        strokeWeight: 2
+      });
+      this.map.addOverlay(polyline);
+      return polyline;
+    };
+
+    TravelLayer.prototype.setPolylinePath = function(polyline, points) {
+      return polyline.setPath(points);
     };
 
     TravelLayer.prototype.removeMarker = function(photo) {
@@ -146,25 +123,6 @@
         cancelMarker(photo);
       }
       return this.updateSpotLine(spot);
-    };
-
-    TravelLayer.prototype.updateSpotLine = function(spot) {
-      var photo, point, _i, _len, _ref;
-      point = [];
-      _ref = spot.photos;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        photo = _ref[_i];
-        point.push(this.createPoint(photo));
-      }
-      if (spot.polyline) {
-        return spot.polyline.setPath(point);
-      } else {
-        spot.polyline = new BMap.Polyline(point, {
-          map: this.map,
-          strokeStyle: 'dashed'
-        });
-        return this.map.addOverlay(spot.polyline);
-      }
     };
 
     return TravelLayer;

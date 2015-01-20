@@ -88,23 +88,32 @@
 
                         <li>
                             <div class="maps-layout btn-group">
-                                <button type="button" class="btn btn-default navbar-btn"
-                                        ng-click="layoutManager.setLayout(layoutManager.leftFull)">
+                                <label type="button" class="btn btn-default navbar-btn"
+                                        ng-model="layoutManager.index"
+                                        btn-radio="3"
+                                        uncheckable
+                                        >
                                     <span class="glyphicon glyphicon-fullscreen" ></span>
-                                </button>
-                                <button type="button" class="btn btn-default navbar-btn hidden-xs"
-                                        ng-click="layoutManager.setLayout(layoutManager.leftFixed)"
+                                </label>
+                                <label type="button" class="btn btn-default navbar-btn hidden-xs"
+                                        ng-model="layoutManager.index"
+                                        btn-radio="1"
+                                        uncheckable
                                         >
                                     <span class="glyphicon glyphicon-align-left" ></span>
 
-                                </button>
+                                </label>
                                 <button type="button" class="btn btn-default navbar-btn hidden-xs"
-                                        ng-click="layoutManager.setLayout(layoutManager.rightFixed)"
+                                        ng-model="layoutManager.index"
+                                        btn-radio="0"
+                                        uncheckable
                                         >
                                     <span class="glyphicon glyphicon-align-right" ></span>
                                 </button>
                                 <button type="button" class="btn btn-default navbar-btn"
-                                        ng-click="layoutManager.setLayout(layoutManager.rightFull)"
+                                        ng-model="layoutManager.index"
+                                        btn-radio="2"
+                                        uncheckable
                                         >
                                     <span class="glyphicon glyphicon-align-justify" ></span>
                                 </button>

@@ -180,8 +180,10 @@
 	</pluginRepositories>
 
 	<dependencies>
-		<!-- ********************************************************************** 
-			** HIBERNATE DEPENDENCIES ** ********************************************************************** -->
+		<!-- **********************************************************************
+			** HIBERNATE DEPENDENCIES **
+			**********************************************************************
+		-->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>

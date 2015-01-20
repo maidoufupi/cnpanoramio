@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.cnpanoramio.MapVendor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.model.User;
@@ -24,7 +25,6 @@ import com.cnpanoramio.json.TravelResponse;
 import com.cnpanoramio.json.TravelResponse.Travel;
 import com.cnpanoramio.json.TravelResponse.TravelSpot;
 import com.cnpanoramio.service.LikeManager;
-import com.cnpanoramio.service.PhotoManager;
 import com.cnpanoramio.service.TravelManager;
 import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.utils.UserUtil;
@@ -44,8 +44,8 @@ public class TravelRestService extends AbstractRestService {
 	@Autowired
 	private TravelService travelService;
 	
-	@Autowired
-	private PhotoManager photoManager;
+//	@Autowired
+//	private PhotoManager photoManager;
 	
 	@Autowired
 	private LikeManager likeManager;
@@ -66,7 +66,8 @@ public class TravelRestService extends AbstractRestService {
 	
 	@RequestMapping(value = "/{travelId}", method = RequestMethod.GET)
 	@ResponseBody
-	public TravelResponse getTravel(@PathVariable String travelId) {
+	public TravelResponse getTravel(@PathVariable String travelId,
+									@RequestParam(value="vendor", required=false) MapVendor vendor) {
 		TravelResponse response = responseFactory();
 		Long id = Long.parseLong(travelId);
 		if(0 == id) {

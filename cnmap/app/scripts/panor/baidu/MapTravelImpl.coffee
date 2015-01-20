@@ -1,21 +1,21 @@
 class TravelLayer extends window.cnmap.ITravelLayer
 
-  initMap: (map) ->
-    @map = map if map
-    @calcSpotTime()
-    point = []
-    if @travel
-      for spot in @travel.spots
-        @createMarker photo for photo in spot.photos when !!photo.point
-        point = []
-        point.push @createPoint photo for photo in spot.photos when !!photo.point
-
-        spot.polyline = new BMap.Polyline point, {
-          map: @map
-          strokeWeight: 2
-#            strokeStyle: 'dashed'
-        }
-        @map.addOverlay spot.polyline
+#  initMap: (map) ->
+#    @map = map if map
+#    @calcSpotTime()
+#    point = []
+#    if @travel
+#      for spot in @travel.spots
+#        @createMarker photo for photo in spot.photos when !!photo.point
+#        point = []
+#        point.push @createPoint photo for photo in spot.photos when !!photo.point
+#
+#        spot.polyline = new BMap.Polyline point, {
+#          map: @map
+#          strokeWeight: 2
+##            strokeStyle: 'dashed'
+#        }
+#        @map.addOverlay spot.polyline
 
   createPoint: (photo) ->
     new BMap.Point photo.point.lng, photo.point.lat
@@ -39,6 +39,18 @@ class TravelLayer extends window.cnmap.ITravelLayer
           jQuery(that).trigger("data_clicked", [this.photo.id])
     photo.marker = marker
     marker
+
+  createPolyline: (points) ->
+    polyline = new BMap.Polyline points, {
+        map: @map
+        strokeWeight: 2
+#            strokeStyle: 'dashed'
+      }
+    @map.addOverlay polyline
+    polyline
+
+  setPolylinePath: (polyline, points) ->
+    polyline.setPath points
 
   removeMarker: (photo) ->
     if photo.marker
@@ -85,16 +97,16 @@ class TravelLayer extends window.cnmap.ITravelLayer
     cancelMarker photo for photo in spot.photos
     @updateSpotLine spot
 
-  updateSpotLine: (spot) ->
-    point = []
-    point.push @createPoint photo for photo in spot.photos
-    if spot.polyline
-      spot.polyline.setPath point
-    else
-      spot.polyline = new BMap.Polyline point, {
-        map: @map
-        strokeStyle: 'dashed'
-      }
-      @map.addOverlay spot.polyline
+#  updateSpotLine: (spot) ->
+#    point = []
+#    point.push @createPoint photo for photo in spot.photos
+#    if spot.polyline
+#      spot.polyline.setPath point
+#    else
+#      spot.polyline = new BMap.Polyline point, {
+#        map: @map
+#        strokeStyle: 'dashed'
+#      }
+#      @map.addOverlay spot.polyline
 
 window.cnmap.TravelLayer = TravelLayer

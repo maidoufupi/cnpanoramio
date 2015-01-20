@@ -1,22 +1,22 @@
 class TravelLayer extends window.cnmap.ITravelLayer
 
-  initMap: (map) ->
-    @map = map if map
-    @calcSpotTime()
-    @labels = []
-    point = []
-    if @travel
-      for spot in @travel.spots
-        @createMarker photo for photo in spot.photos
-        point = []
-        point.push @createPoint photo for photo in spot.photos
-        spot.polyline = new google.maps.Polyline {
-          map: @map
-          path: point
-#          strokeDashStyle: 'dash'
-          strokeWeight: 2
-        }
-        @labels.push spot.polyline
+#  initMap: (map) ->
+#    @map = map if map
+#    @calcSpotTime()
+#    @labels = []
+#    point = []
+#    if @travel
+#      for spot in @travel.spots
+#        @createMarker photo for photo in spot.photos
+#        point = []
+#        point.push @createPoint photo for photo in spot.photos
+#        spot.polyline = new google.maps.Polyline {
+#          map: @map
+#          path: point
+##          strokeDashStyle: 'dash'
+#          strokeWeight: 2
+#        }
+#        @labels.push spot.polyline
 
   createPoint: (photo) ->
     new google.maps.LatLng(photo.point.lat, photo.point.lng)
@@ -36,6 +36,17 @@ class TravelLayer extends window.cnmap.ITravelLayer
     photo.marker = marker
     @labels.push marker
     marker
+
+  createPolyline: (points) ->
+    new google.maps.Polyline {
+      map: @map
+      path: point
+#          strokeDashStyle: 'dash'
+      strokeWeight: 2
+    }
+
+  setPolylinePath: (polyline, points) ->
+    polyline.setPath points
 
   removeMarker: (photo) ->
     if photo.marker
@@ -76,19 +87,19 @@ class TravelLayer extends window.cnmap.ITravelLayer
     cancelMarker photo for photo in spot.photos
     @updateSpotLine spot
 
-  updateSpotLine: (spot) ->
-    points = []
-    points.push @createPoint photo for photo in spot.photos
-    if spot.polyline
-      spot.polyline.setPath points
-    else
-      spot.polyline = new google.maps.Polyline {
-        map: @map
-        path: points
-#        strokeDashStyle: 'dash'
-        strokeWeight: 2
-      }
-      @labels.push spot.polyline
+#  updateSpotLine: (spot) ->
+#    points = []
+#    points.push @createPoint photo for photo in spot.photos
+#    if spot.polyline
+#      spot.polyline.setPath points
+#    else
+#      spot.polyline = new google.maps.Polyline {
+#        map: @map
+#        path: points
+##        strokeDashStyle: 'dash'
+#        strokeWeight: 2
+#      }
+#      @labels.push spot.polyline
 
   clearMap: () ->
     $.each @labels, (index, label) ->

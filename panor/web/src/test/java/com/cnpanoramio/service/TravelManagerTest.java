@@ -33,8 +33,8 @@ import com.cnpanoramio.domain.TravelSpot;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(inheritLocations = true,
-        locations = { 
-				"classpath:/applicationContext-resources.xml",
+        locations = {
+                "classpath:/applicationContext-resources.xml",
                 "classpath:/applicationContext-service.xml",
                 "classpath:/applicationContext-dao.xml",
                 "classpath*:/applicationContext.xml", // for modular archetypes
@@ -45,82 +45,94 @@ import com.cnpanoramio.domain.TravelSpot;
 @Transactional
 public class TravelManagerTest {
 
-	protected transient final Log log = LogFactory.getLog(getClass());
-	
-	@Autowired
-	private RoleManager roleManager;
-	@Autowired
-	private UserManager userManager;
-	@Autowired
-	private PhotoManager photoManager;
+    protected transient final Log log = LogFactory.getLog(getClass());
 
-	@Autowired
-	private TravelManager travelManager;
-	@Autowired
-	private TravelDao travelDao;
-	
-	@Resource
+    @Autowired
+    private RoleManager roleManager;
+    @Autowired
+    private UserManager userManager;
+    @Autowired
+    private PhotoManager photoManager;
+
+    @Autowired
+    private TravelManager travelManager;
+    @Autowired
+    private TravelDao travelDao;
+
+    @Resource
     private SessionFactory sessionFactory;
-	
-	private User user;
-	
-	private List<Travel> travels = new ArrayList<Travel>();
-	
-	private Travel travel;
-	
-	@Before
-	public void preMethodSetup() {
-		user = new User();
-		user.addRole(roleManager.getRole(Constants.USER_ROLE));
-		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+
+    private User user;
+
+    private List<Travel> travels = new ArrayList<Travel>();
+
+    private Travel travel;
+
+    @Before
+    public void preMethodSetup() {
+        user = new User();
+        user.addRole(roleManager.getRole(Constants.USER_ROLE));
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                 "user", "user", user.getAuthorities());
         auth.setDetails(user);
-		SecurityContextHolder.getContext().setAuthentication(auth);
-		
-		travel = new Travel();
-		travel.setAddress("江苏省常州镇111");
-		travel.setTitle("江苏省常州");
-		travelDao.persist(travel);
-		travels.add(travel);
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
-	}
-	
-	@After
-	public void postMethodTearDown() {
-		for(Travel travel : travels) {
-			travelDao.remove(travel);
-		}
-	}
-	
-	@Test
-	public void testAddTravelPhoto() {
-		
-		Photo photo = photoManager.get(3L);
-		
-		TravelSpot travelSpot = new TravelSpot();
-		travelManager.createTravelSpot(travel.getId(), travelSpot);
-		photo = travelManager.addTravelPhoto(travel, photo);
-				
-		for(TravelSpot spot : travel.getSpots()) {
-			log.info(spot.getTimeStart());
-		}
-	}
-	
-	public SessionFactory getSessionFactory() {
+        travel = new Travel();
+        travel.setAddress("江苏省常州镇111");
+        travel.setTitle("江苏省常州");
+        travelDao.persist(travel);
+        travels.add(travel);
+
+    }
+
+    @After
+    public void postMethodTearDown() {
+        for (Travel travel : travels) {
+            travelDao.remove(travel);
+        }
+    }
+
+    @Test
+    public void testAddTravelPhoto() {
+
+        Photo photo = photoManager.get(3L);
+
+        TravelSpot travelSpot = new TravelSpot();
+        travelManager.createTravelSpot(travel.getId(), travelSpot);
+        photo = travelManager.addTravelPhoto(travel, photo);
+
+        for (TravelSpot spot : travel.getSpots()) {
+            log.info(spot.getTimeStart());
+        }
+    }
+
+    @Test
+    public void testGetTravel() {
+        travel = travelManager.getTravel(35L);
+        for (TravelSpot spot : travel.getSpots()) {
+            for (Photo photo : spot.getPhotos()) {
+                if (photo.getId() == 415L) {
+                    log.debug(photo.getGpsPoint());
+                }
+            }
+        }
+    }
+
+    public SessionFactory getSessionFactory() {
         return this.sessionFactory;
     }
-	
-	@Autowired
+
+    @Autowired
     @Required
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-	
-	public Session getSession() throws HibernateException {
+
+    public Session getSession() throws HibernateException {
         Session sess = null;
         try {
-        	sess = getSessionFactory().getCurrentSession();
-        }catch(Exception ex) {
+            sess = getSessionFactory().getCurrentSession();
+        } catch (Exception ex) {
         }
         if (sess == null) {
             sess = getSessionFactory().openSession();
