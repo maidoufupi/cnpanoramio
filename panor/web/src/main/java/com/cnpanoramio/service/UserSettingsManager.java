@@ -12,6 +12,7 @@ import com.cnpanoramio.domain.Tag;
 import com.cnpanoramio.domain.UserSettings;
 import com.cnpanoramio.json.PhotoProperties;
 import com.cnpanoramio.json.UserOpenInfo;
+import com.qq.connect.javabeans.qzone.UserInfoBean;
 
 public interface UserSettingsManager {
 	
@@ -178,4 +179,30 @@ public interface UserSettingsManager {
 	 * @param photo
 	 */
 	public void removeStorageSpace(User user, Photo photo);
+	
+	/**
+	 * 
+	 * @param openID
+	 * @param userInfoBean
+	 * @return
+	 */
+	public User createUserByQQ(String openID, UserInfoBean userInfoBean);
+	/**
+	 * 查询有无重复昵称
+	 * @param nickname
+	 * @return
+	 */
+	public UserSettings selNickname(String nickname);
+	/**
+	 * 更新增加用户信息
+	 * @param user
+	 */
+	public void  addSaveUser(User user);
+	/**
+	 * 保存微博过来用户
+	 * @param user
+	 * @return
+	 */
+	public User createUserByWeiBo(com.cnpanoramio.weibo.model.User user);
+
 }
