@@ -1,4 +1,4 @@
-package com.cnpanoramio.rest;
+package com.cnpanoramio.webapp.controller;
 
 import java.io.IOException;
 
@@ -21,13 +21,21 @@ import com.cnpanoramio.weibo.http.AccessToken;
 import com.cnpanoramio.weibo.model.User;
 import com.cnpanoramio.weibo.model.WeiboException;
 
+/**
+ * 新浪微博登录
+ *
+ * @Author:  齐晶
+ * @Create_Date: 2015-01-01
+ */
 @Controller
 public class WeiBoLandedController {
+
 	private transient final Log log = LogFactory.getLog(getClass());
+
 	@Autowired
 	private UserSettingsManager userSettingsManager;
 
-	@RequestMapping(value = "/weibo")
+	@RequestMapping(value = "/signin/weibo")
 	public void listPage(HttpServletRequest request,
 			HttpServletResponse response) {
 		response.setContentType("text/html;charset=utf-8");
@@ -46,7 +54,7 @@ public class WeiBoLandedController {
 		}
 	}
 
-	@RequestMapping(value = "/weiboToken", method = { RequestMethod.GET })
+	@RequestMapping(value = "/signin/weibo/token", method = { RequestMethod.GET })
 	public String weiBoTokenByCode(HttpServletRequest request,
 			HttpServletResponse response, String code) {
 		response.setContentType("text/html;charset=utf-8");

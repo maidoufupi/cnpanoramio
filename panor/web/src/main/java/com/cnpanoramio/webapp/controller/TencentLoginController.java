@@ -1,4 +1,4 @@
-package com.cnpanoramio.rest;
+package com.cnpanoramio.webapp.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -25,6 +25,13 @@ import com.qq.connect.javabeans.AccessToken;
 import com.qq.connect.javabeans.qzone.UserInfoBean;
 import com.qq.connect.oauth.Oauth;
 
+/**
+ * 第三方登录控制器
+ * 腾讯账号登录
+ *
+ * @Author:  齐晶
+ * @Create_Date: 2015-01-01
+ */
 @Controller
 public class TencentLoginController {
 
@@ -34,14 +41,14 @@ public class TencentLoginController {
 	private UserSettingsManager userSettingsManager;
 
 	/**
-	 * Tencent回调
+	 * Tencent登录链接
 	 * 
 	 * @param request
 	 * @param response
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/tencentLogin", method = { RequestMethod.GET })
+	@RequestMapping(value = "/signin/tencent", method = { RequestMethod.GET })
 	public void tencentCode(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		response.setContentType("text/html;charset=utf-8");
@@ -62,7 +69,7 @@ public class TencentLoginController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/tencentToken", method = { RequestMethod.GET })
+	@RequestMapping(value = "/signin/tencent/token", method = { RequestMethod.GET })
 	public String tencentToken(HttpServletRequest request,
 			HttpServletResponse response, String code, String state)
 			throws IOException {
