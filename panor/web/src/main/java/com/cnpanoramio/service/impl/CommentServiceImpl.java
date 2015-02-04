@@ -93,7 +93,10 @@ public class CommentServiceImpl implements CommentService {
 		// 昵称
 		comment.setUsername(settings.getName());
 		comment.setUserId(commentD.getUser().getId());
-		comment.setUserAvatar(settings.getAvatar().getId());
+		// 头像
+		if(null != settings.getAvatar()) {
+			comment.setUserAvatar(settings.getAvatar().getId());
+		}
 		return comment;		
 	}
 	

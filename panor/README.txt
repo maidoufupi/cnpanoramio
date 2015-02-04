@@ -51,3 +51,26 @@ http://localhost:8080/panor-web
 
 打war包 panor
 mvn package -DskipTests
+
+
+version:1.2.6:
+CREATE TABLE `social_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `accessToken` varchar(255) NOT NULL,
+  `createDate` datetime DEFAULT NULL,
+  `displayName` varchar(255) DEFAULT NULL,
+  `expireTime` bigint(20) DEFAULT NULL,
+  `imageUrl` varchar(255) DEFAULT NULL,
+  `profileUrl` varchar(255) DEFAULT NULL,
+  `providerId` varchar(255) NOT NULL,
+  `providerUserId` varchar(255) DEFAULT NULL,
+  `rank` int(11) NOT NULL,
+  `refreshToken` varchar(255) DEFAULT NULL,
+  `secret` varchar(255) DEFAULT NULL,
+  `userId` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userId` (`userId`,`providerId`,`providerUserId`),
+  UNIQUE KEY `userId_2` (`userId`,`providerId`,`rank`),
+  KEY `FK8960295DCBF4156C` (`userId`),
+  CONSTRAINT `FK8960295DCBF4156C` FOREIGN KEY (`userId`) REFERENCES `app_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -30,6 +30,39 @@ public class UserSettingsDaoImpl extends GenericDaoHibernate<UserSettings, Long>
 		return (UserSettings) photoListQuery.uniqueResult();
 	}
 
+	@Override
+	public void addSaveUser(User user) {
+		// TODO Auto-generated method stub
+		String sql="UPDATE app_user SET email='"
+			+user.getEmail()+"',first_name='"+user.getFirstName()
+			+"',password='"+user.getPassword()+"',username='"+user.getFirstName()+"',Website='"+user.getWebsite()+"',credentials_expired="+user.isAccountExpired() 	
+			+" WHERE id="+user.getId();
+		
+		Query query = getSession().createSQLQuery(sql);
+		query.executeUpdate();
+	}
+
+	@Override
+	public UserSettings getByUserOpenId(String openId) {
+		Query photoListQuery = getSession().createQuery("select us from UserSettings as us left join us.user as u where u.website = :website");	
+		photoListQuery.setParameter("website", openId);
+		return (UserSettings) photoListQuery.uniqueResult();
+	}
+
+	@Override
+	public void updateusersetting(User user) {
+		String sql="UPDATE user_settings SET name='"+user.getFirstName()+"'WHERE id="+user.getId();
+		Query query = getSession().createSQLQuery(sql);
+		query.executeUpdate();
+	}
+
+	@Override
+	public UserSettings getByUserWeiBo(String weibo) {
+		Query photoListQuery = getSession().createQuery("select us from UserSettings as us left join us.user as u where u.website = :website");		
+		photoListQuery.setParameter("website", weibo);
+		return (UserSettings) photoListQuery.uniqueResult();
+	}
+
 //	@Override
 //	public List<String> getUserTags(User user) {
 //		Query query = getSession()
