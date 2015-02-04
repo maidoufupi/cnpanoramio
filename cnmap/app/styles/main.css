@@ -948,6 +948,8 @@
     top: 80px;
     left: 0;
     bottom: 0;
+    right: 0;
+    margin: 0 600px 0 0;
     -webkit-transition: all linear 0.3s;
     -moz-transition: all linear 0.3s;
     -ms-transition: all linear 0.3s;
@@ -1559,13 +1561,10 @@ span.clickable:hover {
   vertical-align: top;
   height: 100%;
   margin-left: 300px;
-  padding-left: 10px;
   border-left: 1px solid lightgrey; }
   .map-photo-modal .map-panel .selected_photo_editor {
     position: absolute;
     top: 0;
-    right: 0;
-    left: 0;
     background-color: #ececec;
     height: 70px;
     padding: 2px;

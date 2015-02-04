@@ -205,17 +205,24 @@
 <!--<script type="text/javascript" src="scripts/panor/baidu/MapEvent.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/baidu/MapConvertor.js"></script>-->
 
-<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>
-<script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>
-<script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>
-<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>
+<!--<script type="text/javascript" src="bower_components/angular-ui-map-qq/ui-map.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.qq.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/qq/MapEventListenerImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/qq/MapServiceImpl.js"></script>-->
+<!--<script type="text/javascript" src="scripts/panor/qq/MapTravelImpl.js"></script>-->
 
 <!--<script type="text/javascript" src="bower_components/angular-ui-map-bing/ui-map.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/panoramio/cnmap.bing.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/bing/MapEventListenerImpl.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/bing/MapServiceImpl.js"></script>-->
 <!--<script type="text/javascript" src="scripts/panor/bing/MapTravelImpl.js"></script>-->
+
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+<script type="text/javascript" src="bower_components/angular-ui-mapbox/ui-map.js"></script>
+<script type="text/javascript" src="scripts/panor/panoramio/cnmap.mapbox.js"></script>
+<script type="text/javascript" src="scripts/panor/mapbox/MapEventListenerImpl.js"></script>
+<script type="text/javascript" src="scripts/panor/mapbox/MapServiceImpl.js"></script>
 
 <!--<script charset="utf-8" src="http://union.mapbar.com/apis/maps/free?f=mapi&v=31.3&k=aCW9cItqL7sqT7AxaB0zdHZoZSWmbBsuT7JhMHTsMeD6ZIl9NzFsZHT=@JBL979@Iu7lJJZWWq0IDu9xZMzMxq7I9AhH7LAAA6hqzZHZZLTbZZauxlDz7C7DD9ZCFGT="></script>
 <script type="text/javascript" src="scripts/panor/js/cnmap.mapbar.js"></script>-->
@@ -237,7 +244,7 @@
             };
     window.login = true;
 
-    window.mapVendor = "qq";
+    window.mapVendor = "mapbox";
     window.dev = true;
 </script>
 <div ng-app="ponmApp.Index" ui-map-async-load>

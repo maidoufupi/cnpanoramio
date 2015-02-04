@@ -51,6 +51,8 @@
       top: $header-navbar-height+$header-navbar-second-height;
       left: 0;
       bottom: 0;
+      right: 0;
+      margin: 0 600px 0 0;
       @include transition-linear(all);
     }
 

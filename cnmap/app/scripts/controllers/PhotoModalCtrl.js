@@ -354,6 +354,10 @@ angular.module('ponmApp.controllers')
           }
         });
 
+        //modalInstance.opened.then(function() {
+        //  $scope.canInitMap = true;
+        //});
+
         modalInstance.result.then(function (selectedItem) {
           $scope.selected = selectedItem;
           $scope.setPhotoId($scope.photoId);
@@ -444,9 +448,9 @@ angular.module('ponmApp.controllers')
     });
   }])
   .controller('MapPhotoCtrl2', ['$window', '$log', '$timeout', '$scope', '$modalInstance', 'PhotoService',
-    'GeocodeService', 'photo', 'ponmCtxConfig', 'alertService',
+    'GeocodeService', 'photo', 'ponmCtxConfig', 'alertService', 'MapsConfigService',
     function ($window, $log, $timeout, $scope, $modalInstance, PhotoService, GeocodeService, photo,
-              ponmCtxConfig, alertService) {
+              ponmCtxConfig, alertService, MapsConfigService) {
       $scope.ctx = $window.ctx;
       $scope.staticCtx = ponmCtxConfig.staticCtx;
       $scope.apirest = $window.apirest;
@@ -466,6 +470,9 @@ angular.module('ponmApp.controllers')
         $modalInstance.dismiss('cancel');
       };
 
+      /**
+       * 更新图片位置信息
+       */
       $scope.ok = function () {
 
         PhotoService.updateProperties({photoId: $scope.photoId}, {
@@ -496,31 +503,39 @@ angular.module('ponmApp.controllers')
 
       };
 
-      $scope.$watch('$$childTail.myMap', function (map) {
+      $scope.$watch('$$childTail.$$childTail.myMap', function (map) {
         if (map) {
           $scope.map = map;
           mapService.init(map);
           addMapClickEvent($scope.map);
-          updatePhotoIdListener();
+          updatePhotoIdListener($scope.photoId);
         }
       });
 
-      function updatePhotoIdListener() {
+      /**
+       * 根据图片ID取得图片GPS信息并创建地图marker
+       *
+       * @param photoId
+       */
+      function updatePhotoIdListener(photoId) {
         if ($scope.file && $scope.file.mapVendor && $scope.file.mapVendor.marker) {
           mapEventListener.setMap($scope.file.mapVendor.marker, null);
         }
+        if(!photoId) {
+          return;
+        }
         $scope.file = {
-          photoId: $scope.photoId
+          photoId: photoId
         };
 
-        PhotoService.getPhoto({photoId: $scope.photoId}, function (data) {
+        PhotoService.getPhoto({photoId: photoId}, function (data) {
           if (data.status == 'OK') {
             $scope.photo = data.prop;
             $scope.file.is360 = data.prop.is360;
           }
         });
 
-        PhotoService.getGPSInfo({photoId: $scope.photoId}, function (res) {
+        PhotoService.getGPSInfo({photoId: photoId}, function (res) {
           if (res.status == "OK") {
             var gpsInfo = res.gps;
             if (gpsInfo) {
@@ -532,6 +547,13 @@ angular.module('ponmApp.controllers')
         })
       }
 
+      /**
+       * 根据经纬度创建可移动地图marker
+       *
+       * @param file
+       * @param lat
+       * @param lng
+       */
       function createMarker(file, lat, lng) {
         // create marker
         file.mapVendor = file.mapVendor || {};
@@ -556,9 +578,13 @@ angular.module('ponmApp.controllers')
         mapEventListener.addDragendListener(file.mapVendor.marker, function (lat, lng) {
           $scope.setPlace(this.photo_file, lat, lng);
         })
-
       }
 
+      /**
+       * 添加地图单击监听（单击添加或移动marker）
+       *
+       * @param map
+       */
       function addMapClickEvent(map) {
         mapEventListener.addMapClickListener(map, function (lat, lng) {
           addOrUpdateMarker($scope.file, lat, lng);
@@ -566,6 +592,13 @@ angular.module('ponmApp.controllers')
         })
       }
 
+      /**
+       * 创建或者移动marker
+       *
+       * @param file
+       * @param lat
+       * @param lng
+       */
       function addOrUpdateMarker(file, lat, lng) {
         file.mapVendor = file.mapVendor || {};
         if (!file.mapVendor.marker) {
@@ -579,6 +612,14 @@ angular.module('ponmApp.controllers')
 
       $scope.addOrUpdateMarker = addOrUpdateMarker;
 
+      /**
+       * 保存经纬度和地址，或根据经纬度获取地址
+       *
+       * @param file
+       * @param lat
+       * @param lng
+       * @param address
+       */
       $scope.setPlace = function (file, lat, lng, address) { // 此参数为非gps坐标
 
         $scope.file.mapVendor = $scope.file.mapVendor || {};
@@ -600,18 +641,25 @@ angular.module('ponmApp.controllers')
         });
       };
 
-
       $scope.clearPlace = function () {
         //$scope.hideMarker();
         //delete $scope.file.mapVendor;
       };
 
-      $scope.mapOptions = {
-        zoom: 5
-      }
+      $scope.mapOptions = MapsConfigService.getConfig();
+
       if (photo.point) {
-        $scope.mapOptions.centerPoint = photo.point;
+        $scope.mapOptions.ngCenter = photo.point;
       }
+
+      /**
+       * 延时创建地图（mapbox）
+       * （由于modal显示时有transform动作，
+       * 当地图使用element创建时，element还没有完全变化好，所有创建的地图大小会有问题）
+       */
+      $timeout(function() {
+        $scope.canInitMap = true;
+      }, 300);
     }])
   .controller('TypeaheadCtrl', ['$scope', '$http', 'GeocodeService', '$q',
     function ($scope, $http, GeocodeService, $q) {

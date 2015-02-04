@@ -1,5 +1,23 @@
 
 $selected_photo_editor_height: 70px;
+//
+//.map-photo-modal.modal.in {
+//  .modal-dialog {
+//    transform: initial;
+//  }
+//}
+//
+//.modal-content {
+//  .map-panel {
+//    .map-photo-map {
+//      position: absolute;
+//      margin: 5px 0;
+//      width: 100%;
+//      top: $selected_photo_editor_height + 10px;
+//      bottom: 0;
+//    }
+//  }
+//}
 
 .map-photo-modal {
   .map-media-scroller {
@@ -23,14 +41,14 @@ $selected_photo_editor_height: 70px;
     vertical-align: top;
     height: 100%;
     margin-left: 300px;
-    padding-left: 10px;
+//    padding-left: 10px;
     border-left: 1px solid lightgrey;
 
     .selected_photo_editor {
       position: absolute;
       top: 0;
-      right: 0;
-      left: 0;
+//      right: 0;
+//      left: 0;
       background-color: #ececec;
       height: $selected_photo_editor_height;
       padding: 2px;

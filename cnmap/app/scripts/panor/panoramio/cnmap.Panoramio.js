@@ -33,6 +33,25 @@
 
     this.requestUuid = "";
 
+    this.mapChanged = function(e) {
+
+      $(this).trigger("map_changed", [this.getBounds(), this.getLevel(), this.getSize()]);
+
+      if (!this.opts.auto) {
+        return;
+      }
+
+      var bounds = this.getBounds();
+      // 地图为初始化完时 getBounds()为空
+      if (!bounds.ne) {
+        return;
+      }
+
+      var thumbs = this.getBoundsThumbnails(this.getBounds(),
+        this.getLevel(),
+        this.getSize());
+    }
+
     this.getBoundsThumbnails = function (bounds/*:LatLngBounds*/, zoomLevel, size/*:Size*/, callback) {
       var clearVisible = this.clearVisible,
         setVisible = this.setVisible;
@@ -118,16 +137,20 @@
      *
      * @param photo
      */
-    this.hideLabel = function (photo) {
-    };
+    //this.hideLabel = function (photo) {
+    //};
 
     /**
      * 创建图片图标
      *
      * @param photo
      */
-    this.createMarker = function (photo) {
-    };
+    //this.createMarker = function (photo) {
+    //};
+
+    this.getIconUrl = function(photoOssKey) {
+      return this.staticCtx + "/" + photoOssKey + "@!panor-lg";
+    }
 
     this.getLabelContent = function (photoOssKey) {
       if (this.opts.phone) {
@@ -138,7 +161,6 @@
         return "<div style='cursor: pointer;'><img src='" + this.staticCtx + "/" + photoOssKey
           + "@!panor-lg' style='border: 2px solid white; width: 34px; height: 34px;'></div>";
       }
-
     };
 
     this.getInfoWindowContent = function (photo) {
@@ -177,8 +199,8 @@
      *
      * @param map
      */
-    this.setMap = function (map/*:Map*/) {
-    };
+    //this.setMap = function (map/*:Map*/) {
+    //};
 
     /**
      * init Environment

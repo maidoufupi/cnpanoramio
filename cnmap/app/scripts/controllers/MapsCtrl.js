@@ -152,6 +152,8 @@ angular.module('ponmApp.maps', [
       this.getConfig = function() {
 
         var mapOptions = {
+          mapboxAccessToken: "pk.eyJ1IjoiYW55cG9zc2libGUiLCJhIjoiaTdwSGNWVSJ9.BoT7DTs0JTTAQ15v7-wkKg",
+          mapboxMapId: "anypossible.l3d50cm5",
           ngCenter: {
             lat: 35,
             lng: 116
@@ -176,10 +178,10 @@ angular.module('ponmApp.maps', [
           var zoom = $rootScope.cache.get(CON_MAPS_CACHE_ZOOM);
           if (lat && lng && zoom) {
             mapOptions.ngCenter = {
-              lat: lat,
-              lng: lng
+              lat: Number(lat),
+              lng: Number(lng)
             };
-            mapOptions.ngZoom = zoom;
+            mapOptions.ngZoom = Number(zoom);
           }else {
             setLocalStorageCache(mapOptions);
           }
@@ -195,10 +197,10 @@ angular.module('ponmApp.maps', [
         var zoom = localStorageService.get(CON_MAPS_CACHE_ZOOM);
         if (lat && lng && zoom) {
           mapOptions.ngCenter = {
-            lat: lat,
-            lng: lng
+            lat: Number(lat),
+            lng: Number(lng)
           };
-          mapOptions.ngZoom = zoom;
+          mapOptions.ngZoom = Number(zoom);
         }
       }
 
@@ -1635,7 +1637,7 @@ angular.module('ponmApp.maps', [
         photo = photos[photo.uuid];
         if (photo) {
           if (photo.mapVendor.marker) {
-            mapEventListener.removeMarker(photo.mapVendor.marker);
+            mapEventListener.removeMarker(photo.mapVendor.marker, $scope.map);
           }
           delete photos[photo.uuid];
         }
@@ -1746,12 +1748,8 @@ angular.module('ponmApp.maps', [
       };
 
       $scope.setPlace = function (file, lat, lng, address) { // 此参数为非gps坐标
-
         file.mapVendor.lat = lat;
         file.mapVendor.lng = lng;
-//                file.mapVendor.latPritty = cnmap.GPS.convert(lat);
-//                file.mapVendor.lngPritty = cnmap.GPS.convert(lng);
-
         if (address) {
           file.mapVendor.address = address;
         }
@@ -1788,14 +1786,12 @@ angular.module('ponmApp.maps', [
         var point = mapEventListener.pixelToPoint($scope.map,
           {x: (drop.event.pageX ), y: (drop.event.clientY - 82)});
         addOrUpdateMarker(photo, point.lat, point.lng);
-//                $scope.activePhoto(photo);
-//                mapEventListener.activeMarker(photo.mapVendor.marker);
       });
 
       $scope.$on("$destroy", function () {
         angular.forEach(photos, function (photo, key) {
           if (photo.mapVendor && photo.mapVendor.marker) {
-            mapEventListener.removeMarker(photo.mapVendor.marker);
+            mapEventListener.removeMarker(photo.mapVendor.marker, $scope.map);
           }
         });
         mapEventListener.clearMap();
@@ -1814,14 +1810,11 @@ angular.module('ponmApp.maps', [
       });
 
       $scope.onLoadWaypoint = function (element, direction) {
-
         if ($scope.messageManager) {
           $scope.messageManager.getMoreMessages().then(function (messages) {
             $scope.$broadcast("message.add", messages);
           });
-
         }
-
       };
 
       if ($scope.userId) {

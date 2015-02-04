@@ -57,7 +57,7 @@
                                  class="form-control"
                                   >
                                   <span class="input-group-btn">
-                                     <button type="submit" class="btn btn-default">Go!</button>
+                                     <button type="submit" class="btn btn-default">查询</button>
                                    </span>
                           <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                       </div>
@@ -82,7 +82,9 @@
           </div>
       </div>
       <div class="map-photo-map">
-          <div class="map-container" ui-map="myMap" ui-options="mapOptions">
+          <div class="map-container"
+               ng-if="canInitMap"
+               ui-map="myMap" ui-options="mapOptions">
               <!--<div class="map-canvas" ui-map="myMap" ui-options="mapOptions">-->
               <!--</div>-->
           </div>

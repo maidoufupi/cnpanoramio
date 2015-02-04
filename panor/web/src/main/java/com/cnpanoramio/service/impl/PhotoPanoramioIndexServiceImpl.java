@@ -112,6 +112,13 @@ public class PhotoPanoramioIndexServiceImpl implements
 						pp.setVendor(MapVendor.baidu.name());
 					}					
 				}
+				if(vendor == MapVendor.gps) {
+					PhotoGps gps = photo.getGps().get(vendor);
+					if(null != gps) {
+						pp.setPoint(gps.getPoint());
+						pp.setVendor(vendor.name());
+					}
+				}
 				pps.add(pp);
 			}
 		}
