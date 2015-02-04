@@ -1,5 +1,7 @@
 package com.cnpanoramio.domain;
 
+import org.appfuse.model.User;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -24,9 +26,11 @@ public class SocialUser {
     private int id;
 
     /**
-     * A local unique identifier for the user, in this case the user.id.
+     * A local user, in this case the user.
      */
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
     @Column(nullable = false)
     private String providerId;
@@ -61,12 +65,12 @@ public class SocialUser {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getProviderId() {

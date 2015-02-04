@@ -33,7 +33,7 @@ import com.qq.connect.oauth.Oauth;
  * @Create_Date: 2015-01-01
  */
 @Controller
-public class TencentLoginController {
+public class TencentLoginController extends AbstractSocialLoginController {
 
 	private transient final Log log = LogFactory.getLog(getClass());
 

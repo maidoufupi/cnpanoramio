@@ -1,33 +1,35 @@
 <!-- NOTE: If you're working offline, you might have to change the DOCTYPE 
 	to the following: <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate 
 	Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"> -->
+<!-- <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"> -->
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-	<session-factory>
+    <session-factory>
 
-		<mapping class="org.appfuse.model.User" />
-		<mapping class="org.appfuse.model.Role" />
-		<mapping class="com.cnpanoramio.domain.Photo" />
-		<mapping class="com.cnpanoramio.domain.Comment" />
-		<mapping class="com.cnpanoramio.domain.Tag" />
-		<mapping class="com.cnpanoramio.domain.UserSettings" />
-		<mapping class="com.cnpanoramio.domain.PhotoDetails" />
-		<mapping class="com.cnpanoramio.domain.PhotoGps" />		
-		<mapping class="com.cnpanoramio.domain.PhotoPanoramio" />		
-		<mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex" />		
-		<mapping class="com.cnpanoramio.domain.PhotoLatestIndex" />		
-		<mapping class="com.cnpanoramio.domain.Views" />		
-		<mapping class="com.cnpanoramio.domain.Favorite" />		
-		<mapping class="com.cnpanoramio.domain.Avatar" />		
-		<mapping class="com.cnpanoramio.domain.Travel" />		
-		<mapping class="com.cnpanoramio.domain.TravelSpot" />		
-		<mapping class="com.cnpanoramio.domain.Like" />		
-		<mapping class="com.cnpanoramio.domain.Recycle" />		
-		<mapping class="com.cnpanoramio.domain.Circle" />		
-		<mapping class="com.cnpanoramio.domain.Message" />		
-		<mapping class="com.cnpanoramio.domain.MessageQueue" />		
-		
-	</session-factory>
+        <mapping class="org.appfuse.model.User"/>
+        <mapping class="org.appfuse.model.Role"/>
+        <mapping class="com.cnpanoramio.domain.Photo"/>
+        <mapping class="com.cnpanoramio.domain.Comment"/>
+        <mapping class="com.cnpanoramio.domain.Tag"/>
+        <mapping class="com.cnpanoramio.domain.UserSettings"/>
+        <mapping class="com.cnpanoramio.domain.PhotoDetails"/>
+        <mapping class="com.cnpanoramio.domain.PhotoGps"/>
+        <mapping class="com.cnpanoramio.domain.PhotoPanoramio"/>
+        <mapping class="com.cnpanoramio.domain.PhotoPanoramioIndex"/>
+        <mapping class="com.cnpanoramio.domain.PhotoLatestIndex"/>
+        <mapping class="com.cnpanoramio.domain.Views"/>
+        <mapping class="com.cnpanoramio.domain.Favorite"/>
+        <mapping class="com.cnpanoramio.domain.Avatar"/>
+        <mapping class="com.cnpanoramio.domain.Travel"/>
+        <mapping class="com.cnpanoramio.domain.TravelSpot"/>
+        <mapping class="com.cnpanoramio.domain.Like"/>
+        <mapping class="com.cnpanoramio.domain.Recycle"/>
+        <mapping class="com.cnpanoramio.domain.Circle"/>
+        <mapping class="com.cnpanoramio.domain.Message"/>
+        <mapping class="com.cnpanoramio.domain.SocialUser"/>
+
+    </session-factory>
 </hibernate-configuration>
