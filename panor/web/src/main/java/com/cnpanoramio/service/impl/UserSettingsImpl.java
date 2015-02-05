@@ -12,8 +12,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.appfuse.dao.UserDao;
 import org.appfuse.model.User;
+import org.appfuse.Constants;
 import org.appfuse.service.RoleManager;
 import org.appfuse.service.UserManager;
+import org.appfuse.service.UserExistsException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.security.authentication.dao.SaltSource;
@@ -43,6 +46,7 @@ import com.cnpanoramio.service.TravelService;
 import com.cnpanoramio.service.UserSettingsManager;
 import com.cnpanoramio.utils.PhotoUtil;
 import com.cnpanoramio.utils.UserUtil;
+import com.qq.connect.javabeans.qzone.UserInfoBean;
 
 @Service
 @Transactional
@@ -370,6 +374,92 @@ public class UserSettingsImpl implements UserSettingsManager {
 			space = userSetting.getStorageSpace();
 		}
 		userSetting.setStorageSpace(space-photo.getFileSize());
+	}
+	
+	@Override
+	public User createUserByQQ(String openID, UserInfoBean userInfoBean) {
+
+		// UserSettings settings =
+		// userSettingsDao.getByUserName(userInfoBean.getNickname());
+		UserSettings settings = userSettingsDao.getByUserOpenId(openID);
+
+		if (settings != null) {
+			return userDao.get(settings.getId());
+		} else {
+			User user = new User();
+			user.setUsername(userInfoBean.getNickname());
+			user.setPassword("666666");
+			// Set the default user role on this new user
+			user.addRole(roleManager.getRole(Constants.USER_ROLE));
+			user.setEnabled(true);
+			user.setFirstName(userInfoBean.getNickname());
+			user.setLastName(userInfoBean.getNickname());
+			user.setEmail(openID);
+			user.setCredentialsExpired(true);
+			user.setWebsite(openID);
+
+			// 用户默认详细设置
+			UserSettings userSettings = null;
+			try {
+				user = userManager.saveUser(user);
+
+				userSettings = create(user);
+
+				userSettings.setName(userInfoBean.getNickname());
+			} catch (AccessDeniedException ade) {
+				// thrown by UserSecurityAdvice configured in aop:advisor
+				// userManagerSecurity
+				log.warn(ade.getMessage());
+				return null;
+			} catch (UserExistsException e) {
+				// redisplay the unencrypted passwords
+				// user.setPassword(user.getConfirmPassword());
+				return null;
+			}
+
+			return user;
+		}
+	}
+
+	@Override
+	public UserSettings selNickname(String nickname) {
+		return userSettingsDao.getByUserName(nickname);
+	}
+
+	@Override
+	public void addSaveUser(User user) {
+		userSettingsDao.addSaveUser(user);
+		userSettingsDao.updateusersetting(user);
+	}
+
+	@Override
+	public User createUserByWeiBo(com.cnpanoramio.weibo.model.User weiBoUser) {
+		UserSettings settings = userSettingsDao.getByUserWeiBo(weiBoUser.getId());
+		if (null != settings) {
+			return userDao.get(settings.getId());
+		} else {
+			User user = new User();
+			user.setUsername(weiBoUser.getName());
+			user.setPassword("888888");
+			user.addRole(roleManager.getRole(Constants.USER_ROLE));
+			user.setEnabled(true);
+			user.setFirstName(weiBoUser.getName());
+			user.setLastName(weiBoUser.getId());
+			user.setEmail(weiBoUser.getId());
+			user.setCredentialsExpired(true);
+			user.setWebsite(weiBoUser.getId());
+			UserSettings userSettings = null;
+			try {
+				user = userManager.saveUser(user);
+				userSettings = create(user);
+				userSettings.setName(weiBoUser.getName());
+			} catch (AccessDeniedException ade) {
+				return null;
+			} catch (UserExistsException e) {
+				return null;
+			}
+			return user;
+		}
 	}
 		
 }
